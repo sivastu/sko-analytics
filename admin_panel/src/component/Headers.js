@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Base_url } from "../config";
 
-let Header = (props) => {
+let Headers = (props) => {
   let [datas, setDatas] = useState()
   let navigate = useNavigate();
 
@@ -39,7 +39,7 @@ let Header = (props) => {
         height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
         // border: "1px solid #dbdbdb"
       }} >
-        <div className="d-flex justify-content-between dddd" >
+        <div className="d-flex justify-content-between container" >
           <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
             {
               props?.name ?
@@ -77,4 +77,4 @@ let Header = (props) => {
   );
 };
 
-export default Header;
+export default Headers;

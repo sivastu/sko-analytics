@@ -8,21 +8,17 @@ import ReactDOM from "react-dom";
 import ReactPaginate from "react-paginate";
 import bigInt from "big-integer"; 
 import app from "./firebase";
-import { getDatabase, ref, set, push , get ,    query,   orderByChild, equalTo } from "firebase/database";
+import { getDatabase, ref, set, push , get } from "firebase/database";
 
-let UserRent = () => {
+let Forgetpassword = () => {
 
   let [data, setData] = useState();
   const input2Ref = useRef(null);
-  const input3Ref = useRef(null);
   const input1Ref = useRef(null);
   const [value, setValue] = useState('');
 
-  let [ username , setUsername ] = useState()
-  let [ password , setPassword ] = useState()
-
-  let [ forget , setForget ] = useState(false)
-  let [ forgetvalue , setForgetvalse ] = useState('')
+  let [ username , setUsername ] = useState('')
+  let [ password , setPassword ] = useState('')
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -31,41 +27,6 @@ let UserRent = () => {
      loginn()
     }
   };
-
-  const handleKeyDowns = (event) => {
-    if (event.key === 'Enter') {
-     console.log('eeeeeeeeeeeeeee')
-     input3Ref.current.blur();
-     sendmail()
-    }
-  };
-
-  let sendmail = async() =>{
-
-    const db = getDatabase(app);
-
-    // Reference to the "user" node
-    const userRef = ref(db, "user");
-    
-    // Query to search for the email
-    const emailQuery = query(userRef, orderByChild("Email"), equalTo(forgetvalue));
-    
-    // Execute the query
-    get(emailQuery).then((snapshot) => {
-      if (snapshot.exists()) {
-        snapshot.forEach((userSnapshot) => {
-          console.log(userSnapshot.key, userSnapshot.val());
-        });
-      } else {
-        console.log("No user found with the given email.");
-      }
-    }).catch((error) => {
-      console.error("Error fetching data:", error);
-    });
-    console.log('sendmail kghiudr')
-  }
-
-  
   let navigate = useNavigate();
 
   const handleKeyDownfiin = (event) => {
@@ -80,7 +41,7 @@ let UserRent = () => {
     try {
 
       const db = getDatabase(app);
-      const newDocRef =ref(db, `user/siva`);
+      const newDocRef =ref(db, `user/${username}`);
  
       const snapshot = await get(newDocRef); // Fetch the data for the user
   
@@ -150,8 +111,6 @@ let UserRent = () => {
 
 
 
-
-
         <div className="dddd" style={{ backgroundImage: "url('backs.jpg')", height: '100vh', padding: 0 }} >
           <div style={{
             backgroundImage: "url('back.png')", height: '100%', backgroundSize: "contain",
@@ -161,52 +120,40 @@ let UserRent = () => {
 
             <div style={{ width: 550, height: 276, backgroundColor: "#F3F3F3", borderRadius: 7,     }} >
 
-              {
-                forget === false ?
-
-                <div className="kjok" style={{ marginTop : '13%' }} > 
-                <div className="d-flex justify-content-around" >
-                  <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', }} >Username:</p>
-                  <input onChange={(e)=>{
-                    setUsername(e.target.value)
-                  }} value={username} onKeyDown={handleKeyDownfiin}  style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070" }} type="text" />
+            <div className="kjok" style={{ marginTop : '13%' }} > 
+              <div className="row" >
+                <div className='col-5' >
+                <p style={{ color: '#1A1A1B', fontSize: 19, fontWeight: '500', textAlign : 'center' , marginTop : 8 }} >New Password :</p>
                 </div>
-
-              
-                <div className="d-flex justify-content-around mt-3" >
-                  <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', }}>Password:</p>
-                  <input onChange={(e)=>{
-                    setPassword(e.target.value)
-                  }} value={password} ref={input2Ref} onKeyDown={handleKeyDown} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070" }} type="password" />
+                <div className='col-7' >
+                <input onChange={(e)=>{
+                  setUsername(e.target.value)
+                }} onKeyDown={handleKeyDownfiin}  style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070" }} type="text" />
                 </div>
-                <p onClick={()=>{ 
-                  setForget(true)
-                }}  style={{ color: "#707070", fontSize: 15, fontWeight: '500' , textAlign : 'right' , marginRight : 40 , marginTop : 3 ,
-                  cursor : "pointer"
-                }} >Reset password?</p>
+               
+               
               </div>
 
-              :
+              
+                <div className="row mt-3" >
 
-              <div className="kjok" style={{ marginTop : '13%' }} >  
-
-            
-                <div className="d-flex justify-content-around mt-3" >
-                  <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', }}>Enter Email :</p>
+                  <div className='col-5' >
+                  <p style={{ color: '#1A1A1B', fontSize: 19, fontWeight: '500', textAlign : 'center' , marginTop : 8 }}>Confirm Password :</p>
+                  </div>
+                  <div className='col-7' >
+                    
                   <input onChange={(e)=>{
-                    setForgetvalse(e.target.value)
-                  }} ref={input3Ref}  value={forgetvalue} onKeyDown={handleKeyDowns} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070" }} type="text" />
+                    setPassword(e.target.value)
+                  }} ref={input2Ref} onKeyDown={handleKeyDown} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070" }} type="password" />
+                  </div>
+                  
                 </div>
-                <p onClick={()=>{ 
-                  setForget(false)
-                }} style={{ color: "#707070", fontSize: 15, fontWeight: '500' , textAlign : 'right' , marginRight : 40 , marginTop : 3 ,
+                <p onClick={()=>{
+                  navigate('/')
+                }}  style={{ color: "#707070", fontSize: 15, fontWeight: '500' , textAlign : 'right' , marginRight : 40 , marginTop : 3 ,
                   cursor : "pointer"
                 }} >Login</p>
-            </div>
-                
-              }
-
-             
+              </div>
 
 
               {/* <button onClick={()=>{ saveData() }} >Submit</button>
@@ -223,4 +170,4 @@ let UserRent = () => {
   );
 };
 
-export default UserRent;
+export default Forgetpassword;

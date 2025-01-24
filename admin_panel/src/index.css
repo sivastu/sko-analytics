@@ -57,3 +57,219 @@ code {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
 }
+
+/* .react-datepicker-wrapper{
+  border: 2px solid red !important;
+
+}
+.react-datepicker__input-container {
+  border: 2px solid red !important;
+
+} */
+
+.react-datepicker-wrapper{
+  width: 264px;
+}
+
+/* Container for Input and Icon */
+.datepicker-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* Date Picker Input */
+.custom-input {
+  width: 100%;
+  padding: 10px 40px 10px 10px; /* Add space for the icon */ 
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  background-color : #fff;
+  box-shadow: 0px 8px #b9b9b9;
+}
+
+.custom-inputone {
+  width: 100%;
+  padding: 10px 40px 10px 10px; /* Add space for the icon */ 
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  background-color : #fff;
+  box-shadow: 0px 8px #b9b9b9;
+}
+
+.custom-input:focus {
+  border-color: #707070;
+  box-shadow: 0 0 5pxrgb(100, 100, 100);
+}
+
+/* Calendar Icon */
+.calendar-icon {
+  position: absolute;
+  right: 10px;
+  color: #707070;
+  font-size: 20px;
+  pointer-events: none; /* Prevent icon from blocking input clicks */
+}
+
+
+.switch-container {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Hide the default checkbox */
+input[type="checkbox"] {
+  display: none;
+}
+.dddd{
+  padding-left: 10%;
+  padding-right: 10%;
+}
+.ddd{
+  padding-left: 5%;
+  padding-right:5%;
+}
+.asdf{
+  width: 100%;
+  background-color: rgb(255, 255, 255);
+  padding: 25px;
+  border-radius : 7px;
+  box-shadow: 0px 8px #b9b9b9;
+  height : 227px;
+}
+.asdfp{
+  font-size : 20px;
+  font-weight : 400;
+}
+.asdfps{
+  display: flex !important;
+  justify-content: end !important;
+  align-items: end !important;
+}
+/* Style the custom rectangular switch */
+.switch-label {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 4px; /* Rounded corners for a rectangular appearance */
+  transition: background-color 0.3s ease;
+}
+
+/* The circle inside the switch */
+.switch-label::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 19px;
+  height: 14px;
+  background-color: white;
+  border-radius: 3px; /* Make the circle have slightly rounded corners */
+  transition: transform 0.3s ease;
+}
+
+/* When the checkbox is checked, change the switch appearance */
+input[type="checkbox"]:checked + .switch-label {
+  background-color: #316AAF; /* Green color when on */
+}
+
+/* Move the circle to the right when checked */
+input[type="checkbox"]:checked + .switch-label::before {
+  transform: translateX(22px); /* Move circle to the right */
+}
+
+.inputttt{
+  color : rgb(112, 112, 112);
+  border : unset; 
+}
+
+.inputttt:focus-visible{ 
+  border : unset; 
+  outline: unset;       /* Remove any outline */
+  box-shadow: unset;
+}
+
+.sdfsdf{
+  color : rgb(112, 112, 112); 
+}
+
+/* Calendar Popup */
+.custom-calendar {
+  background-color: #f5f5f5;
+  border: 1px solid #707070;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-family: "Arial", sans-serif;
+}
+
+/* Day Cells */
+.custom-calendar .react-datepicker__day {
+  color: #000;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.custom-calendar .react-datepicker__day:hover {
+  background-color: #707070;
+  color: #fff;
+}
+
+/* Selected Range */
+.custom-calendar .react-datepicker__day--selected,
+.custom-calendar .react-datepicker__day--in-range {
+  background-color: #707070;
+  color: #fff;
+  border-radius: 50%;
+}
+
+.custom-calendar .react-datepicker__day--in-range:hover {
+  background-color: #707070;
+}
+
+/* Navigation Buttons */
+.custom-calendar .react-datepicker__navigation {
+  top: 10px;
+}
+
+.custom-calendar .react-datepicker__navigation-icon::before {
+  border-color: #707070;
+}
+
+.box {
+  width: 100%;
+  height: 250px;
+  background-color: #fff;
+  padding: 10px;
+  border-radius : 7px;
+  box-shadow: 0px 8px #b9b9b9;
+}
+
+.boxs {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  justify-content: space-between; /* Push content to the ends */
+  height: 100%; /* Ensure it takes the full height of the parent */
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.content {
+  background-color: #ffffff;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.end-box {  
+  padding: 10px;
+  display: flex;
+  justify-content : space-between ;
+  border-radius: 4px;
+}

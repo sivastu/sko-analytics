@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import ReactDOM from "react-dom";
 import ReactPaginate from "react-paginate";
 import bigInt from "big-integer";
-
+import Headers from "../component/Headers"
 let SinglrandMulti = () => {
   let [data, setData] = useState();
   let navigate = useNavigate();
@@ -15,10 +15,10 @@ let SinglrandMulti = () => {
 
   return (
     <div>
-      <Header />
+      <Headers />
       <div style={{ backgroundColor: "#525659", height: '100vh' }} >
  
-        <div className="container" style={{ backgroundImage: "url('backs.jpg')", height: '100vh', padding: 0 }} >
+        <div className="dddd" style={{ backgroundImage: "url('backs.jpg')", height: '100vh', padding: 0 }} >
           <div style={{
             backgroundImage: "url('back.png')", height: '100%', backgroundSize: "contain",
             backgroundPosition: "center", backgroundRepeat: "no-repeat",

@@ -3,7 +3,7 @@ import Header from "../component/Header";
 import axios from "axios";
 import { Base_url } from "../config";
 import { useNavigate } from "react-router-dom";
-
+import Headers from "../component/Headers"
 import ReactDOM from "react-dom";
 import ReactPaginate from "react-paginate";
 import bigInt from "big-integer";
@@ -13,7 +13,7 @@ let Singlevenues = () => {
 
   return (
     <div>
-      <Header />
+      <Headers />
       <div style={{ backgroundColor: "#525659", height: '100vh' }} >
 
         <div className="container" style={{ backgroundImage: "url('asd5.png')", height: '100vh', padding: 0 , display : 'grid' , alignItems : 'end' ,
