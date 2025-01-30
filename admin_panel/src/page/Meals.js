@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import ReactDOM from "react-dom";
 import ReactPaginate from "react-paginate";
-import bigInt from "big-integer";
+import bigInt, { max } from "big-integer";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FaCaretDown } from "react-icons/fa6";
@@ -14,6 +14,8 @@ import TimePicker from 'react-time-picker';
 import Swal from 'sweetalert2'
 import Select, { components } from 'react-select';
 import { FaCheck } from 'react-icons/fa';
+import { Bar } from 'react-chartjs-2';
+import { jsPDF } from 'jspdf';
 
 import app from "./firebase";
 import {
@@ -21,6 +23,24 @@ import {
   startAt, endAt, orderByChild, equalTo,
   orderByKey
 } from "firebase/database";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 
 let Meals = () => {
@@ -58,6 +78,50 @@ let Meals = () => {
     getonez()
 
   }, [])
+
+  let [onebar, setOneBar] = useState([])
+  let [twobar, setTwobar] = useState([])
+  let [optionbar, setOption] = useState([])
+
+
+  const optionshshs = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top' },
+      title: { display: true, text: 'X-Axis Scrollable Bar Chart' },
+    },
+    scales: {
+      x: {
+        ticks: { maxRotation: 45, minRotation: 0 }, // Prevents overlap
+      },
+      y: {
+        beginAtZero: true,
+        max: 200
+      },
+    },
+  };
+
+
+  const datafine = {
+    labels: optionbar,
+    datasets: [
+      {
+        label: 'Chosen range',
+        data: onebar,
+        backgroundColor: '#CA424E',
+        borderColor: '#CA424E',
+        borderWidth: 1,
+      },
+      {
+        label: 'Comparing range',
+        data: twobar,
+        backgroundColor: '#B6B6B6',
+        borderColor: '#B6B6B6',
+        borderWidth: 1,
+      },
+    ],
+  };
 
 
 
@@ -2011,6 +2075,128 @@ let Meals = () => {
   }
 
 
+
+  const chartContainerRef = useRef(null);
+
+  // Function to scroll left
+  const scrollLeft = () => {
+    if (chartContainerRef.current) {
+      chartContainerRef.current.scrollLeft -= 100; // Adjust scroll distance
+    }
+  };
+
+  // Function to scroll right
+  const scrollRight = () => {
+    if (chartContainerRef.current) {
+      chartContainerRef.current.scrollLeft += 100;
+    }
+  };
+
+  const [showDiv, setShowDiv] = useState(false);
+
+  // Toggle the visibility of the div
+  const handleToggleDiv = () => {
+    setShowDiv(!showDiv);
+  };
+
+  const [showDivs, setShowDivs] = useState(false);
+
+  // Toggle the visibility of the div
+  const fsgdgfdfgdf = () => {
+    console.log('gggggggggggggggggggggg')
+    setShowDivs(!showDivs);
+  };
+
+
+  const [showDivss, setShowDivss] = useState(false);
+
+  // Toggle the visibility of the div
+  const handleToggleDivss = () => {
+    setShowDivss(!showDivss);
+  };
+
+
+  const [showDivsss, setShowDivsss] = useState(false);
+
+  // Toggle the visibility of the div
+  const handleToggleDivsss = () => {
+    setShowDivsss(!showDivsss);
+  };
+
+  let editexportpdf = () => {
+
+    const doc = new jsPDF();
+
+    // Add some text to the PDF
+    doc.text('Hello, this is a sample PDF created with jsPDF!', 10, 10);
+
+    // Optionally, you can add other content like images, tables, etc.
+    // doc.addImage(imageData, 'JPEG', 10, 20, 180, 160);
+    // doc.autoTable({ html: '#my-table' });
+
+    // Save the PDF with a filename
+    doc.save('sample.pdf');
+
+    console.log('gggggggggggggggggggg')
+
+  }
+
+  let mealexportpdf = () => {
+
+    const doc = new jsPDF();
+
+    // Add some text to the PDF
+    doc.text('Hello, this is a sample PDF created with jsPDF!', 10, 10);
+
+    // Optionally, you can add other content like images, tables, etc.
+    // doc.addImage(imageData, 'JPEG', 10, 20, 180, 160);
+    // doc.autoTable({ html: '#my-table' });
+
+    // Save the PDF with a filename
+    doc.save('sample.pdf');
+
+    console.log('gggggggggggggggggggg')
+
+  }
+
+  let chartexportpdf = () => {
+
+    const doc = new jsPDF();
+
+    // Add some text to the PDF
+    doc.text('Hello, this is a sample PDF created with jsPDF!', 10, 10);
+
+    // Optionally, you can add other content like images, tables, etc.
+    // doc.addImage(imageData, 'JPEG', 10, 20, 180, 160);
+    // doc.autoTable({ html: '#my-table' });
+
+    // Save the PDF with a filename
+    doc.save('sample.pdf');
+
+    console.log('gggggggggggggggggggg')
+
+  }
+
+  let refundexportpdf = () => {
+
+    const doc = new jsPDF();
+
+    // Add some text to the PDF
+    doc.text('Hello, this is a sample PDF created with jsPDF!', 10, 10);
+
+    // Optionally, you can add other content like images, tables, etc.
+    // doc.addImage(imageData, 'JPEG', 10, 20, 180, 160);
+    // doc.autoTable({ html: '#my-table' });
+
+    // Save the PDF with a filename
+    doc.save('sample.pdf');
+
+    console.log('gggggggggggggggggggg')
+
+  }
+
+
+
   return (
     <div>
       <Header name={"Meals"} center={"Name"} />
@@ -2579,7 +2765,7 @@ let Meals = () => {
 
 
                   <div className='col-6' >
-                    <div class="box"  onClick={() => {
+                    <div class="box" onClick={() => {
                       setMeals(4)
                     }}>
                       <div class="boxs">
@@ -2649,9 +2835,31 @@ let Meals = () => {
                       </div>
 
                       <div >
-                        <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={() => {
+                        <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
 
-                        }} className="" alt="Example Image" />
+                        {showDiv && (
+                          <div
+                            style={{
+                              width: 200,
+                              marginTop: '10px',
+                              padding: '10px',
+                              backgroundColor: '#f8f9fa',
+                              border: '1px solid #ccc',
+                              borderRadius: '4px',
+                              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                              position: 'absolute',
+                              right: '11%'
+                            }}
+                          >
+                            <p style={{ color: '#707070' }}>Export as</p>
+                            <hr />
+                            <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                              editexportpdf()
+                            }}>PDF</p>
+                          </div>
+                        )}
+
+
                       </div>
                     </div>
 
@@ -2762,7 +2970,7 @@ let Meals = () => {
 
                               let tot = ((datdtwo - datd) / datd) * 100
 
-                              return <span >{tot.toFixed(2)+ "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                                 style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
 
                                 }} className="" alt="Example Image" /> :
@@ -2868,344 +3076,429 @@ let Meals = () => {
                 </div>
 
                 : meals === 3 ?
-                <div className="" style={{ marginTop: 100 }} >
-                  <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                  <div className="" style={{ marginTop: 100 }} >
+                    <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-                    <div className="d-flex justify-content-between" >
-                      <div style={{}} className="d-flex " >
-                        <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                          setMeals(1)
-                        }} className="" alt="Example Image" />
-                        <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Served meals</p>
-                      </div>
-
-                      <div >
-                        <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" />
-                      </div>
-                    </div>
-
-                    <div style={{ marginTop: 50, padding: 20 }} >
                       <div className="d-flex justify-content-between" >
-
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                            ggggrt()}</span></p>
+                        <div style={{}} className="d-flex " >
+                          <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                            setMeals(1)
+                          }} className="" alt="Example Image" />
+                          <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Served meals</p>
                         </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
 
-                                      ggggrts()
-                          }</span></p>
+                        <div >
+                          <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
+
+                          {showDivs && (
+                            <div
+                              style={{
+                                width: 200,
+                                marginTop: '10px',
+                                padding: '10px',
+                                backgroundColor: '#f8f9fa',
+                                border: '1px solid #ccc',
+                                borderRadius: '4px',
+                                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                                position: 'absolute',
+                                right: '11%'
+                              }}
+                            >
+                              <p style={{ color: '#707070' }}>Export as</p>
+                              <hr />
+                              <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                                mealexportpdf()
+                              }}>PDF</p>
+                            </div>
+                          )}
+
                         </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                            {(() => {
-                              let datd = ggggrt()
+                      </div>
 
-                              let datdtwo =  ggggrts()
+                      <div style={{ marginTop: 50, padding: 20 }} >
+                        <div className="d-flex justify-content-between" >
 
-                              let tot = ((datd - datdtwo) / datdtwo) * 100
+                          <div >
+                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                              ggggrt()}</span></p>
+                          </div>
+                          <div >
+                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
 
-                              return <span >{tot.toFixed(2)+ "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+                              ggggrts()
+                            }</span></p>
+                          </div>
+                          <div >
+                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                              {(() => {
+                                let datd = ggggrt()
 
-                                }} className="" alt="Example Image" /> :
-                                <img src="d_arw.png"
+                                let datdtwo = ggggrts()
+
+                                let tot = ((datd - datdtwo) / datdtwo) * 100
+
+                                return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                                   style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
 
-                                  }} className="" alt="Example Image" />}</span></span>
+                                  }} className="" alt="Example Image" /> :
+                                  <img src="d_arw.png"
+                                    style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                    }} className="" alt="Example Image" />}</span></span>
 
 
-                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                            })()}</span></p>
+                                console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                              })()}</span></p>
+                          </div>
+
                         </div>
+
+                        <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+                        <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
+
+
+
+                          {
+                            served?.map((dfgh, index) => {
+                              const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+
+                              return (
+                                <>
+                                  <div className="d-flex  ">
+
+                                    <div style={{ width: '33%' }}>
+                                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                                    </div>
+
+                                    {correspondingErv ? (
+                                      <div style={{ width: '33%', textAlign: 'center' }}>
+                                        <div >
+
+                                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <>
+                                        <div style={{ width: '33%' }} >
+                                        </div></>
+                                    )}
+
+                                    <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                                        ( Total )
+                                        <span>
+                                          {(() => {
+                                            const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                                            const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+
+
+                                            const tot = ((datd - datdtwo) / datdtwo) * 100;
+
+                                            return (
+                                              <span>
+                                                {tot.toFixed(2) + "%"}
+                                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                                  {tot > 0 ? (
+                                                    <img
+                                                      src="up_arw.png"
+                                                      style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                                      alt="up arrow"
+                                                    />
+                                                  ) : (
+                                                    <img
+                                                      src="d_arw.png"
+                                                      style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                                      alt="down arrow"
+                                                    />
+                                                  )}
+                                                </span>
+                                              </span>
+                                            );
+                                          })()}
+                                        </span>
+                                      </p>
+                                    </div>
+
+                                  </div>
+
+                                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                                </>
+                              );
+                            })
+                          }
+
+
+                        </div>
+
+
+
+
 
                       </div>
 
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
-                      <div className="scroll" id="scrrrrol" style={{ height : 300 , overflowY : 'auto'  }} >
 
-                     
 
-                      {
-                      served?.map((dfgh, index) => {
-                        const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
 
-                        return (
-                          <>
-                            <div className="d-flex  ">
+                    </div>
+                  </div>
+                  : meals === 4 ?
 
-                              <div style={{ width : '33%' }}>
-                                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+
+                    <div className="" style={{ marginTop: 100 }} >
+                      <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+
+                        <div className="d-flex justify-content-between" >
+                          <div style={{}} className="d-flex " >
+                            <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                              setMeals(1)
+                            }} className="" alt="Example Image" />
+                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Refunded meals</p>
+                          </div>
+
+                          <div >
+                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
+
+                            {showDivss && (
+                              <div
+                                style={{
+                                  width: 200,
+                                  marginTop: '10px',
+                                  padding: '10px',
+                                  backgroundColor: '#f8f9fa',
+                                  border: '1px solid #ccc',
+                                  borderRadius: '4px',
+                                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                                  position: 'absolute',
+                                  right: '11%'
+                                }}
+                              >
+                                <p style={{ color: '#707070' }}>Export as</p>
+                                <hr />
+                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                                  refundexportpdf()
+                                }}>PDF</p>
                               </div>
+                            )}
+                          </div>
+                        </div>
 
-                              {correspondingErv ? (
-                                <div style={{ width : '33%' , textAlign : 'center' }}>
-                                  <div >
+                        <div style={{ marginTop: 50, padding: 20 }} >
+                          <div className="d-flex justify-content-between" >
 
-                                  <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                                  </div>
-                                </div>
-                              ) : (
-                                <>
-                                <div style={{ width : '33%' }} >
-                                  </div></>
-                              )}
+                            <div >
+                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                                ggggrtsg()}</span></p>
+                            </div>
+                            <div >
+                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
 
-                              <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex' , width : '33%' ,    }}>
-                                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                                  ( Total )
-                                  <span>
-                                    {(() => {
-                                      const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                      const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
- 
+                                ggggrtsgg()
+                              }</span></p>
+                            </div>
+                            <div >
+                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                                {(() => {
+                                  let datd = ggggrtsg()
 
-                                      const tot = ((datd - datdtwo) / datdtwo) * 100;
+                                  let datdtwo = ggggrtsgg()
 
-                                      return (
-                                        <span>
-                                          {tot.toFixed(2)+ "%"}
-                                          <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                            {tot > 0 ? (
-                                              <img
-                                                src="up_arw.png"
-                                                style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                alt="up arrow"
-                                              />
-                                            ) : (
-                                              <img
-                                                src="d_arw.png"
-                                                style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                alt="down arrow"
-                                              />
-                                            )}
-                                          </span>
-                                        </span>
-                                      );
-                                    })()}
-                                  </span>
-                                </p>
-                              </div>
+                                  let tot = ((datd - datdtwo) / datdtwo) * 100
 
+                                  return <span >{isNaN(tot) ? 0 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{isNaN(tot) ?
+                                    '%' : tot > 0 ? <img src="up_arw.png"
+                                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                      }} className="" alt="Example Image" /> :
+                                      <img src="d_arw.png"
+                                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                        }} className="" alt="Example Image" />}</span></span>
+
+
+                                  console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                                })()}</span></p>
                             </div>
 
-                            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                          </>
-                        );
-                      })
-                    }
+                          </div>
 
+                          <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
-                    </div>
+                          <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
 
 
 
+                            {
+                              minperday?.map((dfgh, index) => {
+                                const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
+
+                                return (
+                                  <>
+                                    <div className="d-flex  ">
+
+                                      <div style={{ width: '33%' }}>
+                                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                                      </div>
+
+                                      {correspondingErv ? (
+                                        <div style={{ width: '33%', textAlign: 'center' }}>
+                                          <div >
+
+                                            <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <>
+                                          <div style={{ width: '33%' }} >
+                                          </div></>
+                                      )}
+
+                                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                                          ( Total )
+                                          <span>
+                                            {(() => {
+                                              const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                                              const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
 
 
-                    </div>
+                                              const tot = ((datd - datdtwo) / datdtwo) * 100;
 
-
-
-
-
-                  </div>
-                </div>
-                : meals === 4 ?
-
-
-                <div className="" style={{ marginTop: 100 }} >
-                  <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
-
-                    <div className="d-flex justify-content-between" >
-                      <div style={{}} className="d-flex " >
-                        <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                          setMeals(1)
-                        }} className="" alt="Example Image" />
-                        <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Refunded meals</p>
-                      </div>
-
-                      <div >
-                        <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" />
-                      </div>
-                    </div>
-
-                    <div style={{ marginTop: 50, padding: 20 }} >
-                      <div className="d-flex justify-content-between" >
-
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                            ggggrtsg()}</span></p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-
-                              ggggrtsgg()
-                          }</span></p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                            {(() => {
-                              let datd = ggggrtsg()
-
-                              let datdtwo = ggggrtsgg()
-
-                              let tot = ((datd - datdtwo) / datdtwo) * 100
-
-                              return <span >{ isNaN(tot) ? 0 :  tot.toFixed(2)+"%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{ isNaN(tot)  ? 
-                                '%' :   tot > 0 ? <img src="up_arw.png"
-                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                }} className="" alt="Example Image" /> :
-                                <img src="d_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" />}</span></span>
-
-
-                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                            })()}</span></p>
-                        </div>
-
-                      </div>
-
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-                      <div className="scroll" id="scrrrrol" style={{ height : 300 , overflowY : 'auto'  }} >
-
-                     
-
-                      {
-                      minperday?.map((dfgh, index) => {
-                        const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
-
-                        return (
-                          <>
-                            <div className="d-flex  ">
-
-                              <div style={{ width : '33%' }}>
-                                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
-                              </div>
-
-                              {correspondingErv ? (
-                                <div style={{ width : '33%' , textAlign : 'center' }}>
-                                  <div >
-
-                                  <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                                  </div>
-                                </div>
-                              ) : (
-                                <>
-                                <div style={{ width : '33%' }} >
-                                  </div></>
-                              )}
-
-                              <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex' , width : '33%' ,    }}>
-                                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                                  ( Total )
-                                  <span>
-                                    {(() => {
-                                      const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                      const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
- 
-
-                                      const tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                                      return (
-                                        <span>
-                                          {tot.toFixed(2)+"%"}
-                                          <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                            {tot > 0 ? (
-                                              <img
-                                                src="up_arw.png"
-                                                style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                alt="up arrow"
-                                              />
-                                            ) : (
-                                              <img
-                                                src="d_arw.png"
-                                                style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                alt="down arrow"
-                                              />
-                                            )}
+                                              return (
+                                                <span>
+                                                  {tot.toFixed(2) + "%"}
+                                                  <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                                    {tot > 0 ? (
+                                                      <img
+                                                        src="up_arw.png"
+                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                                        alt="up arrow"
+                                                      />
+                                                    ) : (
+                                                      <img
+                                                        src="d_arw.png"
+                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                                        alt="down arrow"
+                                                      />
+                                                    )}
+                                                  </span>
+                                                </span>
+                                              );
+                                            })()}
                                           </span>
-                                        </span>
-                                      );
-                                    })()}
-                                  </span>
-                                </p>
-                              </div>
+                                        </p>
+                                      </div>
 
+                                    </div>
+
+                                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                                  </>
+                                );
+                              })
+                            }
+
+
+                          </div>
+
+
+
+
+
+                        </div>
+
+
+
+
+
+                      </div>
+                    </div>
+
+                    :
+
+                    <div className="" style={{ marginTop: 100 }} >
+                      <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+
+                        <div className="d-flex justify-content-between" >
+                          <div style={{}} className="d-flex " >
+                            <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                              setMeals(1)
+                            }} className="" alt="Example Image" />
+                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Meals received - timeline</p>
+                          </div>
+
+                          <div >
+                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
+
+                            {showDivsss && (
+                              <div
+                                style={{
+                                  width: 200,
+                                  marginTop: '10px',
+                                  padding: '10px',
+                                  backgroundColor: '#f8f9fa',
+                                  border: '1px solid #ccc',
+                                  borderRadius: '4px',
+                                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                                  position: 'absolute',
+                                  right: '11%'
+                                }}
+                              >
+                                <p style={{ color: '#707070' }}>Export as</p>
+                                <hr />
+                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                                  chartexportpdf()
+                                }}>PDF</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div style={{ marginTop: 50, padding: 20 }} >
+
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            {/* Left Scroll Button */}
+                            <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
+
+                            {/* Scrollable Chart Container */}
+                            <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                              <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                                <Bar data={datafine} options={optionshshs} />
+                              </div>
                             </div>
 
-                            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                          </>
-                        );
-                      })
-                    }
+                            {/* Right Scroll Button */}
+                            <button onClick={scrollRight} style={buttonStyle}>➡</button>
+                          </div>
 
 
+
+
+                          {/* <div style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px' }}>
+                            <div style={{ width: '1500px', height: '500px' }}>  
+                              <Bar data={datafine} options={optionshshs} />
+                            </div>
+                          </div> */}
+
+                        </div>
+
+
+
+
+
+                      </div>
                     </div>
-
-
-
-
-
-                    </div>
-
-
-
-
-
-                  </div>
-                </div>
-
-                :
-
-                <div className="" style={{ marginTop: 100 }} >
-                <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
-
-                  <div className="d-flex justify-content-between" >
-                    <div style={{}} className="d-flex " >
-                      <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                        setMeals(1)
-                      }} className="" alt="Example Image" />
-                      <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Meals received - timeline</p>
-                    </div>
-
-                    <div >
-                      <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={() => {
-
-                      }} className="" alt="Example Image" />
-                    </div>
-                  </div>
-
-                  <div style={{ marginTop: 50, padding: 20 }} >
-                   
-  
-                  </div>
-
-
-
-
-
-                </div>
-              </div>
 
 
 
@@ -3218,6 +3511,16 @@ let Meals = () => {
       </div>
     </div>
   );
+};
+
+
+const buttonStyle = {
+  padding: '10px',
+  fontSize: '20px',
+  cursor: 'pointer',
+  background: '#f0f0f0',
+  border: 'none',
+  borderRadius: '5px',
 };
 
 export default Meals;
