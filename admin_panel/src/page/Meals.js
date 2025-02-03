@@ -51,9 +51,9 @@ let Meals = () => {
 
   let [basicall, setBasicall] = useState()
   let [basic, setBasic] = useState()
-  let [basicone, setBasicone] = useState()
+  let [basicone, setBasicone] = useState([])
 
-  let [hubb, setHubb] = useState()
+  let [hubb, setHubb] = useState([])
   let [hubbswitch, setHubbswitch] = useState(false)
 
   //parse meals
@@ -196,9 +196,27 @@ let Meals = () => {
           // };
 
           // const output = transformData(eventss);
+          const result = {};
+          Object.entries(cleanedData).forEach(([groupName, groupData]) => {
 
+           
+            Object.entries(groupData).forEach(([keyss, valuess]) => {
+              Object.entries(valuess).forEach(([keyssa, valuessa]) => {
+              
+                if (!result[keyss]) {
+                  result[keyss] = [];
+                }
+    
+                result[keyss].push({ 
+                  name: keyssa + "-" + keyss
+                });
+                
+            });
+          });
 
-
+          });
+          setAlldrop(result)
+          console.log(result , 'keykeykeykey'  ) // its oblect
           const optionsone = [];
           Object.entries(cleanedData).forEach(([groupName, groupData]) => {
             Object.keys(groupData).forEach((key) => {
@@ -212,6 +230,9 @@ let Meals = () => {
           //   value: hub,
           //   label: hub,
           // }));
+
+         
+
 
           console.log("options:", optionsone);
           // console.log("optionss:", optionsstwo);
@@ -295,7 +316,7 @@ let Meals = () => {
             });
           });
 
-          setAlldrop(result)
+          // setAlldrop(result)
           console.log(JSON.stringify(result), 'resultresultresult')
 
 
@@ -893,7 +914,7 @@ let Meals = () => {
         }
       });
     });
-
+ 
     setBasicone(output)
 
     // const validVenues = selected.map(item => item.value);
@@ -930,10 +951,29 @@ let Meals = () => {
   ];
 
   const [selectedhubOptions, setSelectedhubOptions] = useState([]);
+
+
   const handleChangehub = (selected) => {
     setSelectedhubOptions(selected || []);
 
 
+
+
+
+  };
+
+
+  const handleChangehubone = (selectedss) => {  
+    
+    console.log(selectedss , 'selectedssselectedssselectedss')
+
+    setHubb(selectedss)
+
+
+    filterDataByDate(dateRange, onetime, twotime, selectedOptions,selectedss , selectedCources, selectedTakeaway)
+
+
+    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions,  selectedss, selectedCources, selectedTakeaway)
 
 
 
@@ -1127,21 +1167,12 @@ let Meals = () => {
     }
 
     if (time != "" && time2 != '') {
-      let filterDataByTimeRange = (startTime, endTime) => {
-        // Convert startTime and endTime (e.g. "16:23", "20:05") to comparable Date objects
-        const [startHours, startMinutes] = startTime.split(":").map(Number);
-        const startDate = new Date();
-        startDate.setHours(startHours);
-        startDate.setMinutes(startMinutes);
-        startDate.setSeconds(0);  // Make sure seconds are zero for comparison
+      let filterDataByTimeRange = (startTime, endTime) => { 
 
-        const [endHours, endMinutes] = endTime.split(":").map(Number);
-        const endDate = new Date();
-        endDate.setHours(endHours);
-        endDate.setMinutes(endMinutes);
-        endDate.setSeconds(0);  // Make sure seconds are zero for comparison
+        startTime = parseInt(startTime.replace(":", ""), 10);   // Make sure seconds are zero for comparison
+        
+        endTime = parseInt(endTime.replace(":", ""), 10); 
 
-        // Function to process STAMP and filter based on time range
         function processData(obj) {
           let result = {};
 
@@ -1154,18 +1185,11 @@ let Meals = () => {
                 if (item.STAMP) {
                   let stamp = item.STAMP;
                   let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
-                  timeStr = timeStr.replace("R0", ""); // Remove "R0"
-
-                  // Convert the time to a comparable Date object
-                  const hours = parseInt(timeStr.substring(0, 2), 10);
-                  const minutes = parseInt(timeStr.substring(2, 4), 10);
-                  const stampDate = new Date();
-                  stampDate.setHours(hours);
-                  stampDate.setMinutes(minutes);
-                  stampDate.setSeconds(0);  // Make sure seconds are zero for comparison
+                  timeStr = parseInt(timeStr.replace("R0", "")); // Remove "R0" 
+ 
 
                   // Check if the time is within the range
-                  return stampDate >= startDate && stampDate <= endDate;
+                  return timeStr >= startTime  && timeStr <= endTime;
                 }
                 return false;
               });
@@ -1179,6 +1203,8 @@ let Meals = () => {
       };
 
       let alldddd = filterDataByTimeRange(time, time2)
+
+      alldat = alldddd
 
       console.log(alldddd, 'three')
     }
@@ -1204,36 +1230,65 @@ let Meals = () => {
 
 
     } else {
-      function filterDataByDynamicKey(key) {
-        // Split the key into top-level key and hub name
-        const [topLevelKey, hubName] = key.split('-');
+      // function filterDataByDynamicKey(key) {
+      //   // Split the key into top-level key and hub name
+      //   const [topLevelKey, hubName] = key.split('-');
 
-        // Initialize an empty object for the filtered result
+      //   // Initialize an empty object for the filtered result
+      //   const filteredData = {};
+
+      //   // Check if the top-level key exists in the data
+      //   if (alldat[topLevelKey]) {
+      //     filteredData[topLevelKey] = {};
+
+      //     // Loop through each second-level key (e.g., "GreenbankServicesClubecall")
+      //     for (const secondLevelKey in alldat[topLevelKey]) {
+      //       if (alldat[topLevelKey].hasOwnProperty(secondLevelKey)) {
+      //         // Check if the second-level key contains the hub name
+      //         if (alldat[topLevelKey][secondLevelKey][hubName]) {
+      //           // Add the filtered data for that second-level key and hub name
+      //           filteredData[topLevelKey][secondLevelKey] = {
+      //             [hubName]: alldat[topLevelKey][secondLevelKey][hubName]
+      //           };
+      //         }
+      //       }
+      //     }
+      //   }
+
+      //   return filteredData;
+      // }
+
+      // alldat = filterDataByDynamicKey(val22)
+
+      // console.log(alldat, 'five')
+
+      function filterDataByDynamicKeys(keysArray) {
         const filteredData = {};
-
-        // Check if the top-level key exists in the data
-        if (alldat[topLevelKey]) {
-          filteredData[topLevelKey] = {};
-
-          // Loop through each second-level key (e.g., "GreenbankServicesClubecall")
-          for (const secondLevelKey in alldat[topLevelKey]) {
-            if (alldat[topLevelKey].hasOwnProperty(secondLevelKey)) {
-              // Check if the second-level key contains the hub name
-              if (alldat[topLevelKey][secondLevelKey][hubName]) {
-                // Add the filtered data for that second-level key and hub name
-                filteredData[topLevelKey][secondLevelKey] = {
-                  [hubName]: alldat[topLevelKey][secondLevelKey][hubName]
-                };
+      
+        keysArray.forEach(({ value }) => {
+          const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+      
+          if (alldat[topLevelKey] && alldat[topLevelKey][secondTopLevelKey]) {
+            const secondLevelData = alldat[topLevelKey][secondTopLevelKey];
+      
+            // Check if the hub exists
+            if (secondLevelData[hubName]) {
+              if (!filteredData[topLevelKey]) {
+                filteredData[topLevelKey] = {};
               }
+      
+              if (!filteredData[topLevelKey][secondTopLevelKey]) {
+                filteredData[topLevelKey][secondTopLevelKey] = {};
+              }
+      
+              filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
             }
           }
-        }
-
+        });
+      
         return filteredData;
       }
-
-      alldat = filterDataByDynamicKey(val22)
-
+      alldat = filterDataByDynamicKeys(val22)
       console.log(alldat, 'five')
 
     }
@@ -1339,6 +1394,8 @@ let Meals = () => {
 
     }
 
+
+    console.log(alldat , 'elevenn')
     const filteredData = {};
 
     Object.entries(alldat).forEach(([groupKey, groupData]) => {
@@ -1366,21 +1423,21 @@ let Meals = () => {
 
 
 
+    callfordataone(filteredData)
 
+    // console.log(filteredData, 'eight')
 
-    console.log(filteredData, 'eight')
+    // function isObjectEmpty(obj) {
+    //   return Object.keys(obj).length === 0;
+    // }
 
-    function isObjectEmpty(obj) {
-      return Object.keys(obj).length === 0;
-    }
+    // if (isObjectEmpty(filteredData)) {
 
-    if (isObjectEmpty(filteredData)) {
+    // } else {
 
-    } else {
+    //   callfordataone(filteredData)
 
-      callfordataone(filteredData)
-
-    }
+    // }
 
 
   }
@@ -1495,21 +1552,12 @@ let Meals = () => {
     }
 
     if (time != "" && time2 != '') {
-      let filterDataByTimeRange = (startTime, endTime) => {
-        // Convert startTime and endTime (e.g. "16:23", "20:05") to comparable Date objects
-        const [startHours, startMinutes] = startTime.split(":").map(Number);
-        const startDate = new Date();
-        startDate.setHours(startHours);
-        startDate.setMinutes(startMinutes);
-        startDate.setSeconds(0);  // Make sure seconds are zero for comparison
+      let filterDataByTimeRange = (startTime, endTime) => { 
 
-        const [endHours, endMinutes] = endTime.split(":").map(Number);
-        const endDate = new Date();
-        endDate.setHours(endHours);
-        endDate.setMinutes(endMinutes);
-        endDate.setSeconds(0);  // Make sure seconds are zero for comparison
+        startTime = parseInt(startTime.replace(":", ""), 10);   // Make sure seconds are zero for comparison
+        
+        endTime = parseInt(endTime.replace(":", ""), 10); 
 
-        // Function to process STAMP and filter based on time range
         function processData(obj) {
           let result = {};
 
@@ -1522,18 +1570,11 @@ let Meals = () => {
                 if (item.STAMP) {
                   let stamp = item.STAMP;
                   let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
-                  timeStr = timeStr.replace("R0", ""); // Remove "R0"
-
-                  // Convert the time to a comparable Date object
-                  const hours = parseInt(timeStr.substring(0, 2), 10);
-                  const minutes = parseInt(timeStr.substring(2, 4), 10);
-                  const stampDate = new Date();
-                  stampDate.setHours(hours);
-                  stampDate.setMinutes(minutes);
-                  stampDate.setSeconds(0);  // Make sure seconds are zero for comparison
+                  timeStr = parseInt(timeStr.replace("R0", "")); // Remove "R0" 
+ 
 
                   // Check if the time is within the range
-                  return stampDate >= startDate && stampDate <= endDate;
+                  return timeStr >= startTime  && timeStr <= endTime;
                 }
                 return false;
               });
@@ -1547,6 +1588,8 @@ let Meals = () => {
       };
 
       let alldddd = filterDataByTimeRange(time, time2)
+
+      alldat = alldddd
 
       console.log(alldddd, 'three')
     }
@@ -1572,36 +1615,66 @@ let Meals = () => {
 
 
     } else {
-      function filterDataByDynamicKey(key) {
-        // Split the key into top-level key and hub name
-        const [topLevelKey, hubName] = key.split('-');
+      // function filterDataByDynamicKey(key) {
+      //   // Split the key into top-level key and hub name
+      //   const [topLevelKey, hubName] = key.split('-');
 
-        // Initialize an empty object for the filtered result
+      //   // Initialize an empty object for the filtered result
+      //   const filteredData = {};
+
+      //   // Check if the top-level key exists in the data
+      //   if (alldat[topLevelKey]) {
+      //     filteredData[topLevelKey] = {};
+
+      //     // Loop through each second-level key (e.g., "GreenbankServicesClubecall")
+      //     for (const secondLevelKey in alldat[topLevelKey]) {
+      //       if (alldat[topLevelKey].hasOwnProperty(secondLevelKey)) {
+      //         // Check if the second-level key contains the hub name
+      //         if (alldat[topLevelKey][secondLevelKey][hubName]) {
+      //           // Add the filtered data for that second-level key and hub name
+      //           filteredData[topLevelKey][secondLevelKey] = {
+      //             [hubName]: alldat[topLevelKey][secondLevelKey][hubName]
+      //           };
+      //         }
+      //       }
+      //     }
+      //   }
+
+      //   return filteredData;
+      // }
+
+      // alldat = filterDataByDynamicKey(val22)
+
+      // console.log(alldat, 'five')
+
+
+      function filterDataByDynamicKeys(keysArray) {
         const filteredData = {};
-
-        // Check if the top-level key exists in the data
-        if (alldat[topLevelKey]) {
-          filteredData[topLevelKey] = {};
-
-          // Loop through each second-level key (e.g., "GreenbankServicesClubecall")
-          for (const secondLevelKey in alldat[topLevelKey]) {
-            if (alldat[topLevelKey].hasOwnProperty(secondLevelKey)) {
-              // Check if the second-level key contains the hub name
-              if (alldat[topLevelKey][secondLevelKey][hubName]) {
-                // Add the filtered data for that second-level key and hub name
-                filteredData[topLevelKey][secondLevelKey] = {
-                  [hubName]: alldat[topLevelKey][secondLevelKey][hubName]
-                };
+      
+        keysArray.forEach(({ value }) => {
+          const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+      
+          if (alldat[topLevelKey] && alldat[topLevelKey][secondTopLevelKey]) {
+            const secondLevelData = alldat[topLevelKey][secondTopLevelKey];
+      
+            // Check if the hub exists
+            if (secondLevelData[hubName]) {
+              if (!filteredData[topLevelKey]) {
+                filteredData[topLevelKey] = {};
               }
+      
+              if (!filteredData[topLevelKey][secondTopLevelKey]) {
+                filteredData[topLevelKey][secondTopLevelKey] = {};
+              }
+      
+              filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
             }
           }
-        }
-
+        });
+      
         return filteredData;
       }
-
-      alldat = filterDataByDynamicKey(val22)
-
+      alldat = filterDataByDynamicKeys(val22)
       console.log(alldat, 'five')
 
     }
@@ -2392,7 +2465,33 @@ let Meals = () => {
                   <label class="switch-label" for="switch3"></label>
                 </div>
 
-                <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
+
+
+                <Select
+                  isDisabled={!hubbswitch}
+                  isMulti
+                  className="newoneonee"
+                  options={basicone}
+                  value={hubb}
+                  onChange={handleChangehubone}
+                  placeholder="Select options..."
+                  components={{
+                    Option: CustomOption, // Custom tick option
+                    MultiValue: CustomMultiValue, // Hides selected values in input
+                  }}
+                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                  hideSelectedOptions={false} // Show all options even if selected
+                  styles={{
+                    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                  }}
+                />
+
+
+
+
+                
+
+                {/* <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
                   setHubb(e.target.value)
                   filterDataByDate(dateRange, onetime, twotime, selectedOptions, e.target.value, selectedCources, selectedTakeaway)
 
@@ -2406,7 +2505,7 @@ let Meals = () => {
                   {basicone?.map(item => (
                     <option value={item.value}>{item.label}</option>
                   ))}
-                </select>
+                </select> */}
 
               </div>
             </div>
@@ -3047,7 +3146,7 @@ let Meals = () => {
 
                               console.log(tot, 'nan')
 
-                              return <span >{isNaN(tot) ? 0.00 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                              return <span >{isNaN(tot) ?"+000.00" : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                                 style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
 
                                 }} className="" alt="Example Image" /> :
