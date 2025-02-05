@@ -96,8 +96,7 @@ let Meals = () => {
         ticks: { maxRotation: 45, minRotation: 0 }, // Prevents overlap
       },
       y: {
-        beginAtZero: true,
-        max: 200
+        beginAtZero: true, 
       },
     },
   };
@@ -124,7 +123,7 @@ let Meals = () => {
   };
 
 
-
+  let [fulldatafull, setFulldatafull] = useState()
 
   let getone = () => {
 
@@ -163,6 +162,34 @@ let Meals = () => {
           const cleanedData = removeTrainingNotes(eventss);
 
           console.log("Events between dates:", cleanedData);
+
+
+          function extractUniqueNotes(datad) {
+            let uniqueNotes = new Set();
+        
+            for (let group in datad) {
+                for (let location in datad[group]) {
+                    for (let section in datad[group][location]) {
+                        for (let date in datad[group][location][section]) {
+                            datad[group][location][section][date].forEach(order => {
+                                order.ITEMS.forEach(item => {
+                                    if (item.NOTE) {
+                                        uniqueNotes.add(item.NOTE);
+                                    }
+                                });
+                            });
+                        }
+                    }
+                }
+            }
+        
+            // Convert Set to desired format
+            return [...uniqueNotes].map(note => ({ value: note, label: note }));
+        }
+
+        let uuuk = extractUniqueNotes(cleanedData)
+        setFulldatafull(uuuk)
+        
 
 
           setBasicall(cleanedData)
@@ -245,28 +272,28 @@ let Meals = () => {
           ].map(value => ({ value, label: value }));
 
           console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
-          setFulldatafull([
-            {
-              "value": "Appetizers",
-              "label": "Appetizers"
-            },
-            {
-              "value": "Kids",
-              "label": "Kids"
-            },
-            {
-              "value": "Entrees",
-              "label": "Entrees"
-            },
-            {
-              "value": "Mains",
-              "label": "Mains"
-            },
-            {
-              "value": "Desserts",
-              "label": "Desserts"
-            },
-          ])
+          // setFulldatafull([
+          //   {
+          //     "value": "Appetizers",
+          //     "label": "Appetizers"
+          //   },
+          //   {
+          //     "value": "Kids",
+          //     "label": "Kids"
+          //   },
+          //   {
+          //     "value": "Entrees",
+          //     "label": "Entrees"
+          //   },
+          //   {
+          //     "value": "Mains",
+          //     "label": "Mains"
+          //   },
+          //   {
+          //     "value": "Desserts",
+          //     "label": "Desserts"
+          //   },
+          // ])
           // setFulldatafull(optionstakeaway)
           // setBasicone(optionsstwo)
 
@@ -356,7 +383,7 @@ let Meals = () => {
   let [fulldata, setFulldata] = useState()
   let [fulldatatwo, setFulldatatwo] = useState()
 
-  let [fulldatafull, setFulldatafull] = useState()
+  
 
   let updates = (num, val) => {
 
@@ -696,7 +723,9 @@ let Meals = () => {
 
   let callfordata = (one, two) => {
 
+ 
 
+    
     if (one === undefined || one === null || one === '' ||
       two === undefined || two === null || two === ""
     ) {
@@ -816,7 +845,7 @@ let Meals = () => {
           entriessss.forEach(entry => {
             entry.ITEMS.forEach(item => {
               // Check if "Refunded" exists in the ITEM field
-              if (item.ITEM.includes("Refunded")) {
+              if (item.NOTE.includes("Refunded")) {
                 refundedItems.push(item);
               }
             });
@@ -832,7 +861,7 @@ let Meals = () => {
             results.push({
               date,
               count: totalQuantity,
-              name: refundedItems[0].ITEM, // Assuming all refunded items share the same name
+              name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
               data: refundedItems,
             });
           }
@@ -843,6 +872,10 @@ let Meals = () => {
 
       let refundcount = processRefundedItems(one)
       let refundcounttwo = processRefundedItems(two)
+
+      console.log(refundcount , 'refundcountrefundcount')
+      console.log(refundcounttwo , 'refundcounttworefundcounttwo')
+
       setMinperday(refundcount)
       setMaxperday(refundcounttwo)
 
@@ -889,9 +922,9 @@ let Meals = () => {
 
     setSelectedOptions(selected || []);
 
-    filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway)
+    filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway ,   inputvalue ,inputvaluetwo , selectedhubOptions)
 
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway)
+    filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
 
     const output = [];
 
@@ -956,8 +989,10 @@ let Meals = () => {
   const handleChangehub = (selected) => {
     setSelectedhubOptions(selected || []);
 
+    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway ,   inputvalue ,inputvaluetwo , selected )
+    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo , selected )
 
-
+    // selectedhubOptions
 
 
   };
@@ -970,10 +1005,10 @@ let Meals = () => {
     setHubb(selectedss)
 
 
-    filterDataByDate(dateRange, onetime, twotime, selectedOptions,selectedss , selectedCources, selectedTakeaway)
+    filterDataByDate(dateRange, onetime, twotime, selectedOptions,selectedss , selectedCources, selectedTakeaway ,   inputvalue ,inputvaluetwo , selectedhubOptions )
 
 
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions,  selectedss, selectedCources, selectedTakeaway)
+    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions,  selectedss, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
 
 
 
@@ -992,11 +1027,11 @@ let Meals = () => {
 
   const [selectedCources, setSelectedCources] = useState([]);
   const handleChangeCources = (selected) => {
-    setSelectedCources(selected || []);
+    setSelectedCources(selected || []); 
 
-    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selected, selectedTakeaway)
+    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selected, selectedTakeaway,   inputvalue ,inputvaluetwo , selectedhubOptions)
 
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway)
+    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
 
 
   };
@@ -1015,9 +1050,9 @@ let Meals = () => {
 
     setSelectedTakeaway(selected || []);
 
-    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selected)
+    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selected ,   inputvalue ,inputvaluetwo, selectedhubOptions )
 
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selected)
+    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selected ,   inputvalue ,inputvaluetwo , selectedhubOptions)
 
   };
 
@@ -1046,6 +1081,16 @@ let Meals = () => {
     return kkki
   }
 
+  let ggggrtz = () => {
+    let kkki = 0
+    minperday?.map((reee) => {
+
+      kkki = kkki + reee.count
+    })
+
+    return kkki
+  }
+
   let ggggrts = () => {
     let kkki = 0
     servedone?.map((reee) => {
@@ -1058,11 +1103,11 @@ let Meals = () => {
 
 
 
-  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway) {
+  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway ,   inone ,intwo , alltype ) { 
 
     let alldat = basicall
 
-    console.log(val22, 'val22')
+    console.log( JSON.stringify(alltype) ,  'val2245' )
 
     if (vals[1] === null || vals[1] === "null") {
 
@@ -1225,7 +1270,7 @@ let Meals = () => {
 
     }
 
-    if (val22 === undefined || val22 === "") {
+    if (val22.length === 0 || val22 === "") {
 
 
 
@@ -1296,49 +1341,40 @@ let Meals = () => {
     if (cources.length != 0) {
 
 
-      function filterByNote(filters) {
-        const allowedNotes = filters.map(f => f.value); // Extract values from filter array
-        const result = {};
-
-        function filterItems(items) {
-          return items.filter(item => allowedNotes.includes(item.NOTE));
-        }
-
-        function traverse(obj) {
-          if (Array.isArray(obj)) {
-            return obj.map(traverse).filter(entry => entry && entry.length > 0);
-          } else if (typeof obj === "object" && obj !== null) {
-            let newObj = {};
-            for (let key in obj) {
-              if (key === "ITEMS" && Array.isArray(obj[key])) {
-                let filteredItems = filterItems(obj[key]);
-                if (filteredItems.length > 0) {
-                  newObj[key] = filteredItems;
+      function filterByNoted(data, filterNotes) {
+        let filteredData = {};
+    
+        // Extract only values from the filter list
+        const validNotes = filterNotes.map(item => item.value);
+    
+        for (let group in data) {
+            for (let location in data[group]) {
+                for (let section in data[group][location]) {
+                    for (let date in data[group][location][section]) {
+                        let filteredOrders = data[group][location][section][date].map(order => {
+                            let filteredItems = order.ITEMS.filter(item => validNotes.includes(item.NOTE));
+    
+                            if (filteredItems.length > 0) {
+                                return { ...order, ITEMS: filteredItems };
+                            }
+                            return null;
+                        }).filter(order => order !== null);
+    
+                        if (filteredOrders.length > 0) {
+                            if (!filteredData[group]) filteredData[group] = {};
+                            if (!filteredData[group][location]) filteredData[group][location] = {};
+                            if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                            filteredData[group][location][section][date] = filteredOrders;
+                        }
+                    }
                 }
-              } else {
-                let value = traverse(obj[key]);
-                if (value && Object.keys(value).length > 0) {
-                  newObj[key] = value;
-                }
-              }
             }
-            return Object.keys(newObj).length > 0 ? newObj : null;
-          }
-          return obj;
         }
+    
+        return filteredData;
+    }
 
-        Object.keys(alldat).forEach(key => {
-          let filtered = traverse(alldat[key]);
-          if (filtered && Object.keys(filtered).length > 0) {
-            result[key] = filtered;
-          }
-        });
-
-        return result;
-      }
-
-
-      alldat = filterByNote(cources)
+      alldat = filterByNoted( alldat , cources)
 
       console.log(alldat, 'six')
 
@@ -1393,9 +1429,111 @@ let Meals = () => {
       console.log(alldat, 'seven')
 
     }
+ 
+    if(inone !=undefined && intwo != undefined  ){
+      let splitone = inone.split('-')
+
+      let splittwo = intwo.split('-')
+      console.log(splitone.length , 'ten    lll' , splitone.length)
+      if(splitone.length === 2 && splittwo.length === 2  ) {
+
+        if( Number(splitone[0]) <  Number(splitone[1]) && Number(splittwo[0]) <  Number(splittwo[1]) ){
 
 
-    console.log(alldat , 'elevenn')
+
+          function filterDataByTableRanges(data, ranges) {
+            const filteredData = {};
+        
+            Object.entries(data).forEach(([groupKey, groupData]) => {
+                Object.entries(groupData).forEach(([venueKey, venueData]) => {
+                    Object.entries(venueData).forEach(([areaKey, areaData]) => {
+                        Object.entries(areaData).forEach(([dateKey, records]) => {
+                            const filteredRecords = records.filter(record => {
+                                const tableNum = parseInt(record.TABLE, 10);
+                                return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
+                            });
+        
+                            if (filteredRecords.length > 0) {
+                                if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                                if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                                if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                                filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                            }
+                        });
+                    });
+                });
+            });
+        
+            return filteredData;
+        }
+ 
+        const ranges = [[Number(splitone[0]), Number(splitone[1]) ], [Number(splittwo[0]) , Number(splittwo[1]) ]];
+
+        let twelves = filterDataByTableRanges(alldat, ranges)
+
+        alldat = twelves 
+
+
+          console.log(twelves ,  'nine')
+        }else{
+
+        }
+
+      }else{
+        
+      }
+    }
+
+    if(alltype === undefined || alltype.length === 0 ){
+
+    }else{
+      function filterByStamp(data, filterValues) {
+        let filteredData = {};
+        
+        // Create a mapping of values to stamp identifiers
+        const stampMapping = {
+            "R": "R0",
+            "H": "H0",
+            "P": "P0",
+            "S": "S0"
+        };
+    
+        // Extract relevant values
+        const validStamps = filterValues.map(f => stampMapping[f.value]).filter(Boolean);
+    
+        for (let group in data) {
+            for (let location in data[group]) {
+                for (let section in data[group][location]) {
+                    for (let date in data[group][location][section]) {
+                        let orders = data[group][location][section][date].filter(order =>
+                            validStamps.some(stamp => order.STAMP.includes(stamp))
+                        );
+    
+                        if (!filteredData[group]) filteredData[group] = {};
+                        if (!filteredData[group][location]) filteredData[group][location] = {};
+                        if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                        
+                        if (orders.length > 0) {
+                            filteredData[group][location][section][date] = orders;
+                        }
+                    }
+                }
+            }
+        }
+    
+        return filteredData;
+      }
+
+
+      let resultss = filterByStamp(alldat, alltype);
+
+      alldat = resultss
+
+      console.log(resultss , 'tenten')
+    }
+
+
+    console.log(JSON.stringify(alldat) , 'elevenn')
     const filteredData = {};
 
     Object.entries(alldat).forEach(([groupKey, groupData]) => {
@@ -1425,6 +1563,19 @@ let Meals = () => {
 
     callfordataone(filteredData)
 
+    let ghi =processTimeData(alldat)
+
+    let kidshort  = ghi.sort((a, b) => a.time.localeCompare(b.time));
+
+    // Extract values into separate arrays
+    let timeLabels = kidshort.map(entry => entry.time);
+    let timeCounts = kidshort.map(entry => entry.count);
+
+    setOption(timeLabels)
+    setOneBar(timeCounts)
+
+    console.log( JSON.stringify( ghi) , 'thousand')
+
     // console.log(filteredData, 'eight')
 
     // function isObjectEmpty(obj) {
@@ -1443,11 +1594,55 @@ let Meals = () => {
   }
 
 
-  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaway) {
+  function processTimeData(data) {
+    let timeCounts = {};
+
+    function extractTime(stamp) {
+        let match = stamp.match(/\d{4}(R0|H0|P0|S0)/);
+        if (match) {
+            return match[0].slice(0, 2) + ":" + match[0].slice(2, 4); // Convert to HH:MM
+        }
+        return null;
+    }
+
+    function roundToInterval(time) {
+        let [hour, minute] = time.split(":").map(Number);
+        let roundedMinute = Math.floor(minute / 10) * 10; // Round to nearest lower 10-minute mark
+        return `${hour}.${roundedMinute.toString().padStart(2, "0")}`;
+    }
+
+    for (let group in data) {
+        for (let location in data[group]) {
+            for (let section in data[group][location]) {
+                for (let date in data[group][location][section]) {
+                    data[group][location][section][date].forEach(order => {
+                        let stamps = order.STAMP.split(" "); // Split STAMP string
+                        stamps.forEach(stamp => {
+                            let extractedTime = extractTime(stamp);
+                            if (extractedTime) {
+                                let interval = roundToInterval(extractedTime);
+                                timeCounts[interval] = (timeCounts[interval] || 0) + 1;
+                            }
+                        });
+                    });
+                }
+            }
+        }
+    }
+
+    // Convert to final array format
+    return Object.keys(timeCounts)
+        .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
+        .map(time => ({ time, count: timeCounts[time] }));
+}
+
+
+  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaway , inone , intwo  , alltype ) {
+
 
     let alldat = basicall
 
-    console.log(val22, 'val22')
+    console.log( JSON.stringify(alltype) ,  'val2245' )
 
     if (vals[1] === null || vals[1] === "null") {
 
@@ -1610,7 +1805,7 @@ let Meals = () => {
 
     }
 
-    if (val22 === undefined || val22 === "") {
+    if (val22.length === 0 || val22 === "") {
 
 
 
@@ -1647,7 +1842,6 @@ let Meals = () => {
 
       // console.log(alldat, 'five')
 
-
       function filterDataByDynamicKeys(keysArray) {
         const filteredData = {};
       
@@ -1682,49 +1876,40 @@ let Meals = () => {
     if (cources.length != 0) {
 
 
-      function filterByNote(filters) {
-        const allowedNotes = filters.map(f => f.value); // Extract values from filter array
-        const result = {};
-
-        function filterItems(items) {
-          return items.filter(item => allowedNotes.includes(item.NOTE));
-        }
-
-        function traverse(obj) {
-          if (Array.isArray(obj)) {
-            return obj.map(traverse).filter(entry => entry && entry.length > 0);
-          } else if (typeof obj === "object" && obj !== null) {
-            let newObj = {};
-            for (let key in obj) {
-              if (key === "ITEMS" && Array.isArray(obj[key])) {
-                let filteredItems = filterItems(obj[key]);
-                if (filteredItems.length > 0) {
-                  newObj[key] = filteredItems;
+      function filterByNoted(data, filterNotes) {
+        let filteredData = {};
+    
+        // Extract only values from the filter list
+        const validNotes = filterNotes.map(item => item.value);
+    
+        for (let group in data) {
+            for (let location in data[group]) {
+                for (let section in data[group][location]) {
+                    for (let date in data[group][location][section]) {
+                        let filteredOrders = data[group][location][section][date].map(order => {
+                            let filteredItems = order.ITEMS.filter(item => validNotes.includes(item.NOTE));
+    
+                            if (filteredItems.length > 0) {
+                                return { ...order, ITEMS: filteredItems };
+                            }
+                            return null;
+                        }).filter(order => order !== null);
+    
+                        if (filteredOrders.length > 0) {
+                            if (!filteredData[group]) filteredData[group] = {};
+                            if (!filteredData[group][location]) filteredData[group][location] = {};
+                            if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                            filteredData[group][location][section][date] = filteredOrders;
+                        }
+                    }
                 }
-              } else {
-                let value = traverse(obj[key]);
-                if (value && Object.keys(value).length > 0) {
-                  newObj[key] = value;
-                }
-              }
             }
-            return Object.keys(newObj).length > 0 ? newObj : null;
-          }
-          return obj;
         }
+    
+        return filteredData;
+    }
 
-        Object.keys(alldat).forEach(key => {
-          let filtered = traverse(alldat[key]);
-          if (filtered && Object.keys(filtered).length > 0) {
-            result[key] = filtered;
-          }
-        });
-
-        return result;
-      }
-
-
-      alldat = filterByNote(cources)
+      alldat = filterByNoted( alldat , cources)
 
       console.log(alldat, 'six')
 
@@ -1779,6 +1964,113 @@ let Meals = () => {
       console.log(alldat, 'seven')
 
     }
+ 
+    if(inone !=undefined && intwo != undefined  ){
+      let splitone = inone.split('-')
+
+      let splittwo = intwo.split('-')
+      console.log(splitone.length , 'ten    lll' , splitone.length)
+      if(splitone.length === 2 && splittwo.length === 2  ) {
+
+        if( Number(splitone[0]) <  Number(splitone[1]) && Number(splittwo[0]) <  Number(splittwo[1]) ){
+
+
+
+          function filterDataByTableRanges(data, ranges) {
+            const filteredData = {};
+        
+            Object.entries(data).forEach(([groupKey, groupData]) => {
+                Object.entries(groupData).forEach(([venueKey, venueData]) => {
+                    Object.entries(venueData).forEach(([areaKey, areaData]) => {
+                        Object.entries(areaData).forEach(([dateKey, records]) => {
+                            const filteredRecords = records.filter(record => {
+                                const tableNum = parseInt(record.TABLE, 10);
+                                return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
+                            });
+        
+                            if (filteredRecords.length > 0) {
+                                if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                                if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                                if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                                filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                            }
+                        });
+                    });
+                });
+            });
+        
+            return filteredData;
+        }
+ 
+        const ranges = [[Number(splitone[0]), Number(splitone[1]) ], [Number(splittwo[0]) , Number(splittwo[1]) ]];
+
+        let twelves = filterDataByTableRanges(alldat, ranges)
+
+        alldat = twelves 
+
+
+          console.log(twelves ,  'nine')
+        }else{
+
+        }
+
+      }else{
+        
+      }
+    }
+
+    if(alltype === undefined || alltype.length === 0 ){
+
+    }else{
+      function filterByStamp(data, filterValues) {
+        let filteredData = {};
+        
+        // Create a mapping of values to stamp identifiers
+        const stampMapping = {
+            "R": "R0",
+            "H": "H0",
+            "P": "P0",
+            "S": "S0"
+        };
+    
+        // Extract relevant values
+        const validStamps = filterValues.map(f => stampMapping[f.value]).filter(Boolean);
+    
+        for (let group in data) {
+            for (let location in data[group]) {
+                for (let section in data[group][location]) {
+                    for (let date in data[group][location][section]) {
+                        let orders = data[group][location][section][date].filter(order =>
+                            validStamps.some(stamp => order.STAMP.includes(stamp))
+                        );
+    
+                        if (!filteredData[group]) filteredData[group] = {};
+                        if (!filteredData[group][location]) filteredData[group][location] = {};
+                        if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                        
+                        if (orders.length > 0) {
+                            filteredData[group][location][section][date] = orders;
+                        }
+                    }
+                }
+            }
+        }
+    
+        return filteredData;
+      }
+
+
+      let resultss = filterByStamp(alldat, alltype);
+
+      alldat = resultss
+
+      console.log(resultss , 'tenten')
+    }
+
+
+    console.log(JSON.stringify(alldat) , 'elevenn')
+
+
 
     const filteredData = {};
 
@@ -1823,6 +2115,18 @@ let Meals = () => {
 
     }
 
+    let ghi =processTimeData(alldat)
+
+    let kidshort  = ghi.sort((a, b) => a.time.localeCompare(b.time));
+
+    // Extract values into separate arrays
+    let timeLabels = kidshort.map(entry => entry.time);
+    let timeCounts = kidshort.map(entry => entry.count);
+ 
+    setTwobar(timeCounts)
+
+
+
 
   }
 
@@ -1832,7 +2136,7 @@ let Meals = () => {
   let callfordataone = (one) => {
 
 
-
+ 
 
     const categorizeItems = (datasssssss) => {
       const edited = ["2", "12", "22", "32"];
@@ -1936,7 +2240,7 @@ let Meals = () => {
         entries.forEach(entry => {
           entry.ITEMS.forEach(item => {
             // Check if "Refunded" exists in the ITEM field
-            if (item.ITEM.includes("Refunded")) {
+            if (item.NOTE.includes("Refunded")) {
               refundedItems.push(item);
             }
           });
@@ -1952,7 +2256,7 @@ let Meals = () => {
           results.push({
             date,
             count: totalQuantity,
-            name: refundedItems[0].ITEM, // Assuming all refunded items share the same name
+            name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
             data: refundedItems,
           });
         }
@@ -1964,6 +2268,7 @@ let Meals = () => {
     let refundcount = processRefundedItems(one)
     // let refundcounttwo = processRefundedItems(two)
     setMinperday(refundcount)
+    console.log(refundcount ,'refundcountrefundcountrefundcount')
     // setMaxperday(refundcounttwo)
 
 
@@ -2078,7 +2383,7 @@ let Meals = () => {
         entries.forEach(entry => {
           entry.ITEMS.forEach(item => {
             // Check if "Refunded" exists in the ITEM field
-            if (item.ITEM.includes("Refunded")) {
+            if (item.NOTE.includes("Refunded")) {
               refundedItems.push(item);
             }
           });
@@ -2094,7 +2399,7 @@ let Meals = () => {
           results.push({
             date,
             count: totalQuantity,
-            name: refundedItems[0].ITEM, // Assuming all refunded items share the same name
+            name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
             data: refundedItems,
           });
         }
@@ -2297,7 +2602,7 @@ let Meals = () => {
                     if (update[1] === null || update[1] === "null") {
 
                     } else {
-                      filterDataByDate(update, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway)
+                      filterDataByDate(update, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions )
 
 
 
@@ -2325,7 +2630,7 @@ let Meals = () => {
                       console.log(e.target.value, 'eeee')
                       setOnetime(e.target.value)
 
-                      filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway)
+                      filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
 
 
                     }}
@@ -2338,7 +2643,7 @@ let Meals = () => {
                       setTwotime(e.target.value)
                       // tiemstampp(2, e.target.value)
 
-                      filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway)
+                      filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
 
                     }}
                   />
@@ -2364,7 +2669,7 @@ let Meals = () => {
                     } else {
                       // updates(2, update)
 
-                      filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway)
+                      filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
 
 
                     }
@@ -2392,7 +2697,7 @@ let Meals = () => {
                     onChange={(e) => {
                       setThreetime(e.target.value)
 
-                      filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway)
+                      filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
 
 
                     }}
@@ -2403,7 +2708,7 @@ let Meals = () => {
                     value={fourtime}
                     onChange={(e) => {
                       setFourtime(e.target.value)
-                      filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway)
+                      filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
                     }}
                   />
                 </div>
@@ -2602,11 +2907,23 @@ let Meals = () => {
                 </select> */}
                 <input onChange={(e) => {
                   setInputvalue(e.target.value)
-                }} value={inputvalue} placeholder="0" style={{ width: '50%', border: 'unset' }} type="number" />
+                  
+                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway , e.target.value , inputvaluetwo , selectedhubOptions)
+
+                  filterDataByDateonee(dateRangetwo, threetime, fourtime,  selectedOptions, hubb, selectedCources, selectedTakeaway , e.target.value , inputvaluetwo, selectedhubOptions )
+
+                }} value={inputvalue} placeholder="0-100" style={{ width: '50%', border: 'unset' }} type="text" />
+
+
                 <p style={{ fontSize: 19, display: 'contents' }} >|</p>
+
+              
                 <input onChange={(e) => {
                   setInputvaluetwo(e.target.value)
-                }} value={inputvaluetwo} placeholder="999" style={{ width: '50%', border: 'unset' }} type="number" />
+                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway , inputvalue , e.target.value , selectedhubOptions)
+
+                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway , inputvalue , e.target.value , selectedhubOptions)
+                }} value={inputvaluetwo} placeholder="200-399" style={{ width: '50%', border: 'unset' }} type="text" />
               </div>
 
               <div className="custom-inputoness d-flex justify-content-between mt-3" style={{
@@ -2870,11 +3187,15 @@ let Meals = () => {
                       <div class="boxs">
                         <div className="d-flex justify-content-between" >
                           <div >
-                            <p className='asdfp' style={{ marginBottom: 0 }}>Refunded meals</p>
+                            <p className='asdfp' style={{ marginBottom: 0 }}>Refunded meals</p> 
                             <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
                           </div>
                           <div >
-                            <p className='asdfp' style={{ color: '#316AAF' }}>0</p>
+                            <p className='asdfp' style={{ color: '#316AAF' }}>{
+                              minperday ?
+                                ggggrtz()
+                                : 0
+                            }</p>
                           </div>
                         </div>
 
