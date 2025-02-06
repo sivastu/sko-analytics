@@ -13,6 +13,7 @@ import Forgetpassword from "./page/Forgetpassword";
 
 //meals
 import Meals from "./page/Meals";
+import Dockets from "./page/Dockets";
 
 function App() {
   return (
@@ -27,7 +28,9 @@ function App() {
         <Route path="/singlevenues" element={<Singlevenues />} /> 
         <Route path="/forgetpassword" element={<Forgetpassword />} /> 
 
-        <Route path="/meals" element={<Meals />} />  
+        <Route path="/meals" element={<Meals />} />
+        <Route path="/dockets" element={<Dockets />} />
+
       </Routes>
     </BrowserRouter>
   );

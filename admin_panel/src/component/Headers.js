@@ -39,7 +39,7 @@ let Headers = (props) => {
         height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
         // border: "1px solid #dbdbdb"
       }} >
-        <div className="d-flex justify-content-between container" >
+        <div className="d-flex justify-content-between " style={{ paddingLeft : '2%' , paddingRight : '2%' }}>
           <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
             {
               props?.name ?

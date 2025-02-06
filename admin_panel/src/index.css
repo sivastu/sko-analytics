@@ -68,7 +68,7 @@ code {
 } */
 
 .react-datepicker-wrapper{
-  width: 264px;
+  width: 350px;
 }
 
 /* Container for Input and Icon */
@@ -115,7 +115,7 @@ code {
 }
 
 .newoneonee{
-  width: 188px;
+  width: 280px;
   font-size : 12px;
 }
 
@@ -139,13 +139,19 @@ code {
   align-items: center;
 }
 
+.switch-containers {
+  display: inline-flex;
+  align-items: center;
+}
+
+
 /* Hide the default checkbox */
 input[type="checkbox"] {
   display: none;
 }
 .dddd{
-  padding-left: 10%;
-  padding-right: 10%;
+  padding-left: 2%;
+  padding-right: 2%;
 }
 .ddd{
   padding-left: 5%;

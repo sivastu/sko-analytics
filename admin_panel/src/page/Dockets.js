@@ -43,7 +43,7 @@ ChartJS.register(
 );
 
 
-let Meals = () => {
+let Dockets = () => {
   let [data, setData] = useState();
   const [dateRange, setDateRange] = useState([null, null]); // [startDate, endDate]
   const [startDate, endDate] = dateRange;
@@ -96,7 +96,7 @@ let Meals = () => {
         ticks: { maxRotation: 45, minRotation: 0 }, // Prevents overlap
       },
       y: {
-        beginAtZero: true, 
+        beginAtZero: true,
       },
     },
   };
@@ -166,30 +166,30 @@ let Meals = () => {
 
           function extractUniqueNotes(datad) {
             let uniqueNotes = new Set();
-        
+
             for (let group in datad) {
-                for (let location in datad[group]) {
-                    for (let section in datad[group][location]) {
-                        for (let date in datad[group][location][section]) {
-                            datad[group][location][section][date].forEach(order => {
-                                order.ITEMS.forEach(item => {
-                                    if (item.NOTE) {
-                                        uniqueNotes.add(item.NOTE);
-                                    }
-                                });
-                            });
+              for (let location in datad[group]) {
+                for (let section in datad[group][location]) {
+                  for (let date in datad[group][location][section]) {
+                    datad[group][location][section][date].forEach(order => {
+                      order.ITEMS.forEach(item => {
+                        if (item.NOTE) {
+                          uniqueNotes.add(item.NOTE);
                         }
-                    }
+                      });
+                    });
+                  }
                 }
+              }
             }
-        
+
             // Convert Set to desired format
             return [...uniqueNotes].map(note => ({ value: note, label: note }));
-        }
+          }
 
-        let uuuk = extractUniqueNotes(cleanedData)
-        setFulldatafull(uuuk)
-        
+          let uuuk = extractUniqueNotes(cleanedData)
+          setFulldatafull(uuuk)
+
 
 
           setBasicall(cleanedData)
@@ -226,24 +226,24 @@ let Meals = () => {
           const result = {};
           Object.entries(cleanedData).forEach(([groupName, groupData]) => {
 
-           
+
             Object.entries(groupData).forEach(([keyss, valuess]) => {
               Object.entries(valuess).forEach(([keyssa, valuessa]) => {
-              
+
                 if (!result[keyss]) {
                   result[keyss] = [];
                 }
-    
-                result[keyss].push({ 
+
+                result[keyss].push({
                   name: keyssa + "-" + keyss
                 });
-                
+
+              });
             });
-          });
 
           });
           setAlldrop(result)
-          console.log(result , 'keykeykeykey'  ) // its oblect
+          console.log(result, 'keykeykeykey') // its oblect
           const optionsone = [];
           Object.entries(cleanedData).forEach(([groupName, groupData]) => {
             Object.keys(groupData).forEach((key) => {
@@ -258,7 +258,7 @@ let Meals = () => {
           //   label: hub,
           // }));
 
-         
+
 
 
           console.log("options:", optionsone);
@@ -383,7 +383,7 @@ let Meals = () => {
   let [fulldata, setFulldata] = useState()
   let [fulldatatwo, setFulldatatwo] = useState()
 
-  
+
 
   let updates = (num, val) => {
 
@@ -723,9 +723,9 @@ let Meals = () => {
 
   let callfordata = (one, two) => {
 
- 
 
-    
+
+
     if (one === undefined || one === null || one === '' ||
       two === undefined || two === null || two === ""
     ) {
@@ -873,8 +873,8 @@ let Meals = () => {
       let refundcount = processRefundedItems(one)
       let refundcounttwo = processRefundedItems(two)
 
-      console.log(refundcount , 'refundcountrefundcount')
-      console.log(refundcounttwo , 'refundcounttworefundcounttwo')
+      console.log(refundcount, 'refundcountrefundcount')
+      console.log(refundcounttwo, 'refundcounttworefundcounttwo')
 
       setMinperday(refundcount)
       setMaxperday(refundcounttwo)
@@ -908,13 +908,13 @@ let Meals = () => {
           cursor: 'pointer',
         }}
       >
-        { <div class="switch-containers"  style={{ marginRight : 4 }}>
-                  <input checked={isSelected}  
-                     type="checkbox" id="switch3" />
-                  <label class="switch-label" for="switch3"></label>
-                </div>} 
+        {<div class="switch-containers" style={{ marginRight: 4 }}>
+          <input checked={isSelected}
+            type="checkbox" id="switch3" />
+          <label class="switch-label" for="switch3"></label>
+        </div>}
         <span style={{ flexGrow: 1 }}>{data.label}</span>
-        
+
       </div>
     );
   };
@@ -925,16 +925,16 @@ let Meals = () => {
     const selected = getValue();
     if (selected.length) {
       const allLabels = selected.map(option => option.label).join(", ");
-      
+
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
       const displayText = allLabels.length > maxLength ? allLabels.slice(0, maxLength) + "..." : allLabels;
-  
+
       return <span title={allLabels}>{displayText}</span>;
     }
     return null;
   };
-  
+
   const [selectedOptions, setSelectedOptions] = useState([]);
 
 
@@ -943,9 +943,9 @@ let Meals = () => {
 
     setSelectedOptions(selected || []);
 
-    filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway ,   inputvalue ,inputvaluetwo , selectedhubOptions)
+    filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
+    filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
     const output = [];
 
@@ -968,7 +968,7 @@ let Meals = () => {
         }
       });
     });
- 
+
     setBasicone(output)
 
     // const validVenues = selected.map(item => item.value);
@@ -1010,8 +1010,8 @@ let Meals = () => {
   const handleChangehub = (selected) => {
     setSelectedhubOptions(selected || []);
 
-    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway ,   inputvalue ,inputvaluetwo , selected )
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo , selected )
+    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
+    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
 
     // selectedhubOptions
 
@@ -1019,17 +1019,17 @@ let Meals = () => {
   };
 
 
-  const handleChangehubone = (selectedss) => {  
-    
-    console.log(selectedss , 'selectedssselectedssselectedss')
+  const handleChangehubone = (selectedss) => {
+
+    console.log(selectedss, 'selectedssselectedssselectedss')
 
     setHubb(selectedss)
 
 
-    filterDataByDate(dateRange, onetime, twotime, selectedOptions,selectedss , selectedCources, selectedTakeaway ,   inputvalue ,inputvaluetwo , selectedhubOptions )
+    filterDataByDate(dateRange, onetime, twotime, selectedOptions, selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions,  selectedss, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
+    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
 
@@ -1048,11 +1048,11 @@ let Meals = () => {
 
   const [selectedCources, setSelectedCources] = useState([]);
   const handleChangeCources = (selected) => {
-    setSelectedCources(selected || []); 
+    setSelectedCources(selected || []);
 
-    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selected, selectedTakeaway,   inputvalue ,inputvaluetwo , selectedhubOptions)
+    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
+    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
   };
@@ -1071,9 +1071,9 @@ let Meals = () => {
 
     setSelectedTakeaway(selected || []);
 
-    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selected ,   inputvalue ,inputvaluetwo, selectedhubOptions )
+    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
 
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selected ,   inputvalue ,inputvaluetwo , selectedhubOptions)
+    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
 
   };
 
@@ -1124,11 +1124,11 @@ let Meals = () => {
 
 
 
-  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway ,   inone ,intwo , alltype ) { 
+  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
 
     let alldat = basicall
 
-    console.log( JSON.stringify(alltype) ,  'val2245' )
+    console.log(JSON.stringify(alltype), 'val2245')
 
     if (vals[1] === null || vals[1] === "null") {
 
@@ -1233,11 +1233,11 @@ let Meals = () => {
     }
 
     if (time != "" && time2 != '') {
-      let filterDataByTimeRange = (startTime, endTime) => { 
+      let filterDataByTimeRange = (startTime, endTime) => {
 
         startTime = parseInt(startTime.replace(":", ""), 10);   // Make sure seconds are zero for comparison
-        
-        endTime = parseInt(endTime.replace(":", ""), 10); 
+
+        endTime = parseInt(endTime.replace(":", ""), 10);
 
         function processData(obj) {
           let result = {};
@@ -1252,10 +1252,10 @@ let Meals = () => {
                   let stamp = item.STAMP;
                   let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
                   timeStr = parseInt(timeStr.replace("R0", "")); // Remove "R0" 
- 
+
 
                   // Check if the time is within the range
-                  return timeStr >= startTime  && timeStr <= endTime;
+                  return timeStr >= startTime && timeStr <= endTime;
                 }
                 return false;
               });
@@ -1330,28 +1330,28 @@ let Meals = () => {
 
       function filterDataByDynamicKeys(keysArray) {
         const filteredData = {};
-      
+
         keysArray.forEach(({ value }) => {
           const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
-      
+
           if (alldat[topLevelKey] && alldat[topLevelKey][secondTopLevelKey]) {
             const secondLevelData = alldat[topLevelKey][secondTopLevelKey];
-      
+
             // Check if the hub exists
             if (secondLevelData[hubName]) {
               if (!filteredData[topLevelKey]) {
                 filteredData[topLevelKey] = {};
               }
-      
+
               if (!filteredData[topLevelKey][secondTopLevelKey]) {
                 filteredData[topLevelKey][secondTopLevelKey] = {};
               }
-      
+
               filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
             }
           }
         });
-      
+
         return filteredData;
       }
       alldat = filterDataByDynamicKeys(val22)
@@ -1364,38 +1364,38 @@ let Meals = () => {
 
       function filterByNoted(data, filterNotes) {
         let filteredData = {};
-    
+
         // Extract only values from the filter list
         const validNotes = filterNotes.map(item => item.value);
-    
-        for (let group in data) {
-            for (let location in data[group]) {
-                for (let section in data[group][location]) {
-                    for (let date in data[group][location][section]) {
-                        let filteredOrders = data[group][location][section][date].map(order => {
-                            let filteredItems = order.ITEMS.filter(item => validNotes.includes(item.NOTE));
-    
-                            if (filteredItems.length > 0) {
-                                return { ...order, ITEMS: filteredItems };
-                            }
-                            return null;
-                        }).filter(order => order !== null);
-    
-                        if (filteredOrders.length > 0) {
-                            if (!filteredData[group]) filteredData[group] = {};
-                            if (!filteredData[group][location]) filteredData[group][location] = {};
-                            if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                            filteredData[group][location][section][date] = filteredOrders;
-                        }
-                    }
-                }
-            }
-        }
-    
-        return filteredData;
-    }
 
-      alldat = filterByNoted( alldat , cources)
+        for (let group in data) {
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let filteredOrders = data[group][location][section][date].map(order => {
+                  let filteredItems = order.ITEMS.filter(item => validNotes.includes(item.NOTE));
+
+                  if (filteredItems.length > 0) {
+                    return { ...order, ITEMS: filteredItems };
+                  }
+                  return null;
+                }).filter(order => order !== null);
+
+                if (filteredOrders.length > 0) {
+                  if (!filteredData[group]) filteredData[group] = {};
+                  if (!filteredData[group][location]) filteredData[group][location] = {};
+                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                  filteredData[group][location][section][date] = filteredOrders;
+                }
+              }
+            }
+          }
+        }
+
+        return filteredData;
+      }
+
+      alldat = filterByNoted(alldat, cources)
 
       console.log(alldat, 'six')
 
@@ -1450,98 +1450,98 @@ let Meals = () => {
       console.log(alldat, 'seven')
 
     }
- 
-    if(inone !=undefined && intwo != undefined  ){
+
+    if (inone != undefined && intwo != undefined) {
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
-      console.log(splitone.length , 'ten    lll' , splitone.length)
-      if(splitone.length === 2 && splittwo.length === 2  ) {
+      console.log(splitone.length, 'ten    lll', splitone.length)
+      if (splitone.length === 2 && splittwo.length === 2) {
 
-        if( Number(splitone[0]) <  Number(splitone[1]) && Number(splittwo[0]) <  Number(splittwo[1]) ){
+        if (Number(splitone[0]) < Number(splitone[1]) && Number(splittwo[0]) < Number(splittwo[1])) {
 
 
 
           function filterDataByTableRanges(data, ranges) {
             const filteredData = {};
-        
+
             Object.entries(data).forEach(([groupKey, groupData]) => {
-                Object.entries(groupData).forEach(([venueKey, venueData]) => {
-                    Object.entries(venueData).forEach(([areaKey, areaData]) => {
-                        Object.entries(areaData).forEach(([dateKey, records]) => {
-                            const filteredRecords = records.filter(record => {
-                                const tableNum = parseInt(record.TABLE, 10);
-                                return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
-                            });
-        
-                            if (filteredRecords.length > 0) {
-                                if (!filteredData[groupKey]) filteredData[groupKey] = {};
-                                if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
-                                if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
-                                filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
-                            }
-                        });
+              Object.entries(groupData).forEach(([venueKey, venueData]) => {
+                Object.entries(venueData).forEach(([areaKey, areaData]) => {
+                  Object.entries(areaData).forEach(([dateKey, records]) => {
+                    const filteredRecords = records.filter(record => {
+                      const tableNum = parseInt(record.TABLE, 10);
+                      return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
                     });
+
+                    if (filteredRecords.length > 0) {
+                      if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                      if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                      if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                      filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                    }
+                  });
                 });
+              });
             });
-        
+
             return filteredData;
+          }
+
+          const ranges = [[Number(splitone[0]), Number(splitone[1])], [Number(splittwo[0]), Number(splittwo[1])]];
+
+          let twelves = filterDataByTableRanges(alldat, ranges)
+
+          alldat = twelves
+
+
+          console.log(twelves, 'nine')
+        } else {
+
         }
- 
-        const ranges = [[Number(splitone[0]), Number(splitone[1]) ], [Number(splittwo[0]) , Number(splittwo[1]) ]];
 
-        let twelves = filterDataByTableRanges(alldat, ranges)
+      } else {
 
-        alldat = twelves 
-
-
-          console.log(twelves ,  'nine')
-        }else{
-
-        }
-
-      }else{
-        
       }
     }
 
-    if(alltype === undefined || alltype.length === 0 ){
+    if (alltype === undefined || alltype.length === 0) {
 
-    }else{
+    } else {
       function filterByStamp(data, filterValues) {
         let filteredData = {};
-        
+
         // Create a mapping of values to stamp identifiers
         const stampMapping = {
-            "R": "R0",
-            "H": "H0",
-            "P": "P0",
-            "S": "S0"
+          "R": "R0",
+          "H": "H0",
+          "P": "P0",
+          "S": "S0"
         };
-    
+
         // Extract relevant values
         const validStamps = filterValues.map(f => stampMapping[f.value]).filter(Boolean);
-    
+
         for (let group in data) {
-            for (let location in data[group]) {
-                for (let section in data[group][location]) {
-                    for (let date in data[group][location][section]) {
-                        let orders = data[group][location][section][date].filter(order =>
-                            validStamps.some(stamp => order.STAMP.includes(stamp))
-                        );
-    
-                        if (!filteredData[group]) filteredData[group] = {};
-                        if (!filteredData[group][location]) filteredData[group][location] = {};
-                        if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                        
-                        if (orders.length > 0) {
-                            filteredData[group][location][section][date] = orders;
-                        }
-                    }
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let orders = data[group][location][section][date].filter(order =>
+                  validStamps.some(stamp => order.STAMP.includes(stamp))
+                );
+
+                if (!filteredData[group]) filteredData[group] = {};
+                if (!filteredData[group][location]) filteredData[group][location] = {};
+                if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+
+                if (orders.length > 0) {
+                  filteredData[group][location][section][date] = orders;
                 }
+              }
             }
+          }
         }
-    
+
         return filteredData;
       }
 
@@ -1550,11 +1550,9 @@ let Meals = () => {
 
       alldat = resultss
 
-      console.log(resultss , 'tenten')
+      console.log(resultss, 'tenten')
     }
 
-
-    console.log(JSON.stringify(alldat) , 'elevenn')
     const filteredData = {};
 
     Object.entries(alldat).forEach(([groupKey, groupData]) => {
@@ -1580,14 +1578,9 @@ let Meals = () => {
       });
     });
 
-
-
     callfordataone(filteredData)
-
-    let ghi =processTimeData(alldat)
-
-    let kidshort  = ghi.sort((a, b) => a.time.localeCompare(b.time));
-
+    let ghi = processTimeData(alldat)
+    let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
     // Extract values into separate arrays
     let timeLabels = kidshort.map(entry => entry.time);
     let timeCounts = kidshort.map(entry => entry.count);
@@ -1595,21 +1588,8 @@ let Meals = () => {
     setOption(timeLabels)
     setOneBar(timeCounts)
 
-    console.log( JSON.stringify( ghi) , 'thousand')
+    console.log(JSON.stringify(ghi), 'thousand')
 
-    // console.log(filteredData, 'eight')
-
-    // function isObjectEmpty(obj) {
-    //   return Object.keys(obj).length === 0;
-    // }
-
-    // if (isObjectEmpty(filteredData)) {
-
-    // } else {
-
-    //   callfordataone(filteredData)
-
-    // }
 
 
   }
@@ -1619,51 +1599,51 @@ let Meals = () => {
     let timeCounts = {};
 
     function extractTime(stamp) {
-        let match = stamp.match(/\d{4}(R0|H0|P0|S0)/);
-        if (match) {
-            return match[0].slice(0, 2) + ":" + match[0].slice(2, 4); // Convert to HH:MM
-        }
-        return null;
+      let match = stamp.match(/\d{4}(R0|H0|P0|S0)/);
+      if (match) {
+        return match[0].slice(0, 2) + ":" + match[0].slice(2, 4); // Convert to HH:MM
+      }
+      return null;
     }
 
     function roundToInterval(time) {
-        let [hour, minute] = time.split(":").map(Number);
-        let roundedMinute = Math.floor(minute / 10) * 10; // Round to nearest lower 10-minute mark
-        return `${hour}.${roundedMinute.toString().padStart(2, "0")}`;
+      let [hour, minute] = time.split(":").map(Number);
+      let roundedMinute = Math.floor(minute / 10) * 10; // Round to nearest lower 10-minute mark
+      return `${hour}.${roundedMinute.toString().padStart(2, "0")}`;
     }
 
     for (let group in data) {
-        for (let location in data[group]) {
-            for (let section in data[group][location]) {
-                for (let date in data[group][location][section]) {
-                    data[group][location][section][date].forEach(order => {
-                        let stamps = order.STAMP.split(" "); // Split STAMP string
-                        stamps.forEach(stamp => {
-                            let extractedTime = extractTime(stamp);
-                            if (extractedTime) {
-                                let interval = roundToInterval(extractedTime);
-                                timeCounts[interval] = (timeCounts[interval] || 0) + 1;
-                            }
-                        });
-                    });
+      for (let location in data[group]) {
+        for (let section in data[group][location]) {
+          for (let date in data[group][location][section]) {
+            data[group][location][section][date].forEach(order => {
+              let stamps = order.STAMP.split(" "); // Split STAMP string
+              stamps.forEach(stamp => {
+                let extractedTime = extractTime(stamp);
+                if (extractedTime) {
+                  let interval = roundToInterval(extractedTime);
+                  timeCounts[interval] = (timeCounts[interval] || 0) + 1;
                 }
-            }
+              });
+            });
+          }
         }
+      }
     }
 
     // Convert to final array format
     return Object.keys(timeCounts)
-        .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
-        .map(time => ({ time, count: timeCounts[time] }));
-}
+      .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
+      .map(time => ({ time, count: timeCounts[time] }));
+  }
 
 
-  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaway , inone , intwo  , alltype ) {
+  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
 
 
     let alldat = basicall
 
-    console.log( JSON.stringify(alltype) ,  'val2245' )
+    console.log(JSON.stringify(alltype), 'val2245')
 
     if (vals[1] === null || vals[1] === "null") {
 
@@ -1768,11 +1748,11 @@ let Meals = () => {
     }
 
     if (time != "" && time2 != '') {
-      let filterDataByTimeRange = (startTime, endTime) => { 
+      let filterDataByTimeRange = (startTime, endTime) => {
 
         startTime = parseInt(startTime.replace(":", ""), 10);   // Make sure seconds are zero for comparison
-        
-        endTime = parseInt(endTime.replace(":", ""), 10); 
+
+        endTime = parseInt(endTime.replace(":", ""), 10);
 
         function processData(obj) {
           let result = {};
@@ -1787,10 +1767,10 @@ let Meals = () => {
                   let stamp = item.STAMP;
                   let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
                   timeStr = parseInt(timeStr.replace("R0", "")); // Remove "R0" 
- 
+
 
                   // Check if the time is within the range
-                  return timeStr >= startTime  && timeStr <= endTime;
+                  return timeStr >= startTime && timeStr <= endTime;
                 }
                 return false;
               });
@@ -1865,28 +1845,28 @@ let Meals = () => {
 
       function filterDataByDynamicKeys(keysArray) {
         const filteredData = {};
-      
+
         keysArray.forEach(({ value }) => {
           const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
-      
+
           if (alldat[topLevelKey] && alldat[topLevelKey][secondTopLevelKey]) {
             const secondLevelData = alldat[topLevelKey][secondTopLevelKey];
-      
+
             // Check if the hub exists
             if (secondLevelData[hubName]) {
               if (!filteredData[topLevelKey]) {
                 filteredData[topLevelKey] = {};
               }
-      
+
               if (!filteredData[topLevelKey][secondTopLevelKey]) {
                 filteredData[topLevelKey][secondTopLevelKey] = {};
               }
-      
+
               filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
             }
           }
         });
-      
+
         return filteredData;
       }
       alldat = filterDataByDynamicKeys(val22)
@@ -1899,38 +1879,38 @@ let Meals = () => {
 
       function filterByNoted(data, filterNotes) {
         let filteredData = {};
-    
+
         // Extract only values from the filter list
         const validNotes = filterNotes.map(item => item.value);
-    
-        for (let group in data) {
-            for (let location in data[group]) {
-                for (let section in data[group][location]) {
-                    for (let date in data[group][location][section]) {
-                        let filteredOrders = data[group][location][section][date].map(order => {
-                            let filteredItems = order.ITEMS.filter(item => validNotes.includes(item.NOTE));
-    
-                            if (filteredItems.length > 0) {
-                                return { ...order, ITEMS: filteredItems };
-                            }
-                            return null;
-                        }).filter(order => order !== null);
-    
-                        if (filteredOrders.length > 0) {
-                            if (!filteredData[group]) filteredData[group] = {};
-                            if (!filteredData[group][location]) filteredData[group][location] = {};
-                            if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                            filteredData[group][location][section][date] = filteredOrders;
-                        }
-                    }
-                }
-            }
-        }
-    
-        return filteredData;
-    }
 
-      alldat = filterByNoted( alldat , cources)
+        for (let group in data) {
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let filteredOrders = data[group][location][section][date].map(order => {
+                  let filteredItems = order.ITEMS.filter(item => validNotes.includes(item.NOTE));
+
+                  if (filteredItems.length > 0) {
+                    return { ...order, ITEMS: filteredItems };
+                  }
+                  return null;
+                }).filter(order => order !== null);
+
+                if (filteredOrders.length > 0) {
+                  if (!filteredData[group]) filteredData[group] = {};
+                  if (!filteredData[group][location]) filteredData[group][location] = {};
+                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                  filteredData[group][location][section][date] = filteredOrders;
+                }
+              }
+            }
+          }
+        }
+
+        return filteredData;
+      }
+
+      alldat = filterByNoted(alldat, cources)
 
       console.log(alldat, 'six')
 
@@ -1985,98 +1965,98 @@ let Meals = () => {
       console.log(alldat, 'seven')
 
     }
- 
-    if(inone !=undefined && intwo != undefined  ){
+
+    if (inone != undefined && intwo != undefined) {
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
-      console.log(splitone.length , 'ten    lll' , splitone.length)
-      if(splitone.length === 2 && splittwo.length === 2  ) {
+      console.log(splitone.length, 'ten    lll', splitone.length)
+      if (splitone.length === 2 && splittwo.length === 2) {
 
-        if( Number(splitone[0]) <  Number(splitone[1]) && Number(splittwo[0]) <  Number(splittwo[1]) ){
+        if (Number(splitone[0]) < Number(splitone[1]) && Number(splittwo[0]) < Number(splittwo[1])) {
 
 
 
           function filterDataByTableRanges(data, ranges) {
             const filteredData = {};
-        
+
             Object.entries(data).forEach(([groupKey, groupData]) => {
-                Object.entries(groupData).forEach(([venueKey, venueData]) => {
-                    Object.entries(venueData).forEach(([areaKey, areaData]) => {
-                        Object.entries(areaData).forEach(([dateKey, records]) => {
-                            const filteredRecords = records.filter(record => {
-                                const tableNum = parseInt(record.TABLE, 10);
-                                return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
-                            });
-        
-                            if (filteredRecords.length > 0) {
-                                if (!filteredData[groupKey]) filteredData[groupKey] = {};
-                                if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
-                                if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
-                                filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
-                            }
-                        });
+              Object.entries(groupData).forEach(([venueKey, venueData]) => {
+                Object.entries(venueData).forEach(([areaKey, areaData]) => {
+                  Object.entries(areaData).forEach(([dateKey, records]) => {
+                    const filteredRecords = records.filter(record => {
+                      const tableNum = parseInt(record.TABLE, 10);
+                      return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
                     });
+
+                    if (filteredRecords.length > 0) {
+                      if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                      if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                      if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                      filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                    }
+                  });
                 });
+              });
             });
-        
+
             return filteredData;
+          }
+
+          const ranges = [[Number(splitone[0]), Number(splitone[1])], [Number(splittwo[0]), Number(splittwo[1])]];
+
+          let twelves = filterDataByTableRanges(alldat, ranges)
+
+          alldat = twelves
+
+
+          console.log(twelves, 'nine')
+        } else {
+
         }
- 
-        const ranges = [[Number(splitone[0]), Number(splitone[1]) ], [Number(splittwo[0]) , Number(splittwo[1]) ]];
 
-        let twelves = filterDataByTableRanges(alldat, ranges)
+      } else {
 
-        alldat = twelves 
-
-
-          console.log(twelves ,  'nine')
-        }else{
-
-        }
-
-      }else{
-        
       }
     }
 
-    if(alltype === undefined || alltype.length === 0 ){
+    if (alltype === undefined || alltype.length === 0) {
 
-    }else{
+    } else {
       function filterByStamp(data, filterValues) {
         let filteredData = {};
-        
+
         // Create a mapping of values to stamp identifiers
         const stampMapping = {
-            "R": "R0",
-            "H": "H0",
-            "P": "P0",
-            "S": "S0"
+          "R": "R0",
+          "H": "H0",
+          "P": "P0",
+          "S": "S0"
         };
-    
+
         // Extract relevant values
         const validStamps = filterValues.map(f => stampMapping[f.value]).filter(Boolean);
-    
+
         for (let group in data) {
-            for (let location in data[group]) {
-                for (let section in data[group][location]) {
-                    for (let date in data[group][location][section]) {
-                        let orders = data[group][location][section][date].filter(order =>
-                            validStamps.some(stamp => order.STAMP.includes(stamp))
-                        );
-    
-                        if (!filteredData[group]) filteredData[group] = {};
-                        if (!filteredData[group][location]) filteredData[group][location] = {};
-                        if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                        
-                        if (orders.length > 0) {
-                            filteredData[group][location][section][date] = orders;
-                        }
-                    }
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let orders = data[group][location][section][date].filter(order =>
+                  validStamps.some(stamp => order.STAMP.includes(stamp))
+                );
+
+                if (!filteredData[group]) filteredData[group] = {};
+                if (!filteredData[group][location]) filteredData[group][location] = {};
+                if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+
+                if (orders.length > 0) {
+                  filteredData[group][location][section][date] = orders;
                 }
+              }
             }
+          }
         }
-    
+
         return filteredData;
       }
 
@@ -2085,11 +2065,11 @@ let Meals = () => {
 
       alldat = resultss
 
-      console.log(resultss , 'tenten')
+      console.log(resultss, 'tenten')
     }
 
 
-    console.log(JSON.stringify(alldat) , 'elevenn')
+    console.log(JSON.stringify(alldat), 'elevenn')
 
 
 
@@ -2136,14 +2116,14 @@ let Meals = () => {
 
     }
 
-    let ghi =processTimeData(alldat)
+    let ghi = processTimeData(alldat)
 
-    let kidshort  = ghi.sort((a, b) => a.time.localeCompare(b.time));
+    let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
 
     // Extract values into separate arrays
     let timeLabels = kidshort.map(entry => entry.time);
     let timeCounts = kidshort.map(entry => entry.count);
- 
+
     setTwobar(timeCounts)
 
 
@@ -2157,140 +2137,219 @@ let Meals = () => {
   let callfordataone = (one) => {
 
 
- 
+    function processData(data) {
+      let result = [];
+      let processTimes = [];
 
-    const categorizeItems = (datasssssss) => {
-      const edited = ["2", "12", "22", "32"];
-      const moved = ["3", "13", "23", "33"];
-      const deleted = ["4", "24"];
+      Object.entries(data).forEach(([dateKey, orders]) => {
+        orders.forEach(order => {
+          const date = dateKey.split(") ")[1]; // Extract the date from the key
+          const stampParts = order.STAMP.split(" ");
+          const extractedDate = stampParts[0].substring(0, 8); // Get the first 8 characters for the date
+          const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
 
-      const result = {
-        edited: [],
-        moved: [],
-        deleted: [],
-        served: [],
-        tableMoved: []
-      };
+          const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
+          if (timeEntries.length >= 2) {
+            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
+            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
 
-      for (const [date, entries] of Object.entries(datasssssss)) {
+            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
+            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
 
+            // Calculate processing time
+            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
-        entries.forEach(entry => {
+            processTimes.push(processTime);
 
-
-          if (entry.NOTE && entry.NOTE.includes("$ND$")) {
-            result.tableMoved.push(entry);
+            result.push({
+              date: formattedDate,
+              processtime: processTime, // Store as a number for sorting
+              table: `T${order.TABLE}`,
+              starttime: `@${startTimeFormatted}`,
+              staff: order.STAFF
+            });
           }
-
-
-          entry.ITEMS.forEach(item => {
-            if (edited.includes(item.STATUS)) {
-              result.edited.push(item);
-            } else if (moved.includes(item.STATUS)) {
-              result.moved.push(item);
-            } else if (deleted.includes(item.STATUS)) {
-              result.deleted.push(item);
-            } else if (parseInt(item.STATUS) > 20) {
-              result.served.push(item);
-            }
-          });
         });
+      });
 
+      // Sort orders by process time (high to low)
+      result.sort((a, b) => b.processtime - a.processtime);
+
+      // Convert process time back to string format for display
+      result = result.map(order => ({
+        ...order,
+        processtime: `${order.processtime}min`
+      }));
+
+      // Calculate average, min, and max processing time
+      if (processTimes.length > 0) {
+        const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
+        const averageTime = Math.round(totalTime / processTimes.length);
+        const minTime = Math.min(...processTimes);
+        const maxTime = Math.max(...processTimes);
+
+        return {
+          orders: result,
+          stats: {
+            averageProcessTime: `${averageTime}min`,
+            minProcessTime: `${minTime}min`,
+            maxProcessTime: `${maxTime}min`
+          }
+        };
       }
 
-      return result;
-    };
-
-    let editttsone = categorizeItems(one)
-    // let editttstwo = categorizeItems(two)
-
-    console.log(editttsone, 'editttsoneeditttsone')
+      return { orders: result, stats: null };
+    }
 
 
-    setEditall(editttsone)
-    // setEditallone(editttstwo)
+    let newalldata = processData(one)
 
-    const processItems = (data) => {
-      const dishCounts = {};
+    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
+    setEditall(newalldata)
 
-      // Iterate through the data to collect and process dishes
-      for (const [date, entries] of Object.entries(data)) {
+    // console.log( JSON.stringify( alltype) , 'oneone') 
 
+    // if(alltype.length === 0 ){
 
+    // }else{
 
-        entries.forEach(entry => {
-          entry.ITEMS.forEach(item => {
-            // Remove "Sp\\" prefix if present
-            const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
-
-            // If dish is already counted, increment its count and append data
-            if (dishCounts[cleanItemName]) {
-              dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
-              dishCounts[cleanItemName].data.push(item);
-            } else {
-              // If not, initialize a new entry for the dish
-              dishCounts[cleanItemName] = {
-                count: parseInt(item.QUANTITY, 10),
-                name: cleanItemName,
-                data: [item],
-              };
-            }
-          });
-        });
-      }
-
-      // Convert the dishCounts object to an array
-      return Object.values(dishCounts).sort((a, b) => b.count - a.count);
-    };
+    // }
 
 
-    let minnscount = processItems(one)
-    // let maxnscount = processItems(two)
-    setServed(minnscount)
-    // setServedone(maxnscount)
+    // const categorizeItems = (datasssssss) => {
+    //   const edited = ["2", "12", "22", "32"];
+    //   const moved = ["3", "13", "23", "33"];
+    //   const deleted = ["4", "24"];
 
-    const processRefundedItems = (data) => {
-      const results = [];
+    //   const result = {
+    //     edited: [],
+    //     moved: [],
+    //     deleted: [],
+    //     served: [],
+    //     tableMoved: []
+    //   };
 
-      // Iterate through each date's data
-      for (const [date, entries] of Object.entries(data)) {
-        let refundedItems = [];
+    //   for (const [date, entries] of Object.entries(datasssssss)) {
+
+
+    //     entries.forEach(entry => {
+
+
+    //       if (entry.NOTE && entry.NOTE.includes("$ND$")) {
+    //         result.tableMoved.push(entry);
+    //       }
+
+
+    //       entry.ITEMS.forEach(item => {
+    //         if (edited.includes(item.STATUS)) {
+    //           result.edited.push(item);
+    //         } else if (moved.includes(item.STATUS)) {
+    //           result.moved.push(item);
+    //         } else if (deleted.includes(item.STATUS)) {
+    //           result.deleted.push(item);
+    //         } else if (parseInt(item.STATUS) > 20) {
+    //           result.served.push(item);
+    //         }
+    //       });
+    //     });
+
+    //   }
+
+    //   return result;
+    // };
+
+    // let editttsone = categorizeItems(one)
+    // // let editttstwo = categorizeItems(two)
+
+    // console.log(editttsone, 'editttsoneeditttsone')
+
+
+    // setEditall(editttsone)
+    // // setEditallone(editttstwo)
+
+    // const processItems = (data) => {
+    //   const dishCounts = {};
+
+    //   // Iterate through the data to collect and process dishes
+    //   for (const [date, entries] of Object.entries(data)) {
 
 
 
-        entries.forEach(entry => {
-          entry.ITEMS.forEach(item => {
-            // Check if "Refunded" exists in the ITEM field
-            if (item?.NOTE?.includes("Refunded")) {
-              refundedItems.push(item);
-            }
-          });
-        });
+    //     entries.forEach(entry => {
+    //       entry.ITEMS.forEach(item => {
+    //         // Remove "Sp\\" prefix if present
+    //         const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
 
-        if (refundedItems.length > 0) {
-          // Calculate the total quantity for refunded items
-          const totalQuantity = refundedItems.reduce(
-            (sum, item) => sum + parseInt(item.QUANTITY, 10),
-            0
-          );
+    //         // If dish is already counted, increment its count and append data
+    //         if (dishCounts[cleanItemName]) {
+    //           dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
+    //           dishCounts[cleanItemName].data.push(item);
+    //         } else {
+    //           // If not, initialize a new entry for the dish
+    //           dishCounts[cleanItemName] = {
+    //             count: parseInt(item.QUANTITY, 10),
+    //             name: cleanItemName,
+    //             data: [item],
+    //           };
+    //         }
+    //       });
+    //     });
+    //   }
 
-          results.push({
-            date,
-            count: totalQuantity,
-            name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
-            data: refundedItems,
-          });
-        }
-      }
+    //   // Convert the dishCounts object to an array
+    //   return Object.values(dishCounts).sort((a, b) => b.count - a.count);
+    // };
 
-      return results;
-    };
 
-    let refundcount = processRefundedItems(one)
-    // let refundcounttwo = processRefundedItems(two)
-    setMinperday(refundcount)
-    console.log(refundcount ,'refundcountrefundcountrefundcount')
-    // setMaxperday(refundcounttwo)
+    // let minnscount = processItems(one)
+    // // let maxnscount = processItems(two)
+    // setServed(minnscount)
+    // // setServedone(maxnscount)
+
+    // const processRefundedItems = (data) => {
+    //   const results = [];
+
+    //   // Iterate through each date's data
+    //   for (const [date, entries] of Object.entries(data)) {
+    //     let refundedItems = [];
+
+
+
+    //     entries.forEach(entry => {
+    //       entry.ITEMS.forEach(item => {
+    //         // Check if "Refunded" exists in the ITEM field
+    //         if (item?.NOTE?.includes("Refunded")) {
+    //           refundedItems.push(item);
+    //         }
+    //       });
+    //     });
+
+    //     if (refundedItems.length > 0) {
+    //       // Calculate the total quantity for refunded items
+    //       const totalQuantity = refundedItems.reduce(
+    //         (sum, item) => sum + parseInt(item.QUANTITY, 10),
+    //         0
+    //       );
+
+    //       results.push({
+    //         date,
+    //         count: totalQuantity,
+    //         name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
+    //         data: refundedItems,
+    //       });
+    //     }
+    //   }
+
+    //   return results;
+    // };
+
+    // let refundcount = processRefundedItems(one)
+    // // let refundcounttwo = processRefundedItems(two)
+    // setMinperday(refundcount)
+    // console.log(refundcount ,'refundcountrefundcountrefundcount')
+    // // setMaxperday(refundcounttwo)
 
 
 
@@ -2300,139 +2359,209 @@ let Meals = () => {
   let callfordataonetwo = (two) => {
 
 
+    function processData(data) {
+      let result = [];
+      let processTimes = [];
 
+      Object.entries(data).forEach(([dateKey, orders]) => {
+        orders.forEach(order => {
+          const date = dateKey.split(") ")[1]; // Extract the date from the key
+          const stampParts = order.STAMP.split(" ");
+          const extractedDate = stampParts[0].substring(0, 8); // Get the first 8 characters for the date
+          const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
 
-    const categorizeItems = (datasssssss) => {
-      const edited = ["2", "12", "22", "32"];
-      const moved = ["3", "13", "23", "33"];
-      const deleted = ["4", "24"];
+          const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
+          if (timeEntries.length >= 2) {
+            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
+            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
 
-      const result = {
-        edited: [],
-        moved: [],
-        deleted: [],
-        served: [],
-        tableMoved: []
-      };
+            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
+            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
 
-      for (const [date, entries] of Object.entries(datasssssss)) {
+            // Calculate processing time
+            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
+            processTimes.push(processTime);
 
-        entries.forEach(entry => {
-
-
-          if (entry.NOTE && entry.NOTE.includes("$ND$")) {
-            result.tableMoved.push(entry);
+            result.push({
+              date: formattedDate,
+              processtime: processTime, // Store as a number for sorting
+              table: `T${order.TABLE}`,
+              starttime: `@${startTimeFormatted}`,
+              staff: order.STAFF
+            });
           }
-
-
-          entry.ITEMS.forEach(item => {
-            if (edited.includes(item.STATUS)) {
-              result.edited.push(item);
-            } else if (moved.includes(item.STATUS)) {
-              result.moved.push(item);
-            } else if (deleted.includes(item.STATUS)) {
-              result.deleted.push(item);
-            } else if (parseInt(item.STATUS) > 20) {
-              result.served.push(item);
-            }
-          });
         });
+      });
 
+      // Sort orders by process time (high to low)
+      result.sort((a, b) => b.processtime - a.processtime);
+
+      // Convert process time back to string format for display
+      result = result.map(order => ({
+        ...order,
+        processtime: `${order.processtime}min`
+      }));
+
+      // Calculate average, min, and max processing time
+      if (processTimes.length > 0) {
+        const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
+        const averageTime = Math.round(totalTime / processTimes.length);
+        const minTime = Math.min(...processTimes);
+        const maxTime = Math.max(...processTimes);
+
+        return {
+          orders: result,
+          stats: {
+            averageProcessTime: `${averageTime}min`,
+            minProcessTime: `${minTime}min`,
+            maxProcessTime: `${maxTime}min`
+          }
+        };
       }
 
-      return result;
-    };
-
-    // let editttsone = categorizeItems(one)
-    let editttstwo = categorizeItems(two)
-
-    // console.log(editttsone, 'editttsoneeditttsone')
+      return { orders: result, stats: null };
+    }
 
 
-    // setEditall(editttsone)
-    setEditallone(editttstwo)
+    let newalldata = processData(two)
 
-    const processItems = (data) => {
-      const dishCounts = {};
+    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
+    setEditallone(newalldata)
 
-      // Iterate through the data to collect and process dishes
-      for (const [date, entries] of Object.entries(data)) {
+    // const categorizeItems = (datasssssss) => {
+    //   const edited = ["2", "12", "22", "32"];
+    //   const moved = ["3", "13", "23", "33"];
+    //   const deleted = ["4", "24"];
 
+    //   const result = {
+    //     edited: [],
+    //     moved: [],
+    //     deleted: [],
+    //     served: [],
+    //     tableMoved: []
+    //   };
 
-
-        entries.forEach(entry => {
-          entry.ITEMS.forEach(item => {
-            // Remove "Sp\\" prefix if present
-            const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
-
-            // If dish is already counted, increment its count and append data
-            if (dishCounts[cleanItemName]) {
-              dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
-              dishCounts[cleanItemName].data.push(item);
-            } else {
-              // If not, initialize a new entry for the dish
-              dishCounts[cleanItemName] = {
-                count: parseInt(item.QUANTITY, 10),
-                name: cleanItemName,
-                data: [item],
-              };
-            }
-          });
-        });
-      }
-
-      // Convert the dishCounts object to an array
-      return Object.values(dishCounts).sort((a, b) => b.count - a.count);
-    };
+    //   for (const [date, entries] of Object.entries(datasssssss)) {
 
 
-    // let minnscount = processItems(one)
-    let maxnscount = processItems(two)
-    // setServed(minnscount)
-    setServedone(maxnscount)
-
-    const processRefundedItems = (data) => {
-      const results = [];
-
-      // Iterate through each date's data
-      for (const [date, entries] of Object.entries(data)) {
-        let refundedItems = [];
+    //     entries.forEach(entry => {
 
 
+    //       if (entry.NOTE && entry.NOTE.includes("$ND$")) {
+    //         result.tableMoved.push(entry);
+    //       }
 
-        entries.forEach(entry => {
-          entry.ITEMS.forEach(item => {
-            // Check if "Refunded" exists in the ITEM field
-            if (item.NOTE.includes("Refunded")) {
-              refundedItems.push(item);
-            }
-          });
-        });
 
-        if (refundedItems.length > 0) {
-          // Calculate the total quantity for refunded items
-          const totalQuantity = refundedItems.reduce(
-            (sum, item) => sum + parseInt(item.QUANTITY, 10),
-            0
-          );
+    //       entry.ITEMS.forEach(item => {
+    //         if (edited.includes(item.STATUS)) {
+    //           result.edited.push(item);
+    //         } else if (moved.includes(item.STATUS)) {
+    //           result.moved.push(item);
+    //         } else if (deleted.includes(item.STATUS)) {
+    //           result.deleted.push(item);
+    //         } else if (parseInt(item.STATUS) > 20) {
+    //           result.served.push(item);
+    //         }
+    //       });
+    //     });
 
-          results.push({
-            date,
-            count: totalQuantity,
-            name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
-            data: refundedItems,
-          });
-        }
-      }
+    //   }
 
-      return results;
-    };
+    //   return result;
+    // };
 
-    // let refundcount = processRefundedItems(one)
-    let refundcounttwo = processRefundedItems(two)
-    // setMinperday(refundcount)
-    setMaxperday(refundcounttwo)
+    // // let editttsone = categorizeItems(one)
+    // let editttstwo = categorizeItems(two)
+
+    // // console.log(editttsone, 'editttsoneeditttsone')
+
+
+    // // setEditall(editttsone)
+    // setEditallone(editttstwo)
+
+    // const processItems = (data) => {
+    //   const dishCounts = {};
+
+    //   // Iterate through the data to collect and process dishes
+    //   for (const [date, entries] of Object.entries(data)) {
+
+
+
+    //     entries.forEach(entry => {
+    //       entry.ITEMS.forEach(item => {
+    //         // Remove "Sp\\" prefix if present
+    //         const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
+
+    //         // If dish is already counted, increment its count and append data
+    //         if (dishCounts[cleanItemName]) {
+    //           dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
+    //           dishCounts[cleanItemName].data.push(item);
+    //         } else {
+    //           // If not, initialize a new entry for the dish
+    //           dishCounts[cleanItemName] = {
+    //             count: parseInt(item.QUANTITY, 10),
+    //             name: cleanItemName,
+    //             data: [item],
+    //           };
+    //         }
+    //       });
+    //     });
+    //   }
+
+    //   // Convert the dishCounts object to an array
+    //   return Object.values(dishCounts).sort((a, b) => b.count - a.count);
+    // };
+
+
+    // // let minnscount = processItems(one)
+    // let maxnscount = processItems(two)
+    // // setServed(minnscount)
+    // setServedone(maxnscount)
+
+    // const processRefundedItems = (data) => {
+    //   const results = [];
+
+    //   // Iterate through each date's data
+    //   for (const [date, entries] of Object.entries(data)) {
+    //     let refundedItems = [];
+
+
+
+    //     entries.forEach(entry => {
+    //       entry.ITEMS.forEach(item => {
+    //         // Check if "Refunded" exists in the ITEM field
+    //         if (item.NOTE.includes("Refunded")) {
+    //           refundedItems.push(item);
+    //         }
+    //       });
+    //     });
+
+    //     if (refundedItems.length > 0) {
+    //       // Calculate the total quantity for refunded items
+    //       const totalQuantity = refundedItems.reduce(
+    //         (sum, item) => sum + parseInt(item.QUANTITY, 10),
+    //         0
+    //       );
+
+    //       results.push({
+    //         date,
+    //         count: totalQuantity,
+    //         name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
+    //         data: refundedItems,
+    //       });
+    //     }
+    //   }
+
+    //   return results;
+    // };
+
+    // // let refundcount = processRefundedItems(one)
+    // let refundcounttwo = processRefundedItems(two)
+    // // setMinperday(refundcount)
+    // setMaxperday(refundcounttwo)
 
 
 
@@ -2527,7 +2656,7 @@ let Meals = () => {
     const doc = new jsPDF();
 
     // Add some text to the PDF
-    doc.text('<Hello, this is a sample PDF created with jsPDF>!', 10, 10);
+    doc.text('Hello, this is a sample PDF created with jsPDF!', 10, 10);
 
     // Optionally, you can add other content like images, tables, etc.
     // doc.addImage(imageData, 'JPEG', 10, 20, 180, 160);
@@ -2598,7 +2727,7 @@ let Meals = () => {
 
   return (
     <div>
-      <Header name={"Meals"} center={"Name"} />
+      <Header name={"Dockets"} center={"Name"} />
       <div style={{ backgroundColor: "#DADADA", height: '100vh' }} >
 
         <div style={{}} className="dddd"  >
@@ -2623,7 +2752,7 @@ let Meals = () => {
                     if (update[1] === null || update[1] === "null") {
 
                     } else {
-                      filterDataByDate(update, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions )
+                      filterDataByDate(update, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
 
@@ -2651,7 +2780,7 @@ let Meals = () => {
                       console.log(e.target.value, 'eeee')
                       setOnetime(e.target.value)
 
-                      filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
+                      filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
                     }}
@@ -2664,7 +2793,7 @@ let Meals = () => {
                       setTwotime(e.target.value)
                       // tiemstampp(2, e.target.value)
 
-                      filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
+                      filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
                     }}
                   />
@@ -2690,7 +2819,7 @@ let Meals = () => {
                     } else {
                       // updates(2, update)
 
-                      filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
+                      filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
                     }
@@ -2718,7 +2847,7 @@ let Meals = () => {
                     onChange={(e) => {
                       setThreetime(e.target.value)
 
-                      filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
+                      filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
                     }}
@@ -2729,7 +2858,7 @@ let Meals = () => {
                     value={fourtime}
                     onChange={(e) => {
                       setFourtime(e.target.value)
-                      filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
+                      filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
                     }}
                   />
                 </div>
@@ -2831,7 +2960,7 @@ let Meals = () => {
 
 
 
-                
+
 
                 {/* <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
                   setHubb(e.target.value)
@@ -2960,22 +3089,22 @@ let Meals = () => {
                 </select> */}
                 <input onChange={(e) => {
                   setInputvalue(e.target.value)
-                  
-                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway , e.target.value , inputvaluetwo , selectedhubOptions)
 
-                  filterDataByDateonee(dateRangetwo, threetime, fourtime,  selectedOptions, hubb, selectedCources, selectedTakeaway , e.target.value , inputvaluetwo, selectedhubOptions )
+                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+
+                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
                 }} value={inputvalue} placeholder="0-100" style={{ width: '50%', border: 'unset' }} type="text" />
 
 
                 <p style={{ fontSize: 19, display: 'contents' }} >|</p>
 
-              
+
                 <input onChange={(e) => {
                   setInputvaluetwo(e.target.value)
-                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway , inputvalue , e.target.value , selectedhubOptions)
+                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
 
-                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway , inputvalue , e.target.value , selectedhubOptions)
+                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                 }} value={inputvaluetwo} placeholder="200-399" style={{ width: '50%', border: 'unset' }} type="text" />
               </div>
 
@@ -3040,6 +3169,9 @@ let Meals = () => {
 
 
               </div>
+
+
+
             </div>
 
           </div>
@@ -3048,50 +3180,10 @@ let Meals = () => {
           {
             meals === 1 ?
               <div className="" style={{ marginTop: 100 }} >
-                {/* <div className='row ddd' >
-                <div className='col-6' >
-                  <div className='asdf'  >
-                    <p className='asdfp'>Meals received - timeline</p>
 
-                    <div className='' >
+                <div className='row '  >
 
-                    <div className='d-flex justify-content-between ' >
-                      <img src="rts.png" className="" alt="Example Image" />
-                      <p className="">(# of meals sent between
-                        specific time slots) </p>
-                    </div>
-                    
-                    </div>
-
-                 
-                  </div>
-                </div>
-
-                <div className='col-6' >
-                  <div className='asdf'  >
-                    <div className='d-flex justify-content-between' > 
-                      <div >
-
-                      <p className="asdfps">Edits</p>
-                      <p className="">(Total)</p>
-                      </div>
-
-                        <p className="asdfps" style={{ textAlign : 'end' , color : "#316AAF"}}>22</p>
-                    </div> 
-
-                    <div className='d-flex justify-content-between mt-5' >
-                      <img src="rts.png" alt="Example Image" />
-                      <p className="asdfps">(# of meals sent between
-                        specific time slots) </p>
-                    </div>
-                  </div>
-                </div>
-
-            </div> */}
-
-                <div className='row ' >
-
-                  <div className='col-6' >
+                  {/* <div className='col-6' >
                     <div class="box " onClick={() => {
                       setMeals(5)
                     }} >
@@ -3103,69 +3195,49 @@ let Meals = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
 
-                  <div className='col-6' >
+                  <div className='col-6' style={{ margin: 'auto' }} >
                     <div class="box" onClick={() => {
                       setMeals(2)
                     }}>
                       <div class="boxs">
                         <div className="d-flex justify-content-between" >
                           <div >
-                            <p className='asdfp' style={{ marginBottom: 0 }}>Edits</p>
-                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                            <p className='asdfp' style={{ marginBottom: 0 }}>Dockets completion time</p>
+                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
                           </div>
                           <div >
-                            <p className='asdfp' style={{ color: '#316AAF' }}>{parseInt(editall?.edited?.length)
-                              + parseInt(editall?.moved?.length) + parseInt(editall?.deleted?.length) + parseInt(editall?.tableMoved?.length) || 0}</p>
+                            <p className='asdfp' style={{ color: '#316AAF' }}>{editall?.stats?.averageProcessTime || 0}</p>
                           </div>
                         </div>
 
                         <div class="end-box">
-                          <img src="ert.png" className="" alt="Example Image" />
-                          <div className='' >
+                          <img src="time.png" style={{ width: 90, height: 106 }} className="" alt="Example Image" />
+                          <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
 
-
-                            <div className="d-flex" style={{ marginBottom: 0 }}  >
-                              <div className=' ' style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Edited</p>
+                            <div >
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum</p>
+                                </div>
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.minProcessTime || 0}</p>
+                                </div>
                               </div>
-                              <div className=' ' style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.edited?.length || 0}</p>
+
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum</p>
+                                </div>
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.maxProcessTime || 0}</p>
+                                </div>
                               </div>
                             </div>
-
-
-                            <div className="d-flex" style={{ marginBottom: 0 }}  >
-                              <div className=' ' style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Moved</p>
-                              </div>
-                              <div className=' ' style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.moved?.length || 0}</p>
-                              </div>
-                            </div>
-
-                            <div className="d-flex" style={{ marginBottom: 0 }}  >
-                              <div className=' ' style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Deleted</p>
-                              </div>
-                              <div className=' ' style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.deleted?.length || 0}</p>
-                              </div>
-                            </div>
-
-                            <div className="d-flex" style={{ marginBottom: 0 }}  >
-                              <div className=' ' style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Table moved</p>
-                              </div>
-                              <div className=' ' style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.tableMoved?.length || 0}</p>
-                              </div>
-                            </div>
-
                           </div>
-
 
 
 
@@ -3182,6 +3254,21 @@ let Meals = () => {
                 <div className='row mt-5' >
 
                   <div className='col-6' >
+                    <div class="box " onClick={() => {
+                      setMeals(5)
+                    }} >
+                      <div class="boxs">
+                        <p className='asdfp'>Dockets received - timeline</p>
+                        <div class="end-box">
+                          <img src="rts.png" className="" alt="Example Image" />
+                          <p className="asdfps">(# of dockets received
+                            between specific time slots)</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* <div className='col-6' >
                     <div class="box" onClick={() => {
                       setMeals(3)
                     }} >
@@ -3238,7 +3325,7 @@ let Meals = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
 
 
                   <div className='col-6' >
@@ -3248,47 +3335,22 @@ let Meals = () => {
                       <div class="boxs">
                         <div className="d-flex justify-content-between" >
                           <div >
-                            <p className='asdfp' style={{ marginBottom: 0 }}>Refunded meals</p> 
+                            <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
                             <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
                           </div>
                           <div >
-                            <p className='asdfp' style={{ color: '#316AAF' }}>{
+                            {/* <p className='asdfp' style={{ color: '#316AAF' }}>{
                               minperday ?
                                 ggggrtz()
                                 : 0
-                            }</p>
+                            }</p> */}
                           </div>
                         </div>
 
                         <div class="end-box">
-                          <img src="refundd.png" className="" alt="Example Image" />
-                          <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
-
-                            <div >
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum per day</p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[minperday.length - 1]?.count || 0}</p>
-                                </div>
-                              </div>
-
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum per day</p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[0]?.count || 0}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-
-
-
+                          <img src="bluee.png" className="" alt="Example Image" />
+                          <p className="asdfps">(Average waiting time
+                            between specific time slots)</p>
 
 
                         </div>
@@ -3312,7 +3374,7 @@ let Meals = () => {
                         <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                           setMeals(1)
                         }} className="" alt="Example Image" />
-                        <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Edits</p>
+                        <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Dockets completion time</p>
                       </div>
 
                       <div >
@@ -3349,35 +3411,24 @@ let Meals = () => {
 
                         <div >
                           <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                            editall?.edited?.length
-                            + editall?.deleted?.length
-                            + editall?.moved?.length}</span></p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{
+                            editall?.stats?.averageProcessTime || 0}</span></p>
                         </div>
                         <div >
                           <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-
-                            editallone?.edited?.length
-                            + editallone?.deleted?.length
-                            + editallone?.moved?.length
-                          }</span></p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{editallone?.stats?.averageProcessTime || 0}</span></p>
                         </div>
                         <div >
                           <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >
                             {(() => {
-                              let datd = editallone?.edited?.length
-                                + editallone?.deleted?.length
-                                + editallone?.moved?.length
+                              let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
+                              let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
+                              
+                              // Calculate average
+                              let average = Math.round((numOne + numTwo) / 2);
 
-                              let datdtwo = editall?.edited?.length
-                                + editall?.deleted?.length
-                                + editall?.moved?.length
-
-                              let tot = ((datdtwo - datd) / datd) * 100
-
-                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                              return <span >{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }} >{average > 0 ? <img src="up_arw.png"
                                 style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
 
                                 }} className="" alt="Example Image" /> :
@@ -3386,119 +3437,7 @@ let Meals = () => {
 
                                   }} className="" alt="Example Image" />}</span></span>
 
-
-                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                            })()}</span></p>
-                        </div>
-
-                      </div>
-
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-                      <div className="d-flex justify-content-between" >
-
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.moved?.length}</p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}  </p>
-                        </div>
-                        <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                            {(() => {
-                              let datd = editallone?.moved?.length
-
-                              let datdtwo = editall?.moved?.length
-
-                              let tot = ((datdtwo - datd) / datd) * 100
-
-                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                }} className="" alt="Example Image" /> :
-                                <img src="d_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" />}</span></span>
-
-
-                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                            })()}</span></p>
-                        </div>
-
-                      </div>
-
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-                      <div className="d-flex justify-content-between" >
-
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.edited?.length}</p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}  </p>
-                        </div>
-                        <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                            {(() => {
-                              let datd = editallone?.edited?.length
-
-                              let datdtwo = editall?.edited?.length
-
-                              let tot = ((datdtwo - datd) / datd) * 100
-
-                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                }} className="" alt="Example Image" /> :
-                                <img src="d_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" />}</span></span>
-
-
-                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                            })()}</span></p>
-                        </div>
-
-                      </div>
-
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-                      <div className="d-flex justify-content-between" >
-
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.deleted?.length}</p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.deleted?.length}  </p>
-                        </div>
-                        <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                            {(() => {
-                              let datd = editallone?.deleted?.length
-
-                              let datdtwo = editall?.deleted?.length
-
-                              let tot = ((datdtwo - datd) / datd) * 100
-
-                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                }} className="" alt="Example Image" /> :
-                                <img src="d_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" />}</span></span>
-
-
-                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+ 
                             })()}</span></p>
                         </div>
 
@@ -3507,44 +3446,128 @@ let Meals = () => {
                       <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
 
-                      <div className="d-flex justify-content-between" >
-
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.tableMoved?.length}</p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.tableMoved?.length}  </p>
-                        </div>
-                        <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                            {(() => {
-                              let datd = editallone?.tableMoved?.length
-
-                              let datdtwo = editall?.tableMoved?.length
-
-                              let tot = ((datdtwo - datd) / datd) * 100
-
-                              console.log(tot, 'nan')
-
-                              return <span >{isNaN(tot) ?"+000.00" : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                }} className="" alt="Example Image" /> :
-                                <img src="d_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" />}</span></span>
 
 
-                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                            })()}</span></p>
-                        </div>
+
+
+
+
+
+
+                      <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
+
+                        {
+                          editall?.orders?.map((dfgh, index) => {
+                            const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
+
+                            return (
+                              <div key={index}>
+                                <div className="d-flex gap-5">
+                                  {/* Left Column */}
+                                  <div style={{ width: "40%" }}>
+                                    <div className="d-flex  " style={{}}>
+                                      <p style={{ fontWeight: "700", color: "#000", marginBlock: "4px" ,width: "60%"}}>
+                                        {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.date + " " + "[" +
+                                          dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
+                                      </p>
+
+                                      <img
+                                        src="arrows.png"
+                                        style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10 , marginTop  : 13 }}
+                                        alt="up arrow"
+                                      />
+                                    </div>
+
+                                  </div>
+
+                                  {/* Center Column */}
+                                  {correspondingErv ? (
+                                    <div style={{ width: "40%", }}>
+                                       <div className="d-flex  " >
+                                      <p style={{ fontWeight: "700", color: "#000", marginBlock: "4px" ,width: "60%"  }}>
+                                        {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
+                                          correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
+                                      </p>
+
+                                     
+                                        <img
+                                          src="arrows.png"
+                                          style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10 , marginTop  : 13 }}
+                                          alt="up arrow"
+                                        />
+                                      </div>
+
+                                    </div>
+                                  ) : (
+                                    <div style={{ width: "33%" }}></div>
+                                  )}
+
+                                  {/* Right Column (Percentage Calculation) */}
+                                  <div
+                                    style={{
+                                      justifyContent: "end",
+                                      alignItems: "center",
+                                      display: "flex",
+                                      width: "20%",
+                                    }}
+                                  >
+                                    <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
+
+                                      <span>
+                                        {(() => {
+                                          const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
+                                          const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
+
+                                          let percentageChange = 0;
+                                          if (processTimeTwo > 0) {
+                                            percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
+                                          }
+
+                                          return (
+                                            <span>
+                                              {percentageChange.toFixed(2) + "%"}
+                                              <span
+                                                style={{
+                                                  color: percentageChange > 0 ? "green" : "red",
+                                                  fontWeight: "700",
+                                                }}
+                                              >
+                                                {percentageChange > 0 ? (
+                                                  <img
+                                                    src="up_arw.png"
+                                                    style={{ width: 16, height: 16, cursor: "pointer" }}
+                                                    alt="up arrow"
+                                                  />
+                                                ) : (
+                                                  <img
+                                                    src="d_arw.png"
+                                                    style={{ width: 16, height: 16, cursor: "pointer" }}
+                                                    alt="down arrow"
+                                                  />
+                                                )}
+                                              </span>
+                                            </span>
+                                          );
+                                        })()}
+                                      </span>
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+                              </div>
+                            );
+                          })
+                        }
+
+
+
+
+
 
                       </div>
 
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
 
 
                     </div>
@@ -3575,7 +3598,7 @@ let Meals = () => {
                             <div
                               style={{
                                 width: 200,
-                                marginTop: '0px',
+                                marginTop: '3px',
                                 padding: '10px',
                                 backgroundColor: '#f8f9fa',
                                 border: '1px solid #ccc',
@@ -4004,6 +4027,6 @@ const buttonStyle = {
   borderRadius: '5px',
 };
 
-export default Meals;
+export default Dockets;
 
 
