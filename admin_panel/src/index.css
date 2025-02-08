@@ -58,6 +58,13 @@ code {
   text-align: center;
 }
 
+.gggg {
+  max-height: 550px; /* Set a fixed height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+  scrollbar-width: thin; /* For Firefox */
+}
+
 /* .react-datepicker-wrapper{
   border: 2px solid red !important;
 
@@ -70,6 +77,13 @@ code {
 .react-datepicker-wrapper{
   width: 350px;
 }
+.vertical-line {
+  width: 2px; /* Line thickness */
+  height: 100%; /* Line height */
+  background-color: black; /* Line color */
+  margin-left : auto;
+}
+
 
 /* Container for Input and Icon */
 .datepicker-container {

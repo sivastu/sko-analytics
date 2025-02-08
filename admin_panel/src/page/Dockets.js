@@ -16,6 +16,9 @@ import Select, { components } from 'react-select';
 import { FaCheck } from 'react-icons/fa';
 import { Bar } from 'react-chartjs-2';
 import { jsPDF } from 'jspdf';
+import Modal from 'react-modal';
+
+
 
 import app from "./firebase";
 import {
@@ -41,6 +44,25 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    border: '3px solid #ababab',
+    borderRadius: '10px',
+    width: '70%'
+  },
+};
+
+// Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
+Modal.setAppElement('#root');
+
 
 
 let Dockets = () => {
@@ -72,6 +94,28 @@ let Dockets = () => {
 
   let [alldrop, setAlldrop] = useState([])
 
+  let subtitle;
+  const [modalIsOpen, setIsOpen] = React.useState(false);
+  let [ cval1 , setcval1 ] = useState()
+  let [ cval2 , setcval2 ] = useState()
+  function openModal(finebyme ,   finebyme2) {
+    console.log(finebyme, 'finebymefinebyme', finebyme2)
+    setIsOpen(true);
+    setcval1(finebyme)
+    setcval2(finebyme2)
+  }
+
+   
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed. 
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+
   useEffect(() => {
 
     getone()
@@ -82,6 +126,9 @@ let Dockets = () => {
   let [onebar, setOneBar] = useState([])
   let [twobar, setTwobar] = useState([])
   let [optionbar, setOption] = useState([])
+
+ 
+
 
 
   const optionshshs = {
@@ -2156,6 +2203,10 @@ let Dockets = () => {
             const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
             const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
 
+            let fixedss = parseInt(startTimeFormatted.replace(":", ""), 10)
+
+            if(fixedss > 2 ){}
+
             // Calculate processing time
             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
@@ -2168,7 +2219,8 @@ let Dockets = () => {
               processtime: processTime, // Store as a number for sorting
               table: `T${order.TABLE}`,
               starttime: `@${startTimeFormatted}`,
-              staff: order.STAFF
+              staff: order.STAFF,
+              order : order
             });
           }
         });
@@ -2390,7 +2442,8 @@ let Dockets = () => {
               processtime: processTime, // Store as a number for sorting
               table: `T${order.TABLE}`,
               starttime: `@${startTimeFormatted}`,
-              staff: order.STAFF
+              staff: order.STAFF,
+              order : order
             });
           }
         });
@@ -3424,7 +3477,7 @@ let Dockets = () => {
                             {(() => {
                               let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
                               let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
-                              
+
                               // Calculate average
                               let average = Math.round((numOne + numTwo) / 2);
 
@@ -3437,7 +3490,7 @@ let Dockets = () => {
 
                                   }} className="" alt="Example Image" />}</span></span>
 
- 
+
                             })()}</span></p>
                         </div>
 
@@ -3466,14 +3519,15 @@ let Dockets = () => {
                                   {/* Left Column */}
                                   <div style={{ width: "40%" }}>
                                     <div className="d-flex  " style={{}}>
-                                      <p style={{ fontWeight: "700", color: "#000", marginBlock: "4px" ,width: "60%"}}>
+                                      <p style={{ fontWeight: "700", color: "#000", marginBlock: "4px", width: "60%" }}>
                                         {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.date + " " + "[" +
                                           dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
                                       </p>
 
                                       <img
+                                        onClick={() => { openModal(dfgh , correspondingErv) }}
                                         src="arrows.png"
-                                        style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10 , marginTop  : 13 }}
+                                        style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
                                         alt="up arrow"
                                       />
                                     </div>
@@ -3483,16 +3537,17 @@ let Dockets = () => {
                                   {/* Center Column */}
                                   {correspondingErv ? (
                                     <div style={{ width: "40%", }}>
-                                       <div className="d-flex  " >
-                                      <p style={{ fontWeight: "700", color: "#000", marginBlock: "4px" ,width: "60%"  }}>
-                                        {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
-                                          correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
-                                      </p>
+                                      <div className="d-flex  " >
+                                        <p style={{ fontWeight: "700", color: "#000", marginBlock: "4px", width: "60%" }}>
+                                          {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
+                                            correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
+                                        </p>
 
-                                     
+
                                         <img
+                                        onClick={() => { openModal(dfgh , correspondingErv) }}
                                           src="arrows.png"
-                                          style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10 , marginTop  : 13 }}
+                                          style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
                                           alt="up arrow"
                                         />
                                       </div>
@@ -4013,6 +4068,116 @@ let Dockets = () => {
         </div>
 
       </div>
+
+
+      <Modal
+        isOpen={modalIsOpen}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <div style={{}} >
+          <div className="row" >
+            <div className="col-5" style={{ overflow : 'hidden' }} >
+              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Date: {cval1?.date}</p>
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom : 30  }} >Time created: {(() => {
+                                })()} {cval1?.starttime.replace('@', '')}</p>
+
+              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Time served: {(() => {
+                const datass = cval1?.order?.STAMP;
+
+                if(!datass){
+                  return
+                }
+                // Extract the "S" event using regex
+                const match = datass.match(/\b(\d{4})S\d\b/);
+                
+                if (match) {
+                  const time = match[1]; // Extract the 4-digit time (e.g., "1500")
+                  const formattedTime = `${time.slice(0, 2)}:${time.slice(2)}`; // Convert to HH:mm
+                  return(formattedTime)
+                  // console.log(formattedTime); // Output: "15:00"
+                } else {
+                  // console.log("No 'S' event found");
+                }
+
+
+                                })()}</p>
+              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Completion time: </p>
+
+              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Docket #: {cval1?.order?.DOCKETID}</p>
+              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Table #: {cval1?.order?.TABLE}</p>
+
+              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} ># of courses: {cval1?.order?.COURSES}</p>
+              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} ># of meals: {cval1?.order?.ITEMS?.length}</p>
+
+              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Waiter time: </p>
+              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Header note: {cval1?.order?.NOTE}</p>
+
+            </div>
+            <div className="col-1"  >
+              <div class="vertical-line"></div>
+            </div>
+            <div className="col-6 gggg" >
+              <div style={{ height : 300 }}>
+
+                <p style={{ fontWeight: '600', fontSize: 15 , textAlign : 'center' , marginBottom : 0 }}>Course 1 : { cval1?.order?.COURSES}</p>
+                <p style={{ fontWeight: '500', fontSize: 13 , textAlign : 'center' , color : "#707070" }}>Time: R:  . | P: . | H: .</p>
+
+                <div style={{ marginTop : 10 }}  >
+                  {
+                    cval1?.order?.ITEMS.map((kai , index)=>{
+                      return(
+                        <div style={{ marginBottom : 15 }}>
+                          <p style={{ fontWeight: '600', fontSize: 13 , marginBottom : 0  }}>Item {index+1 }: {kai?.ITEM}</p>
+                          <p style={{ fontWeight: '400', fontSize: 13 , marginBottom : 0 , color : "#707070" }}>Note: {kai?.NOTE}</p>
+                          <p style={{ fontWeight: '400', fontSize: 13 , marginBottom : 0 , color : "#707070" }}>Edited: {
+                            kai?.STATUS === "2" || kai?.STATUS === "12" || kai?.STATUS === "22" || kai?.STATUS === "32" ? 'Yes' : "No"
+                        } | Moved: {
+                          kai?.STATUS === "3" || kai?.STATUS === "13" || kai?.STATUS === "23" || kai?.STATUS === "33" ? 'Yes' : "No"
+                      } | Deleted:  {
+                        kai?.STATUS === "4" || kai?.STATUS === "24"  ? 'Yes' : "No"
+                    }</p>
+                        </div>
+                        
+                      )
+                    })
+                  }
+                </div>
+
+
+                <p style={{ fontWeight: '600', fontSize: 15 , textAlign : 'center' , marginBottom : 0 , marginTop :  30 }}>Course 2 : { cval2?.order?.COURSES}</p>
+                <p style={{ fontWeight: '500', fontSize: 13 , textAlign : 'center' , color : "#707070" }}>Time: R: . | P: . | H: .</p>
+                <div style={{ marginTop : 10 }}  >
+                  {
+                    cval2?.order?.ITEMS.map((kai , index)=>{
+                      return(
+                        <div style={{ marginBottom : 15 }}>
+                          <p style={{ fontWeight: '600', fontSize: 13 , marginBottom : 0  }}>Item {index+1 }: {kai?.ITEM}</p>
+                          <p style={{ fontWeight: '400', fontSize: 13 , marginBottom : 0 , color : "#707070" }}>Note: {kai?.NOTE}</p>
+                          <p style={{ fontWeight: '400', fontSize: 13 , marginBottom : 0 , color : "#707070" }}>Edited: {
+                            kai?.STATUS === "2" || kai?.STATUS === "12" || kai?.STATUS === "22" || kai?.STATUS === "32" ? 'Yes' : "No"
+                        } | Moved: {
+                          kai?.STATUS === "3" || kai?.STATUS === "13" || kai?.STATUS === "23" || kai?.STATUS === "33" ? 'Yes' : "No"
+                      } | Deleted:  {
+                        kai?.STATUS === "4" || kai?.STATUS === "24"  ? 'Yes' : "No"
+                    }</p>
+                        </div>
+                        
+                      )
+                    })
+                  }
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </Modal>
+
+
     </div>
   );
 };
