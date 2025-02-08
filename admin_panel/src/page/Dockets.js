@@ -17,7 +17,7 @@ import { FaCheck } from 'react-icons/fa';
 import { Bar } from 'react-chartjs-2';
 import { jsPDF } from 'jspdf';
 import Modal from 'react-modal';
-
+import html2canvas from "html2canvas";
 
 
 import app from "./firebase";
@@ -96,16 +96,16 @@ let Dockets = () => {
 
   let subtitle;
   const [modalIsOpen, setIsOpen] = React.useState(false);
-  let [ cval1 , setcval1 ] = useState()
-  let [ cval2 , setcval2 ] = useState()
-  function openModal(finebyme ,   finebyme2) {
+  let [cval1, setcval1] = useState()
+  let [cval2, setcval2] = useState()
+  function openModal(finebyme, finebyme2) {
     console.log(finebyme, 'finebymefinebyme', finebyme2)
     setIsOpen(true);
     setcval1(finebyme)
     setcval2(finebyme2)
   }
 
-   
+
 
   function afterOpenModal() {
     // references are now sync'd and can be accessed. 
@@ -127,7 +127,7 @@ let Dockets = () => {
   let [twobar, setTwobar] = useState([])
   let [optionbar, setOption] = useState([])
 
- 
+
 
 
 
@@ -1135,7 +1135,7 @@ let Dockets = () => {
   let [inputvaluetwo, setInputvaluetwo] = useState()
 
 
-
+  const pdfRef = useRef();
 
 
 
@@ -2205,23 +2205,27 @@ let Dockets = () => {
 
             let fixedss = parseInt(startTimeFormatted.replace(":", ""), 10)
 
-            if(fixedss > 2 ){}
+            if (fixedss > 2) {
+              const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+              const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+              const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+
+              processTimes.push(processTime);
+
+              result.push({
+                date: formattedDate,
+                processtime: processTime, // Store as a number for sorting
+                table: `T${order.TABLE}`,
+                starttime: `@${startTimeFormatted}`,
+                staff: order.STAFF,
+                order: order
+              });
+            } else {
+
+            }
 
             // Calculate processing time
-            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
-            processTimes.push(processTime);
-
-            result.push({
-              date: formattedDate,
-              processtime: processTime, // Store as a number for sorting
-              table: `T${order.TABLE}`,
-              starttime: `@${startTimeFormatted}`,
-              staff: order.STAFF,
-              order : order
-            });
           }
         });
       });
@@ -2429,22 +2433,27 @@ let Dockets = () => {
 
             const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
             const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
+            
+              // Calculate processing time
+              const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+              const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+              const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
-            // Calculate processing time
-            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+              console.log(processTime , 'processTime  processTime ')
 
-            processTimes.push(processTime);
+              // if( )
 
-            result.push({
-              date: formattedDate,
-              processtime: processTime, // Store as a number for sorting
-              table: `T${order.TABLE}`,
-              starttime: `@${startTimeFormatted}`,
-              staff: order.STAFF,
-              order : order
-            });
+              processTimes.push(processTime);
+
+              result.push({
+                date: formattedDate,
+                processtime: processTime, // Store as a number for sorting
+                table: `T${order.TABLE}`,
+                starttime: `@${startTimeFormatted}`,
+                staff: order.STAFF,
+                order: order
+              }); 
+
           }
         });
       });
@@ -2704,21 +2713,88 @@ let Dockets = () => {
     setShowDivsss(!showDivsss);
   };
 
-  let editexportpdf = () => {
+  let editexportpdf = async () => {
 
-    const doc = new jsPDF();
+    const input = pdfRef.current;
 
-    // Add some text to the PDF
-    doc.text('Hello, this is a sample PDF created with jsPDF!', 10, 10);
+      
+ 
+    // html2canvas(input, { scale: 2 }).then((canvas) => {
+    //   const imgData = canvas.toDataURL("image/png");
+    //   const pdf = new jsPDF("p", "mm", "a4");
+    //   const imgWidth = 210; // A4 width in mm
+    //   const pageHeight = 297; // A4 height in mm
+    //   const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    //   let heightLeft = imgHeight;
+    //   let position = 0;
 
-    // Optionally, you can add other content like images, tables, etc.
-    // doc.addImage(imageData, 'JPEG', 10, 20, 180, 160);
-    // doc.autoTable({ html: '#my-table' });
+    //   pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    //   heightLeft -= pageHeight;
 
-    // Save the PDF with a filename
-    doc.save('sample.pdf');
+    //   while (heightLeft > 0) {
+    //     position = heightLeft - imgHeight;
+    //     pdf.addPage();
+    //     pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    //     heightLeft -= pageHeight;
+    //   }
 
-    console.log('gggggggggggggggggggg')
+    //   pdf.save("download.pdf");
+    
+    // });
+
+    const doc = new jsPDF({
+      orientation: "p",
+      unit: "mm",
+      format: "a4",
+    }); 
+    doc.text("Test", 10, 10); // Add static text
+  
+    await doc.html(input, {
+      callback: function (doc) {
+        doc.save("output.pdf"); // Save after rendering
+      },
+      x: 10,
+      y: 20,
+      width: 190, // Fit content within page
+      windowWidth: 1000, // Ensure full width capture
+      autoPaging: "text",
+      html2canvas: {  
+        useCORS: true, // Handle cross-origin images
+      },
+    });
+
+
+
+    // var doc = new  jsPDF({
+    //   orientation: 'p',
+    //   unit: 'pt',
+    //   format: 'letter'
+    // });
+    
+    
+    // var field = input;
+    // doc.text(10, 10, "test");
+    // //add first html
+    // await doc.html(field, {
+    //   callback: function (doc) {
+    //     return doc;
+    //   },
+    //   width: 210,
+    //   windowWidth: 210, 
+    //       html2canvas: {
+    //           backgroundColor: 'lightyellow',
+    //           width: 210, 
+    //           height: 150
+    //       },
+    //       backgroundColor: 'lightblue', 
+    //   x: 10,
+    //   y: 50,
+    //   autoPaging: 'text'
+    // });
+
+    // doc.save("download.pdf");
+    // window.open(doc.output('bloburl'));
+    
 
   }
 
@@ -3451,7 +3527,7 @@ let Dockets = () => {
                             <hr />
                             <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
                               editexportpdf()
-                            }}>PDF</p>
+                            }}>PDFs</p>
                           </div>
                         )}
 
@@ -3507,7 +3583,9 @@ let Dockets = () => {
 
 
 
-                      <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
+                      <div  className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 300, overflowY: 'auto' }} >
+
+                        <div  >
 
                         {
                           editall?.orders?.map((dfgh, index) => {
@@ -3519,13 +3597,13 @@ let Dockets = () => {
                                   {/* Left Column */}
                                   <div style={{ width: "40%" }}>
                                     <div className="d-flex  " style={{}}>
-                                      <p style={{ fontWeight: "700", color: "#000", marginBlock: "4px", width: "60%" }}>
+                                      <p style={{ fontWeight: "700", color: "#000",   width: "60%" }}>
                                         {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.date + " " + "[" +
                                           dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
                                       </p>
 
                                       <img
-                                        onClick={() => { openModal(dfgh , correspondingErv) }}
+                                        onClick={() => { openModal(dfgh, correspondingErv) }}
                                         src="arrows.png"
                                         style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
                                         alt="up arrow"
@@ -3538,14 +3616,14 @@ let Dockets = () => {
                                   {correspondingErv ? (
                                     <div style={{ width: "40%", }}>
                                       <div className="d-flex  " >
-                                        <p style={{ fontWeight: "700", color: "#000", marginBlock: "4px", width: "60%" }}>
+                                        <p style={{ fontWeight: "700", color: "#000",   width: "60%" }}>
                                           {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
                                             correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                                         </p>
 
 
                                         <img
-                                        onClick={() => { openModal(dfgh , correspondingErv) }}
+                                          onClick={() => { openModal(dfgh, correspondingErv) }}
                                           src="arrows.png"
                                           style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
                                           alt="up arrow"
@@ -3563,7 +3641,7 @@ let Dockets = () => {
                                       justifyContent: "end",
                                       alignItems: "center",
                                       display: "flex",
-                                      width: "20%",
+                                      width: "10%",
                                     }}
                                   >
                                     <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
@@ -3614,7 +3692,7 @@ let Dockets = () => {
                             );
                           })
                         }
-
+                        </div >
 
 
 
@@ -3632,6 +3710,106 @@ let Dockets = () => {
 
 
                   </div>
+
+<div style={{ visibility : 'hidden' }}>
+                  <div ref={pdfRef}  >
+
+                        {
+                          editall?.orders?.map((dfgh, index) => {
+                            const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
+
+                            return (
+                              <div key={index}>
+                                <div className="d-flex gap-5">
+                                  {/* Left Column */}
+                                  <div style={{ width: "40%" }}>
+                                    <div className="d-flex  " style={{}}>
+                                      <p style={{ fontWeight: "700", color: "#000",   }}>
+                                        {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.date + " " + "[" +
+                                          dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
+                                      </p>
+ 
+                                    </div>
+
+                                  </div>
+
+                                  {/* Center Column */}
+                                  {correspondingErv ? (
+                                    <div style={{ width: "40%", }}>
+                                      <div className="d-flex  " >
+                                        <p style={{ fontWeight: "700", color: "#000",  }}>
+                                          {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
+                                            correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
+                                        </p>
+
+ 
+                                      </div>
+
+                                    </div>
+                                  ) : (
+                                    <div style={{ width: "33%" }}></div>
+                                  )}
+
+                                  {/* Right Column (Percentage Calculation) */}
+                                  <div
+                                    style={{
+                                      justifyContent: "end",
+                                      alignItems: "center",
+                                      display: "flex",
+                                      width: "10%",
+                                    }}
+                                  >
+                                    <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
+
+                                      <span>
+                                        {(() => {
+                                          const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
+                                          const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
+
+                                          let percentageChange = 0;
+                                          if (processTimeTwo > 0) {
+                                            percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
+                                          }
+
+                                          return (
+                                            <span>
+                                              {percentageChange.toFixed(2) + "%"}
+                                              <span
+                                                style={{
+                                                  color: percentageChange > 0 ? "green" : "red",
+                                                  fontWeight: "700",
+                                                }}
+                                              >
+                                                {percentageChange > 0 ? (
+                                                  <img
+                                                    src="up_arw.png"
+                                                    style={{ width: 16, height: 16, cursor: "pointer" }}
+                                                    alt="up arrow"
+                                                  />
+                                                ) : (
+                                                  <img
+                                                    src="d_arw.png"
+                                                    style={{ width: 16, height: 16, cursor: "pointer" }}
+                                                    alt="down arrow"
+                                                  />
+                                                )}
+                                              </span>
+                                            </span>
+                                          );
+                                        })()}
+                                      </span>
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+                              </div>
+                            );
+                          })
+                        }
+                        </div >
+</div>
+
                 </div>
 
                 : meals === 3 ?
@@ -4079,92 +4257,92 @@ let Dockets = () => {
       >
         <div style={{}} >
           <div className="row" >
-            <div className="col-5" style={{ overflow : 'hidden' }} >
-              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Date: {cval1?.date}</p>
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom : 30  }} >Time created: {(() => {
-                                })()} {cval1?.starttime.replace('@', '')}</p>
+            <div className="col-5" style={{ overflow: 'hidden' }} >
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Date: {cval1?.date}</p>
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time created: {(() => {
+              })()} {cval1?.starttime.replace('@', '')}</p>
 
-              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Time served: {(() => {
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time served: {(() => {
                 const datass = cval1?.order?.STAMP;
 
-                if(!datass){
+                if (!datass) {
                   return
                 }
                 // Extract the "S" event using regex
                 const match = datass.match(/\b(\d{4})S\d\b/);
-                
+
                 if (match) {
                   const time = match[1]; // Extract the 4-digit time (e.g., "1500")
                   const formattedTime = `${time.slice(0, 2)}:${time.slice(2)}`; // Convert to HH:mm
-                  return(formattedTime)
+                  return (formattedTime)
                   // console.log(formattedTime); // Output: "15:00"
                 } else {
                   // console.log("No 'S' event found");
                 }
 
 
-                                })()}</p>
-              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Completion time: </p>
+              })()}</p>
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Completion time: </p>
 
-              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Docket #: {cval1?.order?.DOCKETID}</p>
-              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Table #: {cval1?.order?.TABLE}</p>
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Docket #: {cval1?.order?.DOCKETID}</p>
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Table #: {cval1?.order?.TABLE}</p>
 
-              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} ># of courses: {cval1?.order?.COURSES}</p>
-              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} ># of meals: {cval1?.order?.ITEMS?.length}</p>
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} ># of courses: {cval1?.order?.COURSES}</p>
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} ># of meals: {cval1?.order?.ITEMS?.length}</p>
 
-              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Waiter time: </p>
-              <p style={{ fontWeight: '600', fontSize: 15 , marginBottom : 30 }} >Header note: {cval1?.order?.NOTE}</p>
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Waiter time: </p>
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Header note: {cval1?.order?.NOTE}</p>
 
             </div>
             <div className="col-1"  >
               <div class="vertical-line"></div>
             </div>
             <div className="col-6 gggg" >
-              <div style={{ height : 300 }}>
+              <div style={{ height: 300 }}>
 
-                <p style={{ fontWeight: '600', fontSize: 15 , textAlign : 'center' , marginBottom : 0 }}>Course 1 : { cval1?.order?.COURSES}</p>
-                <p style={{ fontWeight: '500', fontSize: 13 , textAlign : 'center' , color : "#707070" }}>Time: R:  . | P: . | H: .</p>
+                <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>Course 1 : {cval1?.order?.COURSES}</p>
+                <p style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}>Time: R:  . | P: . | H: .</p>
 
-                <div style={{ marginTop : 10 }}  >
+                <div style={{ marginTop: 10 }}  >
                   {
-                    cval1?.order?.ITEMS.map((kai , index)=>{
-                      return(
-                        <div style={{ marginBottom : 15 }}>
-                          <p style={{ fontWeight: '600', fontSize: 13 , marginBottom : 0  }}>Item {index+1 }: {kai?.ITEM}</p>
-                          <p style={{ fontWeight: '400', fontSize: 13 , marginBottom : 0 , color : "#707070" }}>Note: {kai?.NOTE}</p>
-                          <p style={{ fontWeight: '400', fontSize: 13 , marginBottom : 0 , color : "#707070" }}>Edited: {
+                    cval1?.order?.ITEMS.map((kai, index) => {
+                      return (
+                        <div style={{ marginBottom: 15 }}>
+                          <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>Item {index + 1}: {kai?.ITEM}</p>
+                          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>Note: {kai?.NOTE}</p>
+                          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>Edited: {
                             kai?.STATUS === "2" || kai?.STATUS === "12" || kai?.STATUS === "22" || kai?.STATUS === "32" ? 'Yes' : "No"
-                        } | Moved: {
-                          kai?.STATUS === "3" || kai?.STATUS === "13" || kai?.STATUS === "23" || kai?.STATUS === "33" ? 'Yes' : "No"
-                      } | Deleted:  {
-                        kai?.STATUS === "4" || kai?.STATUS === "24"  ? 'Yes' : "No"
-                    }</p>
+                          } | Moved: {
+                              kai?.STATUS === "3" || kai?.STATUS === "13" || kai?.STATUS === "23" || kai?.STATUS === "33" ? 'Yes' : "No"
+                            } | Deleted:  {
+                              kai?.STATUS === "4" || kai?.STATUS === "24" ? 'Yes' : "No"
+                            }</p>
                         </div>
-                        
+
                       )
                     })
                   }
                 </div>
 
 
-                <p style={{ fontWeight: '600', fontSize: 15 , textAlign : 'center' , marginBottom : 0 , marginTop :  30 }}>Course 2 : { cval2?.order?.COURSES}</p>
-                <p style={{ fontWeight: '500', fontSize: 13 , textAlign : 'center' , color : "#707070" }}>Time: R: . | P: . | H: .</p>
-                <div style={{ marginTop : 10 }}  >
+                <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0, marginTop: 30 }}>Course 2 : {cval2?.order?.COURSES}</p>
+                <p style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}>Time: R: . | P: . | H: .</p>
+                <div style={{ marginTop: 10 }}  >
                   {
-                    cval2?.order?.ITEMS.map((kai , index)=>{
-                      return(
-                        <div style={{ marginBottom : 15 }}>
-                          <p style={{ fontWeight: '600', fontSize: 13 , marginBottom : 0  }}>Item {index+1 }: {kai?.ITEM}</p>
-                          <p style={{ fontWeight: '400', fontSize: 13 , marginBottom : 0 , color : "#707070" }}>Note: {kai?.NOTE}</p>
-                          <p style={{ fontWeight: '400', fontSize: 13 , marginBottom : 0 , color : "#707070" }}>Edited: {
+                    cval2?.order?.ITEMS.map((kai, index) => {
+                      return (
+                        <div style={{ marginBottom: 15 }}>
+                          <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>Item {index + 1}: {kai?.ITEM}</p>
+                          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>Note: {kai?.NOTE}</p>
+                          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>Edited: {
                             kai?.STATUS === "2" || kai?.STATUS === "12" || kai?.STATUS === "22" || kai?.STATUS === "32" ? 'Yes' : "No"
-                        } | Moved: {
-                          kai?.STATUS === "3" || kai?.STATUS === "13" || kai?.STATUS === "23" || kai?.STATUS === "33" ? 'Yes' : "No"
-                      } | Deleted:  {
-                        kai?.STATUS === "4" || kai?.STATUS === "24"  ? 'Yes' : "No"
-                    }</p>
+                          } | Moved: {
+                              kai?.STATUS === "3" || kai?.STATUS === "13" || kai?.STATUS === "23" || kai?.STATUS === "33" ? 'Yes' : "No"
+                            } | Deleted:  {
+                              kai?.STATUS === "4" || kai?.STATUS === "24" ? 'Yes' : "No"
+                            }</p>
                         </div>
-                        
+
                       )
                     })
                   }
