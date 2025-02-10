@@ -15,6 +15,9 @@ import Forgetpassword from "./page/Forgetpassword";
 import Meals from "./page/Meals";
 import Dockets from "./page/Dockets";
 
+//admin
+import Adminpage from "./page/Adminpage";
+
 function App() {
   return (
     <BrowserRouter>
@@ -24,12 +27,15 @@ function App() {
 
         <Route path="/login" element={<Login />} />
         <Route path="/grantedaccess" element={<SinglrandMulti />} />
-        <Route path="/multivenues" element={<Multivenues />} />
+        <Route path="/analytics" element={<Multivenues />} />
         <Route path="/singlevenues" element={<Singlevenues />} /> 
         <Route path="/forgetpassword" element={<Forgetpassword />} /> 
 
         <Route path="/meals" element={<Meals />} />
         <Route path="/dockets" element={<Dockets />} />
+
+        <Route path="/admin" element={<Adminpage />} />
+
 
       </Routes>
     </BrowserRouter>

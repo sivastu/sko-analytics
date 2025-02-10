@@ -10,6 +10,8 @@ import bigInt from "big-integer";
 import app from "./firebase";
 import { getDatabase, ref, set, push, get, query, orderByChild, equalTo } from "firebase/database";
 import SweetAlert2 from 'react-sweetalert2';
+import * as CryptoJS from 'crypto-js'
+
 
 
 let UserRent = () => {
@@ -43,6 +45,19 @@ let UserRent = () => {
       sendmail()
     }
   };
+
+   const encrypt = ( plainText ) => {
+    const cipherText = CryptoJS.AES.encrypt(plainText, 'secretKey').toString()
+    console.log(cipherText ,'cipherText')
+    return cipherText
+}
+
+ const decrypt = ( cipherText ) => {
+    const bytes = CryptoJS.AES.decrypt(cipherText, 'secretKey' )
+    const plainText = bytes.toString(CryptoJS.enc.Utf8)
+    return plainText
+
+}
 
   let sendmail = async () => {
 
@@ -86,33 +101,55 @@ let UserRent = () => {
     try {
 
       const db = getDatabase(app);
-      const newDocRef = ref(db, `user/siva`);
+      const newDocRef = ref(db, `user`);
 
       const snapshot = await get(newDocRef); // Fetch the data for the user
 
       if (snapshot.exists()) {
         const userData = snapshot.val();
 
-        // Check if the password matches
-        if (userData.Password === password && userData.Email === username ) {
+        console.log(JSON.stringify(userData), 'userDatauserData')
 
-          if (userData.Role === 1) {
-            navigate("/multivenues");
+        // Check if the password matches
+        const foundUser = Object.values(userData).find(user => user.Email === username);
+
+        if (foundUser) {
+          // Check if the password matches
+          if (foundUser.Password === password) {
+            console.log("Login successful:", foundUser);
+
+            let fing = encrypt( JSON.stringify(foundUser) )
+
+            console.log(fing , 'fingfingfingfingfing')
+            localStorage.setItem('data' , fing )
+
+            if (foundUser.Role === 'admin') {
+
+              navigate("/admin", { state: { userdata: foundUser } });
+            }
+          } else {
+            setSwalProps({
+              show: true,
+              title: 'Invalid password',
+              text: ' ',
+              icon: 'error',
+              didClose: () => {
+                console.log('Swal closed');
+                setSwalProps({ show: false });
+              }
+            });
           }
-          console.log("Login successful:", userData);
         } else {
-        
-           setSwalProps({
-                    show: true,
-                    title: 'Invalid user details',
-                    text: ' ',
-                    icon: 'fail',
-                    didClose: () => {
-                      console.log('gggggggggggggggggggggggggg')
-                      setSwalProps({ show: false })
-                      // run when swal is closed...
-                  }
-                });
+          setSwalProps({
+            show: true,
+            title: 'User not found',
+            text: ' ',
+            icon: 'error',
+            didClose: () => {
+              console.log('Swal closed');
+              setSwalProps({ show: false });
+            }
+          });
         }
       } else {
         console.log("User does not exist.");
@@ -214,7 +251,7 @@ let UserRent = () => {
                       }} value={password} ref={input2Ref} onKeyDown={handleKeyDown} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070" }} type="password" />
                     </div>
                     <p onClick={() => {
-                      setForget(true)
+                      // setForget(true)
                     }} style={{
                       color: "#707070", fontSize: 15, fontWeight: '500', textAlign: 'right', marginRight: 40, marginTop: 3,
                       cursor: "pointer"
@@ -243,9 +280,9 @@ let UserRent = () => {
               }
 
 
-              <div style={{ display : 'flex' , justifyContent : 'center' , alignItems : 'center' , marginBottom : 30 , cursor : "pointer" }} >
-                <div onClick={()=>{
-                   loginn()
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 30, cursor: "pointer" }} >
+                <div onClick={() => {
+                  loginn()
                 }} style={{ backgroundColor: '#316AAF', width: 85, height: 30, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }} >
                   <p style={{ textAlign: 'center', color: '#fff', padding: 2 }} >Login</p>
                 </div>
