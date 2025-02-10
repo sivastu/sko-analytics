@@ -1730,7 +1730,7 @@ let Dockets = () => {
 
     setOptionone(timeLabelsone)
     setOneBarone(timeCountsone)
-    console.log(JSON.stringify(ghi), 'thousand')
+    console.log(JSON.stringify(ghione), 'thousand' , ghione)
 
 
 
@@ -1741,7 +1741,7 @@ let Dockets = () => {
     let timeCounts = {};
 
     function extractTime(stamp) {
-      let match = stamp.match(/\d{4}(R0|H0|P0|S0)/);
+      let match = stamp.match(/\d{4}(R0|H0|P0|S0)/); 
       if (match) {
         return match[0].slice(0, 2) + ":" + match[0].slice(2, 4); // Convert to HH:MM
       }
@@ -1773,10 +1773,9 @@ let Dockets = () => {
       }
     }
 
-    // Convert to final array format
     return Object.keys(timeCounts)
-      .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
-      .map(time => ({ time, count: timeCounts[time] }));
+    .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
+    .map(time => ({ time, count: timeCounts[time] })) .slice(1);
   }
 
   function processTimeDatatwo(data) {
@@ -1784,7 +1783,7 @@ let Dockets = () => {
   
     function extractTime(stamp) {
       // Match only S0, S1, S2, ... values in the stamp
-      let match = stamp.match(/\d{4}S\d+/);
+      let match = stamp.match(/\d{4}(S)/);
       if (match) {
         return match[0].slice(0, 2) + ":" + match[0].slice(2, 4); // Convert to HH:MM
       }
@@ -1796,7 +1795,7 @@ let Dockets = () => {
       let roundedMinute = Math.floor(minute / 10) * 10; // Round to nearest lower 10-minute mark
       return `${hour}.${roundedMinute.toString().padStart(2, "0")}`;
     }
-  
+
     for (let group in data) {
       for (let location in data[group]) {
         for (let section in data[group][location]) {
@@ -1815,11 +1814,10 @@ let Dockets = () => {
         }
       }
     }
-  
-    // Convert to final array format
+
     return Object.keys(timeCounts)
-      .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
-      .map(time => ({ time, count: timeCounts[time] }));
+    .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
+    .map(time => ({ time, count: timeCounts[time] })) .slice(1);
   }
   
 

@@ -1586,6 +1586,8 @@ let Meals = () => {
 
     let ghi =processTimeData(alldat)
 
+    console.log(ghi , 'ghighighi')
+
     let kidshort  = ghi.sort((a, b) => a.time.localeCompare(b.time));
 
     // Extract values into separate arrays
@@ -1642,7 +1644,7 @@ let Meals = () => {
                             let extractedTime = extractTime(stamp);
                             if (extractedTime) {
                                 let interval = roundToInterval(extractedTime);
-                                timeCounts[interval] = (timeCounts[interval] || 0) + 1;
+                                timeCounts[interval] = (timeCounts[interval] || 0) + order.ITEMS.length;
                             }
                         });
                     });
@@ -1654,7 +1656,7 @@ let Meals = () => {
     // Convert to final array format
     return Object.keys(timeCounts)
         .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
-        .map(time => ({ time, count: timeCounts[time] }));
+        .map(time => ({ time, count: timeCounts[time] })) .slice(1);
 }
 
 
