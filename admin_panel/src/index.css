@@ -116,6 +116,9 @@ code {
   box-shadow: 0px 8px #b9b9b9;
 }
 
+.gvdfvdf{
+  --mdb-gutter-x : 0px !important;
+}
 
 .custom-inputoness {
   width: 100%;

@@ -89,8 +89,8 @@ let Multivenues = () => {
               <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -7 }} >web portal</p>
             </div>
 
-            <div style={{ padding: 13, width: 400 }} >
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: '50%', marginTop: -3 }} >SINGLE VENUE</p>
+            <div style={{ padding: 13,  }} >
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff",  marginTop: -3 }} >(Group Name)</p>
             </div>
 
             <div style={{ padding: 13 }} >
