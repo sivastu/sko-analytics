@@ -74,6 +74,14 @@ let Dockets = () => {
   let [basicall, setBasicall] = useState()
   let [basic, setBasic] = useState()
   let [basicone, setBasicone] = useState([])
+  let [basicfine, setBasicfine] = useState([{
+    "value": "Maximum",
+    "label": "Maximum"
+  },
+  {
+    "value": "Minimum",
+    "label": "Minimum"
+  },])
 
   let [hubb, setHubb] = useState([])
   let [hubbswitch, setHubbswitch] = useState(false)
@@ -127,6 +135,10 @@ let Dockets = () => {
   let [twobar, setTwobar] = useState([])
   let [optionbar, setOption] = useState([])
 
+  let [onebarone, setOneBarone] = useState([])
+  let [twobarone, setTwobarone] = useState([])
+  let [optionbarone, setOptionone] = useState([])
+
 
 
 
@@ -150,7 +162,7 @@ let Dockets = () => {
 
 
   const datafine = {
-    labels: optionbar,
+    labels: optionbar ,
     datasets: [
       {
         label: 'Chosen range',
@@ -162,6 +174,27 @@ let Dockets = () => {
       {
         label: 'Comparing range',
         data: twobar,
+        backgroundColor: '#B6B6B6',
+        borderColor: '#B6B6B6',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+
+  const datafineone = {
+    labels: optionbarone,
+    datasets: [
+      {
+        label: 'Chosen range',
+        data: onebarone,
+        backgroundColor: '#316AAF',
+        borderColor: '#8AA3C2',
+        borderWidth: 1,
+      },
+      {
+        label: 'Comparing range',
+        data: twobarone,
         backgroundColor: '#B6B6B6',
         borderColor: '#B6B6B6',
         borderWidth: 1,
@@ -965,6 +998,27 @@ let Dockets = () => {
       </div>
     );
   };
+
+  const CustomOptionfinal = (props) => {
+    const { data, isSelected, innerRef, innerProps } = props;
+    return (
+      <div
+        ref={innerRef}
+        {...innerProps}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          padding: '10px',
+          backgroundColor: isSelected ? '#f0f8ff' : 'white',
+          color: isSelected ? '#0073e6' : 'black',
+          cursor: 'pointer',
+        }}
+      >
+        <span style={{ flexGrow: 1 }}>{data.label}</span>
+      </div>
+    );
+  };
+
   const CustomMultiValue = () => null;
 
 
@@ -983,6 +1037,8 @@ let Dockets = () => {
   };
 
   const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const [selectedOptionsfine, setSelectedOptionsfine] = useState([basicfine[0]]);
 
 
   const handleChange = (selected) => {
@@ -1035,6 +1091,35 @@ let Dockets = () => {
 
     //     callfordata(filteredData , filteredDatatwo )
     //     setFulldata(filteredDatatwo)
+
+  };
+
+
+  const handleChangefine = (selected) => {
+    console.log(editall, 'selected')
+
+    if (editall.length === 0) {
+
+    } else {
+      setEditall((prevState) => ({
+        ...prevState,
+        orders: [...prevState.orders].reverse() // Spread operator to avoid direct mutation
+      }));
+    }
+
+    if (editallone.length === 0) {
+
+    } else {
+      setEditallone((prevState) => ({
+        ...prevState,
+        orders: [...prevState.orders].reverse() // Spread operator to avoid direct mutation
+      }));
+
+    }
+
+
+    setSelectedOptionsfine(selected || []);
+
 
   };
 
@@ -1137,6 +1222,8 @@ let Dockets = () => {
 
   const pdfRef = useRef();
 
+  const pdfRefred = useRef();
+  const pdfRefredone = useRef();
 
 
   let ggggrt = () => {
@@ -1635,6 +1722,14 @@ let Dockets = () => {
     setOption(timeLabels)
     setOneBar(timeCounts)
 
+    let ghione = processTimeDatatwo(alldat)
+    let kidshortone = ghione.sort((a, b) => a.time.localeCompare(b.time));
+    // Extract values into separate arrays
+    let timeLabelsone = kidshortone.map(entry => entry.time);
+    let timeCountsone = kidshortone.map(entry => entry.count);
+
+    setOptionone(timeLabelsone)
+    setOneBarone(timeCountsone)
     console.log(JSON.stringify(ghi), 'thousand')
 
 
@@ -1683,6 +1778,50 @@ let Dockets = () => {
       .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
       .map(time => ({ time, count: timeCounts[time] }));
   }
+
+  function processTimeDatatwo(data) {
+    let timeCounts = {};
+  
+    function extractTime(stamp) {
+      // Match only S0, S1, S2, ... values in the stamp
+      let match = stamp.match(/\d{4}S\d+/);
+      if (match) {
+        return match[0].slice(0, 2) + ":" + match[0].slice(2, 4); // Convert to HH:MM
+      }
+      return null; // Skip if S0, S1, etc., is not found
+    }
+  
+    function roundToInterval(time) {
+      let [hour, minute] = time.split(":").map(Number);
+      let roundedMinute = Math.floor(minute / 10) * 10; // Round to nearest lower 10-minute mark
+      return `${hour}.${roundedMinute.toString().padStart(2, "0")}`;
+    }
+  
+    for (let group in data) {
+      for (let location in data[group]) {
+        for (let section in data[group][location]) {
+          for (let date in data[group][location][section]) {
+            data[group][location][section][date].forEach(order => {
+              let stamps = order.STAMP.split(" "); // Split STAMP string
+              stamps.forEach(stamp => {
+                let extractedTime = extractTime(stamp);
+                if (extractedTime) {
+                  let interval = roundToInterval(extractedTime);
+                  timeCounts[interval] = (timeCounts[interval] || 0) + 1;
+                }
+              });
+            });
+          }
+        }
+      }
+    }
+  
+    // Convert to final array format
+    return Object.keys(timeCounts)
+      .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
+      .map(time => ({ time, count: timeCounts[time] }));
+  }
+  
 
 
   function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
@@ -2171,9 +2310,16 @@ let Dockets = () => {
     let timeLabels = kidshort.map(entry => entry.time);
     let timeCounts = kidshort.map(entry => entry.count);
 
-    setTwobar(timeCounts)
 
+    let ghitwo = processTimeDatatwo(alldat)
 
+    let kidshorttwo = ghitwo.sort((a, b) => a.time.localeCompare(b.time));
+
+    // Extract values into separate arrays
+    let timeLabelstwo = kidshorttwo.map(entry => entry.time);
+    let timeCountstwo = kidshorttwo.map(entry => entry.count);
+
+    setTwobarone(timeCountstwo)
 
 
   }
@@ -2203,13 +2349,14 @@ let Dockets = () => {
             const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
             const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
 
-            let fixedss = parseInt(startTimeFormatted.replace(":", ""), 10)
+            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
-            if (fixedss > 2) {
-              const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-              const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-              const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
+            if (processTime < 2) {
+
+            } else {
               processTimes.push(processTime);
 
               result.push({
@@ -2220,9 +2367,9 @@ let Dockets = () => {
                 staff: order.STAFF,
                 order: order
               });
-            } else {
-
             }
+
+
 
             // Calculate processing time
 
@@ -2433,16 +2580,18 @@ let Dockets = () => {
 
             const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
             const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
-            
-              // Calculate processing time
-              const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-              const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-              const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
-              console.log(processTime , 'processTime  processTime ')
+            // Calculate processing time
+            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
-              // if( )
+            console.log(processTime, 'processTime  processTime ')
 
+            // if( )
+            if (processTime < 2) {
+
+            } else {
               processTimes.push(processTime);
 
               result.push({
@@ -2452,7 +2601,9 @@ let Dockets = () => {
                 starttime: `@${startTimeFormatted}`,
                 staff: order.STAFF,
                 order: order
-              }); 
+              });
+            }
+
 
           }
         });
@@ -2717,8 +2868,8 @@ let Dockets = () => {
 
     const input = pdfRef.current;
 
-      
- 
+
+
     // html2canvas(input, { scale: 2 }).then((canvas) => {
     //   const imgData = canvas.toDataURL("image/png");
     //   const pdf = new jsPDF("p", "mm", "a4");
@@ -2739,16 +2890,15 @@ let Dockets = () => {
     //   }
 
     //   pdf.save("download.pdf");
-    
+
     // });
 
     const doc = new jsPDF({
       orientation: "p",
       unit: "mm",
       format: "a4",
-    }); 
-    doc.text("Test", 10, 10); // Add static text
-  
+    });
+
     await doc.html(input, {
       callback: function (doc) {
         doc.save("output.pdf"); // Save after rendering
@@ -2758,7 +2908,7 @@ let Dockets = () => {
       width: 190, // Fit content within page
       windowWidth: 1000, // Ensure full width capture
       autoPaging: "text",
-      html2canvas: {  
+      html2canvas: {
         useCORS: true, // Handle cross-origin images
       },
     });
@@ -2770,8 +2920,8 @@ let Dockets = () => {
     //   unit: 'pt',
     //   format: 'letter'
     // });
-    
-    
+
+
     // var field = input;
     // doc.text(10, 10, "test");
     // //add first html
@@ -2794,7 +2944,7 @@ let Dockets = () => {
 
     // doc.save("download.pdf");
     // window.open(doc.output('bloburl'));
-    
+
 
   }
 
@@ -2816,39 +2966,137 @@ let Dockets = () => {
 
   }
 
-  let chartexportpdf = () => {
+  let chartexportpdf = async () => {
 
-    const doc = new jsPDF();
+    const input = pdfRefred.current;
 
-    // Add some text to the PDF
-    doc.text('Hello, this is a sample PDF created with jsPDF!', 10, 10);
 
-    // Optionally, you can add other content like images, tables, etc.
-    // doc.addImage(imageData, 'JPEG', 10, 20, 180, 160);
-    // doc.autoTable({ html: '#my-table' });
 
-    // Save the PDF with a filename
-    doc.save('sample.pdf');
+    // html2canvas(input, { scale: 2 }).then((canvas) => {
+    //   const imgData = canvas.toDataURL("image/png");
+    //   const pdf = new jsPDF("p", "mm", "a4");
+    //   const imgWidth = 210; // A4 width in mm
+    //   const pageHeight = 297; // A4 height in mm
+    //   const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    //   let heightLeft = imgHeight;
+    //   let position = 0;
 
-    console.log('gggggggggggggggggggg')
+    //   pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    //   heightLeft -= pageHeight;
+
+    //   while (heightLeft > 0) {
+    //     position = heightLeft - imgHeight;
+    //     pdf.addPage();
+    //     pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    //     heightLeft -= pageHeight;
+    //   }
+
+    //   pdf.save("download.pdf");
+
+    // });
+
+    const doc = new jsPDF({
+      orientation: "p",
+      unit: "mm",
+      format: "a4",
+    });
+
+    await doc.html(input, {
+      callback: function (doc) {
+        doc.save("output.pdf"); // Save after rendering
+      },
+      x: 10,
+      y: 20,
+      width: 190, // Fit content within page
+      windowWidth: 1000, // Ensure full width capture
+      autoPaging: "text",
+      html2canvas: {
+        useCORS: true, // Handle cross-origin images
+      },
+    });
+
+
+
+    // var doc = new  jsPDF({
+    //   orientation: 'p',
+    //   unit: 'pt',
+    //   format: 'letter'
+    // });
+
+
+    // var field = input;
+    // doc.text(10, 10, "test");
+    // //add first html
+    // await doc.html(field, {
+    //   callback: function (doc) {
+    //     return doc;
+    //   },
+    //   width: 210,
+    //   windowWidth: 210, 
+    //       html2canvas: {
+    //           backgroundColor: 'lightyellow',
+    //           width: 210, 
+    //           height: 150
+    //       },
+    //       backgroundColor: 'lightblue', 
+    //   x: 10,
+    //   y: 50,
+    //   autoPaging: 'text'
+    // });
+
+    // doc.save("download.pdf");
+    // window.open(doc.output('bloburl'));
+
 
   }
 
-  let refundexportpdf = () => {
+  let refundexportpdf = async() => {
+    const input = pdfRefredone.current;
 
-    const doc = new jsPDF();
 
-    // Add some text to the PDF
-    doc.text('Hello, this is a sample PDF created with jsPDF!', 10, 10);
 
-    // Optionally, you can add other content like images, tables, etc.
-    // doc.addImage(imageData, 'JPEG', 10, 20, 180, 160);
-    // doc.autoTable({ html: '#my-table' });
+    // html2canvas(input, { scale: 2 }).then((canvas) => {
+    //   const imgData = canvas.toDataURL("image/png");
+    //   const pdf = new jsPDF("p", "mm", "a4");
+    //   const imgWidth = 210; // A4 width in mm
+    //   const pageHeight = 297; // A4 height in mm
+    //   const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    //   let heightLeft = imgHeight;
+    //   let position = 0;
 
-    // Save the PDF with a filename
-    doc.save('sample.pdf');
+    //   pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    //   heightLeft -= pageHeight;
 
-    console.log('gggggggggggggggggggg')
+    //   while (heightLeft > 0) {
+    //     position = heightLeft - imgHeight;
+    //     pdf.addPage();
+    //     pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+    //     heightLeft -= pageHeight;
+    //   }
+
+    //   pdf.save("download.pdf");
+
+    // });
+
+    const doc = new jsPDF({
+      orientation: "p",
+      unit: "mm",
+      format: "a4",
+    });
+
+    await doc.html(input, {
+      callback: function (doc) {
+        doc.save("output.pdf"); // Save after rendering
+      },
+      x: 10,
+      y: 20,
+      width: 190, // Fit content within page
+      windowWidth: 1000, // Ensure full width capture
+      autoPaging: "text",
+      html2canvas: {
+        useCORS: true, // Handle cross-origin images
+      },
+    });
 
   }
 
@@ -3035,7 +3283,7 @@ let Dockets = () => {
                       );
                     },
                   }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                  closeMenuOnSelect={false}
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
                     control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
@@ -3079,7 +3327,7 @@ let Dockets = () => {
                       );
                     },
                   }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                  closeMenuOnSelect={false}
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
                     control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
@@ -3147,7 +3395,7 @@ let Dockets = () => {
                       );
                     },
                   }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                  closeMenuOnSelect={false}
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
                     control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
@@ -3190,7 +3438,7 @@ let Dockets = () => {
                       );
                     },
                   }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                  closeMenuOnSelect={false}
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
                     control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
@@ -3288,7 +3536,7 @@ let Dockets = () => {
                       );
                     },
                   }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                  closeMenuOnSelect={false}
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
                     control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
@@ -3506,6 +3754,34 @@ let Dockets = () => {
                         <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Dockets completion time</p>
                       </div>
 
+                      <div class="custom-inputonessfine  " >
+
+                        <Select
+                          className="newoneonee"
+                          options={basicfine}
+                          value={selectedOptionsfine}
+                          onChange={handleChangefine}
+                          placeholder="Select options..."
+                          components={{
+                            Option: CustomOptionfinal,
+                            MultiValue: () => null, // Hides default tags
+                            ValueContainer: ({ children, ...props }) => {
+                              const selectedValues = props.getValue();
+                              return (
+                                <components.ValueContainer {...props}>
+                                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                </components.ValueContainer>
+                              );
+                            },
+                          }}
+                          hideSelectedOptions={false} // Show all options even if selected
+                          styles={{
+                            control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                          }}
+                        />
+
+                      </div>
+
                       <div >
                         <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
 
@@ -3526,8 +3802,9 @@ let Dockets = () => {
                             <p style={{ color: '#707070' }}>Export as</p>
                             <hr />
                             <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                              console.log(JSON.stringify(selectedOptions), 'dateRange')
                               editexportpdf()
-                            }}>PDFs</p>
+                            }}>PDF</p>
                           </div>
                         )}
 
@@ -3583,44 +3860,24 @@ let Dockets = () => {
 
 
 
-                      <div  className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 300, overflowY: 'auto' }} >
+                      <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 300, overflowY: 'auto' }} >
 
                         <div  >
 
-                        {
-                          editall?.orders?.map((dfgh, index) => {
-                            const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
+                          {
+                            editall?.orders?.map((dfgh, index) => {
+                              const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
 
-                            return (
-                              <div key={index}>
-                                <div className="d-flex gap-5">
-                                  {/* Left Column */}
-                                  <div style={{ width: "40%" }}>
-                                    <div className="d-flex  " style={{}}>
-                                      <p style={{ fontWeight: "700", color: "#000",   width: "60%" }}>
-                                        {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.date + " " + "[" +
-                                          dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
-                                      </p>
-
-                                      <img
-                                        onClick={() => { openModal(dfgh, correspondingErv) }}
-                                        src="arrows.png"
-                                        style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
-                                        alt="up arrow"
-                                      />
-                                    </div>
-
-                                  </div>
-
-                                  {/* Center Column */}
-                                  {correspondingErv ? (
-                                    <div style={{ width: "40%", }}>
-                                      <div className="d-flex  " >
-                                        <p style={{ fontWeight: "700", color: "#000",   width: "60%" }}>
-                                          {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
-                                            correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
+                              return (
+                                <div key={index}>
+                                  <div className="d-flex gap-5">
+                                    {/* Left Column */}
+                                    <div style={{ width: "40%" }}>
+                                      <div className="d-flex  " style={{}}>
+                                        <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
+                                          {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.date + " " + "[" +
+                                            dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
                                         </p>
-
 
                                         <img
                                           onClick={() => { openModal(dfgh, correspondingErv) }}
@@ -3631,67 +3888,87 @@ let Dockets = () => {
                                       </div>
 
                                     </div>
-                                  ) : (
-                                    <div style={{ width: "33%" }}></div>
-                                  )}
 
-                                  {/* Right Column (Percentage Calculation) */}
-                                  <div
-                                    style={{
-                                      justifyContent: "end",
-                                      alignItems: "center",
-                                      display: "flex",
-                                      width: "10%",
-                                    }}
-                                  >
-                                    <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
+                                    {/* Center Column */}
+                                    {correspondingErv ? (
+                                      <div style={{ width: "40%", }}>
+                                        <div className="d-flex  " >
+                                          <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
+                                            {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
+                                              correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
+                                          </p>
 
-                                      <span>
-                                        {(() => {
-                                          const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
-                                          const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
 
-                                          let percentageChange = 0;
-                                          if (processTimeTwo > 0) {
-                                            percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
-                                          }
+                                          <img
+                                            onClick={() => { openModal(dfgh, correspondingErv) }}
+                                            src="arrows.png"
+                                            style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
+                                            alt="up arrow"
+                                          />
+                                        </div>
 
-                                          return (
-                                            <span>
-                                              {percentageChange.toFixed(2) + "%"}
-                                              <span
-                                                style={{
-                                                  color: percentageChange > 0 ? "green" : "red",
-                                                  fontWeight: "700",
-                                                }}
-                                              >
-                                                {percentageChange > 0 ? (
-                                                  <img
-                                                    src="up_arw.png"
-                                                    style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                    alt="up arrow"
-                                                  />
-                                                ) : (
-                                                  <img
-                                                    src="d_arw.png"
-                                                    style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                    alt="down arrow"
-                                                  />
-                                                )}
+                                      </div>
+                                    ) : (
+                                      <div style={{ width: "33%" }}></div>
+                                    )}
+
+                                    {/* Right Column (Percentage Calculation) */}
+                                    <div
+                                      style={{
+                                        justifyContent: "end",
+                                        alignItems: "center",
+                                        display: "flex",
+                                        width: "10%",
+                                      }}
+                                    >
+                                      <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
+
+                                        <span>
+                                          {(() => {
+                                            const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
+                                            const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
+
+                                            let percentageChange = 0;
+                                            if (processTimeTwo > 0) {
+                                              percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
+                                            }
+
+                                            return (
+                                              <span>
+                                                {percentageChange.toFixed(2) + "%"}
+                                                <span
+                                                  style={{
+                                                    color: percentageChange > 0 ? "green" : "red",
+                                                    fontWeight: "700",
+                                                  }}
+                                                >
+                                                  {percentageChange > 0 ? (
+                                                    <img
+                                                      src="up_arw.png"
+                                                      style={{ width: 16, height: 16, cursor: "pointer" }}
+                                                      alt="up arrow"
+                                                    />
+                                                  ) : (
+                                                    <img
+                                                      src="d_arw.png"
+                                                      style={{ width: 16, height: 16, cursor: "pointer" }}
+                                                      alt="down arrow"
+                                                    />
+                                                  )}
+                                                </span>
                                               </span>
-                                            </span>
-                                          );
-                                        })()}
-                                      </span>
-                                    </p>
+                                            );
+                                          })()}
+                                        </span>
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
 
-                                <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
-                              </div>
-                            );
-                          })
-                        }
+                                  <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+                                </div>
+                              );
+                            })
+                          }
                         </div >
 
 
@@ -3709,106 +3986,199 @@ let Dockets = () => {
 
 
 
+
                   </div>
 
-<div style={{ visibility : 'hidden' }}>
-                  <div ref={pdfRef}  >
+                  <div style={{ visibility: 'hidden' }}>
+                    <div ref={pdfRef}  >
 
-                        {
-                          editall?.orders?.map((dfgh, index) => {
-                            const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
+                      <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets Completion Time - From {selectedOptionsfine[0]?.label}to
+                        {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
 
-                            return (
-                              <div key={index}>
-                                <div className="d-flex gap-5">
-                                  {/* Left Column */}
-                                  <div style={{ width: "40%" }}>
-                                    <div className="d-flex  " style={{}}>
-                                      <p style={{ fontWeight: "700", color: "#000",   }}>
-                                        {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.date + " " + "[" +
-                                          dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
-                                      </p>
- 
-                                    </div>
+                      <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+                      <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                        const datefineda = new Date(dateRange[0]);
 
-                                  </div>
+                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric"
+                        });
 
-                                  {/* Center Column */}
-                                  {correspondingErv ? (
-                                    <div style={{ width: "40%", }}>
-                                      <div className="d-flex  " >
-                                        <p style={{ fontWeight: "700", color: "#000",  }}>
-                                          {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
-                                            correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
-                                        </p>
+                        return (formattedDate)
+                      })()} to {(() => {
+                        const datefineda = new Date(dateRange[1]);
 
- 
-                                      </div>
+                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric"
+                        });
 
-                                    </div>
-                                  ) : (
-                                    <div style={{ width: "33%" }}></div>
-                                  )}
+                        return (formattedDate)
+                      })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+                      <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                        const datefineda = new Date(dateRangetwo[0]);
 
-                                  {/* Right Column (Percentage Calculation) */}
-                                  <div
-                                    style={{
-                                      justifyContent: "end",
-                                      alignItems: "center",
-                                      display: "flex",
-                                      width: "10%",
-                                    }}
-                                  >
-                                    <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
+                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric"
+                        });
 
-                                      <span>
-                                        {(() => {
-                                          const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
-                                          const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
+                        return (formattedDate)
+                      })()} to {(() => {
+                        const datefineda = new Date(dateRangetwo[1]);
 
-                                          let percentageChange = 0;
-                                          if (processTimeTwo > 0) {
-                                            percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
-                                          }
+                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric"
+                        });
 
-                                          return (
-                                            <span>
-                                              {percentageChange.toFixed(2) + "%"}
-                                              <span
-                                                style={{
-                                                  color: percentageChange > 0 ? "green" : "red",
-                                                  fontWeight: "700",
-                                                }}
-                                              >
-                                                {percentageChange > 0 ? (
-                                                  <img
-                                                    src="up_arw.png"
-                                                    style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                    alt="up arrow"
-                                                  />
-                                                ) : (
-                                                  <img
-                                                    src="d_arw.png"
-                                                    style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                    alt="down arrow"
-                                                  />
-                                                )}
-                                              </span>
-                                            </span>
-                                          );
-                                        })()}
-                                      </span>
+                        return (formattedDate)
+                      })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+                      <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+
+                        const result = selectedOptions.map(item => item.value).join(",");
+
+                        if (result === "" || result === undefined || result === null) {
+                          return 'All'
+                        } else {
+
+                          return result
+
+                        }
+
+
+                      })()}</p>
+                      <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+
+                        const result = selectedhubOptions.map(item => item.label).join(",");
+
+                        if (result === "" || result === undefined || result === null) {
+                          return 'All'
+                        } else {
+
+                          return result
+
+                        }
+
+
+                      })()} </p>
+                      <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+
+                        const result = selectedCources.map(item => item.label).join(",");
+
+                        if (result === "" || result === undefined || result === null) {
+                          return 'All'
+                        } else {
+
+                          return result
+
+                        }
+
+
+                      })()}</p>
+
+
+                      <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+                      {
+                        editall?.orders?.map((dfgh, index) => {
+                          const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
+
+                          return (
+                            <div key={index}   >
+                              <div className="d-flex gap-5" >
+                                {/* Left Column */}
+                                <div style={{ width: "40%" }}>
+                                  <div className="d-flex  " style={{}}>
+                                    <p style={{ paddingTop: 15 }}>
+                                      <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.processtime + ". " || "N/A"} {dfgh?.date + " " + "[" +
+                                        dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
                                     </p>
+
                                   </div>
+
                                 </div>
 
-                                <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+                                {/* Center Column */}
+                                {correspondingErv ? (
+                                  <div style={{ width: "40%", }}>
+                                    <div className="d-flex  " >
+                                      <p style={{ paddingTop: 15 }}>
+                                        <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
+                                          correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
+                                      </p>
+
+
+                                    </div>
+
+                                  </div>
+                                ) : (
+                                  <div style={{ width: "33%" }}></div>
+                                )}
+
+                                {/* Right Column (Percentage Calculation) */}
+                                <div
+                                  style={{
+                                    justifyContent: "end",
+                                    alignItems: "center",
+                                    display: "flex",
+                                    width: "10%",
+                                  }}
+                                >
+                                  <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
+
+                                    <span>
+                                      {(() => {
+                                        const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
+                                        const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
+
+                                        let percentageChange = 0;
+                                        if (processTimeTwo > 0) {
+                                          percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
+                                        }
+
+                                        return (
+                                          <span>
+                                            {percentageChange.toFixed(2) + "%"}
+                                            <span
+                                              style={{
+                                                color: percentageChange > 0 ? "green" : "red",
+                                                fontWeight: "700",
+                                              }}
+                                            >
+                                              {percentageChange > 0 ? (
+                                                <img
+                                                  src="up_arw.png"
+                                                  style={{ width: 16, height: 16, cursor: "pointer" }}
+                                                  alt="up arrow"
+                                                />
+                                              ) : (
+                                                <img
+                                                  src="d_arw.png"
+                                                  style={{ width: 16, height: 16, cursor: "pointer" }}
+                                                  alt="down arrow"
+                                                />
+                                              )}
+                                            </span>
+                                          </span>
+                                        );
+                                      })()}
+                                    </span>
+                                  </p>
+                                </div>
                               </div>
-                            );
-                          })
-                        }
-                        </div >
-</div>
+
+                              <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+                            </div>
+                          );
+                        })
+                      }
+                    </div >
+                  </div>
 
                 </div>
 
@@ -3996,7 +4366,7 @@ let Dockets = () => {
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Refunded meals</p>
+                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Average completion - timeline</p>
                           </div>
 
                           <div >
@@ -4027,128 +4397,130 @@ let Dockets = () => {
                         </div>
 
                         <div style={{ marginTop: 50, padding: 20 }} >
-                          <div className="d-flex justify-content-between" >
+                          
+                           
+                        
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            {/* Left Scroll Button */}
+                            <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
 
-                            <div >
-                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                                ggggrtsg()}</span></p>
-                            </div>
-                            <div >
-                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-
-                                ggggrtsgg()
-                              }</span></p>
-                            </div>
-                            <div >
-                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                                {(() => {
-                                  let datd = ggggrtsg()
-
-                                  let datdtwo = ggggrtsgg()
-
-                                  let tot = ((datd - datdtwo) / datdtwo) * 100
-
-                                  return <span >{isNaN(tot) ? 0 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{isNaN(tot) ?
-                                    '%' : tot > 0 ? <img src="up_arw.png"
-                                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                      }} className="" alt="Example Image" /> :
-                                      <img src="d_arw.png"
-                                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                        }} className="" alt="Example Image" />}</span></span>
-
-
-                                  console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                                })()}</span></p>
+                            {/* Scrollable Chart Container */}
+                            <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                              <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                                <Bar data={datafineone} options={optionshshs} />
+                              </div>
                             </div>
 
-                          </div>
-
-                          <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-                          <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
-
-
-
-                            {
-                              minperday?.map((dfgh, index) => {
-                                const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
-
-                                return (
-                                  <>
-                                    <div className="d-flex  ">
-
-                                      <div style={{ width: '33%' }}>
-                                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
-                                      </div>
-
-                                      {correspondingErv ? (
-                                        <div style={{ width: '33%', textAlign: 'center' }}>
-                                          <div >
-
-                                            <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                                          </div>
-                                        </div>
-                                      ) : (
-                                        <>
-                                          <div style={{ width: '33%' }} >
-                                          </div></>
-                                      )}
-
-                                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                                          ( Total )
-                                          <span>
-                                            {(() => {
-                                              const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                              const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-
-                                              const tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                                              return (
-                                                <span>
-                                                  {tot.toFixed(2) + "%"}
-                                                  <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                                    {tot > 0 ? (
-                                                      <img
-                                                        src="up_arw.png"
-                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                        alt="up arrow"
-                                                      />
-                                                    ) : (
-                                                      <img
-                                                        src="d_arw.png"
-                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                        alt="down arrow"
-                                                      />
-                                                    )}
-                                                  </span>
-                                                </span>
-                                              );
-                                            })()}
-                                          </span>
-                                        </p>
-                                      </div>
-
-                                    </div>
-
-                                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                                  </>
-                                );
-                              })
-                            }
+                            {/* Right Scroll Button */}
+                            <button onClick={scrollRight} style={buttonStyle}>➡</button>
 
 
                           </div>
 
 
+                          <div style={{ visibility: 'hidden' }}>
+                            <div ref={pdfRefredone}  >
+
+                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
+                                {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
+
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                                const datefineda = new Date(dateRange[0]);
+
+                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric"
+                                });
+
+                                return (formattedDate)
+                              })()} to {(() => {
+                                const datefineda = new Date(dateRange[1]);
+
+                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric"
+                                });
+
+                                return (formattedDate)
+                              })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                                const datefineda = new Date(dateRangetwo[0]);
+
+                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric"
+                                });
+
+                                return (formattedDate)
+                              })()} to {(() => {
+                                const datefineda = new Date(dateRangetwo[1]);
+
+                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric"
+                                });
+
+                                return (formattedDate)
+                              })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+
+                                const result = selectedOptions.map(item => item.value).join(",");
+
+                                if (result === "" || result === undefined || result === null) {
+                                  return 'All'
+                                } else {
+
+                                  return result
+
+                                }
+
+
+                              })()}</p>
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+
+                                const result = selectedhubOptions.map(item => item.label).join(",");
+
+                                if (result === "" || result === undefined || result === null) {
+                                  return 'All'
+                                } else {
+
+                                  return result
+
+                                }
+
+
+                              })()} </p>
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+
+                                const result = selectedCources.map(item => item.label).join(",");
+
+                                if (result === "" || result === undefined || result === null) {
+                                  return 'All'
+                                } else {
+
+                                  return result
+
+                                }
+
+
+                              })()}</p>
+
+
+
+                             <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                              <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                                <Bar data={datafineone} options={optionshshs} />
+                              </div>
+                            </div>
+
+                            </div >
+                          </div>
 
 
 
@@ -4171,7 +4543,7 @@ let Dockets = () => {
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Meals received - timeline</p>
+                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Dockets received - timeline</p>
                           </div>
 
                           <div >
@@ -4218,6 +4590,113 @@ let Dockets = () => {
                             {/* Right Scroll Button */}
                             <button onClick={scrollRight} style={buttonStyle}>➡</button>
                           </div>
+
+
+                          <div style={{ visibility: 'hidden' }}>
+                            <div ref={pdfRefred}  >
+
+                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
+                                {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
+
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                                const datefineda = new Date(dateRange[0]);
+
+                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric"
+                                });
+
+                                return (formattedDate)
+                              })()} to {(() => {
+                                const datefineda = new Date(dateRange[1]);
+
+                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric"
+                                });
+
+                                return (formattedDate)
+                              })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                                const datefineda = new Date(dateRangetwo[0]);
+
+                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric"
+                                });
+
+                                return (formattedDate)
+                              })()} to {(() => {
+                                const datefineda = new Date(dateRangetwo[1]);
+
+                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric"
+                                });
+
+                                return (formattedDate)
+                              })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+
+                                const result = selectedOptions.map(item => item.value).join(",");
+
+                                if (result === "" || result === undefined || result === null) {
+                                  return 'All'
+                                } else {
+
+                                  return result
+
+                                }
+
+
+                              })()}</p>
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+
+                                const result = selectedhubOptions.map(item => item.label).join(",");
+
+                                if (result === "" || result === undefined || result === null) {
+                                  return 'All'
+                                } else {
+
+                                  return result
+
+                                }
+
+
+                              })()} </p>
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+
+                                const result = selectedCources.map(item => item.label).join(",");
+
+                                if (result === "" || result === undefined || result === null) {
+                                  return 'All'
+                                } else {
+
+                                  return result
+
+                                }
+
+
+                              })()}</p>
+
+
+
+                            <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                              <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                                <Bar data={datafine} options={optionshshs} />
+                              </div>
+                            </div>
+
+                            </div >
+                          </div>
+
+
 
 
 
