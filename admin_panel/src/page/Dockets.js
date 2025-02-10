@@ -2309,7 +2309,7 @@ let Dockets = () => {
     // Extract values into separate arrays
     let timeLabels = kidshort.map(entry => entry.time);
     let timeCounts = kidshort.map(entry => entry.count);
-
+    setTwobar(timeCounts)
 
     let ghitwo = processTimeDatatwo(alldat)
 
