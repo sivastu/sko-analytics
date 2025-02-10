@@ -17,6 +17,7 @@ import Dockets from "./page/Dockets";
 
 //admin
 import Adminpage from "./page/Adminpage";
+import Admin_dash from "./page/Admin_dash";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/dockets" element={<Dockets />} />
 
         <Route path="/admin" element={<Adminpage />} />
+        <Route path="/dashboard" element={<Admin_dash />} />
 
 
       </Routes>

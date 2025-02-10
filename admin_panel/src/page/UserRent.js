@@ -125,7 +125,7 @@ let UserRent = () => {
 
             if (foundUser.Role === 'admin') {
 
-              navigate("/grantedaccess", { state: { userdata: foundUser } });
+              navigate("/admin", { state: { userdata: foundUser } });
             }
           } else {
             setSwalProps({

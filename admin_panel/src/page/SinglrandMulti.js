@@ -126,7 +126,7 @@ let SinglrandMulti = () => {
     justifyContent: "center",
   }}
   onClick={() => {
-    navigate("/admin");
+    navigate("/analytics"); 
   }}
 >
   <div className="row w-100 gvdfvdf" >

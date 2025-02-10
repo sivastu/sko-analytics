@@ -2605,16 +2605,16 @@ let Meals = () => {
 
         <div style={{}} className="dddd"  >
 
-          <div className="d-flex justify-content-between  pt-4" >
+          <div className="d-flex justify-content-between  pt-4 gap-3" >
 
-            <div >
+            <div style={{ width : '20%' }}>
               <p onClick={() => {
 
                 checkkkk()
 
               }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
 
-              <div  >
+              <div  style={{ width : '100%' }} >
                 <DatePicker
                   selectsRange
                   startDate={startDate}
@@ -2650,8 +2650,14 @@ let Meals = () => {
                     type="time"
                     value={onetime}
                     onChange={(e) => {
-                      console.log(e.target.value, 'eeee')
                       setOnetime(e.target.value)
+                      if(dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null){
+                        return
+                      }
+                      console.log(e.target.value, 'eeee')
+                    
+
+                      
 
                       filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
 
@@ -2664,6 +2670,11 @@ let Meals = () => {
                     value={twotime}
                     onChange={(e) => {
                       setTwotime(e.target.value)
+                      console.log(dateRange , 'dateRangedateRangedateRange')
+                      if(dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null ){
+                        return
+                      }
+                     
                       // tiemstampp(2, e.target.value)
 
                       filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
@@ -2677,9 +2688,9 @@ let Meals = () => {
 
             </div>
 
-            <div >
+            <div  style={{ width : '20%' }} >
               <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
-              <div  >
+              <div   style={{ width : '100%' }} >
                 <DatePicker
                   selectsRange
                   startDate={startDatetwo}
@@ -2719,6 +2730,10 @@ let Meals = () => {
                     value={threetime}
                     onChange={(e) => {
                       setThreetime(e.target.value)
+                      if(dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null){
+                        return
+                      }
+                     
 
                       filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
 
@@ -2731,6 +2746,10 @@ let Meals = () => {
                     value={fourtime}
                     onChange={(e) => {
                       setFourtime(e.target.value)
+                      if(dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null){
+                        return
+                      }
+                  
                       filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway,   inputvalue ,inputvaluetwo, selectedhubOptions)
                     }}
                   />
@@ -2742,10 +2761,10 @@ let Meals = () => {
             </div>
 
 
-            <div >
+            <div style={{ width : '20%' }} >
               <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen venue & hub</p>
               <div className="custom-inputoness d-flex justify-content-between" style={{
-                width: 350, height: 45
+                width: '100%', height: 45
               }}>
                 <div class="switch-container">
                   <input type="checkbox" id="switch1" checked={venueradio} onChange={(e) => {
@@ -2782,13 +2801,13 @@ let Meals = () => {
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    control: (base) => ({ ...base, border: 'unset', color: '#707070' , backgroundColor : '#fff' }),
                   }}
                 />
               </div>
 
               <div className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                width: 350,
+                width: '100%',
                 height: 45
               }}>
 
@@ -2854,10 +2873,10 @@ let Meals = () => {
               </div>
             </div>
 
-            <div >
+            <div style={{ width : '20%' }} >
               <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by stages/courses</p>
               <div className="custom-inputoness d-flex justify-content-between" style={{
-                width: 350,
+                width: '100%',
                 height: 45
               }}>
 
@@ -2901,7 +2920,7 @@ let Meals = () => {
 
 
               <div className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                width: 350,
+                width: '100%',
                 height: 45
               }}>
                 <div class="switch-container">
@@ -2945,10 +2964,10 @@ let Meals = () => {
 
             </div>
 
-            <div >
+            <div style={{ width : '20%' }} >
               <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by tables/takeaways</p>
 
-              <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: 350 }}>
+              <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
                 {/* <div class="switch-container">
                   <input type="checkbox" id="switch1" />
                   <label class="switch-label" for="switch1"></label>
@@ -2967,7 +2986,7 @@ let Meals = () => {
 
                   filterDataByDateonee(dateRangetwo, threetime, fourtime,  selectedOptions, hubb, selectedCources, selectedTakeaway , e.target.value , inputvaluetwo, selectedhubOptions )
 
-                }} value={inputvalue} placeholder="0-100" style={{ width: '50%', border: 'unset' }} type="text" />
+                }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset' }} type="text" />
 
 
                 <p style={{ fontSize: 19, display: 'contents' }} >|</p>
@@ -2978,11 +2997,11 @@ let Meals = () => {
                   filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway , inputvalue , e.target.value , selectedhubOptions)
 
                   filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway , inputvalue , e.target.value , selectedhubOptions)
-                }} value={inputvaluetwo} placeholder="200-399" style={{ width: '50%', border: 'unset' }} type="text" />
+                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
               </div>
 
               <div className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                width: 350,
+                width: '100%',
                 height: 45
               }}>
 

@@ -140,7 +140,7 @@ let Adminpage = () => {
             </div>
 
             <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor : 'pointer'  }} onClick={()=>{
-              navigate('/analytics')
+              navigate('/grantedaccess')
             }} >
             <div className="row" style={{ padding : 32 }} >
                 <div className="col-6" style={{ justifyContent : 'center' , alignItems : 'flex-end' , display : 'flex' }}>
@@ -152,7 +152,10 @@ let Adminpage = () => {
               </div>
             </div>
 
-            <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor : 'pointer' }} >
+            <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor : 'pointer' }} 
+            onClick={()=>{
+              navigate('/dashboard')
+            }} >
             <div className="row" style={{ padding : 32 }} >
                 <div className="col-6" style={{ justifyContent : 'center' , alignItems : 'center' , display : 'flex' }}>
                   <p style={{ fontSize : 30 , fontWeight : '400' , color : "#1A1A1B" , lineHeight : '29px' , marginTop :  20  }}>Settings</p>

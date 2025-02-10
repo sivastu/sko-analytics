@@ -75,7 +75,7 @@ code {
 } */
 
 .react-datepicker-wrapper{
-  width: 350px;
+  width: 100%;
 }
 .vertical-line {
   width: 2px; /* Line thickness */
@@ -119,7 +119,9 @@ code {
 .gvdfvdf{
   --mdb-gutter-x : 0px !important;
 }
-
+.css-1u0ia00-control {
+  background-color : #fff !important;
+}
 .custom-inputoness {
   width: 100%;
   padding: 5px 10px 10px 10px; /* Add space for the icon */ 
