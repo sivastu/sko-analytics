@@ -9,9 +9,10 @@ import ReactDOM from "react-dom";
 import ReactPaginate from "react-paginate";
 import bigInt from "big-integer";
 import * as CryptoJS from 'crypto-js'
-import { getDatabase, ref, set, push, get, query, orderByChild, equalTo } from "firebase/database";
+import { getDatabase, ref, set, push, get, query, orderByChild, equalTo, update } from "firebase/database";
 import app from "./firebase";
 import Select, { components } from 'react-select';
+import SweetAlert2 from 'react-sweetalert2';
 
 import { Nav } from "react-bootstrap";
 
@@ -19,7 +20,9 @@ let Admin_dash = () => {
   let [data, setData] = useState('1');
   let navigate = useNavigate();
   const [openDropdown, setOpenDropdown] = useState(true);
+  const [swalProps, setSwalProps] = useState({ show: false });
 
+  let [ck, setCk] = useState(false)
 
 
   let [fulldatafull, setFulldatafull] = useState()
@@ -29,12 +32,28 @@ let Admin_dash = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   let [basicone, setBasicone] = useState([])
   let [hubb, setHubb] = useState([])
-  let [ user , setUser ] = useState({})
+  let [user, setUser] = useState({})
 
+  let [mydata, setMydata] = useState()
+  let [username, setUsername] = useState()
+  let [email, setEmail] = useState()
+
+
+  let [editname, setEditname] = useState()
+  let [editemail, setEditemail] = useState()
+  let [editpass, setEditpass] = useState()
+
+
+  let [editnamebool, setEditnamebool] = useState(true)
+  let [editemailbool, setEditemailbool] = useState(true)
+  let [editpassbool, setEditpassbool] = useState(true)
+
+  let [btncolor, setButtoncolor] = useState(false)
 
   const handleChangehubone = (selectedss) => {
     console.log(selectedss, 'selectedssselectedssselectedss')
     setHubb(selectedss)
+    checkuserddd()
   };
 
 
@@ -44,7 +63,7 @@ let Admin_dash = () => {
     setSelectedOptions(selected || []);
 
 
-    const output = [];
+    const output = [{ value: 'All', label: 'All Hubs' }];
 
     // // Iterate through the search array
     selected.forEach(({ value }) => {
@@ -67,6 +86,7 @@ let Admin_dash = () => {
     });
 
     setBasicone(output)
+    checkuserddd()
   };
 
 
@@ -80,7 +100,7 @@ let Admin_dash = () => {
   }, [])
 
   useEffect(() => {
-    getuser()
+    // getuser()
   }, [])
 
 
@@ -97,6 +117,113 @@ let Admin_dash = () => {
     }
     return null;
   };
+
+  let newuseredit = () =>{
+
+    
+    console.log(mydata , 'ggggggggggg') 
+    if (editname === undefined || editname === '' || editname === null) {
+      setSwalProps({
+        show: true,
+        title: 'Enter Valid Username',
+        text: ' ',
+        icon: 'error',
+        didClose: () => {
+          console.log('Swal closed');
+          setSwalProps({ show: false });
+        }
+      });
+      return
+    }
+
+
+  
+
+    if (editpass === undefined || editpass === '' || editpass === null) {
+      setSwalProps({
+        show: true,
+        title: 'Enter Valid Password',
+        text: ' ',
+        icon: 'error',
+        didClose: () => {
+          console.log('Swal closed');
+          setSwalProps({ show: false });
+        }
+      });
+      return
+    }
+
+   
+   
+
+    // setSwalProps({
+    //   show: true,
+    //   title: 'Invalid password',
+    //   text: ' ',
+    //   icon: 'error',
+    //   didClose: () => {
+    //     console.log('Swal closed');
+    //     setSwalProps({ show: false });
+    //   }
+    // });
+
+
+    let newData = {
+      [mydata.Email.replace(".com", "")]: {
+        Password: editpass,
+        name: editname,
+        
+        Email: mydata.Email, 
+        Role: mydata.Role, 
+        venue: mydata.venue,
+        hub: mydata.hub 
+      }
+    };
+
+
+    const db = getDatabase(app);
+    const eventsRefs = ref(db, "user");
+
+    const dateQuerys = query(
+      eventsRefs,
+    );
+
+    // Fetch the results
+    update(dateQuerys, newData)
+      .then(() => {
+        setSwalProps({
+          show: true,
+          title: 'User Updated successfully!',
+          text: '',
+          icon: 'success',
+          didClose: () => {
+            console.log('Swal closed');
+            setSwalProps({ show: false });
+          }
+        });
+        setButtoncolor(false)
+        getuser()
+        return
+
+        console.log("Data added successfully!");
+      })
+      .catch((error) => {
+        setSwalProps({
+          show: true,
+          title: error,
+          text: '',
+          icon: 'error',
+          didClose: () => {
+            console.log('Swal closed');
+            setSwalProps({ show: false });
+          }
+        });
+        return
+        console.error("Error adding data:", error);
+      });
+
+
+  }
 
   let getuser = async () => {
     const db = getDatabase(app);
@@ -162,6 +289,7 @@ let Admin_dash = () => {
 
     let parsedatajson = JSON.parse(decry)
 
+    setBasicall(parsedatajson)
     const db = getDatabase(app);
     const newDocRef = ref(db, `user`);
 
@@ -169,17 +297,20 @@ let Admin_dash = () => {
 
     if (snapshot.exists()) {
       const userData = snapshot.val();
-
+      setUser(userData)
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
 
       if (foundUser) {
+        setMydata(foundUser)
         // Check if the password matches
-        if (foundUser.Password === parsedatajson.password) {
-          navigate('/')
-          return
+        if (foundUser.Password === parsedatajson.Password) {
+          setEditname(foundUser.name)
+          setEditemail(foundUser.Email)
+          setEditpass(foundUser.Password)
         } else {
-
+          // navigate('/')
+          return
         }
       } else {
         console.log("User does not exist.");
@@ -230,7 +361,7 @@ let Admin_dash = () => {
 
 
 
-          const optionsone = [];
+          const optionsone = [{ value: 'All', label: 'All Venue' }];
           Object.entries(eventss).forEach(([groupName, groupData]) => {
             Object.keys(groupData).forEach((key) => {
               optionsone.push({ value: key, label: key });
@@ -266,6 +397,245 @@ let Admin_dash = () => {
     const bytes = CryptoJS.AES.decrypt(cipherText, 'secretKey')
     const plainText = bytes.toString(CryptoJS.enc.Utf8)
     return plainText
+
+  }
+
+
+  let checkuserddd = () => {
+
+    console.log(data, 'dataaaaaaaaaaaa')
+
+
+    if (username === undefined || username === '' || username === null) {
+      setCk(false)
+      return
+    }
+
+
+    if (email === undefined || email === '' || email === null) {
+      setCk(false)
+      return
+    }
+
+
+    function isValidEmail(emails) {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      return emailRegex.test(emails);
+    }
+    let emailveri = isValidEmail(email)
+
+    if (emailveri === false) {
+      setCk(false)
+      return
+    }
+
+    if (selectedOptions.length === 0) {
+      setCk(false)
+      return
+    }
+
+    if (hubb.length === 0) {
+      setCk(false)
+      return
+    }
+
+    function isEmailExists(emails) {
+      return Object.values(user).some(user => user.Email === emails);
+    }
+
+    let ecii = isEmailExists(email)
+
+    if (ecii === true) {
+      setCk(false)
+      return
+    }
+
+
+    setCk(true)
+  }
+
+
+  let newuser = () => {
+
+    if (data === '4' || data === '5' || data === '6') {
+      return
+    }
+
+
+
+    if (username === undefined || username === '' || username === null) {
+      setSwalProps({
+        show: true,
+        title: 'Enter Valid Username',
+        text: ' ',
+        icon: 'error',
+        didClose: () => {
+          console.log('Swal closed');
+          setSwalProps({ show: false });
+        }
+      });
+      return
+    }
+
+
+    if (email === undefined || email === '' || email === null) {
+      setSwalProps({
+        show: true,
+        title: 'Enter Valid Email',
+        text: ' ',
+        icon: 'error',
+        didClose: () => {
+          console.log('Swal closed');
+          setSwalProps({ show: false });
+        }
+      });
+      return
+    }
+
+
+    function isValidEmail(emails) {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      return emailRegex.test(emails);
+    }
+    let emailveri = isValidEmail(email)
+
+    if (emailveri === false) {
+      setSwalProps({
+        show: true,
+        title: 'Enter Valid Email',
+        text: ' ',
+        icon: 'error',
+        didClose: () => {
+          console.log('Swal closed');
+          setSwalProps({ show: false });
+        }
+      });
+      return
+    }
+
+    if (selectedOptions.length === 0) {
+      setSwalProps({
+        show: true,
+        title: 'Select Venue',
+        text: '',
+        icon: 'error',
+        didClose: () => {
+          console.log('Swal closed');
+          setSwalProps({ show: false });
+        }
+      });
+      return
+    }
+
+    if (hubb.length === 0) {
+      setSwalProps({
+        show: true,
+        title: 'Select Hubs',
+        text: '',
+        icon: 'error',
+        didClose: () => {
+          console.log('Swal closed');
+          setSwalProps({ show: false });
+        }
+      });
+      return
+    }
+
+    function isEmailExists(emails) {
+      return Object.values(user).some(user => user.Email === emails);
+    }
+
+    let ecii = isEmailExists(email)
+
+    if (ecii === true) {
+      setSwalProps({
+        show: true,
+        title: 'Email Already Used',
+        text: '',
+        icon: 'error',
+        didClose: () => {
+          console.log('Swal closed');
+          setSwalProps({ show: false });
+        }
+      });
+      return
+    }
+
+
+    // setSwalProps({
+    //   show: true,
+    //   title: 'Invalid password',
+    //   text: ' ',
+    //   icon: 'error',
+    //   didClose: () => {
+    //     console.log('Swal closed');
+    //     setSwalProps({ show: false });
+    //   }
+    // });
+
+
+    let newData = {
+      [email.replace(".com", "")]: {
+        Email: email,
+        Password: "password",
+        Role: data === '1' ? "admin" : data === '2' ? 'manager' : 'emp',
+        name: username,
+        venue: selectedOptions,
+        hub: hubb
+      }
+    };
+
+
+    const db = getDatabase(app);
+    const eventsRefs = ref(db, "user");
+
+    const dateQuerys = query(
+      eventsRefs,
+    );
+
+    // Fetch the results
+    update(dateQuerys, newData)
+      .then(() => {
+        setSwalProps({
+          show: true,
+          title: 'User added successfully!',
+          text: '',
+          icon: 'success',
+          didClose: () => {
+            console.log('Swal closed');
+            setSwalProps({ show: false });
+          }
+        });
+        setCk(false)
+        getuser()
+        return
+
+        console.log("Data added successfully!");
+      })
+      .catch((error) => {
+        setSwalProps({
+          show: true,
+          title: error,
+          text: '',
+          icon: 'error',
+          didClose: () => {
+            console.log('Swal closed');
+            setSwalProps({ show: false });
+          }
+        });
+        return
+        console.error("Error adding data:", error);
+      });
+
+
+
+
+
+    console.log(username, 'username')
+    console.log(email, 'email')
+    console.log(hubb, 'hubb')
+    console.log(selectedOptions, 'selectedOptions')
+
 
   }
 
@@ -350,7 +720,7 @@ let Admin_dash = () => {
           </div>
         </div>
 
-        <div className="d-flex " style={{ height : '60%' }} >
+        <div className="d-flex " style={{ height: '60%' }} >
 
           <div className=" " >
             <div>
@@ -512,153 +882,629 @@ let Admin_dash = () => {
               )}
             </div>
           </div>
-          <div className=" " style={{ paddingLeft: 50, paddingRight: 50, width: '100%' , overflow : 'auto' }} >
-            <div style={{ border: '1px solid #9F9F9F',  }} className="ggggggggg" >
-              <div className="d-flex" style={{ backgroundColor: '#DADADA', padding: 20, height: 60 }} >
-                <div style={{ width: '20%' }}>
-                  <p style={{ color: '#1A1A1B', fontWeight: '400' }}>Name</p>
-                </div>
-                <div style={{ width: '20%' }}>
-                  <p style={{ color: '#1A1A1B', fontWeight: '400' }}>Email</p>
-                </div>
-                <div style={{ width: '20%' }}>
-                  <p style={{ color: '#1A1A1B', fontWeight: '400' }}>Last sign-in</p>
-                </div>
-                <div style={{ width: '20%' }}>
-                  <p style={{ color: '#1A1A1B', fontWeight: '400' }} >Venue permission</p>
-                </div>
-                <div style={{ width: '20%' }}>
-                  <p style={{ color: '#1A1A1B', fontWeight: '400' }}>Hub permission</p>
-                </div>
+          <div className=" " style={{ paddingLeft: 50, paddingRight: 50, width: '100%', overflow: data === '1' || data === '2' || data === '3' ? 'auto' : 'hidden' }} >
+            <div style={{ border: '1px solid #9F9F9F', height: '100%' }} className="ggggggggg" >
+
+
+              {
+                data === '1' || data === '2' || data === '3' ?
+
+                  <>
+                    <div className="d-flex" style={{ backgroundColor: '#DADADA', padding: 20, height: 60 }} >
+                      <div style={{ width: '20%' }}>
+                        <p style={{ color: '#1A1A1B', fontWeight: '400' }}>Name</p>
+                      </div>
+                      <div style={{ width: '20%' }}>
+                        <p style={{ color: '#1A1A1B', fontWeight: '400' }}>Email</p>
+                      </div>
+                      <div style={{ width: '20%' }}>
+                        <p style={{ color: '#1A1A1B', fontWeight: '400' }}>Last sign-in</p>
+                      </div>
+                      <div style={{ width: '20%' }}>
+                        <p style={{ color: '#1A1A1B', fontWeight: '400' }} >Venue permission</p>
+                      </div>
+                      <div style={{ width: '20%' }}>
+                        <p style={{ color: '#1A1A1B', fontWeight: '400' }}>Hub permission</p>
+                      </div>
+                    </div>
+
+                    <div className="d-flex" style={{ padding: 20, height: 60, backgroundColor: "#FCFCFC" }} >
+                      <div style={{ width: '20%', }} className="d-flex">
+                        <img src="down.png" alt="Example Image" />
+                        <input
+
+                          onChange={(e) => {
+                            setUsername(e.target.value)
+                            checkuserddd()
+                          }}
+                          type="text"
+                          className="form-control"
+                          placeholder="Add new user"
+                          style={{
+                            border: "none",
+                            boxShadow: "none",
+                          }}
+                        />
+                      </div>
+                      <div style={{ width: '20%' }} className="d-flex"> <input
+                        type="text"
+                        onChange={(e) => {
+                          setEmail(e.target.value)
+                          checkuserddd()
+                        }}
+                        className="form-control"
+                        placeholder="Type in email"
+                        style={{
+                          border: "none",
+                          boxShadow: "none",
+                          marginLeft: -14
+                        }}
+                      />
+                      </div>
+                      <div style={{ width: '20%' }}>
+                        <p style={{ color: '#1A1A1B', fontWeight: '400' }}>-</p>
+                      </div>
+                      <div style={{ width: '20%', paddingRight: 20 }}>
+                        <p style={{ color: '#1A1A1B', fontWeight: '400' }} >
+                          <Select
+                            isMulti
+                            className="newoneonees"
+                            options={basic}
+                            value={selectedOptions}
+                            onChange={handleChange}
+                            placeholder="Select options..."
+                            components={{
+                              Option: CustomOption,
+                              MultiValue: () => null, // Hides default tags
+                              ValueContainer: ({ children, ...props }) => {
+                                const selectedValues = props.getValue();
+                                return (
+                                  <components.ValueContainer {...props}>
+                                    {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                  </components.ValueContainer>
+                                );
+                              },
+                            }}
+                            closeMenuOnSelect={false} // Keep dropdown open for further selection
+                            hideSelectedOptions={false} // Show all options even if selected
+                            styles={{
+                              control: (base) => ({ ...base, border: 'unset', color: '#707070', marginTop: -8 }),
+                            }}
+                          /></p>
+                      </div>
+                      <div style={{ width: '20%', paddingRight: 20 }}>
+                        <Select
+                          isMulti
+                          className="newoneonees"
+                          options={basicone}
+                          value={hubb}
+                          onChange={handleChangehubone}
+                          placeholder="Select options..."
+                          components={{
+                            Option: CustomOption, // Custom tick option
+                            MultiValue: () => null, // Hides default tags
+                            ValueContainer: ({ children, ...props }) => {
+                              const selectedValues = props.getValue();
+                              return (
+                                <components.ValueContainer {...props}>
+                                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                </components.ValueContainer>
+                              );
+                            },
+                          }}
+                          closeMenuOnSelect={false} // Keep dropdown open for further selection
+                          hideSelectedOptions={false} // Show all options even if selected
+                          styles={{
+                            control: (base) => ({ ...base, border: 'unset', color: '#707070', marginTop: -8 }),
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <hr style={{ margin: '0px 0px', backgroundColor: '#9F9F9F', height: 1 }} />
+
+                  </>
+
+                  : data === '4' ?
+
+
+                    <div style={{ height: '40vh' }} >
+                      <div className="d-flex" style={{ backgroundColor: '#DADADA', padding: 20, height: 60 }} >
+                        <div style={{ width: '33%' }}>
+                          <p style={{ color: '#1A1A1B', fontWeight: '400' }}>Name</p>
+                        </div>
+                        <div style={{ width: '34%' }}>
+                          <p style={{ color: '#1A1A1B', fontWeight: '400' }}>Access</p>
+                        </div>
+                        <div style={{ width: '33%' }}>
+                          <p style={{ color: '#1A1A1B', fontWeight: '400' }}>Permissions</p>
+                        </div>
+                      </div>
+
+
+                      <div className="d-flex" style={{ padding: 20, height: 60, backgroundColor: "#ECF1F4" }}>
+                        <div style={{ width: "33%" }} className="d-flex">
+                          <p style={{ color: "#316AAF", fontWeight: "400" }}>Admin</p>
+                        </div>
+                        <div style={{ width: "34%" }} className="d-flex">
+                          <p style={{ color: "#707070", fontWeight: "400" }}>Settings, Analytics, Training videos</p>
+                        </div>
+                        <div style={{ width: "33%" }}>
+                          <p style={{ color: "#707070", fontWeight: "400" }}>Create any users, Reset users passwords</p>
+                        </div>
+                      </div>
+
+                      <hr style={{ margin: "0px 0px", backgroundColor: "#9F9F9F", height: 1 }} />
+
+
+                      <div className="d-flex" style={{ padding: 20, height: 84, backgroundColor: "#ECF1F4" }}>
+                        <div style={{ width: "33%" }} className="d-flex">
+                          <p style={{ color: "#316AAF", fontWeight: "400" }}>Managers</p>
+                        </div>
+                        <div style={{ width: "34%" }} className="d-flex">
+                          <p style={{ color: "#707070", fontWeight: "400" }}>Analytics, Training videos</p>
+                        </div>
+                        <div style={{ width: "33%" }}>
+                          <p style={{ color: "#707070", fontWeight: "400" }}>Create employee users, Reset personal password</p>
+                        </div>
+                      </div>
+
+                      <hr style={{ margin: "0px 0px", backgroundColor: "#9F9F9F", height: 1 }} />
+
+
+                      <div className="d-flex" style={{ padding: 20, height: 60, backgroundColor: "#ECF1F4" }}>
+                        <div style={{ width: "33%" }} className="d-flex">
+                          <p style={{ color: "#316AAF", fontWeight: "400" }}>Employees</p>
+                        </div>
+                        <div style={{ width: "34%" }} className="d-flex">
+                          <p style={{ color: "#707070", fontWeight: "400" }}>Training videos</p>
+                        </div>
+                        <div style={{ width: "33%" }}>
+                          <p style={{ color: "#707070", fontWeight: "400" }}>Reset personal password</p>
+                        </div>
+                      </div>
+
+                      <hr style={{ margin: "0px 0px", backgroundColor: "#9F9F9F", height: 1 }} />
+
+
+
+
+
+                    </div>
+
+                    :
+                    <>
+
+                      <div style={{ height: '40vh' }} >
+                        <div className="d-flex" style={{ backgroundColor: '#DADADA', padding: 20, height: 60 }} >
+                          <div style={{ width: '33%' }}>
+                          </div>
+                          <div style={{ width: '34%' }}>
+                          </div>
+                          <div style={{ width: '33%' }}>
+                          </div>
+                        </div>
+
+
+                        <div className="d-flex" style={{ padding: 20, height: 60, backgroundColor: "#ECF1F4" }}>
+                          <div style={{ width: "20%" }} className="d-flex">
+                            <p style={{ color: "#316AAF", fontWeight: "400" }}>Full Name</p>
+                          </div>
+                          <div style={{ width: "20%" }} className="d-flex">
+
+
+                            <input value={editname} onChange={(e) => {
+                              setEditname(e.target.value)
+                              setButtoncolor(true)
+                            }} className="form-control"
+                              placeholder="Search..."
+                              style={{
+                                border: "none",
+                                boxShadow: "none",
+                                width: '100%', height: 40,
+                                backgroundColor: '#ECF1F4',
+                                marginTop: -9
+                              }} disabled={editnamebool} type="text" id="switch3" />
+
+                          </div>
+                          <div style={{ width: "40%" }}>
+                            <img onClick={(e) => {
+                              setEditnamebool(!editnamebool)
+                            }} src="pencil.png" alt="Example Image" />
+                          </div>
+                        </div>
+
+                        <hr style={{ margin: "0px 0px", backgroundColor: "#9F9F9F", height: 1 }} />
+
+
+                        <div className="d-flex" style={{ padding: 20, height: 84, backgroundColor: "#ECF1F4" }}>
+                          <div style={{ width: "20%" }} className="d-flex">
+                            <p style={{ color: "#316AAF", fontWeight: "400" }}>Email</p>
+                          </div>
+                          <div style={{ width: "20%" }} className="d-flex">
+
+                            <input value={editemail} onChange={(e) => {
+                              setEditemail(e.target.value)
+                              setButtoncolor(true)
+                            }} className="form-control"
+                              placeholder="Search..."
+                              style={{
+                                border: "none",
+                                boxShadow: "none",
+                                width: '100%', height: 40,
+                                backgroundColor: '#ECF1F4',
+                                marginTop: -9
+                              }} disabled={true} type="text" id="switch3" />
+
+
+                          </div>
+                          <div style={{ width: "40%" }}>
+                            <img onClick={(e) => {
+                              setEditemailbool(!editemailbool)
+                            }} src="pencil.png" alt="Example Image" />
+                          </div>
+                        </div>
+
+                        <hr style={{ margin: "0px 0px", backgroundColor: "#9F9F9F", height: 1 }} />
+
+
+                        <div className="d-flex" style={{ padding: 20, height: 60, backgroundColor: "#ECF1F4" }}>
+                          <div style={{ width: "20%" }} className="d-flex">
+                            <p style={{ color: "#316AAF", fontWeight: "400" }}>Password</p>
+                          </div>
+                          <div style={{ width: "20%" }} className="d-flex">
+
+                            <input value={editpass} onChange={(e) => {
+                              setEditpass(e.target.value)
+                              setButtoncolor(true)
+                            }} className="form-control"
+                              placeholder="Search..."
+                              style={{
+                                border: "none",
+                                boxShadow: "none",
+                                width: '100%', height: 40,
+                                backgroundColor: '#ECF1F4',
+                                marginTop: -9
+                              }}   type={editpassbool === true ? "text" : "password"} id="switch3" />
+                          </div>
+                          <div style={{ width: "40%" }}>
+
+                            <label class="round-checkbox">
+                              <input checked={editpassbool} onChange={(e)=>{
+                                setEditpassbool(e.target.checked)
+                              }} type="checkbox" />
+                              <span class="checkmark"></span>
+                              
+                            </label> 
+                          </div>
+                        </div>
+
+                        <hr style={{ margin: "0px 0px", backgroundColor: "#9F9F9F", height: 1 }} />
+
+
+
+
+
+                      </div>
+                    </>
+
+              }
+
+
+              <div style={{ overflow: 'auto', height: '46vh' }} >
+
+                {
+                  data === '1' ?
+                    <>
+
+                      {Object.entries(user)
+                        .filter(([_, value]) => value.Role === "admin") // Filter only admins
+                        .map(([key, value]) => (
+                          <>
+                            <div className="d-flex" style={{ padding: 20, height: 60, backgroundColor: "#ECF1F4" }}>
+                              <div style={{ width: "20%" }} className="d-flex">
+                                <img src="down.png" alt="Example Image" />
+                                <p style={{ color: "#316AAF", fontWeight: "400" }}>{value.name}</p>
+                              </div>
+                              <div style={{ width: "20%" }} className="d-flex">
+                                <p style={{ color: "#707070", fontWeight: "400" }}>{value.Email}</p>
+                              </div>
+                              <div style={{ width: "20%" }}>
+                                <p style={{ color: "#1A1A1B", fontWeight: "400" }}>-</p>
+                              </div>
+                              <div style={{ width: "20%", paddingRight: 20 }}>
+                                <Select
+                                  isMulti
+                                  className="newoneoneess"
+                                  options={value.venue}
+                                  value={[]} // Shows selected values
+                                  onChange={() => { }} // Prevent selection changes
+                                  placeholder={value.venue[0].label + '...'}
+                                  components={{
+                                    MultiValue: () => null, // Hides default tags
+                                    ValueContainer: ({ children, ...props }) => {
+                                      const selectedValues = props.getValue();
+                                      return (
+                                        <components.ValueContainer {...props}>
+                                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                        </components.ValueContainer>
+                                      );
+                                    },
+                                  }}
+                                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                  hideSelectedOptions={false} // Show all options even if selected
+                                  isOptionDisabled={() => true} // Disables all options from being selected
+                                  styles={{
+                                    control: (base) => ({ ...base, border: 'unset', color: '#ECF1F4', marginTop: -8 }),
+                                  }}
+                                />
+
+
+                              </div>
+                              <div style={{ width: "20%", paddingRight: 20 }}>
+                                <Select
+                                  isMulti
+                                  className="newoneoneess"
+                                  options={value.hub}
+                                  value={[]} // Shows selected values
+                                  onChange={() => { }} // Prevent selection changes
+                                  placeholder={value.hub[0].label + '...'}
+                                  components={{
+                                    MultiValue: () => null, // Hides default tags
+                                    ValueContainer: ({ children, ...props }) => {
+                                      const selectedValues = props.getValue();
+                                      return (
+                                        <components.ValueContainer {...props}>
+                                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                        </components.ValueContainer>
+                                      );
+                                    },
+                                  }}
+                                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                  hideSelectedOptions={false} // Show all options even if selected
+                                  isOptionDisabled={() => true} // Disables all options from being selected
+                                  styles={{
+                                    control: (base) => ({ ...base, border: 'unset', color: '#ECF1F4', marginTop: -8 }),
+                                  }}
+                                />
+                              </div>
+                            </div>
+
+                            <hr style={{ margin: "0px 0px", backgroundColor: "#9F9F9F", height: 1 }} />
+                          </>
+                        ))}
+
+
+                    </>
+
+                    : data === '2' ?
+                      <>
+                        {Object.entries(user)
+                          .filter(([_, value]) => value.Role === "manager") // Filter only admins
+                          .map(([key, value]) => (
+                            <>
+                              <div className="d-flex" style={{ padding: 20, height: 60, backgroundColor: "#ECF1F4" }}>
+                                <div style={{ width: "20%" }} className="d-flex">
+                                  <img src="down.png" alt="Example Image" />
+                                  <p style={{ color: "#316AAF", fontWeight: "400" }}>{value.name}</p>
+                                </div>
+                                <div style={{ width: "20%" }} className="d-flex">
+                                  <p style={{ color: "#707070", fontWeight: "400" }}>{value.Email}</p>
+                                </div>
+                                <div style={{ width: "20%" }}>
+                                  <p style={{ color: "#1A1A1B", fontWeight: "400" }}>-</p>
+                                </div>
+                                <div style={{ width: "20%", paddingRight: 20 }}>
+                                  <Select
+                                    isMulti
+                                    className="newoneoneess"
+                                    options={value.venue}
+                                    value={[]} // Shows selected values
+                                    onChange={() => { }} // Prevent selection changes
+                                    placeholder={value.venue[0].label + '...'}
+                                    components={{
+                                      MultiValue: () => null, // Hides default tags
+                                      ValueContainer: ({ children, ...props }) => {
+                                        const selectedValues = props.getValue();
+                                        return (
+                                          <components.ValueContainer {...props}>
+                                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                          </components.ValueContainer>
+                                        );
+                                      },
+                                    }}
+                                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                    hideSelectedOptions={false} // Show all options even if selected
+                                    isOptionDisabled={() => true} // Disables all options from being selected
+                                    styles={{
+                                      control: (base) => ({ ...base, border: 'unset', color: '#ECF1F4', marginTop: -8 }),
+                                    }}
+                                  />
+
+
+                                </div>
+                                <div style={{ width: "20%", paddingRight: 20 }}>
+                                  <Select
+                                    isMulti
+                                    className="newoneoneess"
+                                    options={value.hub}
+                                    value={[]} // Shows selected values
+                                    onChange={() => { }} // Prevent selection changes
+                                    placeholder={value.hub[0].label + '...'}
+                                    components={{
+                                      MultiValue: () => null, // Hides default tags
+                                      ValueContainer: ({ children, ...props }) => {
+                                        const selectedValues = props.getValue();
+                                        return (
+                                          <components.ValueContainer {...props}>
+                                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                          </components.ValueContainer>
+                                        );
+                                      },
+                                    }}
+                                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                    hideSelectedOptions={false} // Show all options even if selected
+                                    isOptionDisabled={() => true} // Disables all options from being selected
+                                    styles={{
+                                      control: (base) => ({ ...base, border: 'unset', color: '#ECF1F4', marginTop: -8 }),
+                                    }}
+                                  />
+                                </div>
+                              </div>
+
+                              <hr style={{ margin: "0px 0px", backgroundColor: "#9F9F9F", height: 1 }} />
+                            </>
+                          ))}
+
+                      </>
+                      : data === '3' ?
+
+                        <>
+
+                          {Object.entries(user)
+                            .filter(([_, value]) => value.Role === "emp") // Filter only admins
+                            .map(([key, value]) => (
+                              <>
+                                <div className="d-flex" style={{ padding: 20, height: 60, backgroundColor: "#ECF1F4" }}>
+                                  <div style={{ width: "20%" }} className="d-flex">
+                                    <img src="down.png" alt="Example Image" />
+                                    <p style={{ color: "#316AAF", fontWeight: "400" }}>{value.name}</p>
+                                  </div>
+                                  <div style={{ width: "20%" }} className="d-flex">
+                                    <p style={{ color: "#707070", fontWeight: "400" }}>{value.Email}</p>
+                                  </div>
+                                  <div style={{ width: "20%" }}>
+                                    <p style={{ color: "#1A1A1B", fontWeight: "400" }}>-</p>
+                                  </div>
+                                  <div style={{ width: "20%", paddingRight: 20 }}>
+                                    <Select
+                                      isMulti
+                                      className="newoneoneess"
+                                      options={value.venue}
+                                      value={[]} // Shows selected values
+                                      onChange={() => { }} // Prevent selection changes
+                                      placeholder={value.venue[0].label + '...'}
+                                      components={{
+                                        MultiValue: () => null, // Hides default tags
+                                        ValueContainer: ({ children, ...props }) => {
+                                          const selectedValues = props.getValue();
+                                          return (
+                                            <components.ValueContainer {...props}>
+                                              {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                            </components.ValueContainer>
+                                          );
+                                        },
+                                      }}
+                                      closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                      hideSelectedOptions={false} // Show all options even if selected
+                                      isOptionDisabled={() => true} // Disables all options from being selected
+                                      styles={{
+                                        control: (base) => ({ ...base, border: 'unset', color: '#ECF1F4', marginTop: -8 }),
+                                      }}
+                                    />
+
+
+                                  </div>
+                                  <div style={{ width: "20%", paddingRight: 20 }}>
+                                    <Select
+                                      isMulti
+                                      className="newoneoneess"
+                                      options={value.hub}
+                                      value={[]} // Shows selected values
+                                      onChange={() => { }} // Prevent selection changes
+                                      placeholder={value.hub[0].label + '...'}
+                                      components={{
+                                        MultiValue: () => null, // Hides default tags
+                                        ValueContainer: ({ children, ...props }) => {
+                                          const selectedValues = props.getValue();
+                                          return (
+                                            <components.ValueContainer {...props}>
+                                              {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                            </components.ValueContainer>
+                                          );
+                                        },
+                                      }}
+                                      closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                      hideSelectedOptions={false} // Show all options even if selected
+                                      isOptionDisabled={() => true} // Disables all options from being selected
+                                      styles={{
+                                        control: (base) => ({ ...base, border: 'unset', color: '#ECF1F4', marginTop: -8 }),
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+
+                                <hr style={{ margin: "0px 0px", backgroundColor: "#9F9F9F", height: 1 }} />
+                              </>
+                            ))}
+                        </>
+
+                        :
+                        data === '4' ?
+
+                          <>
+
+
+                          </>
+
+                          : data === '5' ?
+
+                            <>
+
+
+                            </>
+
+                            : ''
+
+                }
+
+
+
+
+
+
+
+
+
               </div>
-
-              <div className="d-flex" style={{ padding: 20, height: 60, backgroundColor: "#FCFCFC" }} >
-                <div style={{ width: '20%', }} className="d-flex">
-                  <img src="down.png" alt="Example Image" />
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Add new user"
-                    style={{
-                      border: "none",
-                      boxShadow: "none",
-                    }}
-                  />
-                </div>
-                <div style={{ width: '20%' }} className="d-flex"> <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Type in email"
-                  style={{
-                    border: "none",
-                    boxShadow: "none",
-                    marginLeft: -14
-                  }}
-                />
-                </div>
-                <div style={{ width: '20%' }}>
-                  <p style={{ color: '#1A1A1B', fontWeight: '400' }}>-</p>
-                </div>
-                <div style={{ width: '20%', paddingRight: 20 }}>
-                  <p style={{ color: '#1A1A1B', fontWeight: '400' }} >
-                    <Select
-                      isMulti
-                      className="newoneonees"
-                      options={basic}
-                      value={selectedOptions}
-                      onChange={handleChange}
-                      placeholder="Select options..."
-                      components={{
-                        Option: CustomOption,
-                        MultiValue: () => null, // Hides default tags
-                        ValueContainer: ({ children, ...props }) => {
-                          const selectedValues = props.getValue();
-                          return (
-                            <components.ValueContainer {...props}>
-                              {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                            </components.ValueContainer>
-                          );
-                        },
-                      }}
-                      closeMenuOnSelect={false} // Keep dropdown open for further selection
-                      hideSelectedOptions={false} // Show all options even if selected
-                      styles={{
-                        control: (base) => ({ ...base, border: 'unset', color: '#707070', marginTop: -8 }),
-                      }}
-                    /></p>
-                </div>
-                <div style={{ width: '20%', paddingRight: 20 }}>
-                  <Select
-                    isMulti
-                    className="newoneonees"
-                    options={basicone}
-                    value={hubb}
-                    onChange={handleChangehubone}
-                    placeholder="Select options..."
-                    components={{
-                      Option: CustomOption, // Custom tick option
-                      MultiValue: () => null, // Hides default tags
-                      ValueContainer: ({ children, ...props }) => {
-                        const selectedValues = props.getValue();
-                        return (
-                          <components.ValueContainer {...props}>
-                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                          </components.ValueContainer>
-                        );
-                      },
-                    }}
-                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                    hideSelectedOptions={false} // Show all options even if selected
-                    styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070', marginTop: -8 }),
-                    }}
-                  />
-                </div>
-              </div>
-
-              <hr style={{ margin: '0px 0px', backgroundColor: '#9F9F9F', height: 1 }} />
-
-
-              {Object.entries(user).map(([key, value]) => (
-                // <div key={key} style={{ marginBottom: 10, padding: 10, background: "#F3F3F3", borderRadius: 5 }}>
-                //   <h4 style={{ margin: 0 }}>{key}</h4>
-                //   <p style={{ margin: 0 }}>Email: {value.Email}</p>
-                //   <p style={{ margin: 0 }}>Role: {value.Role}</p>
-                // </div>
-                <>
-                  <div className="d-flex" style={{ padding: 20, height: 60, backgroundColor: "#FCFCFC" }} >
-                    <div style={{ width: '20%', }} className="d-flex">
-                      <img src="down.png" alt="Example Image" />
-                      <p style={{ color: '#316AAF', fontWeight: '400' }} >{value.name }</p>
-                    </div>
-                    <div style={{ width: '20%' }} className="d-flex">
-                    <p style={{ color: '#707070', fontWeight: '400' }} >{value.Email}</p>
-                    </div>
-                    <div style={{ width: '20%' }}>
-                      <p style={{ color: '#1A1A1B', fontWeight: '400' }}>-</p>
-                    </div>
-                    <div style={{ width: '20%', paddingRight: 20 }}>
-                      <p style={{ color: '#1A1A1B', fontWeight: '400' }} >
-                          </p>
-                    </div>
-                    <div style={{ width: '20%', paddingRight: 20 }}>
-                      <p></p>
-                    </div>
-                  </div>
-
-                  <hr style={{ margin: '0px 0px', backgroundColor: '#9F9F9F', height: 1 }} />
-                </>
-              ))}
-    
             </div>
           </div>
 
 
-          <div ></div>
+
 
         </div>
+        {
+          data === '1' || data === '2' || data === '3' || data == '4' ?
+          <div style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer', marginTop: 20 }}>
+          <div onClick={() => {
+            newuser()
+          }} style={{ backgroundColor: ck === true ? "#316AAF" : '#9F9F9F', width: 100, height: 35, borderRadius: 5, padding: 6, textAlign: 'center', marginRight: 50 }}>
+            <p style={{ fontSize: 15, fontWeight: '400', color: '#fff', margin: 0 }}>Save</p>
+          </div>
+        </div>
+
+        :
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer', marginTop: 20 }}>
+        <div onClick={() => {
+          if( btncolor === true){
+            newuseredit()
+          }
+          
+        }} style={{ backgroundColor: btncolor === true ? "#316AAF" : '#9F9F9F', width: 100, height: 35, borderRadius: 5, padding: 6, textAlign: 'center', marginRight: 50 }}>
+          <p style={{ fontSize: 15, fontWeight: '400', color: '#fff', margin: 0 }}>Save</p>
+        </div>
+      </div>
+
+        }
+       
+
+
 
       </div>
+
+      <SweetAlert2 {...swalProps} />
     </div>
   );
 };

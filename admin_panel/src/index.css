@@ -149,7 +149,46 @@ code {
 
 
 
+.round-checkbox input {
+  display: none;
+}
 
+/* Custom round checkbox */
+.round-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.round-checkbox .checkmark {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #707070;
+  display: inline-block;
+  position: relative;
+  margin-right: 8px;
+}
+
+/* When checkbox is checked, change background */
+.round-checkbox input:checked + .checkmark {
+  background-color: #316AAF;
+  border: 2px solid #316AAF;
+}
+
+/* Add check icon */
+.round-checkbox input:checked + .checkmark::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
 .custom-inputonessfine { 
   border-radius: 8px;
   font-size: 16px;
@@ -170,6 +209,20 @@ code {
   font-size : 12px;
   margin-right : 30px;
 }
+
+
+.newoneoneess .css-1u0ia00-control {
+  background-color : #ECF1F4 !important;
+}
+
+
+.newoneoneess{
+  width: 100%;
+  font-size : 12px;
+  margin-right : 30px;
+  background-color :  #ECF1F4 !important;
+}
+
 
 .custom-input:focus {
   border-color: #707070;
