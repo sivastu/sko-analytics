@@ -118,10 +118,10 @@ let Admin_dash = () => {
     return null;
   };
 
-  let newuseredit = () =>{
+  let newuseredit = () => {
 
-    
-    console.log(mydata , 'ggggggggggg') 
+
+    console.log(mydata, 'ggggggggggg')
     if (editname === undefined || editname === '' || editname === null) {
       setSwalProps({
         show: true,
@@ -137,7 +137,7 @@ let Admin_dash = () => {
     }
 
 
-  
+
 
     if (editpass === undefined || editpass === '' || editpass === null) {
       setSwalProps({
@@ -153,8 +153,8 @@ let Admin_dash = () => {
       return
     }
 
-   
-   
+
+
 
     // setSwalProps({
     //   show: true,
@@ -172,11 +172,11 @@ let Admin_dash = () => {
       [mydata.Email.replace(".com", "")]: {
         Password: editpass,
         name: editname,
-        
-        Email: mydata.Email, 
-        Role: mydata.Role, 
+
+        Email: mydata.Email,
+        Role: mydata.Role,
         venue: mydata.venue,
-        hub: mydata.hub 
+        hub: mydata.hub
       }
     };
 
@@ -726,9 +726,10 @@ let Admin_dash = () => {
             <div>
               <Nav.Link
                 onClick={() => setOpenDropdown(!openDropdown)}
-                style={{ cursor: "pointer", color: '#1A1A1B', fontWeight: '400', fontSize: 21 }}
+                style={{ cursor: "pointer", color: '#1A1A1B', fontWeight: '400', fontSize: 21, width: 180 }}
               >
-                <img src="down.png" style={{ width: 10, height: 10, marginLeft: 20 }} alt="Example Image" /> 👤  Users
+                <img src="down.png" style={{ marginLeft: 20 }} alt="Example Image" />
+                <img src="per.png" style={{ marginTop: -13, marginLeft: 5, marginRight: 5 }} alt="Example Image" />   Users
               </Nav.Link>
               {openDropdown && (
                 <div className="ms-3">
@@ -834,7 +835,10 @@ let Admin_dash = () => {
                       cursor: 'pointer'
 
                     }}
+                    className="d-flex"
                   >
+
+                    <img src="man.png" style={{ marginLeft: 50, marginRight: 5 , width : 40 , height :  30 , marginTop : -4 }} alt="Example Image" />
 
                     <p
                       style={{
@@ -842,7 +846,7 @@ let Admin_dash = () => {
                         fontWeight: 400,
                         fontSize: 21,
                         margin: 0, // Removes default margin
-                        marginLeft: 50
+
                       }}
                     >
                       Roles
@@ -865,14 +869,15 @@ let Admin_dash = () => {
                       cursor: 'pointer'
 
                     }}
+                    className="d-flex"
                   >
+                    <img src="setts.png" style={{ marginLeft: 50, marginRight: 5 , width : 40 , height :  30 , marginTop : -4 }} alt="Example Image" />
                     <p
                       style={{
                         color: "#1A1A1B",
                         fontWeight: 400,
                         fontSize: 21,
-                        margin: 0, // Removes default margin
-                        marginLeft: 50
+                        margin: 0, // Removes default margin 
                       }}
                     >
                       Security
@@ -1165,17 +1170,17 @@ let Admin_dash = () => {
                                 width: '100%', height: 40,
                                 backgroundColor: '#ECF1F4',
                                 marginTop: -9
-                              }}   type={editpassbool === true ? "text" : "password"} id="switch3" />
+                              }} type={editpassbool === true ? "text" : "password"} id="switch3" />
                           </div>
                           <div style={{ width: "40%" }}>
 
                             <label class="round-checkbox">
-                              <input checked={editpassbool} onChange={(e)=>{
+                              <input checked={editpassbool} onChange={(e) => {
                                 setEditpassbool(e.target.checked)
                               }} type="checkbox" />
                               <span class="checkmark"></span>
-                              
-                            </label> 
+
+                            </label>
                           </div>
                         </div>
 
@@ -1476,29 +1481,29 @@ let Admin_dash = () => {
         </div>
         {
           data === '1' || data === '2' || data === '3' || data == '4' ?
-          <div style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer', marginTop: 20 }}>
-          <div onClick={() => {
-            newuser()
-          }} style={{ backgroundColor: ck === true ? "#316AAF" : '#9F9F9F', width: 100, height: 35, borderRadius: 5, padding: 6, textAlign: 'center', marginRight: 50 }}>
-            <p style={{ fontSize: 15, fontWeight: '400', color: '#fff', margin: 0 }}>Save</p>
-          </div>
-        </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer', marginTop: 20 }}>
+              <div onClick={() => {
+                newuser()
+              }} style={{ backgroundColor: ck === true ? "#316AAF" : '#9F9F9F', width: 100, height: 35, borderRadius: 5, padding: 6, textAlign: 'center', marginRight: 50 }}>
+                <p style={{ fontSize: 15, fontWeight: '400', color: '#fff', margin: 0 }}>Save</p>
+              </div>
+            </div>
 
-        :
+            :
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer', marginTop: 20 }}>
-        <div onClick={() => {
-          if( btncolor === true){
-            newuseredit()
-          }
-          
-        }} style={{ backgroundColor: btncolor === true ? "#316AAF" : '#9F9F9F', width: 100, height: 35, borderRadius: 5, padding: 6, textAlign: 'center', marginRight: 50 }}>
-          <p style={{ fontSize: 15, fontWeight: '400', color: '#fff', margin: 0 }}>Save</p>
-        </div>
-      </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer', marginTop: 20 }}>
+              <div onClick={() => {
+                if (btncolor === true) {
+                  newuseredit()
+                }
+
+              }} style={{ backgroundColor: btncolor === true ? "#316AAF" : '#9F9F9F', width: 100, height: 35, borderRadius: 5, padding: 6, textAlign: 'center', marginRight: 50 }}>
+                <p style={{ fontSize: 15, fontWeight: '400', color: '#fff', margin: 0 }}>Save</p>
+              </div>
+            </div>
 
         }
-       
+
 
 
 

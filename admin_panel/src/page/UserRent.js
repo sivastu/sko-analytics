@@ -30,6 +30,46 @@ let UserRent = () => {
   let [forget, setForget] = useState(false)
   let [forgetvalue, setForgetvalse] = useState('')
 
+  useEffect(()=>{
+    loginCheck()
+  },[])
+
+  let loginCheck = async () => {
+    let getdata = localStorage.getItem('data')
+    if (getdata === undefined || getdata === '' || getdata === null) {
+      navigate('/')
+      return
+    }
+    let decry = decrypt(getdata)
+
+    let parsedatajson = JSON.parse(decry)
+ 
+    const db = getDatabase(app);
+    const newDocRef = ref(db, `user`);
+
+    const snapshot = await get(newDocRef); // Fetch the data for the user
+
+    if (snapshot.exists()) {
+      const userData = snapshot.val();
+      // Check if the password matches
+      const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
+
+      if (foundUser) { 
+        navigate('/admin')
+        // Check if the password matches
+        if (foundUser.Password === parsedatajson.Password) {
+
+        } else {
+          
+          return
+        }
+      } else {
+        console.log("User does not exist.");
+      }
+    }
+  }
+
+
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       console.log('eeeeeeeeeeeeeee')
@@ -125,6 +165,8 @@ let UserRent = () => {
 
             if (foundUser.Role === 'admin') {
 
+              navigate("/admin", { state: { userdata: foundUser } });
+            }else{
               navigate("/admin", { state: { userdata: foundUser } });
             }
           } else {

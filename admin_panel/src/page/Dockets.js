@@ -18,7 +18,7 @@ import { Bar } from 'react-chartjs-2';
 import { jsPDF } from 'jspdf';
 import Modal from 'react-modal';
 import html2canvas from "html2canvas";
-
+import * as CryptoJS from 'crypto-js'
 
 import app from "./firebase";
 import {
@@ -125,11 +125,48 @@ let Dockets = () => {
 
 
   useEffect(() => {
-
+    loginCheck()
     getone()
     getonez()
 
   }, [])
+
+
+
+  let loginCheck = async () => {
+    let getdata = localStorage.getItem('data')
+    if (getdata === undefined || getdata === '' || getdata === null) {
+      navigate('/')
+      return
+    }
+    let decry = decrypt(getdata)
+
+    let parsedatajson = JSON.parse(decry)
+ 
+    const db = getDatabase(app);
+    const newDocRef = ref(db, `user`);
+
+    const snapshot = await get(newDocRef); // Fetch the data for the user
+
+    if (snapshot.exists()) {
+      const userData = snapshot.val();
+      // Check if the password matches
+      const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
+
+      if (foundUser) { 
+        // Check if the password matches
+        if (foundUser.Password === parsedatajson.Password) {
+
+        } else {
+          navigate('/')
+          return
+        }
+      } else {
+        console.log("User does not exist.");
+      }
+    }
+  }
+
 
   let [onebar, setOneBar] = useState([])
   let [twobar, setTwobar] = useState([])
@@ -203,6 +240,12 @@ let Dockets = () => {
   };
 
 
+  const decrypt = (cipherText) => {
+    const bytes = CryptoJS.AES.decrypt(cipherText, 'secretKey')
+    const plainText = bytes.toString(CryptoJS.enc.Utf8)
+    return plainText
+
+  }
   let [fulldatafull, setFulldatafull] = useState()
 
   let getone = () => {
@@ -246,26 +289,31 @@ let Dockets = () => {
 
           function extractUniqueNotes(datad) {
             let uniqueNotes = new Set();
-
+        
             for (let group in datad) {
-              for (let location in datad[group]) {
-                for (let section in datad[group][location]) {
-                  for (let date in datad[group][location][section]) {
-                    datad[group][location][section][date].forEach(order => {
-                      order.ITEMS.forEach(item => {
-                        if (item.NOTE) {
-                          uniqueNotes.add(item.NOTE);
+                for (let location in datad[group]) {
+                    for (let section in datad[group][location]) {
+                        for (let date in datad[group][location][section]) {
+                            datad[group][location][section][date].forEach(order => {
+                                order.ITEMS.forEach(item => {
+                                    if (item.NOTE) {
+                                        // Extract the word after (C<number>
+                                        const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                                        if (match && match[1] && match[1] !== "undefined") { 
+                                          uniqueNotes.add(match[1]); // Add only valid words
+                                      }
+      
+                                    }
+                                });
+                            });
                         }
-                      });
-                    });
-                  }
+                    }
                 }
-              }
             }
-
+        
             // Convert Set to desired format
             return [...uniqueNotes].map(note => ({ value: note, label: note }));
-          }
+        }
 
           let uuuk = extractUniqueNotes(cleanedData)
           setFulldatafull(uuuk)
@@ -352,6 +400,81 @@ let Dockets = () => {
           ].map(value => ({ value, label: value }));
 
           console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
+
+
+          let getdata = localStorage.getItem('data')
+          
+          let decry = decrypt(getdata)
+      
+          let parsedatajson = JSON.parse(decry)
+
+          const filteredDataonee = {};
+
+          console.log( JSON.stringify(parsedatajson) , 'mydatamydatamydatamydatamydatamydatamydata')
+          if( parsedatajson.venue ){
+          
+            const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
+ 
+            console.log(hasAllValue , 'hasAllValue')
+            if( hasAllValue === true ){
+              return
+            }
+
+
+          parsedatajson.venue.forEach(filter => {
+            const key = filter.value;
+            if (cleanedData[key]) {
+              filteredDataonee[key] = cleanedData[key];
+            }
+          });
+          setBasicall(filteredDataonee)
+
+
+
+          }
+
+          if ( parsedatajson.hub ){
+          
+            const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
+            console.log(hasAllValue , 'hasAllValue hub')
+
+            if( hasAllValue === true ){
+              return
+            }
+
+            function filterDataByDynamicKeys(keysArray) {
+              const filteredData = {};
+      
+              keysArray.forEach(({ value }) => {
+                const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+      
+                if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
+                  const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
+      
+                  // Check if the hub exists
+                  if (secondLevelData[hubName]) {
+                    if (!filteredData[topLevelKey]) {
+                      filteredData[topLevelKey] = {};
+                    }
+      
+                    if (!filteredData[topLevelKey][secondTopLevelKey]) {
+                      filteredData[topLevelKey][secondTopLevelKey] = {};
+                    }
+      
+                    filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
+                  }
+                }
+              });
+      
+              return filteredData;
+            }
+
+            let fina = filterDataByDynamicKeys( parsedatajson.hub )
+
+            setBasicall(fina)
+          }
+    
+
           // setFulldatafull([
           //   {
           //     "value": "Appetizers",
@@ -1498,36 +1621,43 @@ let Dockets = () => {
 
       function filterByNoted(data, filterNotes) {
         let filteredData = {};
-
+    
         // Extract only values from the filter list
         const validNotes = filterNotes.map(item => item.value);
-
+    
         for (let group in data) {
-          for (let location in data[group]) {
-            for (let section in data[group][location]) {
-              for (let date in data[group][location][section]) {
-                let filteredOrders = data[group][location][section][date].map(order => {
-                  let filteredItems = order.ITEMS.filter(item => validNotes.includes(item.NOTE));
-
-                  if (filteredItems.length > 0) {
-                    return { ...order, ITEMS: filteredItems };
-                  }
-                  return null;
-                }).filter(order => order !== null);
-
-                if (filteredOrders.length > 0) {
-                  if (!filteredData[group]) filteredData[group] = {};
-                  if (!filteredData[group][location]) filteredData[group][location] = {};
-                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                  filteredData[group][location][section][date] = filteredOrders;
+            for (let location in data[group]) {
+                for (let section in data[group][location]) {
+                    for (let date in data[group][location][section]) {
+                        let filteredOrders = data[group][location][section][date].map(order => {
+                            let filteredItems = order.ITEMS.filter(item => {
+                                if (!item.NOTE) return false; // Ignore empty or undefined NOTE
+    
+                                // Extract the word after (C<number>)
+                                const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                                if (match && match[1]) {
+                                    return validNotes.includes(match[1]); // Keep only if in validNotes
+                                }
+                                return false;
+                            });
+    
+                            return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
+                        }).filter(order => order !== null);
+    
+                        if (filteredOrders.length > 0) {
+                            if (!filteredData[group]) filteredData[group] = {};
+                            if (!filteredData[group][location]) filteredData[group][location] = {};
+                            if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                            filteredData[group][location][section][date] = filteredOrders;
+                        }
+                    }
                 }
-              }
             }
-          }
         }
-
+    
         return filteredData;
-      }
+    }
+    
 
       alldat = filterByNoted(alldat, cources)
 
@@ -2063,36 +2193,43 @@ let Dockets = () => {
 
       function filterByNoted(data, filterNotes) {
         let filteredData = {};
-
+    
         // Extract only values from the filter list
         const validNotes = filterNotes.map(item => item.value);
-
+    
         for (let group in data) {
-          for (let location in data[group]) {
-            for (let section in data[group][location]) {
-              for (let date in data[group][location][section]) {
-                let filteredOrders = data[group][location][section][date].map(order => {
-                  let filteredItems = order.ITEMS.filter(item => validNotes.includes(item.NOTE));
-
-                  if (filteredItems.length > 0) {
-                    return { ...order, ITEMS: filteredItems };
-                  }
-                  return null;
-                }).filter(order => order !== null);
-
-                if (filteredOrders.length > 0) {
-                  if (!filteredData[group]) filteredData[group] = {};
-                  if (!filteredData[group][location]) filteredData[group][location] = {};
-                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                  filteredData[group][location][section][date] = filteredOrders;
+            for (let location in data[group]) {
+                for (let section in data[group][location]) {
+                    for (let date in data[group][location][section]) {
+                        let filteredOrders = data[group][location][section][date].map(order => {
+                            let filteredItems = order.ITEMS.filter(item => {
+                                if (!item.NOTE) return false; // Ignore empty or undefined NOTE
+    
+                                // Extract the word after (C<number>)
+                                const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                                if (match && match[1]) {
+                                    return validNotes.includes(match[1]); // Keep only if in validNotes
+                                }
+                                return false;
+                            });
+    
+                            return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
+                        }).filter(order => order !== null);
+    
+                        if (filteredOrders.length > 0) {
+                            if (!filteredData[group]) filteredData[group] = {};
+                            if (!filteredData[group][location]) filteredData[group][location] = {};
+                            if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                            filteredData[group][location][section][date] = filteredOrders;
+                        }
+                    }
                 }
-              }
             }
-          }
         }
-
+    
         return filteredData;
-      }
+    }
+    
 
       alldat = filterByNoted(alldat, cources)
 

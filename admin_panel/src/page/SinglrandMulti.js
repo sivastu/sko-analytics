@@ -115,86 +115,86 @@ let SinglrandMulti = () => {
             alignItems: "center", justifyContent: "center", backgroundColor: "#313233", flexDirection: 'column', gap: '4%', display: 'flex'
           }} >
 
-<div
-  style={{
-    width: 752, 
-    backgroundColor: "#F3F3F3",
-    borderRadius: 7,
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  }}
-  onClick={() => {
-    navigate("/analytics"); 
-  }}
->
-  <div className="row w-100 gvdfvdf" >
-    <div className="col-6 d-flex align-items-center justify-content-center">
-      <img style={{ width: "100%" }} src="as1.png" alt="Example Image" />
-    </div>
-    <div className="col-6 d-flex align-items-center justify-content-center">
-      <div className="row w-100">
-        <div
-          className="col-6 d-flex align-items-center justify-content-center"
-          style={{ padding: 24 }}
-        >
-          <p style={{ fontSize: 35, fontWeight: "500", lineHeight: 1.3 , color : '#1A1A1B' , marginTop : 15 }}>
-            Single Venue
-          </p>
-        </div>
-        <div
-          className="col-6 d-flex align-items-center justify-content-center"
-          style={{ padding: 40 }}
-        >
-          <img src="asd.png" alt="Example Image" style={{ width : 100 , height :  100 }} />
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+            <div
+              style={{
+                width: 752,
+                backgroundColor: "#F3F3F3",
+                borderRadius: 7,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onClick={() => {
+                navigate("/analytics");
+              }}
+            >
+              <div className="row w-100 gvdfvdf" >
+                <div className="col-6 d-flex align-items-center justify-content-center">
+                  <img style={{ width: "100%" }} src="as2.png" alt="Example Image" />
+                </div>
+                <div className="col-6 d-flex align-items-center justify-content-center">
+                  <div className="row w-100">
+                    <div
+                      className="col-6 d-flex align-items-center justify-content-center"
+                      style={{ padding: 24 }}
+                    >
+                      <p style={{ fontSize: 35, fontWeight: "500", lineHeight: 1.3, color: '#1A1A1B', marginTop: 15 }}>
+                        Single Venue
+                      </p>
+                    </div>
+                    <div
+                      className="col-6 d-flex align-items-center justify-content-center"
+                      style={{ padding: 40 }}
+                    >
+                      <img src="asd.png" alt="Example Image" style={{ width: 100, height: 100 }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
 
-<div
-  style={{
-    width: 752, 
-    backgroundColor: "#F3F3F3",
-    borderRadius: 7,
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  }}
-  onClick={() => { 
-  }}
->
-  <div className="row w-100 gvdfvdf" >
-    <div className="col-6 d-flex align-items-center justify-content-center">
-      <img style={{ width: "100%" }} src="as2.png" alt="Example Image" />
-    </div>
-    <div className="col-6 d-flex align-items-center justify-content-center">
-      <div className="row w-100">
-        <div
-          className="col-6 d-flex align-items-center justify-content-center"
-          style={{ padding: 24 }}
-        >
-          <p style={{ fontSize: 35, fontWeight: "500", lineHeight: 1.3 , color : '#1A1A1B' , marginTop : 15 }}>
-          Multi Venues
-          </p>
-        </div>
-        <div
-          className="col-6 d-flex align-items-center justify-content-center"
-          style={{ padding: 40 }}
-        >
-          <img src="asd1.png" alt="Example Image" style={{ width : 100 , height :  100 }} />
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+            <div
+              style={{
+                width: 752,
+                backgroundColor: "#F3F3F3",
+                borderRadius: 7,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              onClick={() => {
+              }}
+            >
+              <div className="row w-100 gvdfvdf" >
+                <div className="col-6 d-flex align-items-center justify-content-center">
+                  <img style={{ width: "100%" }} src="as1.png" alt="Example Image" />
+                </div>
+                <div className="col-6 d-flex align-items-center justify-content-center">
+                  <div className="row w-100">
+                    <div
+                      className="col-6 d-flex align-items-center justify-content-center"
+                      style={{ padding: 24 }}
+                    >
+                      <p style={{ fontSize: 35, fontWeight: "500", lineHeight: 1.3, color: '#1A1A1B', marginTop: 15 }}>
+                        Multi Venues
+                      </p>
+                    </div>
+                    <div
+                      className="col-6 d-flex align-items-center justify-content-center"
+                      style={{ padding: 40 }}
+                    >
+                      <img src="asd1.png" alt="Example Image" style={{ width: 100, height: 100 }} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
 
-             
+
             <SweetAlert2 {...swalProps} />
           </div>
         </div>
