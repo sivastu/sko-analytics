@@ -282,9 +282,11 @@ let UserRent = () => {
                   <div className="kjok" style={{ marginTop: '7%' }} >
                     <div className="d-flex justify-content-around" >
                       <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', marginTop: 7 }} >Username:</p>
-                      <input onChange={(e) => {
+                      <input onChange={(e) => { 
                         setUsername(e.target.value)
-                      }} value={username} onKeyDown={handleKeyDownfiin} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070" }} type="text" />
+                      }} value={username} onKeyDown={handleKeyDownfiin} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070" ,
+                        paddingLeft : 11
+                       }} type="text" />
                     </div>
 
 
@@ -292,7 +294,8 @@ let UserRent = () => {
                       <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', marginTop: 7 }}>Password:</p>
                       <input onChange={(e) => {
                         setPassword(e.target.value)
-                      }} value={password} ref={input2Ref} onKeyDown={handleKeyDown} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070" }} type="password" />
+                      }} value={password} ref={input2Ref} onKeyDown={handleKeyDown} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070",
+                        paddingLeft : 11 }} type="password" />
                     </div>
                     <p onClick={() => {
                       // setForget(true)

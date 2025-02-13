@@ -34,10 +34,13 @@ let Admin_dash = () => {
   let [hubb, setHubb] = useState([])
   let [user, setUser] = useState({})
 
+  let [newusers, setNewuser] = useState({})
+
   let [mydata, setMydata] = useState()
   let [username, setUsername] = useState()
   let [email, setEmail] = useState()
 
+  const [rotation, setRotation] = useState(0);
 
   let [editname, setEditname] = useState()
   let [editemail, setEditemail] = useState()
@@ -49,6 +52,8 @@ let Admin_dash = () => {
   let [editpassbool, setEditpassbool] = useState(true)
 
   let [btncolor, setButtoncolor] = useState(false)
+
+  let [searchvalue, setSearchvalue] = useState('')
 
   const handleChangehubone = (selectedss) => {
     console.log(selectedss, 'selectedssselectedssselectedss')
@@ -281,21 +286,21 @@ let Admin_dash = () => {
 
 
   let [usedname, setUsedname] = useState('')
-        function getName(data) {
-          if (!data.venue || data.venue.length === 0) {
-              return data.name; // Default to name if venue is missing or empty
-          }
-      
-          const hasAll = data.venue.some(v => v.value === "All");
-      
-          if (hasAll && data.venue.length > 1) {
-              return data.name;
-          } else if (data.venue.length === 1 && !hasAll) {
-              return data.venue[0].value;
-          }
-      
-          return data.name;
-      }
+  function getName(data) {
+    if (!data.venue || data.venue.length === 0) {
+      return data.name; // Default to name if venue is missing or empty
+    }
+
+    const hasAll = data.venue.some(v => v.value === "All");
+
+    if (hasAll && data.venue.length > 1) {
+      return data.name;
+    } else if (data.venue.length === 1 && !hasAll) {
+      return data.venue[0].value;
+    }
+
+    return data.name;
+  }
 
   let loginCheck = async () => {
     let getdata = localStorage.getItem('data')
@@ -307,7 +312,7 @@ let Admin_dash = () => {
     let decry = decrypt(getdata)
 
     let parsedatajson = JSON.parse(decry)
- let name = getName(parsedatajson)
+    let name = getName(parsedatajson)
     setUsedname(name)
     setBasicall(parsedatajson)
     const db = getDatabase(app);
@@ -318,11 +323,12 @@ let Admin_dash = () => {
     if (snapshot.exists()) {
       const userData = snapshot.val();
       setUser(userData)
+      setNewuser(userData)
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
 
       if (foundUser) {
-        if(foundUser.Role === 'emp'){
+        if (foundUser.Role === 'emp') {
           localStorage.removeItem('data')
           navigate('/')
           return
@@ -621,6 +627,10 @@ let Admin_dash = () => {
     // Fetch the results
     update(dateQuerys, newData)
       .then(() => {
+        setUsername('')
+        setEmail('')
+        setHubb([])
+        setSelectedOptions([])
         setSwalProps({
           show: true,
           title: 'User added successfully!',
@@ -631,6 +641,7 @@ let Admin_dash = () => {
             setSwalProps({ show: false });
           }
         });
+
         setCk(false)
         getuser()
         return
@@ -661,6 +672,31 @@ let Admin_dash = () => {
     console.log(hubb, 'hubb')
     console.log(selectedOptions, 'selectedOptions')
 
+
+  }
+
+
+  const handleRotate = () => {
+    if (openDropdown) {
+      setRotation((prevRotation) => prevRotation - 90); // Rotates by 90 degrees on each click
+    } else {
+      setRotation((prevRotation) => prevRotation + 90); // Rotates by 90 degrees on each click
+    }
+
+  };
+
+  let searchresult = (val) => {
+
+    console.log(val)
+    console.log(JSON.stringify(user), 'useruseruseruser ')
+
+    const regex = new RegExp(val, "i"); // Case-insensitive search
+
+    const filteredUsers = Object.values(newusers).filter(user =>
+      regex.test(user.Email) || regex.test(user.name)
+    );
+
+    setUser(filteredUsers)
 
   }
 
@@ -714,6 +750,11 @@ let Admin_dash = () => {
 
                 <div className="input-group"  >
                   <input
+                    onChange={(e) => {
+                      setSearchvalue(e.target.value)
+                      searchresult(e.target.value)
+                    }}
+                    value={searchvalue}
                     type="text"
                     className="form-control"
                     placeholder="Search..."
@@ -750,10 +791,13 @@ let Admin_dash = () => {
           <div className=" " >
             <div>
               <Nav.Link
-                onClick={() => setOpenDropdown(!openDropdown)}
+                onClick={() => {
+                  handleRotate()
+                  setOpenDropdown(!openDropdown)
+                }}
                 style={{ cursor: "pointer", color: '#1A1A1B', fontWeight: '400', fontSize: 21, width: 180 }}
               >
-                <img src="down.png" style={{ marginLeft: 20 }} alt="Example Image" />
+                <img src="down.png" style={{ marginLeft: 20, transform: `rotate(${rotation}deg)`, }} alt="Example Image" />
                 <img src="per.png" style={{ marginTop: -13, marginLeft: 5, marginRight: 5 }} alt="Example Image" />   Users
               </Nav.Link>
               {openDropdown && (
@@ -863,7 +907,7 @@ let Admin_dash = () => {
                     className="d-flex"
                   >
 
-                    <img src="man.png" style={{ marginLeft: 50, marginRight: 5 , width : 40 , height :  30 , marginTop : -4 }} alt="Example Image" />
+                    <img src="man.png" style={{ marginLeft: 50, marginRight: 5, width: 40, height: 30, marginTop: -4 }} alt="Example Image" />
 
                     <p
                       style={{
@@ -896,7 +940,7 @@ let Admin_dash = () => {
                     }}
                     className="d-flex"
                   >
-                    <img src="setts.png" style={{ marginLeft: 50, marginRight: 5 , width : 40 , height :  30 , marginTop : -4 }} alt="Example Image" />
+                    <img src="setts.png" style={{ marginLeft: 50, marginRight: 5, width: 40, height: 30, marginTop: -4 }} alt="Example Image" />
                     <p
                       style={{
                         color: "#1A1A1B",
@@ -947,6 +991,7 @@ let Admin_dash = () => {
                             setUsername(e.target.value)
                             checkuserddd()
                           }}
+                          value={username}
                           type="text"
                           className="form-control"
                           placeholder="Add new user"
@@ -962,6 +1007,7 @@ let Admin_dash = () => {
                           setEmail(e.target.value)
                           checkuserddd()
                         }}
+                        value={email}
                         className="form-control"
                         placeholder="Type in email"
                         style={{
@@ -1169,9 +1215,9 @@ let Admin_dash = () => {
 
                           </div>
                           <div style={{ width: "40%" }}>
-                            <img onClick={(e) => {
+                            {/* <img onClick={(e) => {
                               setEditemailbool(!editemailbool)
-                            }} src="pencil.png" alt="Example Image" />
+                            }} src="pencil.png" alt="Example Image" /> */}
                           </div>
                         </div>
 

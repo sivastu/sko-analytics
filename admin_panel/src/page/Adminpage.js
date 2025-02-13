@@ -11,6 +11,7 @@ import app from "./firebase";
 import { getDatabase, ref, set, push, get, query, orderByChild, equalTo } from "firebase/database";
 import SweetAlert2 from 'react-sweetalert2';
 import * as CryptoJS from 'crypto-js'
+import Modal from 'react-modal';
 
 let Adminpage = () => {
 
@@ -28,29 +29,51 @@ let Adminpage = () => {
   let [forget, setForget] = useState(false)
   let [forgetvalue, setForgetvalse] = useState('')
 
+  const [modalIsOpen, setIsOpen] = useState(false);
 
+  const customStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      border: '3px solid #ababab',
+      borderRadius: '10px',
+      width: '70%'
+    },
+  };
   useEffect(() => {
     loginCheck()
   }, [])
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed. 
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
 
 
 
   let [usedname, setUsedname] = useState('')
   function getName(data) {
     if (!data.venue || data.venue.length === 0) {
-        return data.name; // Default to name if venue is missing or empty
+      return data.name; // Default to name if venue is missing or empty
     }
 
     const hasAll = data.venue.some(v => v.value === "All");
 
     if (hasAll && data.venue.length > 1) {
-        return data.name;
+      return data.name;
     } else if (data.venue.length === 1 && !hasAll) {
-        return data.venue[0].value;
+      return data.venue[0].value;
     }
 
     return data.name;
-}
+  }
 
 
 
@@ -68,7 +91,7 @@ let Adminpage = () => {
     let name = getName(parsedatajson)
     setUsedname(name)
 
-    console.log(decry , 'decrydecry')
+    console.log(decry, 'decrydecry')
 
     const db = getDatabase(app);
     const newDocRef = ref(db, `user`);
@@ -80,7 +103,7 @@ let Adminpage = () => {
 
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
-      if(foundUser.Role === 'emp'){
+      if (foundUser.Role === 'emp') {
         localStorage.removeItem('data')
         navigate('/')
         return
@@ -131,10 +154,15 @@ let Adminpage = () => {
           <div className="d-flex justify-content-between" style={{ paddingLeft: '2%', paddingRight: '2%', height: 52 }}>
 
             <div style={{ padding: 13 }} className="d-flex" >
-              <p onClick={()=>{
-                localStorage.removeItem('data')
-                navigate('/')
-              }} style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: '50%', marginTop: -3 }} >Logout</p>
+              <p onClick={() => {
+                setIsOpen(true)
+
+                // localStorage.removeItem('data')
+                // navigate('/')
+              }} style={{
+                fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: '50%', marginTop: -3,
+                cursor: 'pointer'
+              }} >Logout</p>
             </div>
             <div style={{ padding: 13, width: 400 }} className="d-flex" >
               <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: '50%', marginTop: -3 }} >{usedname}</p>
@@ -149,7 +177,7 @@ let Adminpage = () => {
         </div>
 
       </div>
-      <div style={{ backgroundColor: "#313233", height: '100vh' }} > 
+      <div style={{ backgroundColor: "#313233", height: '100vh' }} >
 
         <div className="dddd" style={{ backgroundImage: "url('backs.jpg')", height: '100vh', padding: 0 }} >
           <div style={{
@@ -158,9 +186,9 @@ let Adminpage = () => {
             alignItems: "center", justifyContent: "center", backgroundColor: "#313233", flexDirection: 'column', gap: '4%', display: 'flex'
           }} >
 
-            <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }}  onClick={() => {
-                  navigate('/training')
-                }} >
+            <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }} onClick={() => {
+              navigate('/training')
+            }} >
 
               <div className="row" style={{ padding: 32 }} >
                 <div className="col-6" style={{ justifyContent: 'center', alignItems: 'flex-end', display: 'flex' }}>
@@ -217,6 +245,69 @@ let Adminpage = () => {
             <SweetAlert2 {...swalProps} />
           </div>
         </div>
+        <Modal
+          isOpen={modalIsOpen}
+          onAfterOpen={afterOpenModal}
+          onRequestClose={closeModal}
+          contentLabel="Logout Confirmation"
+          style={{
+            overlay: { backgroundColor: 'rgba(0, 0, 0, 0.6)' },
+            content: {
+              width: '350px',
+              height: '170px',
+              margin: 'auto',
+              padding: '20px',
+              borderRadius: '12px',
+              textAlign: 'center',
+              backgroundColor: '#ECF1F4',
+              color: 'white',
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)'
+            }
+          }}
+        >
+          <h2 style={{ marginBottom: '15px', fontSize: '20px' , color : '#1A1A1B' }}>Are you sure you want to log out?</h2>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '20px' }}>
+            <button
+              onClick={()=>{
+                localStorage.removeItem('data')
+                navigate('/')
+              }}
+              style={{
+                padding: '10px 20px',
+                cursor: 'pointer',
+                borderRadius: '8px',
+                border: 'none',
+                backgroundColor: '#ff4d4d',
+                color: 'white',
+                fontWeight: 'bold',
+                transition: '0.3s'
+              }}
+              onMouseOver={(e) => e.target.style.backgroundColor = '#ff1a1a'}
+              onMouseOut={(e) => e.target.style.backgroundColor = '#ff4d4d'}
+            >
+              Yes
+            </button>
+            <button
+              onClick={()=>{
+                setIsOpen(false)
+              }}
+              style={{
+                padding: '10px 20px',
+                cursor: 'pointer',
+                borderRadius: '8px',
+                border: 'none',
+                backgroundColor: '#4caf50',
+                color: 'white',
+                fontWeight: 'bold',
+                transition: '0.3s'
+              }}
+              onMouseOver={(e) => e.target.style.backgroundColor = '#388e3c'}
+              onMouseOut={(e) => e.target.style.backgroundColor = '#4caf50'}
+            >
+              No
+            </button>
+          </div>
+        </Modal>
 
       </div>
     </div>
