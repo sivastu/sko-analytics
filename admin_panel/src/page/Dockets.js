@@ -3735,7 +3735,7 @@ let Dockets = () => {
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
           // border: "1px solid #dbdbdb"
         }} >
-          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%' }}>
+          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', cursor: "pointer" }}>
             <div style={{ padding: 17, }} className="d-flex" onClick={() => {
               navigate(-1)
             }} >
@@ -3757,7 +3757,7 @@ let Dockets = () => {
         </div>
 
       </div>
-      <div style={{ backgroundColor: "#DADADA", height: '100vh' }} >
+      <div style={{ backgroundColor: "#DADADA", height: '100vh' ,     }}  className="finefinrr">
 
         <div style={{}} className="dddd"  >
 

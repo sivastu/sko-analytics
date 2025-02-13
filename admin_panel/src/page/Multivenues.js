@@ -108,7 +108,7 @@ let Multivenues = () => {
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
           // border: "1px solid #dbdbdb"
         }} >
-          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%' }}>
+          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', cursor: "pointer" }}>
             <div style={{ padding: 17, }} className="d-flex" onClick={()=>{
                navigate(-1)
             }} >
@@ -146,7 +146,7 @@ let Multivenues = () => {
               }} >
                 <div className="row">
                   <div className="col-6 d-flex align-items-center" style={{ padding: 35 }}>
-                    <p style={{ fontSize: 40, fontWeight: '400', lineHeight: 1.3, color: '#000', margin: 0 }}>
+                    <p style={{ fontSize: 35, fontWeight: '400', lineHeight: 1.3, color: '#000', margin: 0 }}>
                       Meals
                     </p>
                   </div>
@@ -163,8 +163,10 @@ let Multivenues = () => {
                 <div className="row" style={{ height: 190 }} >
                   {/* Left column - centered text */}
                   <div className="col-6 d-flex justify-content-center align-items-center" style={{ padding: 35 }}>
-                    <p style={{ fontSize: 49, fontWeight: '400', lineHeight: 1.3, color: '#000', margin: 0, textAlign: 'center' }}>
-                      Dockets
+                    
+
+                    <p style={{ fontSize: 35, fontWeight: '400', lineHeight: 1.3, color: '#000', margin: 0 }}>
+                    Dockets
                     </p>
                   </div>
 

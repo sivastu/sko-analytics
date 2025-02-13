@@ -106,7 +106,7 @@ let Training = () => {
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
 
-      if(foundUser.Role === 'emp'){
+      if (foundUser.Role === 'emp') {
         navigate('/')
         return
       }
@@ -152,7 +152,7 @@ let Training = () => {
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
           // border: "1px solid #dbdbdb"
         }} >
-          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%' }}>
+          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', cursor: "pointer" }}>
             <div style={{ padding: 17, }} className="d-flex" onClick={() => {
               navigate(-1)
             }} >
@@ -177,47 +177,76 @@ let Training = () => {
       <div style={{ backgroundColor: "#ECF1F4", height: '100vh' }} >
 
         <div className="   p-5">
-         
-
-            <div style={{ width  : '60%' , margin : 'auto' , display : 'block' }} >
-              <div className="custom-inputoness d-flex justify-content-between" style={{
-                width: "100%",
-                height: 45
-              }}>
-
-                <div className="input-group"  >
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Search..."
-                    style={{
-                      border: "none",
-                      boxShadow: "none",
-                      marginRight: "45px",
-                    }}
-                  />
-                  <span
-                    className="input-group-text"
-                    style={{
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      position: "absolute",
-                      right: 10,
-                    }}
-                  >
-                    🔍
-                  </span>
-                </div>
 
 
+          <div style={{ width: '60%', margin: 'auto', display: 'block' }} >
+            <div className="custom-inputoness d-flex justify-content-between" style={{
+              width: "100%",
+              height: 45
+            }}>
+
+              <div className="input-group"  >
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Search..."
+                  style={{
+                    border: "none",
+                    boxShadow: "none",
+                    marginRight: "45px",
+                  }}
+                />
+                <span
+                  className="input-group-text"
+                  style={{
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    position: "absolute",
+                    right: 10,
+                  }}
+                >
+                  🔍
+                </span>
               </div>
 
 
-              <p style={{ marginTop : '5%' , textAlign : 'center' , fontWeight : '600' , fontSize : 30 }}>SKO system training videos</p>
-
             </div>
- 
+
+
+            <p style={{ marginTop: '5%', textAlign: 'center', fontWeight: '600', fontSize: 30 }}>SKO system training videos</p>
+
+
+            <div class="accordion" id="accordionExample">
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    BASIC
+                  </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <strong>BASIC DATA.</strong> </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    CHEF
+                  </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                  <div class="accordion-body">
+                    <strong>CHEFF DATA.</strong> </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+          </div>
+
         </div>
 
 

@@ -212,6 +212,19 @@ code {
   margin-top : -1px;
 }
 
+@media (min-width: 600px) and (max-width: 1320px) { 
+  /* For portrait layouts only */
+  .finefinrr{
+    padding-bottom : 10% !important;
+    overflow : auto !important;
+  }
+  .custom-input {
+    font-size: 13px !important;
+    width: 100%;
+    padding: 15px 40px 10px 10px !important;
+  }
+}
+
 .newoneonees{
   width: 100%;
   font-size : 12px;

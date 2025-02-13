@@ -107,7 +107,7 @@ let Multivenuesone = () => {
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
           // border: "1px solid #dbdbdb"
         }} >
-          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%' }}>
+          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', cursor: "pointer" }}>
             <div style={{ padding: 17, }} className="d-flex" onClick={()=>{
                navigate(-1)
             }} >
@@ -132,7 +132,7 @@ let Multivenuesone = () => {
 
       <div style={{ backgroundColor: "#525659", height: '100vh' }} >
 
-        <div >
+        <div > 
           <div className="" style={{
             backgroundImage: "url('asd9.jpg')", height: '100vh', padding: 0, display: 'grid', alignItems: 'end',
             backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundSize: 'cover'
@@ -145,7 +145,7 @@ let Multivenuesone = () => {
               }} >
                 <div className="row">
                   <div className="col-6 d-flex align-items-center" style={{ padding: 35 }}>
-                    <p style={{ fontSize: 40, fontWeight: '400', lineHeight: 1.3, color: '#000', margin: 0 }}>
+                    <p style={{ fontSize: 35, fontWeight: '400', lineHeight: 1.3, color: '#000', margin: 0 }}>
                       Meals
                     </p>
                   </div>
@@ -162,9 +162,9 @@ let Multivenuesone = () => {
                 <div className="row" style={{ height: 190 }} >
                   {/* Left column - centered text */}
                   <div className="col-6 d-flex justify-content-center align-items-center" style={{ padding: 35 }}>
-                    <p style={{ fontSize: 49, fontWeight: '400', lineHeight: 1.3, color: '#000', margin: 0, textAlign: 'center' }}>
-                      Dockets
-                    </p>
+                  <p style={{ fontSize: 35, fontWeight: '400', lineHeight: 1.3, color: '#000', margin: 0 }}>
+                  Dockets
+                    </p> 
                   </div>
 
                   {/* Right column - aligned image */}

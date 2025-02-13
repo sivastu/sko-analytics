@@ -3110,7 +3110,7 @@ let name = getName(parsedatajson)
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
           // border: "1px solid #dbdbdb"
         }} >
-          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%' }}>
+          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%' , cursor: "pointer" }}>
             <div style={{ padding: 17, }} className="d-flex" onClick={() => {
               navigate(-1)
             }} >
@@ -3133,7 +3133,7 @@ let name = getName(parsedatajson)
 
       </div>
 
-      <div style={{ backgroundColor: "#DADADA", height: '100vh' }} >
+      <div style={{ backgroundColor: "#DADADA", height: '100vh' , overflow : 'auto' ,  }}  className="finefinrr">
 
         <div style={{}} className="dddd"  >
 
@@ -3151,6 +3151,7 @@ let name = getName(parsedatajson)
                   selectsRange
                   startDate={startDate}
                   endDate={endDate}
+                  style={{ fontSize : 30}}
                   onChange={(update) => {
 
                     console.log(update , 'update')
