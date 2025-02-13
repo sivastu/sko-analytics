@@ -57,6 +57,7 @@ let Adminpage = () => {
   let loginCheck = async () => {
     let getdata = localStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
+      localStorage.removeItem('data')
       navigate('/')
       return
     }
@@ -79,7 +80,11 @@ let Adminpage = () => {
 
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
-
+      if(foundUser.Role === 'emp'){
+        localStorage.removeItem('data')
+        navigate('/')
+        return
+      }
       if (foundUser) {
         setUsername(foundUser)
         // Check if the password matches
@@ -153,7 +158,9 @@ let Adminpage = () => {
             alignItems: "center", justifyContent: "center", backgroundColor: "#313233", flexDirection: 'column', gap: '4%', display: 'flex'
           }} >
 
-            <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }} >
+            <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }}  onClick={() => {
+                  navigate('/training')
+                }} >
 
               <div className="row" style={{ padding: 32 }} >
                 <div className="col-6" style={{ justifyContent: 'center', alignItems: 'flex-end', display: 'flex' }}>

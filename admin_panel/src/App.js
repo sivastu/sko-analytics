@@ -21,6 +21,9 @@ import Adminpage from "./page/Adminpage";
 import Admin_dash from "./page/Admin_dash";
 import Multi_venue from "./page/Multi_venue";
 
+//tra
+import Training from "./page/Training";
+
 function App() {
   return (
     <BrowserRouter>
@@ -42,6 +45,8 @@ function App() {
         <Route path="/multivenues" element={<Multi_venue />} />
 
         <Route path="/multivenue" element={<Multivenuesone />} />
+
+        <Route path="/training" element={<Training />} />
 
 
       </Routes>

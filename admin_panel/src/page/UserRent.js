@@ -166,6 +166,8 @@ let UserRent = () => {
             if (foundUser.Role === 'admin') {
 
               navigate("/admin", { state: { userdata: foundUser } });
+            }else if(foundUser.Role === 'emp'){
+              navigate("/training");
             }else{
               navigate("/admin", { state: { userdata: foundUser } });
             }

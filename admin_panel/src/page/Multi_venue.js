@@ -66,6 +66,7 @@ Modal.setAppElement('#root');
 
 
 let Multi_venue = () => {
+  
   let [data, setData] = useState();
   const [dateRange, setDateRange] = useState([null, null]); // [startDate, endDate]
   const [startDate, endDate] = dateRange;
@@ -228,6 +229,7 @@ let Multi_venue = () => {
   let loginCheck = async () => {
     let getdata = localStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
+      localStorage.removeItem('data')
       navigate('/')
       return
     }
@@ -247,6 +249,11 @@ let Multi_venue = () => {
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
 
       if (foundUser) {
+        if(foundUser.Role === 'emp'){
+          localStorage.removeItem('data')
+          navigate('/')
+          return
+        }
         // Check if the password matches
         if (foundUser.Password === parsedatajson.Password) {
 
@@ -377,6 +384,16 @@ let Multi_venue = () => {
 
   }
   let [fulldatafull, setFulldatafull] = useState()
+
+  const getFormattedDate = (daysBefore) => {
+    const date = new Date();
+    date.setDate(date.getDate() - daysBefore);
+
+    // Ensure time is set to match the expected format
+    date.setUTCHours(18, 30, 0, 0);
+
+    return date; // Return a Date object instead of a string
+};
 
   let getone = () => {
 
@@ -537,11 +554,15 @@ let Multi_venue = () => {
 
           const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
 
-          if (hasAllValue === true) {
-            setBasic(optionsone)
-          } else {
-            setBasic(parsedatajson.venue)
-          }
+          let realven = []
+                   
+                             if (hasAllValue === true) {
+                               realven.push(optionsone[0])
+                               setBasic(optionsone)
+                             } else {
+                               realven.push(parsedatajson.venue[0])
+                               setBasic(parsedatajson.venue)
+                             }
 
 
 
@@ -623,6 +644,16 @@ let Multi_venue = () => {
           }
 
           // alldat = filteredDataonee
+
+          setSelectedOptions(realven)
+          // alldat = filteredDataonee
+          const yesterday = [getFormattedDate(1), getFormattedDate(1)];
+          const eightDaysBefore =[getFormattedDate(8), getFormattedDate(1)];      
+          setDateRangetwo(eightDaysBefore)
+          setDateRange(yesterday)
+          filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+          filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
 

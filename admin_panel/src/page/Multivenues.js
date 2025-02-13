@@ -44,6 +44,7 @@ let Multivenues = () => {
   let loginCheck = async () => {
     let getdata = localStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
+      localStorage.removeItem('data')
       navigate('/')
       return
     }
@@ -62,8 +63,13 @@ let Multivenues = () => {
 
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
-
+      if(foundUser.Role === 'emp'){
+        localStorage.removeItem('data')
+        navigate('/')
+        return
+      }
       if (foundUser) {
+
         // Check if the password matches
         if (foundUser.Password === parsedatajson.password) {
           navigate('/')

@@ -92,6 +92,16 @@ let Meals = () => {
 
   }, [])
 
+  const getFormattedDate = (daysBefore) => {
+    const date = new Date();
+    date.setDate(date.getDate() - daysBefore);
+
+    // Ensure time is set to match the expected format
+    date.setUTCHours(18, 30, 0, 0);
+
+    return date; // Return a Date object instead of a string
+};
+
   let [onebar, setOneBar] = useState([])
   let [twobar, setTwobar] = useState([])
   let [optionbar, setOption] = useState([])
@@ -118,6 +128,7 @@ let Meals = () => {
   let loginCheck = async () => {
     let getdata = localStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
+      localStorage.removeItem('data')
       navigate('/')
       return
     }
@@ -135,7 +146,11 @@ let name = getName(parsedatajson)
       const userData = snapshot.val();
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
-
+      if(foundUser.Role === 'emp'){
+        localStorage.removeItem('data')
+        navigate('/')
+        return
+      }
       if (foundUser) {
         setMydata(foundUser)
         // Check if the password matches
@@ -355,10 +370,13 @@ let name = getName(parsedatajson)
 
 
           const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
+          let realven = []
 
           if (hasAllValue === true) {
+            realven.push(optionsone[0])
             setBasic(optionsone)
           } else {
+            realven.push(parsedatajson.venue[0])
             setBasic(parsedatajson.venue)
           }
 
@@ -441,11 +459,15 @@ let name = getName(parsedatajson)
 
             setBasicall(fina)
           }
-
+          setSelectedOptions(realven)
           // alldat = filteredDataonee
+          const yesterday = [getFormattedDate(1), getFormattedDate(1)];
+          const eightDaysBefore =[getFormattedDate(8), getFormattedDate(1)];      
+          setDateRangetwo(eightDaysBefore)
+          setDateRange(yesterday)
+          filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-
-
+          filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
         } else {
           console.log("No events found between the dates.");
@@ -2938,11 +2960,23 @@ let name = getName(parsedatajson)
     return kkki
   }
 
+
+
   let checkkkk = () => {
 
-    //one
-    console.log(basicall, '1')
+    const yesterday = [getFormattedDate(1), getFormattedDate(1)];
+    const eightDaysBefore =[getFormattedDate(8), getFormattedDate(8)];
 
+
+    //one
+    console.log( yesterday , '1')
+    console.log( eightDaysBefore , '2')
+
+    console.log( JSON.stringify(yesterday) , '3')
+    console.log( JSON.stringify(eightDaysBefore) , '4') 
+
+    console.log( dateRange , '5')
+    console.log( JSON.stringify(dateRange) , '6')   
   }
 
 
@@ -3118,6 +3152,8 @@ let name = getName(parsedatajson)
                   startDate={startDate}
                   endDate={endDate}
                   onChange={(update) => {
+
+                    console.log(update , 'update')
                     setDateRange(update)
 
                     if (update[1] === null || update[1] === "null") {
