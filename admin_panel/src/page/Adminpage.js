@@ -33,6 +33,27 @@ let Adminpage = () => {
     loginCheck()
   }, [])
 
+
+
+  let [usedname, setUsedname] = useState('')
+  function getName(data) {
+    if (!data.venue || data.venue.length === 0) {
+        return data.name; // Default to name if venue is missing or empty
+    }
+
+    const hasAll = data.venue.some(v => v.value === "All");
+
+    if (hasAll && data.venue.length > 1) {
+        return data.name;
+    } else if (data.venue.length === 1 && !hasAll) {
+        return data.venue[0].value;
+    }
+
+    return data.name;
+}
+
+
+
   let loginCheck = async () => {
     let getdata = localStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
@@ -42,6 +63,11 @@ let Adminpage = () => {
     let decry = decrypt(getdata)
 
     let parsedatajson = JSON.parse(decry)
+
+    let name = getName(parsedatajson)
+    setUsedname(name)
+
+    console.log(decry , 'decrydecry')
 
     const db = getDatabase(app);
     const newDocRef = ref(db, `user`);
@@ -106,7 +132,7 @@ let Adminpage = () => {
               }} style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: '50%', marginTop: -3 }} >Logout</p>
             </div>
             <div style={{ padding: 13, width: 400 }} className="d-flex" >
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: '50%', marginTop: -3 }} >(Group Name)</p>
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: '50%', marginTop: -3 }} >{usedname}</p>
             </div>
 
             <div style={{ padding: 13 }} className="d-flex" >

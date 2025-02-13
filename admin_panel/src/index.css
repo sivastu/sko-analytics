@@ -171,6 +171,13 @@ code {
   margin-right: 8px;
 }
 
+.nerrrimg {
+  width: 50px;
+  height: 50px;
+  margin-top: -15px;
+  margin-right: 10px;
+}
+
 /* When checkbox is checked, change background */
 .round-checkbox input:checked + .checkmark {
   background-color: #316AAF;
@@ -202,6 +209,7 @@ code {
 .newoneonee{
   width: 280px;
   font-size : 12px;
+  margin-top : -1px;
 }
 
 .newoneonees{
@@ -288,6 +296,7 @@ input[type="checkbox"] {
   background-color: #ccc;
   border-radius: 4px; /* Rounded corners for a rectangular appearance */
   transition: background-color 0.3s ease;
+  margin-top: 5px;
 }
 
 /* The circle inside the switch */

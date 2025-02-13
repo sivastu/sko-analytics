@@ -55,7 +55,7 @@ let Meals = () => {
   let [basicone, setBasicone] = useState([])
 
   let [hubb, setHubb] = useState([])
-  let [hubbswitch, setHubbswitch] = useState(false)
+  let [hubbswitch, setHubbswitch] = useState(true)
 
   //parse meals
   let [meals, setMeals] = useState(1)
@@ -73,6 +73,12 @@ let Meals = () => {
 
   let [alldrop, setAlldrop] = useState([])
 
+  ///old
+  let [oldven, setOldven] = useState([])
+  let [oldhub, setOldhub] = useState([])
+  let [oldpro, setOldpro] = useState([])
+  let [oldcou, setOldcou] = useState([])
+  let [oldtak, setOldtak] = useState([])
 
 
   useEffect(() => {
@@ -91,6 +97,24 @@ let Meals = () => {
   let [optionbar, setOption] = useState([])
   let [mydata, setMydata] = useState()
 
+
+        let [usedname, setUsedname] = useState('')
+        function getName(data) {
+          if (!data.venue || data.venue.length === 0) {
+              return data.name; // Default to name if venue is missing or empty
+          }
+      
+          const hasAll = data.venue.some(v => v.value === "All");
+      
+          if (hasAll && data.venue.length > 1) {
+              return data.name;
+          } else if (data.venue.length === 1 && !hasAll) {
+              return data.venue[0].value;
+          }
+      
+          return data.name;
+      }
+
   let loginCheck = async () => {
     let getdata = localStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
@@ -100,7 +124,8 @@ let Meals = () => {
     let decry = decrypt(getdata)
 
     let parsedatajson = JSON.parse(decry)
- 
+let name = getName(parsedatajson)
+    setUsedname(name)
     const db = getDatabase(app);
     const newDocRef = ref(db, `user`);
 
@@ -214,33 +239,35 @@ let Meals = () => {
 
           function extractUniqueNotes(datad) {
             let uniqueNotes = new Set();
-        
+
             for (let group in datad) {
-                for (let location in datad[group]) {
-                    for (let section in datad[group][location]) {
-                        for (let date in datad[group][location][section]) {
-                            datad[group][location][section][date].forEach(order => {
-                                order.ITEMS.forEach(item => {
-                                    if (item.NOTE) {
-                                        // Extract the word after (C<number>
-                                        const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                                        if (match && match[1] && match[1] !== "undefined") { 
-                                          uniqueNotes.add(match[1]); // Add only valid words
-                                      }
-      
-                                    }
-                                });
-                            });
+              for (let location in datad[group]) {
+                for (let section in datad[group][location]) {
+                  for (let date in datad[group][location][section]) {
+                    datad[group][location][section][date].forEach(order => {
+                      order.ITEMS.forEach(item => {
+                        if (item.NOTE) {
+                          // Extract the word after (C<number>
+                          const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                          if (match && match[1] && match[1] !== "undefined") {
+                            uniqueNotes.add(match[1]); // Add only valid words
+                          }
+
                         }
-                    }
+                      });
+                    });
+                  }
                 }
+              }
             }
-        
+
             // Convert Set to desired format
             return [...uniqueNotes].map(note => ({ value: note, label: note }));
-        }
+          }
 
           let uuuk = extractUniqueNotes(cleanedData)
+          uuuk.unshift({ label: "All Courses", value: "All" });
+
           setFulldatafull(uuuk)
 
 
@@ -297,7 +324,10 @@ let Meals = () => {
           });
           setAlldrop(result)
           console.log(result, 'keykeykeykey') // its oblect
-          const optionsone = [];
+          const optionsone = [{
+            "label": "All Venue",
+            "value": "All"
+          }];
           Object.entries(cleanedData).forEach(([groupName, groupData]) => {
             Object.keys(groupData).forEach((key) => {
               optionsone.push({ value: key, label: key });
@@ -317,94 +347,106 @@ let Meals = () => {
           console.log("options:", optionsone);
           // console.log("optionss:", optionsstwo);
 
-          setBasic(optionsone)
+          let getdata = localStorage.getItem('data')
+
+          let decry = decrypt(getdata)
+
+          let parsedatajson = JSON.parse(decry)
+
+
+          const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
+
+          if (hasAllValue === true) {
+            setBasic(optionsone)
+          } else {
+            setBasic(parsedatajson.venue)
+          }
+
+
 
           const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
           const optionstakeaway = [
             ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
           ].map(value => ({ value, label: value }));
 
+
           console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
 
 
 
-          let getdata = localStorage.getItem('data')
-          
-          let decry = decrypt(getdata)
-      
-          let parsedatajson = JSON.parse(decry)
+
 
           const filteredDataonee = {};
 
-          console.log( JSON.stringify(parsedatajson) , 'mydatamydatamydatamydatamydatamydatamydata')
-          if( parsedatajson.venue ){
-          
+          console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
+          if (parsedatajson.venue) {
+
             const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
- 
-            console.log(hasAllValue , 'hasAllValue')
-            if( hasAllValue === true ){
+
+            console.log(hasAllValue, 'hasAllValue')
+            if (hasAllValue === true) {
               return
             }
 
 
-          parsedatajson.venue.forEach(filter => {
-            const key = filter.value;
-            if (cleanedData[key]) {
-              filteredDataonee[key] = cleanedData[key];
-            }
-          });
-          setBasicall(filteredDataonee)
+            parsedatajson.venue.forEach(filter => {
+              const key = filter.value;
+              if (cleanedData[key]) {
+                filteredDataonee[key] = cleanedData[key];
+              }
+            });
+            setBasicall(filteredDataonee)
 
 
 
           }
 
-          if ( parsedatajson.hub ){
-          
-            const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
-            console.log(hasAllValue , 'hasAllValue hub')
+          if (parsedatajson.hub) {
 
-            if( hasAllValue === true ){
+            const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
+            console.log(hasAllValue, 'hasAllValue hub')
+
+            if (hasAllValue === true) {
               return
             }
 
             function filterDataByDynamicKeys(keysArray) {
               const filteredData = {};
-      
+
               keysArray.forEach(({ value }) => {
                 const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
-      
+
                 if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
                   const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
-      
+
                   // Check if the hub exists
                   if (secondLevelData[hubName]) {
                     if (!filteredData[topLevelKey]) {
                       filteredData[topLevelKey] = {};
                     }
-      
+
                     if (!filteredData[topLevelKey][secondTopLevelKey]) {
                       filteredData[topLevelKey][secondTopLevelKey] = {};
                     }
-      
+
                     filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
                   }
                 }
               });
-      
+
               return filteredData;
             }
 
-            let fina = filterDataByDynamicKeys( parsedatajson.hub )
+            let fina = filterDataByDynamicKeys(parsedatajson.hub)
 
             setBasicall(fina)
           }
-    
+
           // alldat = filteredDataonee
 
 
 
-           
+
         } else {
           console.log("No events found between the dates.");
         }
@@ -999,7 +1041,7 @@ let Meals = () => {
 
   //.select options venue
 
-  const [venueradio, setVenueradio] = useState(false)
+  const [venueradio, setVenueradio] = useState(true)
 
   const CustomOption = (props) => {
     const { data, isSelected, innerRef, innerProps } = props;
@@ -1047,37 +1089,159 @@ let Meals = () => {
 
 
   const handleChange = (selected) => {
+
     console.log(JSON.stringify(fulldatatwo), 'selected')
+    const hasAllValue = selected.some(item => item.value === "All");
+    const hasAllValueold = oldven.some(item => item.value === "All");
 
-    setSelectedOptions(selected || []);
 
-    filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+    setOldven(selected)
 
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+    if (hasAllValue === false && hasAllValueold === true) {
+      setSelectedOptions([]);
 
-    const output = [];
+      filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-    // // Iterate through the search array
-    selected.forEach(({ value }) => {
-      // Search in the data object
-      Object.entries(alldrop).forEach(([key, items]) => {
-        if (key === value) {
-          // If the key matches, add all items from the group to the output
-          items.forEach(item => {
-            output.push({ value: key + '-' + item.name, label: item.name });
-          });
-        } else {
-          // Search within the group's items
-          items.forEach(item => {
-            if (item.name === value) {
-              output.push({ value: key + '-' + item.name, label: key });
-            }
-          });
-        }
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      const output = [];
+
+      // // Iterate through the search array
+      [].forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
       });
-    });
 
-    setBasicone(output)
+      setBasicone(output)
+
+      return
+    }
+
+
+
+    if (hasAllValue === true) {
+
+      setSelectedOptions(basic || []);
+
+      filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      const output = [{
+        "label": "All Hub",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      basic.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasicone(output)
+
+
+    } else {
+
+      let lengthss = selected.length
+      let lengthssone = basic.length
+
+      // if (lengthss === lengthssone - 1) {
+      //   setSelectedOptions( []);
+
+      //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      //   const output = [];
+
+      //   // // Iterate through the search array
+      //   [].forEach(({ value }) => {
+      //     // Search in the data object
+      //     Object.entries(alldrop).forEach(([key, items]) => {
+      //       if (key === value) {
+      //         // If the key matches, add all items from the group to the output
+      //         items.forEach(item => {
+      //           output.push({ value: key + '-' + item.name, label: item.name });
+      //         });
+      //       } else {
+      //         // Search within the group's items
+      //         items.forEach(item => {
+      //           if (item.name === value) {
+      //             output.push({ value: key + '-' + item.name, label: key });
+      //           }
+      //         });
+      //       }
+      //     });
+      //   });
+
+      //   setBasicone(output)
+
+      //   return
+      // }
+
+      setSelectedOptions(selected || []);
+
+      filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      const output = [{
+        "label": "All Hub",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      selected.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasicone(output)
+    }
+
 
     // const validVenues = selected.map(item => item.value);
 
@@ -1105,21 +1269,49 @@ let Meals = () => {
   //.select options hub
 
   const [Hubradio, setHubradio] = useState(true)
-  const optionshub = [
-    { value: 'R', label: 'On Process' },
-    { value: 'H', label: 'On Hold' },
-    { value: 'P', label: 'On Pass' },
-    { value: 'S', label: 'Served' },
+  const optionshub = [{
+    "label": "All Stages",
+    "value": "All"
+  },
+  { value: 'R', label: 'On Process' },
+  { value: 'H', label: 'On Hold' },
+  { value: 'P', label: 'On Pass' },
+  { value: 'S', label: 'Served' },
   ];
 
   const [selectedhubOptions, setSelectedhubOptions] = useState([]);
 
 
   const handleChangehub = (selected) => {
-    setSelectedhubOptions(selected || []);
 
-    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
+    const hasAllValue = selected.some(item => item.value === "All");
+    const hasAllValueold = oldpro.some(item => item.value === "All");
+
+    setOldpro(selected)
+
+    if (hasAllValue === false && hasAllValueold === true) {
+
+
+      setSelectedhubOptions([]);
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
+      return
+
+    }
+
+
+    if (hasAllValue === true) {
+      setSelectedhubOptions(optionshub);
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
+
+    } else {
+      setSelectedhubOptions(selected || []);
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
+
+    }
+
 
     // selectedhubOptions
 
@@ -1129,15 +1321,52 @@ let Meals = () => {
 
   const handleChangehubone = (selectedss) => {
 
-    console.log(selectedss, 'selectedssselectedssselectedss')
 
-    setHubb(selectedss)
+    const hasAllValue = selectedss.some(item => item.value === "All");
+    const hasAllValueold = oldhub.some(item => item.value === "All");
+
+    setOldhub(selectedss)
+
+    if (hasAllValue === false && hasAllValueold === true) {
+
+      console.log(selectedss, 'selectedssselectedssselectedss')
+
+      setHubb([])
 
 
-    filterDataByDate(dateRange, onetime, twotime, selectedOptions, selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      return
+    }
+
+    if (hasAllValue === true) {
+      console.log(selectedss, 'selectedssselectedssselectedss')
+
+      setHubb(basicone)
+
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, basicone, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, basicone, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+    } else {
+      console.log(selectedss, 'selectedssselectedssselectedss')
+
+      setHubb(selectedss)
+
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+    }
+
+
 
 
 
@@ -1155,21 +1384,53 @@ let Meals = () => {
   ];
 
   const [selectedCources, setSelectedCources] = useState([]);
+
   const handleChangeCources = (selected) => {
-    setSelectedCources(selected || []);
 
-    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+    const hasAllValue = selected.some(item => item.value === "All");
+    const hasAllValueold = oldcou.some(item => item.value === "All");
+
+    setOldcou(selected)
+
+    if (hasAllValue === false && hasAllValueold === true) {
+
+      setSelectedCources([]);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      return
+    }
+
+    if (hasAllValue === true) {
+
+      setSelectedCources(fulldatafull);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+    } else {
+      setSelectedCources(selected || []);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+    }
+
+
 
 
   };
 
 
   //select takeaway
-  const [takeaway, setTakeaway] = useState(false)
+  const [takeaway, setTakeaway] = useState(true)
   const optionstakeaway = [
-    { value: 'all', label: 'All takeaways' },
+    { value: 'All', label: 'All takeaways' },
     { value: 'Takeaways', label: 'Takeaways' },
     { value: 'Deliveries', label: 'Deliveries' },
     { value: 'Pick-ups', label: 'Pick-ups' },
@@ -1177,11 +1438,37 @@ let Meals = () => {
   const [selectedTakeaway, setSelectedTakeaway] = useState([]);
   const handleChangeTakeaway = (selected) => {
 
-    setSelectedTakeaway(selected || []);
+    const hasAllValue = selected.some(item => item.value === "All");
+    const hasAllValueold = oldtak.some(item => item.value === "All");
 
-    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
+    setOldtak(selected)
 
-    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
+    if (hasAllValue === false && hasAllValueold === true) {
+
+      setSelectedTakeaway([]);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
+
+      return
+
+    }
+
+    if (hasAllValue === true) {
+      setSelectedTakeaway(optionstakeaway);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+    } else {
+      setSelectedTakeaway(selected || []);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
+    }
+
 
   };
 
@@ -1384,14 +1671,28 @@ let Meals = () => {
     }
 
     if (val21.length != 0) {
+
       const filteredData = {};
+
 
       val21.forEach(filter => {
         const key = filter.value;
-        if (alldat[key]) {
-          filteredData[key] = alldat[key];
+        for (const mainKey in alldat) {
+          if (alldat[mainKey][key]) {
+            if (!filteredData[mainKey]) {
+              filteredData[mainKey] = {}; // Initialize if not exists
+            }
+            filteredData[mainKey][key] = alldat[mainKey][key];
+          }
         }
       });
+
+      // val21.forEach(filter => {
+      //   const key = filter.value;
+      //   if (alldat[key]) {
+      //     filteredData[key] = alldat[key];
+      //   }
+      // });
 
       alldat = filteredData
 
@@ -1436,33 +1737,58 @@ let Meals = () => {
 
       // console.log(alldat, 'five')
 
-      function filterDataByDynamicKeys(keysArray) {
+      const filterDataByDynamicKeys = (data, filterCriteria) => {
         const filteredData = {};
 
-        keysArray.forEach(({ value }) => {
-          const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+        filterCriteria.forEach(({ label }) => {
+          const [hub, parent] = label.split('-'); // Extract hub and parent names
 
-          if (alldat[topLevelKey] && alldat[topLevelKey][secondTopLevelKey]) {
-            const secondLevelData = alldat[topLevelKey][secondTopLevelKey];
-
-            // Check if the hub exists
-            if (secondLevelData[hubName]) {
-              if (!filteredData[topLevelKey]) {
-                filteredData[topLevelKey] = {};
-              }
-
-              if (!filteredData[topLevelKey][secondTopLevelKey]) {
-                filteredData[topLevelKey][secondTopLevelKey] = {};
-              }
-
-              filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
+          // Find the corresponding key in the data
+          for (const key in data) {
+            if (data[key][parent] && data[key][parent][hub]) {
+              if (!filteredData[key]) filteredData[key] = {};
+              if (!filteredData[key][parent]) filteredData[key][parent] = {};
+              filteredData[key][parent][hub] = data[key][parent][hub];
             }
           }
         });
 
         return filteredData;
-      }
-      alldat = filterDataByDynamicKeys(val22)
+      };
+
+
+
+      // function filterDataByDynamicKeys(keysArray) {
+      //   const filteredData = {};
+
+      //   keysArray.forEach(({ value }) => {
+      //     const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+
+      //     if (alldat[topLevelKey] && alldat[topLevelKey][secondTopLevelKey]) {
+      //       const secondLevelData = alldat[topLevelKey][secondTopLevelKey];
+
+      //       // Check if the hub exists
+      //       if (secondLevelData[hubName]) {
+      //         if (!filteredData[topLevelKey]) {
+      //           filteredData[topLevelKey] = {};
+      //         }
+
+      //         if (!filteredData[topLevelKey][secondTopLevelKey]) {
+      //           filteredData[topLevelKey][secondTopLevelKey] = {};
+      //         }
+
+      //         filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
+      //       }
+      //     }
+      //   });
+
+      //   return filteredData;
+      // }
+      let ofjfij = filterDataByDynamicKeys(alldat, val22)
+
+      alldat = ofjfij
+
+      console.log(JSON.stringify(val22, 'val22val22'))
       console.log(alldat, 'five')
 
     }
@@ -1472,43 +1798,43 @@ let Meals = () => {
 
       function filterByNoted(data, filterNotes) {
         let filteredData = {};
-    
+
         // Extract only values from the filter list
         const validNotes = filterNotes.map(item => item.value);
-    
+
         for (let group in data) {
-            for (let location in data[group]) {
-                for (let section in data[group][location]) {
-                    for (let date in data[group][location][section]) {
-                        let filteredOrders = data[group][location][section][date].map(order => {
-                            let filteredItems = order.ITEMS.filter(item => {
-                                if (!item.NOTE) return false; // Ignore empty or undefined NOTE
-    
-                                // Extract the word after (C<number>)
-                                const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                                if (match && match[1]) {
-                                    return validNotes.includes(match[1]); // Keep only if in validNotes
-                                }
-                                return false;
-                            });
-    
-                            return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
-                        }).filter(order => order !== null);
-    
-                        if (filteredOrders.length > 0) {
-                            if (!filteredData[group]) filteredData[group] = {};
-                            if (!filteredData[group][location]) filteredData[group][location] = {};
-                            if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                            filteredData[group][location][section][date] = filteredOrders;
-                        }
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let filteredOrders = data[group][location][section][date].map(order => {
+                  let filteredItems = order.ITEMS.filter(item => {
+                    if (!item.NOTE) return false; // Ignore empty or undefined NOTE
+
+                    // Extract the word after (C<number>)
+                    const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                    if (match && match[1]) {
+                      return validNotes.includes(match[1]); // Keep only if in validNotes
                     }
+                    return false;
+                  });
+
+                  return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
+                }).filter(order => order !== null);
+
+                if (filteredOrders.length > 0) {
+                  if (!filteredData[group]) filteredData[group] = {};
+                  if (!filteredData[group][location]) filteredData[group][location] = {};
+                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                  filteredData[group][location][section][date] = filteredOrders;
                 }
+              }
             }
+          }
         }
-    
+
         return filteredData;
-    }
-    
+      }
+
 
       alldat = filterByNoted(alldat, cources)
 
@@ -1932,8 +2258,13 @@ let Meals = () => {
 
       val21.forEach(filter => {
         const key = filter.value;
-        if (alldat[key]) {
-          filteredData[key] = alldat[key];
+        for (const mainKey in alldat) {
+          if (alldat[mainKey][key]) {
+            if (!filteredData[mainKey]) {
+              filteredData[mainKey] = {}; // Initialize if not exists
+            }
+            filteredData[mainKey][key] = alldat[mainKey][key];
+          }
         }
       });
 
@@ -1980,33 +2311,57 @@ let Meals = () => {
 
       // console.log(alldat, 'five')
 
-      function filterDataByDynamicKeys(keysArray) {
+      const filterDataByDynamicKeys = (data, filterCriteria) => {
         const filteredData = {};
 
-        keysArray.forEach(({ value }) => {
-          const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+        filterCriteria.forEach(({ label }) => {
+          const [hub, parent] = label.split('-'); // Extract hub and parent names
 
-          if (alldat[topLevelKey] && alldat[topLevelKey][secondTopLevelKey]) {
-            const secondLevelData = alldat[topLevelKey][secondTopLevelKey];
-
-            // Check if the hub exists
-            if (secondLevelData[hubName]) {
-              if (!filteredData[topLevelKey]) {
-                filteredData[topLevelKey] = {};
-              }
-
-              if (!filteredData[topLevelKey][secondTopLevelKey]) {
-                filteredData[topLevelKey][secondTopLevelKey] = {};
-              }
-
-              filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
+          // Find the corresponding key in the data
+          for (const key in data) {
+            if (data[key][parent] && data[key][parent][hub]) {
+              if (!filteredData[key]) filteredData[key] = {};
+              if (!filteredData[key][parent]) filteredData[key][parent] = {};
+              filteredData[key][parent][hub] = data[key][parent][hub];
             }
           }
         });
 
         return filteredData;
-      }
-      alldat = filterDataByDynamicKeys(val22)
+      };
+
+
+
+      // function filterDataByDynamicKeys(keysArray) {
+      //   const filteredData = {};
+
+      //   keysArray.forEach(({ value }) => {
+      //     const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+
+      //     if (alldat[topLevelKey] && alldat[topLevelKey][secondTopLevelKey]) {
+      //       const secondLevelData = alldat[topLevelKey][secondTopLevelKey];
+
+      //       // Check if the hub exists
+      //       if (secondLevelData[hubName]) {
+      //         if (!filteredData[topLevelKey]) {
+      //           filteredData[topLevelKey] = {};
+      //         }
+
+      //         if (!filteredData[topLevelKey][secondTopLevelKey]) {
+      //           filteredData[topLevelKey][secondTopLevelKey] = {};
+      //         }
+
+      //         filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
+      //       }
+      //     }
+      //   });
+
+      //   return filteredData;
+      // }
+      let ofjfij = filterDataByDynamicKeys(alldat, val22)
+
+      alldat = ofjfij
+
       console.log(alldat, 'five')
 
     }
@@ -2016,43 +2371,43 @@ let Meals = () => {
 
       function filterByNoted(data, filterNotes) {
         let filteredData = {};
-    
+
         // Extract only values from the filter list
         const validNotes = filterNotes.map(item => item.value);
-    
+
         for (let group in data) {
-            for (let location in data[group]) {
-                for (let section in data[group][location]) {
-                    for (let date in data[group][location][section]) {
-                        let filteredOrders = data[group][location][section][date].map(order => {
-                            let filteredItems = order.ITEMS.filter(item => {
-                                if (!item.NOTE) return false; // Ignore empty or undefined NOTE
-    
-                                // Extract the word after (C<number>)
-                                const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                                if (match && match[1]) {
-                                    return validNotes.includes(match[1]); // Keep only if in validNotes
-                                }
-                                return false;
-                            });
-    
-                            return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
-                        }).filter(order => order !== null);
-    
-                        if (filteredOrders.length > 0) {
-                            if (!filteredData[group]) filteredData[group] = {};
-                            if (!filteredData[group][location]) filteredData[group][location] = {};
-                            if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                            filteredData[group][location][section][date] = filteredOrders;
-                        }
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let filteredOrders = data[group][location][section][date].map(order => {
+                  let filteredItems = order.ITEMS.filter(item => {
+                    if (!item.NOTE) return false; // Ignore empty or undefined NOTE
+
+                    // Extract the word after (C<number>)
+                    const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                    if (match && match[1]) {
+                      return validNotes.includes(match[1]); // Keep only if in validNotes
                     }
+                    return false;
+                  });
+
+                  return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
+                }).filter(order => order !== null);
+
+                if (filteredOrders.length > 0) {
+                  if (!filteredData[group]) filteredData[group] = {};
+                  if (!filteredData[group][location]) filteredData[group][location] = {};
+                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                  filteredData[group][location][section][date] = filteredOrders;
                 }
+              }
             }
+          }
         }
-    
+
         return filteredData;
-    }
-    
+      }
+
 
       alldat = filterByNoted(alldat, cources)
 
@@ -2527,8 +2882,8 @@ let Meals = () => {
 
         entries.forEach(entry => {
           entry.ITEMS.forEach(item => {
-            // Check if "Refunded" exists in the ITEM field
-            if (item.NOTE.includes("Refunded")) {
+            // Ensure item.NOTE is defined before using includes()
+            if (item.NOTE && item.NOTE.includes("Refunded")) {
               refundedItems.push(item);
             }
           });
@@ -2586,7 +2941,7 @@ let Meals = () => {
   let checkkkk = () => {
 
     //one
-    console.log(basicall, '1') 
+    console.log(basicall, '1')
 
   }
 
@@ -2715,7 +3070,35 @@ let Meals = () => {
 
   return (
     <div>
-      <Header name={"Meals"} center={"Name"} />
+      <div style={{ scrollbarWidth: 'none' }}>
+
+        <div style={{
+          height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
+          // border: "1px solid #dbdbdb"
+        }} >
+          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%' }}>
+            <div style={{ padding: 17, }} className="d-flex" onClick={() => {
+              navigate(-1)
+            }} >
+              <img src="arrow.png" style={{ width: 20, height: 20 }} alt="Example Image" />
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -7 }} >Meals</p>
+            </div>
+
+            <div style={{ padding: 13, }} >
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginTop: -3 }} >{usedname}</p>
+            </div>
+
+
+            <div style={{ padding: 13 }} className="d-flex" >
+
+              <img src="newlogo.png" style={{ width: 40, height: 22 }} alt="Example Image" />
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >analytics</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
       <div style={{ backgroundColor: "#DADADA", height: '100vh' }} >
 
         <div style={{}} className="dddd"  >
@@ -2900,7 +3283,7 @@ let Meals = () => {
                   options={basic}
                   value={selectedOptions}
                   onChange={handleChange}
-                  placeholder="Select options..."
+                  placeholder="All Venues"
                   components={{
                     Option: CustomOption,
                     MultiValue: () => null, // Hides default tags
@@ -2944,7 +3327,7 @@ let Meals = () => {
                   options={basicone}
                   value={hubb}
                   onChange={handleChangehubone}
-                  placeholder="Select options..."
+                  placeholder="All Hubs"
                   components={{
                     Option: CustomOption, // Custom tick option
                     MultiValue: () => null, // Hides default tags
@@ -3012,7 +3395,7 @@ let Meals = () => {
                   options={optionshub}
                   value={selectedhubOptions}
                   onChange={handleChangehub}
-                  placeholder="Select options..."
+                  placeholder="All stages"
                   components={{
                     Option: CustomOption, // Custom tick option
                     MultiValue: () => null, // Hides default tags
@@ -3055,7 +3438,7 @@ let Meals = () => {
                   options={fulldatafull}
                   value={selectedCources}
                   onChange={handleChangeCources}
-                  placeholder="Select options..."
+                  placeholder="All courses"
                   components={{
                     Option: CustomOption, // Custom tick option
                     MultiValue: () => null, // Hides default tags
@@ -3153,7 +3536,7 @@ let Meals = () => {
                   options={optionstakeaway}
                   value={selectedTakeaway}
                   onChange={handleChangeTakeaway}
-                  placeholder="Select options..."
+                  placeholder="All takeaways"
                   components={{
                     Option: CustomOption, // Custom tick option
                     MultiValue: () => null, // Hides default tags

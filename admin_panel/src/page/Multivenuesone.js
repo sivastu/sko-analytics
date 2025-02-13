@@ -12,7 +12,7 @@ import * as CryptoJS from 'crypto-js'
 import { getDatabase, ref, set, push, get, query, orderByChild, equalTo } from "firebase/database";
 import app from "./firebase";
 
-let Multivenues = () => {
+let Multivenuesone = () => {
   let [data, setData] = useState();
   let navigate = useNavigate();
 
@@ -23,23 +23,22 @@ let Multivenues = () => {
 
 
 
-      let [usedname, setUsedname] = useState('')
-      function getName(data) {
-        if (!data.venue || data.venue.length === 0) {
-            return data.name; // Default to name if venue is missing or empty
-        }
-    
-        const hasAll = data.venue.some(v => v.value === "All");
-    
-        if (hasAll && data.venue.length > 1) {
-            return data.name;
-        } else if (data.venue.length === 1 && !hasAll) {
-            return data.venue[0].value;
-        }
-    
-        return data.name;
-    }
-    
+        let [usedname, setUsedname] = useState('')
+        function getName(data) {
+          if (!data.venue || data.venue.length === 0) {
+              return data.name; // Default to name if venue is missing or empty
+          }
+      
+          const hasAll = data.venue.some(v => v.value === "All");
+      
+          if (hasAll && data.venue.length > 1) {
+              return data.name;
+          } else if (data.venue.length === 1 && !hasAll) {
+              return data.venue[0].value;
+          }
+      
+          return data.name;
+      }
 
   let loginCheck = async () => {
     let getdata = localStorage.getItem('data')
@@ -50,7 +49,7 @@ let Multivenues = () => {
     let decry = decrypt(getdata)
 
     let parsedatajson = JSON.parse(decry)
-    let name = getName(parsedatajson)
+  let name = getName(parsedatajson)
     setUsedname(name)
     const db = getDatabase(app);
     const newDocRef = ref(db, `user`);
@@ -107,7 +106,7 @@ let Multivenues = () => {
                navigate(-1)
             }} >
               <img src="arrow.png" style={{ width: 20, height: 20 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -7 }} >SINGLE VENUE</p>
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -7 }} >MULTI VENUES</p>
             </div>
 
             <div style={{ padding: 13,  }} >
@@ -129,7 +128,7 @@ let Multivenues = () => {
 
         <div >
           <div className="" style={{
-            backgroundImage: "url('asd3.png')", height: '100vh', padding: 0, display: 'grid', alignItems: 'end',
+            backgroundImage: "url('asd9.png')", height: '100vh', padding: 0, display: 'grid', alignItems: 'end',
             backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundSize: 'cover'
           }} >
 
@@ -152,7 +151,7 @@ let Multivenues = () => {
 
               <div style={{ width: '27%', height: 190, backgroundColor: '#fff', marginTop: 20, borderRadius: 5, marginBottom: 50, cursor: 'pointer' }}
                 onClick={() => {
-                  navigate("/dockets");
+                  navigate("/multivenues");
                 }} >
                 <div className="row" style={{ height: 190 }} >
                   {/* Left column - centered text */}
@@ -183,4 +182,4 @@ let Multivenues = () => {
   );
 };
 
-export default Multivenues;
+export default Multivenuesone;

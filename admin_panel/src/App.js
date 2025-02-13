@@ -10,6 +10,7 @@ import SinglrandMulti from "./page/SinglrandMulti";
 import Multivenues from "./page/Multivenues";
 import Singlevenues from "./page/Singlevenues";
 import Forgetpassword from "./page/Forgetpassword";
+import Multivenuesone from "./page/Multivenuesone";
 
 //meals
 import Meals from "./page/Meals";
@@ -18,6 +19,7 @@ import Dockets from "./page/Dockets";
 //admin
 import Adminpage from "./page/Adminpage";
 import Admin_dash from "./page/Admin_dash";
+import Multi_venue from "./page/Multi_venue";
 
 function App() {
   return (
@@ -37,6 +39,9 @@ function App() {
 
         <Route path="/admin" element={<Adminpage />} />
         <Route path="/dashboard" element={<Admin_dash />} />
+        <Route path="/multivenues" element={<Multi_venue />} />
+
+        <Route path="/multivenue" element={<Multivenuesone />} />
 
 
       </Routes>

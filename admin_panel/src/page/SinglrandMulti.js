@@ -22,6 +22,26 @@ let SinglrandMulti = () => {
   useEffect(() => {
     loginCheck()
   }, [])
+ 
+
+    let [usedname, setUsedname] = useState('')
+    function getName(data) {
+      if (!data.venue || data.venue.length === 0) {
+          return data.name; // Default to name if venue is missing or empty
+      }
+  
+      const hasAll = data.venue.some(v => v.value === "All");
+  
+      if (hasAll && data.venue.length > 1) {
+          return data.name;
+      } else if (data.venue.length === 1 && !hasAll) {
+          return data.venue[0].value;
+      }
+  
+      return data.name;
+  }
+  
+  
 
   let loginCheck = async () => {
     let getdata = localStorage.getItem('data')
@@ -32,7 +52,8 @@ let SinglrandMulti = () => {
     let decry = decrypt(getdata)
 
     let parsedatajson = JSON.parse(decry)
-
+let name = getName(parsedatajson)
+    setUsedname(name)
     const db = getDatabase(app);
     const newDocRef = ref(db, `user`);
 
@@ -91,11 +112,13 @@ let SinglrandMulti = () => {
             </div>
 
             <div style={{ padding: 13, }} >
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginTop: -3 }} >(Group Name)</p>
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginTop: -3 }} >{usedname}</p>
             </div>
 
-            <div style={{ padding: 13 }} >
-              <img src="zx1.png" alt="Example Image" />
+            <div style={{ padding: 13 }}  className="d-flex" >
+
+            <img src="newlogo.png" style={{ width: 40, height: 22 }} alt="Example Image" />
+            <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >analytics</p>
             </div>
 
           </div>
@@ -166,6 +189,7 @@ let SinglrandMulti = () => {
                 justifyContent: "center",
               }}
               onClick={() => {
+                navigate('/multivenue')
               }}
             >
               <div className="row w-100 gvdfvdf" >

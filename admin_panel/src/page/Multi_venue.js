@@ -65,7 +65,7 @@ Modal.setAppElement('#root');
 
 
 
-let Dockets = () => {
+let Multi_venue = () => {
   let [data, setData] = useState();
   const [dateRange, setDateRange] = useState([null, null]); // [startDate, endDate]
   const [startDate, endDate] = dateRange;
@@ -207,22 +207,23 @@ let Dockets = () => {
   }, [])
 
 
-      let [usedname, setUsedname] = useState('')
-      function getName(data) {
-        if (!data.venue || data.venue.length === 0) {
-            return data.name; // Default to name if venue is missing or empty
-        }
-    
-        const hasAll = data.venue.some(v => v.value === "All");
-    
-        if (hasAll && data.venue.length > 1) {
-            return data.name;
-        } else if (data.venue.length === 1 && !hasAll) {
-            return data.venue[0].value;
-        }
-    
-        return data.name;
-    }
+  let [usedname, setUsedname] = useState('')
+        function getName(data) {
+          if (!data.venue || data.venue.length === 0) {
+              return data.name; // Default to name if venue is missing or empty
+          }
+      
+          const hasAll = data.venue.some(v => v.value === "All");
+      
+          if (hasAll && data.venue.length > 1) {
+              return data.name;
+          } else if (data.venue.length === 1 && !hasAll) {
+              return data.venue[0].value;
+          }
+      
+          return data.name;
+      }
+
 
   let loginCheck = async () => {
     let getdata = localStorage.getItem('data')
@@ -5466,6 +5467,6 @@ const buttonStyle = {
   borderRadius: '5px',
 };
 
-export default Dockets;
+export default Multi_venue;
 
 
