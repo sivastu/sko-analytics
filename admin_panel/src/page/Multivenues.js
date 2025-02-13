@@ -129,7 +129,7 @@ let Multivenues = () => {
 
         <div >
           <div className="" style={{
-            backgroundImage: "url('asd3.png')", height: '100vh', padding: 0, display: 'grid', alignItems: 'end',
+            backgroundImage: "url('asd3.jpg')", height: '100vh', padding: 0, display: 'grid', alignItems: 'end',
             backgroundRepeat: 'no-repeat', backgroundPosition: 'center', backgroundSize: 'cover'
           }} >
 
