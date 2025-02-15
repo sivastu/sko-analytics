@@ -171,6 +171,15 @@ code {
   margin-right: 8px;
 }
 
+.gggjgjjg {
+  margin-left: -65px;
+  margin-right: -65px;
+  /* height: 165px; */
+  width: 197px;
+  transform: rotate(-90deg);
+  color : #707070;
+}
+
 .nerrrimg {
   width: 50px;
   height: 50px;
@@ -212,7 +221,7 @@ code {
   margin-top : -1px;
 }
 
-@media (min-width: 600px) and (max-width: 1320px) { 
+@media (min-width: 600px) and (max-width: 1880px) { 
   /* For portrait layouts only */
   .finefinrr{
     padding-bottom : 10% !important;

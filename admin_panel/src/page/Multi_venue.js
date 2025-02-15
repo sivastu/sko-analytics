@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../component/Header";
 import axios from "axios";
@@ -66,7 +67,6 @@ Modal.setAppElement('#root');
 
 
 let Multi_venue = () => {
-  
   let [data, setData] = useState();
   const [dateRange, setDateRange] = useState([null, null]); // [startDate, endDate]
   const [startDate, endDate] = dateRange;
@@ -111,10 +111,58 @@ let Multi_venue = () => {
 
   let [alldrop, setAlldrop] = useState([])
 
+  let [filterdataone, setFilterdataone] = useState({})
+  let [filterdatatwo, setFilterdatatwo] = useState({})
+
   let subtitle;
   const [modalIsOpen, setIsOpen] = React.useState(false);
   let [cval1, setcval1] = useState()
   let [cval2, setcval2] = useState()
+
+  
+  
+    const [menuIsOpen, setMenuIsOpen] = useState(false);
+  
+    const [menuIsOpenone, setMenuIsOpenone] = useState(false);
+    const [menuIsOpentwo, setMenuIsOpentwo] = useState(false);
+    const [menuIsOpenthree, setMenuIsOpenthree] = useState(false);
+    const [menuIsOpenfour, setMenuIsOpenfour] = useState(false);
+  
+  
+    const selectRef = useRef(null);
+  
+    const selectRefone = useRef(null);
+    const selectReftwo = useRef(null);
+    const selectRefthree = useRef(null);
+    const selectReffour = useRef(null);
+  
+    // Close menu when clicking outside
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (selectRef.current && !selectRef.current.contains(event.target)) {
+          setMenuIsOpen(false);
+        }
+  
+        if (selectRefone.current && !selectRefone.current.contains(event.target)) {
+          setMenuIsOpenone(false);
+        }
+        if (selectReftwo.current && !selectReftwo.current.contains(event.target)) {
+          setMenuIsOpentwo(false);
+        }
+        if (selectRefthree.current && !selectRefthree.current.contains(event.target)) {
+          setMenuIsOpenthree(false);
+        }
+        if (selectReffour.current && !selectReffour.current.contains(event.target)) {
+          setMenuIsOpenfour(false);
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
+  
 
 
   function findFirstOccurrences(stampData) {
@@ -209,22 +257,21 @@ let Multi_venue = () => {
 
 
   let [usedname, setUsedname] = useState('')
-        function getName(data) {
-          if (!data.venue || data.venue.length === 0) {
-              return data.name; // Default to name if venue is missing or empty
-          }
-      
-          const hasAll = data.venue.some(v => v.value === "All");
-      
-          if (hasAll && data.venue.length > 1) {
-              return data.name;
-          } else if (data.venue.length === 1 && !hasAll) {
-              return data.venue[0].value;
-          }
-      
-          return data.name;
-      }
+  function getName(data) {
+    if (!data.venue || data.venue.length === 0) {
+      return data.name; // Default to name if venue is missing or empty
+    }
 
+    const hasAll = data.venue.some(v => v.value === "All");
+
+    if (hasAll && data.venue.length > 1) {
+      return data.name;
+    } else if (data.venue.length === 1 && !hasAll) {
+      return data.venue[0].value;
+    }
+
+    return data.name;
+  }
 
   let loginCheck = async () => {
     let getdata = localStorage.getItem('data')
@@ -247,13 +294,12 @@ let Multi_venue = () => {
       const userData = snapshot.val();
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
-
+      if (foundUser.Role === 'emp') {
+        localStorage.removeItem('data')
+        navigate('/')
+        return
+      }
       if (foundUser) {
-        if(foundUser.Role === 'emp'){
-          localStorage.removeItem('data')
-          navigate('/')
-          return
-        }
         // Check if the password matches
         if (foundUser.Password === parsedatajson.Password) {
 
@@ -275,6 +321,15 @@ let Multi_venue = () => {
   let [onebarone, setOneBarone] = useState([])
   let [twobarone, setTwobarone] = useState([])
   let [optionbarone, setOptionone] = useState([])
+  const getFormattedDate = (daysBefore) => {
+    const date = new Date();
+    date.setDate(date.getDate() - daysBefore);
+
+    // Ensure time is set to match the expected format
+    date.setUTCHours(18, 30, 0, 0);
+
+    return date; // Return a Date object instead of a string
+  };
 
 
 
@@ -285,7 +340,7 @@ let Multi_venue = () => {
     maintainAspectRatio: false,
     plugins: {
       legend: { position: 'top' },
-      title: { display: true, text: 'X-Axis Scrollable Bar Chart' },
+      title: { display: false, text: 'X-Axis Scrollable Bar Chart' },
     },
     scales: {
       x: {
@@ -385,15 +440,7 @@ let Multi_venue = () => {
   }
   let [fulldatafull, setFulldatafull] = useState()
 
-  const getFormattedDate = (daysBefore) => {
-    const date = new Date();
-    date.setDate(date.getDate() - daysBefore);
 
-    // Ensure time is set to match the expected format
-    date.setUTCHours(18, 30, 0, 0);
-
-    return date; // Return a Date object instead of a string
-};
 
   let getone = () => {
 
@@ -462,9 +509,7 @@ let Multi_venue = () => {
           }
 
           let uuuk = extractUniqueNotes(cleanedData)
-
           uuuk.unshift({ label: "All Courses", value: "All" });
-
 
           setFulldatafull(uuuk)
 
@@ -553,16 +598,15 @@ let Multi_venue = () => {
 
 
           const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-
           let realven = []
-                   
-                             if (hasAllValue === true) {
-                               realven.push(optionsone[0])
-                               setBasic(optionsone)
-                             } else {
-                               realven.push(parsedatajson.venue[0])
-                               setBasic(parsedatajson.venue)
-                             }
+
+          if (hasAllValue === true) {
+            realven.push(optionsone[1])
+            setBasic(optionsone)
+          } else {
+            realven.push(parsedatajson.venue[0])
+            setBasic(parsedatajson.venue)
+          }
 
 
 
@@ -570,6 +614,7 @@ let Multi_venue = () => {
           const optionstakeaway = [
             ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
           ].map(value => ({ value, label: value }));
+
 
           console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
 
@@ -586,17 +631,19 @@ let Multi_venue = () => {
 
             console.log(hasAllValue, 'hasAllValue')
             if (hasAllValue === true) {
-              return
+
+            } else {
+
+              parsedatajson.venue.forEach(filter => {
+                const key = filter.value;
+                if (cleanedData[key]) {
+                  filteredDataonee[key] = cleanedData[key];
+                }
+              });
+              setBasicall(filteredDataonee)
             }
 
 
-            parsedatajson.venue.forEach(filter => {
-              const key = filter.value;
-              if (cleanedData[key]) {
-                filteredDataonee[key] = cleanedData[key];
-              }
-            });
-            setBasicall(filteredDataonee)
 
 
 
@@ -608,55 +655,51 @@ let Multi_venue = () => {
             console.log(hasAllValue, 'hasAllValue hub')
 
             if (hasAllValue === true) {
-              return
-            }
 
-            function filterDataByDynamicKeys(keysArray) {
-              const filteredData = {};
+            } else {
+              function filterDataByDynamicKeys(keysArray) {
+                const filteredData = {};
 
-              keysArray.forEach(({ value }) => {
-                const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+                keysArray.forEach(({ value }) => {
+                  const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
 
-                if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
-                  const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
+                  if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
+                    const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
 
-                  // Check if the hub exists
-                  if (secondLevelData[hubName]) {
-                    if (!filteredData[topLevelKey]) {
-                      filteredData[topLevelKey] = {};
+                    // Check if the hub exists
+                    if (secondLevelData[hubName]) {
+                      if (!filteredData[topLevelKey]) {
+                        filteredData[topLevelKey] = {};
+                      }
+
+                      if (!filteredData[topLevelKey][secondTopLevelKey]) {
+                        filteredData[topLevelKey][secondTopLevelKey] = {};
+                      }
+
+                      filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
                     }
-
-                    if (!filteredData[topLevelKey][secondTopLevelKey]) {
-                      filteredData[topLevelKey][secondTopLevelKey] = {};
-                    }
-
-                    filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
                   }
-                }
-              });
+                });
 
-              return filteredData;
+                return filteredData;
+              }
+
+              let fina = filterDataByDynamicKeys(parsedatajson.hub)
+
+              setBasicall(fina)
             }
 
-            let fina = filterDataByDynamicKeys(parsedatajson.hub)
 
-            setBasicall(fina)
           }
-
-          // alldat = filteredDataonee
-
           setSelectedOptions(realven)
           // alldat = filteredDataonee
           const yesterday = [getFormattedDate(1), getFormattedDate(1)];
-          const eightDaysBefore =[getFormattedDate(8), getFormattedDate(1)];      
+          const eightDaysBefore = [getFormattedDate(8), getFormattedDate(1)];
           setDateRangetwo(eightDaysBefore)
           setDateRange(yesterday)
           filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
           filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-
 
         } else {
           console.log("No events found between the dates.");
@@ -666,6 +709,7 @@ let Multi_venue = () => {
         console.error("Error fetching events:", error);
       });
   }
+
 
   let getonez = () => {
 
@@ -1310,12 +1354,12 @@ let Multi_venue = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.length > maxLength ? allLabels.slice(0, maxLength) + "..." : allLabels;
+const displayText = allLabels.slice(0, 30) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
     return null;
-  };
+  }; 
 
   const [selectedOptions, setSelectedOptions] = useState([]);
 
@@ -2271,6 +2315,7 @@ let Multi_venue = () => {
         });
       });
     });
+    setFilterdataone(filteredData)
 
     callfordataone(filteredData)
     let ghi = processTimeData(alldat)
@@ -2879,7 +2924,7 @@ let Multi_venue = () => {
     });
 
 
-
+    setFilterdatatwo(filteredData)
 
 
     console.log(filteredData, 'eight')
@@ -3219,7 +3264,16 @@ let Multi_venue = () => {
 
             // if( )
             if (processTime < 2) {
+              processTimes.push(processTime);
 
+              result.push({
+                date: formattedDate,
+                processtime: processTime, // Store as a number for sorting
+                table: `T${order.TABLE}`,
+                starttime: `@${startTimeFormatted}`,
+                staff: order.STAFF,
+                order: order
+              });
             } else {
               processTimes.push(processTime);
 
@@ -3410,6 +3464,326 @@ let Multi_venue = () => {
 
   }
 
+
+  let callfordataonesearch = (one , bitedata) => {
+
+
+    function processData(data) {
+      let result = [];
+      let processTimes = [];
+
+      Object.entries(data).forEach(([dateKey, orders]) => {
+        orders.forEach(order => {
+          const date = dateKey.split(") ")[1]; // Extract the date from the key
+          const stampParts = order.STAMP.split(" ");
+          const extractedDate = stampParts[0].substring(0, 8); // Get the first 8 characters for the date
+          const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
+
+          const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
+          if (timeEntries.length >= 2) {
+            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
+            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
+
+            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
+            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
+
+            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+
+
+            if (processTime === parseInt(bitedata)) {
+
+              processTimes.push(processTime);
+
+              result.push({
+                date: formattedDate,
+                processtime: processTime, // Store as a number for sorting
+                table: `T${order.TABLE}`,
+                starttime: `@${startTimeFormatted}`,
+                staff: order.STAFF,
+                order: order
+              });
+
+
+            } else {
+              
+            }
+
+
+
+            // Calculate processing time
+
+          }
+        });
+      });
+
+      // Sort orders by process time (high to low)
+      result.sort((a, b) => b.processtime - a.processtime);
+
+      // Convert process time back to string format for display
+      result = result.map(order => ({
+        ...order,
+        processtime: `${order.processtime}min`
+      }));
+
+      // Calculate average, min, and max processing time
+      if (processTimes.length > 0) {
+        const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
+        const averageTime = Math.round(totalTime / processTimes.length);
+        const minTime = Math.min(...processTimes);
+        const maxTime = Math.max(...processTimes);
+
+        return {
+          orders: result,
+          stats: {
+            averageProcessTime: `${averageTime}min`,
+            minProcessTime: `${minTime}min`,
+            maxProcessTime: `${maxTime}min`
+          }
+        };
+      }
+
+      return { orders: result, stats: null };
+    }
+
+
+    let newalldata = processData(one)
+
+    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
+    setEditall(newalldata)
+
+   
+
+  }
+
+  let callfordataonetwosearch = (two , bitedata) => {
+
+
+    function processData(data) {
+      let result = [];
+      let processTimes = [];
+
+      Object.entries(data).forEach(([dateKey, orders]) => {
+        orders.forEach(order => {
+          const date = dateKey.split(") ")[1]; // Extract the date from the key
+          const stampParts = order.STAMP.split(" ");
+          const extractedDate = stampParts[0].substring(0, 8); // Get the first 8 characters for the date
+          const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
+
+          const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
+          if (timeEntries.length >= 2) {
+            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
+            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
+
+            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
+            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
+
+            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+
+
+            console.log(processTime , 'processTimeprocessTimeprocessTimeprocessTime')
+
+
+            if (processTime === parseInt(bitedata) ) {
+              processTimes.push(processTime);
+
+              result.push({
+                date: formattedDate,
+                processtime: processTime, // Store as a number for sorting
+                table: `T${order.TABLE}`,
+                starttime: `@${startTimeFormatted}`,
+                staff: order.STAFF,
+                order: order
+              });
+            } else {
+             
+            }
+
+
+
+            // Calculate processing time
+
+          }
+        });
+      });
+
+      // Sort orders by process time (high to low)
+      result.sort((a, b) => b.processtime - a.processtime);
+
+      // Convert process time back to string format for display
+      result = result.map(order => ({
+        ...order,
+        processtime: `${order.processtime}min`
+      }));
+
+      // Calculate average, min, and max processing time
+      if (processTimes.length > 0) {
+        const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
+        const averageTime = Math.round(totalTime / processTimes.length);
+        const minTime = Math.min(...processTimes);
+        const maxTime = Math.max(...processTimes);
+
+        return {
+          orders: result,
+          stats: {
+            averageProcessTime: `${averageTime}min`,
+            minProcessTime: `${minTime}min`,
+            maxProcessTime: `${maxTime}min`
+          }
+        };
+      }
+
+      return { orders: result, stats: null };
+    }
+
+
+
+    let newalldata = processData(two)
+
+    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
+    setEditallone(newalldata)
+
+    // const categorizeItems = (datasssssss) => {
+    //   const edited = ["2", "12", "22", "32"];
+    //   const moved = ["3", "13", "23", "33"];
+    //   const deleted = ["4", "24"];
+
+    //   const result = {
+    //     edited: [],
+    //     moved: [],
+    //     deleted: [],
+    //     served: [],
+    //     tableMoved: []
+    //   };
+
+    //   for (const [date, entries] of Object.entries(datasssssss)) {
+
+
+    //     entries.forEach(entry => {
+
+
+    //       if (entry.NOTE && entry.NOTE.includes("$ND$")) {
+    //         result.tableMoved.push(entry);
+    //       }
+
+
+    //       entry.ITEMS.forEach(item => {
+    //         if (edited.includes(item.STATUS)) {
+    //           result.edited.push(item);
+    //         } else if (moved.includes(item.STATUS)) {
+    //           result.moved.push(item);
+    //         } else if (deleted.includes(item.STATUS)) {
+    //           result.deleted.push(item);
+    //         } else if (parseInt(item.STATUS) > 20) {
+    //           result.served.push(item);
+    //         }
+    //       });
+    //     });
+
+    //   }
+
+    //   return result;
+    // };
+
+    // // let editttsone = categorizeItems(one)
+    // let editttstwo = categorizeItems(two)
+
+    // // console.log(editttsone, 'editttsoneeditttsone')
+
+
+    // // setEditall(editttsone)
+    // setEditallone(editttstwo)
+
+    // const processItems = (data) => {
+    //   const dishCounts = {};
+
+    //   // Iterate through the data to collect and process dishes
+    //   for (const [date, entries] of Object.entries(data)) {
+
+
+
+    //     entries.forEach(entry => {
+    //       entry.ITEMS.forEach(item => {
+    //         // Remove "Sp\\" prefix if present
+    //         const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
+
+    //         // If dish is already counted, increment its count and append data
+    //         if (dishCounts[cleanItemName]) {
+    //           dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
+    //           dishCounts[cleanItemName].data.push(item);
+    //         } else {
+    //           // If not, initialize a new entry for the dish
+    //           dishCounts[cleanItemName] = {
+    //             count: parseInt(item.QUANTITY, 10),
+    //             name: cleanItemName,
+    //             data: [item],
+    //           };
+    //         }
+    //       });
+    //     });
+    //   }
+
+    //   // Convert the dishCounts object to an array
+    //   return Object.values(dishCounts).sort((a, b) => b.count - a.count);
+    // };
+
+
+    // // let minnscount = processItems(one)
+    // let maxnscount = processItems(two)
+    // // setServed(minnscount)
+    // setServedone(maxnscount)
+
+    // const processRefundedItems = (data) => {
+    //   const results = [];
+
+    //   // Iterate through each date's data
+    //   for (const [date, entries] of Object.entries(data)) {
+    //     let refundedItems = [];
+
+
+
+    //     entries.forEach(entry => {
+    //       entry.ITEMS.forEach(item => {
+    //         // Check if "Refunded" exists in the ITEM field
+    //         if (item.NOTE.includes("Refunded")) {
+    //           refundedItems.push(item);
+    //         }
+    //       });
+    //     });
+
+    //     if (refundedItems.length > 0) {
+    //       // Calculate the total quantity for refunded items
+    //       const totalQuantity = refundedItems.reduce(
+    //         (sum, item) => sum + parseInt(item.QUANTITY, 10),
+    //         0
+    //       );
+
+    //       results.push({
+    //         date,
+    //         count: totalQuantity,
+    //         name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
+    //         data: refundedItems,
+    //       });
+    //     }
+    //   }
+
+    //   return results;
+    // };
+
+    // // let refundcount = processRefundedItems(one)
+    // let refundcounttwo = processRefundedItems(two)
+    // // setMinperday(refundcount)
+    // setMaxperday(refundcounttwo)
+
+
+
+
+  }
+
+
   let ggggrtsg = () => {
     let kkki = 0
     minperday?.map((reee) => {
@@ -3441,6 +3815,22 @@ let Multi_venue = () => {
     console.log(editallone, '4')
     console.log(servedone, '5')
     console.log(maxperday, '6')
+
+  }
+
+
+  let searchvalue = (e) =>{
+    console.log(editall ,'searchvaluesearchvaluesearchvalue')
+ 
+     if( e === undefined || e === '' || e === null ){
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      return
+     }else{
+      callfordataonesearch(filterdataone , e)
+      callfordataonetwosearch(filterdatatwo , e)
+     }
 
   }
 
@@ -3764,161 +4154,162 @@ let Multi_venue = () => {
         </div>
 
       </div>
-      <div style={{ backgroundColor: "#DADADA", height: '100vh' }} className="finefinrr">
+      <div >
+      <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr">
 
-        <div style={{}} className="dddd"  >
+<div style={{}} className="dddd"  >
 
-          <div className="d-flex justify-content-between  pt-4 gap-3" >
+  <div className="d-flex justify-content-between  pt-4 gap-3" >
 
-            <div style={{ width: '20%' }}>
-              <p onClick={() => {
+    <div style={{ width: '20%' }}>
+      <p onClick={() => {
 
-                checkkkk()
+        checkkkk()
 
-              }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
+      }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
 
-              <div style={{ width: '100%' }} >
-                <DatePicker
-                  selectsRange
-                  startDate={startDate}
-                  endDate={endDate}
-                  onChange={(update) => {
-                    setDateRange(update)
+      <div style={{ width: '100%' }} >
+        <DatePicker
+          selectsRange
+          startDate={startDate}
+          endDate={endDate}
+          onChange={(update) => {
+            setDateRange(update)
 
-                    if (update[1] === null || update[1] === "null") {
+            if (update[1] === null || update[1] === "null") {
 
-                    } else {
-                      filterDataByDate(update, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-
-                    }
-                  }} // Update both startDate and EndDate 
-                  placeholderText="Select a date range"
-                  className="custom-input"
-                  calendarClassName="custom-calendar"
-                  dateFormat="d MMM yyyy"
-                  customInput={
-                    <div className="custom-display-input">
-                      {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
-                      <FaCaretDown className="calendar-icon" />
-                    </div>
-                  }
-                />
-              </div>
-              <div className="mt-3" >
-                <div className="custom-inputone d-flex justify-content-between">
-                  <input
-                    className='inputttt'
-                    type="time"
-                    value={onetime}
-                    onChange={(e) => {
-                      console.log(e.target.value, 'eeee')
-                      setOnetime(e.target.value)
-                      if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                        return
-                      }
-
-                      filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-                    }}
-                  />
-                  <input
-                    className='inputttt'
-                    type="time"
-                    value={twotime}
-                    onChange={(e) => {
-                      setTwotime(e.target.value)
-                      if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                        return
-                      }
-                      // tiemstampp(2, e.target.value)
-
-                      filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-                    }}
-                  />
-                </div>
-              </div>
+            } else {
+              filterDataByDate(update, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
 
+            }
+          }} // Update both startDate and EndDate 
+          placeholderText="Select a date range"
+          className="custom-input"
+          calendarClassName="custom-calendar"
+          dateFormat="d MMM yyyy"
+          customInput={
+            <div className="custom-display-input">
+              {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
+              <FaCaretDown className="calendar-icon" />
             </div>
+          }
+        />
+      </div>
+      <div className="mt-3" >
+        <div className="custom-inputone d-flex justify-content-between">
+          <input
+            className='inputttt'
+            type="time"
+            value={onetime}
+            onChange={(e) => {
+              console.log(e.target.value, 'eeee')
+              setOnetime(e.target.value)
+              if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                return
+              }
 
-            <div style={{ width: '20%' }}>
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
-              <div style={{ width: '100%' }}>
-                <DatePicker
-                  selectsRange
-                  startDate={startDatetwo}
-                  endDate={endDatetwo}
-                  onChange={(update) => {
-                    setDateRangetwo(update)
-
-                    if (update[1] === null || update[1] === "null") {
-
-                    } else {
-                      // updates(2, update)
-
-                      filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-                    }
+              filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
-                  }} // Update both startDate and EndDate 
-                  placeholderText="Select a date range"
-                  className="custom-input"
-                  calendarClassName="custom-calendar"
-                  dateFormat="d MMM yyyy"
-                  customInput={
-                    <div className="custom-display-input">
-                      {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
-                      <FaCaretDown className="calendar-icon" />
-                    </div>
-                  }
-                />
-              </div>
-              <div className="mt-3" >
-                <div className="custom-inputone d-flex justify-content-between">
-                  <input
-                    className='inputttt'
-                    type="time"
-                    value={threetime}
-                    onChange={(e) => {
-                      setThreetime(e.target.value)
-                      if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                        return
-                      }
-                      filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+            }}
+          />
+          <input
+            className='inputttt'
+            type="time"
+            value={twotime}
+            onChange={(e) => {
+              setTwotime(e.target.value)
+              if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                return
+              }
+              // tiemstampp(2, e.target.value)
 
+              filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-                    }}
-                  />
-                  <input
-                    className='inputttt'
-                    type="time"
-                    value={fourtime}
-                    onChange={(e) => {
-                      setFourtime(e.target.value)
-                      if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                        return
-                      }
-                      filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-                    }}
-                  />
-                </div>
-              </div>
+            }}
+          />
+        </div>
+      </div>
 
 
 
+    </div>
+
+    <div style={{ width: '20%' }}>
+      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
+      <div style={{ width: '100%' }}>
+        <DatePicker
+          selectsRange
+          startDate={startDatetwo}
+          endDate={endDatetwo}
+          onChange={(update) => {
+            setDateRangetwo(update)
+
+            if (update[1] === null || update[1] === "null") {
+
+            } else {
+              // updates(2, update)
+
+              filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+            }
+
+
+          }} // Update both startDate and EndDate 
+          placeholderText="Select a date range"
+          className="custom-input"
+          calendarClassName="custom-calendar"
+          dateFormat="d MMM yyyy"
+          customInput={
+            <div className="custom-display-input">
+              {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
+              <FaCaretDown className="calendar-icon" />
             </div>
+          }
+        />
+      </div>
+      <div className="mt-3" >
+        <div className="custom-inputone d-flex justify-content-between">
+          <input
+            className='inputttt'
+            type="time"
+            value={threetime}
+            onChange={(e) => {
+              setThreetime(e.target.value)
+              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
+                return
+              }
+              filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
-            <div style={{ width: '20%' }}>
+            }}
+          />
+          <input
+            className='inputttt'
+            type="time"
+            value={fourtime}
+            onChange={(e) => {
+              setFourtime(e.target.value)
+              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
+                return
+              }
+              filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+            }}
+          />
+        </div>
+      </div>
+
+
+
+    </div>
+
+
+    <div style={{ width: '20%' }} >
               <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen venue & hub</p>
-              <div className="custom-inputoness d-flex justify-content-between" style={{
+              <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
                 width: '100%', height: 45
               }}>
                 <div class="switch-container">
@@ -3934,6 +4325,10 @@ let Multi_venue = () => {
                   <label class="switch-label" for="switch1"></label>
                 </div>
                 <Select
+                  menuIsOpen={menuIsOpen}
+                  onMenuOpen={() => setMenuIsOpen(true)}
+                  onMenuClose={() => setMenuIsOpen(false)}
+                  onFocus={() => setMenuIsOpen(true)}
                   isDisabled={!venueradio}
                   isMulti
                   className="newoneonee"
@@ -3953,15 +4348,15 @@ let Multi_venue = () => {
                       );
                     },
                   }}
-                  closeMenuOnSelect={false}
+                  closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff' }),
                   }}
                 />
               </div>
 
-              <div className="custom-inputoness d-flex justify-content-between mt-3" style={{
+              <div ref={selectRefone}  className="custom-inputoness d-flex justify-content-between mt-3" style={{
                 width: '100%',
                 height: 45
               }}>
@@ -3977,12 +4372,21 @@ let Multi_venue = () => {
 
 
 
+
                 <Select
+
+                  menuIsOpen={menuIsOpenone}
+                  onMenuOpen={() => setMenuIsOpenone(true)}
+                  onMenuClose={() => setMenuIsOpenone(false)}
+                  onFocus={() => setMenuIsOpenone(true)}
+
+
                   isDisabled={!hubbswitch}
                   isMulti
                   className="newoneonee"
                   options={basicone}
                   value={hubb}
+
                   onChange={handleChangehubone}
                   placeholder="All Hubs"
                   components={{
@@ -3997,7 +4401,7 @@ let Multi_venue = () => {
                       );
                     },
                   }}
-                  closeMenuOnSelect={false}
+                  closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
                     control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
@@ -4028,9 +4432,9 @@ let Multi_venue = () => {
               </div>
             </div>
 
-            <div style={{ width: '20%' }}>
+            <div style={{ width: '20%' }} >
               <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by stages/courses</p>
-              <div className="custom-inputoness d-flex justify-content-between" style={{
+              <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
                 width: '100%',
                 height: 45
               }}>
@@ -4046,6 +4450,11 @@ let Multi_venue = () => {
                 </div>
 
                 <Select
+                menuIsOpen={menuIsOpentwo}
+                onMenuOpen={() => setMenuIsOpentwo(true)}
+                onMenuClose={() => setMenuIsOpentwo(false)}
+                onFocus={() => setMenuIsOpentwo(true)}
+
                   isDisabled={!Hubradio}
                   isMulti
                   className="newoneonee"
@@ -4065,7 +4474,7 @@ let Multi_venue = () => {
                       );
                     },
                   }}
-                  closeMenuOnSelect={false}
+                  closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
                     control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
@@ -4074,7 +4483,7 @@ let Multi_venue = () => {
               </div>
 
 
-              <div className="custom-inputoness d-flex justify-content-between mt-3" style={{
+              <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{
                 width: '100%',
                 height: 45
               }}>
@@ -4089,6 +4498,10 @@ let Multi_venue = () => {
                 </div>
 
                 <Select
+                menuIsOpen={menuIsOpenthree}
+                onMenuOpen={() => setMenuIsOpenthree(true)}
+                onMenuClose={() => setMenuIsOpenthree(false)}
+                onFocus={() => setMenuIsOpenthree(true)}
                   isDisabled={!Cources}
                   isMulti
                   className="newoneonee"
@@ -4108,7 +4521,7 @@ let Multi_venue = () => {
                       );
                     },
                   }}
-                  closeMenuOnSelect={false}
+                  closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
                     control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
@@ -4119,7 +4532,7 @@ let Multi_venue = () => {
 
             </div>
 
-            <div style={{ width: '20%' }}>
+            <div style={{ width: '20%' }} >
               <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by tables/takeaways</p>
 
               <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
@@ -4155,27 +4568,13 @@ let Multi_venue = () => {
                 }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
               </div>
 
-              <div className="custom-inputoness d-flex justify-content-between mt-3" style={{
+              <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
                 width: '100%',
                 height: 45
               }}>
 
 
-
-
-
-                {/* <div class="switch-container">
-                  <input type="checkbox" id="switch1" />
-                  <label class="switch-label" for="switch1"></label>
-                </div>
-
-                <select name="cars" id="cars" style={{ border: 'unset', color: '#707070' }} >
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
-                  <option value="mercedes">Mercedes</option>
-                  <option value="audi">Audi</option>
-                </select> */}
-
+ 
                 <div class="switch-container">
                   <input type="checkbox" checked={takeaway} onChange={(e) => {
                     setTakeaway(e.target.checked)
@@ -4187,6 +4586,10 @@ let Multi_venue = () => {
                 </div>
 
                 <Select
+                 menuIsOpen={menuIsOpenfour}
+                 onMenuOpen={() => setMenuIsOpenfour(true)}
+                 onMenuClose={() => setMenuIsOpenfour(false)}
+                 onFocus={() => setMenuIsOpenfour(true)}
                   isDisabled={!takeaway}
                   isMulti
                   className="newoneonee"
@@ -4206,7 +4609,7 @@ let Multi_venue = () => {
                       );
                     },
                   }}
-                  closeMenuOnSelect={false}
+                  closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
                     control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
@@ -4216,453 +4619,727 @@ let Multi_venue = () => {
 
 
               </div>
+            </div>
+
+  </div>
+
+
+  {
+    meals === 1 ?
+      <div className="" style={{ marginTop: 100 }} >
+
+        <div className='row '  >
+
+          {/* <div className='col-6' >
+            <div class="box " onClick={() => {
+              setMeals(5)
+            }} >
+              <div class="boxs">
+                <p className='asdfp'>Meals received - timeline</p>
+                <div class="end-box">
+                  <img src="rts.png" className="" alt="Example Image" />
+                  <p className="asdfps">(# of meals sent between specific time slots) </p>
+                </div>
+              </div>
+            </div>
+          </div> */}
+
+
+          <div className='col-6' style={{ margin: 'auto' }} >
+            <div class="box" onClick={() => {
+              setMeals(2)
+            }}>
+              <div class="boxs">
+                <div className="d-flex justify-content-between" >
+                  <div >
+                    <p className='asdfp' style={{ marginBottom: 0 }}>Dockets completion time</p>
+                    <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
+                  </div>
+                  <div >
+                    <p className='asdfp' style={{ color: '#316AAF' }}>{editall?.stats?.averageProcessTime || 0}</p>
+                  </div>
+                </div>
+
+                <div class="end-box">
+                  <img src="time.png" style={{ width: 90, height: 106 }} className="" alt="Example Image" />
+                  <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
+
+                    <div >
+                      <div className="d-flex" style={{ marginBottom: 0 }}  >
+                        <div className=' ' style={{ width: 200 }}>
+                          <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum</p>
+                        </div>
+                        <div className=' ' style={{ fontWeight: '600' }}>
+                          <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.minProcessTime || 0}</p>
+                        </div>
+                      </div>
+
+
+                      <div className="d-flex" style={{ marginBottom: 0 }}  >
+                        <div className=' ' style={{ width: 200 }}>
+                          <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum</p>
+                        </div>
+                        <div className=' ' style={{ fontWeight: '600' }}>
+                          <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.maxProcessTime || 0}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div className='row mt-5' >
+
+          <div className='col-6' >
+            <div class="box " onClick={() => {
+              setMeals(5)
+            }} >
+              <div class="boxs">
+                <p className='asdfp'>Dockets received - timeline</p>
+                <div class="end-box">
+                  <img src="rts.png" className="" alt="Example Image" />
+                  <p className="asdfps">(# of dockets received
+                    between specific time slots)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* <div className='col-6' >
+            <div class="box" onClick={() => {
+              setMeals(3)
+            }} >
+              <div class="boxs">
+                <div className="d-flex justify-content-between" >
+                  <div >
+                    <p className='asdfp' style={{ marginBottom: 0 }}>Served meals</p>
+                    <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                  </div>
+                  <div >
+                    <p className='asdfp' style={{ color: '#316AAF' }}>{
+                      served ?
+                        ggggrt()
+                        : 0
+                    }</p>
+                  </div>
+                </div>
+
+                <div class="end-box">
+                  <img src="starr.png" className="" alt="Example Image" />
+                  <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
+
+                    <div >
+
+
+
+
+                      <div className="d-flex" style={{ marginBottom: 0 }}  >
+                        <div className=' ' style={{ width: 200 }}>
+                          <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Most: <span style={{ fontWeight: '600' }} >{served[0]?.name || 0}</span></p>
+                        </div>
+                        <div className=' ' style={{ fontWeight: '600' }}>
+                          <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[0]?.count || 0}</p>
+                        </div>
+                      </div>
+
+
+                      <div className="d-flex" style={{ marginBottom: 0 }}  >
+                        <div className=' ' style={{ width: 200 }}>
+                          <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Less: <span style={{ fontWeight: '600' }} >{served[served.length - 1]?.name || ''}</span></p>
+                        </div>
+                        <div className=' ' style={{ fontWeight: '600' }}>
+                          <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[served.length - 1]?.count || 0}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+
+
+                </div>
+              </div>
+            </div>
+          </div> */}
+
+
+          <div className='col-6' >
+            <div class="box" onClick={() => {
+              setMeals(4)
+            }}>
+              <div class="boxs">
+                <div className="d-flex justify-content-between" >
+                  <div >
+                    <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
+                    <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                  </div>
+                  <div >
+                    {/* <p className='asdfp' style={{ color: '#316AAF' }}>{
+                      minperday ?
+                        ggggrtz()
+                        : 0
+                    }</p> */}
+                  </div>
+                </div>
+
+                <div class="end-box">
+                  <img src="bluee.png" className="" alt="Example Image" />
+                  <p className="asdfps">(Average waiting time
+                    between specific time slots)</p>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+      : meals === 2 ?
+
+        <div className="" style={{ marginTop: 100 }} >
+          <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+
+            <div className="d-flex justify-content-between" >
+              <div style={{}} className="d-flex " >
+                <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                  setMeals(1)
+                }} className="" alt="Example Image" />
+                <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Dockets completion time</p>
+              </div>
+
+              <div class="custom-inputonessfine  " >
+
+                <Select
+                  className="newoneonee"
+                  options={basicfine}
+                  value={selectedOptionsfine}
+                  onChange={handleChangefine}
+                  placeholder="Select options..."
+                  components={{
+                    Option: CustomOptionfinal,
+                    MultiValue: () => null, // Hides default tags
+                    ValueContainer: ({ children, ...props }) => {
+                      const selectedValues = props.getValue();
+                      return (
+                        <components.ValueContainer {...props}>
+                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                        </components.ValueContainer>
+                      );
+                    },
+                  }} 
+                  hideSelectedOptions={false} // Show all options even if selected
+                  styles={{
+                    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                  }}
+                />
+
+              </div>
+
+              <div className="d-flex justify-content-between gap-5">
+                <div className="custom-inputoness d-flex justify-content-between" style={{
+                  width: 250,
+                  height: 45,
+                  border : '1px solid rgb(203 203 203)'
+                }}>
+
+                  <div className="input-group"  >
+                    <input 
+                      onChange={(e)=>{
+                        searchvalue(e.target.value)
+                      }}
+                      type="text"
+                      className="form-control"
+                      placeholder="Docket Search..."
+                      style={{
+                        border: "none",
+                        boxShadow: "none",
+                        marginRight: "45px",
+                      }}
+                    />
+                    <span
+                      className="input-group-text"
+                      style={{
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        position: "absolute",
+                        right: 10,
+                      }}
+                    >
+                      🔍
+                    </span>
+                  </div>
+
+
+                </div>
+
+                <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
+
+                {showDiv && (
+                  <div
+                    style={{
+                      width: 200,
+                      marginTop: '0px',
+                      padding: '10px',
+                      backgroundColor: '#f8f9fa',
+                      border: '1px solid #ccc',
+                      borderRadius: '4px',
+                      boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                      position: 'absolute',
+                      right: '3%'
+                    }}
+                  >
+                    <p style={{ color: '#707070' }}>Export as</p>
+                    <hr />
+                    <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                      console.log(JSON.stringify(selectedOptions), 'dateRange')
+                      editexportpdf()
+                    }}>PDF</p>
+                  </div>
+                )}
+
+
+              </div>
+            </div>
+
+            <div style={{ marginTop: 50, padding: 20 }} >
+              <div className="d-flex justify-content-between" >
+
+                <div >
+                  <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{
+                    editall?.stats?.averageProcessTime || 0}</span></p>
+                </div>
+                <div >
+                  <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{editallone?.stats?.averageProcessTime || 0}</span></p>
+                </div>
+                <div >
+                  <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >
+                    {(() => {
+                      let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
+                      let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
+
+                      // Calculate average
+                      let average = Math.round((numOne + numTwo) / 2);
+
+                      return <span >{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }} >{average > 0 ? <img src="up_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" /> :
+                        <img src="d_arw.png"
+                          style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                          }} className="" alt="Example Image" />}</span></span>
+
+
+                    })()}</span></p>
+                </div>
+
+              </div>
+
+              <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+
+
+
+
+
+
+
+
+
+              <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 300, overflowY: 'auto' }} >
+
+                <div  >
+
+                  {
+                    editall?.orders?.map((dfgh, index) => {
+                      const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
+
+                      return (
+                        <div key={index}>
+                          <div className="d-flex gap-5">
+                            {/* Left Column */}
+                            <div style={{ width: "40%" }}>
+                              <div className="d-flex  " style={{}}>
+                                <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
+                                  {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.date + " " + "[" +
+                                    dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
+                                </p>
+
+                                <img
+                                  onClick={() => { openModal(dfgh, correspondingErv) }}
+                                  src="arrows.png"
+                                  style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
+                                  alt="up arrow"
+                                />
+                              </div>
+
+                            </div>
+
+                            {/* Center Column */}
+                            {correspondingErv ? (
+                              <div style={{ width: "40%", }}>
+                                <div className="d-flex  " >
+                                  <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
+                                    {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
+                                      correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
+                                  </p>
+
+
+                                  <img
+                                    onClick={() => { openModal(dfgh, correspondingErv) }}
+                                    src="arrows.png"
+                                    style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
+                                    alt="up arrow"
+                                  />
+                                </div>
+
+                              </div>
+                            ) : (
+                              <div style={{ width: "33%" }}></div>
+                            )}
+
+                            {/* Right Column (Percentage Calculation) */}
+                            <div
+                              style={{
+                                justifyContent: "end",
+                                alignItems: "center",
+                                display: "flex",
+                                width: "10%",
+                              }}
+                            >
+                              <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
+
+                                <span>
+                                  {(() => {
+                                    const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
+                                    const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
+
+                                    let percentageChange = 0;
+                                    if (processTimeTwo > 0) {
+                                      percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
+                                    }
+
+                                    return (
+                                      <span>
+                                        {percentageChange.toFixed(2) + "%"}
+                                        <span
+                                          style={{
+                                            color: percentageChange > 0 ? "green" : "red",
+                                            fontWeight: "700",
+                                          }}
+                                        >
+                                          {percentageChange > 0 ? (
+                                            <img
+                                              src="up_arw.png"
+                                              style={{ width: 16, height: 16, cursor: "pointer" }}
+                                              alt="up arrow"
+                                            />
+                                          ) : (
+                                            <img
+                                              src="d_arw.png"
+                                              style={{ width: 16, height: 16, cursor: "pointer" }}
+                                              alt="down arrow"
+                                            />
+                                          )}
+                                        </span>
+                                      </span>
+                                    );
+                                  })()}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+
+                          <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+                        </div>
+                      );
+                    })
+                  }
+                </div >
+
+
+
+
+
+              </div>
+
 
 
 
             </div>
 
+
+
+
+
+
           </div>
 
+       
 
-          {
-            meals === 1 ?
-              <div className="" style={{ marginTop: 100 }} >
+        </div>
 
-                <div className='row '  >
+        : meals === 3 ?
+          <div className="" style={{ marginTop: 100 }} >
+            <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-                  {/* <div className='col-6' >
-                    <div class="box " onClick={() => {
-                      setMeals(5)
-                    }} >
-                      <div class="boxs">
-                        <p className='asdfp'>Meals received - timeline</p>
-                        <div class="end-box">
-                          <img src="rts.png" className="" alt="Example Image" />
-                          <p className="asdfps">(# of meals sent between specific time slots) </p>
-                        </div>
-                      </div>
+              <div className="d-flex justify-content-between" >
+                <div style={{}} className="d-flex " >
+                  <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                    setMeals(1)
+                  }} className="" alt="Example Image" />
+                  <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Served meals</p>
+                </div>
+
+                <div >
+                  <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
+
+                  {showDivs && (
+                    <div
+                      style={{
+                        width: 200,
+                        marginTop: '3px',
+                        padding: '10px',
+                        backgroundColor: '#f8f9fa',
+                        border: '1px solid #ccc',
+                        borderRadius: '4px',
+                        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                        position: 'absolute',
+                        right: '3%'
+                      }}
+                    >
+                      <p style={{ color: '#707070' }}>Export as</p>
+                      <hr />
+                      <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                        mealexportpdf()
+                      }}>PDF</p>
                     </div>
-                  </div> */}
+                  )}
 
+                </div>
+              </div>
 
-                  <div className='col-6' style={{ margin: 'auto' }} >
-                    <div class="box" onClick={() => {
-                      setMeals(2)
-                    }}>
-                      <div class="boxs">
-                        <div className="d-flex justify-content-between" >
-                          <div >
-                            <p className='asdfp' style={{ marginBottom: 0 }}>Dockets completion time</p>
-                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
-                          </div>
-                          <div >
-                            <p className='asdfp' style={{ color: '#316AAF' }}>{editall?.stats?.averageProcessTime || 0}</p>
-                          </div>
-                        </div>
+              <div style={{ marginTop: 50, padding: 20 }} >
+                <div className="d-flex justify-content-between" >
 
-                        <div class="end-box">
-                          <img src="time.png" style={{ width: 90, height: 106 }} className="" alt="Example Image" />
-                          <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
-
-                            <div >
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum</p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.minProcessTime || 0}</p>
-                                </div>
-                              </div>
-
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum</p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.maxProcessTime || 0}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-
-
-
-
-                        </div>
-                      </div>
-                    </div>
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                      ggggrt()}</span></p>
                   </div>
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+
+                      ggggrts()
+                    }</span></p>
+                  </div>
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                      {(() => {
+                        let datd = ggggrt()
+
+                        let datdtwo = ggggrts()
+
+                        let tot = ((datd - datdtwo) / datdtwo) * 100
+
+                        return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                          style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                          }} className="" alt="Example Image" /> :
+                          <img src="d_arw.png"
+                            style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                            }} className="" alt="Example Image" />}</span></span>
+
+
+                        console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                      })()}</span></p>
+                  </div>
+
+                </div>
+
+                <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+                <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
+
+
+
+                  {
+                    served?.map((dfgh, index) => {
+                      const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+
+                      return (
+                        <>
+                          <div className="d-flex  ">
+
+                            <div style={{ width: '33%' }}>
+                              <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                            </div>
+
+                            {correspondingErv ? (
+                              <div style={{ width: '33%', textAlign: 'center' }}>
+                                <div >
+
+                                  <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                                </div>
+                              </div>
+                            ) : (
+                              <>
+                                <div style={{ width: '33%' }} >
+                                </div></>
+                            )}
+
+                            <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                                ( Total )
+                                <span>
+                                  {(() => {
+                                    const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                                    const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+
+
+                                    const tot = ((datd - datdtwo) / datdtwo) * 100;
+
+                                    return (
+                                      <span>
+                                        {tot.toFixed(2) + "%"}
+                                        <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                          {tot > 0 ? (
+                                            <img
+                                              src="up_arw.png"
+                                              style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                              alt="up arrow"
+                                            />
+                                          ) : (
+                                            <img
+                                              src="d_arw.png"
+                                              style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                              alt="down arrow"
+                                            />
+                                          )}
+                                        </span>
+                                      </span>
+                                    );
+                                  })()}
+                                </span>
+                              </p>
+                            </div>
+
+                          </div>
+
+                          <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                        </>
+                      );
+                    })
+                  }
 
 
                 </div>
 
-                <div className='row mt-5' >
-
-                  <div className='col-6' >
-                    <div class="box " onClick={() => {
-                      setMeals(5)
-                    }} >
-                      <div class="boxs">
-                        <p className='asdfp'>Dockets received - timeline</p>
-                        <div class="end-box">
-                          <img src="rts.png" className="" alt="Example Image" />
-                          <p className="asdfps">(# of dockets received
-                            between specific time slots)</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* <div className='col-6' >
-                    <div class="box" onClick={() => {
-                      setMeals(3)
-                    }} >
-                      <div class="boxs">
-                        <div className="d-flex justify-content-between" >
-                          <div >
-                            <p className='asdfp' style={{ marginBottom: 0 }}>Served meals</p>
-                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                          </div>
-                          <div >
-                            <p className='asdfp' style={{ color: '#316AAF' }}>{
-                              served ?
-                                ggggrt()
-                                : 0
-                            }</p>
-                          </div>
-                        </div>
-
-                        <div class="end-box">
-                          <img src="starr.png" className="" alt="Example Image" />
-                          <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
-
-                            <div >
 
 
 
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Most: <span style={{ fontWeight: '600' }} >{served[0]?.name || 0}</span></p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[0]?.count || 0}</p>
-                                </div>
-                              </div>
-
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Less: <span style={{ fontWeight: '600' }} >{served[served.length - 1]?.name || ''}</span></p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[served.length - 1]?.count || 0}</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-
-
-
-
-
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
-
-
-                  <div className='col-6' >
-                    <div class="box" onClick={() => {
-                      setMeals(4)
-                    }}>
-                      <div class="boxs">
-                        <div className="d-flex justify-content-between" >
-                          <div >
-                            <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
-                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                          </div>
-                          <div >
-                            {/* <p className='asdfp' style={{ color: '#316AAF' }}>{
-                              minperday ?
-                                ggggrtz()
-                                : 0
-                            }</p> */}
-                          </div>
-                        </div>
-
-                        <div class="end-box">
-                          <img src="bluee.png" className="" alt="Example Image" />
-                          <p className="asdfps">(Average waiting time
-                            between specific time slots)</p>
-
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
 
               </div>
 
 
-              : meals === 2 ?
 
-                <div className="" style={{ marginTop: 100 }} >
-                  <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-                    <div className="d-flex justify-content-between" >
-                      <div style={{}} className="d-flex " >
-                        <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                          setMeals(1)
-                        }} className="" alt="Example Image" />
-                        <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Dockets completion time</p>
+
+            </div>
+          </div>
+          : meals === 4 ?
+
+
+            <div className="" style={{ marginTop: 100 }} >
+              <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+
+                <div className="d-flex justify-content-between" >
+                  <div style={{}} className="d-flex " >
+                    <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                      setMeals(1)
+                    }} className="" alt="Example Image" />
+                    <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Average completion - timeline</p>
+                  </div>
+
+                  <div >
+                    <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
+
+                    {showDivss && (
+                      <div
+                        style={{
+                          width: 200,
+                          marginTop: '0px',
+                          padding: '10px',
+                          backgroundColor: '#f8f9fa',
+                          border: '1px solid #ccc',
+                          borderRadius: '4px',
+                          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                          position: 'absolute',
+                          right: '3%'
+                        }}
+                      >
+                        <p style={{ color: '#707070' }}>Export as</p>
+                        <hr />
+                        <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                          refundexportpdf()
+                        }}>PDF</p>
                       </div>
+                    )}
+                  </div>
+                </div>
 
-                      <div class="custom-inputonessfine  " >
-
-                        <Select
-                          className="newoneonee"
-                          options={basicfine}
-                          value={selectedOptionsfine}
-                          onChange={handleChangefine}
-                          placeholder="Select options..."
-                          components={{
-                            Option: CustomOptionfinal,
-                            MultiValue: () => null, // Hides default tags
-                            ValueContainer: ({ children, ...props }) => {
-                              const selectedValues = props.getValue();
-                              return (
-                                <components.ValueContainer {...props}>
-                                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                                </components.ValueContainer>
-                              );
-                            },
-                          }}
-                          hideSelectedOptions={false} // Show all options even if selected
-                          styles={{
-                            control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
-                          }}
-                        />
-
-                      </div>
-
-                      <div >
-                        <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
-
-                        {showDiv && (
-                          <div
-                            style={{
-                              width: 200,
-                              marginTop: '0px',
-                              padding: '10px',
-                              backgroundColor: '#f8f9fa',
-                              border: '1px solid #ccc',
-                              borderRadius: '4px',
-                              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                              position: 'absolute',
-                              right: '3%'
-                            }}
-                          >
-                            <p style={{ color: '#707070' }}>Export as</p>
-                            <hr />
-                            <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                              console.log(JSON.stringify(selectedOptions), 'dateRange')
-                              editexportpdf()
-                            }}>PDF</p>
-                          </div>
-                        )}
+                <div style={{ marginTop: 50, padding: 20 }} >
 
 
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    {/* Left Scroll Button */}
+                    <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
+                    <p className="gggjgjjg"># of new dockets</p>
+                    {/* Scrollable Chart Container */}
+                    <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                      <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                        <Bar data={datafineone} options={optionshshs} />
                       </div>
                     </div>
 
-                    <div style={{ marginTop: 50, padding: 20 }} >
-                      <div className="d-flex justify-content-between" >
-
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{
-                            editall?.stats?.averageProcessTime || 0}</span></p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{editallone?.stats?.averageProcessTime || 0}</span></p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >
-                            {(() => {
-                              let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
-                              let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
-
-                              // Calculate average
-                              let average = Math.round((numOne + numTwo) / 2);
-
-                              return <span >{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }} >{average > 0 ? <img src="up_arw.png"
-                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                }} className="" alt="Example Image" /> :
-                                <img src="d_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" />}</span></span>
-
-
-                            })()}</span></p>
-                        </div>
-
-                      </div>
-
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-
-
-
-
-
-
-
-
-
-                      <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 300, overflowY: 'auto' }} >
-
-                        <div  >
-
-                          {
-                            editall?.orders?.map((dfgh, index) => {
-                              const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
-
-                              return (
-                                <div key={index}>
-                                  <div className="d-flex gap-5">
-                                    {/* Left Column */}
-                                    <div style={{ width: "40%" }}>
-                                      <div className="d-flex  " style={{}}>
-                                        <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
-                                          {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.date + " " + "[" +
-                                            dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
-                                        </p>
-
-                                        <img
-                                          onClick={() => { openModal(dfgh, correspondingErv) }}
-                                          src="arrows.png"
-                                          style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
-                                          alt="up arrow"
-                                        />
-                                      </div>
-
-                                    </div>
-
-                                    {/* Center Column */}
-                                    {correspondingErv ? (
-                                      <div style={{ width: "40%", }}>
-                                        <div className="d-flex  " >
-                                          <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
-                                            {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
-                                              correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
-                                          </p>
-
-
-                                          <img
-                                            onClick={() => { openModal(dfgh, correspondingErv) }}
-                                            src="arrows.png"
-                                            style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
-                                            alt="up arrow"
-                                          />
-                                        </div>
-
-                                      </div>
-                                    ) : (
-                                      <div style={{ width: "33%" }}></div>
-                                    )}
-
-                                    {/* Right Column (Percentage Calculation) */}
-                                    <div
-                                      style={{
-                                        justifyContent: "end",
-                                        alignItems: "center",
-                                        display: "flex",
-                                        width: "10%",
-                                      }}
-                                    >
-                                      <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
-
-                                        <span>
-                                          {(() => {
-                                            const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
-                                            const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
-
-                                            let percentageChange = 0;
-                                            if (processTimeTwo > 0) {
-                                              percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
-                                            }
-
-                                            return (
-                                              <span>
-                                                {percentageChange.toFixed(2) + "%"}
-                                                <span
-                                                  style={{
-                                                    color: percentageChange > 0 ? "green" : "red",
-                                                    fontWeight: "700",
-                                                  }}
-                                                >
-                                                  {percentageChange > 0 ? (
-                                                    <img
-                                                      src="up_arw.png"
-                                                      style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                      alt="up arrow"
-                                                    />
-                                                  ) : (
-                                                    <img
-                                                      src="d_arw.png"
-                                                      style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                      alt="down arrow"
-                                                    />
-                                                  )}
-                                                </span>
-                                              </span>
-                                            );
-                                          })()}
-                                        </span>
-                                      </p>
-                                    </div>
-                                  </div>
-
-                                  <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
-                                </div>
-                              );
-                            })
-                          }
-                        </div >
-
-
-
-
-
-                      </div>
-
-
-
-
-                    </div>
-
-
-
-
+                    {/* Right Scroll Button */}
+                    <button onClick={scrollRight} style={buttonStyle}>➡</button>
 
 
                   </div>
 
-                  <div style={{ visibility: 'hidden' }}>
-                    <div ref={pdfRef}  >
 
-                      <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets Completion Time - From {selectedOptionsfine[0]?.label}to
+                  <div style={{ visibility: 'hidden' }}>
+                    <div ref={pdfRefredone}  >
+
+                      <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
                         {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
 
                       <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
@@ -4753,648 +5430,427 @@ let Multi_venue = () => {
                       })()}</p>
 
 
-                      <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
-                      {
-                        editall?.orders?.map((dfgh, index) => {
-                          const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
 
-                          return (
-                            <div key={index}   >
-                              <div className="d-flex gap-5" >
-                                {/* Left Column */}
-                                <div style={{ width: "40%" }}>
-                                  <div className="d-flex  " style={{}}>
-                                    <p style={{ paddingTop: 15 }}>
-                                      <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.processtime + ". " || "N/A"} {dfgh?.date + " " + "[" +
-                                        dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
-                                    </p>
+                      <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                        <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                          <Bar data={datafineone} options={optionshshs} />
+                        </div>
+                      </div>
 
-                                  </div>
-
-                                </div>
-
-                                {/* Center Column */}
-                                {correspondingErv ? (
-                                  <div style={{ width: "40%", }}>
-                                    <div className="d-flex  " >
-                                      <p style={{ paddingTop: 15 }}>
-                                        <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
-                                          correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
-                                      </p>
-
-
-                                    </div>
-
-                                  </div>
-                                ) : (
-                                  <div style={{ width: "33%" }}></div>
-                                )}
-
-                                {/* Right Column (Percentage Calculation) */}
-                                <div
-                                  style={{
-                                    justifyContent: "end",
-                                    alignItems: "center",
-                                    display: "flex",
-                                    width: "10%",
-                                  }}
-                                >
-                                  <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
-
-                                    <span>
-                                      {(() => {
-                                        const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
-                                        const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
-
-                                        let percentageChange = 0;
-                                        if (processTimeTwo > 0) {
-                                          percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
-                                        }
-
-                                        return (
-                                          <span>
-                                            {percentageChange.toFixed(2) + "%"}
-                                            <span
-                                              style={{
-                                                color: percentageChange > 0 ? "green" : "red",
-                                                fontWeight: "700",
-                                              }}
-                                            >
-                                              {percentageChange > 0 ? (
-                                                <img
-                                                  src="up_arw.png"
-                                                  style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                  alt="up arrow"
-                                                />
-                                              ) : (
-                                                <img
-                                                  src="d_arw.png"
-                                                  style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                  alt="down arrow"
-                                                />
-                                              )}
-                                            </span>
-                                          </span>
-                                        );
-                                      })()}
-                                    </span>
-                                  </p>
-                                </div>
-                              </div>
-
-                              <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
-                            </div>
-                          );
-                        })
-                      }
                     </div >
                   </div>
 
+
+
                 </div>
 
-                : meals === 3 ?
-                  <div className="" style={{ marginTop: 100 }} >
-                    <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
-
-                      <div className="d-flex justify-content-between" >
-                        <div style={{}} className="d-flex " >
-                          <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                            setMeals(1)
-                          }} className="" alt="Example Image" />
-                          <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Served meals</p>
-                        </div>
-
-                        <div >
-                          <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
-
-                          {showDivs && (
-                            <div
-                              style={{
-                                width: 200,
-                                marginTop: '3px',
-                                padding: '10px',
-                                backgroundColor: '#f8f9fa',
-                                border: '1px solid #ccc',
-                                borderRadius: '4px',
-                                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                                position: 'absolute',
-                                right: '3%'
-                              }}
-                            >
-                              <p style={{ color: '#707070' }}>Export as</p>
-                              <hr />
-                              <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                mealexportpdf()
-                              }}>PDF</p>
-                            </div>
-                          )}
-
-                        </div>
-                      </div>
-
-                      <div style={{ marginTop: 50, padding: 20 }} >
-                        <div className="d-flex justify-content-between" >
-
-                          <div >
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                              ggggrt()}</span></p>
-                          </div>
-                          <div >
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-
-                              ggggrts()
-                            }</span></p>
-                          </div>
-                          <div >
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                              {(() => {
-                                let datd = ggggrt()
-
-                                let datdtwo = ggggrts()
-
-                                let tot = ((datd - datdtwo) / datdtwo) * 100
-
-                                return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" /> :
-                                  <img src="d_arw.png"
-                                    style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                    }} className="" alt="Example Image" />}</span></span>
-
-
-                                console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                              })()}</span></p>
-                          </div>
-
-                        </div>
-
-                        <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-                        <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
-
-
-
-                          {
-                            served?.map((dfgh, index) => {
-                              const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
-
-                              return (
-                                <>
-                                  <div className="d-flex  ">
-
-                                    <div style={{ width: '33%' }}>
-                                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
-                                    </div>
-
-                                    {correspondingErv ? (
-                                      <div style={{ width: '33%', textAlign: 'center' }}>
-                                        <div >
-
-                                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                                        </div>
-                                      </div>
-                                    ) : (
-                                      <>
-                                        <div style={{ width: '33%' }} >
-                                        </div></>
-                                    )}
-
-                                    <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                                        ( Total )
-                                        <span>
-                                          {(() => {
-                                            const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                            const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-
-                                            const tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                                            return (
-                                              <span>
-                                                {tot.toFixed(2) + "%"}
-                                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                                  {tot > 0 ? (
-                                                    <img
-                                                      src="up_arw.png"
-                                                      style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                      alt="up arrow"
-                                                    />
-                                                  ) : (
-                                                    <img
-                                                      src="d_arw.png"
-                                                      style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                      alt="down arrow"
-                                                    />
-                                                  )}
-                                                </span>
-                                              </span>
-                                            );
-                                          })()}
-                                        </span>
-                                      </p>
-                                    </div>
-
-                                  </div>
-
-                                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                                </>
-                              );
-                            })
-                          }
-
-
-                        </div>
 
 
 
 
+              </div>
+            </div>
 
-                      </div>
+            :
 
+            <div className="" style={{ marginTop: 100 }} >
+              <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-
-
-
-                    </div>
+                <div className="d-flex justify-content-between" >
+                  <div style={{}} className="d-flex " >
+                    <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                      setMeals(1)
+                    }} className="" alt="Example Image" />
+                    <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Dockets received - timeline</p>
                   </div>
-                  : meals === 4 ?
+
+                  <div >
+                    <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
+
+                    {showDivsss && (
+                      <div
+                        style={{
+                          width: 200,
+                          marginTop: '0px',
+                          padding: '10px',
+                          backgroundColor: '#f8f9fa',
+                          border: '1px solid #ccc',
+                          borderRadius: '4px',
+                          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                          position: 'absolute',
+                          right: '3%'
+                        }}
+                      >
+                        <p style={{ color: '#707070' }}>Export as</p>
+                        <hr />
+                        <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                          chartexportpdf()
+                        }}>PDF</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div style={{ marginTop: 50, padding: 20 }} >
 
 
-                    <div className="" style={{ marginTop: 100 }} >
-                      <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
-
-                        <div className="d-flex justify-content-between" >
-                          <div style={{}} className="d-flex " >
-                            <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                              setMeals(1)
-                            }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Average completion - timeline</p>
-                          </div>
-
-                          <div >
-                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
-
-                            {showDivss && (
-                              <div
-                                style={{
-                                  width: 200,
-                                  marginTop: '0px',
-                                  padding: '10px',
-                                  backgroundColor: '#f8f9fa',
-                                  border: '1px solid #ccc',
-                                  borderRadius: '4px',
-                                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                                  position: 'absolute',
-                                  right: '3%'
-                                }}
-                              >
-                                <p style={{ color: '#707070' }}>Export as</p>
-                                <hr />
-                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                  refundexportpdf()
-                                }}>PDF</p>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        <div style={{ marginTop: 50, padding: 20 }} >
-
-
-
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            {/* Left Scroll Button */}
-                            <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
-
-                            {/* Scrollable Chart Container */}
-                            <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
-                              <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                <Bar data={datafineone} options={optionshshs} />
-                              </div>
-                            </div>
-
-                            {/* Right Scroll Button */}
-                            <button onClick={scrollRight} style={buttonStyle}>➡</button>
-
-
-                          </div>
-
-
-                          <div style={{ visibility: 'hidden' }}>
-                            <div ref={pdfRefredone}  >
-
-                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
-                                {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
-
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-                                const datefineda = new Date(dateRange[0]);
-
-                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric"
-                                });
-
-                                return (formattedDate)
-                              })()} to {(() => {
-                                const datefineda = new Date(dateRange[1]);
-
-                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric"
-                                });
-
-                                return (formattedDate)
-                              })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-                                const datefineda = new Date(dateRangetwo[0]);
-
-                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric"
-                                });
-
-                                return (formattedDate)
-                              })()} to {(() => {
-                                const datefineda = new Date(dateRangetwo[1]);
-
-                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric"
-                                });
-
-                                return (formattedDate)
-                              })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-                                const result = selectedOptions.map(item => item.value).join(",");
-
-                                if (result === "" || result === undefined || result === null) {
-                                  return 'All'
-                                } else {
-
-                                  return result
-
-                                }
-
-
-                              })()}</p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-
-                                const result = selectedhubOptions.map(item => item.label).join(",");
-
-                                if (result === "" || result === undefined || result === null) {
-                                  return 'All'
-                                } else {
-
-                                  return result
-
-                                }
-
-
-                              })()} </p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-
-                                const result = selectedCources.map(item => item.label).join(",");
-
-                                if (result === "" || result === undefined || result === null) {
-                                  return 'All'
-                                } else {
-
-                                  return result
-
-                                }
-
-
-                              })()}</p>
-
-
-
-                              <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
-                                <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                  <Bar data={datafineone} options={optionshshs} />
-                                </div>
-                              </div>
-
-                            </div >
-                          </div>
-
-
-
-                        </div>
-
-
-
-
-
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    {/* Left Scroll Button */}
+                    <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
+                    <p className="gggjgjjg">Average waiting time</p>
+                    {/* Scrollable Chart Container */}
+                    <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                      <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                        <Bar data={datafine} options={optionshshs} />
                       </div>
                     </div>
 
-                    :
+                    {/* Right Scroll Button */}
+                    <button onClick={scrollRight} style={buttonStyle}>➡</button>
+                  </div>
 
-                    <div className="" style={{ marginTop: 100 }} >
-                      <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-                        <div className="d-flex justify-content-between" >
-                          <div style={{}} className="d-flex " >
-                            <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                              setMeals(1)
-                            }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Dockets received - timeline</p>
-                          </div>
+                  <div style={{ visibility: 'hidden' }}>
+                    <div ref={pdfRefred}  >
 
-                          <div >
-                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
+                      <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
+                        {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
 
-                            {showDivsss && (
-                              <div
-                                style={{
-                                  width: 200,
-                                  marginTop: '0px',
-                                  padding: '10px',
-                                  backgroundColor: '#f8f9fa',
-                                  border: '1px solid #ccc',
-                                  borderRadius: '4px',
-                                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                                  position: 'absolute',
-                                  right: '3%'
-                                }}
-                              >
-                                <p style={{ color: '#707070' }}>Export as</p>
-                                <hr />
-                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                  chartexportpdf()
-                                }}>PDF</p>
-                              </div>
-                            )}
-                          </div>
+                      <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+                      <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                        const datefineda = new Date(dateRange[0]);
+
+                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric"
+                        });
+
+                        return (formattedDate)
+                      })()} to {(() => {
+                        const datefineda = new Date(dateRange[1]);
+
+                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric"
+                        });
+
+                        return (formattedDate)
+                      })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+                      <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                        const datefineda = new Date(dateRangetwo[0]);
+
+                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric"
+                        });
+
+                        return (formattedDate)
+                      })()} to {(() => {
+                        const datefineda = new Date(dateRangetwo[1]);
+
+                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric"
+                        });
+
+                        return (formattedDate)
+                      })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+                      <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+
+                        const result = selectedOptions.map(item => item.value).join(",");
+
+                        if (result === "" || result === undefined || result === null) {
+                          return 'All'
+                        } else {
+
+                          return result
+
+                        }
+
+
+                      })()}</p>
+                      <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+
+                        const result = selectedhubOptions.map(item => item.label).join(",");
+
+                        if (result === "" || result === undefined || result === null) {
+                          return 'All'
+                        } else {
+
+                          return result
+
+                        }
+
+
+                      })()} </p>
+                      <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+
+                        const result = selectedCources.map(item => item.label).join(",");
+
+                        if (result === "" || result === undefined || result === null) {
+                          return 'All'
+                        } else {
+
+                          return result
+
+                        }
+
+
+                      })()}</p>
+
+
+
+                      <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                        <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                          <Bar data={datafine} options={optionshshs} />
                         </div>
-
-                        <div style={{ marginTop: 50, padding: 20 }} >
-
-
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            {/* Left Scroll Button */}
-                            <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
-
-                            {/* Scrollable Chart Container */}
-                            <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
-                              <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                <Bar data={datafine} options={optionshshs} />
-                              </div>
-                            </div>
-
-                            {/* Right Scroll Button */}
-                            <button onClick={scrollRight} style={buttonStyle}>➡</button>
-                          </div>
-
-
-                          <div style={{ visibility: 'hidden' }}>
-                            <div ref={pdfRefred}  >
-
-                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
-                                {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
-
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-                                const datefineda = new Date(dateRange[0]);
-
-                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric"
-                                });
-
-                                return (formattedDate)
-                              })()} to {(() => {
-                                const datefineda = new Date(dateRange[1]);
-
-                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric"
-                                });
-
-                                return (formattedDate)
-                              })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-                                const datefineda = new Date(dateRangetwo[0]);
-
-                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric"
-                                });
-
-                                return (formattedDate)
-                              })()} to {(() => {
-                                const datefineda = new Date(dateRangetwo[1]);
-
-                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric"
-                                });
-
-                                return (formattedDate)
-                              })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-                                const result = selectedOptions.map(item => item.value).join(",");
-
-                                if (result === "" || result === undefined || result === null) {
-                                  return 'All'
-                                } else {
-
-                                  return result
-
-                                }
-
-
-                              })()}</p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-
-                                const result = selectedhubOptions.map(item => item.label).join(",");
-
-                                if (result === "" || result === undefined || result === null) {
-                                  return 'All'
-                                } else {
-
-                                  return result
-
-                                }
-
-
-                              })()} </p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-
-                                const result = selectedCources.map(item => item.label).join(",");
-
-                                if (result === "" || result === undefined || result === null) {
-                                  return 'All'
-                                } else {
-
-                                  return result
-
-                                }
-
-
-                              })()}</p>
-
-
-
-                              <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
-                                <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                  <Bar data={datafine} options={optionshshs} />
-                                </div>
-                              </div>
-
-                            </div >
-                          </div>
-
-
-
-
-
-
-                          {/* <div style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px' }}>
-                            <div style={{ width: '1500px', height: '500px' }}>  
-                              <Bar data={datafine} options={optionshshs} />
-                            </div>
-                          </div> */}
-
-                        </div>
-
-
-
-
-
                       </div>
+
+                    </div >
+                  </div>
+
+
+
+
+
+
+                  {/* <div style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px' }}>
+                    <div style={{ width: '1500px', height: '500px' }}>  
+                      <Bar data={datafine} options={optionshshs} />
                     </div>
+                  </div> */}
+
+                </div>
 
 
 
-          }
+
+
+              </div>
+            </div>
 
 
 
-        </div>
+  }
 
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<div style={{ visibility: 'hidden' }}>
+            <div ref={pdfRef}  >
+
+              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets Completion Time - From {selectedOptionsfine[0]?.label}to
+                {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
+
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                const datefineda = new Date(dateRange[0]);
+
+                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+
+                return (formattedDate)
+              })()} to {(() => {
+                const datefineda = new Date(dateRange[1]);
+
+                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+
+                return (formattedDate)
+              })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                const datefineda = new Date(dateRangetwo[0]);
+
+                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+
+                return (formattedDate)
+              })()} to {(() => {
+                const datefineda = new Date(dateRangetwo[1]);
+
+                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+
+                return (formattedDate)
+              })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+
+                const result = selectedOptions.map(item => item.value).join(",");
+
+                if (result === "" || result === undefined || result === null) {
+                  return 'All'
+                } else {
+
+                  return result
+
+                }
+
+
+              })()}</p>
+              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+
+                const result = selectedhubOptions.map(item => item.label).join(",");
+
+                if (result === "" || result === undefined || result === null) {
+                  return 'All'
+                } else {
+
+                  return result
+
+                }
+
+
+              })()} </p>
+              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+
+                const result = selectedCources.map(item => item.label).join(",");
+
+                if (result === "" || result === undefined || result === null) {
+                  return 'All'
+                } else {
+
+                  return result
+
+                }
+
+
+              })()}</p>
+
+
+              <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+              {
+                editall?.orders?.map((dfgh, index) => {
+                  const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
+
+                  return (
+                    <div key={index}   >
+                      <div className="d-flex gap-5" >
+                        {/* Left Column */}
+                        <div style={{ width: "40%" }}>
+                          <div className="d-flex  " style={{}}>
+                            <p style={{ paddingTop: 15 }}>
+                              <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.processtime + ". " || "N/A"} {dfgh?.date + " " + "[" +
+                                dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
+                            </p>
+
+                          </div>
+
+                        </div>
+
+                        {/* Center Column */}
+                        {correspondingErv ? (
+                          <div style={{ width: "40%", }}>
+                            <div className="d-flex  " >
+                              <p style={{ paddingTop: 15 }}>
+                                <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
+                                  correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
+                              </p>
+
+
+                            </div>
+
+                          </div>
+                        ) : (
+                          <div style={{ width: "33%" }}></div>
+                        )}
+
+                        {/* Right Column (Percentage Calculation) */}
+                        <div
+                          style={{
+                            justifyContent: "end",
+                            alignItems: "center",
+                            display: "flex",
+                            width: "10%",
+                          }}
+                        >
+                          <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
+
+                            <span>
+                              {(() => {
+                                const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
+                                const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
+
+                                let percentageChange = 0;
+                                if (processTimeTwo > 0) {
+                                  percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
+                                }
+
+                                return (
+                                  <span>
+                                    {percentageChange.toFixed(2) + "%"}
+                                    <span
+                                      style={{
+                                        color: percentageChange > 0 ? "green" : "red",
+                                        fontWeight: "700",
+                                      }}
+                                    >
+                                      {percentageChange > 0 ? (
+                                        <img
+                                          src="up_arw.png"
+                                          style={{ width: 16, height: 16, cursor: "pointer" }}
+                                          alt="up arrow"
+                                        />
+                                      ) : (
+                                        <img
+                                          src="d_arw.png"
+                                          style={{ width: 16, height: 16, cursor: "pointer" }}
+                                          alt="down arrow"
+                                        />
+                                      )}
+                                    </span>
+                                  </span>
+                                );
+                              })()}
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+
+                      <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+                    </div>
+                  );
+                })
+              }
+            </div >
+          </div>
+
+
+
+
+
+
+
+</div>
       </div>
+     
 
 
       <Modal
