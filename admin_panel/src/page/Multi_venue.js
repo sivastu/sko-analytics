@@ -1339,7 +1339,7 @@ let Multi_venue = () => {
           cursor: 'pointer',
         }}
       >
-        <span style={{ flexGrow: 1 }}>{data.label}</span>
+        <span style={{ flexGrow: 1,marginTop:6 }}>{data.label}</span>
       </div>
     );
   };

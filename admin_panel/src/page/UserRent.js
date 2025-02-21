@@ -356,37 +356,15 @@ let UserRent = () => {
               }
 
 
-<div 
-  style={{ 
-    display: 'flex', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    marginBottom: 30, 
-    cursor: "pointer" 
-  }} 
->
-  <div 
-    onClick={() => loginn()} 
-    style={{ 
-      backgroundColor: '#316AAF', 
-      width: 85, 
-      height: 30, 
-      borderRadius: 5, 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center'
-    }} 
-  >
-    <p style={{ 
-      color: '#fff', 
-      fontFamily: 'Gotham', 
-      fontSize: 14, 
-marginTop:25
-    }}>
-      Login
-    </p>
-  </div>
-</div>
+
+<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 30, cursor: "pointer" }} >
+                <div onClick={() => {
+                  loginn()
+                }} style={{ backgroundColor: '#316AAF', width: 85, height: 30, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }} >
+                  <p style={{ textAlign: 'center', color: '#fff', padding: 2 }} >Login</p>
+                </div>
+              </div>
+
 
 
 
