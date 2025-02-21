@@ -3252,31 +3252,32 @@ let Meals = () => {
     <div>
       <div style={{ scrollbarWidth: 'none' }}>
 
-        <div style={{
+        <div className="" style={{
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
           // border: "1px solid #dbdbdb"
         }} >
-          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', cursor: "pointer" }}>
-            <div style={{ padding: 17, }} className="d-flex" onClick={() => {
+          <div className="row justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', height: 52 }}>
+
+            <div style={{ padding: 13 }} className="d-flex col"
+             onClick={() => {
               navigate(-1)
-            }} >
-              <img src="arrow.png" style={{ width: 20, height: 20 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -7 }} >Meals</p>
+            }}  >
+            <img src="arrow.png" style={{ width: 20, height: 20 ,marginTop:3}} alt="Example Image" />
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 3 }} >MEALS</p>
+            </div>
+            <div style={{ padding: 13 }} className="d-flex text-center justify-content-center col" >
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop:3 }} >
+                {usedname}
+                </p>
             </div>
 
-            <div style={{ padding: 13, }} >
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginTop: -3 }} >{usedname}</p>
+            <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
+              <img src="Menu_Logo.png" style={{ width: 56, height: 28 }} alt="Example Image" />
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 3 }} >analytics</p>
             </div>
 
-
-            <div style={{ padding: 13 }} className="d-flex" >
-
-              <img src="newlogo.png" style={{ width: 40, height: 22 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >analytics</p>
-            </div>
           </div>
         </div>
-
       </div>
 
       <div style={{ backgroundColor: "#DADADA", height: '100vh', overflow: 'auto', }} className="finefinrr">
@@ -3805,8 +3806,8 @@ let Meals = () => {
 
                 <div className='row ' >
 
-                  <div className='col-6' >
-                    <div class="box " onClick={() => {
+                  <div className='col-6 d-flex justify-content-center ' >
+                    <div class="box" style={{maxWidth: "600px", marginLeft:80}} onClick={() => {
                       setMeals(5)
                     }} >
                       <div class="boxs">
@@ -3820,8 +3821,8 @@ let Meals = () => {
                   </div>
 
 
-                  <div className='col-6' >
-                    <div class="box" onClick={() => {
+                  <div className='col-6 d-flex justify-content-center' >
+                    <div class="box" style={{maxWidth: "600px", marginRight:80}} onClick={() => {
                       setMeals(2)
                     }}>
                       <div class="boxs">
@@ -3895,8 +3896,8 @@ let Meals = () => {
 
                 <div className='row mt-5' >
 
-                  <div className='col-6' >
-                    <div class="box" onClick={() => {
+                  <div className='col-6 d-flex justify-content-center' >
+                    <div class="box" style={{maxWidth: "600px", marginLeft:80}} onClick={() => {
                       setMeals(3)
                     }} >
                       <div class="boxs">
@@ -3955,8 +3956,8 @@ let Meals = () => {
                   </div>
 
 
-                  <div className='col-6' >
-                    <div class="box" onClick={() => {
+                  <div className='col-6 d-flex justify-content-center' >
+                    <div class="box" style={{maxWidth: "600px", marginRight:80}} onClick={() => {
                       setMeals(4)
                     }}>
                       <div class="boxs">
@@ -4026,7 +4027,7 @@ let Meals = () => {
                         <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                           setMeals(1)
                         }} className="" alt="Example Image" />
-                        <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Edits</p>
+                        <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Edits</p>
                       </div>
 
                       <div >
@@ -4279,7 +4280,7 @@ let Meals = () => {
                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                             setMeals(1)
                           }} className="" alt="Example Image" />
-                          <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Served meals</p>
+                          <p style={{ fontWeight: '500', fontSize: 20, marginTop:0, marginLeft: 10 }}>Served meals</p>
                         </div>
 
                         <div >
@@ -4454,7 +4455,7 @@ let Meals = () => {
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Refunded meals</p>
+                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Refunded meals</p>
                           </div>
 
                           <div >
@@ -4629,7 +4630,7 @@ let Meals = () => {
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Meals received - timeline</p>
+                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Meals received - timeline</p>
                           </div>
 
                           <div >

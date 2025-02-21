@@ -103,32 +103,33 @@ let Multivenues = () => {
   return (
     <div>
       <div style={{ scrollbarWidth: 'none' }}>
-
-        <div style={{
+        
+        <div className="" style={{
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
           // border: "1px solid #dbdbdb"
         }} >
-          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', cursor: "pointer" }}>
-            <div style={{ padding: 17, }} className="d-flex" onClick={()=>{
-               navigate(-1)
-            }} >
-              <img src="arrow.png" style={{ width: 20, height: 20 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -7 }} >SINGLE VENUE</p>
+          <div className="row justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', height: 52 }}>
+
+            <div style={{ padding: 13 }} className="d-flex col"
+             onClick={() => {
+              navigate(-1)
+            }}  >
+            <img src="arrow.png" style={{ width: 20, height: 20 ,marginTop:3}} alt="Example Image" />
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 3 }} >SINGLE VENUE</p>
+            </div>
+            <div style={{ padding: 13 }} className="d-flex text-center justify-content-center col" >
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop:3 }} >
+                {usedname}
+                </p>
             </div>
 
-            <div style={{ padding: 13,  }} >
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff",  marginTop: -3 }} >{usedname}</p>
+            <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
+              <img src="Menu_Logo.png" style={{ width: 56, height: 28 }} alt="Example Image" />
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 3 }} >analytics</p>
             </div>
 
-         
-            <div style={{ padding: 13 }}  className="d-flex" >
-
-            <img src="newlogo.png" style={{ width: 40, height: 22 }} alt="Example Image" />
-            <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >analytics</p>
-            </div>
           </div>
         </div>
-
       </div>
 
       <div style={{ backgroundColor: "#525659", height: '100vh' }} >
@@ -155,14 +156,14 @@ let Multivenues = () => {
                   </div>
                 </div>
               </div>
-
+        
               <div style={{ width: '27%', height: 190, backgroundColor: '#fff', marginTop: 20, borderRadius: 5, marginBottom: 50, cursor: 'pointer' }}
                 onClick={() => {
                   navigate("/dockets");
                 }} >
                 <div className="row" style={{ height: 190 }} >
                   {/* Left column - centered text */}
-                  <div className="col-6 d-flex justify-content-center align-items-center" style={{ padding: 35 }}>
+                  <div className="col-6 d-flex align-items-center" style={{ padding: 35 }}>
                     
 
                     <p style={{ fontSize: 35, fontWeight: '400', lineHeight: 1.3, color: '#000', margin: 0 }}>

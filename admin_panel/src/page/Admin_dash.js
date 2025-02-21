@@ -797,8 +797,8 @@ let Admin_dash = () => {
                 }}
                 style={{ cursor: "pointer", color: '#1A1A1B', fontWeight: '400', fontSize: 21, width: 180 }}
               >
-                <img src="down.png" style={{ marginLeft: 20, transform: `rotate(${rotation}deg)`, }} alt="Example Image" />
-                <img src="per.png" style={{ marginTop: -13, marginLeft: 5, marginRight: 5 }} alt="Example Image" />   Users
+                <img src="down.png" style={{ marginLeft: 20, transform: `rotate(${rotation}deg)`,height:"10px",width:"14px" }} alt="Example Image" />
+                <img src="person.png" style={{ marginTop: -6, marginLeft: 10, marginRight: 8 ,height:"20px",width:"24px"}} alt="Example Image" />   Users
               </Nav.Link>
               {openDropdown && (
                 <div className="ms-3">
@@ -825,6 +825,7 @@ let Admin_dash = () => {
                         color: "#1A1A1B",
                         fontWeight: 400,
                         fontSize: 21,
+                        marginTop:5,
                         margin: 0, // Removes default margin
                         marginLeft: 50
                       }}
@@ -853,6 +854,7 @@ let Admin_dash = () => {
                         color: "#1A1A1B",
                         fontWeight: 400,
                         fontSize: 21,
+                        marginTop:5,
                         margin: 0, // Removes default margin
                         marginLeft: 50
                       }}
@@ -881,6 +883,7 @@ let Admin_dash = () => {
                         color: "#1A1A1B",
                         fontWeight: 400,
                         fontSize: 21,
+                        marginTop:5,
                         margin: 0, // Removes default margin
                         marginLeft: 50
                       }}
@@ -907,13 +910,14 @@ let Admin_dash = () => {
                     className="d-flex"
                   >
 
-                    <img src="man.png" style={{ marginLeft: 50, marginRight: 5, width: 40, height: 30, marginTop: -4 }} alt="Example Image" />
+                    <img src="manset.png" style={{ marginLeft: 50, marginRight: 0, width: 40, height: 40, marginTop: 2 }} alt="Example Image" />
 
                     <p
                       style={{
                         color: "#1A1A1B",
                         fontWeight: 400,
                         fontSize: 21,
+                        marginTop:5,
                         margin: 0, // Removes default margin
 
                       }}
@@ -940,12 +944,13 @@ let Admin_dash = () => {
                     }}
                     className="d-flex"
                   >
-                    <img src="setts.png" style={{ marginLeft: 50, marginRight: 5, width: 40, height: 30, marginTop: -4 }} alt="Example Image" />
+                    <img src="settings.png" style={{ marginLeft: 50, marginRight: 0, width: 40, height: 40, marginTop: 0 }} alt="Example Image" />
                     <p
                       style={{
                         color: "#1A1A1B",
                         fontWeight: 400,
                         fontSize: 21,
+                        marginTop:5,
                         margin: 0, // Removes default margin 
                       }}
                     >
@@ -997,6 +1002,7 @@ let Admin_dash = () => {
                           placeholder="Add new user"
                           style={{
                             border: "none",
+                            padding:"0",
                             boxShadow: "none",
                           }}
                         />

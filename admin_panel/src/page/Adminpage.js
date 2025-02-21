@@ -147,30 +147,32 @@ let Adminpage = () => {
     <div>
       <div style={{ scrollbarWidth: 'none' }}>
 
-        <div style={{
+        <div className="" style={{
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
           // border: "1px solid #dbdbdb"
         }} >
-          <div className="d-flex justify-content-between" style={{ paddingLeft: '2%', paddingRight: '2%', height: 52 }}>
+          <div className="row justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', height: 52 }}>
 
-            <div style={{ padding: 13 }} className="d-flex" >
+            <div style={{ padding: 13 }} className="d-flex col" >
               <p onClick={() => {
                 setIsOpen(true)
 
                 // localStorage.removeItem('data')
                 // navigate('/')
               }} style={{
-                fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: '50%', marginTop: -3,
+                fontSize: 20, fontWeight: '700', color: "#fff", marginTop: 3,
                 cursor: 'pointer'
               }} >Logout</p>
             </div>
-            <div style={{ padding: 13, width: 400 }} className="d-flex" >
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: '50%', marginTop: -3 }} >{usedname}</p>
+            <div style={{ padding: 13 }} className="d-flex text-center justify-content-center col" >
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop:3 }} >
+                {usedname}
+                </p>
             </div>
 
-            <div style={{ padding: 13 }} className="d-flex" >
-              <img src="newlogo.png" style={{ width: 40, height: 22 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >knowledge</p>
+            <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
+              <img src="Menu_Logo.png" style={{ width: 56, height: 28 }} alt="Example Image" />
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 3 }} >web app</p>
             </div>
 
           </div>
@@ -190,9 +192,9 @@ let Adminpage = () => {
               navigate('/training')
             }} >
 
-              <div className="row" style={{ padding: 32 }} >
+              <div className="row" style={{ padding: 30 }} >
                 <div className="col-6" style={{ justifyContent: 'center', alignItems: 'flex-end', display: 'flex' }}>
-                  <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', }}>Training <br />videos</p>
+                  <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px',marginTop:30,marginLeft:8 }}>Training <br />videos</p>
                 </div>
                 <div className="col-6">
                   <img src="starr.png" style={{ width: 95, height: 90, margin: 'auto', display: 'block' }} alt="Example Image" />
@@ -206,9 +208,9 @@ let Adminpage = () => {
                 <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }} onClick={() => {
                   navigate('/grantedaccess')
                 }} >
-                  <div className="row" style={{ padding: 32 }} >
+                  <div className="row" style={{ padding: 30 }} >
                     <div className="col-6" style={{ justifyContent: 'center', alignItems: 'flex-end', display: 'flex' }}>
-                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', }}>SKO <br />Analytics</p>
+                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginLeft:28,marginTop:30 }}>SKO <br />Analytics</p>
                     </div>
                     <div className="col-6">
                       <img src="bluee.png" style={{ width: 95, height: 90, margin: 'auto', display: 'block' }} alt="Example Image" />
@@ -227,12 +229,12 @@ let Adminpage = () => {
                   onClick={() => {
                     navigate('/dashboard')
                   }} >
-                  <div className="row" style={{ padding: 32 }} >
-                    <div className="col-6" style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
-                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginTop: 20 }}>Settings</p>
+                  <div className="row" style={{ padding: 30 }} >
+                    <div className="col-6 d-flex justify-content-center align-items-center ">
+                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginTop: 30 ,marginLeft:8}}>Settings</p>
                     </div>
                     <div className="col-6">
-                      <img src="sett.png" style={{ width: 95, height: 95, margin: 'auto', display: 'block' }} alt="Example Image" />
+                      <img src="sett.png" style={{ width: 95, height: 90, margin: 'auto', display: 'block' }} alt="Example Image" />
                     </div>
                   </div>
                 </div>

@@ -4127,32 +4127,32 @@ const displayText = allLabels.slice(0, 30) + "..."
        */}
 
       <div style={{ scrollbarWidth: 'none' }}>
-
-        <div style={{
+        <div className="" style={{
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
           // border: "1px solid #dbdbdb"
         }} >
-          <div className="d-flex justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', cursor: "pointer" }}>
-            <div style={{ padding: 17, }} className="d-flex" onClick={() => {
+          <div className="row justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', height: 52 }}>
+
+            <div style={{ padding: 13 }} className="d-flex col"
+             onClick={() => {
               navigate(-1)
-            }} >
-              <img src="arrow.png" style={{ width: 20, height: 20 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -7 }} >DOCKETS</p>
+            }}  >
+            <img src="arrow.png" style={{ width: 20, height: 20 ,marginTop:3}} alt="Example Image" />
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 3 }} >DOCKETS</p>
+            </div>
+            <div style={{ padding: 13 }} className="d-flex text-center justify-content-center col" >
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop:3 }} >
+                {usedname}
+                </p>
             </div>
 
-            <div style={{ padding: 13, }} >
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginTop: -3 }} >{usedname}</p>
+            <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
+              <img src="Menu_Logo.png" style={{ width: 56, height: 28 }} alt="Example Image" />
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 3 }} >analytics</p>
             </div>
 
-
-            <div style={{ padding: 13 }} className="d-flex" >
-
-              <img src="newlogo.png" style={{ width: 40, height: 22 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >analytics</p>
-            </div>
           </div>
         </div>
-
       </div>
       <div >
       <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr">
@@ -4236,77 +4236,6 @@ const displayText = allLabels.slice(0, 30) + "..."
 
 
     </div>
-
-    <div style={{ width: '20%' }}>
-      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
-      <div style={{ width: '100%' }}>
-        <DatePicker
-          selectsRange
-          startDate={startDatetwo}
-          endDate={endDatetwo}
-          onChange={(update) => {
-            setDateRangetwo(update)
-
-            if (update[1] === null || update[1] === "null") {
-
-            } else {
-              // updates(2, update)
-
-              filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-            }
-
-
-          }} // Update both startDate and EndDate 
-          placeholderText="Select a date range"
-          className="custom-input"
-          calendarClassName="custom-calendar"
-          dateFormat="d MMM yyyy"
-          customInput={
-            <div className="custom-display-input">
-              {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
-              <FaCaretDown className="calendar-icon" />
-            </div>
-          }
-        />
-      </div>
-      <div className="mt-3" >
-        <div className="custom-inputone d-flex justify-content-between">
-          <input
-            className='inputttt'
-            type="time"
-            value={threetime}
-            onChange={(e) => {
-              setThreetime(e.target.value)
-              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                return
-              }
-              filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-            }}
-          />
-          <input
-            className='inputttt'
-            type="time"
-            value={fourtime}
-            onChange={(e) => {
-              setFourtime(e.target.value)
-              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                return
-              }
-              filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-            }}
-          />
-        </div>
-      </div>
-
-
-
-    </div>
-
-
     <div style={{ width: '20%' }} >
               <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen venue & hub</p>
               <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
@@ -4431,6 +4360,78 @@ const displayText = allLabels.slice(0, 30) + "..."
 
               </div>
             </div>
+
+    <div style={{ width: '20%' }}>
+      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
+      <div style={{ width: '100%' }}>
+        <DatePicker
+          selectsRange
+          startDate={startDatetwo}
+          endDate={endDatetwo}
+          onChange={(update) => {
+            setDateRangetwo(update)
+
+            if (update[1] === null || update[1] === "null") {
+
+            } else {
+              // updates(2, update)
+
+              filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+            }
+
+
+          }} // Update both startDate and EndDate 
+          placeholderText="Select a date range"
+          className="custom-input"
+          calendarClassName="custom-calendar"
+          dateFormat="d MMM yyyy"
+          customInput={
+            <div className="custom-display-input">
+              {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
+              <FaCaretDown className="calendar-icon" />
+            </div>
+          }
+        />
+      </div>
+      <div className="mt-3" >
+        <div className="custom-inputone d-flex justify-content-between">
+          <input
+            className='inputttt'
+            type="time"
+            value={threetime}
+            onChange={(e) => {
+              setThreetime(e.target.value)
+              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
+                return
+              }
+              filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+            }}
+          />
+          <input
+            className='inputttt'
+            type="time"
+            value={fourtime}
+            onChange={(e) => {
+              setFourtime(e.target.value)
+              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
+                return
+              }
+              filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+            }}
+          />
+        </div>
+      </div>
+
+
+
+    </div>
+
+
+
 
             <div style={{ width: '20%' }} >
               <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by stages/courses</p>
@@ -4645,8 +4646,8 @@ const displayText = allLabels.slice(0, 30) + "..."
           </div> */}
 
 
-          <div className='col-6' style={{ margin: 'auto' }} >
-            <div class="box" onClick={() => {
+          <div className='col-6 w-100 d-flex justify-content-center' style={{ margin: 'auto' }} >
+            <div class="box " style={{maxWidth:"600px"}} onClick={() => {
               setMeals(2)
             }}>
               <div class="boxs">
@@ -4698,115 +4699,118 @@ const displayText = allLabels.slice(0, 30) + "..."
 
         </div>
 
-        <div className='row mt-5' >
+<div className="w-100 d-flex justify-content-center">
+<div className='row mt-5 ' >
 
-          <div className='col-6' >
-            <div class="box " onClick={() => {
-              setMeals(5)
-            }} >
-              <div class="boxs">
-                <p className='asdfp'>Dockets received - timeline</p>
-                <div class="end-box">
-                  <img src="rts.png" className="" alt="Example Image" />
-                  <p className="asdfps">(# of dockets received
-                    between specific time slots)</p>
-                </div>
-              </div>
-            </div>
-          </div>
+<div className='col-6' >
+  <div class="box me-5" style={{maxWidth:"600px"}} onClick={() => {
+    setMeals(5)
+  }} >
+    <div class="boxs">
+      <p className='asdfp'>Dockets received - timeline</p>
+      <div class="end-box d-flex justify-content-between">
+        <img src="rts.png" className="d-flex justify-content-between" alt="Example Image" />
+        <p className="asdfps w-50 m-0">(# of dockets received
+          between specific time slots)</p>
+      </div>
+    </div>
+  </div>
+</div>
 
-          {/* <div className='col-6' >
-            <div class="box" onClick={() => {
-              setMeals(3)
-            }} >
-              <div class="boxs">
-                <div className="d-flex justify-content-between" >
-                  <div >
-                    <p className='asdfp' style={{ marginBottom: 0 }}>Served meals</p>
-                    <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                  </div>
-                  <div >
-                    <p className='asdfp' style={{ color: '#316AAF' }}>{
-                      served ?
-                        ggggrt()
-                        : 0
-                    }</p>
-                  </div>
-                </div>
-
-                <div class="end-box">
-                  <img src="starr.png" className="" alt="Example Image" />
-                  <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
-
-                    <div >
-
-
-
-
-                      <div className="d-flex" style={{ marginBottom: 0 }}  >
-                        <div className=' ' style={{ width: 200 }}>
-                          <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Most: <span style={{ fontWeight: '600' }} >{served[0]?.name || 0}</span></p>
-                        </div>
-                        <div className=' ' style={{ fontWeight: '600' }}>
-                          <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[0]?.count || 0}</p>
-                        </div>
-                      </div>
-
-
-                      <div className="d-flex" style={{ marginBottom: 0 }}  >
-                        <div className=' ' style={{ width: 200 }}>
-                          <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Less: <span style={{ fontWeight: '600' }} >{served[served.length - 1]?.name || ''}</span></p>
-                        </div>
-                        <div className=' ' style={{ fontWeight: '600' }}>
-                          <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[served.length - 1]?.count || 0}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-
-
-
-
-                </div>
-              </div>
-            </div>
-          </div> */}
-
-
-          <div className='col-6' >
-            <div class="box" onClick={() => {
-              setMeals(4)
-            }}>
-              <div class="boxs">
-                <div className="d-flex justify-content-between" >
-                  <div >
-                    <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
-                    <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                  </div>
-                  <div >
-                    {/* <p className='asdfp' style={{ color: '#316AAF' }}>{
-                      minperday ?
-                        ggggrtz()
-                        : 0
-                    }</p> */}
-                  </div>
-                </div>
-
-                <div class="end-box">
-                  <img src="bluee.png" className="" alt="Example Image" />
-                  <p className="asdfps">(Average waiting time
-                    between specific time slots)</p>
-
-
-                </div>
-              </div>
-            </div>
-          </div>
-
-
+{/* <div className='col-6' >
+  <div class="box" onClick={() => {
+    setMeals(3)
+  }} >
+    <div class="boxs">
+      <div className="d-flex justify-content-between" >
+        <div >
+          <p className='asdfp' style={{ marginBottom: 0 }}>Served meals</p>
+          <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
         </div>
+        <div >
+          <p className='asdfp' style={{ color: '#316AAF' }}>{
+            served ?
+              ggggrt()
+              : 0
+          }</p>
+        </div>
+      </div>
+
+      <div class="end-box">
+        <img src="starr.png" className="" alt="Example Image" />
+        <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
+
+          <div >
+
+
+
+
+            <div className="d-flex" style={{ marginBottom: 0 }}  >
+              <div className=' ' style={{ width: 200 }}>
+                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Most: <span style={{ fontWeight: '600' }} >{served[0]?.name || 0}</span></p>
+              </div>
+              <div className=' ' style={{ fontWeight: '600' }}>
+                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[0]?.count || 0}</p>
+              </div>
+            </div>
+
+
+            <div className="d-flex" style={{ marginBottom: 0 }}  >
+              <div className=' ' style={{ width: 200 }}>
+                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Less: <span style={{ fontWeight: '600' }} >{served[served.length - 1]?.name || ''}</span></p>
+              </div>
+              <div className=' ' style={{ fontWeight: '600' }}>
+                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[served.length - 1]?.count || 0}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div> */}
+
+
+<div className='col-6' >
+  <div class="box ms-5" style={{maxWidth:"600px"}} onClick={() => {
+    setMeals(4)
+  }}>
+    <div class="boxs">
+      <div className="d-flex justify-content-between" >
+        <div >
+          <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
+          <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+        </div>
+        <div >
+          {/* <p className='asdfp' style={{ color: '#316AAF' }}>{
+            minperday ?
+              ggggrtz()
+              : 0
+          }</p> */}
+        </div>
+      </div>
+
+      <div class="end-box d-flex justify-content-between ">
+        <img src="bluee.png" className="" alt="Example Image" />
+        <p className="asdfps w-50 m-0">(Average waiting time
+          between specific time slots)</p>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+  </div>
+       
 
       </div>
 
@@ -4821,7 +4825,7 @@ const displayText = allLabels.slice(0, 30) + "..."
                 <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                   setMeals(1)
                 }} className="" alt="Example Image" />
-                <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Dockets completion time</p>
+                <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Dockets completion time</p>
               </div>
 
               <div class="custom-inputonessfine  " >
@@ -5284,7 +5288,7 @@ const displayText = allLabels.slice(0, 30) + "..."
                     <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                       setMeals(1)
                     }} className="" alt="Example Image" />
-                    <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Average completion - timeline</p>
+                    <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Average completion - timeline</p>
                   </div>
 
                   <div >
@@ -5461,7 +5465,7 @@ const displayText = allLabels.slice(0, 30) + "..."
                     <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                       setMeals(1)
                     }} className="" alt="Example Image" />
-                    <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Dockets received - timeline</p>
+                    <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Dockets received - timeline</p>
                   </div>
 
                   <div >
