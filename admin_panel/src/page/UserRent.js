@@ -254,8 +254,8 @@ let UserRent = () => {
 
 
             <div style={{ padding: 13 }} className="d-flex" >
-              <img src="newlogo.png" style={{ width: 40, height: 22 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >web portal</p>
+              <img src="Menu_Logo.png" style={{ width: 56, height: 28  }} alt="Example Image" />
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 3 }} >web portal</p>
             </div>
 
           </div>
@@ -284,7 +284,7 @@ let UserRent = () => {
                       <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', marginTop: 7 }} >Username:</p>
                       <input onChange={(e) => { 
                         setUsername(e.target.value)
-                      }} value={username} onKeyDown={handleKeyDownfiin} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070" ,
+                      }} value={username} onKeyDown={handleKeyDownfiin} style={{ width: 290,color: '#1A1A1B', height: 50, borderRadius: 5, border: "1px solid #707070" ,
                         paddingLeft : 11
                        }} type="text" />
                     </div>
@@ -327,13 +327,38 @@ let UserRent = () => {
               }
 
 
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 30, cursor: "pointer" }} >
-                <div onClick={() => {
-                  loginn()
-                }} style={{ backgroundColor: '#316AAF', width: 85, height: 30, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }} >
-                  <p style={{ textAlign: 'center', color: '#fff', padding: 2 }} >Login</p>
-                </div>
-              </div>
+<div 
+  style={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    marginBottom: 30, 
+    cursor: "pointer" 
+  }} 
+>
+  <div 
+    onClick={() => loginn()} 
+    style={{ 
+      backgroundColor: '#316AAF', 
+      width: 85, 
+      height: 30, 
+      borderRadius: 5, 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center'
+    }} 
+  >
+    <p style={{ 
+      color: '#fff', 
+      fontFamily: 'Gotham', 
+      fontSize: 14, 
+marginTop:25
+    }}>
+      Login
+    </p>
+  </div>
+</div>
+
 
 
 

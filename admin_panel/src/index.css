@@ -3,6 +3,7 @@
   src: url('./assets/fonts/GothamBook.ttf') format('opentype');
   font-weight: normal;
   font-style: normal;
+
 }
 @font-face {
   font-family: 'Gotham';
@@ -11,7 +12,7 @@
   font-style: normal;
 }
 *{
-  font-family:'Gotham',sans-serif;
+  font-family:'Gotham',sans-serif !important;
 }
 body {
   margin: 0;
