@@ -693,7 +693,7 @@ let Dockets = () => {
           setSelectedOptions(realven)
           // alldat = filteredDataonee
           const yesterday = [getFormattedDate(1), getFormattedDate(1)];
-          const eightDaysBefore = [getFormattedDate(8), getFormattedDate(1)];
+          const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
           setDateRangetwo(eightDaysBefore)
           setDateRange(yesterday)
           filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
