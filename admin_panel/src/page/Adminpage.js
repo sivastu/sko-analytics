@@ -78,15 +78,17 @@ let Adminpage = () => {
 
 
   let loginCheck = async () => {
-    let getdata = localStorage.getItem('data')
+    let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
-      localStorage.removeItem('data')
+      sessionStorage.removeItem('data')
       navigate('/')
       return
     }
     let decry = decrypt(getdata)
 
     let parsedatajson = JSON.parse(decry)
+
+    setUsername(parsedatajson)
 
     let name = getName(parsedatajson)
     setUsedname(name)
@@ -104,12 +106,12 @@ let Adminpage = () => {
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
       if (foundUser.Role === 'emp') {
-        localStorage.removeItem('data')
+        sessionStorage.removeItem('data')
         navigate('/')
         return
       }
       if (foundUser) {
-        setUsername(foundUser)
+       
         // Check if the password matches
         if (foundUser.Password === parsedatajson.password) {
           // navigate('/')
@@ -157,7 +159,7 @@ let Adminpage = () => {
               <p onClick={() => {
                 setIsOpen(true)
 
-                // localStorage.removeItem('data')
+                // sessionStorage.removeItem('data')
                 // navigate('/')
               }} style={{
                 fontSize: 20, fontWeight: '700', color: "#fff", marginTop: 3,
@@ -165,9 +167,9 @@ let Adminpage = () => {
               }} >Logout</p>
             </div>
             <div style={{ padding: 13 }} className="d-flex text-center justify-content-center col" >
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop:3 }} >
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop: 3 }} >
                 {usedname}
-                </p>
+              </p>
             </div>
 
             <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
@@ -194,7 +196,7 @@ let Adminpage = () => {
 
               <div className="row" style={{ padding: 30 }} >
                 <div className="col-6" style={{ justifyContent: 'center', alignItems: 'flex-end', display: 'flex' }}>
-                  <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px',marginTop:30,marginLeft:8 }}>Training <br />videos</p>
+                  <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginTop: 30, marginLeft: 8 }}>Training <br />videos</p>
                 </div>
                 <div className="col-6">
                   <img src="starr.png" style={{ width: 95, height: 90, margin: 'auto', display: 'block' }} alt="Example Image" />
@@ -206,11 +208,43 @@ let Adminpage = () => {
               username?.Role === 'admin' || username?.Role === 'manager' ?
 
                 <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }} onClick={() => {
-                  navigate('/grantedaccess')
+
+
+                  console.log(username , 'usernameusernameusernameusername' )
+
+                  function getNames(data) {
+
+                    if (!data.venue || data.venue.length === 0) {
+                      return false; // Default to name if venue is missing or empty
+                    }
+
+                    const hasAll = data.venue.some(v => v.value === "All");
+
+                    if (hasAll && data.venue.length > 1) {
+                      return false;
+                    } else if (data.venue.length === 1 && !hasAll) {
+                      return true;
+                    }
+
+                    return false;
+                  }
+                
+
+                  let funnnderr = getNames(username) 
+
+                  console.log(funnnderr , 'usernameusernameusernameusername' )
+                  if( funnnderr === true ){
+                    navigate("/analytics");
+                  }else{
+                    navigate('/grantedaccess')
+                  }
+
+
+                 
                 }} >
                   <div className="row" style={{ padding: 30 }} >
                     <div className="col-6" style={{ justifyContent: 'center', alignItems: 'flex-end', display: 'flex' }}>
-                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginLeft:28,marginTop:30 }}>SKO <br />Analytics</p>
+                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginLeft: 28, marginTop: 30 }}>SKO <br />Analytics</p>
                     </div>
                     <div className="col-6">
                       <img src="bluee.png" style={{ width: 95, height: 90, margin: 'auto', display: 'block' }} alt="Example Image" />
@@ -231,7 +265,7 @@ let Adminpage = () => {
                   }} >
                   <div className="row" style={{ padding: 30 }} >
                     <div className="col-6 d-flex justify-content-center align-items-center ">
-                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginTop: 30 ,marginLeft:8}}>Settings</p>
+                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginTop: 30, marginLeft: 8 }}>Settings</p>
                     </div>
                     <div className="col-6">
                       <img src="sett.png" style={{ width: 95, height: 90, margin: 'auto', display: 'block' }} alt="Example Image" />
@@ -267,11 +301,11 @@ let Adminpage = () => {
             }
           }}
         >
-          <h2 style={{ marginBottom: '15px', fontSize: '20px' , color : '#1A1A1B' }}>Are you sure you want to log out?</h2>
+          <h2 style={{ marginBottom: '15px', fontSize: '20px', color: '#1A1A1B' }}>Are you sure you want to log out?</h2>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '20px' }}>
             <button
-              onClick={()=>{
-                localStorage.removeItem('data')
+              onClick={() => {
+                sessionStorage.removeItem('data')
                 navigate('/')
               }}
               style={{
@@ -290,7 +324,7 @@ let Adminpage = () => {
               Yes
             </button>
             <button
-              onClick={()=>{
+              onClick={() => {
                 setIsOpen(false)
               }}
               style={{

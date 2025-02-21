@@ -41,9 +41,9 @@ let Multivenuesone = () => {
       }
 
   let loginCheck = async () => {
-    let getdata = localStorage.getItem('data')
+    let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
-      localStorage.removeItem('data')
+      sessionStorage.removeItem('data')
       navigate('/')
       return
     }
@@ -65,7 +65,7 @@ let Multivenuesone = () => {
 
       if (foundUser) {
         if(foundUser.Role === 'emp'){
-          localStorage.removeItem('data')
+          sessionStorage.removeItem('data')
           navigate('/')
           return
         }

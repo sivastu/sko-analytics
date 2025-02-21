@@ -101,7 +101,7 @@ let Training = () => {
   }
 
   let loginCheck = async () => {
-    let getdata = localStorage.getItem('data')
+    let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
       navigate('/')
       return

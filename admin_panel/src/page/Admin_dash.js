@@ -303,9 +303,9 @@ let Admin_dash = () => {
   }
 
   let loginCheck = async () => {
-    let getdata = localStorage.getItem('data')
+    let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
-      localStorage.removeItem('data')
+      sessionStorage.removeItem('data')
       navigate('/')
       return
     }
@@ -329,7 +329,7 @@ let Admin_dash = () => {
 
       if (foundUser) {
         if (foundUser.Role === 'emp') {
-          localStorage.removeItem('data')
+          sessionStorage.removeItem('data')
           navigate('/')
           return
         }
@@ -806,6 +806,10 @@ let Admin_dash = () => {
                   <div
                     onClick={() => {
                       setData('1')
+                      setUsername('')
+                      setEmail('')
+                      setSelectedOptions([])
+                      setSelectedOptions([])
                     }}
                     style={{
                       marginTop: 30,
@@ -836,6 +840,12 @@ let Admin_dash = () => {
                   <div
                     onClick={() => {
                       setData('2')
+
+                      setUsername('')
+                      setEmail('')
+                      setSelectedOptions([])
+                      setSelectedOptions([])
+
                     }}
                     style={{
                       marginTop: 30,
@@ -864,6 +874,12 @@ let Admin_dash = () => {
                   <div
                     onClick={() => {
                       setData('3')
+
+                      setUsername('')
+                      setEmail('')
+                      setSelectedOptions([])
+                      setSelectedOptions([])
+
                     }}
                     style={{
                       marginTop: 30,
@@ -894,6 +910,12 @@ let Admin_dash = () => {
                   <div
                     onClick={() => {
                       setData('4')
+
+                      setUsername('')
+                      setEmail('')
+                      setSelectedOptions([])
+                      setSelectedOptions([])
+
                     }}
                     style={{
                       marginTop: 30,
@@ -929,6 +951,12 @@ let Admin_dash = () => {
                   <div
                     onClick={() => {
                       setData('5')
+
+                      setUsername('')
+                      setEmail('')
+                      setSelectedOptions([])
+                      setSelectedOptions([])
+                      
                     }}
                     style={{
                       marginTop: 30,
@@ -1560,7 +1588,7 @@ let Admin_dash = () => {
             <div style={{ display: 'flex', justifyContent: 'flex-end', cursor: 'pointer', marginTop: 20 }}>
               <div onClick={() => {
                 newuser()
-              }} style={{ backgroundColor: ck === true ? "#316AAF" : '#9F9F9F', width: 100, height: 35, borderRadius: 5, padding: 6, textAlign: 'center', marginRight: 50 }}>
+              }} style={{ backgroundColor: ck === true ? "#316AAF" : '#316AAF', width: 100, height: 35, borderRadius: 5, padding: 6, textAlign: 'center', marginRight: 50 }}>
                 <p style={{ fontSize: 15, fontWeight: '400', color: '#fff', margin: 0 }}>Save</p>
               </div>
             </div>
@@ -1573,7 +1601,7 @@ let Admin_dash = () => {
                   newuseredit()
                 }
 
-              }} style={{ backgroundColor: btncolor === true ? "#316AAF" : '#9F9F9F', width: 100, height: 35, borderRadius: 5, padding: 6, textAlign: 'center', marginRight: 50 }}>
+              }} style={{ backgroundColor: btncolor === true ? "#316AAF" : '#316AAF', width: 100, height: 35, borderRadius: 5, padding: 6, textAlign: 'center', marginRight: 50 }}>
                 <p style={{ fontSize: 15, fontWeight: '400', color: '#fff', margin: 0 }}>Save</p>
               </div>
             </div>
