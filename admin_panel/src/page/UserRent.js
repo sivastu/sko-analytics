@@ -284,7 +284,7 @@ let UserRent = () => {
 
             <div style={{ padding: 13 }} className="d-flex" >
               <img src="Menu_Logo.png" style={{ width: 56, height: 28  }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 3 }} >web portal</p>
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 4 }} >web portal</p>
             </div>
 
           </div>
@@ -310,7 +310,7 @@ let UserRent = () => {
 
                   <div className="kjok" style={{ marginTop: '7%' }} >
                     <div className="d-flex justify-content-around" >
-                      <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', marginTop: 7 }} >Username:</p>
+                      <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', paddingTop:12 }} >Username:</p>
                       <input onChange={(e) => { 
                         setUsername(e.target.value)
                       }} value={username} onKeyDown={handleKeyDownfiin} style={{ width: 290,color: '#1A1A1B', height: 50, borderRadius: 5, border: "1px solid #707070" ,
@@ -320,7 +320,7 @@ let UserRent = () => {
 
 
                     <div className="d-flex justify-content-around mt-3" >
-                      <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', marginTop: 7 }}>Password:</p>
+                      <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', paddingTop:12}}>Password:</p>
                       <input onChange={(e) => {
                         setPassword(e.target.value)
                       }} value={password} ref={input2Ref} onKeyDown={handleKeyDown} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070",

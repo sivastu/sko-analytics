@@ -162,23 +162,19 @@ let Adminpage = () => {
                 // sessionStorage.removeItem('data')
                 // navigate('/')
               }} style={{
-                fontSize: 20, fontWeight: '700', color: "#fff", marginTop: 0,
+                fontSize: 20, fontWeight: '700', color: "#fff", marginTop: -3,
                 cursor: 'pointer'
               }} >Logout</p>
             </div>
             <div style={{ padding: 13 }} className="d-flex text-center justify-content-center col" >
-<<<<<<< HEAD
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop:0 }} >
-=======
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop: 3 }} >
->>>>>>> 92323f17fdef01a3b341a62c2633500ebad44a94
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop: -3 }} >
                 {usedname}
               </p>
             </div>
 
             <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
               <img src="Menu_Logo.png" style={{ width: 56, height: 28 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 0 }} >web app</p>
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >web app</p>
             </div>
 
           </div>
@@ -200,7 +196,7 @@ let Adminpage = () => {
 
               <div className="row" style={{ padding: 30 }} >
                 <div className="col-6" style={{ justifyContent: 'center', alignItems: 'flex-end', display: 'flex' }}>
-                  <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginTop: 30, marginLeft: 8 }}>Training <br />videos</p>
+                  <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginTop: 20, marginLeft: 6 }}>Training <br />videos</p>
                 </div>
                 <div className="col-6">
                   <img src="starr.png" style={{ width: 95, height: 90, margin: 'auto', display: 'block' }} alt="Example Image" />
@@ -248,7 +244,7 @@ let Adminpage = () => {
                 }} >
                   <div className="row" style={{ padding: 30 }} >
                     <div className="col-6" style={{ justifyContent: 'center', alignItems: 'flex-end', display: 'flex' }}>
-                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginLeft: 28, marginTop: 30 }}>SKO <br />Analytics</p>
+                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginLeft: 28, marginTop: 20 }}>SKO <br />Analytics</p>
                     </div>
                     <div className="col-6">
                       <img src="bluee.png" style={{ width: 95, height: 90, margin: 'auto', display: 'block' }} alt="Example Image" />
@@ -269,7 +265,7 @@ let Adminpage = () => {
                   }} >
                   <div className="row" style={{ padding: 30 }} >
                     <div className="col-6 d-flex justify-content-center align-items-center ">
-                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginTop: 30, marginLeft: 8 }}>Settings</p>
+                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginTop: 20, marginLeft: 8 }}>Settings</p>
                     </div>
                     <div className="col-6">
                       <img src="sett.png" style={{ width: 95, height: 90, margin: 'auto', display: 'block' }} alt="Example Image" />
