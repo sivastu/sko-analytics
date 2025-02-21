@@ -1133,7 +1133,7 @@ let Meals = () => {
             type="checkbox" id="switch3" />
           <label class="switch-label" for="switch3"></label>
         </div>}
-        <span style={{ flexGrow: 1 }}>{data.label}</span>
+        <span style={{ flexGrow: 1,marginTop:2 }}>{data.label}</span>
 
       </div>
     );
@@ -3319,8 +3319,8 @@ let Meals = () => {
                   dateFormat="d MMM yyyy"
                   customInput={
                     <div className="custom-display-input">
-                      {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
-                      <FaCaretDown className="calendar-icon" />
+{startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
+               <FaCaretDown className="calendar-icon" />
                     </div>
                   }
                 />
@@ -3503,7 +3503,7 @@ let Meals = () => {
                     if (e.target.checked === false) {
                     }
                   }} type="checkbox" id="switch3" />
-                  <label class="switch-label" for="switch3"></label>
+                  <label class="switch-label " for="switch3"></label>
                 </div>
 
 
@@ -3739,7 +3739,7 @@ let Meals = () => {
                     ValueContainer: ({ children, ...props }) => {
                       const selectedValues = props.getValue();
                       return (
-                        <components.ValueContainer {...props}>
+                        <components.ValueContainer {...props} >
                           {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
                         </components.ValueContainer>
                       );
