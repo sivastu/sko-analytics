@@ -1133,7 +1133,7 @@ let Meals = () => {
             type="checkbox" id="switch3" />
           <label class="switch-label" for="switch3"></label>
         </div>}
-        <span style={{ flexGrow: 1,marginTop:2 }}>{data.label}</span>
+        <span style={{ flexGrow: 1, marginTop: 2 }}>{data.label}</span>
 
       </div>
     );
@@ -1144,7 +1144,10 @@ let Meals = () => {
   const CustomPlaceholder = ({ children, getValue }) => {
     const selected = getValue();
     if (selected.length) {
-      const allLabels = selected.map(option => option.label).join(", ");
+      const allLabels = selected
+        .filter(option => !option.label.startsWith("All ")) // Skip labels starting with "All "
+        .map(option => option.label)
+        .join(", ");
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
@@ -3259,16 +3262,16 @@ let Meals = () => {
           <div className="row justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', height: 52 }}>
 
             <div style={{ padding: 13 }} className="d-flex col"
-             onClick={() => {
-              navigate(-1)
-            }}  >
-            <img src="arrow.png" style={{ width: 20, height: 20 ,marginTop:3}} alt="Example Image" />
+              onClick={() => {
+                navigate(-1)
+              }}  >
+              <img src="arrow.png" style={{ width: 20, height: 20, marginTop: 3 }} alt="Example Image" />
               <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >MEALS</p>
             </div>
             <div style={{ padding: 13 }} className="d-flex text-center justify-content-center col" >
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop:-3 }} >
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop: -3 }} >
                 {usedname}
-                </p>
+              </p>
             </div>
 
             <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
@@ -3319,8 +3322,8 @@ let Meals = () => {
                   dateFormat="d MMM yyyy"
                   customInput={
                     <div className="custom-display-input">
-{startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
-               <FaCaretDown className="calendar-icon" />
+                      {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
+                      <FaCaretDown className="calendar-icon" />
                     </div>
                   }
                 />
@@ -3492,7 +3495,7 @@ let Meals = () => {
                 />
               </div>
 
-              <div ref={selectRefone}  className="custom-inputoness d-flex justify-content-between mt-3" style={{
+              <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{
                 width: '100%',
                 height: 45
               }}>
@@ -3586,10 +3589,10 @@ let Meals = () => {
                 </div>
 
                 <Select
-                menuIsOpen={menuIsOpentwo}
-                onMenuOpen={() => setMenuIsOpentwo(true)}
-                onMenuClose={() => setMenuIsOpentwo(false)}
-                onFocus={() => setMenuIsOpentwo(true)}
+                  menuIsOpen={menuIsOpentwo}
+                  onMenuOpen={() => setMenuIsOpentwo(true)}
+                  onMenuClose={() => setMenuIsOpentwo(false)}
+                  onFocus={() => setMenuIsOpentwo(true)}
 
                   isDisabled={!Hubradio}
                   isMulti
@@ -3634,10 +3637,10 @@ let Meals = () => {
                 </div>
 
                 <Select
-                menuIsOpen={menuIsOpenthree}
-                onMenuOpen={() => setMenuIsOpenthree(true)}
-                onMenuClose={() => setMenuIsOpenthree(false)}
-                onFocus={() => setMenuIsOpenthree(true)}
+                  menuIsOpen={menuIsOpenthree}
+                  onMenuOpen={() => setMenuIsOpenthree(true)}
+                  onMenuClose={() => setMenuIsOpenthree(false)}
+                  onFocus={() => setMenuIsOpenthree(true)}
                   isDisabled={!Cources}
                   isMulti
                   className="newoneonee"
@@ -3710,7 +3713,7 @@ let Meals = () => {
               }}>
 
 
- 
+
                 <div class="switch-container">
                   <input type="checkbox" checked={takeaway} onChange={(e) => {
                     setTakeaway(e.target.checked)
@@ -3722,10 +3725,10 @@ let Meals = () => {
                 </div>
 
                 <Select
-                 menuIsOpen={menuIsOpenfour}
-                 onMenuOpen={() => setMenuIsOpenfour(true)}
-                 onMenuClose={() => setMenuIsOpenfour(false)}
-                 onFocus={() => setMenuIsOpenfour(true)}
+                  menuIsOpen={menuIsOpenfour}
+                  onMenuOpen={() => setMenuIsOpenfour(true)}
+                  onMenuClose={() => setMenuIsOpenfour(false)}
+                  onFocus={() => setMenuIsOpenfour(true)}
                   isDisabled={!takeaway}
                   isMulti
                   className="newoneonee"
@@ -3807,7 +3810,7 @@ let Meals = () => {
                 <div className='row ' >
 
                   <div className='col-6 d-flex justify-content-center ' >
-                    <div class="box" style={{maxWidth: "600px", marginLeft:80}} onClick={() => {
+                    <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
                       setMeals(5)
                     }} >
                       <div class="boxs">
@@ -3822,7 +3825,7 @@ let Meals = () => {
 
 
                   <div className='col-6 d-flex justify-content-center' >
-                    <div class="box" style={{maxWidth: "600px", marginRight:80}} onClick={() => {
+                    <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
                       setMeals(2)
                     }}>
                       <div class="boxs">
@@ -3897,7 +3900,7 @@ let Meals = () => {
                 <div className='row mt-5' >
 
                   <div className='col-6 d-flex justify-content-center' >
-                    <div class="box" style={{maxWidth: "600px", marginLeft:80}} onClick={() => {
+                    <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
                       setMeals(3)
                     }} >
                       <div class="boxs">
@@ -3957,7 +3960,7 @@ let Meals = () => {
 
 
                   <div className='col-6 d-flex justify-content-center' >
-                    <div class="box" style={{maxWidth: "600px", marginRight:80}} onClick={() => {
+                    <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
                       setMeals(4)
                     }}>
                       <div class="boxs">
@@ -4280,7 +4283,7 @@ let Meals = () => {
                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                             setMeals(1)
                           }} className="" alt="Example Image" />
-                          <p style={{ fontWeight: '500', fontSize: 20, marginTop:0, marginLeft: 10 }}>Served meals</p>
+                          <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Served meals</p>
                         </div>
 
                         <div >

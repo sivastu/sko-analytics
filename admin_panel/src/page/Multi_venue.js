@@ -1350,7 +1350,10 @@ let Multi_venue = () => {
   const CustomPlaceholder = ({ children, getValue }) => {
     const selected = getValue();
     if (selected.length) {
-      const allLabels = selected.map(option => option.label).join(", ");
+      const allLabels = selected
+  .filter(option => !option.label.startsWith("All ")) // Skip labels starting with "All "
+  .map(option => option.label)
+  .join(", ");
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
