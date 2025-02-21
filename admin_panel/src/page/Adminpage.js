@@ -167,7 +167,7 @@ let Adminpage = () => {
               }} >Logout</p>
             </div>
             <div style={{ padding: 13 }} className="d-flex text-center justify-content-center col" >
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop:0 }} >
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop:-3 }} >
                 {usedname}
               </p>
             </div>
