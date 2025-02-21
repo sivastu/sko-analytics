@@ -35,7 +35,7 @@ let UserRent = () => {
   },[])
 
   let loginCheck = async () => {
-    let getdata = localStorage.getItem('data')
+    let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
       navigate('/')
       return
@@ -161,15 +161,44 @@ let UserRent = () => {
             let fing = encrypt( JSON.stringify(foundUser) )
 
             console.log(fing , 'fingfingfingfingfing')
-            localStorage.setItem('data' , fing )
+            sessionStorage.setItem('data' , fing )
+
+            function getName(data) {
+
+              if (!data.venue || data.venue.length === 0) {
+                return false; // Default to name if venue is missing or empty
+              }
+          
+              const hasAll = data.venue.some(v => v.value === "All");
+          
+              if (hasAll && data.venue.length > 1) {
+                return false;
+              } else if (data.venue.length === 1 && !hasAll) {
+                return true;
+              }
+          
+              return false;
+            }
+
 
             if (foundUser.Role === 'admin') {
 
-              navigate("/admin", { state: { userdata: foundUser } });
+              let funnnderr = getName(foundUser) 
+              if( funnnderr === true ){
+                navigate("/admin", { state: { userdata: foundUser } });
+              }else{
+                navigate("/admin", { state: { userdata: foundUser } });
+              }
             }else if(foundUser.Role === 'emp'){
               navigate("/training");
             }else{
-              navigate("/admin", { state: { userdata: foundUser } });
+              let funnnderr = getName(foundUser) 
+              if( funnnderr === true ){
+                navigate("/admin", { state: { userdata: foundUser } });
+              }else{
+                navigate("/admin", { state: { userdata: foundUser } });
+              }
+             
             }
           } else {
             setSwalProps({

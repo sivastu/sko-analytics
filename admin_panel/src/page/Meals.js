@@ -169,9 +169,9 @@ let Meals = () => {
   }
 
   let loginCheck = async () => {
-    let getdata = localStorage.getItem('data')
+    let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
-      localStorage.removeItem('data')
+      sessionStorage.removeItem('data')
       navigate('/')
       return
     }
@@ -190,7 +190,7 @@ let Meals = () => {
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
       if (foundUser.Role === 'emp') {
-        localStorage.removeItem('data')
+        sessionStorage.removeItem('data')
         navigate('/')
         return
       }
@@ -406,7 +406,7 @@ let Meals = () => {
           console.log("options:", optionsone);
           // console.log("optionss:", optionsstwo);
 
-          let getdata = localStorage.getItem('data')
+          let getdata = sessionStorage.getItem('data')
 
           let decry = decrypt(getdata)
 
@@ -510,7 +510,7 @@ let Meals = () => {
           setSelectedOptions(realven)
           // alldat = filteredDataonee
           const yesterday = [getFormattedDate(1), getFormattedDate(1)];
-          const eightDaysBefore = [getFormattedDate(8), getFormattedDate(1)];
+          const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
           setDateRangetwo(eightDaysBefore)
           setDateRange(yesterday)
           filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)

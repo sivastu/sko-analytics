@@ -274,9 +274,9 @@ let Multi_venue = () => {
   }
 
   let loginCheck = async () => {
-    let getdata = localStorage.getItem('data')
+    let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
-      localStorage.removeItem('data')
+      sessionStorage.removeItem('data')
       navigate('/')
       return
     }
@@ -295,7 +295,7 @@ let Multi_venue = () => {
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
       if (foundUser.Role === 'emp') {
-        localStorage.removeItem('data')
+        sessionStorage.removeItem('data')
         navigate('/')
         return
       }
@@ -590,7 +590,7 @@ let Multi_venue = () => {
           console.log("options:", optionsone);
           // console.log("optionss:", optionsstwo);
 
-          let getdata = localStorage.getItem('data')
+          let getdata = sessionStorage.getItem('data')
 
           let decry = decrypt(getdata)
 

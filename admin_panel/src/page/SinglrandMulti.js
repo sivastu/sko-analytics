@@ -44,9 +44,9 @@ let SinglrandMulti = () => {
   
 
   let loginCheck = async () => {
-    let getdata = localStorage.getItem('data')
+    let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
-      localStorage.removeItem('data')
+      sessionStorage.removeItem('data')
       navigate('/')
       return
     }
@@ -68,7 +68,7 @@ let name = getName(parsedatajson)
 
       if (foundUser) {
         if(foundUser.Role === 'emp'){
-          localStorage.removeItem('data')
+          sessionStorage.removeItem('data')
           navigate('/')
           return
         }
