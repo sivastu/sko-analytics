@@ -439,6 +439,39 @@ let Dockets = () => {
   }
   let [fulldatafull, setFulldatafull] = useState()
 
+  function extractUniqueNotes(datad, predefinedValues) {
+            
+    console.log(predefinedValues , 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
+    let uniqueNotes = new Set();
+
+    for (let group in datad) {
+        
+
+        for (let location in datad[group]) {
+
+          if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
+
+            for (let section in datad[group][location]) {
+                for (let date in datad[group][location][section]) {
+                    datad[group][location][section][date].forEach(order => {
+                        order.ITEMS.forEach(item => {
+                            if (item.NOTE) {
+                                // Extract the word after (C<number>)
+                                const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                                if (match && match[1] && match[1] !== "undefined") {
+                                    uniqueNotes.add(match[1]); // Add only valid words
+                                }
+                            }
+                        });
+                    });
+                }
+            }
+        }
+    }
+
+    // Convert Set to desired format
+    return [...uniqueNotes].map(note => ({ value: note, label: note }));
+}
 
 
   let getone = () => {
@@ -476,41 +509,9 @@ let Dockets = () => {
           }
 
           const cleanedData = removeTrainingNotes(eventss);
+ 
 
-          console.log("Events between dates:", cleanedData);
-
-          function extractUniqueNotes(datad) {
-            let uniqueNotes = new Set();
-
-            for (let group in datad) {
-              for (let location in datad[group]) {
-                for (let section in datad[group][location]) {
-                  for (let date in datad[group][location][section]) {
-                    datad[group][location][section][date].forEach(order => {
-                      order.ITEMS.forEach(item => {
-                        if (item.NOTE) {
-                          // Extract the word after (C<number>
-                          const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                          if (match && match[1] && match[1] !== "undefined") {
-                            uniqueNotes.add(match[1]); // Add only valid words
-                          }
-
-                        }
-                      });
-                    });
-                  }
-                }
-              }
-            }
-
-            // Convert Set to desired format
-            return [...uniqueNotes].map(note => ({ value: note, label: note }));
-          }
-
-          let uuuk = extractUniqueNotes(cleanedData)
-          uuuk.unshift({ label: "All Courses", value: "All" });
-
-          setFulldatafull(uuuk)
+     
 
 
 
@@ -583,10 +584,7 @@ let Dockets = () => {
           //   label: hub,
           // }));
 
-
-
-
-          console.log("options:", optionsone);
+  
           // console.log("optionss:", optionsstwo);
 
           let getdata = sessionStorage.getItem('data')
@@ -600,14 +598,29 @@ let Dockets = () => {
           let realven = []
 
           if (hasAllValue === true) {
-            realven.push(optionsone[1])
+            realven.push(...optionsone);
             setBasic(optionsone)
+
+
+            let uuuk = extractUniqueNotes(cleanedData , optionsone )
+            uuuk.unshift({ label: "All Courses", value: "All" });
+  
+            setFulldatafull(uuuk)
+
           } else {
-            realven.push(parsedatajson.venue[0])
+            realven.push(parsedatajson.venue)
             setBasic(parsedatajson.venue)
+
+
+            let uuuk = extractUniqueNotes(cleanedData , parsedatajson.venue )
+            uuuk.unshift({ label: "All Courses", value: "All" });
+  
+            setFulldatafull(uuuk)
           }
 
 
+          
+        
 
           const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
           const optionstakeaway = [
@@ -1378,6 +1391,12 @@ let Dockets = () => {
     setOldven(selected)
 
     if (hasAllValue === false && hasAllValueold === true) {
+
+      let uuuk = extractUniqueNotes( basicall , [] )
+      uuuk.unshift({ label: "All Courses", value: "All" });
+
+      setFulldatafull(uuuk)
+
       setSelectedOptions([]);
 
       filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -1414,6 +1433,12 @@ let Dockets = () => {
 
 
     if (hasAllValue === true) {
+
+      let uuuk = extractUniqueNotes( basicall , basic )
+      uuuk.unshift({ label: "All Courses", value: "All" });
+
+      setFulldatafull(uuuk)
+
 
       setSelectedOptions(basic || []);
 
@@ -1487,7 +1512,10 @@ let Dockets = () => {
 
       //   return
       // }
+      let uuuk = extractUniqueNotes( basicall , selected )
+      uuuk.unshift({ label: "All Courses", value: "All" });
 
+      setFulldatafull(uuuk)
       setSelectedOptions(selected || []);
 
       filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)

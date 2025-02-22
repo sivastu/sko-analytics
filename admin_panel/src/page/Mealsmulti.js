@@ -44,24 +44,24 @@ ChartJS.register(
 );
 
 
-let Meals = () => {
+let Mealsmulti = () => {
   let [data, setData] = useState();
   const [dateRange, setDateRange] = useState([null, null]); // [startDate, endDate]
   const [startDate, endDate] = dateRange;
-
+  const [selectedOptionsfive, setSelectedOptionsfive] = useState([]);
   const pdfRef = useRef();
   const pdfRefss = useRef();
   const pdfRefsss = useRef();
   let [basicall, setBasicall] = useState()
   let [basic, setBasic] = useState()
   let [basicone, setBasicone] = useState([])
-
+ let [hubbtwo, setHubbtwo] = useState([])
   let [hubb, setHubb] = useState([])
   let [hubbswitch, setHubbswitch] = useState(true)
-
+ let [basiconefive, setBasiconefive] = useState([])
   //parse meals
   let [meals, setMeals] = useState(1)
-
+ let [oldvenfive, setOldvenfive] = useState([])
   const pdfRefred = useRef();
   //edit
   let [editall, setEditall] = useState([])
@@ -74,7 +74,8 @@ let Meals = () => {
   let [maxperday, setMaxperday] = useState([])
 
   let [alldrop, setAlldrop] = useState([])
-
+ const [menuIsOpenfive, setMenuIsOpenfive] = useState(false);
+  const [menuIsOpensix, setMenuIsOpensix] = useState(false);
   ///old
   let [oldven, setOldven] = useState([])
   let [oldhub, setOldhub] = useState([])
@@ -82,7 +83,11 @@ let Meals = () => {
   let [oldcou, setOldcou] = useState([])
   let [oldtak, setOldtak] = useState([])
 
+    let [oldhubtwo, setOldhubtwo] = useState([])
+  const [venueradiofivese, setVenueradiofivese ] = useState(true)
 
+  const [venueradiosix , setVenueradiosix ] = useState(true)
+const selectReffive = useRef(null);
 
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
@@ -91,7 +96,7 @@ let Meals = () => {
   const [menuIsOpenthree, setMenuIsOpenthree] = useState(false);
   const [menuIsOpenfour, setMenuIsOpenfour] = useState(false);
 
-
+  const selectRefsix = useRef(null);
   const selectRef = useRef(null);
 
   const selectRefone = useRef(null);
@@ -150,6 +155,39 @@ let Meals = () => {
   let [optionbar, setOption] = useState([])
   let [mydata, setMydata] = useState()
 
+  function extractUniqueNotes(datad, predefinedValues) {
+            
+    console.log(predefinedValues , 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
+    let uniqueNotes = new Set();
+
+    for (let group in datad) {
+        
+
+        for (let location in datad[group]) {
+
+          if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
+
+            for (let section in datad[group][location]) {
+                for (let date in datad[group][location][section]) {
+                    datad[group][location][section][date].forEach(order => {
+                        order.ITEMS.forEach(item => {
+                            if (item.NOTE) {
+                                // Extract the word after (C<number>)
+                                const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                                if (match && match[1] && match[1] !== "undefined") {
+                                    uniqueNotes.add(match[1]); // Add only valid words
+                                }
+                            }
+                        });
+                    });
+                }
+            }
+        }
+    }
+
+    // Convert Set to desired format
+    return [...uniqueNotes].map(note => ({ value: note, label: note }));
+}
 
   let [usedname, setUsedname] = useState('')
   function getName(data) {
@@ -255,39 +293,6 @@ let Meals = () => {
     ],
   };
 
-  function extractUniqueNotes(datad, predefinedValues) {
-            
-    console.log(predefinedValues , 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
-    let uniqueNotes = new Set();
-
-    for (let group in datad) {
-        
-
-        for (let location in datad[group]) {
-
-          if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
-
-            for (let section in datad[group][location]) {
-                for (let date in datad[group][location][section]) {
-                    datad[group][location][section][date].forEach(order => {
-                        order.ITEMS.forEach(item => {
-                            if (item.NOTE) {
-                                // Extract the word after (C<number>)
-                                const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                                if (match && match[1] && match[1] !== "undefined") {
-                                    uniqueNotes.add(match[1]); // Add only valid words
-                                }
-                            }
-                        });
-                    });
-                }
-            }
-        }
-    }
-
-    // Convert Set to desired format
-    return [...uniqueNotes].map(note => ({ value: note, label: note }));
-}
 
   let [fulldatafull, setFulldatafull] = useState()
 
@@ -329,7 +334,6 @@ let Meals = () => {
  
 
        
-        
 
 
 
@@ -1175,16 +1179,17 @@ let Meals = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
 
-  const handleChange = (selected) => {
-    setMenuIsOpen(true) 
-    console.log(JSON.stringify(fulldatatwo), 'selected')
-    const hasAllValue = selected.some(item => item.value === "All");
-    const hasAllValueold = oldven.some(item => item.value === "All");
+   const handleChange = (selected) => {
+ 
+     console.log(JSON.stringify(fulldatatwo), 'selected')
+     const hasAllValue = selected.some(item => item.value === "All");
+     const hasAllValueold = oldven.some(item => item.value === "All");
+ 
+ 
+     setOldven(selected)
+ 
+     if (hasAllValue === false && hasAllValueold === true) {
 
-
-    setOldven(selected)
-
-    if (hasAllValue === false && hasAllValueold === true) {
 
       let uuuk = extractUniqueNotes( basicall , [] )
       uuuk.unshift({ label: "All Courses", value: "All" });
@@ -1192,184 +1197,343 @@ let Meals = () => {
       setFulldatafull(uuuk)
 
 
-
-      setSelectedOptions([]);
-
-      filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      const output = [];
-
-      // // Iterate through the search array
-      [].forEach(({ value }) => {
-        // Search in the data object
-        Object.entries(alldrop).forEach(([key, items]) => {
-          if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
-          } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
-            });
-          }
-        });
-      });
-
-      setBasicone(output)
-
-      return
-    }
-
-
-
-    if (hasAllValue === true) {
+       setSelectedOptions([]);
+ 
+       filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRange, onetime  , twotime  , selectedOptionsfive , 
+       //   hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       const output = [];
+ 
+       // // Iterate through the search array
+       [].forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(alldrop).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value: key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+ 
+       setBasicone(output)
+ 
+       return
+     }
+ 
+ 
+ 
+     if (hasAllValue === true) {
 
       let uuuk = extractUniqueNotes( basicall , basic )
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
-
-
-      setSelectedOptions(basic || []);
-
-      filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      const output = [{
-        "label": "All Hub",
-        "value": "All"
-      }];
-
-      // // Iterate through the search array
-      basic.forEach(({ value }) => {
-        // Search in the data object
-        Object.entries(alldrop).forEach(([key, items]) => {
-          if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
-          } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
-            });
-          }
-        });
-      });
-
-      setBasicone(output)
-
-
-    } else {
-
-      let lengthss = selected.length
-      let lengthssone = basic.length
-
-      // if (lengthss === lengthssone - 1) {
-      //   setSelectedOptions( []);
-
-      //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      //   const output = [];
-
-      //   // // Iterate through the search array
-      //   [].forEach(({ value }) => {
-      //     // Search in the data object
-      //     Object.entries(alldrop).forEach(([key, items]) => {
-      //       if (key === value) {
-      //         // If the key matches, add all items from the group to the output
-      //         items.forEach(item => {
-      //           output.push({ value: key + '-' + item.name, label: item.name });
-      //         });
-      //       } else {
-      //         // Search within the group's items
-      //         items.forEach(item => {
-      //           if (item.name === value) {
-      //             output.push({ value: key + '-' + item.name, label: key });
-      //           }
-      //         });
-      //       }
-      //     });
-      //   });
-
-      //   setBasicone(output)
-
-      //   return
-      // }
-
-      let uuuk = extractUniqueNotes( basicall , selected )
-      uuuk.unshift({ label: "All Courses", value: "All" });
-
-      setFulldatafull(uuuk)
-
-
-      setSelectedOptions(selected || []);
-
-      filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      const output = [{
-        "label": "All Hub",
-        "value": "All"
-      }];
-
-      // // Iterate through the search array
-      selected.forEach(({ value }) => {
-        // Search in the data object
-        Object.entries(alldrop).forEach(([key, items]) => {
-          if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
-          } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
-            });
-          }
-        });
-      });
-
-      setBasicone(output)
-    }
-
-
-    // const validVenues = selected.map(item => item.value);
-
-    //     // Filter the data
-    //     const filteredData = Object.fromEntries(
-    //       Object.entries(fulldatatwo).filter(([key, value]) => validVenues.includes(value.venue))
-    //     );
-    //     callfordata(filteredData , fulldata )
-
-    //     setFulldatatwo(filteredData) 
-
-
-    //     const filteredDatatwo = Object.fromEntries(
-    //       Object.entries(fulldata).filter(([key, value]) => validVenues.includes(value.venue))
-    //     );
-
-    //     callfordata(filteredData , filteredDatatwo )
-    //     setFulldata(filteredDatatwo)
-
-  };
-
+ 
+       setSelectedOptions(basic || []);
+ 
+       filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       const output = [{
+         "label": "All Hub",
+         "value": "All"
+       }];
+ 
+       // // Iterate through the search array
+       basic.forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(alldrop).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value: key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+ 
+       setBasicone(output)
+ 
+ 
+     } else {
+ 
+       let lengthss = selected.length
+       let lengthssone = basic.length
+ 
+       // if (lengthss === lengthssone - 1) {
+       //   setSelectedOptions( []);
+ 
+       //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       //   const output = [];
+ 
+       //   // // Iterate through the search array
+       //   [].forEach(({ value }) => {
+       //     // Search in the data object
+       //     Object.entries(alldrop).forEach(([key, items]) => {
+       //       if (key === value) {
+       //         // If the key matches, add all items from the group to the output
+       //         items.forEach(item => {
+       //           output.push({ value: key + '-' + item.name, label: item.name });
+       //         });
+       //       } else {
+       //         // Search within the group's items
+       //         items.forEach(item => {
+       //           if (item.name === value) {
+       //             output.push({ value: key + '-' + item.name, label: key });
+       //           }
+       //         });
+       //       }
+       //     });
+       //   });
+ 
+       //   setBasicone(output)
+ 
+       //   return
+       // }
+       let uuuk = extractUniqueNotes( basicall , selected )
+       uuuk.unshift({ label: "All Courses", value: "All" });
+ 
+       setFulldatafull(uuuk)
+       setSelectedOptions(selected || []);
+ 
+       filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       const output = [{
+         "label": "All Hub",
+         "value": "All"
+       }];
+ 
+       // // Iterate through the search array
+       selected.forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(alldrop).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value: key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+ 
+       setBasicone(output)
+     }
+ 
+ 
+     // const validVenues = selected.map(item => item.value);
+ 
+     //     // Filter the data
+     //     const filteredData = Object.fromEntries(
+     //       Object.entries(fulldatatwo).filter(([key, value]) => validVenues.includes(value.venue))
+     //     );
+     //     callfordata(filteredData , fulldata )
+ 
+     //     setFulldatatwo(filteredData) 
+ 
+ 
+     //     const filteredDatatwo = Object.fromEntries(
+     //       Object.entries(fulldata).filter(([key, value]) => validVenues.includes(value.venue))
+     //     );
+ 
+     //     callfordata(filteredData , filteredDatatwo )
+     //     setFulldata(filteredDatatwo)
+ 
+   };
+ 
+   const handleChangefive = (selected) => {
+ 
+     console.log(JSON.stringify(fulldatatwo), 'selected')
+     const hasAllValue = selected.some(item => item.value === "All");
+     const hasAllValueold = oldvenfive.some(item => item.value === "All");
+ 
+ 
+     setOldvenfive(selected)
+ 
+     if (hasAllValue === false && hasAllValueold === true) {
+       setSelectedOptionsfive([]);
+ 
+       // filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       filterDataByDateonee(dateRange, onetime , twotime, [] , 
+         hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+         
+       const output = [];
+ 
+       // // Iterate through the search array
+       [].forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(alldrop).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value: key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+ 
+       setBasiconefive(output)
+ 
+       return
+     }
+ 
+ 
+ 
+     if (hasAllValue === true) {
+ 
+       setSelectedOptionsfive(basic || []);
+ 
+       // filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+       filterDataByDateonee(dateRange, onetime , twotime, basic  , 
+         hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+       const output = [{
+         "label": "All Hub",
+         "value": "All"
+       }];
+ 
+       // // Iterate through the search array
+       basic.forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(alldrop).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value: key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+ 
+       setBasiconefive(output)
+ 
+ 
+     } else {
+ 
+       let lengthss = selected.length
+       let lengthssone = basic.length
+ 
+       // if (lengthss === lengthssone - 1) {
+       //   setSelectedOptions( []);
+ 
+       //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       //   const output = [];
+ 
+       //   // // Iterate through the search array
+       //   [].forEach(({ value }) => {
+       //     // Search in the data object
+       //     Object.entries(alldrop).forEach(([key, items]) => {
+       //       if (key === value) {
+       //         // If the key matches, add all items from the group to the output
+       //         items.forEach(item => {
+       //           output.push({ value: key + '-' + item.name, label: item.name });
+       //         });
+       //       } else {
+       //         // Search within the group's items
+       //         items.forEach(item => {
+       //           if (item.name === value) {
+       //             output.push({ value: key + '-' + item.name, label: key });
+       //           }
+       //         });
+       //       }
+       //     });
+       //   });
+ 
+       //   setBasicone(output)
+ 
+       //   return
+       // }
+ 
+       setSelectedOptionsfive(selected || []);
+ 
+       // filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+       filterDataByDateonee(dateRange, onetime , twotime, selected  , 
+         hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+       const output = [{
+         "label": "All Hub",
+         "value": "All"
+       }];
+ 
+       // // Iterate through the search array
+       selected.forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(alldrop).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value: key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+ 
+       setBasiconefive(output)
+     }
+ 
+  
+   };
 
 
 
@@ -1389,8 +1553,9 @@ let Meals = () => {
   const [selectedhubOptions, setSelectedhubOptions] = useState([]);
 
 
+  
   const handleChangehub = (selected) => {
-    setMenuIsOpentwo(true)
+
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldpro.some(item => item.value === "All");
 
@@ -1401,7 +1566,11 @@ let Meals = () => {
 
       setSelectedhubOptions([]);
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
+
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  inputvaluetwo, [])
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
       return
 
     }
@@ -1410,12 +1579,18 @@ let Meals = () => {
     if (hasAllValue === true) {
       setSelectedhubOptions(optionshub);
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
+
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  inputvaluetwo, optionshub )
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
 
     } else {
       setSelectedhubOptions(selected || []);
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  inputvaluetwo, selected )
 
     }
 
@@ -1427,7 +1602,7 @@ let Meals = () => {
 
 
   const handleChangehubone = (selectedss) => {
-    setMenuIsOpenone(true)
+
 
     const hasAllValue = selectedss.some(item => item.value === "All");
     const hasAllValueold = oldhub.some(item => item.value === "All");
@@ -1444,7 +1619,7 @@ let Meals = () => {
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
     }
@@ -1458,7 +1633,7 @@ let Meals = () => {
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, basicone, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, basicone, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, basicone, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
     } else {
       console.log(selectedss, 'selectedssselectedssselectedss')
@@ -1469,7 +1644,70 @@ let Meals = () => {
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+    }
+
+
+
+
+
+  };
+
+
+  const handleChangehubtwo = (selectedss) => {
+
+
+    const hasAllValue = selectedss.some(item => item.value === "All");
+    const hasAllValueold = oldhubtwo.some(item => item.value === "All");
+
+    setOldhubtwo(selectedss)
+
+    if (hasAllValue === false && hasAllValueold === true) {
+
+      console.log(selectedss, 'selectedssselectedssselectedss')
+
+      setHubbtwo([])
+
+
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        [] , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      return
+    }
+
+    if (hasAllValue === true) {
+      console.log(selectedss, 'selectedssselectedssselectedss')
+
+      setHubbtwo(basiconefive)
+
+
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, basiconefive, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, basiconefive, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        basiconefive , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+    } else {
+      console.log(selectedss, 'selectedssselectedssselectedss')
+
+      setHubbtwo(selectedss)
+
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        selectedss , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
     }
 
@@ -1493,8 +1731,8 @@ let Meals = () => {
   const [selectedCources, setSelectedCources] = useState([]);
 
   const handleChangeCources = (selected) => {
-    setMenuIsOpenthree(true)
 
+ 
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldcou.some(item => item.value === "All");
 
@@ -1506,7 +1744,10 @@ let Meals = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , [], selectedTakeaway, inputvalue ,  inputvaluetwo, selectedhubOptions )
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
     }
@@ -1517,7 +1758,11 @@ let Meals = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , fulldatafull , selectedTakeaway, inputvalue ,  inputvaluetwo, selectedhubOptions )
+
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
     } else {
@@ -1525,7 +1770,11 @@ let Meals = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selected , selectedTakeaway, inputvalue ,  inputvaluetwo, selectedhubOptions )
+
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
     }
 
 
@@ -1544,7 +1793,7 @@ let Meals = () => {
   ];
   const [selectedTakeaway, setSelectedTakeaway] = useState([]);
   const handleChangeTakeaway = (selected) => {
-    setMenuIsOpenfour(true)
+
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldtak.some(item => item.value === "All");
 
@@ -1556,7 +1805,11 @@ let Meals = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selectedCources , [], inputvalue ,  inputvaluetwo, selectedhubOptions )
+
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
 
@@ -1567,13 +1820,21 @@ let Meals = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selectedCources , optionstakeaway , inputvalue ,  inputvaluetwo, selectedhubOptions )
+
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
     } else {
       setSelectedTakeaway(selected || []);
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selectedCources , selected , inputvalue ,  inputvaluetwo, selectedhubOptions )
+
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
     }
 
 
@@ -3323,270 +3584,202 @@ let Meals = () => {
 
           <div className="d-flex justify-content-between  pt-4 gap-3" >
 
-            <div style={{ width: '20%' }}>
-              <p onClick={() => {
+          <div style={{ width: '20%' }}>
+                <p onClick={() => {
 
-                checkkkk()
+                  checkkkk()
 
-              }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
+                }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
 
-              <div style={{ width: '100%' }} >
-                <DatePicker
-                  selectsRange
-                  startDate={startDate}
-                  endDate={endDate}
-                  style={{ fontSize: 30 }}
-                  onChange={(update) => {
+                <div style={{ width: '100%' }} >
+                  <DatePicker
+                    selectsRange
+                    startDate={startDate}
+                    endDate={endDate}
+                    onChange={(update) => {
+                      setDateRange(update)
 
-                    console.log(update, 'update')
-                    setDateRange(update)
+                      if (update[1] === null || update[1] === "null") {
 
-                    if (update[1] === null || update[1] === "null") {
+                      } else {
+                        filterDataByDate(update, onetime, twotime, selectedOptions, hubb, 
+                          selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-                    } else {
-                      filterDataByDate(update, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-
+                        filterDataByDateonee(update, onetime, twotime, selectedOptionsfive , 
+                          hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                      }
+                    }} // Update both startDate and EndDate 
+                    placeholderText="Select a date range"
+                    className="custom-input"
+                    calendarClassName="custom-calendar"
+                    dateFormat="d MMM yyyy"
+                    customInput={
+                      <div className="custom-display-input">
+                        {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
+                        <FaCaretDown className="calendar-icon" />
+                      </div>
                     }
-                  }} // Update both startDate and EndDate 
-                  placeholderText="Select a date range"
-                  className="custom-input"
-                  calendarClassName="custom-calendar"
-                  dateFormat="d MMM yyyy"
-                  customInput={
-                    <div className="custom-display-input">
-                      {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
-                      <FaCaretDown className="calendar-icon" />
-                    </div>
-                  }
-                />
-              </div>
-              <div className="mt-3" >
-                <div className="custom-inputone d-flex justify-content-between">
-                  <input
-                    className='inputttt'
-                    type="time"
-                    value={onetime}
-                    onChange={(e) => {
-                      setOnetime(e.target.value)
-                      if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                        return
-                      }
-                      console.log(e.target.value, 'eeee')
-
-
-
-
-                      filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-                    }}
-                  />
-                  <input
-                    className='inputttt'
-                    type="time"
-                    value={twotime}
-                    onChange={(e) => {
-                      setTwotime(e.target.value)
-                      console.log(dateRange, 'dateRangedateRangedateRange')
-                      if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                        return
-                      }
-
-                      // tiemstampp(2, e.target.value)
-
-                      filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-                    }}
                   />
                 </div>
-              </div>
+                <div className="mt-3" >
+                  <div className="custom-inputone d-flex justify-content-between">
+                    <input
+                      className='inputttt'
+                      type="time"
+                      value={onetime}
+                      onChange={(e) => {
+                        console.log(e.target.value, 'eeee')
+                        setOnetime(e.target.value)
+                        if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                          return
+                        }
 
+                        filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ filterDataByDateonee(dateRange, e.target.value , twotime, selectedOptionsfive , 
+                          hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
+                      }}
+                    />
+                    <input
+                      className='inputttt'
+                      type="time"
+                      value={twotime}
+                      onChange={(e) => {
+                        setTwotime(e.target.value)
+                        if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                          return
+                        }
+                        // tiemstampp(2, e.target.value)
 
-            </div>
-
-            <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
-              <div style={{ width: '100%' }} >
-                <DatePicker
-                  selectsRange
-                  startDate={startDatetwo}
-                  endDate={endDatetwo}
-                  onChange={(update) => {
-                    setDateRangetwo(update)
-
-                    if (update[1] === null || update[1] === "null") {
-
-                    } else {
-                      // updates(2, update)
-
-                      filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-                    }
-
-
-                  }} // Update both startDate and EndDate 
-                  placeholderText="Select a date range"
-                  className="custom-input"
-                  calendarClassName="custom-calendar"
-                  dateFormat="d MMM yyyy"
-                  customInput={
-                    <div className="custom-display-input">
-                      {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
-                      <FaCaretDown className="calendar-icon" />
-                    </div>
-                  }
-                />
-              </div>
-              <div className="mt-3" >
-                <div className="custom-inputone d-flex justify-content-between">
-                  <input
-                    className='inputttt'
-                    type="time"
-                    value={threetime}
-                    onChange={(e) => {
-                      setThreetime(e.target.value)
-                      if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                        return
-                      }
-
-
-                      filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-                    }}
-                  />
-                  <input
-                    className='inputttt'
-                    type="time"
-                    value={fourtime}
-                    onChange={(e) => {
-                      setFourtime(e.target.value)
-                      if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                        return
-                      }
-
-                      filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-                    }}
-                  />
-                </div>
-              </div>
-
-
-
-            </div>
-
-
-            <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen venue & hub</p>
-              <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
-                width: '100%', height: 45
-              }}>
-                <div class="switch-container">
-                  <input type="checkbox" id="switch1" checked={venueradio} onChange={(e) => {
-                    setVenueradio(e.target.checked)
-                    if (e.target.checked === false) {
-                      setSelectedOptions([])
-                    } else {
-                    }
-
-                    console.log(e.target.checked, 'ggggggggggggggg')
-                  }} />
-                  <label class="switch-label" for="switch1"></label>
-                </div>
-                <Select
-                  menuIsOpen={menuIsOpen}
-                  onMenuOpen={() => setMenuIsOpen(true)}
-                  onMenuClose={() => setMenuIsOpen(false)}
-                  onFocus={() => setMenuIsOpen(true)}
-                  isDisabled={!venueradio}
-                  isMulti
-                  className="newoneonee"
-                  options={basic}
-                  value={selectedOptions}
-                  onChange={handleChange}
-                  placeholder="All Venues"
-                  components={{
-                    Option: CustomOption,
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff' }),
-                  }}
-                />
-              </div>
-
-              <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                width: '100%',
-                height: 45
-              }}>
-
-                <div class="switch-container">
-                  <input checked={hubbswitch} onChange={(e) => {
-                    setHubbswitch(e.target.checked)
-                    if (e.target.checked === false) {
-                    }
-                  }} type="checkbox" id="switch3" />
-                  <label class="switch-label " for="switch3"></label>
+                        filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                        filterDataByDateonee(dateRange, onetime  , e.target.value , selectedOptionsfive , 
+                          hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                      }}
+                    />
+                  </div>
                 </div>
 
 
 
-
-                <Select
-
-                  menuIsOpen={menuIsOpenone}
-                  onMenuOpen={() => setMenuIsOpenone(true)}
-                  onMenuClose={() => setMenuIsOpenone(false)}
-                  onFocus={() => setMenuIsOpenone(true)}
-
-
-                  isDisabled={!hubbswitch}
-                  isMulti
-                  className="newoneonee"
-                  options={basicone}
-                  value={hubb}
-
-                  onChange={handleChangehubone}
-                  placeholder="All Hubs"
-                  components={{
-                    Option: CustomOption, // Custom tick option
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
-                  }}
-                />
+              </div>
+              <div style={{ width: '20%' }} >
 
 
 
 
 
 
-                {/* <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
+
+
+
+
+
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen venue & hub</p>
+                <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
+                  width: '100%', height: 45
+                }}>
+                  <div class="switch-container">
+                    <input type="checkbox" id="switch1" checked={venueradio} onChange={(e) => {
+                      setVenueradio(e.target.checked)
+                      if (e.target.checked === false) {
+                        setSelectedOptions([])
+                      } else {
+                      }
+
+                      console.log(e.target.checked, 'ggggggggggggggg')
+                    }} />
+                    <label class="switch-label" for="switch1"></label>
+                  </div>
+                  <Select
+                    menuIsOpen={menuIsOpen}
+                    onMenuOpen={() => setMenuIsOpen(true)}
+                    onMenuClose={() => setMenuIsOpen(false)}
+                    onFocus={() => setMenuIsOpen(true)}
+                    isDisabled={!venueradio}
+                    isMulti
+                    className="newoneonee"
+                    options={basic}
+                    value={selectedOptions}
+                    onChange={handleChange}
+                    placeholder="All Venues"
+                    components={{
+                      Option: CustomOption,
+                      MultiValue: () => null, // Hides default tags
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                    hideSelectedOptions={false} // Show all options even if selected
+                    styles={{
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff' }),
+                    }}
+                  />
+                </div>
+
+                <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{
+                  width: '100%',
+                  height: 45
+                }}>
+
+                  <div class="switch-container">
+                    <input checked={hubbswitch} onChange={(e) => {
+                      setHubbswitch(e.target.checked)
+                      if (e.target.checked === false) {
+                      }
+                    }} type="checkbox" id="switch35" />
+                    <label class="switch-label" for="switch35"></label>
+                  </div>
+
+
+
+
+                  <Select
+
+                    menuIsOpen={menuIsOpenone}
+                    onMenuOpen={() => setMenuIsOpenone(true)}
+                    onMenuClose={() => setMenuIsOpenone(false)}
+                    onFocus={() => setMenuIsOpenone(true)}
+
+
+                    isDisabled={!hubbswitch}
+                    isMulti
+                    className="newoneonee"
+                    options={basicone}
+                    value={hubb}
+
+                    onChange={handleChangehubone}
+                    placeholder="All Hubs"
+                    components={{
+                      Option: CustomOption, // Custom tick option
+                      MultiValue: () => null, // Hides default tags
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                    hideSelectedOptions={false} // Show all options even if selected
+                    styles={{
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    }}
+                  />
+
+
+
+
+
+
+                  {/* <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
                   setHubb(e.target.value)
                   filterDataByDate(dateRange, onetime, twotime, selectedOptions, e.target.value, selectedCources, selectedTakeaway)
 
@@ -3602,197 +3795,347 @@ let Meals = () => {
                   ))}
                 </select> */}
 
-              </div>
-            </div>
-
-            <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by stages/courses</p>
-              <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
-                width: '100%',
-                height: 45
-              }}>
-
-                <div class="switch-container">
-                  <input type="checkbox" checked={Hubradio} onChange={(e) => {
-                    setHubradio(e.target.checked)
-                    if (e.target.checked === false) {
-                      setSelectedhubOptions([])
-                    }
-                  }} id="switch2" />
-                  <label class="switch-label" for="switch2"></label>
                 </div>
 
-                <Select
-                  menuIsOpen={menuIsOpentwo}
-                  onMenuOpen={() => setMenuIsOpentwo(true)}
-                  onMenuClose={() => setMenuIsOpentwo(false)}
-                  onFocus={() => setMenuIsOpentwo(true)}
 
-                  isDisabled={!Hubradio}
-                  isMulti
-                  className="newoneonee"
-                  options={optionshub}
-                  value={selectedhubOptions}
-                  onChange={handleChangehub}
-                  placeholder="All stages"
-                  components={{
-                    Option: CustomOption, // Custom tick option
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
-                  }}
-                />
+
+
+
+
+
+
+
+
+
               </div>
 
+              <div style={{ width: '20%' }}>
 
-              <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                width: '100%',
-                height: 45
-              }}>
-                <div class="switch-container">
-                  <input type="checkbox" checked={Cources} onChange={(e) => {
-                    setCources(e.target.checked)
-                    if (e.target.checked === false) {
-                      setSelectedCources([])
-                    }
-                  }} id="switch4" />
-                  <label class="switch-label" for="switch4"></label>
+
+
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
+                <div ref={selectReffive} className="custom-inputoness d-flex justify-content-between" style={{
+                  width: '100%', height: 45
+                }}>
+                  <div class="switch-container">
+                    <input type="checkbox" id="switch13" checked={venueradiofivese} onChange={(e) => {
+                      setVenueradiofivese(e.target.checked)
+                      if (e.target.checked === false) {
+                        setSelectedOptionsfive([])
+                      } else {
+                      }
+
+                      console.log(e.target.checked, 'ggggggggggggggg fdgbfgc')
+                    }} />
+                    <label class="switch-label" for="switch13"></label>
+                  </div>
+                  <Select
+                    menuIsOpen={menuIsOpenfive}
+                    onMenuOpen={() => setMenuIsOpenfive(true)}
+                    onMenuClose={() => setMenuIsOpenfive(false)}
+                    onFocus={() => setMenuIsOpenfive(true)}
+                    isDisabled={!venueradiofivese}
+                    isMulti
+                    className="newoneonee"
+                    options={basic}
+                    value={selectedOptionsfive}
+                    onChange={handleChangefive}
+                    placeholder="All Venues"
+                    components={{
+                      Option: CustomOption,
+                      MultiValue: () => null, // Hides default tags
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                    hideSelectedOptions={false} // Show all options even if selected
+                    styles={{
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff' }),
+                    }}
+                  />
                 </div>
 
-                <Select
-                  menuIsOpen={menuIsOpenthree}
-                  onMenuOpen={() => setMenuIsOpenthree(true)}
-                  onMenuClose={() => setMenuIsOpenthree(false)}
-                  onFocus={() => setMenuIsOpenthree(true)}
-                  isDisabled={!Cources}
-                  isMulti
-                  className="newoneonee"
-                  options={fulldatafull}
-                  value={selectedCources}
-                  onChange={handleChangeCources}
-                  placeholder="All courses"
-                  components={{
-                    Option: CustomOption, // Custom tick option
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
-                  }}
-                />
+                <div ref={selectRefsix} className="custom-inputoness d-flex justify-content-between mt-3" style={{
+                  width: '100%',
+                  height: 45
+                }}>
+
+                  <div class="switch-container">
+                    <input checked={venueradiosix} onChange={(e) => {
+                      setVenueradiosix(e.target.checked)
+                      if (e.target.checked === false) {
+                      }
+                    }} type="checkbox" id="switch34" />
+                    <label class="switch-label" for="switch34"></label>
+                  </div>
+
+
+
+
+                  <Select
+
+                    menuIsOpen={menuIsOpensix}
+                    onMenuOpen={() => setMenuIsOpensix(true)}
+                    onMenuClose={() => setMenuIsOpensix(false)}
+                    onFocus={() => setMenuIsOpensix(true)}
+
+
+                    isDisabled={!venueradiosix}
+                    isMulti
+                    className="newoneonee"
+                    options={basiconefive}
+                    value={hubbtwo}
+
+                    onChange={handleChangehubtwo}
+                    placeholder="All Hubs"
+                    components={{
+                      Option: CustomOption, // Custom tick option
+                      MultiValue: () => null, // Hides default tags
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                    hideSelectedOptions={false} // Show all options even if selected
+                    styles={{
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    }}
+                  />
+
+
+
+
+
+
+                  {/* <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
+                  setHubb(e.target.value)
+                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, e.target.value, selectedCources, selectedTakeaway)
+
+
+                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, e.target.value, selectedCources, selectedTakeaway)
+
+
+                  console.log(e.target.value)
+                }} name="cars" id="cars" style={{ border: 'unset', color: '#707070' }} >
+                  <option value="">Select</option>
+                  {basicone?.map(item => (
+                    <option value={item.value}>{item.label}</option>
+                  ))}
+                </select> */}
+
+                </div>
+
+
+
               </div>
 
 
-            </div>
 
-            <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by tables/takeaways</p>
 
-              <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
-                {/* <div class="switch-container">
+              <div style={{ width: '20%' }} >
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by stages/courses</p>
+                <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
+                  width: '100%',
+                  height: 45
+                }}>
+
+                  <div class="switch-container">
+                    <input type="checkbox" checked={Hubradio} onChange={(e) => {
+                      setHubradio(e.target.checked)
+                      if (e.target.checked === false) {
+                        setSelectedhubOptions([])
+                      }
+                    }} id="switch2" />
+                    <label class="switch-label" for="switch2"></label>
+                  </div>
+
+                  <Select
+                    menuIsOpen={menuIsOpentwo}
+                    onMenuOpen={() => setMenuIsOpentwo(true)}
+                    onMenuClose={() => setMenuIsOpentwo(false)}
+                    onFocus={() => setMenuIsOpentwo(true)}
+
+                    isDisabled={!Hubradio}
+                    isMulti
+                    className="newoneonee"
+                    options={optionshub}
+                    value={selectedhubOptions}
+                    onChange={handleChangehub}
+                    placeholder="All stages"
+                    components={{
+                      Option: CustomOption, // Custom tick option
+                      MultiValue: () => null, // Hides default tags
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                    hideSelectedOptions={false} // Show all options even if selected
+                    styles={{
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    }}
+                  />
+                </div>
+
+
+                <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{
+                  width: '100%',
+                  height: 45
+                }}>
+                  <div class="switch-container">
+                    <input type="checkbox" checked={Cources} onChange={(e) => {
+                      setCources(e.target.checked)
+                      if (e.target.checked === false) {
+                        setSelectedCources([])
+                      }
+                    }} id="switch4" />
+                    <label class="switch-label" for="switch4"></label>
+                  </div>
+
+                  <Select
+                    menuIsOpen={menuIsOpenthree}
+                    onMenuOpen={() => setMenuIsOpenthree(true)}
+                    onMenuClose={() => setMenuIsOpenthree(false)}
+                    onFocus={() => setMenuIsOpenthree(true)}
+                    isDisabled={!Cources}
+                    isMulti
+                    className="newoneonee"
+                    options={fulldatafull}
+                    value={selectedCources}
+                    onChange={handleChangeCources}
+                    placeholder="All courses"
+                    components={{
+                      Option: CustomOption, // Custom tick option
+                      MultiValue: () => null, // Hides default tags
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                    hideSelectedOptions={false} // Show all options even if selected
+                    styles={{
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    }}
+                  />
+                </div>
+
+
+              </div>
+
+              <div style={{ width: '20%' }} >
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by tables/takeaways</p>
+
+                <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
+                  {/* <div class="switch-container">
                   <input type="checkbox" id="switch1" />
                   <label class="switch-label" for="switch1"></label>
                 </div> */}
 
-                {/* <select name="cars" id="cars" style={{ border: 'unset', color: '#707070' }} >
+                  {/* <select name="cars" id="cars" style={{ border: 'unset', color: '#707070' }} >
                   <option value="volvo">Volvo</option>
                   <option value="saab">Saab</option>
                   <option value="mercedes">Mercedes</option>
                   <option value="audi">Audi</option>
                 </select> */}
-                <input onChange={(e) => {
-                  setInputvalue(e.target.value)
+                  <input onChange={(e) => {
+                    setInputvalue(e.target.value)
 
-                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+                    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+ 
 
-                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+                    filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+                      hubbtwo , selectedCources, selectedTakeaway, e.target.value , inputvaluetwo, selectedhubOptions)
+                      
+                    // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset' }} type="text" />
-
-
-                <p style={{ fontSize: 19, display: 'contents' }} >|</p>
-
-
-                <input onChange={(e) => {
-                  setInputvaluetwo(e.target.value)
-                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-
-                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
-              </div>
-
-              <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                width: '100%',
-                height: 45
-              }}>
+                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset' }} type="text" />
 
 
+                  <p style={{ fontSize: 19, display: 'contents' }} >|</p>
 
-                <div class="switch-container">
-                  <input type="checkbox" checked={takeaway} onChange={(e) => {
-                    setTakeaway(e.target.checked)
-                    if (e.target.checked === false) {
-                      setSelectedTakeaway([])
-                    }
-                  }} id="switch5" />
-                  <label class="switch-label" for="switch5"></label>
+
+                  <input onChange={(e) => {
+                    setInputvaluetwo(e.target.value)
+                    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+                    filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+                      hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  e.target.value, selectedhubOptions)
+                    // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
                 </div>
 
-                <Select
-                  menuIsOpen={menuIsOpenfour}
-                  onMenuOpen={() => setMenuIsOpenfour(true)}
-                  onMenuClose={() => setMenuIsOpenfour(false)}
-                  onFocus={() => setMenuIsOpenfour(true)}
-                  isDisabled={!takeaway}
-                  isMulti
-                  className="newoneonee"
-                  options={optionstakeaway}
-                  value={selectedTakeaway}
-                  onChange={handleChangeTakeaway}
-                  placeholder="All takeaways"
-                  components={{
-                    Option: CustomOption, // Custom tick option
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props} >
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
-                  }}
-                />
+                <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
+                  width: '100%',
+                  height: 45
+                }}>
 
 
 
+                  <div class="switch-container">
+                    <input type="checkbox" checked={takeaway} onChange={(e) => {
+                      setTakeaway(e.target.checked)
+                      if (e.target.checked === false) {
+                        setSelectedTakeaway([])
+                      }
+                    }} id="switch5" />
+                    <label class="switch-label" for="switch5"></label>
+                  </div>
+
+                  <Select
+                    menuIsOpen={menuIsOpenfour}
+                    onMenuOpen={() => setMenuIsOpenfour(true)}
+                    onMenuClose={() => setMenuIsOpenfour(false)}
+                    onFocus={() => setMenuIsOpenfour(true)}
+                    isDisabled={!takeaway}
+                    isMulti
+                    className="newoneonee"
+                    options={optionstakeaway}
+                    value={selectedTakeaway}
+                    onChange={handleChangeTakeaway}
+                    placeholder="All takeaways"
+                    components={{
+                      Option: CustomOption, // Custom tick option
+                      MultiValue: () => null, // Hides default tags
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                    hideSelectedOptions={false} // Show all options even if selected
+                    styles={{
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    }}
+                  />
+
+
+
+                </div>
               </div>
-            </div>
 
           </div>
 
@@ -5603,6 +5946,6 @@ const buttonStyle = {
   borderRadius: '5px',
 };
 
-export default Meals;
+export default Mealsmulti;
 
 

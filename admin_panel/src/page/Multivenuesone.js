@@ -159,7 +159,7 @@ let Multivenuesone = () => {
 
               <div style={{ width: '27%', height: 190, backgroundColor: '#fff', marginTop: 20, borderRadius: 5, marginBottom: 50, cursor: 'pointer' }}
                 onClick={() => {
-                  navigate("/multivenues");
+                  navigate("/multivenuesmeals");
                 }} >
                 <div className="row" style={{ height: 190 }} >
                   {/* Left column - centered text */}
