@@ -143,7 +143,7 @@ let Multivenuesone = () => {
 
             <div style={{ padding: 90 }} >
               <div style={{ width: '27%', height: 190, backgroundColor: '#fff', borderRadius: 5, cursor: 'pointer' }} onClick={() => {
-                navigate("/meals");
+                navigate("/multivenuesmeals");
               }} >
                 <div className="row">
                   <div className="col-6 d-flex align-items-center" style={{ padding: 35 }}>
@@ -159,7 +159,7 @@ let Multivenuesone = () => {
 
               <div style={{ width: '27%', height: 190, backgroundColor: '#fff', marginTop: 20, borderRadius: 5, marginBottom: 50, cursor: 'pointer' }}
                 onClick={() => {
-                  navigate("/multivenuesmeals");
+                  navigate("/multivenues");
                 }} >
                 <div className="row" style={{ height: 190 }} >
                   {/* Left column - centered text */}

@@ -469,38 +469,38 @@ let Multi_venue = () => {
   let [fulldatafull, setFulldatafull] = useState()
 
   function extractUniqueNotes(datad, predefinedValues) {
-            
-    console.log(predefinedValues , 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
+
+    console.log(predefinedValues, 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
     let uniqueNotes = new Set();
 
     for (let group in datad) {
-        
 
-        for (let location in datad[group]) {
 
-          if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
+      for (let location in datad[group]) {
 
-            for (let section in datad[group][location]) {
-                for (let date in datad[group][location][section]) {
-                    datad[group][location][section][date].forEach(order => {
-                        order.ITEMS.forEach(item => {
-                            if (item.NOTE) {
-                                // Extract the word after (C<number>)
-                                const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                                if (match && match[1] && match[1] !== "undefined") {
-                                    uniqueNotes.add(match[1]); // Add only valid words
-                                }
-                            }
-                        });
-                    });
+        if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
+
+        for (let section in datad[group][location]) {
+          for (let date in datad[group][location][section]) {
+            datad[group][location][section][date].forEach(order => {
+              order.ITEMS.forEach(item => {
+                if (item.NOTE) {
+                  // Extract the word after (C<number>)
+                  const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                  if (match && match[1] && match[1] !== "undefined") {
+                    uniqueNotes.add(match[1]); // Add only valid words
+                  }
                 }
-            }
+              });
+            });
+          }
         }
+      }
     }
 
     // Convert Set to desired format
     return [...uniqueNotes].map(note => ({ value: note, label: note }));
-}
+  }
 
 
   let getone = () => {
@@ -538,9 +538,9 @@ let Multi_venue = () => {
           }
 
           const cleanedData = removeTrainingNotes(eventss);
- 
 
-    
+
+
 
 
 
@@ -613,7 +613,7 @@ let Multi_venue = () => {
           //   label: hub,
           // }));
 
-  
+
           // console.log("optionss:", optionsstwo);
 
           let getdata = sessionStorage.getItem('data')
@@ -631,9 +631,9 @@ let Multi_venue = () => {
             setBasic(optionsone)
 
 
-            let uuuk = extractUniqueNotes(cleanedData , optionsone )
+            let uuuk = extractUniqueNotes(cleanedData, optionsone)
             uuuk.unshift({ label: "All Courses", value: "All" });
-  
+
             setFulldatafull(uuuk)
 
           } else {
@@ -641,15 +641,15 @@ let Multi_venue = () => {
             setBasic(parsedatajson.venue)
 
 
-            let uuuk = extractUniqueNotes(cleanedData , parsedatajson.venue )
+            let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
             uuuk.unshift({ label: "All Courses", value: "All" });
-  
+
             setFulldatafull(uuuk)
           }
 
 
-          
-        
+
+
 
           const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
           const optionstakeaway = [
@@ -1339,9 +1339,9 @@ let Multi_venue = () => {
 
   const [venueradio, setVenueradio] = useState(true)
 
-  const [venueradiofivese, setVenueradiofivese ] = useState(true)
+  const [venueradiofivese, setVenueradiofivese] = useState(true)
 
-  const [venueradiosix , setVenueradiosix ] = useState(true)
+  const [venueradiosix, setVenueradiosix] = useState(true)
 
   const CustomOption = (props) => {
     const { data, isSelected, innerRef, innerProps } = props;
@@ -1402,7 +1402,7 @@ let Multi_venue = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, 30) + "..."
+      const displayText = allLabels.slice(0, 25) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
@@ -1412,7 +1412,7 @@ let Multi_venue = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   const [selectedOptionsfive, setSelectedOptionsfive] = useState([]);
-   const [selectedOptionssix, setSelectedOptionssix] = useState([]);
+  const [selectedOptionssix, setSelectedOptionssix] = useState([]);
 
 
   const [selectedOptionsfine, setSelectedOptionsfine] = useState([basicfine[0]]);
@@ -1429,7 +1429,7 @@ let Multi_venue = () => {
 
     if (hasAllValue === false && hasAllValueold === true) {
 
-      let uuuk = extractUniqueNotes( basicall , [] )
+      let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
@@ -1474,7 +1474,7 @@ let Multi_venue = () => {
 
     if (hasAllValue === true) {
 
-      let uuuk = extractUniqueNotes( basicall , basic )
+      let uuuk = extractUniqueNotes(basicall, basic)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
@@ -1554,7 +1554,7 @@ let Multi_venue = () => {
       // }
 
 
-      let uuuk = extractUniqueNotes( basicall , selected )
+      let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
@@ -1630,9 +1630,9 @@ let Multi_venue = () => {
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, [] , 
-        hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-        
+      filterDataByDateonee(dateRange, onetime, twotime, [],
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
       const output = [];
 
       // // Iterate through the search array
@@ -1669,8 +1669,8 @@ let Multi_venue = () => {
       // filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-      filterDataByDateonee(dateRange, onetime , twotime, basic  , 
-        hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime, twotime, basic,
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
       const output = [{
         "label": "All Hub",
         "value": "All"
@@ -1743,8 +1743,8 @@ let Multi_venue = () => {
       // filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-      filterDataByDateonee(dateRange, onetime , twotime, selected  , 
-        hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime, twotime, selected,
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
       const output = [{
         "label": "All Hub",
         "value": "All"
@@ -1773,7 +1773,7 @@ let Multi_venue = () => {
       setBasiconefive(output)
     }
 
- 
+
   };
 
 
@@ -1837,8 +1837,8 @@ let Multi_venue = () => {
       setSelectedhubOptions([]);
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  inputvaluetwo, [])
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
       return
@@ -1850,8 +1850,8 @@ let Multi_venue = () => {
       setSelectedhubOptions(optionshub);
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  inputvaluetwo, optionshub )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
 
@@ -1859,8 +1859,8 @@ let Multi_venue = () => {
       setSelectedhubOptions(selected || []);
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  inputvaluetwo, selected )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
 
     }
 
@@ -1942,8 +1942,8 @@ let Multi_venue = () => {
 
       // filterDataByDate(dateRange, onetime, twotime, selectedOptions, [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        [] , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
@@ -1960,8 +1960,8 @@ let Multi_venue = () => {
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, basiconefive, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        basiconefive , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        basiconefive, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
     } else {
@@ -1969,8 +1969,8 @@ let Multi_venue = () => {
 
       setHubbtwo(selectedss)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        selectedss , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
 
@@ -2001,7 +2001,7 @@ let Multi_venue = () => {
   const [selectedCources, setSelectedCources] = useState([]);
   const handleChangeCources = (selected) => {
 
- 
+
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldcou.some(item => item.value === "All");
 
@@ -2013,8 +2013,8 @@ let Multi_venue = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , [], selectedTakeaway, inputvalue ,  inputvaluetwo, selectedhubOptions )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
@@ -2027,8 +2027,8 @@ let Multi_venue = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , fulldatafull , selectedTakeaway, inputvalue ,  inputvaluetwo, selectedhubOptions )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -2039,8 +2039,8 @@ let Multi_venue = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selected , selectedTakeaway, inputvalue ,  inputvaluetwo, selectedhubOptions )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -2074,8 +2074,8 @@ let Multi_venue = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selectedCources , [], inputvalue ,  inputvaluetwo, selectedhubOptions )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
@@ -2089,8 +2089,8 @@ let Multi_venue = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selectedCources , optionstakeaway , inputvalue ,  inputvaluetwo, selectedhubOptions )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -2099,8 +2099,8 @@ let Multi_venue = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selectedCources , selected , inputvalue ,  inputvaluetwo, selectedhubOptions )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -4156,7 +4156,7 @@ let Multi_venue = () => {
     if (e === undefined || e === '' || e === null) {
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo,onetime, twotime, selectedOptionsfive, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRangetwo, onetime, twotime, selectedOptionsfive, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
       return
     } else {
       callfordataonesearch(filterdataone, e)
@@ -4358,7 +4358,7 @@ let Multi_venue = () => {
       x: 10,
       y: 20,
       width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
+      windowWidth: 1600, // Ensure full width capture
       autoPaging: "text",
       html2canvas: {
         useCORS: true, // Handle cross-origin images
@@ -4441,7 +4441,7 @@ let Multi_venue = () => {
       x: 10,
       y: 20,
       width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
+      windowWidth: 1600, // Ensure full width capture
       autoPaging: "text",
       html2canvas: {
         useCORS: true, // Handle cross-origin images
@@ -4510,11 +4510,11 @@ let Multi_venue = () => {
                       if (update[1] === null || update[1] === "null") {
 
                       } else {
-                        filterDataByDate(update, onetime, twotime, selectedOptions, hubb, 
+                        filterDataByDate(update, onetime, twotime, selectedOptions, hubb,
                           selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-                        filterDataByDateonee(update, onetime, twotime, selectedOptionsfive , 
-                          hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                        filterDataByDateonee(update, onetime, twotime, selectedOptionsfive,
+                          hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
                       }
                     }} // Update both startDate and EndDate 
                     placeholderText="Select a date range"
@@ -4543,8 +4543,8 @@ let Multi_venue = () => {
                         }
 
                         filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- filterDataByDateonee(dateRange, e.target.value , twotime, selectedOptionsfive , 
-                          hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                        filterDataByDateonee(dateRange, e.target.value, twotime, selectedOptionsfive,
+                          hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
                       }}
                     />
@@ -4560,8 +4560,8 @@ let Multi_venue = () => {
                         // tiemstampp(2, e.target.value)
 
                         filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-                        filterDataByDateonee(dateRange, onetime  , e.target.value , selectedOptionsfive , 
-                          hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                        filterDataByDateonee(dateRange, onetime, e.target.value, selectedOptionsfive,
+                          hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
                       }}
                     />
                   </div>
@@ -4970,11 +4970,11 @@ let Multi_venue = () => {
                     setInputvalue(e.target.value)
 
                     filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
- 
 
-                    filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-                      hubbtwo , selectedCources, selectedTakeaway, e.target.value , inputvaluetwo, selectedhubOptions)
-                      
+
+                    filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+                      hubbtwo, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+
                     // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
                   }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset' }} type="text" />
@@ -4986,8 +4986,8 @@ let Multi_venue = () => {
                   <input onChange={(e) => {
                     setInputvaluetwo(e.target.value)
                     filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                    filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-                      hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  e.target.value, selectedhubOptions)
+                    filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+                      hubbtwo, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                     // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                   }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
                 </div>
@@ -5050,97 +5050,85 @@ let Multi_venue = () => {
 
             {
               meals === 1 ?
-                <div className="" style={{ marginTop: 100 }} >
-
-                  <div className='row '  >
-
-                    {/* <div className='col-6' >
-            <div class="box " onClick={() => {
-              setMeals(5)
-            }} >
-              <div class="boxs">
-                <p className='asdfp'>Meals received - timeline</p>
-                <div class="end-box">
-                  <img src="rts.png" className="" alt="Example Image" />
-                  <p className="asdfps">(# of meals sent between specific time slots) </p>
-                </div>
-              </div>
-            </div>
-          </div> */}
+                <div className="changeone" style={{ marginTop: 100 }} >
+                  <div className="changetwos"   >
+                    <div className='row '  >
 
 
-                    <div className='col-6 w-100 d-flex justify-content-center' style={{ margin: 'auto' }} >
-                      <div class="box " style={{ maxWidth: "600px" }} onClick={() => {
-                        setMeals(2)
-                      }}>
-                        <div class="boxs">
-                          <div className="d-flex justify-content-between" >
-                            <div >
-                              <p className='asdfp' style={{ marginBottom: 0 }}>Dockets completion time</p>
-                              <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
-                            </div>
-                            <div >
-                              <p className='asdfp' style={{ color: '#316AAF' }}>{editall?.stats?.averageProcessTime || 0}</p>
-                            </div>
-                          </div>
 
-                          <div class="end-box">
-                            <img src="time.png" style={{ width: 90, height: 106 }} className="" alt="Example Image" />
-                            <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
 
+                      <div className='col-6 w-100 d-flex justify-content-center' style={{ margin: 'auto' }} >
+                        <div class="box " style={{ maxWidth: "600px" }} onClick={() => {
+                          setMeals(2)
+                        }}>
+                          <div class="boxs">
+                            <div className="d-flex justify-content-between" >
                               <div >
-                                <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                  <div className=' ' style={{ width: 200 }}>
-                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum</p>
-                                  </div>
-                                  <div className=' ' style={{ fontWeight: '600' }}>
-                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.minProcessTime || 0}</p>
-                                  </div>
-                                </div>
-
-
-                                <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                  <div className=' ' style={{ width: 200 }}>
-                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum</p>
-                                  </div>
-                                  <div className=' ' style={{ fontWeight: '600' }}>
-                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.maxProcessTime || 0}</p>
-                                  </div>
-                                </div>
+                                <p className='asdfp' style={{ marginBottom: 0 }}>Dockets completion time</p>
+                                <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
+                              </div>
+                              <div >
+                                <p className='asdfp' style={{ color: '#316AAF' }}>{editall?.stats?.averageProcessTime || 0}</p>
                               </div>
                             </div>
 
+                            <div class="end-box">
+                              <img src="time.png" style={{ width: 90, height: 106 }} className="" alt="Example Image" />
+                              <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
+
+                                <div >
+                                  <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                    <div className=' ' style={{ width: 200 }}>
+                                      <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum</p>
+                                    </div>
+                                    <div className=' ' style={{ fontWeight: '600' }}>
+                                      <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.minProcessTime || 0}</p>
+                                    </div>
+                                  </div>
+
+
+                                  <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                    <div className=' ' style={{ width: 200 }}>
+                                      <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum</p>
+                                    </div>
+                                    <div className=' ' style={{ fontWeight: '600' }}>
+                                      <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.maxProcessTime || 0}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
 
 
 
 
-                          </div>
-                        </div>
-                      </div>
-                    </div>
 
-
-                  </div>
-
-                  <div className="w-100 d-flex justify-content-center">
-                    <div className='row mt-5 ' >
-
-                      <div className='col-6' >
-                        <div class="box me-5" style={{ maxWidth: "600px" }} onClick={() => {
-                          setMeals(5)
-                        }} >
-                          <div class="boxs">
-                            <p className='asdfp'>Dockets received - timeline</p>
-                            <div class="end-box d-flex justify-content-between">
-                              <img src="rts.png" className="d-flex justify-content-between" alt="Example Image" />
-                              <p className="asdfps w-50 m-0">(# of dockets received
-                                between specific time slots)</p>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      {/* <div className='col-6' >
+
+                    </div>
+
+                    <div className="w-100 d-flex justify-content-center">
+                      <div className='row mt-5 ' >
+
+                        <div className='col-6' >
+                          <div class="box me-5" style={{ maxWidth: "600px" }} onClick={() => {
+                            setMeals(5)
+                          }} >
+                            <div class="boxs">
+                              <p className='asdfp'>Dockets received - timeline</p>
+                              <div class="end-box d-flex justify-content-between">
+                                <img src="rts.png" className="d-flex justify-content-between" alt="Example Image" />
+                                <p className="asdfps w-50 m-0">(# of dockets received
+                                  between specific time slots)</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* <div className='col-6' >
   <div class="box" onClick={() => {
     setMeals(3)
   }} >
@@ -5200,55 +5188,55 @@ let Multi_venue = () => {
 </div> */}
 
 
-                      <div className='col-6' >
-                        <div class="box ms-5" style={{ maxWidth: "600px" }} onClick={() => {
-                          setMeals(4)
-                        }}>
-                          <div class="boxs">
-                            <div className="d-flex justify-content-between" >
-                              <div >
-                                <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
-                                <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                              </div>
-                              <div >
-                                {/* <p className='asdfp' style={{ color: '#316AAF' }}>{
+                        <div className='col-6' >
+                          <div class="box ms-5" style={{ maxWidth: "600px" }} onClick={() => {
+                            setMeals(4)
+                          }}>
+                            <div class="boxs">
+                              <div className="d-flex justify-content-between" >
+                                <div >
+                                  <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
+                                  <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                                </div>
+                                <div >
+                                  {/* <p className='asdfp' style={{ color: '#316AAF' }}>{
             minperday ?
               ggggrtz()
               : 0
           }</p> */}
+                                </div>
                               </div>
-                            </div>
 
-                            <div class="end-box d-flex justify-content-between ">
-                              <img src="bluee.png" className="" alt="Example Image" />
-                              <p className="asdfps w-50 m-0">(Average waiting time
-                                between specific time slots)</p>
+                              <div class="end-box d-flex justify-content-between ">
+                                <img src="bluee.png" className="" alt="Example Image" />
+                                <p className="asdfps w-50 m-0">(Average waiting time
+                                  between specific time slots)</p>
 
 
+                              </div>
                             </div>
                           </div>
                         </div>
+
+
                       </div>
-
-
                     </div>
+
                   </div>
-
-
                 </div>
 
 
                 : meals === 2 ?
 
-                  <div className="" style={{ marginTop: 100 }} >
-                    <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                  <div className="changeone" style={{ marginTop: 100 }} >
+                    <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                       <div className="d-flex justify-content-between" >
                         <div style={{}} className="d-flex " >
                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                             setMeals(1)
                           }} className="" alt="Example Image" />
-                          <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Dockets completion time</p>
+                          <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets completion time</p>
                         </div>
 
                         <div class="custom-inputonessfine  " >
@@ -5528,8 +5516,8 @@ let Multi_venue = () => {
                   </div>
 
                   : meals === 3 ?
-                    <div className="" style={{ marginTop: 100 }} >
-                      <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                    <div className="changeone" style={{ marginTop: 100 }} >
+                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                         <div className="d-flex justify-content-between" >
                           <div style={{}} className="d-flex " >
@@ -5703,15 +5691,15 @@ let Multi_venue = () => {
                     : meals === 4 ?
 
 
-                      <div className="" style={{ marginTop: 100 }} >
-                        <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                      <div className="changeone" style={{ marginTop: 100 }} >
+                        <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                           <div className="d-flex justify-content-between" >
                             <div style={{}} className="d-flex " >
                               <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                                 setMeals(1)
                               }} className="" alt="Example Image" />
-                              <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Average completion - timeline</p>
+                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Average completion - timeline</p>
                             </div>
 
                             <div >
@@ -5880,15 +5868,15 @@ let Multi_venue = () => {
 
                       :
 
-                      <div className="" style={{ marginTop: 100 }} >
-                        <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                      <div className="changeone" style={{ marginTop: 100 }} >
+                        <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                           <div className="d-flex justify-content-between" >
                             <div style={{}} className="d-flex " >
                               <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                                 setMeals(1)
                               }} className="" alt="Example Image" />
-                              <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Dockets received - timeline</p>
+                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets received - timeline</p>
                             </div>
 
                             <div >

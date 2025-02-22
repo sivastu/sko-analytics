@@ -440,38 +440,38 @@ let Dockets = () => {
   let [fulldatafull, setFulldatafull] = useState()
 
   function extractUniqueNotes(datad, predefinedValues) {
-            
-    console.log(predefinedValues , 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
+
+    console.log(predefinedValues, 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
     let uniqueNotes = new Set();
 
     for (let group in datad) {
-        
 
-        for (let location in datad[group]) {
 
-          if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
+      for (let location in datad[group]) {
 
-            for (let section in datad[group][location]) {
-                for (let date in datad[group][location][section]) {
-                    datad[group][location][section][date].forEach(order => {
-                        order.ITEMS.forEach(item => {
-                            if (item.NOTE) {
-                                // Extract the word after (C<number>)
-                                const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                                if (match && match[1] && match[1] !== "undefined") {
-                                    uniqueNotes.add(match[1]); // Add only valid words
-                                }
-                            }
-                        });
-                    });
+        if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
+
+        for (let section in datad[group][location]) {
+          for (let date in datad[group][location][section]) {
+            datad[group][location][section][date].forEach(order => {
+              order.ITEMS.forEach(item => {
+                if (item.NOTE) {
+                  // Extract the word after (C<number>)
+                  const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                  if (match && match[1] && match[1] !== "undefined") {
+                    uniqueNotes.add(match[1]); // Add only valid words
+                  }
                 }
-            }
+              });
+            });
+          }
         }
+      }
     }
 
     // Convert Set to desired format
     return [...uniqueNotes].map(note => ({ value: note, label: note }));
-}
+  }
 
 
   let getone = () => {
@@ -509,9 +509,9 @@ let Dockets = () => {
           }
 
           const cleanedData = removeTrainingNotes(eventss);
- 
 
-     
+
+
 
 
 
@@ -584,7 +584,7 @@ let Dockets = () => {
           //   label: hub,
           // }));
 
-  
+
           // console.log("optionss:", optionsstwo);
 
           let getdata = sessionStorage.getItem('data')
@@ -602,9 +602,9 @@ let Dockets = () => {
             setBasic(optionsone)
 
 
-            let uuuk = extractUniqueNotes(cleanedData , optionsone )
+            let uuuk = extractUniqueNotes(cleanedData, optionsone)
             uuuk.unshift({ label: "All Courses", value: "All" });
-  
+
             setFulldatafull(uuuk)
 
           } else {
@@ -612,15 +612,15 @@ let Dockets = () => {
             setBasic(parsedatajson.venue)
 
 
-            let uuuk = extractUniqueNotes(cleanedData , parsedatajson.venue )
+            let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
             uuuk.unshift({ label: "All Courses", value: "All" });
-  
+
             setFulldatafull(uuuk)
           }
 
 
-          
-        
+
+
 
           const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
           const optionstakeaway = [
@@ -1330,7 +1330,7 @@ let Dockets = () => {
             type="checkbox" id="switch3" />
           <label class="switch-label" for="switch3"></label>
         </div>}
-        <span style={{ flexGrow: 1,marginTop:6 }}>{data.label}</span>
+        <span style={{ flexGrow: 1, marginTop: 6 }}>{data.label}</span>
 
       </div>
     );
@@ -1351,7 +1351,7 @@ let Dockets = () => {
           cursor: 'pointer',
         }}
       >
-        <span style={{ flexGrow: 1, marginTop:6 }}>{data.label}</span>
+        <span style={{ flexGrow: 1, marginTop: 6 }}>{data.label}</span>
       </div>
     );
   };
@@ -1369,7 +1369,7 @@ let Dockets = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, 30) + "..."
+      const displayText = allLabels.slice(0, 25) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
@@ -1392,7 +1392,7 @@ let Dockets = () => {
 
     if (hasAllValue === false && hasAllValueold === true) {
 
-      let uuuk = extractUniqueNotes( basicall , [] )
+      let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
@@ -1434,7 +1434,7 @@ let Dockets = () => {
 
     if (hasAllValue === true) {
 
-      let uuuk = extractUniqueNotes( basicall , basic )
+      let uuuk = extractUniqueNotes(basicall, basic)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
@@ -1512,7 +1512,7 @@ let Dockets = () => {
 
       //   return
       // }
-      let uuuk = extractUniqueNotes( basicall , selected )
+      let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
@@ -4057,7 +4057,7 @@ let Dockets = () => {
       x: 10,
       y: 20,
       width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
+      windowWidth: 1600, // Ensure full width capture
       autoPaging: "text",
       html2canvas: {
         useCORS: true, // Handle cross-origin images
@@ -4140,7 +4140,7 @@ let Dockets = () => {
       x: 10,
       y: 20,
       width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
+      windowWidth: 1600, // Ensure full width capture
       autoPaging: "text",
       html2canvas: {
         useCORS: true, // Handle cross-origin images
@@ -4657,97 +4657,85 @@ let Dockets = () => {
 
             {
               meals === 1 ?
-                <div className="" style={{ marginTop: 100 }} >
-
-                  <div className='row '  >
-
-                    {/* <div className='col-6' >
-            <div class="box " onClick={() => {
-              setMeals(5)
-            }} >
-              <div class="boxs">
-                <p className='asdfp'>Meals received - timeline</p>
-                <div class="end-box">
-                  <img src="rts.png" className="" alt="Example Image" />
-                  <p className="asdfps">(# of meals sent between specific time slots) </p>
-                </div>
-              </div>
-            </div>
-          </div> */}
+                <div className="changeone" style={{ marginTop: 100 }} >
+                  <div className="changetwos"   >
+                    <div className='row '  >
 
 
-                    <div className='col-6 w-100 d-flex justify-content-center' style={{ margin: 'auto' }} >
-                      <div class="box" style={{ maxWidth: "600px" }} onClick={() => {
-                        setMeals(2)
-                      }}>
-                        <div class="boxs">
-                          <div className="d-flex justify-content-between" >
-                            <div >
-                              <p className='asdfp' style={{ marginBottom: 0 }}>Dockets completion time</p>
-                              <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
-                            </div>
-                            <div >
-                              <p className='asdfp' style={{ color: '#316AAF' }}>{editall?.stats?.averageProcessTime || 0}</p>
-                            </div>
-                          </div>
 
-                          <div class="end-box">
-                            <img src="time.png" style={{ width: 90, height: 106 }} className="" alt="Example Image" />
-                            <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
 
+                      <div className='col-6 w-100 d-flex justify-content-center' style={{ margin: 'auto' }} >
+                        <div class="box" style={{ maxWidth: "600px" }} onClick={() => {
+                          setMeals(2)
+                        }}>
+                          <div class="boxs">
+                            <div className="d-flex justify-content-between" >
                               <div >
-                                <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                  <div className=' ' style={{ width: 200 }}>
-                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum</p>
-                                  </div>
-                                  <div className=' ' style={{ fontWeight: '600' }}>
-                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.minProcessTime || 0}</p>
-                                  </div>
-                                </div>
-
-
-                                <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                  <div className=' ' style={{ width: 200 }}>
-                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum</p>
-                                  </div>
-                                  <div className=' ' style={{ fontWeight: '600' }}>
-                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.maxProcessTime || 0}</p>
-                                  </div>
-                                </div>
+                                <p className='asdfp' style={{ marginBottom: 0 }}>Dockets completion time</p>
+                                <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
+                              </div>
+                              <div >
+                                <p className='asdfp' style={{ color: '#316AAF' }}>{editall?.stats?.averageProcessTime || 0}</p>
                               </div>
                             </div>
 
+                            <div class="end-box">
+                              <img src="time.png" style={{ width: 90, height: 106 }} className="" alt="Example Image" />
+                              <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
+
+                                <div >
+                                  <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                    <div className=' ' style={{ width: 200 }}>
+                                      <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum</p>
+                                    </div>
+                                    <div className=' ' style={{ fontWeight: '600' }}>
+                                      <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.minProcessTime || 0}</p>
+                                    </div>
+                                  </div>
+
+
+                                  <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                    <div className=' ' style={{ width: 200 }}>
+                                      <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum</p>
+                                    </div>
+                                    <div className=' ' style={{ fontWeight: '600' }}>
+                                      <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.maxProcessTime || 0}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
 
 
 
 
-                          </div>
-                        </div>
-                      </div>
-                    </div>
 
-
-                  </div>
-
-                  <div className="w-100 d-flex justify-content-center">
-                    <div className='row mt-5' >
-
-                      <div className='col-6' >
-                        <div class="box me-5" style={{ maxWidth: "600px" }} onClick={() => {
-                          setMeals(5)
-                        }} >
-                          <div class="boxs">
-                            <p className='asdfp'>Dockets received - timeline</p>
-                            <div class="end-box d-flex justify-content-between">
-                              <img src="rts.png" className="d-flex justify-content-between" alt="Example Image" />
-                              <p className="asdfps w-50 m-0">(# of dockets received
-                                between specific time slots)</p>
                             </div>
                           </div>
                         </div>
                       </div>
 
-                      {/* <div className='col-6' >
+
+                    </div>
+
+                    <div className="w-100 d-flex justify-content-center">
+                      <div className='row mt-5' >
+
+                        <div className='col-6' >
+                          <div class="box me-5" style={{ maxWidth: "600px" }} onClick={() => {
+                            setMeals(5)
+                          }} >
+                            <div class="boxs">
+                              <p className='asdfp'>Dockets received - timeline</p>
+                              <div class="end-box d-flex justify-content-between">
+                                <img src="rts.png" className="d-flex justify-content-between" alt="Example Image" />
+                                <p className="asdfps w-50 m-0">(# of dockets received
+                                  between specific time slots)</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* <div className='col-6' >
   <div class="box" onClick={() => {
     setMeals(3)
   }} >
@@ -4807,54 +4795,54 @@ let Dockets = () => {
 </div> */}
 
 
-                      <div className='col-6 ' >
-                        <div class="box ms-5" style={{ maxWidth: "600px" }} onClick={() => {
-                          setMeals(4)
-                        }}>
-                          <div class="boxs">
-                            <div className="d-flex justify-content-between" >
-                              <div >
-                                <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
-                                <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                              </div>
-                              <div >
-                                {/* <p className='asdfp' style={{ color: '#316AAF' }}>{
+                        <div className='col-6 ' >
+                          <div class="box ms-5" style={{ maxWidth: "600px" }} onClick={() => {
+                            setMeals(4)
+                          }}>
+                            <div class="boxs">
+                              <div className="d-flex justify-content-between" >
+                                <div >
+                                  <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
+                                  <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                                </div>
+                                <div >
+                                  {/* <p className='asdfp' style={{ color: '#316AAF' }}>{
             minperday ?
               ggggrtz()
               : 0
           }</p> */}
+                                </div>
                               </div>
-                            </div>
 
-                            <div class="end-box d-flex justify-content-between">
-                              <img src="bluee.png" className="" alt="Example Image" />
-                              <p className="asdfps w-50 m-0">(Average waiting time
-                                between specific time slots)</p>
+                              <div class="end-box d-flex justify-content-between">
+                                <img src="bluee.png" className="" alt="Example Image" />
+                                <p className="asdfps w-50 m-0">(Average waiting time
+                                  between specific time slots)</p>
 
 
+                              </div>
                             </div>
                           </div>
                         </div>
+
+
                       </div>
-
-
                     </div>
                   </div>
-
                 </div>
 
 
                 : meals === 2 ?
 
-                  <div className="" style={{ marginTop: 100 }} >
-                    <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                  <div className="changeone" style={{ marginTop: 100 }} >
+                    <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                       <div className="d-flex justify-content-between" >
                         <div style={{}} className="d-flex " >
                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                             setMeals(1)
                           }} className="" alt="Example Image" />
-                          <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Dockets completion time</p>
+                          <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets completion time</p>
                         </div>
 
                         <div class="custom-inputonessfine  " >
@@ -5134,8 +5122,8 @@ let Dockets = () => {
                   </div>
 
                   : meals === 3 ?
-                    <div className="" style={{ marginTop: 100 }} >
-                      <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                    <div className="changeone" style={{ marginTop: 100 }} >
+                      <div lassName="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                         <div className="d-flex justify-content-between" >
                           <div style={{}} className="d-flex " >
@@ -5309,15 +5297,15 @@ let Dockets = () => {
                     : meals === 4 ?
 
 
-                      <div className="" style={{ marginTop: 100 }} >
-                        <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                      <div className="changeone" style={{ marginTop: 100 }} >
+                        <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                           <div className="d-flex justify-content-between" >
                             <div style={{}} className="d-flex " >
                               <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                                 setMeals(1)
                               }} className="" alt="Example Image" />
-                              <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Average completion - timeline</p>
+                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Average completion - timeline</p>
                             </div>
 
                             <div >
@@ -5486,15 +5474,15 @@ let Dockets = () => {
 
                       :
 
-                      <div className="" style={{ marginTop: 100 }} >
-                        <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                      <div className="changeone" style={{ marginTop: 100 }} >
+                        <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                           <div className="d-flex justify-content-between" >
                             <div style={{}} className="d-flex " >
                               <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                                 setMeals(1)
                               }} className="" alt="Example Image" />
-                              <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Dockets received - timeline</p>
+                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets received - timeline</p>
                             </div>
 
                             <div >

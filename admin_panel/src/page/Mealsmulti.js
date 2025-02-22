@@ -1099,7 +1099,7 @@ const selectReffive = useRef(null);
             results.push({
               date,
               count: totalQuantity,
-              name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
+              name: refundedItems[0].ITEM, // Assuming all refunded items share the same name
               data: refundedItems,
             });
           }
@@ -1169,7 +1169,7 @@ const selectReffive = useRef(null);
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, 30) + "..."
+      const displayText = allLabels.slice(0, 25) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
@@ -3124,7 +3124,7 @@ const selectReffive = useRef(null);
           results.push({
             date,
             count: totalQuantity,
-            name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
+            name: refundedItems[0].ITEM, // Assuming all refunded items share the same name
             data: refundedItems,
           });
         }
@@ -3267,7 +3267,7 @@ const selectReffive = useRef(null);
           results.push({
             date,
             count: totalQuantity,
-            name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
+            name: refundedItems[0].ITEM, // Assuming all refunded items share the same name
             data: refundedItems,
           });
         }
@@ -3505,7 +3505,7 @@ const selectReffive = useRef(null);
       x: 10,
       y: 20,
       width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
+      windowWidth: 1600, // Ensure full width capture
       autoPaging: "text",
       html2canvas: {
         useCORS: true, // Handle cross-origin images
@@ -4142,47 +4142,9 @@ const selectReffive = useRef(null);
 
           {
             meals === 1 ?
-              <div className="" style={{ marginTop: 100 }} >
-                {/* <div className='row ddd' >
-                <div className='col-6' >
-                  <div className='asdf'  >
-                    <p className='asdfp'>Meals received - timeline</p>
-
-                    <div className='' >
-
-                    <div className='d-flex justify-content-between ' >
-                      <img src="rts.png" className="" alt="Example Image" />
-                      <p className="">(# of meals sent between
-                        specific time slots) </p>
-                    </div>
-                    
-                    </div>
-
-                 
-                  </div>
-                </div>
-
-                <div className='col-6' >
-                  <div className='asdf'  >
-                    <div className='d-flex justify-content-between' > 
-                      <div >
-
-                      <p className="asdfps">Edits</p>
-                      <p className="">(Total)</p>
-                      </div>
-
-                        <p className="asdfps" style={{ textAlign : 'end' , color : "#316AAF"}}>22</p>
-                    </div> 
-
-                    <div className='d-flex justify-content-between mt-5' >
-                      <img src="rts.png" alt="Example Image" />
-                      <p className="asdfps">(# of meals sent between
-                        specific time slots) </p>
-                    </div>
-                  </div>
-                </div>
-
-            </div> */}
+              <div className="changeone" style={{ marginTop: 100 }} >
+                
+                <div className="changetwos"   >
 
                 <div className='row ' >
 
@@ -4393,21 +4355,22 @@ const selectReffive = useRef(null);
 
 
                 </div>
+                </div>
 
               </div>
 
 
               : meals === 2 ?
 
-                <div className="" style={{ marginTop: 100 }} >
-                  <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                <div className="changeone" style={{ marginTop: 100 }} >
+                  <div className="changetwo"  style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                     <div className="d-flex justify-content-between" >
                       <div style={{}} className="d-flex " >
                         <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                           setMeals(1)
                         }} className="" alt="Example Image" />
-                        <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Edits</p>
+                        <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Edits</p>
                       </div>
 
                       <div >
@@ -4652,15 +4615,15 @@ const selectReffive = useRef(null);
                 </div>
 
                 : meals === 3 ?
-                  <div className="" style={{ marginTop: 100 }} >
-                    <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                  <div className="changeone" style={{ marginTop: 100 }} >
+                    <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                       <div className="d-flex justify-content-between" >
                         <div style={{}} className="d-flex " >
                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                             setMeals(1)
                           }} className="" alt="Example Image" />
-                          <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Served meals</p>
+                          <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Served meals</p>
                         </div>
 
                         <div >
@@ -4827,15 +4790,15 @@ const selectReffive = useRef(null);
                   : meals === 4 ?
 
 
-                    <div className="" style={{ marginTop: 100 }} >
-                      <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                    <div className="changeone" style={{ marginTop: 100 }} >
+                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                         <div className="d-flex justify-content-between" >
                           <div style={{}} className="d-flex " >
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Refunded meals</p>
+                            <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Refunded meals</p>
                           </div>
 
                           <div >
@@ -5002,15 +4965,15 @@ const selectReffive = useRef(null);
 
                     :
 
-                    <div className="" style={{ marginTop: 100 }} >
-                      <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                    <div className="changeone" style={{ marginTop: 100 }} >
+                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                         <div className="d-flex justify-content-between" >
                           <div style={{}} className="d-flex " >
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Meals received - timeline</p>
+                            <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Meals received - timeline</p>
                           </div>
 
                           <div >
@@ -5496,441 +5459,431 @@ const selectReffive = useRef(null);
         </div >
       </div>
 
-      <div style={{ visibility: 'hidden' }}>
-        <div ref={pdfRefss}  >
-
-          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Served meals</p>
-
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-            const datefineda = new Date(dateRange[0]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} to {(() => {
-            const datefineda = new Date(dateRange[1]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-            const datefineda = new Date(dateRangetwo[0]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} to {(() => {
-            const datefineda = new Date(dateRangetwo[1]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-            const result = selectedOptions.map(item => item.value).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()}</p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-
-            const result = selectedhubOptions.map(item => item.label).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()} </p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-
-            const result = selectedCources.map(item => item.label).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()}</p>
-
-
-          <div style={{ marginTop: 20, padding: 10 }} >
-
-            <div className="d-flex justify-content-between" >
-
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                  ggggrt()}</span></p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-
-                  ggggrts()
-                }</span></p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                  {(() => {
-                    let datd = ggggrt()
-
-                    let datdtwo = ggggrts()
-
-                    let tot = ((datd - datdtwo) / datdtwo) * 100
-
-                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                      }} className="" alt="Example Image" /> :
-                      <img src="d_arw.png"
-                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" />}</span></span>
-
-
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                  })()}</span></p>
-              </div>
-
-            </div>
-
-
-            {
-              served?.map((dfgh, index) => {
-                const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
-
-                return (
-                  <>
-                    <div className="d-flex  ">
-
-                      <div style={{ width: '33%' }}>
-                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
-                      </div>
-
-                      {correspondingErv ? (
-                        <div style={{ width: '33%', textAlign: 'center' }}>
-                          <div >
-
-                            <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div style={{ width: '33%' }} >
-                          </div></>
-                      )}
-
-                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                          ( Total )
-                          <span>
-                            {(() => {
-                              const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                              const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-
-                              const tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                              return (
-                                <span>
-                                  {tot.toFixed(2) + "%"}
-                                  <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                    {tot > 0 ? (
-                                      <img
-                                        src="up_arw.png"
-                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                        alt="up arrow"
-                                      />
-                                    ) : (
-                                      <img
-                                        src="d_arw.png"
-                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                        alt="down arrow"
-                                      />
-                                    )}
-                                  </span>
-                                </span>
-                              );
-                            })()}
-                          </span>
-                        </p>
-                      </div>
-
-                    </div>
-
-                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                  </>
-                );
-              })
-            }
-
-
-          </div>
-        </div >
-      </div>
-
-
-      <div style={{ visibility: 'hidden' }}>
-        <div ref={pdfRefsss}  >
-
-          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Refunded meals</p>
-
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-            const datefineda = new Date(dateRange[0]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} to {(() => {
-            const datefineda = new Date(dateRange[1]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-            const datefineda = new Date(dateRangetwo[0]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} to {(() => {
-            const datefineda = new Date(dateRangetwo[1]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-            const result = selectedOptions.map(item => item.value).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()}</p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-
-            const result = selectedhubOptions.map(item => item.label).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()} </p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-
-            const result = selectedCources.map(item => item.label).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()}</p>
-
-
-          <div style={{ marginTop: 20, padding: 10 }} >
-
-            <div className="d-flex justify-content-between" >
-
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                  ggggrtsg()}</span></p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-
-                  ggggrtsgg()
-                }</span></p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                  {(() => {
-                    let datd = ggggrtsg()
-
-                    let datdtwo = ggggrtsgg()
-
-                    let tot = ((datd - datdtwo) / datdtwo) * 100
-
-                    return <span >{isNaN(tot) ? 0 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{isNaN(tot) ?
-                      '%' : tot > 0 ? <img src="up_arw.png"
-                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" /> :
-                        <img src="d_arw.png"
-                          style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                          }} className="" alt="Example Image" />}</span></span>
-
-
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                  })()}</span></p>
-              </div>
-
-            </div>
-
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-            <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
-
-
-
-              {
-                minperday?.map((dfgh, index) => {
-                  const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
-
-                  return (
-                    <>
-                      <div className="d-flex  ">
-
-                        <div style={{ width: '33%' }}>
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
-                        </div>
-
-                        {correspondingErv ? (
-                          <div style={{ width: '33%', textAlign: 'center' }}>
-                            <div >
-
-                              <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                            </div>
-                          </div>
-                        ) : (
-                          <>
-                            <div style={{ width: '33%' }} >
-                            </div></>
-                        )}
-
-                        <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                            ( Total )
-                            <span>
-                              {(() => {
-                                const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-
-                                const tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                                return (
-                                  <span>
-                                    {tot.toFixed(2) + "%"}
-                                    <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                      {tot > 0 ? (
-                                        <img
-                                          src="up_arw.png"
-                                          style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                          alt="up arrow"
-                                        />
-                                      ) : (
-                                        <img
-                                          src="d_arw.png"
-                                          style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                          alt="down arrow"
-                                        />
-                                      )}
-                                    </span>
-                                  </span>
-                                );
-                              })()}
-                            </span>
-                          </p>
-                        </div>
-
-                      </div>
-
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                    </>
-                  );
-                })
-              }
-
-
-            </div>
-
-
-
-
-          </div>
-        </div >
-      </div>
+       <div style={{ visibility: 'hidden' }}>
+             <div ref={pdfRefss}  >
+     
+               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Served meals</p>
+     
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                 const datefineda = new Date(dateRange[0]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} to {(() => {
+                 const datefineda = new Date(dateRange[1]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                 const datefineda = new Date(dateRangetwo[0]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} to {(() => {
+                 const datefineda = new Date(dateRangetwo[1]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+     
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+     
+                 const result = selectedOptions.map(item => item.value).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()}</p>
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+     
+                 const result = selectedhubOptions.map(item => item.label).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()} </p>
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+     
+                 const result = selectedCources.map(item => item.label).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()}</p>
+     
+     
+               <div style={{ marginTop: 20, padding: 10 }} >
+     
+                 <div className="d-flex justify-content-between" >
+     
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+                       ggggrt()} </p>
+                   </div>
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+     
+                       ggggrts()
+                     } </p>
+                   </div>
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
+                       ( Total ){" "}
+                       {(() => {
+                         let datd = ggggrt();
+                         let datdtwo = ggggrts();
+                         let tot = ((datd - datdtwo) / datdtwo) * 100;
+     
+                         return (
+                           <>
+                             {tot.toFixed(2) + "%"}{" "}
+                             <img
+                               src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                               style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
+                               alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+                             />
+                           </>
+                         );
+                       })()}
+                     </p>
+     
+     
+                   </div>
+     
+                 </div>
+     
+     
+                 {
+                   served?.map((dfgh, index) => {
+                     const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+     
+                     return (
+                       <>
+                         <div className="d-flex  mt-3">
+     
+                           <div style={{ width: '33%' }}>
+                             <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{dfgh?.count}</p>
+                           </div>
+     
+                           {correspondingErv ? (
+                             <div style={{ width: '33%', textAlign: 'center' }}>
+                               <div >
+     
+                                 <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                 <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{correspondingErv?.count}</p>
+                               </div>
+                             </div>
+                           ) : (
+                             <>
+                               <div style={{ width: '33%' }} >
+                               </div></>
+                           )}
+     
+                           <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
+                               ( Total ){" "}
+                               {(() => {
+                                 const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                                 const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+     
+                                 const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0; // Prevent division by zero
+     
+                                 return (
+                                   <>
+                                     {tot.toFixed(2) + "%"}{" "}
+                                     <img
+                                       src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                                       style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
+                                       alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+                                     />
+                                   </>
+                                 );
+                               })()}
+                             </p>
+     
+                           </div>
+     
+                         </div>
+     
+                         <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
+                       </>
+                     );
+                   })
+                 }
+     
+     
+               </div>
+             </div >
+           </div>
+     
+     
+           <div style={{ visibility: 'hidden' }}>
+             <div ref={pdfRefsss}  >
+     
+               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Refunded meals</p>
+     
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                 const datefineda = new Date(dateRange[0]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} to {(() => {
+                 const datefineda = new Date(dateRange[1]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                 const datefineda = new Date(dateRangetwo[0]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} to {(() => {
+                 const datefineda = new Date(dateRangetwo[1]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+     
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+     
+                 const result = selectedOptions.map(item => item.value).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()}</p>
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+     
+                 const result = selectedhubOptions.map(item => item.label).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()} </p>
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+     
+                 const result = selectedCources.map(item => item.label).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()}</p>
+     
+     
+               <div style={{ marginTop: 20, padding: 10 }} >
+     
+                 <div className="d-flex justify-content-between" >
+     
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                       ggggrtsg()}</span></p>
+                   </div>
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+     
+                       ggggrtsgg()
+                     }</span></p>
+                   </div>
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                       {(() => {
+                         let datd = ggggrtsg()
+     
+                         let datdtwo = ggggrtsgg()
+     
+                         let tot = ((datd - datdtwo) / datdtwo) * 100
+     
+                         return <span >{isNaN(tot) ? 0 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{isNaN(tot) ?
+                           '%' : tot > 0 ? <img src="up_arw.png"
+                             style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+     
+                             }} className="" alt="Example Image" /> :
+                             <img src="d_arw.png"
+                               style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+     
+                               }} className="" alt="Example Image" />}</span></span>
+     
+     
+                         console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                       })()}</span></p>
+                   </div>
+     
+                 </div>
+     
+                 <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+     
+                 <div className="scroll" id="scrrrrol"  >
+     
+     
+     
+                   {
+                     minperday?.map((dfgh, index) => {
+      
+                       const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
+     
+                       return (
+                         <>
+                           <div className="d-flex  ">
+     
+                             <div style={{ width: '33%' }}>
+                               <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                               <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                             </div>
+     
+                             {correspondingErv ? (
+                               <div style={{ width: '33%', textAlign: 'center' }}>
+                                 <div >
+     
+                                   <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                   <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                                 </div>
+                               </div>
+                             ) : (
+                               <>
+                                 <div style={{ width: '33%' }} >
+                                 </div></>
+                             )}
+     
+                             <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                               <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                                 ( Total )
+                                 <span>
+                                   {(() => {
+                                     const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                                     const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+     
+     
+                                     const tot = ((datd - datdtwo) / datdtwo) * 100;
+     
+                                     return (
+                                       <span>
+                                         {tot.toFixed(2) + "%"}
+                                         <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                           {tot > 0 ? (
+                                             <img
+                                               src="up_arw.png"
+                                               style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                               alt="up arrow"
+                                             />
+                                           ) : (
+                                             <img
+                                               src="d_arw.png"
+                                               style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                               alt="down arrow"
+                                             />
+                                           )}
+                                         </span>
+                                       </span>
+                                     );
+                                   })()}
+                                 </span>
+                               </p>
+                             </div>
+     
+                           </div>
+     
+                           <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
+                         </>
+                       );
+                     })
+                   }
+     
+     
+                 </div>
+     
+     
+     
+     
+               </div>
+             </div >
+           </div>
 
     </div>
   );

@@ -256,38 +256,38 @@ let Meals = () => {
   };
 
   function extractUniqueNotes(datad, predefinedValues) {
-            
-    console.log(predefinedValues , 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
+
+    console.log(predefinedValues, 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
     let uniqueNotes = new Set();
 
     for (let group in datad) {
-        
 
-        for (let location in datad[group]) {
 
-          if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
+      for (let location in datad[group]) {
 
-            for (let section in datad[group][location]) {
-                for (let date in datad[group][location][section]) {
-                    datad[group][location][section][date].forEach(order => {
-                        order.ITEMS.forEach(item => {
-                            if (item.NOTE) {
-                                // Extract the word after (C<number>)
-                                const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                                if (match && match[1] && match[1] !== "undefined") {
-                                    uniqueNotes.add(match[1]); // Add only valid words
-                                }
-                            }
-                        });
-                    });
+        if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
+
+        for (let section in datad[group][location]) {
+          for (let date in datad[group][location][section]) {
+            datad[group][location][section][date].forEach(order => {
+              order.ITEMS.forEach(item => {
+                if (item.NOTE) {
+                  // Extract the word after (C<number>)
+                  const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                  if (match && match[1] && match[1] !== "undefined") {
+                    uniqueNotes.add(match[1]); // Add only valid words
+                  }
                 }
-            }
+              });
+            });
+          }
         }
+      }
     }
 
     // Convert Set to desired format
     return [...uniqueNotes].map(note => ({ value: note, label: note }));
-}
+  }
 
   let [fulldatafull, setFulldatafull] = useState()
 
@@ -326,10 +326,10 @@ let Meals = () => {
           }
 
           const cleanedData = removeTrainingNotes(eventss);
- 
 
-       
-        
+
+
+
 
 
 
@@ -402,7 +402,7 @@ let Meals = () => {
           //   label: hub,
           // }));
 
-  
+
           // console.log("optionss:", optionsstwo);
 
           let getdata = sessionStorage.getItem('data')
@@ -420,9 +420,9 @@ let Meals = () => {
             setBasic(optionsone)
 
 
-            let uuuk = extractUniqueNotes(cleanedData , optionsone )
+            let uuuk = extractUniqueNotes(cleanedData, optionsone)
             uuuk.unshift({ label: "All Courses", value: "All" });
-  
+
             setFulldatafull(uuuk)
 
           } else {
@@ -430,15 +430,15 @@ let Meals = () => {
             setBasic(parsedatajson.venue)
 
 
-            let uuuk = extractUniqueNotes(cleanedData , parsedatajson.venue )
+            let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
             uuuk.unshift({ label: "All Courses", value: "All" });
-  
+
             setFulldatafull(uuuk)
           }
 
 
-          
-        
+
+
 
           const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
           const optionstakeaway = [
@@ -1095,7 +1095,7 @@ let Meals = () => {
             results.push({
               date,
               count: totalQuantity,
-              name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
+              name: refundedItems[0].ITEM, // Assuming all refunded items share the same name
               data: refundedItems,
             });
           }
@@ -1147,7 +1147,7 @@ let Meals = () => {
             type="checkbox" id="switch3" />
           <label class="switch-label" for="switch3"></label>
         </div>}
-        <span style={{ flexGrow: 1,marginTop:6 }}>{data.label}</span>
+        <span style={{ flexGrow: 1, marginTop: 6 }}>{data.label}</span>
 
       </div>
     );
@@ -1165,7 +1165,7 @@ let Meals = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, 30) + "..."
+      const displayText = allLabels.slice(0, 25) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
@@ -1176,7 +1176,7 @@ let Meals = () => {
 
 
   const handleChange = (selected) => {
-    setMenuIsOpen(true) 
+    setMenuIsOpen(true)
     console.log(JSON.stringify(fulldatatwo), 'selected')
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldven.some(item => item.value === "All");
@@ -1186,7 +1186,7 @@ let Meals = () => {
 
     if (hasAllValue === false && hasAllValueold === true) {
 
-      let uuuk = extractUniqueNotes( basicall , [] )
+      let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
@@ -1230,7 +1230,7 @@ let Meals = () => {
 
     if (hasAllValue === true) {
 
-      let uuuk = extractUniqueNotes( basicall , basic )
+      let uuuk = extractUniqueNotes(basicall, basic)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
@@ -1309,7 +1309,7 @@ let Meals = () => {
       //   return
       // }
 
-      let uuuk = extractUniqueNotes( basicall , selected )
+      let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
@@ -2863,7 +2863,7 @@ let Meals = () => {
           results.push({
             date,
             count: totalQuantity,
-            name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
+            name: refundedItems[0].ITEM, // Assuming all refunded items share the same name
             data: refundedItems,
           });
         }
@@ -3006,7 +3006,7 @@ let Meals = () => {
           results.push({
             date,
             count: totalQuantity,
-            name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
+            name: refundedItems[0].ITEM, // Assuming all refunded items share the same name
             data: refundedItems,
           });
         }
@@ -3211,11 +3211,13 @@ let Meals = () => {
     await doc.html(input, {
       callback: function (doc) {
         doc.save("output.pdf"); // Save after rendering
-      },
-      x: 10,
-      y: 20,
+      }, 
+      y: 10,
       width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
+      windowWidth: 1000, // Ensure full width capture  
+      margin : 10,
+
+
       autoPaging: "text",
       html2canvas: {
         useCORS: true, // Handle cross-origin images
@@ -3244,7 +3246,7 @@ let Meals = () => {
       x: 10,
       y: 20,
       width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
+      windowWidth: 1600, // Ensure full width capture
       autoPaging: "text",
       html2canvas: {
         useCORS: true, // Handle cross-origin images
@@ -3317,7 +3319,7 @@ let Meals = () => {
         </div>
       </div>
 
-      <div style={{ backgroundColor: "#DADADA", height: '100vh', overflow: 'auto', }} className="finefinrr">
+      <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr">
 
         <div style={{}} className="dddd"  >
 
@@ -3799,272 +3801,238 @@ let Meals = () => {
 
           {
             meals === 1 ?
-              <div className="" style={{ marginTop: 100 }} >
-                {/* <div className='row ddd' >
-                <div className='col-6' >
-                  <div className='asdf'  >
-                    <p className='asdfp'>Meals received - timeline</p>
+              <div className="changeone" style={{ marginTop: 100, }}  >
 
-                    <div className='' >
+                <div className="changetwos"   >
 
-                    <div className='d-flex justify-content-between ' >
-                      <img src="rts.png" className="" alt="Example Image" />
-                      <p className="">(# of meals sent between
-                        specific time slots) </p>
-                    </div>
-                    
-                    </div>
 
-                 
-                  </div>
-                </div>
+                  <div className='row ' >
 
-                <div className='col-6' >
-                  <div className='asdf'  >
-                    <div className='d-flex justify-content-between' > 
-                      <div >
-
-                      <p className="asdfps">Edits</p>
-                      <p className="">(Total)</p>
-                      </div>
-
-                        <p className="asdfps" style={{ textAlign : 'end' , color : "#316AAF"}}>22</p>
-                    </div> 
-
-                    <div className='d-flex justify-content-between mt-5' >
-                      <img src="rts.png" alt="Example Image" />
-                      <p className="asdfps">(# of meals sent between
-                        specific time slots) </p>
-                    </div>
-                  </div>
-                </div>
-
-            </div> */}
-
-                <div className='row ' >
-
-                  <div className='col-6 d-flex justify-content-center ' >
-                    <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
-                      setMeals(5)
-                    }} >
-                      <div class="boxs">
-                        <p className='asdfp'>Meals received - timeline</p>
-                        <div class="end-box">
-                          <img src="rts.png" className="" alt="Example Image" />
-                          <p className="asdfps">(# of meals sent between specific time slots) </p>
+                    <div className='col-6 d-flex justify-content-center ' >
+                      <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
+                        setMeals(5)
+                      }} >
+                        <div class="boxs">
+                          <p className='asdfp'>Meals received - timeline</p>
+                          <div class="end-box">
+                            <img src="rts.png" className="" alt="Example Image" />
+                            <p className="asdfps">(# of meals sent between specific time slots) </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
 
-                  <div className='col-6 d-flex justify-content-center' >
-                    <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
-                      setMeals(2)
-                    }}>
-                      <div class="boxs">
-                        <div className="d-flex justify-content-between" >
-                          <div >
-                            <p className='asdfp' style={{ marginBottom: 0 }}>Edits</p>
-                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                          </div>
-                          <div >
-                            <p className='asdfp' style={{ color: '#316AAF' }}>{parseInt(editall?.edited?.length)
-                              + parseInt(editall?.moved?.length) + parseInt(editall?.deleted?.length) + parseInt(editall?.tableMoved?.length) || 0}</p>
-                          </div>
-                        </div>
-
-                        <div class="end-box">
-                          <img src="ert.png" className="" alt="Example Image" />
-                          <div className='' >
-
-
-                            <div className="d-flex" style={{ marginBottom: 0 }}  >
-                              <div className=' ' style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Edited</p>
-                              </div>
-                              <div className=' ' style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.edited?.length || 0}</p>
-                              </div>
-                            </div>
-
-
-                            <div className="d-flex" style={{ marginBottom: 0 }}  >
-                              <div className=' ' style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Moved</p>
-                              </div>
-                              <div className=' ' style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.moved?.length || 0}</p>
-                              </div>
-                            </div>
-
-                            <div className="d-flex" style={{ marginBottom: 0 }}  >
-                              <div className=' ' style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Deleted</p>
-                              </div>
-                              <div className=' ' style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.deleted?.length || 0}</p>
-                              </div>
-                            </div>
-
-                            <div className="d-flex" style={{ marginBottom: 0 }}  >
-                              <div className=' ' style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Table moved</p>
-                              </div>
-                              <div className=' ' style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.tableMoved?.length || 0}</p>
-                              </div>
-                            </div>
-
-                          </div>
-
-
-
-
-
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
-
-                <div className='row mt-5' >
-
-                  <div className='col-6 d-flex justify-content-center' >
-                    <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
-                      setMeals(3)
-                    }} >
-                      <div class="boxs">
-                        <div className="d-flex justify-content-between" >
-                          <div >
-                            <p className='asdfp' style={{ marginBottom: 0 }}>Served meals</p>
-                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                          </div>
-                          <div >
-                            <p className='asdfp' style={{ color: '#316AAF' }}>{
-                              served ?
-                                ggggrt()
-                                : 0
-                            }</p>
-                          </div>
-                        </div>
-
-                        <div class="end-box">
-                          <img src="starr.png" className="" alt="Example Image" />
-                          <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
-
+                    <div className='col-6 d-flex justify-content-center' >
+                      <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
+                        setMeals(2)
+                      }}>
+                        <div class="boxs">
+                          <div className="d-flex justify-content-between" >
                             <div >
-
-
-
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Most: <span style={{ fontWeight: '600' }} >{served[0]?.name || 0}</span></p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[0]?.count || 0}</p>
-                                </div>
-                              </div>
-
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Less: <span style={{ fontWeight: '600' }} >{served[served.length - 1]?.name || ''}</span></p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[served.length - 1]?.count || 0}</p>
-                                </div>
-                              </div>
+                              <p className='asdfp' style={{ marginBottom: 0 }}>Edits</p>
+                              <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
                             </div>
-                          </div>
-
-
-
-
-
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-                  <div className='col-6 d-flex justify-content-center' >
-                    <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
-                      setMeals(4)
-                    }}>
-                      <div class="boxs">
-                        <div className="d-flex justify-content-between" >
-                          <div >
-                            <p className='asdfp' style={{ marginBottom: 0 }}>Refunded meals</p>
-                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                          </div>
-                          <div >
-                            <p className='asdfp' style={{ color: '#316AAF' }}>{
-                              minperday ?
-                                ggggrtz()
-                                : 0
-                            }</p>
-                          </div>
-                        </div>
-
-                        <div class="end-box">
-                          <img src="refundd.png" className="" alt="Example Image" />
-                          <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
-
                             <div >
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum per day</p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[minperday.length - 1]?.count || 0}</p>
-                                </div>
-                              </div>
-
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum per day</p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[0]?.count || 0}</p>
-                                </div>
-                              </div>
+                              <p className='asdfp' style={{ color: '#316AAF' }}>{parseInt(editall?.edited?.length)
+                                + parseInt(editall?.moved?.length) + parseInt(editall?.deleted?.length) + parseInt(editall?.tableMoved?.length) || 0}</p>
                             </div>
                           </div>
 
+                          <div class="end-box">
+                            <img src="ert.png" className="" alt="Example Image" />
+                            <div className='' >
+
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Edited</p>
+                                </div>
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.edited?.length || 0}</p>
+                                </div>
+                              </div>
+
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Moved</p>
+                                </div>
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.moved?.length || 0}</p>
+                                </div>
+                              </div>
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Deleted</p>
+                                </div>
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.deleted?.length || 0}</p>
+                                </div>
+                              </div>
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Table moved</p>
+                                </div>
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.tableMoved?.length || 0}</p>
+                                </div>
+                              </div>
+
+                            </div>
 
 
 
 
 
+
+                          </div>
                         </div>
                       </div>
                     </div>
+
+
+                  </div>
+
+                  <div className='row mt-5' >
+
+                    <div className='col-6 d-flex justify-content-center' >
+                      <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
+                        setMeals(3)
+                      }} >
+                        <div class="boxs">
+                          <div className="d-flex justify-content-between" >
+                            <div >
+                              <p className='asdfp' style={{ marginBottom: 0 }}>Served meals</p>
+                              <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                            </div>
+                            <div >
+                              <p className='asdfp' style={{ color: '#316AAF' }}>{
+                                served ?
+                                  ggggrt()
+                                  : 0
+                              }</p>
+                            </div>
+                          </div>
+
+                          <div class="end-box">
+                            <img src="starr.png" className="" alt="Example Image" />
+                            <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
+
+                              <div >
+
+
+
+
+                                <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                  <div className=' ' style={{ width: 200 }}>
+                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Most: <span style={{ fontWeight: '600' }} >{served[0]?.name || 0}</span></p>
+                                  </div>
+                                  <div className=' ' style={{ fontWeight: '600' }}>
+                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[0]?.count || 0}</p>
+                                  </div>
+                                </div>
+
+
+                                <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                  <div className=' ' style={{ width: 200 }}>
+                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Less: <span style={{ fontWeight: '600' }} >{served[served.length - 1]?.name || ''}</span></p>
+                                  </div>
+                                  <div className=' ' style={{ fontWeight: '600' }}>
+                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[served.length - 1]?.count || 0}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+
+
+
+
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div className='col-6 d-flex justify-content-center' >
+                      <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
+                        setMeals(4)
+                      }}>
+                        <div class="boxs">
+                          <div className="d-flex justify-content-between" >
+                            <div >
+                              <p className='asdfp' style={{ marginBottom: 0 }}>Refunded meals</p>
+                              <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                            </div>
+                            <div >
+                              <p className='asdfp' style={{ color: '#316AAF' }}>{
+                                minperday ?
+                                  ggggrtz()
+                                  : 0
+                              }</p>
+                            </div>
+                          </div>
+
+                          <div class="end-box">
+                            <img src="refundd.png" className="" alt="Example Image" />
+                            <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
+
+                              <div >
+                                <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                  <div className=' ' style={{ width: 200 }}>
+                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum per day</p>
+                                  </div>
+                                  <div className=' ' style={{ fontWeight: '600' }}>
+                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[minperday.length - 1]?.count || 0}</p>
+                                  </div>
+                                </div>
+
+
+                                <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                  <div className=' ' style={{ width: 200 }}>
+                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum per day</p>
+                                  </div>
+                                  <div className=' ' style={{ fontWeight: '600' }}>
+                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[0]?.count || 0}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+
+
+
+
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
                   </div>
 
 
-                </div>
+                </div >
 
               </div>
 
 
               : meals === 2 ?
 
-                <div className="" style={{ marginTop: 100 }} >
-                  <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                <div className="changeone" style={{ marginTop: 100 }} >
+                  <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                     <div className="d-flex justify-content-between" >
                       <div style={{}} className="d-flex " >
                         <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                           setMeals(1)
                         }} className="" alt="Example Image" />
-                        <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Edits</p>
+                        <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop : -6 }}>Edits</p>
                       </div>
 
                       <div >
@@ -4309,15 +4277,15 @@ let Meals = () => {
                 </div>
 
                 : meals === 3 ?
-                  <div className="" style={{ marginTop: 100 }} >
-                    <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                  <div className="changeone" style={{ marginTop: 100 }} >
+                    <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                       <div className="d-flex justify-content-between" >
                         <div style={{}} className="d-flex " >
                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                             setMeals(1)
                           }} className="" alt="Example Image" />
-                          <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Served meals</p>
+                          <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Served meals</p>
                         </div>
 
                         <div >
@@ -4484,15 +4452,15 @@ let Meals = () => {
                   : meals === 4 ?
 
 
-                    <div className="" style={{ marginTop: 100 }} >
-                      <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                    <div className="changeone" style={{ marginTop: 100 }} >
+                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                         <div className="d-flex justify-content-between" >
                           <div style={{}} className="d-flex " >
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Refunded meals</p>
+                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6}}>Refunded meals</p>
                           </div>
 
                           <div >
@@ -4659,15 +4627,15 @@ let Meals = () => {
 
                     :
 
-                    <div className="" style={{ marginTop: 100 }} >
-                      <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                    <div className="changeone" style={{ marginTop: 100 }} >
+                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                         <div className="d-flex justify-content-between" >
                           <div style={{}} className="d-flex " >
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Meals received - timeline</p>
+                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Meals received - timeline</p>
                           </div>
 
                           <div >
@@ -5252,38 +5220,39 @@ let Meals = () => {
 
               <div >
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                  ggggrt()}</span></p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+                  ggggrt()} </p>
               </div>
               <div >
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
 
                   ggggrts()
-                }</span></p>
+                } </p>
               </div>
               <div >
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
+                  ( Total ){" "}
                   {(() => {
-                    let datd = ggggrt()
+                    let datd = ggggrt();
+                    let datdtwo = ggggrts();
+                    let tot = ((datd - datdtwo) / datdtwo) * 100;
 
-                    let datdtwo = ggggrts()
+                    return (
+                      <>
+                        {tot.toFixed(2) + "%"}{" "}
+                        <img
+                          src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                          style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
+                          alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+                        />
+                      </>
+                    );
+                  })()}
+                </p>
 
-                    let tot = ((datd - datdtwo) / datdtwo) * 100
 
-                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                      }} className="" alt="Example Image" /> :
-                      <img src="d_arw.png"
-                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" />}</span></span>
-
-
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                  })()}</span></p>
               </div>
 
             </div>
@@ -5295,11 +5264,11 @@ let Meals = () => {
 
                 return (
                   <>
-                    <div className="d-flex  ">
+                    <div className="d-flex  mt-3">
 
                       <div style={{ width: '33%' }}>
                         <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{dfgh?.count}</p>
                       </div>
 
                       {correspondingErv ? (
@@ -5307,7 +5276,7 @@ let Meals = () => {
                           <div >
 
                             <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{correspondingErv?.count}</p>
                           </div>
                         </div>
                       ) : (
@@ -5317,44 +5286,32 @@ let Meals = () => {
                       )}
 
                       <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                          ( Total )
-                          <span>
-                            {(() => {
-                              const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                              const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
+                          ( Total ){" "}
+                          {(() => {
+                            const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                            const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
 
+                            const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0; // Prevent division by zero
 
-                              const tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                              return (
-                                <span>
-                                  {tot.toFixed(2) + "%"}
-                                  <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                    {tot > 0 ? (
-                                      <img
-                                        src="up_arw.png"
-                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                        alt="up arrow"
-                                      />
-                                    ) : (
-                                      <img
-                                        src="d_arw.png"
-                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                        alt="down arrow"
-                                      />
-                                    )}
-                                  </span>
-                                </span>
-                              );
-                            })()}
-                          </span>
+                            return (
+                              <>
+                                {tot.toFixed(2) + "%"}{" "}
+                                <img
+                                  src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                                  style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
+                                  alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+                                />
+                              </>
+                            );
+                          })()}
                         </p>
+
                       </div>
 
                     </div>
 
-                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
                   </>
                 );
               })
@@ -5504,12 +5461,13 @@ let Meals = () => {
 
             <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
-            <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
+            <div className="scroll" id="scrrrrol"  >
 
 
 
               {
                 minperday?.map((dfgh, index) => {
+ 
                   const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
 
                   return (
@@ -5573,7 +5531,7 @@ let Meals = () => {
 
                       </div>
 
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
                     </>
                   );
                 })
