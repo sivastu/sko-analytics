@@ -1363,9 +1363,10 @@ let Dockets = () => {
     const selected = getValue();
     if (selected.length) {
       const allLabels = selected
-        .filter(option => !option.label.startsWith("All ")) // Skip labels starting with "All "
-        .map(option => option.label)
-        .join(", ");
+      .filter(option => option.label && !option.label.startsWith("All ")) // Ensure label exists
+      .map(option => option.label)
+      .join(", ");
+
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
