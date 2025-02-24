@@ -1370,7 +1370,7 @@ let Dockets = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-const displayText = allLabels.slice(0, 20) + "..."
+const displayText = allLabels.slice(0, 18) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
@@ -4198,7 +4198,7 @@ const displayText = allLabels.slice(0, 20) + "..."
 
                   checkkkk()
 
-                }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
+                }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 ,marginBottom:2}}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
 
                 <div style={{ width: '100%' }} >
                   <DatePicker
@@ -4222,7 +4222,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                     calendarClassName="custom-calendar"
                     dateFormat="d MMM yyyy"
                     customInput={
-                      <div className="custom-display-input">
+                      <div className="custom-display-input" style={{color:'#1A1A1B',fontSize:15}}>
                         {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
                         <FaCaretDown className="calendar-icon" />
                       </div>
@@ -4235,6 +4235,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                       className='inputttt'
                       type="time"
                       value={onetime}
+                      style={{color:'#1A1A1B',fontSize:15}}
                       onChange={(e) => {
                         console.log(e.target.value, 'eeee')
                         setOnetime(e.target.value)
@@ -4251,6 +4252,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                       className='inputttt'
                       type="time"
                       value={twotime}
+                      style={{color:'#1A1A1B',fontSize:15}}
                       onChange={(e) => {
                         setTwotime(e.target.value)
                         if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
@@ -4270,7 +4272,7 @@ const displayText = allLabels.slice(0, 20) + "..."
               </div>
 
               <div style={{ width: '20%' }}>
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
                 <div style={{ width: '100%' }}>
                   <DatePicker
                     selectsRange
@@ -4296,7 +4298,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                     calendarClassName="custom-calendar"
                     dateFormat="d MMM yyyy"
                     customInput={
-                      <div className="custom-display-input">
+                      <div className="custom-display-input" style={{color:'#1A1A1B',fontSize:15}}>
                         {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
                         <FaCaretDown className="calendar-icon" />
                       </div>
@@ -4308,6 +4310,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                     <input
                       className='inputttt'
                       type="time"
+                      style={{color:'#1A1A1B',fontSize:15}}
                       value={threetime}
                       onChange={(e) => {
                         setThreetime(e.target.value)
@@ -4322,6 +4325,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                     <input
                       className='inputttt'
                       type="time"
+                      style={{color:'#1A1A1B',fontSize:15}}
                       value={fourtime}
                       onChange={(e) => {
                         setFourtime(e.target.value)
@@ -4340,7 +4344,7 @@ const displayText = allLabels.slice(0, 20) + "..."
 
 
               <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen venue & hub</p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Chosen venue & hub</p>
                 <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
                   width: '100%', height: 45
                 }}>
@@ -4383,7 +4387,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff' }),
+                      control: (base) => ({ ...base, border: 'unset', backgroundColor: '#fff',color:'#1A1A1B',fontSize:15 }),
                     }}
                   />
                 </div>
@@ -4436,7 +4440,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15 }),
                     }}
                   />
 
@@ -4465,7 +4469,7 @@ const displayText = allLabels.slice(0, 20) + "..."
               </div>
 
               <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by stages/courses</p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Filter by stages/courses</p>
                 <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
                   width: '100%',
                   height: 45
@@ -4509,7 +4513,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15 }),
                     }}
                   />
                 </div>
@@ -4556,7 +4560,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15 }),
                     }}
                   />
                 </div>
@@ -4564,7 +4568,7 @@ const displayText = allLabels.slice(0, 20) + "..."
               </div>
 
               <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by tables/takeaways</p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Filter by tables/takeaways</p>
 
                 <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
                   {/* <div class="switch-container">
@@ -4585,7 +4589,7 @@ const displayText = allLabels.slice(0, 20) + "..."
 
                     filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset' }} type="text" />
+                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset',color:'#1A1A1B',fontSize:15 }} type="text" />
 
 
                   <p style={{ fontSize: 19, display: 'contents' }} >|</p>
@@ -4596,7 +4600,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                     filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
 
                     filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
+                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',color:'#1A1A1B',fontSize:15 }} type="text" />
                 </div>
 
                 <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
@@ -4643,7 +4647,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset', color:'#1A1A1B',fontSize:15 }),
                     }}
                   />
 
@@ -4671,7 +4675,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                           <div class="boxs">
                             <div className="d-flex justify-content-between" >
                               <div >
-                                <p className='asdfp' style={{ marginBottom: 0 }}>Dockets completion time</p>
+                                <p className='asdfp' style={{ marginBottom: 0,color:'#1A1A1B',fontWeight:600 }}>Dockets completion time</p>
                                 <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
                               </div>
                               <div >
@@ -4725,7 +4729,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                             setMeals(5)
                           }} >
                             <div class="boxs">
-                              <p className='asdfp'>Dockets received - timeline</p>
+                              <p className='asdfp' style={{color:'#1A1A1B',fontWeight:600}}>Dockets received - timeline</p>
                               <div class="end-box d-flex justify-content-between">
                                 <img src="rts.png" className="d-flex justify-content-between" alt="Example Image" />
                                 <p className="asdfps w-50 m-0">(# of dockets received
@@ -4802,7 +4806,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                             <div class="boxs">
                               <div className="d-flex justify-content-between" >
                                 <div >
-                                  <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
+                                  <p className='asdfp' style={{ marginBottom: 0,color:'#1A1A1B',fontWeight:600 }}>Average completion - timeline</p>
                                   <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
                                 </div>
                                 <div >
@@ -4842,7 +4846,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                             setMeals(1)
                           }} className="" alt="Example Image" />
-                          <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets completion time</p>
+                          <p style={{color:'#1A1A1B',fontWeight:600, fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets completion time</p>
                         </div>
 
                         <div class="custom-inputonessfine  " >
@@ -5305,7 +5309,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                               <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                                 setMeals(1)
                               }} className="" alt="Example Image" />
-                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Average completion - timeline</p>
+                              <p style={{color:'#1A1A1B',fontWeight:600, fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Average completion - timeline</p>
                             </div>
 
                             <div >
@@ -5482,7 +5486,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                               <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                                 setMeals(1)
                               }} className="" alt="Example Image" />
-                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets received - timeline</p>
+                              <p style={{color:'#1A1A1B',fontWeight:600, fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets received - timeline</p>
                             </div>
 
                             <div >

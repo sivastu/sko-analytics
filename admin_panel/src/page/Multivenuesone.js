@@ -11,7 +11,6 @@ import bigInt from "big-integer";
 import * as CryptoJS from 'crypto-js'
 import { getDatabase, ref, set, push, get, query, orderByChild, equalTo } from "firebase/database";
 import app from "./firebase";
-
 let Multivenuesone = () => {
   let [data, setData] = useState();
   let navigate = useNavigate();
@@ -142,7 +141,7 @@ let Multivenuesone = () => {
 
 
             <div style={{ padding: 90 }} >
-              <div style={{ width: '27%', height: 190, backgroundColor: '#fff', borderRadius: 5, cursor: 'pointer' }} onClick={() => {
+              <div style={{ width: '25%', height: 190, backgroundColor: '#fff', borderRadius: 5, cursor: 'pointer' }} onClick={() => {
                 navigate("/multivenuesmeals");
               }} >
                 <div className="row" style={{ height: 190,margin:"0 5px" }}>

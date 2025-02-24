@@ -1402,7 +1402,7 @@ let Multi_venue = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, 25) + "..."
+      const displayText = allLabels.slice(0, 18) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
@@ -4497,7 +4497,7 @@ let Multi_venue = () => {
 
                   checkkkk()
 
-                }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
+                }} style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
 
                 <div style={{ width: '100%' }} >
                   <DatePicker
@@ -4522,7 +4522,7 @@ let Multi_venue = () => {
                     calendarClassName="custom-calendar"
                     dateFormat="d MMM yyyy"
                     customInput={
-                      <div className="custom-display-input">
+                      <div className="custom-display-input" style={{fontSize:15,color:'#1A1A1B'}}>
                         {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
                         <FaCaretDown className="calendar-icon" />
                       </div>
@@ -4535,6 +4535,7 @@ let Multi_venue = () => {
                       className='inputttt'
                       type="time"
                       value={onetime}
+                      style={{fontSize:15,color:'#1A1A1B'}}
                       onChange={(e) => {
                         console.log(e.target.value, 'eeee')
                         setOnetime(e.target.value)
@@ -4551,6 +4552,7 @@ let Multi_venue = () => {
                     <input
                       className='inputttt'
                       type="time"
+                      style={{fontSize:15,color:'#1A1A1B'}}
                       value={twotime}
                       onChange={(e) => {
                         setTwotime(e.target.value)
@@ -4582,7 +4584,7 @@ let Multi_venue = () => {
 
 
 
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen venue & hub</p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Chosen venue & hub</p>
                 <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
                   width: '100%', height: 45
                 }}>
@@ -4625,7 +4627,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff' }),
+                      control: (base) => ({ ...base, border: 'unset', backgroundColor: '#fff',fontSize:15,color:'#1A1A1B' }),
                     }}
                   />
                 </div>
@@ -4678,7 +4680,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
                     }}
                   />
 
@@ -4721,7 +4723,7 @@ let Multi_venue = () => {
 
 
 
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
                 <div ref={selectReffive} className="custom-inputoness d-flex justify-content-between" style={{
                   width: '100%', height: 45
                 }}>
@@ -4764,7 +4766,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff' }),
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff',fontSize:15,color:'#1A1A1B' }),
                     }}
                   />
                 </div>
@@ -4817,7 +4819,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
                     }}
                   />
 
@@ -4852,7 +4854,7 @@ let Multi_venue = () => {
 
 
               <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by stages/courses</p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Filter by stages/courses</p>
                 <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
                   width: '100%',
                   height: 45
@@ -4896,7 +4898,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset',fontSize:15,color:'#1A1A1B' }),
                     }}
                   />
                 </div>
@@ -4943,7 +4945,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset',fontSize:15,color:'#1A1A1B' }),
                     }}
                   />
                 </div>
@@ -4952,7 +4954,7 @@ let Multi_venue = () => {
               </div>
 
               <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by tables/takeaways</p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Filter by tables/takeaways</p>
 
                 <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
                   {/* <div class="switch-container">
@@ -4977,7 +4979,7 @@ let Multi_venue = () => {
 
                     // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset' }} type="text" />
+                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B' }} type="text" />
 
 
                   <p style={{ fontSize: 19, display: 'contents' }} >|</p>
@@ -4989,7 +4991,7 @@ let Multi_venue = () => {
                     filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
                       hubbtwo, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                     // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
+                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B' }} type="text" />
                 </div>
 
                 <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
@@ -5036,7 +5038,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
                     }}
                   />
 
@@ -5064,7 +5066,7 @@ let Multi_venue = () => {
                           <div class="boxs">
                             <div className="d-flex justify-content-between" >
                               <div >
-                                <p className='asdfp' style={{ marginBottom: 0 }}>Dockets completion time</p>
+                                <p className='asdfp' style={{ marginBottom: 0,color:'#1A1A1B',fontWeight:600 ,fontSize:20 }}>Dockets completion time</p>
                                 <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
                               </div>
                               <div >
@@ -5118,7 +5120,7 @@ let Multi_venue = () => {
                             setMeals(5)
                           }} >
                             <div class="boxs">
-                              <p className='asdfp'>Dockets received - timeline</p>
+                              <p className='asdfp' style={{color:'#1A1A1B',fontWeight:600 ,fontSize:20}}>Dockets received - timeline</p>
                               <div class="end-box d-flex justify-content-between">
                                 <img src="rts.png" className="d-flex justify-content-between" alt="Example Image" />
                                 <p className="asdfps w-50 m-0">(# of dockets received
@@ -5195,7 +5197,7 @@ let Multi_venue = () => {
                             <div class="boxs">
                               <div className="d-flex justify-content-between" >
                                 <div >
-                                  <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
+                                  <p className='asdfp' style={{ marginBottom: 0 ,color:'#1A1A1B',fontWeight:600 ,fontSize:20}}>Average completion - timeline</p>
                                   <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
                                 </div>
                                 <div >
@@ -5236,7 +5238,7 @@ let Multi_venue = () => {
                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                             setMeals(1)
                           }} className="" alt="Example Image" />
-                          <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets completion time</p>
+                          <p style={{fontWeight: '600',color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets completion time</p>
                         </div>
 
                         <div class="custom-inputonessfine  " >
@@ -5699,7 +5701,7 @@ let Multi_venue = () => {
                               <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                                 setMeals(1)
                               }} className="" alt="Example Image" />
-                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Average completion - timeline</p>
+                              <p style={{fontWeight: '600',color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Average completion - timeline</p>
                             </div>
 
                             <div >
@@ -5876,7 +5878,7 @@ let Multi_venue = () => {
                               <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                                 setMeals(1)
                               }} className="" alt="Example Image" />
-                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets received - timeline</p>
+                              <p style={{fontWeight: '600',color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets received - timeline</p>
                             </div>
 
                             <div >
