@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useRef } from "react";
 import Header from "../component/Header";
 import axios from "axios";
@@ -17,8 +16,6 @@ import Select, { components } from 'react-select';
 import { FaCheck } from 'react-icons/fa';
 import { Bar } from 'react-chartjs-2';
 import { jsPDF } from 'jspdf';
-import Modal from 'react-modal';
-import html2canvas from "html2canvas";
 import * as CryptoJS from 'crypto-js'
 
 import app from "./firebase";
@@ -47,66 +44,38 @@ ChartJS.register(
 );
 
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-    border: '3px solid #ababab',
-    borderRadius: '10px',
-    width: '70%'
-  },
-};
-
-// Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
-Modal.setAppElement('#root');
-
-
-
-let Multi_venue = () => {
+let Mealsmulti = () => {
   let [data, setData] = useState();
   const [dateRange, setDateRange] = useState([null, null]); // [startDate, endDate]
   const [startDate, endDate] = dateRange;
-
-
+  const [selectedOptionsfive, setSelectedOptionsfive] = useState([]);
+  const pdfRef = useRef();
+  const pdfRefss = useRef();
+  const pdfRefsss = useRef();
   let [basicall, setBasicall] = useState()
   let [basic, setBasic] = useState()
   let [basicone, setBasicone] = useState([])
-
-  let [basiconefive, setBasiconefive] = useState([])
-  let [basiconesix, setBasiconesix] = useState([])
-
-  let [basicfine, setBasicfine] = useState([{
-    "value": "Maximum",
-    "label": "Maximum"
-  },
-  {
-    "value": "Minimum",
-    "label": "Minimum"
-  },])
-
+ let [hubbtwo, setHubbtwo] = useState([])
   let [hubb, setHubb] = useState([])
-  let [hubbtwo, setHubbtwo] = useState([])
   let [hubbswitch, setHubbswitch] = useState(true)
-
+ let [basiconefive, setBasiconefive] = useState([])
   //parse meals
   let [meals, setMeals] = useState(1)
-
-
+ let [oldvenfive, setOldvenfive] = useState([])
+  const pdfRefred = useRef();
   //edit
   let [editall, setEditall] = useState([])
   let [editallone, setEditallone] = useState([])
   let [served, setServed] = useState([])
   let [servedone, setServedone] = useState([])
 
-  let [stampval, setStampval] = useState([])
   //refund meals
   let [minperday, setMinperday] = useState([])
   let [maxperday, setMaxperday] = useState([])
 
+  let [alldrop, setAlldrop] = useState([])
+ const [menuIsOpenfive, setMenuIsOpenfive] = useState(false);
+  const [menuIsOpensix, setMenuIsOpensix] = useState(false);
   ///old
   let [oldven, setOldven] = useState([])
   let [oldhub, setOldhub] = useState([])
@@ -114,22 +83,11 @@ let Multi_venue = () => {
   let [oldcou, setOldcou] = useState([])
   let [oldtak, setOldtak] = useState([])
 
-  let [oldhubtwo, setOldhubtwo] = useState([])
+    let [oldhubtwo, setOldhubtwo] = useState([])
+  const [venueradiofivese, setVenueradiofivese ] = useState(true)
 
-  let [oldvenfive, setOldvenfive] = useState([])
-  let [oldvensix, setOldvensix] = useState([])
-
-  let [alldrop, setAlldrop] = useState([])
-
-  let [filterdataone, setFilterdataone] = useState({})
-  let [filterdatatwo, setFilterdatatwo] = useState({})
-
-  let subtitle;
-  const [modalIsOpen, setIsOpen] = React.useState(false);
-  let [cval1, setcval1] = useState()
-  let [cval2, setcval2] = useState()
-
-
+  const [venueradiosix , setVenueradiosix ] = useState(true)
+const selectReffive = useRef(null);
 
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
@@ -138,16 +96,7 @@ let Multi_venue = () => {
   const [menuIsOpenthree, setMenuIsOpenthree] = useState(false);
   const [menuIsOpenfour, setMenuIsOpenfour] = useState(false);
 
-  const [menuIsOpenfive, setMenuIsOpenfive] = useState(false);
-  const [menuIsOpensix, setMenuIsOpensix] = useState(false);
-
-
-  const selectReffive = useRef(null);
-
   const selectRefsix = useRef(null);
-
-
-
   const selectRef = useRef(null);
 
   const selectRefone = useRef(null);
@@ -174,15 +123,6 @@ let Multi_venue = () => {
       if (selectReffour.current && !selectReffour.current.contains(event.target)) {
         setMenuIsOpenfour(false);
       }
-
-
-      if (selectReffive.current && !selectReffive.current.contains(event.target)) {
-        setMenuIsOpenfive(false);
-      }
-      if (selectRefsix.current && !selectRefsix.current.contains(event.target)) {
-        setMenuIsOpensix(false);
-      }
-
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -193,89 +133,6 @@ let Multi_venue = () => {
 
 
 
-  function findFirstOccurrences(stampData) {
-    const [timestamp, ...actions] = stampData.split(" ");
-
-    const firstOccurrences = {}; // To store first occurrences
-
-    for (let action of actions) {
-      const time = action.substring(0, 4); // Extract time (hhmm)
-      const statusCode = action.substring(4); // Extract status code
-
-      let status = "";
-      if (/^R\d+$/.test(statusCode)) status = "Process";
-      else if (/^P\d+$/.test(statusCode)) status = "Pass";
-      else if (/^H\d+$/.test(statusCode)) status = "Hold";
-
-      if (status && !firstOccurrences[status]) {
-        firstOccurrences[status] = { status, time: `${time.substring(0, 2)}:${time.substring(2, 4)}` };
-      }
-
-      // Stop if all statuses are found
-      if (Object.keys(firstOccurrences).length === 3) break;
-    }
-
-    return Object.values(firstOccurrences);
-  }
-
-
-
-
-  function openModal(finebyme, finebyme2) {
-    console.log(JSON.stringify(finebyme), 'finebymefinebyme')
-
-
-
-
-    function filterItemsByNote(order) {
-      const groupedItems = {};
-
-      order.ITEMS.forEach(item => {
-        let note = item.NOTE.trim();
-
-        if (!note) {
-          note = "empty"; // If NOTE is empty, assign "empty"
-        } else if (note.startsWith("(") && note.includes(")")) {
-          const match = note.match(/\([A-Z]\d+([a-zA-Z]+)\)/); // Extracts text after letter and number inside ()
-          if (match) {
-            note = match[1]; // Extract only the category name
-          }
-        }
-
-        if (!groupedItems[note]) {
-          groupedItems[note] = [];
-        }
-
-        groupedItems[note].push(item);
-      });
-
-      return groupedItems;
-    }
-    let finedata = filterItemsByNote(finebyme.order)
-
-
-    let Stampdata = findFirstOccurrences(finebyme?.order?.STAMP)
-    console.log(Stampdata, 'kk')
-    setStampval(Stampdata)
-
-    setIsOpen(true);
-    setcval1(finebyme)
-    setcval2(finedata)
-
-
-  }
-
-
-
-  function afterOpenModal() {
-    // references are now sync'd and can be accessed. 
-  }
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-
   useEffect(() => {
     loginCheck()
     getone()
@@ -283,6 +140,54 @@ let Multi_venue = () => {
 
   }, [])
 
+  const getFormattedDate = (daysBefore) => {
+    const date = new Date();
+    date.setDate(date.getDate() - daysBefore);
+
+    // Ensure time is set to match the expected format
+    date.setUTCHours(18, 30, 0, 0);
+
+    return date; // Return a Date object instead of a string
+  };
+
+  let [onebar, setOneBar] = useState([])
+  let [twobar, setTwobar] = useState([])
+  let [optionbar, setOption] = useState([])
+  let [mydata, setMydata] = useState()
+
+  function extractUniqueNotes(datad, predefinedValues) {
+            
+    console.log(predefinedValues , 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
+    let uniqueNotes = new Set();
+
+    for (let group in datad) {
+        
+
+        for (let location in datad[group]) {
+
+          if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
+
+            for (let section in datad[group][location]) {
+                for (let date in datad[group][location][section]) {
+                    datad[group][location][section][date].forEach(order => {
+                        order.ITEMS.forEach(item => {
+                            if (item.NOTE) {
+                                // Extract the word after (C<number>)
+                                const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                                if (match && match[1] && match[1] !== "undefined") {
+                                    uniqueNotes.add(match[1]); // Add only valid words
+                                }
+                            }
+                        });
+                    });
+                }
+            }
+        }
+    }
+
+    // Convert Set to desired format
+    return [...uniqueNotes].map(note => ({ value: note, label: note }));
+}
 
   let [usedname, setUsedname] = useState('')
   function getName(data) {
@@ -328,6 +233,7 @@ let Multi_venue = () => {
         return
       }
       if (foundUser) {
+        setMydata(foundUser)
         // Check if the password matches
         if (foundUser.Password === parsedatajson.Password) {
 
@@ -342,26 +248,12 @@ let Multi_venue = () => {
   }
 
 
-  let [onebar, setOneBar] = useState([])
-  let [twobar, setTwobar] = useState([])
-  let [optionbar, setOption] = useState([])
+  const decrypt = (cipherText) => {
+    const bytes = CryptoJS.AES.decrypt(cipherText, 'secretKey')
+    const plainText = bytes.toString(CryptoJS.enc.Utf8)
+    return plainText
 
-  let [onebarone, setOneBarone] = useState([])
-  let [twobarone, setTwobarone] = useState([])
-  let [optionbarone, setOptionone] = useState([])
-  const getFormattedDate = (daysBefore) => {
-    const date = new Date();
-    date.setDate(date.getDate() - daysBefore);
-
-    // Ensure time is set to match the expected format
-    date.setUTCHours(18, 30, 0, 0);
-
-    return date; // Return a Date object instead of a string
-  };
-
-
-
-
+  }
 
   const optionshshs = {
     responsive: true,
@@ -400,108 +292,9 @@ let Multi_venue = () => {
       },
     ],
   };
-  const OrderDisplay = ({ orders = {} }) => {
-    if (!orders || Object.keys(orders).length === 0) {
-      return <p style={{ textAlign: 'center', color: 'red' }}>No orders available</p>;
-    }
 
 
-
-    let stamp = cval1?.order?.STAMP
-
-    return (
-      <div>
-        {Object.entries(orders).map(([course, items]) => (
-          <div key={course} style={{ marginBottom: 20 }}>
-            <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>
-              Course: {course === "empty" ? '' : course}
-            </p>
-            <p style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}>
-              Time: R: {stampval[0]?.time} . | P: {stampval[1]?.time}. | H: {stampval[2]?.time}.
-            </p>
-
-            <div style={{ marginTop: 10 }}>
-              {items?.map((kai, index) => (
-                <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
-                  <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>Item {index + 1}: {kai?.ITEM}</p>
-                  <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>Note: {kai?.NOTE || "No Note"}</p>
-                  <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
-                    Edited: {["2", "12", "22", "32"].includes(kai?.STATUS) ? 'Yes' : "No"} |
-                    Moved: {["3", "13", "23", "33"].includes(kai?.STATUS) ? 'Yes' : "No"} |
-                    Deleted: {["4", "24"].includes(kai?.STATUS) ? 'Yes' : "No"}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
-  const datafineone = {
-    labels: optionbarone,
-    datasets: [
-      {
-        label: 'Chosen range',
-        data: onebarone,
-        backgroundColor: '#316AAF',
-        borderColor: '#8AA3C2',
-        borderWidth: 1,
-      },
-      {
-        label: 'Comparing range',
-        data: twobarone,
-        backgroundColor: '#B6B6B6',
-        borderColor: '#B6B6B6',
-        borderWidth: 1,
-      },
-    ],
-  };
-
-
-  const decrypt = (cipherText) => {
-    const bytes = CryptoJS.AES.decrypt(cipherText, 'secretKey')
-    const plainText = bytes.toString(CryptoJS.enc.Utf8)
-    return plainText
-
-  }
   let [fulldatafull, setFulldatafull] = useState()
-
-  function extractUniqueNotes(datad, predefinedValues) {
-
-    console.log(predefinedValues, 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
-    let uniqueNotes = new Set();
-
-    for (let group in datad) {
-
-
-      for (let location in datad[group]) {
-
-        if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
-
-        for (let section in datad[group][location]) {
-          for (let date in datad[group][location][section]) {
-            datad[group][location][section][date].forEach(order => {
-              order.ITEMS.forEach(item => {
-                if (item.NOTE) {
-                  // Extract the word after (C<number>)
-                  const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                  if (match && match[1] && match[1] !== "undefined") {
-                    uniqueNotes.add(match[1]); // Add only valid words
-                  }
-                }
-              });
-            });
-          }
-        }
-      }
-    }
-
-    // Convert Set to desired format
-    return [...uniqueNotes].map(note => ({ value: note, label: note }));
-  }
-
 
   let getone = () => {
 
@@ -538,9 +331,9 @@ let Multi_venue = () => {
           }
 
           const cleanedData = removeTrainingNotes(eventss);
+ 
 
-
-
+       
 
 
 
@@ -613,7 +406,7 @@ let Multi_venue = () => {
           //   label: hub,
           // }));
 
-
+  
           // console.log("optionss:", optionsstwo);
 
           let getdata = sessionStorage.getItem('data')
@@ -631,9 +424,9 @@ let Multi_venue = () => {
             setBasic(optionsone)
 
 
-            let uuuk = extractUniqueNotes(cleanedData, optionsone)
+            let uuuk = extractUniqueNotes(cleanedData , optionsone )
             uuuk.unshift({ label: "All Courses", value: "All" });
-
+  
             setFulldatafull(uuuk)
 
           } else {
@@ -641,15 +434,15 @@ let Multi_venue = () => {
             setBasic(parsedatajson.venue)
 
 
-            let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
+            let uuuk = extractUniqueNotes(cleanedData , parsedatajson.venue )
             uuuk.unshift({ label: "All Courses", value: "All" });
-
+  
             setFulldatafull(uuuk)
           }
 
 
-
-
+          
+        
 
           const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
           const optionstakeaway = [
@@ -750,7 +543,6 @@ let Multi_venue = () => {
         console.error("Error fetching events:", error);
       });
   }
-
 
   let getonez = () => {
 
@@ -1307,7 +1099,7 @@ let Multi_venue = () => {
             results.push({
               date,
               count: totalQuantity,
-              name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
+              name: refundedItems[0].ITEM, // Assuming all refunded items share the same name
               data: refundedItems,
             });
           }
@@ -1339,10 +1131,6 @@ let Multi_venue = () => {
 
   const [venueradio, setVenueradio] = useState(true)
 
-  const [venueradiofivese, setVenueradiofivese] = useState(true)
-
-  const [venueradiosix, setVenueradiosix] = useState(true)
-
   const CustomOption = (props) => {
     const { data, isSelected, innerRef, innerProps } = props;
     return (
@@ -1363,32 +1151,11 @@ let Multi_venue = () => {
             type="checkbox" id="switch3" />
           <label class="switch-label" for="switch3"></label>
         </div>}
-        <span style={{ flexGrow: 1 }}>{data.label}</span>
+        <span style={{ flexGrow: 1,marginTop:6 }}>{data.label}</span>
 
       </div>
     );
   };
-
-  const CustomOptionfinal = (props) => {
-    const { data, isSelected, innerRef, innerProps } = props;
-    return (
-      <div
-        ref={innerRef}
-        {...innerProps}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: '10px',
-          backgroundColor: isSelected ? '#f0f8ff' : 'white',
-          color: isSelected ? '#0073e6' : 'black',
-          cursor: 'pointer',
-        }}
-      >
-        <span style={{ flexGrow: 1, marginTop: 6 }}>{data.label}</span>
-      </div>
-    );
-  };
-
   const CustomMultiValue = () => null;
 
 
@@ -1396,9 +1163,9 @@ let Multi_venue = () => {
     const selected = getValue();
     if (selected.length) {
       const allLabels = selected
-    .filter(option => option.label && !option.label.startsWith("All ")) // Ensure label exists
-    .map(option => option.label)
-    .join(", ");
+      .filter(option => option.label && !option.label.startsWith("All ")) // Ensure label exists
+      .map(option => option.label)
+      .join(", ");
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
@@ -1411,400 +1178,362 @@ let Multi_venue = () => {
 
   const [selectedOptions, setSelectedOptions] = useState([]);
 
-  const [selectedOptionsfive, setSelectedOptionsfive] = useState([]);
-  const [selectedOptionssix, setSelectedOptionssix] = useState([]);
+
+   const handleChange = (selected) => {
+ 
+     console.log(JSON.stringify(fulldatatwo), 'selected')
+     const hasAllValue = selected.some(item => item.value === "All");
+     const hasAllValueold = oldven.some(item => item.value === "All");
+ 
+ 
+     setOldven(selected)
+ 
+     if (hasAllValue === false && hasAllValueold === true) {
 
 
-  const [selectedOptionsfine, setSelectedOptionsfine] = useState([basicfine[0]]);
-
-
-  const handleChange = (selected) => {
-
-    console.log(JSON.stringify(fulldatatwo), 'selected')
-    const hasAllValue = selected.some(item => item.value === "All");
-    const hasAllValueold = oldven.some(item => item.value === "All");
-
-
-    setOldven(selected)
-
-    if (hasAllValue === false && hasAllValueold === true) {
-
-      let uuuk = extractUniqueNotes(basicall, [])
-      uuuk.unshift({ label: "All Courses", value: "All" });
-
-      setFulldatafull(uuuk)
-
-      setSelectedOptions([]);
-
-      filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRange, onetime  , twotime  , selectedOptionsfive , 
-      //   hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      const output = [];
-
-      // // Iterate through the search array
-      [].forEach(({ value }) => {
-        // Search in the data object
-        Object.entries(alldrop).forEach(([key, items]) => {
-          if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
-          } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
-            });
-          }
-        });
-      });
-
-      setBasicone(output)
-
-      return
-    }
-
-
-
-    if (hasAllValue === true) {
-
-      let uuuk = extractUniqueNotes(basicall, basic)
+      let uuuk = extractUniqueNotes( basicall , [] )
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
 
 
-      setSelectedOptions(basic || []);
+       setSelectedOptions([]);
+ 
+       filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRange, onetime  , twotime  , selectedOptionsfive , 
+       //   hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       const output = [];
+ 
+       // // Iterate through the search array
+       [].forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(alldrop).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value: key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+ 
+       setBasicone(output)
+ 
+       return
+     }
+ 
+ 
+ 
+     if (hasAllValue === true) {
 
-      filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      const output = [{
-        "label": "All Hub",
-        "value": "All"
-      }];
-
-      // // Iterate through the search array
-      basic.forEach(({ value }) => {
-        // Search in the data object
-        Object.entries(alldrop).forEach(([key, items]) => {
-          if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
-          } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
-            });
-          }
-        });
-      });
-
-      setBasicone(output)
-
-
-    } else {
-
-      let lengthss = selected.length
-      let lengthssone = basic.length
-
-      // if (lengthss === lengthssone - 1) {
-      //   setSelectedOptions( []);
-
-      //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      //   const output = [];
-
-      //   // // Iterate through the search array
-      //   [].forEach(({ value }) => {
-      //     // Search in the data object
-      //     Object.entries(alldrop).forEach(([key, items]) => {
-      //       if (key === value) {
-      //         // If the key matches, add all items from the group to the output
-      //         items.forEach(item => {
-      //           output.push({ value: key + '-' + item.name, label: item.name });
-      //         });
-      //       } else {
-      //         // Search within the group's items
-      //         items.forEach(item => {
-      //           if (item.name === value) {
-      //             output.push({ value: key + '-' + item.name, label: key });
-      //           }
-      //         });
-      //       }
-      //     });
-      //   });
-
-      //   setBasicone(output)
-
-      //   return
-      // }
-
-
-      let uuuk = extractUniqueNotes(basicall, selected)
+      let uuuk = extractUniqueNotes( basicall , basic )
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
-
-      setSelectedOptions(selected || []);
-
-      filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      const output = [{
-        "label": "All Hub",
-        "value": "All"
-      }];
-
-      // // Iterate through the search array
-      selected.forEach(({ value }) => {
-        // Search in the data object
-        Object.entries(alldrop).forEach(([key, items]) => {
-          if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
-          } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
-            });
-          }
-        });
-      });
-
-      setBasicone(output)
-    }
-
-
-    // const validVenues = selected.map(item => item.value);
-
-    //     // Filter the data
-    //     const filteredData = Object.fromEntries(
-    //       Object.entries(fulldatatwo).filter(([key, value]) => validVenues.includes(value.venue))
-    //     );
-    //     callfordata(filteredData , fulldata )
-
-    //     setFulldatatwo(filteredData) 
-
-
-    //     const filteredDatatwo = Object.fromEntries(
-    //       Object.entries(fulldata).filter(([key, value]) => validVenues.includes(value.venue))
-    //     );
-
-    //     callfordata(filteredData , filteredDatatwo )
-    //     setFulldata(filteredDatatwo)
-
-  };
-
-  const handleChangefive = (selected) => {
-
-    console.log(JSON.stringify(fulldatatwo), 'selected')
-    const hasAllValue = selected.some(item => item.value === "All");
-    const hasAllValueold = oldvenfive.some(item => item.value === "All");
-
-
-    setOldvenfive(selected)
-
-    if (hasAllValue === false && hasAllValueold === true) {
-      setSelectedOptionsfive([]);
-
-      // filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      filterDataByDateonee(dateRange, onetime, twotime, [],
-        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      const output = [];
-
-      // // Iterate through the search array
-      [].forEach(({ value }) => {
-        // Search in the data object
-        Object.entries(alldrop).forEach(([key, items]) => {
-          if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
-          } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
-            });
-          }
-        });
-      });
-
-      setBasiconefive(output)
-
-      return
-    }
-
-
-
-    if (hasAllValue === true) {
-
-      setSelectedOptionsfive(basic || []);
-
-      // filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-      filterDataByDateonee(dateRange, onetime, twotime, basic,
-        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-      const output = [{
-        "label": "All Hub",
-        "value": "All"
-      }];
-
-      // // Iterate through the search array
-      basic.forEach(({ value }) => {
-        // Search in the data object
-        Object.entries(alldrop).forEach(([key, items]) => {
-          if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
-          } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
-            });
-          }
-        });
-      });
-
-      setBasiconefive(output)
-
-
-    } else {
-
-      let lengthss = selected.length
-      let lengthssone = basic.length
-
-      // if (lengthss === lengthssone - 1) {
-      //   setSelectedOptions( []);
-
-      //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      //   const output = [];
-
-      //   // // Iterate through the search array
-      //   [].forEach(({ value }) => {
-      //     // Search in the data object
-      //     Object.entries(alldrop).forEach(([key, items]) => {
-      //       if (key === value) {
-      //         // If the key matches, add all items from the group to the output
-      //         items.forEach(item => {
-      //           output.push({ value: key + '-' + item.name, label: item.name });
-      //         });
-      //       } else {
-      //         // Search within the group's items
-      //         items.forEach(item => {
-      //           if (item.name === value) {
-      //             output.push({ value: key + '-' + item.name, label: key });
-      //           }
-      //         });
-      //       }
-      //     });
-      //   });
-
-      //   setBasicone(output)
-
-      //   return
-      // }
-
-      setSelectedOptionsfive(selected || []);
-
-      // filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-      filterDataByDateonee(dateRange, onetime, twotime, selected,
-        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-      const output = [{
-        "label": "All Hub",
-        "value": "All"
-      }];
-
-      // // Iterate through the search array
-      selected.forEach(({ value }) => {
-        // Search in the data object
-        Object.entries(alldrop).forEach(([key, items]) => {
-          if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
-          } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
-            });
-          }
-        });
-      });
-
-      setBasiconefive(output)
-    }
-
-
-  };
-
-
-  const handleChangefine = (selected) => {
-    console.log(editall, 'selected')
-
-    if (editall.length === 0) {
-
-    } else {
-      setEditall((prevState) => ({
-        ...prevState,
-        orders: [...prevState.orders].reverse() // Spread operator to avoid direct mutation
-      }));
-    }
-
-    if (editallone.length === 0) {
-
-    } else {
-      setEditallone((prevState) => ({
-        ...prevState,
-        orders: [...prevState.orders].reverse() // Spread operator to avoid direct mutation
-      }));
-
-    }
-
-
-    setSelectedOptionsfine(selected || []);
-
-
-  };
-
+ 
+       setSelectedOptions(basic || []);
+ 
+       filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       const output = [{
+         "label": "All Hub",
+         "value": "All"
+       }];
+ 
+       // // Iterate through the search array
+       basic.forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(alldrop).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value: key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+ 
+       setBasicone(output)
+ 
+ 
+     } else {
+ 
+       let lengthss = selected.length
+       let lengthssone = basic.length
+ 
+       // if (lengthss === lengthssone - 1) {
+       //   setSelectedOptions( []);
+ 
+       //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       //   const output = [];
+ 
+       //   // // Iterate through the search array
+       //   [].forEach(({ value }) => {
+       //     // Search in the data object
+       //     Object.entries(alldrop).forEach(([key, items]) => {
+       //       if (key === value) {
+       //         // If the key matches, add all items from the group to the output
+       //         items.forEach(item => {
+       //           output.push({ value: key + '-' + item.name, label: item.name });
+       //         });
+       //       } else {
+       //         // Search within the group's items
+       //         items.forEach(item => {
+       //           if (item.name === value) {
+       //             output.push({ value: key + '-' + item.name, label: key });
+       //           }
+       //         });
+       //       }
+       //     });
+       //   });
+ 
+       //   setBasicone(output)
+ 
+       //   return
+       // }
+       let uuuk = extractUniqueNotes( basicall , selected )
+       uuuk.unshift({ label: "All Courses", value: "All" });
+ 
+       setFulldatafull(uuuk)
+       setSelectedOptions(selected || []);
+ 
+       filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       const output = [{
+         "label": "All Hub",
+         "value": "All"
+       }];
+ 
+       // // Iterate through the search array
+       selected.forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(alldrop).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value: key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+ 
+       setBasicone(output)
+     }
+ 
+ 
+     // const validVenues = selected.map(item => item.value);
+ 
+     //     // Filter the data
+     //     const filteredData = Object.fromEntries(
+     //       Object.entries(fulldatatwo).filter(([key, value]) => validVenues.includes(value.venue))
+     //     );
+     //     callfordata(filteredData , fulldata )
+ 
+     //     setFulldatatwo(filteredData) 
+ 
+ 
+     //     const filteredDatatwo = Object.fromEntries(
+     //       Object.entries(fulldata).filter(([key, value]) => validVenues.includes(value.venue))
+     //     );
+ 
+     //     callfordata(filteredData , filteredDatatwo )
+     //     setFulldata(filteredDatatwo)
+ 
+   };
+ 
+   const handleChangefive = (selected) => {
+ 
+     console.log(JSON.stringify(fulldatatwo), 'selected')
+     const hasAllValue = selected.some(item => item.value === "All");
+     const hasAllValueold = oldvenfive.some(item => item.value === "All");
+ 
+ 
+     setOldvenfive(selected)
+ 
+     if (hasAllValue === false && hasAllValueold === true) {
+       setSelectedOptionsfive([]);
+ 
+       // filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       filterDataByDateonee(dateRange, onetime , twotime, [] , 
+         hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+         
+       const output = [];
+ 
+       // // Iterate through the search array
+       [].forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(alldrop).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value: key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+ 
+       setBasiconefive(output)
+ 
+       return
+     }
+ 
+ 
+ 
+     if (hasAllValue === true) {
+ 
+       setSelectedOptionsfive(basic || []);
+ 
+       // filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+       filterDataByDateonee(dateRange, onetime , twotime, basic  , 
+         hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+       const output = [{
+         "label": "All Hub",
+         "value": "All"
+       }];
+ 
+       // // Iterate through the search array
+       basic.forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(alldrop).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value: key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+ 
+       setBasiconefive(output)
+ 
+ 
+     } else {
+ 
+       let lengthss = selected.length
+       let lengthssone = basic.length
+ 
+       // if (lengthss === lengthssone - 1) {
+       //   setSelectedOptions( []);
+ 
+       //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       //   const output = [];
+ 
+       //   // // Iterate through the search array
+       //   [].forEach(({ value }) => {
+       //     // Search in the data object
+       //     Object.entries(alldrop).forEach(([key, items]) => {
+       //       if (key === value) {
+       //         // If the key matches, add all items from the group to the output
+       //         items.forEach(item => {
+       //           output.push({ value: key + '-' + item.name, label: item.name });
+       //         });
+       //       } else {
+       //         // Search within the group's items
+       //         items.forEach(item => {
+       //           if (item.name === value) {
+       //             output.push({ value: key + '-' + item.name, label: key });
+       //           }
+       //         });
+       //       }
+       //     });
+       //   });
+ 
+       //   setBasicone(output)
+ 
+       //   return
+       // }
+ 
+       setSelectedOptionsfive(selected || []);
+ 
+       // filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+       filterDataByDateonee(dateRange, onetime , twotime, selected  , 
+         hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+       const output = [{
+         "label": "All Hub",
+         "value": "All"
+       }];
+ 
+       // // Iterate through the search array
+       selected.forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(alldrop).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value: key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+ 
+       setBasiconefive(output)
+     }
+ 
+  
+   };
 
 
 
@@ -1824,6 +1553,7 @@ let Multi_venue = () => {
   const [selectedhubOptions, setSelectedhubOptions] = useState([]);
 
 
+  
   const handleChangehub = (selected) => {
 
     const hasAllValue = selected.some(item => item.value === "All");
@@ -1837,8 +1567,8 @@ let Multi_venue = () => {
       setSelectedhubOptions([]);
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
 
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  inputvaluetwo, [])
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
       return
@@ -1850,8 +1580,8 @@ let Multi_venue = () => {
       setSelectedhubOptions(optionshub);
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
 
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  inputvaluetwo, optionshub )
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
 
@@ -1859,8 +1589,8 @@ let Multi_venue = () => {
       setSelectedhubOptions(selected || []);
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  inputvaluetwo, selected )
 
     }
 
@@ -1942,8 +1672,8 @@ let Multi_venue = () => {
 
       // filterDataByDate(dateRange, onetime, twotime, selectedOptions, [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        [] , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
@@ -1960,8 +1690,8 @@ let Multi_venue = () => {
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, basiconefive, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        basiconefive, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        basiconefive , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
     } else {
@@ -1969,8 +1699,8 @@ let Multi_venue = () => {
 
       setHubbtwo(selectedss)
 
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        selectedss , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
 
@@ -1999,9 +1729,10 @@ let Multi_venue = () => {
   ];
 
   const [selectedCources, setSelectedCources] = useState([]);
+
   const handleChangeCources = (selected) => {
 
-
+ 
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldcou.some(item => item.value === "All");
 
@@ -2013,8 +1744,8 @@ let Multi_venue = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        hubbtwo, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , [], selectedTakeaway, inputvalue ,  inputvaluetwo, selectedhubOptions )
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
@@ -2027,8 +1758,8 @@ let Multi_venue = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        hubbtwo, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , fulldatafull , selectedTakeaway, inputvalue ,  inputvaluetwo, selectedhubOptions )
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -2039,8 +1770,8 @@ let Multi_venue = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        hubbtwo, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selected , selectedTakeaway, inputvalue ,  inputvaluetwo, selectedhubOptions )
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -2074,8 +1805,8 @@ let Multi_venue = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        hubbtwo, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selectedCources , [], inputvalue ,  inputvaluetwo, selectedhubOptions )
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
@@ -2089,8 +1820,8 @@ let Multi_venue = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        hubbtwo, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selectedCources , optionstakeaway , inputvalue ,  inputvaluetwo, selectedhubOptions )
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -2099,8 +1830,8 @@ let Multi_venue = () => {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        hubbtwo, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+        hubbtwo , selectedCources , selected , inputvalue ,  inputvaluetwo, selectedhubOptions )
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -2108,6 +1839,7 @@ let Multi_venue = () => {
 
 
   };
+
   //times
   let [onetime, setOnetime] = useState('')
   let [twotime, setTwotime] = useState('')
@@ -2119,10 +1851,8 @@ let Multi_venue = () => {
   let [inputvaluetwo, setInputvaluetwo] = useState()
 
 
-  const pdfRef = useRef();
 
-  const pdfRefred = useRef();
-  const pdfRefredone = useRef();
+
 
 
   let ggggrt = () => {
@@ -2309,7 +2039,9 @@ let Multi_venue = () => {
     }
 
     if (val21.length != 0) {
+
       const filteredData = {};
+
 
       val21.forEach(filter => {
         const key = filter.value;
@@ -2322,6 +2054,13 @@ let Multi_venue = () => {
           }
         }
       });
+
+      // val21.forEach(filter => {
+      //   const key = filter.value;
+      //   if (alldat[key]) {
+      //     filteredData[key] = alldat[key];
+      //   }
+      // });
 
       alldat = filteredData
 
@@ -2417,6 +2156,7 @@ let Multi_venue = () => {
 
       alldat = ofjfij
 
+      console.log(JSON.stringify(val22, 'val22val22'))
       console.log(alldat, 'five')
 
     }
@@ -2622,6 +2362,8 @@ let Multi_venue = () => {
       console.log(resultss, 'tenten')
     }
 
+
+    console.log(alldat, 'elevenn elevennelevenn')
     const filteredData = {};
 
     Object.entries(alldat).forEach(([groupKey, groupData]) => {
@@ -2646,11 +2388,17 @@ let Multi_venue = () => {
         });
       });
     });
-    setFilterdataone(filteredData)
+
+
 
     callfordataone(filteredData)
+
     let ghi = processTimeData(alldat)
+
+    console.log(ghi, 'ghighighi')
+
     let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
+
     // Extract values into separate arrays
     let timeLabels = kidshort.map(entry => entry.time);
     let timeCounts = kidshort.map(entry => entry.count);
@@ -2658,16 +2406,21 @@ let Multi_venue = () => {
     setOption(timeLabels)
     setOneBar(timeCounts)
 
-    let ghione = processTimeDatatwo(alldat)
-    let kidshortone = ghione.sort((a, b) => a.time.localeCompare(b.time));
-    // Extract values into separate arrays
-    let timeLabelsone = kidshortone.map(entry => entry.time);
-    let timeCountsone = kidshortone.map(entry => entry.count);
+    console.log(JSON.stringify(ghi), 'thousand')
 
-    setOptionone(timeLabelsone)
-    setOneBarone(timeCountsone)
-    console.log(JSON.stringify(ghione), 'thousand', ghione)
+    // console.log(filteredData, 'eight')
 
+    // function isObjectEmpty(obj) {
+    //   return Object.keys(obj).length === 0;
+    // }
+
+    // if (isObjectEmpty(filteredData)) {
+
+    // } else {
+
+    //   callfordataone(filteredData)
+
+    // }
 
 
   }
@@ -2700,7 +2453,7 @@ let Multi_venue = () => {
                 let extractedTime = extractTime(stamp);
                 if (extractedTime) {
                   let interval = roundToInterval(extractedTime);
-                  timeCounts[interval] = (timeCounts[interval] || 0) + 1;
+                  timeCounts[interval] = (timeCounts[interval] || 0) + order.ITEMS.length;
                 }
               });
             });
@@ -2709,53 +2462,11 @@ let Multi_venue = () => {
       }
     }
 
+    // Convert to final array format
     return Object.keys(timeCounts)
       .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
       .map(time => ({ time, count: timeCounts[time] })).slice(1);
   }
-
-  function processTimeDatatwo(data) {
-    let timeCounts = {};
-
-    function extractTime(stamp) {
-      // Match only S0, S1, S2, ... values in the stamp
-      let match = stamp.match(/\d{4}(S)/);
-      if (match) {
-        return match[0].slice(0, 2) + ":" + match[0].slice(2, 4); // Convert to HH:MM
-      }
-      return null; // Skip if S0, S1, etc., is not found
-    }
-
-    function roundToInterval(time) {
-      let [hour, minute] = time.split(":").map(Number);
-      let roundedMinute = Math.floor(minute / 10) * 10; // Round to nearest lower 10-minute mark
-      return `${hour}.${roundedMinute.toString().padStart(2, "0")}`;
-    }
-
-    for (let group in data) {
-      for (let location in data[group]) {
-        for (let section in data[group][location]) {
-          for (let date in data[group][location][section]) {
-            data[group][location][section][date].forEach(order => {
-              let stamps = order.STAMP.split(" "); // Split STAMP string
-              stamps.forEach(stamp => {
-                let extractedTime = extractTime(stamp);
-                if (extractedTime) {
-                  let interval = roundToInterval(extractedTime);
-                  timeCounts[interval] = (timeCounts[interval] || 0) + 1;
-                }
-              });
-            });
-          }
-        }
-      }
-    }
-
-    return Object.keys(timeCounts)
-      .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
-      .map(time => ({ time, count: timeCounts[time] })).slice(1);
-  }
-
 
 
   function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
@@ -3255,7 +2966,7 @@ let Multi_venue = () => {
     });
 
 
-    setFilterdatatwo(filteredData)
+
 
 
     console.log(filteredData, 'eight')
@@ -3279,285 +2990,154 @@ let Multi_venue = () => {
     // Extract values into separate arrays
     let timeLabels = kidshort.map(entry => entry.time);
     let timeCounts = kidshort.map(entry => entry.count);
+
     setTwobar(timeCounts)
 
-    let ghitwo = processTimeDatatwo(alldat)
 
-    let kidshorttwo = ghitwo.sort((a, b) => a.time.localeCompare(b.time));
-
-    // Extract values into separate arrays
-    let timeLabelstwo = kidshorttwo.map(entry => entry.time);
-    let timeCountstwo = kidshorttwo.map(entry => entry.count);
-
-    setTwobarone(timeCountstwo)
 
 
   }
 
 
-  function timeDifference(startTime, endTime) {
 
-    console.log(endTime)
-
-    if (!endTime) {
-      return
-    }
-
-
-    // Extract the "S" event using regex
-    const match = endTime?.match(/\b(\d{4})S\d\b/);
-
-    if (match) {
-      const time = match[1]; // Extract the 4-digit time (e.g., "1500")
-      const formattedTime = `${time.slice(0, 2)}:${time.slice(2)}`; // Convert to HH:mm
-
-      // console.log(formattedTime); // Output: "15:00"
-
-
-
-      const [startHour, startMinute] = startTime.split(":").map(Number);
-      const [endHour, endMinute] = formattedTime.split(":").map(Number);
-
-      let diffHours = endHour - startHour;
-      let diffMinutes = endMinute - startMinute;
-
-      if (diffMinutes < 0) {
-        diffMinutes += 60;
-        diffHours -= 1;
-      }
-
-      return `${diffHours}:${diffMinutes.toString().padStart(2, "0")}`;
-    }
-
-
-  }
 
   let callfordataone = (one) => {
 
 
-    function processData(data) {
-      let result = [];
-      let processTimes = [];
-
-      Object.entries(data).forEach(([dateKey, orders]) => {
-        orders.forEach(order => {
-          const date = dateKey.split(") ")[1]; // Extract the date from the key
-          const stampParts = order.STAMP.split(" ");
-          const extractedDate = stampParts[0].substring(0, 8); // Get the first 8 characters for the date
-          const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
-
-          const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-          if (timeEntries.length >= 2) {
-            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
-            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
-
-            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
-            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
-
-            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
 
-            if (processTime < 2) {
+    const categorizeItems = (datasssssss) => {
+      const edited = ["2", "12", "22", "32"];
+      const moved = ["3", "13", "23", "33"];
+      const deleted = ["4", "24"];
 
-            } else {
-              processTimes.push(processTime);
+      const result = {
+        edited: [],
+        moved: [],
+        deleted: [],
+        served: [],
+        tableMoved: []
+      };
 
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
+      for (const [date, entries] of Object.entries(datasssssss)) {
+
+
+        entries.forEach(entry => {
+
+
+          if (entry.NOTE && entry.NOTE.includes("$ND$")) {
+            result.tableMoved.push(entry);
+          }
+
+
+          entry.ITEMS.forEach(item => {
+            if (edited.includes(item.STATUS)) {
+              result.edited.push(item);
+            } else if (moved.includes(item.STATUS)) {
+              result.moved.push(item);
+            } else if (deleted.includes(item.STATUS)) {
+              result.deleted.push(item);
+            } else if (parseInt(item.STATUS) > 20) {
+              result.served.push(item);
             }
-
-
-
-            // Calculate processing time
-
-          }
+          });
         });
-      });
 
-      // Sort orders by process time (high to low)
-      result.sort((a, b) => b.processtime - a.processtime);
-
-      // Convert process time back to string format for display
-      result = result.map(order => ({
-        ...order,
-        processtime: `${order.processtime}min`
-      }));
-
-      // Calculate average, min, and max processing time
-      if (processTimes.length > 0) {
-        const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
-        const averageTime = Math.round(totalTime / processTimes.length);
-        const minTime = Math.min(...processTimes);
-        const maxTime = Math.max(...processTimes);
-
-        return {
-          orders: result,
-          stats: {
-            averageProcessTime: `${averageTime}min`,
-            minProcessTime: `${minTime}min`,
-            maxProcessTime: `${maxTime}min`
-          }
-        };
       }
 
-      return { orders: result, stats: null };
-    }
+      return result;
+    };
+
+    let editttsone = categorizeItems(one)
+    // let editttstwo = categorizeItems(two)
+
+    console.log(editttsone, 'editttsoneeditttsone')
 
 
-    let newalldata = processData(one)
+    setEditall(editttsone)
+    // setEditallone(editttstwo)
 
-    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
-    setEditall(newalldata)
+    const processItems = (data) => {
+      const dishCounts = {};
 
-    // console.log( JSON.stringify( alltype) , 'oneone') 
-
-    // if(alltype.length === 0 ){
-
-    // }else{
-
-    // }
-
-
-    // const categorizeItems = (datasssssss) => {
-    //   const edited = ["2", "12", "22", "32"];
-    //   const moved = ["3", "13", "23", "33"];
-    //   const deleted = ["4", "24"];
-
-    //   const result = {
-    //     edited: [],
-    //     moved: [],
-    //     deleted: [],
-    //     served: [],
-    //     tableMoved: []
-    //   };
-
-    //   for (const [date, entries] of Object.entries(datasssssss)) {
-
-
-    //     entries.forEach(entry => {
-
-
-    //       if (entry.NOTE && entry.NOTE.includes("$ND$")) {
-    //         result.tableMoved.push(entry);
-    //       }
-
-
-    //       entry.ITEMS.forEach(item => {
-    //         if (edited.includes(item.STATUS)) {
-    //           result.edited.push(item);
-    //         } else if (moved.includes(item.STATUS)) {
-    //           result.moved.push(item);
-    //         } else if (deleted.includes(item.STATUS)) {
-    //           result.deleted.push(item);
-    //         } else if (parseInt(item.STATUS) > 20) {
-    //           result.served.push(item);
-    //         }
-    //       });
-    //     });
-
-    //   }
-
-    //   return result;
-    // };
-
-    // let editttsone = categorizeItems(one)
-    // // let editttstwo = categorizeItems(two)
-
-    // console.log(editttsone, 'editttsoneeditttsone')
-
-
-    // setEditall(editttsone)
-    // // setEditallone(editttstwo)
-
-    // const processItems = (data) => {
-    //   const dishCounts = {};
-
-    //   // Iterate through the data to collect and process dishes
-    //   for (const [date, entries] of Object.entries(data)) {
+      // Iterate through the data to collect and process dishes
+      for (const [date, entries] of Object.entries(data)) {
 
 
 
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Remove "Sp\\" prefix if present
-    //         const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
+        entries.forEach(entry => {
+          entry.ITEMS.forEach(item => {
+            // Remove "Sp\\" prefix if present
+            const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
 
-    //         // If dish is already counted, increment its count and append data
-    //         if (dishCounts[cleanItemName]) {
-    //           dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
-    //           dishCounts[cleanItemName].data.push(item);
-    //         } else {
-    //           // If not, initialize a new entry for the dish
-    //           dishCounts[cleanItemName] = {
-    //             count: parseInt(item.QUANTITY, 10),
-    //             name: cleanItemName,
-    //             data: [item],
-    //           };
-    //         }
-    //       });
-    //     });
-    //   }
+            // If dish is already counted, increment its count and append data
+            if (dishCounts[cleanItemName]) {
+              dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
+              dishCounts[cleanItemName].data.push(item);
+            } else {
+              // If not, initialize a new entry for the dish
+              dishCounts[cleanItemName] = {
+                count: parseInt(item.QUANTITY, 10),
+                name: cleanItemName,
+                data: [item],
+              };
+            }
+          });
+        });
+      }
 
-    //   // Convert the dishCounts object to an array
-    //   return Object.values(dishCounts).sort((a, b) => b.count - a.count);
-    // };
-
-
-    // let minnscount = processItems(one)
-    // // let maxnscount = processItems(two)
-    // setServed(minnscount)
-    // // setServedone(maxnscount)
-
-    // const processRefundedItems = (data) => {
-    //   const results = [];
-
-    //   // Iterate through each date's data
-    //   for (const [date, entries] of Object.entries(data)) {
-    //     let refundedItems = [];
+      // Convert the dishCounts object to an array
+      return Object.values(dishCounts).sort((a, b) => b.count - a.count);
+    };
 
 
+    let minnscount = processItems(one)
+    // let maxnscount = processItems(two)
+    setServed(minnscount)
+    // setServedone(maxnscount)
 
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Check if "Refunded" exists in the ITEM field
-    //         if (item?.NOTE?.includes("Refunded")) {
-    //           refundedItems.push(item);
-    //         }
-    //       });
-    //     });
+    const processRefundedItems = (data) => {
+      const results = [];
 
-    //     if (refundedItems.length > 0) {
-    //       // Calculate the total quantity for refunded items
-    //       const totalQuantity = refundedItems.reduce(
-    //         (sum, item) => sum + parseInt(item.QUANTITY, 10),
-    //         0
-    //       );
+      // Iterate through each date's data
+      for (const [date, entries] of Object.entries(data)) {
+        let refundedItems = [];
 
-    //       results.push({
-    //         date,
-    //         count: totalQuantity,
-    //         name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
-    //         data: refundedItems,
-    //       });
-    //     }
-    //   }
 
-    //   return results;
-    // };
 
-    // let refundcount = processRefundedItems(one)
-    // // let refundcounttwo = processRefundedItems(two)
-    // setMinperday(refundcount)
-    // console.log(refundcount ,'refundcountrefundcountrefundcount')
-    // // setMaxperday(refundcounttwo)
+        entries.forEach(entry => {
+          entry.ITEMS.forEach(item => {
+            // Check if "Refunded" exists in the ITEM field
+            if (item?.NOTE?.includes("Refunded")) {
+              refundedItems.push(item);
+            }
+          });
+        });
+
+        if (refundedItems.length > 0) {
+          // Calculate the total quantity for refunded items
+          const totalQuantity = refundedItems.reduce(
+            (sum, item) => sum + parseInt(item.QUANTITY, 10),
+            0
+          );
+
+          results.push({
+            date,
+            count: totalQuantity,
+            name: refundedItems[0].ITEM, // Assuming all refunded items share the same name
+            data: refundedItems,
+          });
+        }
+      }
+
+      return results;
+    };
+
+    let refundcount = processRefundedItems(one)
+    // let refundcounttwo = processRefundedItems(two)
+    setMinperday(refundcount)
+    console.log(refundcount, 'refundcountrefundcountrefundcount')
+    // setMaxperday(refundcounttwo)
 
 
 
@@ -3567,553 +3147,144 @@ let Multi_venue = () => {
   let callfordataonetwo = (two) => {
 
 
-    function processData(data) {
-      let result = [];
-      let processTimes = [];
 
-      Object.entries(data).forEach(([dateKey, orders]) => {
-        orders.forEach(order => {
-          const date = dateKey.split(") ")[1]; // Extract the date from the key
-          const stampParts = order.STAMP.split(" ");
-          const extractedDate = stampParts[0].substring(0, 8); // Get the first 8 characters for the date
-          const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
 
-          const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-          if (timeEntries.length >= 2) {
-            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
-            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
+    const categorizeItems = (datasssssss) => {
+      const edited = ["2", "12", "22", "32"];
+      const moved = ["3", "13", "23", "33"];
+      const deleted = ["4", "24"];
 
-            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
-            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
+      const result = {
+        edited: [],
+        moved: [],
+        deleted: [],
+        served: [],
+        tableMoved: []
+      };
 
-            // Calculate processing time
-            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+      for (const [date, entries] of Object.entries(datasssssss)) {
 
-            console.log(processTime, 'processTime  processTime ')
 
-            // if( )
-            if (processTime < 2) {
-              processTimes.push(processTime);
+        entries.forEach(entry => {
 
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
-            } else {
-              processTimes.push(processTime);
 
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
+          if (entry.NOTE && entry.NOTE.includes("$ND$")) {
+            result.tableMoved.push(entry);
+          }
+
+
+          entry.ITEMS.forEach(item => {
+            if (edited.includes(item.STATUS)) {
+              result.edited.push(item);
+            } else if (moved.includes(item.STATUS)) {
+              result.moved.push(item);
+            } else if (deleted.includes(item.STATUS)) {
+              result.deleted.push(item);
+            } else if (parseInt(item.STATUS) > 20) {
+              result.served.push(item);
             }
-
-
-          }
+          });
         });
-      });
 
-      // Sort orders by process time (high to low)
-      result.sort((a, b) => b.processtime - a.processtime);
-
-      // Convert process time back to string format for display
-      result = result.map(order => ({
-        ...order,
-        processtime: `${order.processtime}min`
-      }));
-
-      // Calculate average, min, and max processing time
-      if (processTimes.length > 0) {
-        const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
-        const averageTime = Math.round(totalTime / processTimes.length);
-        const minTime = Math.min(...processTimes);
-        const maxTime = Math.max(...processTimes);
-
-        return {
-          orders: result,
-          stats: {
-            averageProcessTime: `${averageTime}min`,
-            minProcessTime: `${minTime}min`,
-            maxProcessTime: `${maxTime}min`
-          }
-        };
       }
 
-      return { orders: result, stats: null };
-    }
+      return result;
+    };
+
+    // let editttsone = categorizeItems(one)
+    let editttstwo = categorizeItems(two)
+
+    // console.log(editttsone, 'editttsoneeditttsone')
 
 
-    let newalldata = processData(two)
+    // setEditall(editttsone)
+    setEditallone(editttstwo)
 
-    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
-    setEditallone(newalldata)
+    const processItems = (data) => {
+      const dishCounts = {};
 
-    // const categorizeItems = (datasssssss) => {
-    //   const edited = ["2", "12", "22", "32"];
-    //   const moved = ["3", "13", "23", "33"];
-    //   const deleted = ["4", "24"];
-
-    //   const result = {
-    //     edited: [],
-    //     moved: [],
-    //     deleted: [],
-    //     served: [],
-    //     tableMoved: []
-    //   };
-
-    //   for (const [date, entries] of Object.entries(datasssssss)) {
-
-
-    //     entries.forEach(entry => {
-
-
-    //       if (entry.NOTE && entry.NOTE.includes("$ND$")) {
-    //         result.tableMoved.push(entry);
-    //       }
-
-
-    //       entry.ITEMS.forEach(item => {
-    //         if (edited.includes(item.STATUS)) {
-    //           result.edited.push(item);
-    //         } else if (moved.includes(item.STATUS)) {
-    //           result.moved.push(item);
-    //         } else if (deleted.includes(item.STATUS)) {
-    //           result.deleted.push(item);
-    //         } else if (parseInt(item.STATUS) > 20) {
-    //           result.served.push(item);
-    //         }
-    //       });
-    //     });
-
-    //   }
-
-    //   return result;
-    // };
-
-    // // let editttsone = categorizeItems(one)
-    // let editttstwo = categorizeItems(two)
-
-    // // console.log(editttsone, 'editttsoneeditttsone')
-
-
-    // // setEditall(editttsone)
-    // setEditallone(editttstwo)
-
-    // const processItems = (data) => {
-    //   const dishCounts = {};
-
-    //   // Iterate through the data to collect and process dishes
-    //   for (const [date, entries] of Object.entries(data)) {
+      // Iterate through the data to collect and process dishes
+      for (const [date, entries] of Object.entries(data)) {
 
 
 
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Remove "Sp\\" prefix if present
-    //         const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
+        entries.forEach(entry => {
+          entry.ITEMS.forEach(item => {
+            // Remove "Sp\\" prefix if present
+            const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
 
-    //         // If dish is already counted, increment its count and append data
-    //         if (dishCounts[cleanItemName]) {
-    //           dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
-    //           dishCounts[cleanItemName].data.push(item);
-    //         } else {
-    //           // If not, initialize a new entry for the dish
-    //           dishCounts[cleanItemName] = {
-    //             count: parseInt(item.QUANTITY, 10),
-    //             name: cleanItemName,
-    //             data: [item],
-    //           };
-    //         }
-    //       });
-    //     });
-    //   }
+            // If dish is already counted, increment its count and append data
+            if (dishCounts[cleanItemName]) {
+              dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
+              dishCounts[cleanItemName].data.push(item);
+            } else {
+              // If not, initialize a new entry for the dish
+              dishCounts[cleanItemName] = {
+                count: parseInt(item.QUANTITY, 10),
+                name: cleanItemName,
+                data: [item],
+              };
+            }
+          });
+        });
+      }
 
-    //   // Convert the dishCounts object to an array
-    //   return Object.values(dishCounts).sort((a, b) => b.count - a.count);
-    // };
-
-
-    // // let minnscount = processItems(one)
-    // let maxnscount = processItems(two)
-    // // setServed(minnscount)
-    // setServedone(maxnscount)
-
-    // const processRefundedItems = (data) => {
-    //   const results = [];
-
-    //   // Iterate through each date's data
-    //   for (const [date, entries] of Object.entries(data)) {
-    //     let refundedItems = [];
+      // Convert the dishCounts object to an array
+      return Object.values(dishCounts).sort((a, b) => b.count - a.count);
+    };
 
 
+    // let minnscount = processItems(one)
+    let maxnscount = processItems(two)
+    // setServed(minnscount)
+    setServedone(maxnscount)
 
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Check if "Refunded" exists in the ITEM field
-    //         if (item.NOTE.includes("Refunded")) {
-    //           refundedItems.push(item);
-    //         }
-    //       });
-    //     });
+    const processRefundedItems = (data) => {
+      const results = [];
 
-    //     if (refundedItems.length > 0) {
-    //       // Calculate the total quantity for refunded items
-    //       const totalQuantity = refundedItems.reduce(
-    //         (sum, item) => sum + parseInt(item.QUANTITY, 10),
-    //         0
-    //       );
+      // Iterate through each date's data
+      for (const [date, entries] of Object.entries(data)) {
+        let refundedItems = [];
 
-    //       results.push({
-    //         date,
-    //         count: totalQuantity,
-    //         name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
-    //         data: refundedItems,
-    //       });
-    //     }
-    //   }
 
-    //   return results;
-    // };
 
-    // // let refundcount = processRefundedItems(one)
-    // let refundcounttwo = processRefundedItems(two)
-    // // setMinperday(refundcount)
-    // setMaxperday(refundcounttwo)
+        entries.forEach(entry => {
+          entry.ITEMS.forEach(item => {
+            // Ensure item.NOTE is defined before using includes()
+            if (item.NOTE && item.NOTE.includes("Refunded")) {
+              refundedItems.push(item);
+            }
+          });
+        });
+
+        if (refundedItems.length > 0) {
+          // Calculate the total quantity for refunded items
+          const totalQuantity = refundedItems.reduce(
+            (sum, item) => sum + parseInt(item.QUANTITY, 10),
+            0
+          );
+
+          results.push({
+            date,
+            count: totalQuantity,
+            name: refundedItems[0].ITEM, // Assuming all refunded items share the same name
+            data: refundedItems,
+          });
+        }
+      }
+
+      return results;
+    };
+
+    // let refundcount = processRefundedItems(one)
+    let refundcounttwo = processRefundedItems(two)
+    // setMinperday(refundcount)
+    setMaxperday(refundcounttwo)
 
 
 
 
   }
-
-
-  let callfordataonesearch = (one, bitedata) => {
-
-
-    function processData(data) {
-      let result = [];
-      let processTimes = [];
-
-      Object.entries(data).forEach(([dateKey, orders]) => {
-        orders.forEach(order => {
-          const date = dateKey.split(") ")[1]; // Extract the date from the key
-          const stampParts = order.STAMP.split(" ");
-          const extractedDate = stampParts[0].substring(0, 8); // Get the first 8 characters for the date
-          const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
-
-          const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-          if (timeEntries.length >= 2) {
-            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
-            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
-
-            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
-            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
-
-            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-
-
-            if (processTime === parseInt(bitedata)) {
-
-              processTimes.push(processTime);
-
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
-
-
-            } else {
-
-            }
-
-
-
-            // Calculate processing time
-
-          }
-        });
-      });
-
-      // Sort orders by process time (high to low)
-      result.sort((a, b) => b.processtime - a.processtime);
-
-      // Convert process time back to string format for display
-      result = result.map(order => ({
-        ...order,
-        processtime: `${order.processtime}min`
-      }));
-
-      // Calculate average, min, and max processing time
-      if (processTimes.length > 0) {
-        const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
-        const averageTime = Math.round(totalTime / processTimes.length);
-        const minTime = Math.min(...processTimes);
-        const maxTime = Math.max(...processTimes);
-
-        return {
-          orders: result,
-          stats: {
-            averageProcessTime: `${averageTime}min`,
-            minProcessTime: `${minTime}min`,
-            maxProcessTime: `${maxTime}min`
-          }
-        };
-      }
-
-      return { orders: result, stats: null };
-    }
-
-
-    let newalldata = processData(one)
-
-    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
-    setEditall(newalldata)
-
-
-
-  }
-
-  let callfordataonetwosearch = (two, bitedata) => {
-
-
-    function processData(data) {
-      let result = [];
-      let processTimes = [];
-
-      Object.entries(data).forEach(([dateKey, orders]) => {
-        orders.forEach(order => {
-          const date = dateKey.split(") ")[1]; // Extract the date from the key
-          const stampParts = order.STAMP.split(" ");
-          const extractedDate = stampParts[0].substring(0, 8); // Get the first 8 characters for the date
-          const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
-
-          const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-          if (timeEntries.length >= 2) {
-            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
-            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
-
-            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
-            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
-
-            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-
-
-            console.log(processTime, 'processTimeprocessTimeprocessTimeprocessTime')
-
-
-            if (processTime === parseInt(bitedata)) {
-              processTimes.push(processTime);
-
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
-            } else {
-
-            }
-
-
-
-            // Calculate processing time
-
-          }
-        });
-      });
-
-      // Sort orders by process time (high to low)
-      result.sort((a, b) => b.processtime - a.processtime);
-
-      // Convert process time back to string format for display
-      result = result.map(order => ({
-        ...order,
-        processtime: `${order.processtime}min`
-      }));
-
-      // Calculate average, min, and max processing time
-      if (processTimes.length > 0) {
-        const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
-        const averageTime = Math.round(totalTime / processTimes.length);
-        const minTime = Math.min(...processTimes);
-        const maxTime = Math.max(...processTimes);
-
-        return {
-          orders: result,
-          stats: {
-            averageProcessTime: `${averageTime}min`,
-            minProcessTime: `${minTime}min`,
-            maxProcessTime: `${maxTime}min`
-          }
-        };
-      }
-
-      return { orders: result, stats: null };
-    }
-
-
-
-    let newalldata = processData(two)
-
-    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
-    setEditallone(newalldata)
-
-    // const categorizeItems = (datasssssss) => {
-    //   const edited = ["2", "12", "22", "32"];
-    //   const moved = ["3", "13", "23", "33"];
-    //   const deleted = ["4", "24"];
-
-    //   const result = {
-    //     edited: [],
-    //     moved: [],
-    //     deleted: [],
-    //     served: [],
-    //     tableMoved: []
-    //   };
-
-    //   for (const [date, entries] of Object.entries(datasssssss)) {
-
-
-    //     entries.forEach(entry => {
-
-
-    //       if (entry.NOTE && entry.NOTE.includes("$ND$")) {
-    //         result.tableMoved.push(entry);
-    //       }
-
-
-    //       entry.ITEMS.forEach(item => {
-    //         if (edited.includes(item.STATUS)) {
-    //           result.edited.push(item);
-    //         } else if (moved.includes(item.STATUS)) {
-    //           result.moved.push(item);
-    //         } else if (deleted.includes(item.STATUS)) {
-    //           result.deleted.push(item);
-    //         } else if (parseInt(item.STATUS) > 20) {
-    //           result.served.push(item);
-    //         }
-    //       });
-    //     });
-
-    //   }
-
-    //   return result;
-    // };
-
-    // // let editttsone = categorizeItems(one)
-    // let editttstwo = categorizeItems(two)
-
-    // // console.log(editttsone, 'editttsoneeditttsone')
-
-
-    // // setEditall(editttsone)
-    // setEditallone(editttstwo)
-
-    // const processItems = (data) => {
-    //   const dishCounts = {};
-
-    //   // Iterate through the data to collect and process dishes
-    //   for (const [date, entries] of Object.entries(data)) {
-
-
-
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Remove "Sp\\" prefix if present
-    //         const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
-
-    //         // If dish is already counted, increment its count and append data
-    //         if (dishCounts[cleanItemName]) {
-    //           dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
-    //           dishCounts[cleanItemName].data.push(item);
-    //         } else {
-    //           // If not, initialize a new entry for the dish
-    //           dishCounts[cleanItemName] = {
-    //             count: parseInt(item.QUANTITY, 10),
-    //             name: cleanItemName,
-    //             data: [item],
-    //           };
-    //         }
-    //       });
-    //     });
-    //   }
-
-    //   // Convert the dishCounts object to an array
-    //   return Object.values(dishCounts).sort((a, b) => b.count - a.count);
-    // };
-
-
-    // // let minnscount = processItems(one)
-    // let maxnscount = processItems(two)
-    // // setServed(minnscount)
-    // setServedone(maxnscount)
-
-    // const processRefundedItems = (data) => {
-    //   const results = [];
-
-    //   // Iterate through each date's data
-    //   for (const [date, entries] of Object.entries(data)) {
-    //     let refundedItems = [];
-
-
-
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Check if "Refunded" exists in the ITEM field
-    //         if (item.NOTE.includes("Refunded")) {
-    //           refundedItems.push(item);
-    //         }
-    //       });
-    //     });
-
-    //     if (refundedItems.length > 0) {
-    //       // Calculate the total quantity for refunded items
-    //       const totalQuantity = refundedItems.reduce(
-    //         (sum, item) => sum + parseInt(item.QUANTITY, 10),
-    //         0
-    //       );
-
-    //       results.push({
-    //         date,
-    //         count: totalQuantity,
-    //         name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
-    //         data: refundedItems,
-    //       });
-    //     }
-    //   }
-
-    //   return results;
-    // };
-
-    // // let refundcount = processRefundedItems(one)
-    // let refundcounttwo = processRefundedItems(two)
-    // // setMinperday(refundcount)
-    // setMaxperday(refundcounttwo)
-
-
-
-
-  }
-
 
   let ggggrtsg = () => {
     let kkki = 0
@@ -4135,34 +3306,23 @@ let Multi_venue = () => {
     return kkki
   }
 
+
+
   let checkkkk = () => {
 
+    const yesterday = [getFormattedDate(1), getFormattedDate(1)];
+    const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
+
+
     //one
-    console.log(editall, '1')
-    console.log(served, '2')
-    console.log(minperday, '3')
+    console.log(yesterday, '1')
+    console.log(eightDaysBefore, '2')
 
-    //two
-    console.log(editallone, '4')
-    console.log(servedone, '5')
-    console.log(maxperday, '6')
+    console.log(JSON.stringify(yesterday), '3')
+    console.log(JSON.stringify(eightDaysBefore), '4')
 
-  }
-
-
-  let searchvalue = (e) => {
-    console.log(editall, 'searchvaluesearchvaluesearchvalue')
-
-    if (e === undefined || e === '' || e === null) {
-      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      filterDataByDateonee(dateRangetwo, onetime, twotime, selectedOptionsfive, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-      return
-    } else {
-      callfordataonesearch(filterdataone, e)
-      callfordataonetwosearch(filterdatatwo, e)
-    }
-
+    console.log(dateRange, '5')
+    console.log(JSON.stringify(dateRange), '6')
   }
 
 
@@ -4298,52 +3458,39 @@ let Multi_venue = () => {
 
   }
 
-  let mealexportpdf = () => {
+  let mealexportpdf = async () => {
+    const input = pdfRefss.current;
 
-    const doc = new jsPDF();
 
-    // Add some text to the PDF
-    doc.text('Hello, this is a sample PDF created with jsPDF!', 10, 10);
 
-    // Optionally, you can add other content like images, tables, etc.
-    // doc.addImage(imageData, 'JPEG', 10, 20, 180, 160);
-    // doc.autoTable({ html: '#my-table' });
+    const doc = new jsPDF({
+      orientation: "p",
+      unit: "mm",
+      format: "a4",
+    });
 
-    // Save the PDF with a filename
-    doc.save('sample.pdf');
+    await doc.html(input, {
+      callback: function (doc) {
+        doc.save("output.pdf"); // Save after rendering
+      },
+      x: 10,
+      y: 20,
+      width: 190, // Fit content within page
+      windowWidth: 1000, // Ensure full width capture
+      autoPaging: "text",
+      html2canvas: {
+        useCORS: true, // Handle cross-origin images
+      },
+    });
 
-    console.log('gggggggggggggggggggg')
+
 
   }
-
   let chartexportpdf = async () => {
 
     const input = pdfRefred.current;
 
 
-
-    // html2canvas(input, { scale: 2 }).then((canvas) => {
-    //   const imgData = canvas.toDataURL("image/png");
-    //   const pdf = new jsPDF("p", "mm", "a4");
-    //   const imgWidth = 210; // A4 width in mm
-    //   const pageHeight = 297; // A4 height in mm
-    //   const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    //   let heightLeft = imgHeight;
-    //   let position = 0;
-
-    //   pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    //   heightLeft -= pageHeight;
-
-    //   while (heightLeft > 0) {
-    //     position = heightLeft - imgHeight;
-    //     pdf.addPage();
-    //     pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    //     heightLeft -= pageHeight;
-    //   }
-
-    //   pdf.save("download.pdf");
-
-    // });
 
     const doc = new jsPDF({
       orientation: "p",
@@ -4366,67 +3513,14 @@ let Multi_venue = () => {
     });
 
 
-
-    // var doc = new  jsPDF({
-    //   orientation: 'p',
-    //   unit: 'pt',
-    //   format: 'letter'
-    // });
-
-
-    // var field = input;
-    // doc.text(10, 10, "test");
-    // //add first html
-    // await doc.html(field, {
-    //   callback: function (doc) {
-    //     return doc;
-    //   },
-    //   width: 210,
-    //   windowWidth: 210, 
-    //       html2canvas: {
-    //           backgroundColor: 'lightyellow',
-    //           width: 210, 
-    //           height: 150
-    //       },
-    //       backgroundColor: 'lightblue', 
-    //   x: 10,
-    //   y: 50,
-    //   autoPaging: 'text'
-    // });
-
-    // doc.save("download.pdf");
-    // window.open(doc.output('bloburl'));
-
-
   }
 
   let refundexportpdf = async () => {
-    const input = pdfRefredone.current;
 
 
+    const input = pdfRefsss.current;
 
-    // html2canvas(input, { scale: 2 }).then((canvas) => {
-    //   const imgData = canvas.toDataURL("image/png");
-    //   const pdf = new jsPDF("p", "mm", "a4");
-    //   const imgWidth = 210; // A4 width in mm
-    //   const pageHeight = 297; // A4 height in mm
-    //   const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    //   let heightLeft = imgHeight;
-    //   let position = 0;
 
-    //   pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    //   heightLeft -= pageHeight;
-
-    //   while (heightLeft > 0) {
-    //     position = heightLeft - imgHeight;
-    //     pdf.addPage();
-    //     pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-    //     heightLeft -= pageHeight;
-    //   }
-
-    //   pdf.save("download.pdf");
-
-    // });
 
     const doc = new jsPDF({
       orientation: "p",
@@ -4441,7 +3535,7 @@ let Multi_venue = () => {
       x: 10,
       y: 20,
       width: 190, // Fit content within page
-      windowWidth: 1600, // Ensure full width capture
+      windowWidth: 1000, // Ensure full width capture
       autoPaging: "text",
       html2canvas: {
         useCORS: true, // Handle cross-origin images
@@ -4454,10 +3548,8 @@ let Multi_venue = () => {
 
   return (
     <div>
-      {/* <Header name={"Dockets"} center={"Name"} />
-       */}
-
       <div style={{ scrollbarWidth: 'none' }}>
+
         <div className="" style={{
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
           // border: "1px solid #dbdbdb"
@@ -4469,7 +3561,7 @@ let Multi_venue = () => {
                 navigate(-1)
               }}  >
               <img src="arrow.png" style={{ width: 20, height: 20, marginTop: 3 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >DOCKETS</p>
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >MEALS</p>
             </div>
             <div style={{ padding: 13 }} className="d-flex text-center justify-content-center col" >
               <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop: -3 }} >
@@ -4485,14 +3577,14 @@ let Multi_venue = () => {
           </div>
         </div>
       </div>
-      <div >
-        <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr">
 
-          <div style={{}} className="dddd"  >
+      <div style={{ backgroundColor: "#DADADA", height: '100vh', overflow: 'auto', }} className="finefinrr">
 
-            <div className="d-flex justify-content-between  pt-4 gap-3" >
+        <div style={{}} className="dddd"  >
 
-              <div style={{ width: '20%' }}>
+          <div className="d-flex justify-content-between  pt-4 gap-3" >
+
+          <div style={{ width: '20%' }}>
                 <p onClick={() => {
 
                   checkkkk()
@@ -4510,11 +3602,11 @@ let Multi_venue = () => {
                       if (update[1] === null || update[1] === "null") {
 
                       } else {
-                        filterDataByDate(update, onetime, twotime, selectedOptions, hubb,
+                        filterDataByDate(update, onetime, twotime, selectedOptions, hubb, 
                           selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-                        filterDataByDateonee(update, onetime, twotime, selectedOptionsfive,
-                          hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                        filterDataByDateonee(update, onetime, twotime, selectedOptionsfive , 
+                          hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
                       }
                     }} // Update both startDate and EndDate 
                     placeholderText="Select a date range"
@@ -4543,8 +3635,8 @@ let Multi_venue = () => {
                         }
 
                         filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-                        filterDataByDateonee(dateRange, e.target.value, twotime, selectedOptionsfive,
-                          hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ filterDataByDateonee(dateRange, e.target.value , twotime, selectedOptionsfive , 
+                          hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
                       }}
                     />
@@ -4560,8 +3652,8 @@ let Multi_venue = () => {
                         // tiemstampp(2, e.target.value)
 
                         filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-                        filterDataByDateonee(dateRange, onetime, e.target.value, selectedOptionsfive,
-                          hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                        filterDataByDateonee(dateRange, onetime  , e.target.value , selectedOptionsfive , 
+                          hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
                       }}
                     />
                   </div>
@@ -4970,11 +4062,11 @@ let Multi_venue = () => {
                     setInputvalue(e.target.value)
 
                     filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+ 
 
-
-                    filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-                      hubbtwo, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
-
+                    filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+                      hubbtwo , selectedCources, selectedTakeaway, e.target.value , inputvaluetwo, selectedhubOptions)
+                      
                     // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
                   }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset' }} type="text" />
@@ -4986,8 +4078,8 @@ let Multi_venue = () => {
                   <input onChange={(e) => {
                     setInputvaluetwo(e.target.value)
                     filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                    filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-                      hubbtwo, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+                    filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
+                      hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  e.target.value, selectedhubOptions)
                     // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                   }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
                 </div>
@@ -5045,189 +4137,484 @@ let Multi_venue = () => {
                 </div>
               </div>
 
-            </div>
-
-
-            {
-              meals === 1 ?
-                <div className="changeone" style={{ marginTop: 100 }} >
-                  <div className="changetwos"   >
-                    <div className='row '  >
-
-
-
-
-                      <div className='col-6 w-100 d-flex justify-content-center' style={{ margin: 'auto' }} >
-                        <div class="box " style={{ maxWidth: "600px" }} onClick={() => {
-                          setMeals(2)
-                        }}>
-                          <div class="boxs">
-                            <div className="d-flex justify-content-between" >
-                              <div >
-                                <p className='asdfp' style={{ marginBottom: 0 }}>Dockets completion time</p>
-                                <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
-                              </div>
-                              <div >
-                                <p className='asdfp' style={{ color: '#316AAF' }}>{editall?.stats?.averageProcessTime || 0}</p>
-                              </div>
-                            </div>
-
-                            <div class="end-box">
-                              <img src="time.png" style={{ width: 90, height: 106 }} className="" alt="Example Image" />
-                              <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
-
-                                <div >
-                                  <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                    <div className=' ' style={{ width: 200 }}>
-                                      <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum</p>
-                                    </div>
-                                    <div className=' ' style={{ fontWeight: '600' }}>
-                                      <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.minProcessTime || 0}</p>
-                                    </div>
-                                  </div>
-
-
-                                  <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                    <div className=' ' style={{ width: 200 }}>
-                                      <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum</p>
-                                    </div>
-                                    <div className=' ' style={{ fontWeight: '600' }}>
-                                      <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.maxProcessTime || 0}</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-
-
-
-
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-
-                    </div>
-
-                    <div className="w-100 d-flex justify-content-center">
-                      <div className='row mt-5 ' >
-
-                        <div className='col-6' >
-                          <div class="box me-5" style={{ maxWidth: "600px" }} onClick={() => {
-                            setMeals(5)
-                          }} >
-                            <div class="boxs">
-                              <p className='asdfp'>Dockets received - timeline</p>
-                              <div class="end-box d-flex justify-content-between">
-                                <img src="rts.png" className="d-flex justify-content-between" alt="Example Image" />
-                                <p className="asdfps w-50 m-0">(# of dockets received
-                                  between specific time slots)</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* <div className='col-6' >
-  <div class="box" onClick={() => {
-    setMeals(3)
-  }} >
-    <div class="boxs">
-      <div className="d-flex justify-content-between" >
-        <div >
-          <p className='asdfp' style={{ marginBottom: 0 }}>Served meals</p>
-          <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-        </div>
-        <div >
-          <p className='asdfp' style={{ color: '#316AAF' }}>{
-            served ?
-              ggggrt()
-              : 0
-          }</p>
-        </div>
-      </div>
-
-      <div class="end-box">
-        <img src="starr.png" className="" alt="Example Image" />
-        <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
-
-          <div >
-
-
-
-
-            <div className="d-flex" style={{ marginBottom: 0 }}  >
-              <div className=' ' style={{ width: 200 }}>
-                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Most: <span style={{ fontWeight: '600' }} >{served[0]?.name || 0}</span></p>
-              </div>
-              <div className=' ' style={{ fontWeight: '600' }}>
-                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[0]?.count || 0}</p>
-              </div>
-            </div>
-
-
-            <div className="d-flex" style={{ marginBottom: 0 }}  >
-              <div className=' ' style={{ width: 200 }}>
-                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Less: <span style={{ fontWeight: '600' }} >{served[served.length - 1]?.name || ''}</span></p>
-              </div>
-              <div className=' ' style={{ fontWeight: '600' }}>
-                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[served.length - 1]?.count || 0}</p>
-              </div>
-            </div>
           </div>
-        </div>
+
+
+          {
+            meals === 1 ?
+              <div className="changeone" style={{ marginTop: 100 }} >
+                
+                <div className="changetwos"   >
+
+                <div className='row ' >
+
+                  <div className='col-6 d-flex justify-content-center ' >
+                    <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
+                      setMeals(5)
+                    }} >
+                      <div class="boxs">
+                        <p className='asdfp'>Meals received - timeline</p>
+                        <div class="end-box">
+                          <img src="rts.png" className="" alt="Example Image" />
+                          <p className="asdfps">(# of meals sent between specific time slots) </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div className='col-6 d-flex justify-content-center' >
+                    <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
+                      setMeals(2)
+                    }}>
+                      <div class="boxs">
+                        <div className="d-flex justify-content-between" >
+                          <div >
+                            <p className='asdfp' style={{ marginBottom: 0 }}>Edits</p>
+                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                          </div>
+                          <div >
+                            <p className='asdfp' style={{ color: '#316AAF' }}>{parseInt(editall?.edited?.length)
+                              + parseInt(editall?.moved?.length) + parseInt(editall?.deleted?.length) + parseInt(editall?.tableMoved?.length) || 0}</p>
+                          </div>
+                        </div>
+
+                        <div class="end-box">
+                          <img src="ert.png" className="" alt="Example Image" />
+                          <div className='' >
+
+
+                            <div className="d-flex" style={{ marginBottom: 0 }}  >
+                              <div className=' ' style={{ width: 200 }}>
+                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Edited</p>
+                              </div>
+                              <div className=' ' style={{ fontWeight: '600' }}>
+                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.edited?.length || 0}</p>
+                              </div>
+                            </div>
+
+
+                            <div className="d-flex" style={{ marginBottom: 0 }}  >
+                              <div className=' ' style={{ width: 200 }}>
+                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Moved</p>
+                              </div>
+                              <div className=' ' style={{ fontWeight: '600' }}>
+                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.moved?.length || 0}</p>
+                              </div>
+                            </div>
+
+                            <div className="d-flex" style={{ marginBottom: 0 }}  >
+                              <div className=' ' style={{ width: 200 }}>
+                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Deleted</p>
+                              </div>
+                              <div className=' ' style={{ fontWeight: '600' }}>
+                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.deleted?.length || 0}</p>
+                              </div>
+                            </div>
+
+                            <div className="d-flex" style={{ marginBottom: 0 }}  >
+                              <div className=' ' style={{ width: 200 }}>
+                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Table moved</p>
+                              </div>
+                              <div className=' ' style={{ fontWeight: '600' }}>
+                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.tableMoved?.length || 0}</p>
+                              </div>
+                            </div>
+
+                          </div>
 
 
 
 
 
 
-      </div>
-    </div>
-  </div>
-</div> */}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
 
-                        <div className='col-6' >
-                          <div class="box ms-5" style={{ maxWidth: "600px" }} onClick={() => {
-                            setMeals(4)
-                          }}>
-                            <div class="boxs">
-                              <div className="d-flex justify-content-between" >
-                                <div >
-                                  <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
-                                  <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                </div>
+
+                <div className='row mt-5' >
+
+                  <div className='col-6 d-flex justify-content-center' >
+                    <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
+                      setMeals(3)
+                    }} >
+                      <div class="boxs">
+                        <div className="d-flex justify-content-between" >
+                          <div >
+                            <p className='asdfp' style={{ marginBottom: 0 }}>Served meals</p>
+                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                          </div>
+                          <div >
+                            <p className='asdfp' style={{ color: '#316AAF' }}>{
+                              served ?
+                                ggggrt()
+                                : 0
+                            }</p>
+                          </div>
+                        </div>
+
+                        <div class="end-box">
+                          <img src="starr.png" className="" alt="Example Image" />
+                          <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
+
+                            <div >
+
+
+
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Most: <span style={{ fontWeight: '600' }} >{served[0]?.name || 0}</span></p>
                                 </div>
-                                <div >
-                                  {/* <p className='asdfp' style={{ color: '#316AAF' }}>{
-            minperday ?
-              ggggrtz()
-              : 0
-          }</p> */}
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[0]?.count || 0}</p>
                                 </div>
                               </div>
 
-                              <div class="end-box d-flex justify-content-between ">
-                                <img src="bluee.png" className="" alt="Example Image" />
-                                <p className="asdfps w-50 m-0">(Average waiting time
-                                  between specific time slots)</p>
 
-
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Less: <span style={{ fontWeight: '600' }} >{served[served.length - 1]?.name || ''}</span></p>
+                                </div>
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[served.length - 1]?.count || 0}</p>
+                                </div>
                               </div>
                             </div>
                           </div>
+
+
+
+
+
+
                         </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div className='col-6 d-flex justify-content-center' >
+                    <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
+                      setMeals(4)
+                    }}>
+                      <div class="boxs">
+                        <div className="d-flex justify-content-between" >
+                          <div >
+                            <p className='asdfp' style={{ marginBottom: 0 }}>Refunded meals</p>
+                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                          </div>
+                          <div >
+                            <p className='asdfp' style={{ color: '#316AAF' }}>{
+                              minperday ?
+                                ggggrtz()
+                                : 0
+                            }</p>
+                          </div>
+                        </div>
+
+                        <div class="end-box">
+                          <img src="refundd.png" className="" alt="Example Image" />
+                          <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
+
+                            <div >
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum per day</p>
+                                </div>
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[minperday.length - 1]?.count || 0}</p>
+                                </div>
+                              </div>
+
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum per day</p>
+                                </div>
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[0]?.count || 0}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+
+
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+                </div>
+
+              </div>
+
+
+              : meals === 2 ?
+
+                <div className="changeone" style={{ marginTop: 100 }} >
+                  <div className="changetwo"  style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+
+                    <div className="d-flex justify-content-between" >
+                      <div style={{}} className="d-flex " >
+                        <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                          setMeals(1)
+                        }} className="" alt="Example Image" />
+                        <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Edits</p>
+                      </div>
+
+                      <div >
+                        <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
+
+                        {showDiv && (
+                          <div
+                            style={{
+                              width: 200,
+                              marginTop: '0px',
+                              padding: '10px',
+                              backgroundColor: '#f8f9fa',
+                              border: '1px solid #ccc',
+                              borderRadius: '4px',
+                              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                              position: 'absolute',
+                              right: '3%'
+                            }}
+                          >
+                            <p style={{ color: '#707070' }}>Export as</p>
+                            <hr />
+                            <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                              editexportpdf()
+                            }}>PDF</p>
+                          </div>
+                        )}
 
 
                       </div>
                     </div>
+
+                    <div style={{ marginTop: 50, padding: 20 }} >
+                      <div className="d-flex justify-content-between" >
+
+                        <div >
+                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                            editall?.edited?.length
+                            + editall?.deleted?.length
+                            + editall?.moved?.length}</span></p>
+                        </div>
+                        <div >
+                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+
+                            editallone?.edited?.length
+                            + editallone?.deleted?.length
+                            + editallone?.moved?.length
+                          }</span></p>
+                        </div>
+                        <div >
+                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                            {(() => {
+                              let datd = editallone?.edited?.length
+                                + editallone?.deleted?.length
+                                + editallone?.moved?.length
+
+                              let datdtwo = editall?.edited?.length
+                                + editall?.deleted?.length
+                                + editall?.moved?.length
+
+                              let tot = ((datdtwo - datd) / datd) * 100
+
+                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                }} className="" alt="Example Image" /> :
+                                <img src="d_arw.png"
+                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                  }} className="" alt="Example Image" />}</span></span>
+
+
+                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                            })()}</span></p>
+                        </div>
+
+                      </div>
+
+                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+                      <div className="d-flex justify-content-between" >
+
+                        <div >
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.moved?.length}</p>
+                        </div>
+                        <div >
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}  </p>
+                        </div>
+                        <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                            {(() => {
+                              let datd = editallone?.moved?.length
+
+                              let datdtwo = editall?.moved?.length
+
+                              let tot = ((datdtwo - datd) / datd) * 100
+
+                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                }} className="" alt="Example Image" /> :
+                                <img src="d_arw.png"
+                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                  }} className="" alt="Example Image" />}</span></span>
+
+
+                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                            })()}</span></p>
+                        </div>
+
+                      </div>
+
+                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+                      <div className="d-flex justify-content-between" >
+
+                        <div >
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.edited?.length}</p>
+                        </div>
+                        <div >
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}  </p>
+                        </div>
+                        <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                            {(() => {
+                              let datd = editallone?.edited?.length
+
+                              let datdtwo = editall?.edited?.length
+
+                              let tot = ((datdtwo - datd) / datd) * 100
+
+                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                }} className="" alt="Example Image" /> :
+                                <img src="d_arw.png"
+                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                  }} className="" alt="Example Image" />}</span></span>
+
+
+                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                            })()}</span></p>
+                        </div>
+
+                      </div>
+
+                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+                      <div className="d-flex justify-content-between" >
+
+                        <div >
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.deleted?.length}</p>
+                        </div>
+                        <div >
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.deleted?.length}  </p>
+                        </div>
+                        <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                            {(() => {
+                              let datd = editallone?.deleted?.length
+
+                              let datdtwo = editall?.deleted?.length
+
+                              let tot = ((datdtwo - datd) / datd) * 100
+
+                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                }} className="" alt="Example Image" /> :
+                                <img src="d_arw.png"
+                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                  }} className="" alt="Example Image" />}</span></span>
+
+
+                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                            })()}</span></p>
+                        </div>
+
+                      </div>
+
+                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+
+                      <div className="d-flex justify-content-between" >
+
+                        <div >
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.tableMoved?.length}</p>
+                        </div>
+                        <div >
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.tableMoved?.length}  </p>
+                        </div>
+                        <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                            {(() => {
+                              let datd = editallone?.tableMoved?.length
+
+                              let datdtwo = editall?.tableMoved?.length
+
+                              let tot = ((datdtwo - datd) / datd) * 100
+
+                              console.log(tot, 'nan')
+
+                              return <span >{isNaN(tot) ? "+000.00" : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                }} className="" alt="Example Image" /> :
+                                <img src="d_arw.png"
+                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                  }} className="" alt="Example Image" />}</span></span>
+
+
+                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                            })()}</span></p>
+                        </div>
+
+                      </div>
+
+                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+
+                    </div>
+
+
+
+
 
                   </div>
                 </div>
 
-
-                : meals === 2 ?
-
+                : meals === 3 ?
                   <div className="changeone" style={{ marginTop: 100 }} >
                     <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
@@ -5236,78 +4623,13 @@ let Multi_venue = () => {
                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                             setMeals(1)
                           }} className="" alt="Example Image" />
-                          <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets completion time</p>
+                          <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Served meals</p>
                         </div>
 
-                        <div class="custom-inputonessfine  " >
+                        <div >
+                          <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
 
-                          <Select
-                            className="newoneonee"
-                            options={basicfine}
-                            value={selectedOptionsfine}
-                            onChange={handleChangefine}
-                            placeholder="Select options..."
-                            components={{
-                              Option: CustomOptionfinal,
-                              MultiValue: () => null, // Hides default tags
-                              ValueContainer: ({ children, ...props }) => {
-                                const selectedValues = props.getValue();
-                                return (
-                                  <components.ValueContainer {...props}>
-                                    {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                                  </components.ValueContainer>
-                                );
-                              },
-                            }}
-                            hideSelectedOptions={false} // Show all options even if selected
-                            styles={{
-                              control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
-                            }}
-                          />
-
-                        </div>
-
-                        <div className="d-flex justify-content-between gap-5">
-                          <div className="custom-inputoness d-flex justify-content-between" style={{
-                            width: 250,
-                            height: 45,
-                            border: '1px solid rgb(203 203 203)'
-                          }}>
-
-                            <div className="input-group"  >
-                              <input
-                                onChange={(e) => {
-                                  searchvalue(e.target.value)
-                                }}
-                                type="text"
-                                className="form-control"
-                                placeholder="Docket Search..."
-                                style={{
-                                  border: "none",
-                                  boxShadow: "none",
-                                  marginRight: "45px",
-                                }}
-                              />
-                              <span
-                                className="input-group-text"
-                                style={{
-                                  background: "none",
-                                  border: "none",
-                                  cursor: "pointer",
-                                  position: "absolute",
-                                  right: 10,
-                                }}
-                              >
-                                🔍
-                              </span>
-                            </div>
-
-
-                          </div>
-
-                          <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
-
-                          {showDiv && (
+                          {showDivs && (
                             <div
                               style={{
                                 width: 200,
@@ -5324,12 +4646,10 @@ let Multi_venue = () => {
                               <p style={{ color: '#707070' }}>Export as</p>
                               <hr />
                               <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                console.log(JSON.stringify(selectedOptions), 'dateRange')
-                                editexportpdf()
+                                mealexportpdf()
                               }}>PDF</p>
                             </div>
                           )}
-
 
                         </div>
                       </div>
@@ -5339,24 +4659,27 @@ let Multi_venue = () => {
 
                           <div >
                             <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{
-                              editall?.stats?.averageProcessTime || 0}</span></p>
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                              ggggrt()}</span></p>
                           </div>
                           <div >
                             <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{editallone?.stats?.averageProcessTime || 0}</span></p>
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+
+                              ggggrts()
+                            }</span></p>
                           </div>
                           <div >
                             <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
                               {(() => {
-                                let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
-                                let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
+                                let datd = ggggrt()
 
-                                // Calculate average
-                                let average = Math.round((numOne + numTwo) / 2);
+                                let datdtwo = ggggrts()
 
-                                return <span >{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }} >{average > 0 ? <img src="up_arw.png"
+                                let tot = ((datd - datdtwo) / datdtwo) * 100
+
+                                return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                                   style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
 
                                   }} className="" alt="Example Image" /> :
@@ -5366,6 +4689,7 @@ let Multi_venue = () => {
                                     }} className="" alt="Example Image" />}</span></span>
 
 
+                                console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
                               })()}</span></p>
                           </div>
 
@@ -5373,131 +4697,84 @@ let Multi_venue = () => {
 
                         <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
+                        <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
 
 
 
+                          {
+                            served?.map((dfgh, index) => {
+                              const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
 
+                              return (
+                                <>
+                                  <div className="d-flex  ">
 
-
-
-
-
-                        <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 300, overflowY: 'auto' }} >
-
-                          <div  >
-
-                            {
-                              editall?.orders?.map((dfgh, index) => {
-                                const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
-
-                                return (
-                                  <div key={index}>
-                                    <div className="d-flex gap-5">
-                                      {/* Left Column */}
-                                      <div style={{ width: "40%" }}>
-                                        <div className="d-flex  " style={{}}>
-                                          <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
-                                            {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.date + " " + "[" +
-                                              dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
-                                          </p>
-
-                                          <img
-                                            onClick={() => { openModal(dfgh, correspondingErv) }}
-                                            src="arrows.png"
-                                            style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
-                                            alt="up arrow"
-                                          />
-                                        </div>
-
-                                      </div>
-
-                                      {/* Center Column */}
-                                      {correspondingErv ? (
-                                        <div style={{ width: "40%", }}>
-                                          <div className="d-flex  " >
-                                            <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
-                                              {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
-                                                correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
-                                            </p>
-
-
-                                            <img
-                                              onClick={() => { openModal(dfgh, correspondingErv) }}
-                                              src="arrows.png"
-                                              style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
-                                              alt="up arrow"
-                                            />
-                                          </div>
-
-                                        </div>
-                                      ) : (
-                                        <div style={{ width: "33%" }}></div>
-                                      )}
-
-                                      {/* Right Column (Percentage Calculation) */}
-                                      <div
-                                        style={{
-                                          justifyContent: "end",
-                                          alignItems: "center",
-                                          display: "flex",
-                                          width: "10%",
-                                        }}
-                                      >
-                                        <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
-
-                                          <span>
-                                            {(() => {
-                                              const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
-                                              const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
-
-                                              let percentageChange = 0;
-                                              if (processTimeTwo > 0) {
-                                                percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
-                                              }
-
-                                              return (
-                                                <span>
-                                                  {percentageChange.toFixed(2) + "%"}
-                                                  <span
-                                                    style={{
-                                                      color: percentageChange > 0 ? "green" : "red",
-                                                      fontWeight: "700",
-                                                    }}
-                                                  >
-                                                    {percentageChange > 0 ? (
-                                                      <img
-                                                        src="up_arw.png"
-                                                        style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                        alt="up arrow"
-                                                      />
-                                                    ) : (
-                                                      <img
-                                                        src="d_arw.png"
-                                                        style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                        alt="down arrow"
-                                                      />
-                                                    )}
-                                                  </span>
-                                                </span>
-                                              );
-                                            })()}
-                                          </span>
-                                        </p>
-                                      </div>
+                                    <div style={{ width: '33%' }}>
+                                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
                                     </div>
 
-                                    <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+                                    {correspondingErv ? (
+                                      <div style={{ width: '33%', textAlign: 'center' }}>
+                                        <div >
+
+                                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <>
+                                        <div style={{ width: '33%' }} >
+                                        </div></>
+                                    )}
+
+                                    <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                                        ( Total )
+                                        <span>
+                                          {(() => {
+                                            const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                                            const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+
+
+                                            const tot = ((datd - datdtwo) / datdtwo) * 100;
+
+                                            return (
+                                              <span>
+                                                {tot.toFixed(2) + "%"}
+                                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                                  {tot > 0 ? (
+                                                    <img
+                                                      src="up_arw.png"
+                                                      style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                                      alt="up arrow"
+                                                    />
+                                                  ) : (
+                                                    <img
+                                                      src="d_arw.png"
+                                                      style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                                      alt="down arrow"
+                                                    />
+                                                  )}
+                                                </span>
+                                              </span>
+                                            );
+                                          })()}
+                                        </span>
+                                      </p>
+                                    </div>
+
                                   </div>
-                                );
-                              })
-                            }
-                          </div >
 
-
-
+                                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                                </>
+                              );
+                            })
+                          }
 
 
                         </div>
+
 
 
 
@@ -5508,14 +4785,11 @@ let Multi_venue = () => {
 
 
 
-
                     </div>
-
-
-
                   </div>
+                  : meals === 4 ?
 
-                  : meals === 3 ?
+
                     <div className="changeone" style={{ marginTop: 100 }} >
                       <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
@@ -5524,17 +4798,17 @@ let Multi_venue = () => {
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Served meals</p>
+                            <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Refunded meals</p>
                           </div>
 
                           <div >
-                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
+                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
 
-                            {showDivs && (
+                            {showDivss && (
                               <div
                                 style={{
                                   width: 200,
-                                  marginTop: '3px',
+                                  marginTop: '0px',
                                   padding: '10px',
                                   backgroundColor: '#f8f9fa',
                                   border: '1px solid #ccc',
@@ -5547,11 +4821,10 @@ let Multi_venue = () => {
                                 <p style={{ color: '#707070' }}>Export as</p>
                                 <hr />
                                 <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                  mealexportpdf()
+                                  refundexportpdf()
                                 }}>PDF</p>
                               </div>
                             )}
-
                           </div>
                         </div>
 
@@ -5561,33 +4834,34 @@ let Multi_venue = () => {
                             <div >
                               <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
                               <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                                ggggrt()}</span></p>
+                                ggggrtsg()}</span></p>
                             </div>
                             <div >
                               <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
                               <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
 
-                                ggggrts()
+                                ggggrtsgg()
                               }</span></p>
                             </div>
                             <div >
                               <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
                               <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
                                 {(() => {
-                                  let datd = ggggrt()
+                                  let datd = ggggrtsg()
 
-                                  let datdtwo = ggggrts()
+                                  let datdtwo = ggggrtsgg()
 
                                   let tot = ((datd - datdtwo) / datdtwo) * 100
 
-                                  return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                    style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                    }} className="" alt="Example Image" /> :
-                                    <img src="d_arw.png"
+                                  return <span >{isNaN(tot) ? 0 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{isNaN(tot) ?
+                                    '%' : tot > 0 ? <img src="up_arw.png"
                                       style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
 
-                                      }} className="" alt="Example Image" />}</span></span>
+                                      }} className="" alt="Example Image" /> :
+                                      <img src="d_arw.png"
+                                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                        }} className="" alt="Example Image" />}</span></span>
 
 
                                   console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
@@ -5603,8 +4877,8 @@ let Multi_venue = () => {
 
 
                             {
-                              served?.map((dfgh, index) => {
-                                const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+                              minperday?.map((dfgh, index) => {
+                                const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
 
                                 return (
                                   <>
@@ -5688,672 +4962,928 @@ let Multi_venue = () => {
 
                       </div>
                     </div>
-                    : meals === 4 ?
 
+                    :
 
-                      <div className="changeone" style={{ marginTop: 100 }} >
-                        <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                    <div className="changeone" style={{ marginTop: 100 }} >
+                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-                          <div className="d-flex justify-content-between" >
-                            <div style={{}} className="d-flex " >
-                              <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                                setMeals(1)
-                              }} className="" alt="Example Image" />
-                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Average completion - timeline</p>
-                            </div>
-
-                            <div >
-                              <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
-
-                              {showDivss && (
-                                <div
-                                  style={{
-                                    width: 200,
-                                    marginTop: '0px',
-                                    padding: '10px',
-                                    backgroundColor: '#f8f9fa',
-                                    border: '1px solid #ccc',
-                                    borderRadius: '4px',
-                                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                                    position: 'absolute',
-                                    right: '3%'
-                                  }}
-                                >
-                                  <p style={{ color: '#707070' }}>Export as</p>
-                                  <hr />
-                                  <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                    refundexportpdf()
-                                  }}>PDF</p>
-                                </div>
-                              )}
-                            </div>
+                        <div className="d-flex justify-content-between" >
+                          <div style={{}} className="d-flex " >
+                            <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                              setMeals(1)
+                            }} className="" alt="Example Image" />
+                            <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Meals received - timeline</p>
                           </div>
 
-                          <div style={{ marginTop: 50, padding: 20 }} >
+                          <div >
+                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
 
-
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                              {/* Left Scroll Button */}
-                              <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
-                              <p className="gggjgjjg"># of new dockets</p>
-                              {/* Scrollable Chart Container */}
-                              <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
-                                <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                  <Bar data={datafineone} options={optionshshs} />
-                                </div>
+                            {showDivsss && (
+                              <div
+                                style={{
+                                  width: 200,
+                                  marginTop: '0px',
+                                  padding: '10px',
+                                  backgroundColor: '#f8f9fa',
+                                  border: '1px solid #ccc',
+                                  borderRadius: '4px',
+                                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                                  position: 'absolute',
+                                  right: '3%'
+                                }}
+                              >
+                                <p style={{ color: '#707070' }}>Export as</p>
+                                <hr />
+                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                                  chartexportpdf()
+                                }}>PDF</p>
                               </div>
-
-                              {/* Right Scroll Button */}
-                              <button onClick={scrollRight} style={buttonStyle}>➡</button>
-
-
-                            </div>
-
-
-                            <div style={{ visibility: 'hidden' }}>
-                              <div ref={pdfRefredone}  >
-
-                                <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
-                                  {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
-
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-                                  const datefineda = new Date(dateRange[0]);
-
-                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric"
-                                  });
-
-                                  return (formattedDate)
-                                })()} to {(() => {
-                                  const datefineda = new Date(dateRange[1]);
-
-                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric"
-                                  });
-
-                                  return (formattedDate)
-                                })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-                                  const datefineda = new Date(dateRangetwo[0]);
-
-                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric"
-                                  });
-
-                                  return (formattedDate)
-                                })()} to {(() => {
-                                  const datefineda = new Date(dateRangetwo[1]);
-
-                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric"
-                                  });
-
-                                  return (formattedDate)
-                                })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-                                  const result = selectedOptions.map(item => item.value).join(",");
-
-                                  if (result === "" || result === undefined || result === null) {
-                                    return 'All'
-                                  } else {
-
-                                    return result
-
-                                  }
-
-
-                                })()}</p>
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-
-                                  const result = selectedhubOptions.map(item => item.label).join(",");
-
-                                  if (result === "" || result === undefined || result === null) {
-                                    return 'All'
-                                  } else {
-
-                                    return result
-
-                                  }
-
-
-                                })()} </p>
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-
-                                  const result = selectedCources.map(item => item.label).join(",");
-
-                                  if (result === "" || result === undefined || result === null) {
-                                    return 'All'
-                                  } else {
-
-                                    return result
-
-                                  }
-
-
-                                })()}</p>
-
-
-
-                                <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
-                                  <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                    <Bar data={datafineone} options={optionshshs} />
-                                  </div>
-                                </div>
-
-                              </div >
-                            </div>
-
-
-
+                            )}
                           </div>
-
-
-
-
-
                         </div>
-                      </div>
 
-                      :
+                        <div style={{ marginTop: 50, padding: 20 }} >
 
-                      <div className="changeone" style={{ marginTop: 100 }} >
-                        <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-                          <div className="d-flex justify-content-between" >
-                            <div style={{}} className="d-flex " >
-                              <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                                setMeals(1)
-                              }} className="" alt="Example Image" />
-                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets received - timeline</p>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            {/* Left Scroll Button */}
+                            <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
+
+                            <p className="gggjgjjg"># of new dockets</p>
+
+                            {/* Scrollable Chart Container */}
+                            <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                              <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                                <Bar data={datafine} options={optionshshs} />
+                              </div>
                             </div>
 
-                            <div >
-                              <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
-
-                              {showDivsss && (
-                                <div
-                                  style={{
-                                    width: 200,
-                                    marginTop: '0px',
-                                    padding: '10px',
-                                    backgroundColor: '#f8f9fa',
-                                    border: '1px solid #ccc',
-                                    borderRadius: '4px',
-                                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                                    position: 'absolute',
-                                    right: '3%'
-                                  }}
-                                >
-                                  <p style={{ color: '#707070' }}>Export as</p>
-                                  <hr />
-                                  <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                    chartexportpdf()
-                                  }}>PDF</p>
-                                </div>
-                              )}
-                            </div>
+                            {/* Right Scroll Button */}
+                            <button onClick={scrollRight} style={buttonStyle}>➡</button>
                           </div>
 
-                          <div style={{ marginTop: 50, padding: 20 }} >
+
+                          <div style={{ visibility: 'hidden' }}>
+                            <div ref={pdfRefred}  >
+
+                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Meals received - timeline
+                              </p>
+
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                                const datefineda = new Date(dateRange[0]);
+
+                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric"
+                                });
+
+                                return (formattedDate)
+                              })()} to {(() => {
+                                const datefineda = new Date(dateRange[1]);
+
+                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric"
+                                });
+
+                                return (formattedDate)
+                              })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                                const datefineda = new Date(dateRangetwo[0]);
+
+                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric"
+                                });
+
+                                return (formattedDate)
+                              })()} to {(() => {
+                                const datefineda = new Date(dateRangetwo[1]);
+
+                                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                  day: "2-digit",
+                                  month: "short",
+                                  year: "numeric"
+                                });
+
+                                return (formattedDate)
+                              })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+
+                                const result = selectedOptions.map(item => item.value).join(",");
+
+                                if (result === "" || result === undefined || result === null) {
+                                  return 'All'
+                                } else {
+
+                                  return result
+
+                                }
 
 
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                              {/* Left Scroll Button */}
-                              <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
-                              <p className="gggjgjjg">Average waiting time</p>
-                              {/* Scrollable Chart Container */}
+                              })()}</p>
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+
+                                const result = selectedhubOptions.map(item => item.label).join(",");
+
+                                if (result === "" || result === undefined || result === null) {
+                                  return 'All'
+                                } else {
+
+                                  return result
+
+                                }
+
+
+                              })()} </p>
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+
+                                const result = selectedCources.map(item => item.label).join(",");
+
+                                if (result === "" || result === undefined || result === null) {
+                                  return 'All'
+                                } else {
+
+                                  return result
+
+                                }
+
+
+                              })()}</p>
+
+
+
                               <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                 <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
                                   <Bar data={datafine} options={optionshshs} />
                                 </div>
                               </div>
 
-                              {/* Right Scroll Button */}
-                              <button onClick={scrollRight} style={buttonStyle}>➡</button>
-                            </div>
-
-
-                            <div style={{ visibility: 'hidden' }}>
-                              <div ref={pdfRefred}  >
-
-                                <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
-                                  {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
-
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-                                  const datefineda = new Date(dateRange[0]);
-
-                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric"
-                                  });
-
-                                  return (formattedDate)
-                                })()} to {(() => {
-                                  const datefineda = new Date(dateRange[1]);
-
-                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric"
-                                  });
-
-                                  return (formattedDate)
-                                })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-                                  const datefineda = new Date(dateRangetwo[0]);
-
-                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric"
-                                  });
-
-                                  return (formattedDate)
-                                })()} to {(() => {
-                                  const datefineda = new Date(dateRangetwo[1]);
-
-                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                                    day: "2-digit",
-                                    month: "short",
-                                    year: "numeric"
-                                  });
-
-                                  return (formattedDate)
-                                })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-                                  const result = selectedOptions.map(item => item.value).join(",");
-
-                                  if (result === "" || result === undefined || result === null) {
-                                    return 'All'
-                                  } else {
-
-                                    return result
-
-                                  }
-
-
-                                })()}</p>
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-
-                                  const result = selectedhubOptions.map(item => item.label).join(",");
-
-                                  if (result === "" || result === undefined || result === null) {
-                                    return 'All'
-                                  } else {
-
-                                    return result
-
-                                  }
-
-
-                                })()} </p>
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-
-                                  const result = selectedCources.map(item => item.label).join(",");
-
-                                  if (result === "" || result === undefined || result === null) {
-                                    return 'All'
-                                  } else {
-
-                                    return result
-
-                                  }
-
-
-                                })()}</p>
-
-
-
-                                <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
-                                  <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                    <Bar data={datafine} options={optionshshs} />
-                                  </div>
-                                </div>
-
-                              </div >
-                            </div>
-
-
-
-
-
-
-                            {/* <div style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px' }}>
-                    <div style={{ width: '1500px', height: '500px' }}>  
-                      <Bar data={datafine} options={optionshshs} />
-                    </div>
-                  </div> */}
-
+                            </div >
                           </div>
 
 
 
 
 
+
+                          {/* <div style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px' }}>
+                            <div style={{ width: '1500px', height: '500px' }}>  
+                              <Bar data={datafine} options={optionshshs} />
+                            </div>
+                          </div> */}
+
                         </div>
+
+
+
+
+
                       </div>
+                    </div>
 
 
+
+          }
+
+
+
+        </div>
+
+      </div>
+
+
+      <div style={{ visibility: 'hidden' }}>
+        <div ref={pdfRef}  >
+
+          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Edits</p>
+
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+            const datefineda = new Date(dateRange[0]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            });
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRange[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            });
+
+            return (formattedDate)
+          })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+            const datefineda = new Date(dateRangetwo[0]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            });
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRangetwo[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            });
+
+            return (formattedDate)
+          })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+
+            const result = selectedOptions.map(item => item.value).join(",");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
 
             }
 
 
+          })()}</p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+
+            const result = selectedhubOptions.map(item => item.label).join(",");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()} </p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+
+            const result = selectedCources.map(item => item.label).join(",");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()}</p>
+
+
+          <div style={{ marginTop: 20, padding: 10 }} >
+            <div className="d-flex justify-content-between" >
+
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                  editall?.edited?.length
+                  + editall?.deleted?.length
+                  + editall?.moved?.length}</span></p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+
+                  editallone?.edited?.length
+                  + editallone?.deleted?.length
+                  + editallone?.moved?.length
+                }</span></p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                  {(() => {
+                    let datd = editallone?.edited?.length
+                      + editallone?.deleted?.length
+                      + editallone?.moved?.length
+
+                    let datdtwo = editall?.edited?.length
+                      + editall?.deleted?.length
+                      + editall?.moved?.length
+
+                    let tot = ((datdtwo - datd) / datd) * 100
+
+                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                      }} className="" alt="Example Image" /> :
+                      <img src="d_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" />}</span></span>
+
+
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                  })()}</span></p>
+              </div>
+
+            </div>
+
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black' }} />
+
+            <div className="d-flex justify-content-between" >
+
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.moved?.length}</p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}  </p>
+              </div>
+              <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                  {(() => {
+                    let datd = editallone?.moved?.length
+
+                    let datdtwo = editall?.moved?.length
+
+                    let tot = ((datdtwo - datd) / datd) * 100
+
+                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                      }} className="" alt="Example Image" /> :
+                      <img src="d_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" />}</span></span>
+
+
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                  })()}</span></p>
+              </div>
+
+            </div>
+
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+            <div className="d-flex justify-content-between" >
+
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.edited?.length}</p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}  </p>
+              </div>
+              <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                  {(() => {
+                    let datd = editallone?.edited?.length
+
+                    let datdtwo = editall?.edited?.length
+
+                    let tot = ((datdtwo - datd) / datd) * 100
+
+                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                      }} className="" alt="Example Image" /> :
+                      <img src="d_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" />}</span></span>
+
+
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                  })()}</span></p>
+              </div>
+
+            </div>
+
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+            <div className="d-flex justify-content-between" >
+
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.deleted?.length}</p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.deleted?.length}  </p>
+              </div>
+              <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                  {(() => {
+                    let datd = editallone?.deleted?.length
+
+                    let datdtwo = editall?.deleted?.length
+
+                    let tot = ((datdtwo - datd) / datd) * 100
+
+                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                      }} className="" alt="Example Image" /> :
+                      <img src="d_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" />}</span></span>
+
+
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                  })()}</span></p>
+              </div>
+
+            </div>
+
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+
+            <div className="d-flex justify-content-between" >
+
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.tableMoved?.length}</p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.tableMoved?.length}  </p>
+              </div>
+              <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                  {(() => {
+                    let datd = editallone?.tableMoved?.length
+
+                    let datdtwo = editall?.tableMoved?.length
+
+                    let tot = ((datdtwo - datd) / datd) * 100
+
+                    console.log(tot, 'nan')
+
+                    return <span >{isNaN(tot) ? "+000.00" : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                      }} className="" alt="Example Image" /> :
+                      <img src="d_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" />}</span></span>
+
+
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                  })()}</span></p>
+              </div>
+
+            </div>
+
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
 
           </div>
-
-
-
-
-
-
-
-
-
-
-          <div style={{ visibility: 'hidden' }}>
-            <div ref={pdfRef}  >
-
-              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets Completion Time - From {selectedOptionsfine[0]?.label}to
-                {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
-
-              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-                const datefineda = new Date(dateRange[0]);
-
-                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric"
-                });
-
-                return (formattedDate)
-              })()} to {(() => {
-                const datefineda = new Date(dateRange[1]);
-
-                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric"
-                });
-
-                return (formattedDate)
-              })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-                const datefineda = new Date(dateRangetwo[0]);
-
-                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric"
-                });
-
-                return (formattedDate)
-              })()} to {(() => {
-                const datefineda = new Date(dateRangetwo[1]);
-
-                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric"
-                });
-
-                return (formattedDate)
-              })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-                const result = selectedOptions.map(item => item.value).join(",");
-
-                if (result === "" || result === undefined || result === null) {
-                  return 'All'
-                } else {
-
-                  return result
-
-                }
-
-
-              })()}</p>
-              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-
-                const result = selectedhubOptions.map(item => item.label).join(",");
-
-                if (result === "" || result === undefined || result === null) {
-                  return 'All'
-                } else {
-
-                  return result
-
-                }
-
-
-              })()} </p>
-              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-
-                const result = selectedCources.map(item => item.label).join(",");
-
-                if (result === "" || result === undefined || result === null) {
-                  return 'All'
-                } else {
-
-                  return result
-
-                }
-
-
-              })()}</p>
-
-
-              <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
-              {
-                editall?.orders?.map((dfgh, index) => {
-                  const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
-
-                  return (
-                    <div key={index}   >
-                      <div className="d-flex gap-5" >
-                        {/* Left Column */}
-                        <div style={{ width: "40%" }}>
-                          <div className="d-flex  " style={{}}>
-                            <p style={{ paddingTop: 15 }}>
-                              <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.processtime + ". " || "N/A"} {dfgh?.date + " " + "[" +
-                                dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
-                            </p>
-
-                          </div>
-
-                        </div>
-
-                        {/* Center Column */}
-                        {correspondingErv ? (
-                          <div style={{ width: "40%", }}>
-                            <div className="d-flex  " >
-                              <p style={{ paddingTop: 15 }}>
-                                <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
-                                  correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
-                              </p>
-
-
-                            </div>
-
-                          </div>
-                        ) : (
-                          <div style={{ width: "33%" }}></div>
-                        )}
-
-                        {/* Right Column (Percentage Calculation) */}
-                        <div
-                          style={{
-                            justifyContent: "end",
-                            alignItems: "center",
-                            display: "flex",
-                            width: "10%",
-                          }}
-                        >
-                          <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
-
-                            <span>
-                              {(() => {
-                                const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
-                                const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
-
-                                let percentageChange = 0;
-                                if (processTimeTwo > 0) {
-                                  percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
-                                }
-
-                                return (
-                                  <span>
-                                    {percentageChange.toFixed(2) + "%"}
-                                    <span
-                                      style={{
-                                        color: percentageChange > 0 ? "green" : "red",
-                                        fontWeight: "700",
-                                      }}
-                                    >
-                                      {percentageChange > 0 ? (
-                                        <img
-                                          src="up_arw.png"
-                                          style={{ width: 16, height: 16, cursor: "pointer" }}
-                                          alt="up arrow"
-                                        />
-                                      ) : (
-                                        <img
-                                          src="d_arw.png"
-                                          style={{ width: 16, height: 16, cursor: "pointer" }}
-                                          alt="down arrow"
-                                        />
-                                      )}
-                                    </span>
-                                  </span>
-                                );
-                              })()}
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-
-                      <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
-                    </div>
-                  );
-                })
-              }
-            </div >
-          </div>
-
-
-
-
-
-
-
-        </div>
+        </div >
       </div>
 
-
-
-      <Modal
-        isOpen={modalIsOpen}
-        onAfterOpen={afterOpenModal}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
-        <div style={{}} >
-          <div className="row" >
-            <div className="col-5" style={{ overflow: 'hidden' }} >
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Date: {cval1?.date}</p>
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time created: {(() => {
-              })()} {cval1?.starttime.replace('@', '')}</p>
-
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time served: {(() => {
-                const datass = cval1?.order?.STAMP;
-
-                if (!datass) {
-                  return
-                }
-                // Extract the "S" event using regex
-                const match = datass.match(/\b(\d{4})S\d\b/);
-
-                if (match) {
-                  const time = match[1]; // Extract the 4-digit time (e.g., "1500")
-                  const formattedTime = `${time.slice(0, 2)}:${time.slice(2)}`; // Convert to HH:mm
-                  return (formattedTime)
-                  // console.log(formattedTime); // Output: "15:00"
-                } else {
-                  // console.log("No 'S' event found");
-                }
-
-
-              })()}</p>
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Completion time: {timeDifference(cval1?.starttime.replace('@', ''), cval1?.order?.STAMP)}</p>
-
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Docket #: {cval1?.order?.DOCKETID}</p>
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Table #: {cval1?.order?.TABLE}</p>
-
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} ># of courses: {cval1?.order?.COURSES}</p>
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} ># of meals: {cval1?.order?.ITEMS?.length}</p>
-
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Waiter Name: {cval1?.staff}</p>
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Header note: {cval1?.order?.NOTE}</p>
-
-            </div>
-            <div className="col-1"  >
-              <div class="vertical-line"></div>
-            </div>
-            <div className="col-6 gggg" >
-              <div style={{ height: 300 }}>
-
-                {/* <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>Course 1 : {cval1?.order?.COURSES}</p>
-                <p style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}>Time: R:  . | P: . | H: .</p>
-
-                <div style={{ marginTop: 10 }}  >
-                  {
-                    cval1?.order?.ITEMS.map((kai, index) => {
-                      return (
-                        <div style={{ marginBottom: 15 }}>
-                          <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>Item {index + 1}: {kai?.ITEM}</p>
-                          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>Note: {kai?.NOTE}</p>
-                          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>Edited: {
-                            kai?.STATUS === "2" || kai?.STATUS === "12" || kai?.STATUS === "22" || kai?.STATUS === "32" ? 'Yes' : "No"
-                          } | Moved: {
-                              kai?.STATUS === "3" || kai?.STATUS === "13" || kai?.STATUS === "23" || kai?.STATUS === "33" ? 'Yes' : "No"
-                            } | Deleted:  {
-                              kai?.STATUS === "4" || kai?.STATUS === "24" ? 'Yes' : "No"
-                            }</p>
-                        </div>
-
-                      )
-                    })
-                  }
-                </div>
- */}
-
-                <OrderDisplay orders={cval2 || {}} />
-
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </Modal>
-
+       <div style={{ visibility: 'hidden' }}>
+             <div ref={pdfRefss}  >
+     
+               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Served meals</p>
+     
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                 const datefineda = new Date(dateRange[0]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} to {(() => {
+                 const datefineda = new Date(dateRange[1]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                 const datefineda = new Date(dateRangetwo[0]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} to {(() => {
+                 const datefineda = new Date(dateRangetwo[1]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+     
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+     
+                 const result = selectedOptions.map(item => item.value).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()}</p>
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+     
+                 const result = selectedhubOptions.map(item => item.label).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()} </p>
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+     
+                 const result = selectedCources.map(item => item.label).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()}</p>
+     
+     
+               <div style={{ marginTop: 20, padding: 10 }} >
+     
+                 <div className="d-flex justify-content-between" >
+     
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+                       ggggrt()} </p>
+                   </div>
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+     
+                       ggggrts()
+                     } </p>
+                   </div>
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
+                       ( Total ){" "}
+                       {(() => {
+                         let datd = ggggrt();
+                         let datdtwo = ggggrts();
+                         let tot = ((datd - datdtwo) / datdtwo) * 100;
+     
+                         return (
+                           <>
+                             {tot.toFixed(2) + "%"}{" "}
+                             <img
+                               src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                               style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
+                               alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+                             />
+                           </>
+                         );
+                       })()}
+                     </p>
+     
+     
+                   </div>
+     
+                 </div>
+     
+     
+                 {
+                   served?.map((dfgh, index) => {
+                     const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+     
+                     return (
+                       <>
+                         <div className="d-flex  mt-3">
+     
+                           <div style={{ width: '33%' }}>
+                             <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{dfgh?.count}</p>
+                           </div>
+     
+                           {correspondingErv ? (
+                             <div style={{ width: '33%', textAlign: 'center' }}>
+                               <div >
+     
+                                 <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                 <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{correspondingErv?.count}</p>
+                               </div>
+                             </div>
+                           ) : (
+                             <>
+                               <div style={{ width: '33%' }} >
+                               </div></>
+                           )}
+     
+                           <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
+                               ( Total ){" "}
+                               {(() => {
+                                 const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                                 const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+     
+                                 const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0; // Prevent division by zero
+     
+                                 return (
+                                   <>
+                                     {tot.toFixed(2) + "%"}{" "}
+                                     <img
+                                       src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                                       style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
+                                       alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+                                     />
+                                   </>
+                                 );
+                               })()}
+                             </p>
+     
+                           </div>
+     
+                         </div>
+     
+                         <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
+                       </>
+                     );
+                   })
+                 }
+     
+     
+               </div>
+             </div >
+           </div>
+     
+     
+           <div style={{ visibility: 'hidden' }}>
+             <div ref={pdfRefsss}  >
+     
+               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Refunded meals</p>
+     
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                 const datefineda = new Date(dateRange[0]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} to {(() => {
+                 const datefineda = new Date(dateRange[1]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                 const datefineda = new Date(dateRangetwo[0]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} to {(() => {
+                 const datefineda = new Date(dateRangetwo[1]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+     
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+     
+                 const result = selectedOptions.map(item => item.value).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()}</p>
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+     
+                 const result = selectedhubOptions.map(item => item.label).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()} </p>
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+     
+                 const result = selectedCources.map(item => item.label).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()}</p>
+     
+     
+               <div style={{ marginTop: 20, padding: 10 }} >
+     
+                 <div className="d-flex justify-content-between" >
+     
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                       ggggrtsg()}</span></p>
+                   </div>
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+     
+                       ggggrtsgg()
+                     }</span></p>
+                   </div>
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                       {(() => {
+                         let datd = ggggrtsg()
+     
+                         let datdtwo = ggggrtsgg()
+     
+                         let tot = ((datd - datdtwo) / datdtwo) * 100
+     
+                         return <span >{isNaN(tot) ? 0 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{isNaN(tot) ?
+                           '%' : tot > 0 ? <img src="up_arw.png"
+                             style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+     
+                             }} className="" alt="Example Image" /> :
+                             <img src="d_arw.png"
+                               style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+     
+                               }} className="" alt="Example Image" />}</span></span>
+     
+     
+                         console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                       })()}</span></p>
+                   </div>
+     
+                 </div>
+     
+                 <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+     
+                 <div className="scroll" id="scrrrrol"  >
+     
+     
+     
+                   {
+                     minperday?.map((dfgh, index) => {
+      
+                       const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
+     
+                       return (
+                         <>
+                           <div className="d-flex  ">
+     
+                             <div style={{ width: '33%' }}>
+                               <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                               <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                             </div>
+     
+                             {correspondingErv ? (
+                               <div style={{ width: '33%', textAlign: 'center' }}>
+                                 <div >
+     
+                                   <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                   <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                                 </div>
+                               </div>
+                             ) : (
+                               <>
+                                 <div style={{ width: '33%' }} >
+                                 </div></>
+                             )}
+     
+                             <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                               <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                                 ( Total )
+                                 <span>
+                                   {(() => {
+                                     const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                                     const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+     
+     
+                                     const tot = ((datd - datdtwo) / datdtwo) * 100;
+     
+                                     return (
+                                       <span>
+                                         {tot.toFixed(2) + "%"}
+                                         <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                           {tot > 0 ? (
+                                             <img
+                                               src="up_arw.png"
+                                               style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                               alt="up arrow"
+                                             />
+                                           ) : (
+                                             <img
+                                               src="d_arw.png"
+                                               style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                               alt="down arrow"
+                                             />
+                                           )}
+                                         </span>
+                                       </span>
+                                     );
+                                   })()}
+                                 </span>
+                               </p>
+                             </div>
+     
+                           </div>
+     
+                           <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
+                         </>
+                       );
+                     })
+                   }
+     
+     
+                 </div>
+     
+     
+     
+     
+               </div>
+             </div >
+           </div>
 
     </div>
   );
@@ -6369,6 +5899,6 @@ const buttonStyle = {
   borderRadius: '5px',
 };
 
-export default Multi_venue;
+export default Mealsmulti;
 
 

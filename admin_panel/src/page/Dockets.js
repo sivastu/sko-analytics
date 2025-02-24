@@ -118,50 +118,50 @@ let Dockets = () => {
   let [cval1, setcval1] = useState()
   let [cval2, setcval2] = useState()
 
-  
-  
-    const [menuIsOpen, setMenuIsOpen] = useState(false);
-  
-    const [menuIsOpenone, setMenuIsOpenone] = useState(false);
-    const [menuIsOpentwo, setMenuIsOpentwo] = useState(false);
-    const [menuIsOpenthree, setMenuIsOpenthree] = useState(false);
-    const [menuIsOpenfour, setMenuIsOpenfour] = useState(false);
-  
-  
-    const selectRef = useRef(null);
-  
-    const selectRefone = useRef(null);
-    const selectReftwo = useRef(null);
-    const selectRefthree = useRef(null);
-    const selectReffour = useRef(null);
-  
-    // Close menu when clicking outside
-    useEffect(() => {
-      const handleClickOutside = (event) => {
-        if (selectRef.current && !selectRef.current.contains(event.target)) {
-          setMenuIsOpen(false);
-        }
-  
-        if (selectRefone.current && !selectRefone.current.contains(event.target)) {
-          setMenuIsOpenone(false);
-        }
-        if (selectReftwo.current && !selectReftwo.current.contains(event.target)) {
-          setMenuIsOpentwo(false);
-        }
-        if (selectRefthree.current && !selectRefthree.current.contains(event.target)) {
-          setMenuIsOpenthree(false);
-        }
-        if (selectReffour.current && !selectReffour.current.contains(event.target)) {
-          setMenuIsOpenfour(false);
-        }
-      };
-  
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, []);
-  
+
+
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+
+  const [menuIsOpenone, setMenuIsOpenone] = useState(false);
+  const [menuIsOpentwo, setMenuIsOpentwo] = useState(false);
+  const [menuIsOpenthree, setMenuIsOpenthree] = useState(false);
+  const [menuIsOpenfour, setMenuIsOpenfour] = useState(false);
+
+
+  const selectRef = useRef(null);
+
+  const selectRefone = useRef(null);
+  const selectReftwo = useRef(null);
+  const selectRefthree = useRef(null);
+  const selectReffour = useRef(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setMenuIsOpen(false);
+      }
+
+      if (selectRefone.current && !selectRefone.current.contains(event.target)) {
+        setMenuIsOpenone(false);
+      }
+      if (selectReftwo.current && !selectReftwo.current.contains(event.target)) {
+        setMenuIsOpentwo(false);
+      }
+      if (selectRefthree.current && !selectRefthree.current.contains(event.target)) {
+        setMenuIsOpenthree(false);
+      }
+      if (selectReffour.current && !selectReffour.current.contains(event.target)) {
+        setMenuIsOpenfour(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
 
   function findFirstOccurrences(stampData) {
@@ -439,6 +439,39 @@ let Dockets = () => {
   }
   let [fulldatafull, setFulldatafull] = useState()
 
+  function extractUniqueNotes(datad, predefinedValues) {
+
+    console.log(predefinedValues, 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
+    let uniqueNotes = new Set();
+
+    for (let group in datad) {
+
+
+      for (let location in datad[group]) {
+
+        if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
+
+        for (let section in datad[group][location]) {
+          for (let date in datad[group][location][section]) {
+            datad[group][location][section][date].forEach(order => {
+              order.ITEMS.forEach(item => {
+                if (item.NOTE) {
+                  // Extract the word after (C<number>)
+                  const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                  if (match && match[1] && match[1] !== "undefined") {
+                    uniqueNotes.add(match[1]); // Add only valid words
+                  }
+                }
+              });
+            });
+          }
+        }
+      }
+    }
+
+    // Convert Set to desired format
+    return [...uniqueNotes].map(note => ({ value: note, label: note }));
+  }
 
 
   let getone = () => {
@@ -477,40 +510,8 @@ let Dockets = () => {
 
           const cleanedData = removeTrainingNotes(eventss);
 
-          console.log("Events between dates:", cleanedData);
 
-          function extractUniqueNotes(datad) {
-            let uniqueNotes = new Set();
 
-            for (let group in datad) {
-              for (let location in datad[group]) {
-                for (let section in datad[group][location]) {
-                  for (let date in datad[group][location][section]) {
-                    datad[group][location][section][date].forEach(order => {
-                      order.ITEMS.forEach(item => {
-                        if (item.NOTE) {
-                          // Extract the word after (C<number>
-                          const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                          if (match && match[1] && match[1] !== "undefined") {
-                            uniqueNotes.add(match[1]); // Add only valid words
-                          }
-
-                        }
-                      });
-                    });
-                  }
-                }
-              }
-            }
-
-            // Convert Set to desired format
-            return [...uniqueNotes].map(note => ({ value: note, label: note }));
-          }
-
-          let uuuk = extractUniqueNotes(cleanedData)
-          uuuk.unshift({ label: "All Courses", value: "All" });
-
-          setFulldatafull(uuuk)
 
 
 
@@ -584,9 +585,6 @@ let Dockets = () => {
           // }));
 
 
-
-
-          console.log("options:", optionsone);
           // console.log("optionss:", optionsstwo);
 
           let getdata = sessionStorage.getItem('data')
@@ -600,12 +598,27 @@ let Dockets = () => {
           let realven = []
 
           if (hasAllValue === true) {
-            realven.push(optionsone[1])
+            realven.push(...optionsone);
             setBasic(optionsone)
+
+
+            let uuuk = extractUniqueNotes(cleanedData, optionsone)
+            uuuk.unshift({ label: "All Courses", value: "All" });
+
+            setFulldatafull(uuuk)
+
           } else {
-            realven.push(parsedatajson.venue[0])
+            realven.push(parsedatajson.venue)
             setBasic(parsedatajson.venue)
+
+
+            let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
+            uuuk.unshift({ label: "All Courses", value: "All" });
+
+            setFulldatafull(uuuk)
           }
+
+
 
 
 
@@ -693,7 +706,7 @@ let Dockets = () => {
           setSelectedOptions(realven)
           // alldat = filteredDataonee
           const yesterday = [getFormattedDate(1), getFormattedDate(1)];
-          const eightDaysBefore = [getFormattedDate(8), getFormattedDate(1)];
+          const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
           setDateRangetwo(eightDaysBefore)
           setDateRange(yesterday)
           filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -1317,7 +1330,7 @@ let Dockets = () => {
             type="checkbox" id="switch3" />
           <label class="switch-label" for="switch3"></label>
         </div>}
-        <span style={{ flexGrow: 1,marginTop:6 }}>{data.label}</span>
+        <span style={{ flexGrow: 1, marginTop: 6 }}>{data.label}</span>
 
       </div>
     );
@@ -1338,7 +1351,7 @@ let Dockets = () => {
           cursor: 'pointer',
         }}
       >
-        <span style={{ flexGrow: 1, marginTop:6 }}>{data.label}</span>
+        <span style={{ flexGrow: 1, marginTop: 6 }}>{data.label}</span>
       </div>
     );
   };
@@ -1349,7 +1362,11 @@ let Dockets = () => {
   const CustomPlaceholder = ({ children, getValue }) => {
     const selected = getValue();
     if (selected.length) {
-      const allLabels = selected.map(option => option.label).join(", ");
+      const allLabels = selected
+      .filter(option => option.label && !option.label.startsWith("All ")) // Ensure label exists
+      .map(option => option.label)
+      .join(", ");
+
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
@@ -1358,7 +1375,7 @@ const displayText = allLabels.slice(0, 20) + "..."
       return <span title={allLabels}>{displayText}</span>;
     }
     return null;
-  }; 
+  };
 
   const [selectedOptions, setSelectedOptions] = useState([]);
 
@@ -1375,6 +1392,12 @@ const displayText = allLabels.slice(0, 20) + "..."
     setOldven(selected)
 
     if (hasAllValue === false && hasAllValueold === true) {
+
+      let uuuk = extractUniqueNotes(basicall, [])
+      uuuk.unshift({ label: "All Courses", value: "All" });
+
+      setFulldatafull(uuuk)
+
       setSelectedOptions([]);
 
       filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -1411,6 +1434,12 @@ const displayText = allLabels.slice(0, 20) + "..."
 
 
     if (hasAllValue === true) {
+
+      let uuuk = extractUniqueNotes(basicall, basic)
+      uuuk.unshift({ label: "All Courses", value: "All" });
+
+      setFulldatafull(uuuk)
+
 
       setSelectedOptions(basic || []);
 
@@ -1484,7 +1513,10 @@ const displayText = allLabels.slice(0, 20) + "..."
 
       //   return
       // }
+      let uuuk = extractUniqueNotes(basicall, selected)
+      uuuk.unshift({ label: "All Courses", value: "All" });
 
+      setFulldatafull(uuuk)
       setSelectedOptions(selected || []);
 
       filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -3464,7 +3496,7 @@ const displayText = allLabels.slice(0, 20) + "..."
   }
 
 
-  let callfordataonesearch = (one , bitedata) => {
+  let callfordataonesearch = (one, bitedata) => {
 
 
     function processData(data) {
@@ -3506,7 +3538,7 @@ const displayText = allLabels.slice(0, 20) + "..."
 
 
             } else {
-              
+
             }
 
 
@@ -3552,11 +3584,11 @@ const displayText = allLabels.slice(0, 20) + "..."
     console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
     setEditall(newalldata)
 
-   
+
 
   }
 
-  let callfordataonetwosearch = (two , bitedata) => {
+  let callfordataonetwosearch = (two, bitedata) => {
 
 
     function processData(data) {
@@ -3583,10 +3615,10 @@ const displayText = allLabels.slice(0, 20) + "..."
             const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
 
-            console.log(processTime , 'processTimeprocessTimeprocessTimeprocessTime')
+            console.log(processTime, 'processTimeprocessTimeprocessTimeprocessTime')
 
 
-            if (processTime === parseInt(bitedata) ) {
+            if (processTime === parseInt(bitedata)) {
               processTimes.push(processTime);
 
               result.push({
@@ -3598,7 +3630,7 @@ const displayText = allLabels.slice(0, 20) + "..."
                 order: order
               });
             } else {
-             
+
             }
 
 
@@ -3818,18 +3850,18 @@ const displayText = allLabels.slice(0, 20) + "..."
   }
 
 
-  let searchvalue = (e) =>{
-    console.log(editall ,'searchvaluesearchvaluesearchvalue')
- 
-     if( e === undefined || e === '' || e === null ){
+  let searchvalue = (e) => {
+    console.log(editall, 'searchvaluesearchvaluesearchvalue')
+
+    if (e === undefined || e === '' || e === null) {
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
       return
-     }else{
-      callfordataonesearch(filterdataone , e)
-      callfordataonetwosearch(filterdatatwo , e)
-     }
+    } else {
+      callfordataonesearch(filterdataone, e)
+      callfordataonetwosearch(filterdatatwo, e)
+    }
 
   }
 
@@ -4026,7 +4058,7 @@ const displayText = allLabels.slice(0, 20) + "..."
       x: 10,
       y: 20,
       width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
+      windowWidth: 1600, // Ensure full width capture
       autoPaging: "text",
       html2canvas: {
         useCORS: true, // Handle cross-origin images
@@ -4109,7 +4141,7 @@ const displayText = allLabels.slice(0, 20) + "..."
       x: 10,
       y: 20,
       width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
+      windowWidth: 1600, // Ensure full width capture
       autoPaging: "text",
       html2canvas: {
         useCORS: true, // Handle cross-origin images
@@ -4134,16 +4166,16 @@ const displayText = allLabels.slice(0, 20) + "..."
           <div className="row justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', height: 52 }}>
 
             <div style={{ padding: 13 }} className="d-flex col"
-             onClick={() => {
-              navigate(-1)
-            }}  >
-            <img src="arrow.png" style={{ width: 20, height: 20 ,marginTop:3}} alt="Example Image" />
+              onClick={() => {
+                navigate(-1)
+              }}  >
+              <img src="arrow.png" style={{ width: 20, height: 20, marginTop: 3 }} alt="Example Image" />
               <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >DOCKETS</p>
             </div>
             <div style={{ padding: 13 }} className="d-flex text-center justify-content-center col" >
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop:-3 }} >
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop: -3 }} >
                 {usedname}
-                </p>
+              </p>
             </div>
 
             <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
@@ -4155,270 +4187,265 @@ const displayText = allLabels.slice(0, 20) + "..."
         </div>
       </div>
       <div >
-      <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr">
+        <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr">
 
-<div style={{}} className="dddd"  >
+          <div style={{}} className="dddd"  >
 
-  <div className="d-flex justify-content-between  pt-4 gap-3" >
+            <div className="d-flex justify-content-between  pt-4 gap-3" >
 
-    <div style={{ width: '20%' }}>
-      <p onClick={() => {
+              <div style={{ width: '20%' }}>
+                <p onClick={() => {
 
-        checkkkk()
+                  checkkkk()
 
-      }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
+                }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
 
-      <div style={{ width: '100%' }} >
-        <DatePicker
-          selectsRange
-          startDate={startDate}
-          style={{ fontSize: 15,color:'#1A1A1B' }}
-          endDate={endDate}
-          onChange={(update) => {
-            setDateRange(update)
+                <div style={{ width: '100%' }} >
+                  <DatePicker
+                    selectsRange
+                    startDate={startDate}
+                    endDate={endDate}
+                    onChange={(update) => {
+                      setDateRange(update)
 
-            if (update[1] === null || update[1] === "null") {
+                      if (update[1] === null || update[1] === "null") {
 
-            } else {
-              filterDataByDate(update, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-
-            }
-          }} // Update both startDate and EndDate 
-          placeholderText="Select a date range"
-          className="custom-input"
-          calendarClassName="custom-calendar"
-          dateFormat="d MMM yyyy"
-          customInput={
-            <div className="custom-display-input"   style={{ fontSize: 15,color:'#1A1A1B' }}>
-              {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
-              <FaCaretDown className="calendar-icon" />
-            </div>
-          }
-        />
-      </div>
-      <div className="mt-3" >
-        <div className="custom-inputone d-flex justify-content-between">
-          <input
-            className='inputttt'
-            type="time"
-            value={onetime}
-              style={{ fontSize: 15,color:'#1A1A1B' }}
-            onChange={(e) => {
-              console.log(e.target.value, 'eeee')
-              setOnetime(e.target.value)
-              if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                return
-              }
-
-              filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-            }}
-          />
-          <input
-            className='inputttt'
-            type="time"
-            style={{ fontSize: 15,color:'#1A1A1B' }}
-            value={twotime}
-            onChange={(e) => {
-              setTwotime(e.target.value)
-              if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                return
-              }
-              // tiemstampp(2, e.target.value)
-
-              filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-            }}
-          />
-        </div>
-      </div>
+                      } else {
+                        filterDataByDate(update, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
 
-    </div>
-
-    <div style={{ width: '20%' }}>
-      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
-      <div style={{ width: '100%' }}>
-        <DatePicker
-          selectsRange
-          startDate={startDatetwo}
-          endDate={endDatetwo}
-          onChange={(update) => {
-            setDateRangetwo(update)
-
-            if (update[1] === null || update[1] === "null") {
-
-            } else {
-              // updates(2, update)
-
-              filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-            }
-
-
-          }} // Update both startDate and EndDate 
-          placeholderText="Select a date range"
-          className="custom-input"
-          calendarClassName="custom-calendar"
-          dateFormat="d MMM yyyy"
-          customInput={
-                    <div className="custom-display-input" style={{fontSize:15,color:'#1A1A1B'}} >
-              {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
-              <FaCaretDown className="calendar-icon" />
-            </div>
-          }
-        />
-      </div>
-      <div className="mt-3" >
-        <div className="custom-inputone d-flex justify-content-between">
-          <input
-            className='inputttt'
-            type="time"
-            value={threetime}
-            style={{fontSize:15,color:'#1A1A1B'}}
-            onChange={(e) => {
-              setThreetime(e.target.value)
-              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                return
-              }
-              filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-            }}
-          />
-          <input
-            className='inputttt'
-            type="time"
-            style={{fontSize:15,color:'#1A1A1B'}}
-            value={fourtime}
-            onChange={(e) => {
-              setFourtime(e.target.value)
-              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                return
-              }
-              filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-            }}
-          />
-        </div>
-      </div>
-
-
-
-    </div>
-
-
-    <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen venue & hub</p>
-              <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
-                width: '100%', height: 45
-              }}>
-                <div class="switch-container">
-                  <input type="checkbox" id="switch1" style={{fontSize:15}}  checked={venueradio} onChange={(e) => {
-                    setVenueradio(e.target.checked)
-                    if (e.target.checked === false) {
-                      setSelectedOptions([])
-                    } else {
+                      }
+                    }} // Update both startDate and EndDate 
+                    placeholderText="Select a date range"
+                    className="custom-input"
+                    calendarClassName="custom-calendar"
+                    dateFormat="d MMM yyyy"
+                    customInput={
+                      <div className="custom-display-input">
+                        {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
+                        <FaCaretDown className="calendar-icon" />
+                      </div>
                     }
-
-                    console.log(e.target.checked, 'ggggggggggggggg')
-                  }} />
-                  <label class="switch-label" for="switch1"></label>
+                  />
                 </div>
-                <Select
-                  menuIsOpen={menuIsOpen}
-                  onMenuOpen={() => setMenuIsOpen(true)}
-                  onMenuClose={() => setMenuIsOpen(false)}
-                  onFocus={() => setMenuIsOpen(true)}
-                  isDisabled={!venueradio}
-                  isMulti
-                  className="newoneonee"
-                  options={basic}
-                  value={selectedOptions}
-                  onChange={handleChange}
-                  placeholder="All Venues"
-                  components={{
-                    Option: CustomOption,
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B', backgroundColor: '#fff',fontSize:15  }),
-                  }}
-                />
+                <div className="mt-3" >
+                  <div className="custom-inputone d-flex justify-content-between">
+                    <input
+                      className='inputttt'
+                      type="time"
+                      value={onetime}
+                      onChange={(e) => {
+                        console.log(e.target.value, 'eeee')
+                        setOnetime(e.target.value)
+                        if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                          return
+                        }
+
+                        filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+                      }}
+                    />
+                    <input
+                      className='inputttt'
+                      type="time"
+                      value={twotime}
+                      onChange={(e) => {
+                        setTwotime(e.target.value)
+                        if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                          return
+                        }
+                        // tiemstampp(2, e.target.value)
+
+                        filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+                      }}
+                    />
+                  </div>
+                </div>
+
+
+
               </div>
 
-              <div ref={selectRefone}  className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                width: '100%',
-                height: 45
-              }}>
+              <div style={{ width: '20%' }}>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
+                <div style={{ width: '100%' }}>
+                  <DatePicker
+                    selectsRange
+                    startDate={startDatetwo}
+                    endDate={endDatetwo}
+                    onChange={(update) => {
+                      setDateRangetwo(update)
 
-                <div class="switch-container">
-                  <input checked={hubbswitch} onChange={(e) => {
-                    setHubbswitch(e.target.checked)
-                    if (e.target.checked === false) {
+                      if (update[1] === null || update[1] === "null") {
+
+                      } else {
+                        // updates(2, update)
+
+                        filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+                      }
+
+
+                    }} // Update both startDate and EndDate 
+                    placeholderText="Select a date range"
+                    className="custom-input"
+                    calendarClassName="custom-calendar"
+                    dateFormat="d MMM yyyy"
+                    customInput={
+                      <div className="custom-display-input">
+                        {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
+                        <FaCaretDown className="calendar-icon" />
+                      </div>
                     }
-                  }} type="checkbox" id="switch3" />
-                  <label class="switch-label" for="switch3"></label>
+                  />
+                </div>
+                <div className="mt-3" >
+                  <div className="custom-inputone d-flex justify-content-between">
+                    <input
+                      className='inputttt'
+                      type="time"
+                      value={threetime}
+                      onChange={(e) => {
+                        setThreetime(e.target.value)
+                        if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
+                          return
+                        }
+                        filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+                      }}
+                    />
+                    <input
+                      className='inputttt'
+                      type="time"
+                      value={fourtime}
+                      onChange={(e) => {
+                        setFourtime(e.target.value)
+                        if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
+                          return
+                        }
+                        filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                      }}
+                    />
+                  </div>
                 </div>
 
 
 
-
-                <Select
-
-                  menuIsOpen={menuIsOpenone}
-                  onMenuOpen={() => setMenuIsOpenone(true)}
-                  onMenuClose={() => setMenuIsOpenone(false)}
-                  onFocus={() => setMenuIsOpenone(true)}
+              </div>
 
 
-                  isDisabled={!hubbswitch}
-                  isMulti
-                  className="newoneonee"
-                  options={basicone}
-                  value={hubb}
+              <div style={{ width: '20%' }} >
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen venue & hub</p>
+                <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
+                  width: '100%', height: 45
+                }}>
+                  <div class="switch-container">
+                    <input type="checkbox" id="switch1" checked={venueradio} onChange={(e) => {
+                      setVenueradio(e.target.checked)
+                      if (e.target.checked === false) {
+                        setSelectedOptions([])
+                      } else {
+                      }
 
-                  onChange={handleChangehubone}
-                  placeholder="All Hubs"
-                  components={{
-                    Option: CustomOption, // Custom tick option
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15  }),
-                  }}
-                />
+                      console.log(e.target.checked, 'ggggggggggggggg')
+                    }} />
+                    <label class="switch-label" for="switch1"></label>
+                  </div>
+                  <Select
+                    menuIsOpen={menuIsOpen}
+                    onMenuOpen={() => setMenuIsOpen(true)}
+                    onMenuClose={() => setMenuIsOpen(false)}
+                    onFocus={() => setMenuIsOpen(true)}
+                    isDisabled={!venueradio}
+                    isMulti
+                    className="newoneonee"
+                    options={basic}
+                    value={selectedOptions}
+                    onChange={handleChange}
+                    placeholder="All Venues"
+                    components={{
+                      Option: CustomOption,
+                      MultiValue: () => null, // Hides default tags
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                    hideSelectedOptions={false} // Show all options even if selected
+                    styles={{
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff' }),
+                    }}
+                  />
+                </div>
+
+                <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{
+                  width: '100%',
+                  height: 45
+                }}>
+
+                  <div class="switch-container">
+                    <input checked={hubbswitch} onChange={(e) => {
+                      setHubbswitch(e.target.checked)
+                      if (e.target.checked === false) {
+                      }
+                    }} type="checkbox" id="switch3" />
+                    <label class="switch-label" for="switch3"></label>
+                  </div>
+
+
+
+
+                  <Select
+
+                    menuIsOpen={menuIsOpenone}
+                    onMenuOpen={() => setMenuIsOpenone(true)}
+                    onMenuClose={() => setMenuIsOpenone(false)}
+                    onFocus={() => setMenuIsOpenone(true)}
+
+
+                    isDisabled={!hubbswitch}
+                    isMulti
+                    className="newoneonee"
+                    options={basicone}
+                    value={hubb}
+
+                    onChange={handleChangehubone}
+                    placeholder="All Hubs"
+                    components={{
+                      Option: CustomOption, // Custom tick option
+                      MultiValue: () => null, // Hides default tags
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                    hideSelectedOptions={false} // Show all options even if selected
+                    styles={{
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    }}
+                  />
 
 
 
 
 
 
-                {/* <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
+                  {/* <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
                   setHubb(e.target.value)
                   filterDataByDate(dateRange, onetime, twotime, selectedOptions, e.target.value, selectedCources, selectedTakeaway)
 
@@ -4434,294 +4461,281 @@ const displayText = allLabels.slice(0, 20) + "..."
                   ))}
                 </select> */}
 
+                </div>
               </div>
-            </div>
 
-            <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by stages/courses</p>
-              <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
-                width: '100%',
-                height: 45
-              }}>
+              <div style={{ width: '20%' }} >
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by stages/courses</p>
+                <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
+                  width: '100%',
+                  height: 45
+                }}>
 
-                <div class="switch-container">
-                  <input type="checkbox" checked={Hubradio} onChange={(e) => {
-                    setHubradio(e.target.checked)
-                    if (e.target.checked === false) {
-                      setSelectedhubOptions([])
-                    }
-                  }} id="switch2" />
-                  <label class="switch-label" for="switch2"></label>
+                  <div class="switch-container">
+                    <input type="checkbox" checked={Hubradio} onChange={(e) => {
+                      setHubradio(e.target.checked)
+                      if (e.target.checked === false) {
+                        setSelectedhubOptions([])
+                      }
+                    }} id="switch2" />
+                    <label class="switch-label" for="switch2"></label>
+                  </div>
+
+                  <Select
+                    menuIsOpen={menuIsOpentwo}
+                    onMenuOpen={() => setMenuIsOpentwo(true)}
+                    onMenuClose={() => setMenuIsOpentwo(false)}
+                    onFocus={() => setMenuIsOpentwo(true)}
+
+                    isDisabled={!Hubradio}
+                    isMulti
+                    className="newoneonee"
+                    options={optionshub}
+                    value={selectedhubOptions}
+                    onChange={handleChangehub}
+                    placeholder="All stages"
+                    components={{
+                      Option: CustomOption, // Custom tick option
+                      MultiValue: () => null, // Hides default tags
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                    hideSelectedOptions={false} // Show all options even if selected
+                    styles={{
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    }}
+                  />
                 </div>
 
-                <Select
-                menuIsOpen={menuIsOpentwo}
-                onMenuOpen={() => setMenuIsOpentwo(true)}
-                onMenuClose={() => setMenuIsOpentwo(false)}
-                onFocus={() => setMenuIsOpentwo(true)}
 
-                  isDisabled={!Hubradio}
-                  isMulti
-                  className="newoneonee"
-                  options={optionshub}
-                  value={selectedhubOptions}
-                  onChange={handleChangehub}
-                  placeholder="All stages"
-                  components={{
-                    Option: CustomOption, // Custom tick option
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15  }),
-                  }}
-                />
-              </div>
+                <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{
+                  width: '100%',
+                  height: 45
+                }}>
+                  <div class="switch-container">
+                    <input type="checkbox" checked={Cources} onChange={(e) => {
+                      setCources(e.target.checked)
+                      if (e.target.checked === false) {
+                        setSelectedCources([])
+                      }
+                    }} id="switch4" />
+                    <label class="switch-label" for="switch4"></label>
+                  </div>
 
-
-              <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                width: '100%',
-                height: 45
-              }}>
-                <div class="switch-container">
-                  <input type="checkbox" checked={Cources} onChange={(e) => {
-                    setCources(e.target.checked)
-                    if (e.target.checked === false) {
-                      setSelectedCources([])
-                    }
-                  }} id="switch4" />
-                  <label class="switch-label" for="switch4"></label>
+                  <Select
+                    menuIsOpen={menuIsOpenthree}
+                    onMenuOpen={() => setMenuIsOpenthree(true)}
+                    onMenuClose={() => setMenuIsOpenthree(false)}
+                    onFocus={() => setMenuIsOpenthree(true)}
+                    isDisabled={!Cources}
+                    isMulti
+                    className="newoneonee"
+                    options={fulldatafull}
+                    value={selectedCources}
+                    onChange={handleChangeCources}
+                    placeholder="All courses"
+                    components={{
+                      Option: CustomOption, // Custom tick option
+                      MultiValue: () => null, // Hides default tags
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                    hideSelectedOptions={false} // Show all options even if selected
+                    styles={{
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    }}
+                  />
                 </div>
 
-                <Select
-                menuIsOpen={menuIsOpenthree}
-                onMenuOpen={() => setMenuIsOpenthree(true)}
-                onMenuClose={() => setMenuIsOpenthree(false)}
-                onFocus={() => setMenuIsOpenthree(true)}
-                  isDisabled={!Cources}
-                  isMulti
-                  className="newoneonee"
-                  options={fulldatafull}
-                  value={selectedCources}
-                  onChange={handleChangeCources}
-                  placeholder="All courses"
-                  components={{
-                    Option: CustomOption, // Custom tick option
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15  }),
-                  }}
-                />
               </div>
 
+              <div style={{ width: '20%' }} >
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by tables/takeaways</p>
 
-            </div>
-
-            <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by tables/takeaways</p>
-
-              <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
-                {/* <div class="switch-container">
+                <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
+                  {/* <div class="switch-container">
                   <input type="checkbox" id="switch1" />
                   <label class="switch-label" for="switch1"></label>
                 </div> */}
 
-                {/* <select name="cars" id="cars" style={{ border: 'unset', color: '#707070' }} >
+                  {/* <select name="cars" id="cars" style={{ border: 'unset', color: '#707070' }} >
                   <option value="volvo">Volvo</option>
                   <option value="saab">Saab</option>
                   <option value="mercedes">Mercedes</option>
                   <option value="audi">Audi</option>
                 </select> */}
-                <input onChange={(e) => {
-                  setInputvalue(e.target.value)
+                  <input onChange={(e) => {
+                    setInputvalue(e.target.value)
 
-                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+                    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+                    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B'  }} type="text" />
-
-
-                <p style={{ fontSize: 19, display: 'contents' }} >|</p>
+                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset' }} type="text" />
 
 
-                <input onChange={(e) => {
-                  setInputvaluetwo(e.target.value)
-                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-
-                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B'  }} type="text" />
-              </div>
-
-              <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                width: '100%',
-                height: 45
-              }}>
+                  <p style={{ fontSize: 19, display: 'contents' }} >|</p>
 
 
- 
-                <div class="switch-container">
-                  <input type="checkbox" checked={takeaway} onChange={(e) => {
-                    setTakeaway(e.target.checked)
-                    if (e.target.checked === false) {
-                      setSelectedTakeaway([])
-                    }
-                  }} id="switch5" />
-                  <label class="switch-label" for="switch5"></label>
+                  <input onChange={(e) => {
+                    setInputvaluetwo(e.target.value)
+                    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+
+                    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
                 </div>
 
-                <Select
-                 menuIsOpen={menuIsOpenfour}
-                 onMenuOpen={() => setMenuIsOpenfour(true)}
-                 onMenuClose={() => setMenuIsOpenfour(false)}
-                 onFocus={() => setMenuIsOpenfour(true)}
-                  isDisabled={!takeaway}
-                  isMulti
-                  className="newoneonee"
-                  options={optionstakeaway}
-                  value={selectedTakeaway}
-                  onChange={handleChangeTakeaway}
-                  placeholder="All takeaways"
-                  components={{
-                    Option: CustomOption, // Custom tick option
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15  }),
-                  }}
-                />
+                <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
+                  width: '100%',
+                  height: 45
+                }}>
 
 
 
+                  <div class="switch-container">
+                    <input type="checkbox" checked={takeaway} onChange={(e) => {
+                      setTakeaway(e.target.checked)
+                      if (e.target.checked === false) {
+                        setSelectedTakeaway([])
+                      }
+                    }} id="switch5" />
+                    <label class="switch-label" for="switch5"></label>
+                  </div>
+
+                  <Select
+                    menuIsOpen={menuIsOpenfour}
+                    onMenuOpen={() => setMenuIsOpenfour(true)}
+                    onMenuClose={() => setMenuIsOpenfour(false)}
+                    onFocus={() => setMenuIsOpenfour(true)}
+                    isDisabled={!takeaway}
+                    isMulti
+                    className="newoneonee"
+                    options={optionstakeaway}
+                    value={selectedTakeaway}
+                    onChange={handleChangeTakeaway}
+                    placeholder="All takeaways"
+                    components={{
+                      Option: CustomOption, // Custom tick option
+                      MultiValue: () => null, // Hides default tags
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false} // Keep dropdown open for further selection
+                    hideSelectedOptions={false} // Show all options even if selected
+                    styles={{
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    }}
+                  />
+
+
+
+                </div>
               </div>
+
             </div>
 
-  </div>
+
+            {
+              meals === 1 ?
+                <div className="changeone" style={{ marginTop: 100 }} >
+                  <div className="changetwos"   >
+                    <div className='row '  >
 
 
-  {
-    meals === 1 ?
-      <div className="" style={{ marginTop: 100 }} >
-
-        <div className='row '  >
-
-          {/* <div className='col-6' >
-            <div class="box " onClick={() => {
-              setMeals(5)
-            }} >
-              <div class="boxs">
-                <p className='asdfp'>Meals received - timeline</p>
-                <div class="end-box">
-                  <img src="rts.png" className="" alt="Example Image" />
-                  <p className="asdfps">(# of meals sent between specific time slots) </p>
-                </div>
-              </div>
-            </div>
-          </div> */}
 
 
-          <div className='col-6 w-100 d-flex justify-content-center' style={{ margin: 'auto' }} >
-            <div class="box" style={{maxWidth:"600px"}} onClick={() => {
-              setMeals(2)
-            }}>
-              <div class="boxs">
-                <div className="d-flex justify-content-between" >
-                  <div >
-                    <p className='asdfp'  style={{fontSize:20,marginBottom: 0,fontWeight:600,color:'#1A1A1B'}}>Dockets completion time</p>
-                    <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
-                  </div>
-                  <div >
-                    <p className='asdfp' style={{ color: '#316AAF' }}>{editall?.stats?.averageProcessTime || 0}</p>
-                  </div>
-                </div>
+                      <div className='col-6 w-100 d-flex justify-content-center' style={{ margin: 'auto' }} >
+                        <div class="box" style={{ maxWidth: "600px" }} onClick={() => {
+                          setMeals(2)
+                        }}>
+                          <div class="boxs">
+                            <div className="d-flex justify-content-between" >
+                              <div >
+                                <p className='asdfp' style={{ marginBottom: 0 }}>Dockets completion time</p>
+                                <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
+                              </div>
+                              <div >
+                                <p className='asdfp' style={{ color: '#316AAF' }}>{editall?.stats?.averageProcessTime || 0}</p>
+                              </div>
+                            </div>
 
-                <div class="end-box">
-                  <img src="time.png" style={{ width: 90, height: 106 }} className="" alt="Example Image" />
-                  <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
+                            <div class="end-box">
+                              <img src="time.png" style={{ width: 90, height: 106 }} className="" alt="Example Image" />
+                              <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
 
-                    <div >
-                      <div className="d-flex" style={{ marginBottom: 0 }}  >
-                        <div className=' ' style={{ width: 200 }}>
-                          <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum</p>
-                        </div>
-                        <div className=' ' style={{ fontWeight: '600' }}>
-                          <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.minProcessTime || 0}</p>
+                                <div >
+                                  <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                    <div className=' ' style={{ width: 200 }}>
+                                      <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum</p>
+                                    </div>
+                                    <div className=' ' style={{ fontWeight: '600' }}>
+                                      <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.minProcessTime || 0}</p>
+                                    </div>
+                                  </div>
+
+
+                                  <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                    <div className=' ' style={{ width: 200 }}>
+                                      <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum</p>
+                                    </div>
+                                    <div className=' ' style={{ fontWeight: '600' }}>
+                                      <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.maxProcessTime || 0}</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+
+
+
+
+                            </div>
+                          </div>
                         </div>
                       </div>
 
 
-                      <div className="d-flex" style={{ marginBottom: 0 }}  >
-                        <div className=' ' style={{ width: 200 }}>
-                          <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum</p>
-                        </div>
-                        <div className=' ' style={{ fontWeight: '600' }}>
-                          <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.stats?.maxProcessTime || 0}</p>
-                        </div>
-                      </div>
                     </div>
-                  </div>
 
+                    <div className="w-100 d-flex justify-content-center">
+                      <div className='row mt-5' >
 
+                        <div className='col-6' >
+                          <div class="box me-5" style={{ maxWidth: "600px" }} onClick={() => {
+                            setMeals(5)
+                          }} >
+                            <div class="boxs">
+                              <p className='asdfp'>Dockets received - timeline</p>
+                              <div class="end-box d-flex justify-content-between">
+                                <img src="rts.png" className="d-flex justify-content-between" alt="Example Image" />
+                                <p className="asdfps w-50 m-0">(# of dockets received
+                                  between specific time slots)</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
-
-
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-        </div>
-
-     <div className="w-100 d-flex justify-content-center">
-     <div className='row mt-5' >
-
-<div className='col-6' >
-  <div class="box me-5" style={{maxWidth:"600px"}} onClick={() => {
-    setMeals(5)
-  }} >
-    <div class="boxs">
-      <p className='asdfp'  style={{fontSize:20,marginBottom: 0,fontWeight:600,color:'#1A1A1B'}}>Dockets received - timeline</p>
-      <div class="end-box d-flex justify-content-between">
-        <img src="rts.png" className="d-flex justify-content-between" alt="Example Image" />
-        <p className="asdfps w-50 m-0">(# of dockets received
-          between specific time slots)</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-{/* <div className='col-6' >
+                        {/* <div className='col-6' >
   <div class="box" onClick={() => {
     setMeals(3)
   }} >
@@ -4781,884 +4795,884 @@ const displayText = allLabels.slice(0, 20) + "..."
 </div> */}
 
 
-<div className='col-6 ' >
-  <div class="box ms-5" style={{maxWidth:"600px"}} onClick={() => {
-    setMeals(4)
-  }}>
-    <div class="boxs">
-      <div className="d-flex justify-content-between" >
-        <div >
-          <p className='asdfp'  style={{fontSize:20,marginBottom: 0,fontWeight:600,color:'#1A1A1B'}}>Average completion - timeline</p>
-          <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-        </div>
-        <div >
-          {/* <p className='asdfp' style={{ color: '#316AAF' }}>{
+                        <div className='col-6 ' >
+                          <div class="box ms-5" style={{ maxWidth: "600px" }} onClick={() => {
+                            setMeals(4)
+                          }}>
+                            <div class="boxs">
+                              <div className="d-flex justify-content-between" >
+                                <div >
+                                  <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
+                                  <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                                </div>
+                                <div >
+                                  {/* <p className='asdfp' style={{ color: '#316AAF' }}>{
             minperday ?
               ggggrtz()
               : 0
           }</p> */}
-        </div>
-      </div>
-
-      <div class="end-box d-flex justify-content-between">
-        <img src="bluee.png" className="" alt="Example Image" />
-        <p className="asdfps w-50 m-0">(Average waiting time
-          between specific time slots)</p>
-
-
-      </div>
-    </div>
-  </div>
-</div>
-
-
-</div>
-      </div>
-
-      </div>
-
-
-      : meals === 2 ?
-
-        <div className="" style={{ marginTop: 100 }} >
-          <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
-
-            <div className="d-flex justify-content-between" >
-              <div style={{}} className="d-flex " >
-                <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                  setMeals(1)
-                }} className="" alt="Example Image" />
-                <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Dockets completion time</p>
-              </div>
-
-              <div class="custom-inputonessfine  " >
-
-                <Select
-                  className="newoneonee"
-                  options={basicfine}
-                  value={selectedOptionsfine}
-                  onChange={handleChangefine}
-                  placeholder="Select options..."
-                  components={{
-                    Option: CustomOptionfinal,
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }} 
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
-                  }}
-                />
-
-              </div>
-
-              <div className="d-flex justify-content-between gap-5">
-                <div className="custom-inputoness d-flex justify-content-between" style={{
-                  width: 250,
-                  height: 45,
-                  border : '1px solid rgb(203 203 203)'
-                }}>
-
-                  <div className="input-group"  >
-                    <input 
-                      onChange={(e)=>{
-                        searchvalue(e.target.value)
-                      }}
-                      type="text"
-                      className="form-control"
-                      placeholder="Docket Search..."
-                      style={{
-                        border: "none",
-                        boxShadow: "none",
-                        marginRight: "45px",
-                      }}
-                    />
-                    <span
-                      className="input-group-text"
-                      style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        position: "absolute",
-                        right: 10,
-                      }}
-                    >
-                      🔍
-                    </span>
-                  </div>
-
-
-                </div>
-
-                <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
-
-                {showDiv && (
-                  <div
-                    style={{
-                      width: 200,
-                      marginTop: '0px',
-                      padding: '10px',
-                      backgroundColor: '#f8f9fa',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                      position: 'absolute',
-                      right: '3%'
-                    }}
-                  >
-                    <p style={{ color: '#707070' }}>Export as</p>
-                    <hr />
-                    <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                      console.log(JSON.stringify(selectedOptions), 'dateRange')
-                      editexportpdf()
-                    }}>PDF</p>
-                  </div>
-                )}
-
-
-              </div>
-            </div>
-
-            <div style={{ marginTop: 50, padding: 20 }} >
-              <div className="d-flex justify-content-between" >
-
-                <div >
-                  <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{
-                    editall?.stats?.averageProcessTime || 0}</span></p>
-                </div>
-                <div >
-                  <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{editallone?.stats?.averageProcessTime || 0}</span></p>
-                </div>
-                <div >
-                  <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >
-                    {(() => {
-                      let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
-                      let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
-
-                      // Calculate average
-                      let average = Math.round((numOne + numTwo) / 2);
-
-                      return <span >{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }} >{average > 0 ? <img src="up_arw.png"
-                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" /> :
-                        <img src="d_arw.png"
-                          style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                          }} className="" alt="Example Image" />}</span></span>
-
-
-                    })()}</span></p>
-                </div>
-
-              </div>
-
-              <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-
-
-
-
-
-
-
-
-
-              <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 300, overflowY: 'auto' }} >
-
-                <div  >
-
-                  {
-                    editall?.orders?.map((dfgh, index) => {
-                      const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
-
-                      return (
-                        <div key={index}>
-                          <div className="d-flex gap-5">
-                            {/* Left Column */}
-                            <div style={{ width: "40%" }}>
-                              <div className="d-flex  " style={{}}>
-                                <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
-                                  {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.date + " " + "[" +
-                                    dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
-                                </p>
-
-                                <img
-                                  onClick={() => { openModal(dfgh, correspondingErv) }}
-                                  src="arrows.png"
-                                  style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
-                                  alt="up arrow"
-                                />
-                              </div>
-
-                            </div>
-
-                            {/* Center Column */}
-                            {correspondingErv ? (
-                              <div style={{ width: "40%", }}>
-                                <div className="d-flex  " >
-                                  <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
-                                    {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
-                                      correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
-                                  </p>
-
-
-                                  <img
-                                    onClick={() => { openModal(dfgh, correspondingErv) }}
-                                    src="arrows.png"
-                                    style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
-                                    alt="up arrow"
-                                  />
                                 </div>
+                              </div>
+
+                              <div class="end-box d-flex justify-content-between">
+                                <img src="bluee.png" className="" alt="Example Image" />
+                                <p className="asdfps w-50 m-0">(Average waiting time
+                                  between specific time slots)</p>
+
 
                               </div>
-                            ) : (
-                              <div style={{ width: "33%" }}></div>
-                            )}
-
-                            {/* Right Column (Percentage Calculation) */}
-                            <div
-                              style={{
-                                justifyContent: "end",
-                                alignItems: "center",
-                                display: "flex",
-                                width: "10%",
-                              }}
-                            >
-                              <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
-
-                                <span>
-                                  {(() => {
-                                    const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
-                                    const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
-
-                                    let percentageChange = 0;
-                                    if (processTimeTwo > 0) {
-                                      percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
-                                    }
-
-                                    return (
-                                      <span>
-                                        {percentageChange.toFixed(2) + "%"}
-                                        <span
-                                          style={{
-                                            color: percentageChange > 0 ? "green" : "red",
-                                            fontWeight: "700",
-                                          }}
-                                        >
-                                          {percentageChange > 0 ? (
-                                            <img
-                                              src="up_arw.png"
-                                              style={{ width: 16, height: 16, cursor: "pointer" }}
-                                              alt="up arrow"
-                                            />
-                                          ) : (
-                                            <img
-                                              src="d_arw.png"
-                                              style={{ width: 16, height: 16, cursor: "pointer" }}
-                                              alt="down arrow"
-                                            />
-                                          )}
-                                        </span>
-                                      </span>
-                                    );
-                                  })()}
-                                </span>
-                              </p>
                             </div>
                           </div>
-
-                          <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
                         </div>
-                      );
-                    })
-                  }
-                </div >
 
 
-
-
-
-              </div>
-
-
-
-
-            </div>
-
-
-
-
-
-
-          </div>
-
-       
-
-        </div>
-
-        : meals === 3 ?
-          <div className="" style={{ marginTop: 100 }} >
-            <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
-
-              <div className="d-flex justify-content-between" >
-                <div style={{}} className="d-flex " >
-                  <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                    setMeals(1)
-                  }} className="" alt="Example Image" />
-                  <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Served meals</p>
-                </div>
-
-                <div >
-                  <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
-
-                  {showDivs && (
-                    <div
-                      style={{
-                        width: 200,
-                        marginTop: '3px',
-                        padding: '10px',
-                        backgroundColor: '#f8f9fa',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                        position: 'absolute',
-                        right: '3%'
-                      }}
-                    >
-                      <p style={{ color: '#707070' }}>Export as</p>
-                      <hr />
-                      <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                        mealexportpdf()
-                      }}>PDF</p>
+                      </div>
                     </div>
-                  )}
-
-                </div>
-              </div>
-
-              <div style={{ marginTop: 50, padding: 20 }} >
-                <div className="d-flex justify-content-between" >
-
-                  <div >
-                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                      ggggrt()}</span></p>
                   </div>
-                  <div >
-                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-
-                      ggggrts()
-                    }</span></p>
-                  </div>
-                  <div >
-                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                      {(() => {
-                        let datd = ggggrt()
-
-                        let datdtwo = ggggrts()
-
-                        let tot = ((datd - datdtwo) / datdtwo) * 100
-
-                        return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                          style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                          }} className="" alt="Example Image" /> :
-                          <img src="d_arw.png"
-                            style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                            }} className="" alt="Example Image" />}</span></span>
-
-
-                        console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                      })()}</span></p>
-                  </div>
-
                 </div>
 
-                <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
-                <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
+                : meals === 2 ?
 
+                  <div className="changeone" style={{ marginTop: 100 }} >
+                    <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
+                      <div className="d-flex justify-content-between" >
+                        <div style={{}} className="d-flex " >
+                          <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                            setMeals(1)
+                          }} className="" alt="Example Image" />
+                          <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets completion time</p>
+                        </div>
 
-                  {
-                    served?.map((dfgh, index) => {
-                      const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+                        <div class="custom-inputonessfine  " >
 
-                      return (
-                        <>
-                          <div className="d-flex  ">
+                          <Select
+                            className="newoneonee"
+                            options={basicfine}
+                            value={selectedOptionsfine}
+                            onChange={handleChangefine}
+                            placeholder="Select options..."
+                            components={{
+                              Option: CustomOptionfinal,
+                              MultiValue: () => null, // Hides default tags
+                              ValueContainer: ({ children, ...props }) => {
+                                const selectedValues = props.getValue();
+                                return (
+                                  <components.ValueContainer {...props}>
+                                    {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                  </components.ValueContainer>
+                                );
+                              },
+                            }}
+                            hideSelectedOptions={false} // Show all options even if selected
+                            styles={{
+                              control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                            }}
+                          />
 
-                            <div style={{ width: '33%' }}>
-                              <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                        </div>
+
+                        <div className="d-flex justify-content-between gap-5">
+                          <div className="custom-inputoness d-flex justify-content-between" style={{
+                            width: 250,
+                            height: 45,
+                            border: '1px solid rgb(203 203 203)'
+                          }}>
+
+                            <div className="input-group"  >
+                              <input
+                                onChange={(e) => {
+                                  searchvalue(e.target.value)
+                                }}
+                                type="text"
+                                className="form-control"
+                                placeholder="Docket Search..."
+                                style={{
+                                  border: "none",
+                                  boxShadow: "none",
+                                  marginRight: "45px",
+                                }}
+                              />
+                              <span
+                                className="input-group-text"
+                                style={{
+                                  background: "none",
+                                  border: "none",
+                                  cursor: "pointer",
+                                  position: "absolute",
+                                  right: 10,
+                                }}
+                              >
+                                🔍
+                              </span>
                             </div>
 
-                            {correspondingErv ? (
-                              <div style={{ width: '33%', textAlign: 'center' }}>
-                                <div >
 
-                                  <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                                </div>
-                              </div>
-                            ) : (
-                              <>
-                                <div style={{ width: '33%' }} >
-                                </div></>
-                            )}
+                          </div>
 
-                            <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                                ( Total )
-                                <span>
-                                  {(() => {
-                                    const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                    const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+                          <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
+
+                          {showDiv && (
+                            <div
+                              style={{
+                                width: 200,
+                                marginTop: '0px',
+                                padding: '10px',
+                                backgroundColor: '#f8f9fa',
+                                border: '1px solid #ccc',
+                                borderRadius: '4px',
+                                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                                position: 'absolute',
+                                right: '3%'
+                              }}
+                            >
+                              <p style={{ color: '#707070' }}>Export as</p>
+                              <hr />
+                              <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                                console.log(JSON.stringify(selectedOptions), 'dateRange')
+                                editexportpdf()
+                              }}>PDF</p>
+                            </div>
+                          )}
 
 
-                                    const tot = ((datd - datdtwo) / datdtwo) * 100;
+                        </div>
+                      </div>
 
-                                    return (
-                                      <span>
-                                        {tot.toFixed(2) + "%"}
-                                        <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                          {tot > 0 ? (
+                      <div style={{ marginTop: 50, padding: 20 }} >
+                        <div className="d-flex justify-content-between" >
+
+                          <div >
+                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{
+                              editall?.stats?.averageProcessTime || 0}</span></p>
+                          </div>
+                          <div >
+                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{editallone?.stats?.averageProcessTime || 0}</span></p>
+                          </div>
+                          <div >
+                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >
+                              {(() => {
+                                let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
+                                let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
+
+                                // Calculate average
+                                let average = Math.round((numOne + numTwo) / 2);
+
+                                return <span >{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }} >{average > 0 ? <img src="up_arw.png"
+                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                  }} className="" alt="Example Image" /> :
+                                  <img src="d_arw.png"
+                                    style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                    }} className="" alt="Example Image" />}</span></span>
+
+
+                              })()}</span></p>
+                          </div>
+
+                        </div>
+
+                        <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+
+
+
+
+
+
+
+
+
+                        <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 300, overflowY: 'auto' }} >
+
+                          <div  >
+
+                            {
+                              editall?.orders?.map((dfgh, index) => {
+                                const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
+
+                                return (
+                                  <div key={index}>
+                                    <div className="d-flex gap-5">
+                                      {/* Left Column */}
+                                      <div style={{ width: "40%" }}>
+                                        <div className="d-flex  " style={{}}>
+                                          <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
+                                            {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.date + " " + "[" +
+                                              dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
+                                          </p>
+
+                                          <img
+                                            onClick={() => { openModal(dfgh, correspondingErv) }}
+                                            src="arrows.png"
+                                            style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
+                                            alt="up arrow"
+                                          />
+                                        </div>
+
+                                      </div>
+
+                                      {/* Center Column */}
+                                      {correspondingErv ? (
+                                        <div style={{ width: "40%", }}>
+                                          <div className="d-flex  " >
+                                            <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
+                                              {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
+                                                correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
+                                            </p>
+
+
                                             <img
-                                              src="up_arw.png"
-                                              style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                              onClick={() => { openModal(dfgh, correspondingErv) }}
+                                              src="arrows.png"
+                                              style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
                                               alt="up arrow"
                                             />
-                                          ) : (
-                                            <img
-                                              src="d_arw.png"
-                                              style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                              alt="down arrow"
-                                            />
-                                          )}
-                                        </span>
-                                      </span>
-                                    );
-                                  })()}
-                                </span>
-                              </p>
+                                          </div>
+
+                                        </div>
+                                      ) : (
+                                        <div style={{ width: "33%" }}></div>
+                                      )}
+
+                                      {/* Right Column (Percentage Calculation) */}
+                                      <div
+                                        style={{
+                                          justifyContent: "end",
+                                          alignItems: "center",
+                                          display: "flex",
+                                          width: "10%",
+                                        }}
+                                      >
+                                        <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
+
+                                          <span>
+                                            {(() => {
+                                              const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
+                                              const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
+
+                                              let percentageChange = 0;
+                                              if (processTimeTwo > 0) {
+                                                percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
+                                              }
+
+                                              return (
+                                                <span>
+                                                  {percentageChange.toFixed(2) + "%"}
+                                                  <span
+                                                    style={{
+                                                      color: percentageChange > 0 ? "green" : "red",
+                                                      fontWeight: "700",
+                                                    }}
+                                                  >
+                                                    {percentageChange > 0 ? (
+                                                      <img
+                                                        src="up_arw.png"
+                                                        style={{ width: 16, height: 16, cursor: "pointer" }}
+                                                        alt="up arrow"
+                                                      />
+                                                    ) : (
+                                                      <img
+                                                        src="d_arw.png"
+                                                        style={{ width: 16, height: 16, cursor: "pointer" }}
+                                                        alt="down arrow"
+                                                      />
+                                                    )}
+                                                  </span>
+                                                </span>
+                                              );
+                                            })()}
+                                          </span>
+                                        </p>
+                                      </div>
+                                    </div>
+
+                                    <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+                                  </div>
+                                );
+                              })
+                            }
+                          </div >
+
+
+
+
+
+                        </div>
+
+
+
+
+                      </div>
+
+
+
+
+
+
+                    </div>
+
+
+
+                  </div>
+
+                  : meals === 3 ?
+                    <div className="changeone" style={{ marginTop: 100 }} >
+                      <div lassName="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+
+                        <div className="d-flex justify-content-between" >
+                          <div style={{}} className="d-flex " >
+                            <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                              setMeals(1)
+                            }} className="" alt="Example Image" />
+                            <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Served meals</p>
+                          </div>
+
+                          <div >
+                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
+
+                            {showDivs && (
+                              <div
+                                style={{
+                                  width: 200,
+                                  marginTop: '3px',
+                                  padding: '10px',
+                                  backgroundColor: '#f8f9fa',
+                                  border: '1px solid #ccc',
+                                  borderRadius: '4px',
+                                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                                  position: 'absolute',
+                                  right: '3%'
+                                }}
+                              >
+                                <p style={{ color: '#707070' }}>Export as</p>
+                                <hr />
+                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                                  mealexportpdf()
+                                }}>PDF</p>
+                              </div>
+                            )}
+
+                          </div>
+                        </div>
+
+                        <div style={{ marginTop: 50, padding: 20 }} >
+                          <div className="d-flex justify-content-between" >
+
+                            <div >
+                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                                ggggrt()}</span></p>
+                            </div>
+                            <div >
+                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+
+                                ggggrts()
+                              }</span></p>
+                            </div>
+                            <div >
+                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                                {(() => {
+                                  let datd = ggggrt()
+
+                                  let datdtwo = ggggrts()
+
+                                  let tot = ((datd - datdtwo) / datdtwo) * 100
+
+                                  return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                                    style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                    }} className="" alt="Example Image" /> :
+                                    <img src="d_arw.png"
+                                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                                      }} className="" alt="Example Image" />}</span></span>
+
+
+                                  console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                                })()}</span></p>
                             </div>
 
                           </div>
 
                           <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                        </>
-                      );
-                    })
-                  }
 
-
-                </div>
+                          <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
 
 
 
+                            {
+                              served?.map((dfgh, index) => {
+                                const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+
+                                return (
+                                  <>
+                                    <div className="d-flex  ">
+
+                                      <div style={{ width: '33%' }}>
+                                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                                      </div>
+
+                                      {correspondingErv ? (
+                                        <div style={{ width: '33%', textAlign: 'center' }}>
+                                          <div >
+
+                                            <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <>
+                                          <div style={{ width: '33%' }} >
+                                          </div></>
+                                      )}
+
+                                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                                          ( Total )
+                                          <span>
+                                            {(() => {
+                                              const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                                              const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
 
 
-              </div>
+                                              const tot = ((datd - datdtwo) / datdtwo) * 100;
+
+                                              return (
+                                                <span>
+                                                  {tot.toFixed(2) + "%"}
+                                                  <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                                    {tot > 0 ? (
+                                                      <img
+                                                        src="up_arw.png"
+                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                                        alt="up arrow"
+                                                      />
+                                                    ) : (
+                                                      <img
+                                                        src="d_arw.png"
+                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                                        alt="down arrow"
+                                                      />
+                                                    )}
+                                                  </span>
+                                                </span>
+                                              );
+                                            })()}
+                                          </span>
+                                        </p>
+                                      </div>
+
+                                    </div>
+
+                                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                                  </>
+                                );
+                              })
+                            }
+
+
+                          </div>
 
 
 
 
 
-            </div>
-          </div>
-          : meals === 4 ?
-
-
-            <div className="" style={{ marginTop: 100 }} >
-              <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
-
-                <div className="d-flex justify-content-between" >
-                  <div style={{}} className="d-flex " >
-                    <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                      setMeals(1)
-                    }} className="" alt="Example Image" />
-                    <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Average completion - timeline</p>
-                  </div>
-
-                  <div >
-                    <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
-
-                    {showDivss && (
-                      <div
-                        style={{
-                          width: 200,
-                          marginTop: '0px',
-                          padding: '10px',
-                          backgroundColor: '#f8f9fa',
-                          border: '1px solid #ccc',
-                          borderRadius: '4px',
-                          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                          position: 'absolute',
-                          right: '3%'
-                        }}
-                      >
-                        <p style={{ color: '#707070' }}>Export as</p>
-                        <hr />
-                        <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                          refundexportpdf()
-                        }}>PDF</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div style={{ marginTop: 50, padding: 20 }} >
+                        </div>
 
 
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    {/* Left Scroll Button */}
-                    <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
-                    <p className="gggjgjjg"># of new dockets</p>
-                    {/* Scrollable Chart Container */}
-                    <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
-                      <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                        <Bar data={datafineone} options={optionshshs} />
+
+
                       </div>
                     </div>
-
-                    {/* Right Scroll Button */}
-                    <button onClick={scrollRight} style={buttonStyle}>➡</button>
+                    : meals === 4 ?
 
 
-                  </div>
+                      <div className="changeone" style={{ marginTop: 100 }} >
+                        <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
+                          <div className="d-flex justify-content-between" >
+                            <div style={{}} className="d-flex " >
+                              <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                                setMeals(1)
+                              }} className="" alt="Example Image" />
+                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Average completion - timeline</p>
+                            </div>
 
-                  <div style={{ visibility: 'hidden' }}>
-                    <div ref={pdfRefredone}  >
+                            <div >
+                              <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
 
-                      <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
-                        {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
+                              {showDivss && (
+                                <div
+                                  style={{
+                                    width: 200,
+                                    marginTop: '0px',
+                                    padding: '10px',
+                                    backgroundColor: '#f8f9fa',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '4px',
+                                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                                    position: 'absolute',
+                                    right: '3%'
+                                  }}
+                                >
+                                  <p style={{ color: '#707070' }}>Export as</p>
+                                  <hr />
+                                  <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                                    refundexportpdf()
+                                  }}>PDF</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
 
-                      <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-                      <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-                        const datefineda = new Date(dateRange[0]);
-
-                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric"
-                        });
-
-                        return (formattedDate)
-                      })()} to {(() => {
-                        const datefineda = new Date(dateRange[1]);
-
-                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric"
-                        });
-
-                        return (formattedDate)
-                      })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                      <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-                        const datefineda = new Date(dateRangetwo[0]);
-
-                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric"
-                        });
-
-                        return (formattedDate)
-                      })()} to {(() => {
-                        const datefineda = new Date(dateRangetwo[1]);
-
-                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric"
-                        });
-
-                        return (formattedDate)
-                      })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-                      <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-                        const result = selectedOptions.map(item => item.value).join(",");
-
-                        if (result === "" || result === undefined || result === null) {
-                          return 'All'
-                        } else {
-
-                          return result
-
-                        }
-
-
-                      })()}</p>
-                      <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-
-                        const result = selectedhubOptions.map(item => item.label).join(",");
-
-                        if (result === "" || result === undefined || result === null) {
-                          return 'All'
-                        } else {
-
-                          return result
-
-                        }
-
-
-                      })()} </p>
-                      <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-
-                        const result = selectedCources.map(item => item.label).join(",");
-
-                        if (result === "" || result === undefined || result === null) {
-                          return 'All'
-                        } else {
-
-                          return result
-
-                        }
-
-
-                      })()}</p>
+                          <div style={{ marginTop: 50, padding: 20 }} >
 
 
 
-                      <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
-                        <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                          <Bar data={datafineone} options={optionshshs} />
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                              {/* Left Scroll Button */}
+                              <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
+                              <p className="gggjgjjg"># of new dockets</p>
+                              {/* Scrollable Chart Container */}
+                              <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                                <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                                  <Bar data={datafineone} options={optionshshs} />
+                                </div>
+                              </div>
+
+                              {/* Right Scroll Button */}
+                              <button onClick={scrollRight} style={buttonStyle}>➡</button>
+
+
+                            </div>
+
+
+                            <div style={{ visibility: 'hidden' }}>
+                              <div ref={pdfRefredone}  >
+
+                                <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
+                                  {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
+
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                                  const datefineda = new Date(dateRange[0]);
+
+                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric"
+                                  });
+
+                                  return (formattedDate)
+                                })()} to {(() => {
+                                  const datefineda = new Date(dateRange[1]);
+
+                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric"
+                                  });
+
+                                  return (formattedDate)
+                                })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                                  const datefineda = new Date(dateRangetwo[0]);
+
+                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric"
+                                  });
+
+                                  return (formattedDate)
+                                })()} to {(() => {
+                                  const datefineda = new Date(dateRangetwo[1]);
+
+                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric"
+                                  });
+
+                                  return (formattedDate)
+                                })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+
+                                  const result = selectedOptions.map(item => item.value).join(",");
+
+                                  if (result === "" || result === undefined || result === null) {
+                                    return 'All'
+                                  } else {
+
+                                    return result
+
+                                  }
+
+
+                                })()}</p>
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+
+                                  const result = selectedhubOptions.map(item => item.label).join(",");
+
+                                  if (result === "" || result === undefined || result === null) {
+                                    return 'All'
+                                  } else {
+
+                                    return result
+
+                                  }
+
+
+                                })()} </p>
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+
+                                  const result = selectedCources.map(item => item.label).join(",");
+
+                                  if (result === "" || result === undefined || result === null) {
+                                    return 'All'
+                                  } else {
+
+                                    return result
+
+                                  }
+
+
+                                })()}</p>
+
+
+
+                                <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                                  <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                                    <Bar data={datafineone} options={optionshshs} />
+                                  </div>
+                                </div>
+
+                              </div >
+                            </div>
+
+
+
+                          </div>
+
+
+
+
+
                         </div>
                       </div>
 
-                    </div >
-                  </div>
+                      :
+
+                      <div className="changeone" style={{ marginTop: 100 }} >
+                        <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+
+                          <div className="d-flex justify-content-between" >
+                            <div style={{}} className="d-flex " >
+                              <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                                setMeals(1)
+                              }} className="" alt="Example Image" />
+                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets received - timeline</p>
+                            </div>
+
+                            <div >
+                              <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
+
+                              {showDivsss && (
+                                <div
+                                  style={{
+                                    width: 200,
+                                    marginTop: '0px',
+                                    padding: '10px',
+                                    backgroundColor: '#f8f9fa',
+                                    border: '1px solid #ccc',
+                                    borderRadius: '4px',
+                                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                                    position: 'absolute',
+                                    right: '3%'
+                                  }}
+                                >
+                                  <p style={{ color: '#707070' }}>Export as</p>
+                                  <hr />
+                                  <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                                    chartexportpdf()
+                                  }}>PDF</p>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          <div style={{ marginTop: 50, padding: 20 }} >
+
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                              {/* Left Scroll Button */}
+                              <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
+                              <p className="gggjgjjg">Average waiting time</p>
+                              {/* Scrollable Chart Container */}
+                              <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                                <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                                  <Bar data={datafine} options={optionshshs} />
+                                </div>
+                              </div>
+
+                              {/* Right Scroll Button */}
+                              <button onClick={scrollRight} style={buttonStyle}>➡</button>
+                            </div>
+
+
+                            <div style={{ visibility: 'hidden' }}>
+                              <div ref={pdfRefred}  >
+
+                                <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
+                                  {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
+
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                                  const datefineda = new Date(dateRange[0]);
+
+                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric"
+                                  });
+
+                                  return (formattedDate)
+                                })()} to {(() => {
+                                  const datefineda = new Date(dateRange[1]);
+
+                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric"
+                                  });
+
+                                  return (formattedDate)
+                                })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                                  const datefineda = new Date(dateRangetwo[0]);
+
+                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric"
+                                  });
+
+                                  return (formattedDate)
+                                })()} to {(() => {
+                                  const datefineda = new Date(dateRangetwo[1]);
+
+                                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric"
+                                  });
+
+                                  return (formattedDate)
+                                })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+
+                                  const result = selectedOptions.map(item => item.value).join(",");
+
+                                  if (result === "" || result === undefined || result === null) {
+                                    return 'All'
+                                  } else {
+
+                                    return result
+
+                                  }
+
+
+                                })()}</p>
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+
+                                  const result = selectedhubOptions.map(item => item.label).join(",");
+
+                                  if (result === "" || result === undefined || result === null) {
+                                    return 'All'
+                                  } else {
+
+                                    return result
+
+                                  }
+
+
+                                })()} </p>
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+
+                                  const result = selectedCources.map(item => item.label).join(",");
+
+                                  if (result === "" || result === undefined || result === null) {
+                                    return 'All'
+                                  } else {
+
+                                    return result
+
+                                  }
+
+
+                                })()}</p>
 
 
 
-                </div>
+                                <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                                  <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                                    <Bar data={datafine} options={optionshshs} />
+                                  </div>
+                                </div>
 
-
-
-
-
-              </div>
-            </div>
-
-            :
-
-            <div className="" style={{ marginTop: 100 }} >
-              <div className="" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
-
-                <div className="d-flex justify-content-between" >
-                  <div style={{}} className="d-flex " >
-                    <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                      setMeals(1)
-                    }} className="" alt="Example Image" />
-                    <p style={{ fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 }}>Dockets received - timeline</p>
-                  </div>
-
-                  <div >
-                    <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
-
-                    {showDivsss && (
-                      <div
-                        style={{
-                          width: 200,
-                          marginTop: '0px',
-                          padding: '10px',
-                          backgroundColor: '#f8f9fa',
-                          border: '1px solid #ccc',
-                          borderRadius: '4px',
-                          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                          position: 'absolute',
-                          right: '3%'
-                        }}
-                      >
-                        <p style={{ color: '#707070' }}>Export as</p>
-                        <hr />
-                        <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                          chartexportpdf()
-                        }}>PDF</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div style={{ marginTop: 50, padding: 20 }} >
-
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    {/* Left Scroll Button */}
-                    <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
-                    <p className="gggjgjjg">Average waiting time</p>
-                    {/* Scrollable Chart Container */}
-                    <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
-                      <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                        <Bar data={datafine} options={optionshshs} />
-                      </div>
-                    </div>
-
-                    {/* Right Scroll Button */}
-                    <button onClick={scrollRight} style={buttonStyle}>➡</button>
-                  </div>
-
-
-                  <div style={{ visibility: 'hidden' }}>
-                    <div ref={pdfRefred}  >
-
-                      <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
-                        {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
-
-                      <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-                      <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-                        const datefineda = new Date(dateRange[0]);
-
-                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric"
-                        });
-
-                        return (formattedDate)
-                      })()} to {(() => {
-                        const datefineda = new Date(dateRange[1]);
-
-                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric"
-                        });
-
-                        return (formattedDate)
-                      })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                      <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-                        const datefineda = new Date(dateRangetwo[0]);
-
-                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric"
-                        });
-
-                        return (formattedDate)
-                      })()} to {(() => {
-                        const datefineda = new Date(dateRangetwo[1]);
-
-                        const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric"
-                        });
-
-                        return (formattedDate)
-                      })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-                      <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-                        const result = selectedOptions.map(item => item.value).join(",");
-
-                        if (result === "" || result === undefined || result === null) {
-                          return 'All'
-                        } else {
-
-                          return result
-
-                        }
-
-
-                      })()}</p>
-                      <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-
-                        const result = selectedhubOptions.map(item => item.label).join(",");
-
-                        if (result === "" || result === undefined || result === null) {
-                          return 'All'
-                        } else {
-
-                          return result
-
-                        }
-
-
-                      })()} </p>
-                      <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-
-                        const result = selectedCources.map(item => item.label).join(",");
-
-                        if (result === "" || result === undefined || result === null) {
-                          return 'All'
-                        } else {
-
-                          return result
-
-                        }
-
-
-                      })()}</p>
-
-
-
-                      <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
-                        <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                          <Bar data={datafine} options={optionshshs} />
-                        </div>
-                      </div>
-
-                    </div >
-                  </div>
+                              </div >
+                            </div>
 
 
 
 
 
 
-                  {/* <div style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px' }}>
+                            {/* <div style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px' }}>
                     <div style={{ width: '1500px', height: '500px' }}>  
                       <Bar data={datafine} options={optionshshs} />
                     </div>
                   </div> */}
 
-                </div>
+                          </div>
 
 
 
 
 
-              </div>
-            </div>
+                        </div>
+                      </div>
 
 
 
-  }
+            }
 
 
 
-</div>
-
-
-
-
+          </div>
 
 
 
 
 
 
-<div style={{ visibility: 'hidden' }}>
+
+
+
+
+          <div style={{ visibility: 'hidden' }}>
             <div ref={pdfRef}  >
 
               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets Completion Time - From {selectedOptionsfine[0]?.label}to
@@ -5855,9 +5869,9 @@ const displayText = allLabels.slice(0, 20) + "..."
 
 
 
-</div>
+        </div>
       </div>
-     
+
 
 
       <Modal

@@ -20,6 +20,7 @@ import Dockets from "./page/Dockets";
 import Adminpage from "./page/Adminpage";
 import Admin_dash from "./page/Admin_dash";
 import Multi_venue from "./page/Multi_venue";
+import Mealsmulti from "./page/Mealsmulti";
 
 //tra
 import Training from "./page/Training";
@@ -47,6 +48,8 @@ function App() {
         <Route path="/multivenue" element={<Multivenuesone />} />
 
         <Route path="/training" element={<Training />} />
+
+        <Route path="/multivenuesmeals" element={<Mealsmulti />} />
 
 
       </Routes>
