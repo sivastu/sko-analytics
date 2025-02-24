@@ -4967,8 +4967,8 @@ const selectReffive = useRef(null);
 
                     :
 
-                    <div className="changeone" style={{ marginTop: 100 }} >
-                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                    <div className="changeone" style={{ marginTop: 100,overflowY:'hidden' }} >
+                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 580, padding: 20 }} >
 
                         <div className="d-flex justify-content-between" >
                           <div style={{}} className="d-flex " >
@@ -5005,7 +5005,7 @@ const selectReffive = useRef(null);
                           </div>
                         </div>
 
-                        <div style={{ marginTop: 50, padding: 20 }} >
+                        <div style={{ marginTop: 50, padding: 20,overflowY:'hidden' }} >
 
 
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
