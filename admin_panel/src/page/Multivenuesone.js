@@ -142,10 +142,10 @@ let Multivenuesone = () => {
 
 
             <div style={{ padding: 90 }} >
-              <div style={{ width: '27%', height: 190, backgroundColor: '#fff', borderRadius: 5, cursor: 'pointer' }} onClick={() => {
+              <div style={{ width: "25%", height: 190, backgroundColor: '#fff', borderRadius: 5, cursor: 'pointer' }} onClick={() => {
                 navigate("/meals");
               }} >
-                <div className="row">
+                <div className="row" style={{ height: 190,margin:"0 5px" }}>
                   <div className="col-6 d-flex align-items-center" style={{ padding: 35 }}>
                     <p style={{ fontSize: 35, fontWeight: '400', lineHeight: 1.3, color: '#000', margin: 0 }}>
                       Meals
@@ -157,11 +157,11 @@ let Multivenuesone = () => {
                 </div>
               </div>
 
-              <div style={{ width: '27%', height: 190, backgroundColor: '#fff', marginTop: 20, borderRadius: 5, marginBottom: 50, cursor: 'pointer' }}
+              <div style={{ width: "25%", height: 190, backgroundColor: '#fff', marginTop: 20, borderRadius: 5, marginBottom: 50, cursor: 'pointer' }}
                 onClick={() => {
                   navigate("/multivenues");
                 }} >
-                <div className="row" style={{ height: 190 }} >
+                <div className="row" style={{ height: 190 , margin:"0 5px"}} >
                   {/* Left column - centered text */}
                   <div className="col-6 d-flex justify-content-center align-items-center" style={{ padding: 35 }}>
                   <p style={{ fontSize: 35, fontWeight: '400', lineHeight: 1.3, color: '#000', margin: 0 }}>

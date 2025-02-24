@@ -274,7 +274,7 @@ let UserRent = () => {
     <div>
       <div style={{ scrollbarWidth: 'none' }}>
 
-        <div style={{
+        <div  style={{
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
           // border: "1px solid #dbdbdb"
         }} >
@@ -309,8 +309,8 @@ let UserRent = () => {
                 forget === false ?
 
                   <div className="kjok" style={{ marginTop: '7%' }} >
-                    <div className="d-flex justify-content-around" >
-                      <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', paddingTop:12 }} >Username:</p>
+                    <div className="d-flex justify-content-evenly" >
+                      <p style={{ color: '#1A1A1B', fontSize: 17, fontWeight: '400', paddingTop:12 }} >Username:</p>
                       <input onChange={(e) => { 
                         setUsername(e.target.value)
                       }} value={username} onKeyDown={handleKeyDownfiin} style={{ width: 290,color: '#1A1A1B', height: 50, borderRadius: 5, border: "1px solid #707070" ,
@@ -319,8 +319,8 @@ let UserRent = () => {
                     </div>
 
 
-                    <div className="d-flex justify-content-around mt-3" >
-                      <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', paddingTop:12}}>Password:</p>
+                    <div className="d-flex justify-content-evenly mt-3" >
+                      <p style={{ color: '#1A1A1B', fontSize: 17, fontWeight: '400',fontFamily: 'Roboto', paddingTop:12}}>Password:</p>
                       <input onChange={(e) => {
                         setPassword(e.target.value)
                       }} value={password} ref={input2Ref} onKeyDown={handleKeyDown} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070",
@@ -329,7 +329,7 @@ let UserRent = () => {
                     <p onClick={() => {
                       // setForget(true)
                     }} style={{
-                      color: "#707070", fontSize: 15, fontWeight: '500', textAlign: 'right', marginRight: 40, marginTop: 3,
+                      color: "#707070", fontSize: 14, fontWeight: '400',fontFamily:'Roboto', textAlign: 'right', marginRight: 68, marginTop: 3,
                       cursor: "pointer"
                     }} >Reset password?</p>
                   </div>
@@ -348,7 +348,7 @@ let UserRent = () => {
                     <p onClick={() => {
                       setForget(false)
                     }} style={{
-                      color: "#707070", fontSize: 15, fontWeight: '500', textAlign: 'right', marginRight: 40, marginTop: 3,
+                      color: "#707070", fontSize: 15, fontWeight: '700', textAlign: 'right', marginRight: 40, marginTop: 3,
                       cursor: "pointer"
                     }} >Login</p>
                   </div>
@@ -361,7 +361,7 @@ let UserRent = () => {
                 <div onClick={() => {
                   loginn()
                 }} style={{ backgroundColor: '#316AAF', width: 85, height: 30, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }} >
-                  <p style={{ textAlign: 'center', color: '#fff', padding: 2 }} >Login</p>
+                  <p style={{ textAlign: 'center',fontSize: 17, color: '#FCFCFC',fontWeight:700,fontFamily: 'Roboto',padding: 2 }} >Login</p>
                 </div>
               </div>
 

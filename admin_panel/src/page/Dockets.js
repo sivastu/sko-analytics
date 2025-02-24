@@ -1353,7 +1353,7 @@ let Dockets = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-const displayText = allLabels.slice(0, 30) + "..."
+const displayText = allLabels.slice(0, 20) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
@@ -4172,6 +4172,7 @@ const displayText = allLabels.slice(0, 30) + "..."
         <DatePicker
           selectsRange
           startDate={startDate}
+          style={{ fontSize: 15,color:'#1A1A1B' }}
           endDate={endDate}
           onChange={(update) => {
             setDateRange(update)
@@ -4190,7 +4191,7 @@ const displayText = allLabels.slice(0, 30) + "..."
           calendarClassName="custom-calendar"
           dateFormat="d MMM yyyy"
           customInput={
-            <div className="custom-display-input">
+            <div className="custom-display-input"   style={{ fontSize: 15,color:'#1A1A1B' }}>
               {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
               <FaCaretDown className="calendar-icon" />
             </div>
@@ -4203,6 +4204,7 @@ const displayText = allLabels.slice(0, 30) + "..."
             className='inputttt'
             type="time"
             value={onetime}
+              style={{ fontSize: 15,color:'#1A1A1B' }}
             onChange={(e) => {
               console.log(e.target.value, 'eeee')
               setOnetime(e.target.value)
@@ -4218,6 +4220,7 @@ const displayText = allLabels.slice(0, 30) + "..."
           <input
             className='inputttt'
             type="time"
+            style={{ fontSize: 15,color:'#1A1A1B' }}
             value={twotime}
             onChange={(e) => {
               setTwotime(e.target.value)
@@ -4264,7 +4267,7 @@ const displayText = allLabels.slice(0, 30) + "..."
           calendarClassName="custom-calendar"
           dateFormat="d MMM yyyy"
           customInput={
-            <div className="custom-display-input">
+                    <div className="custom-display-input" style={{fontSize:15,color:'#1A1A1B'}} >
               {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
               <FaCaretDown className="calendar-icon" />
             </div>
@@ -4277,6 +4280,7 @@ const displayText = allLabels.slice(0, 30) + "..."
             className='inputttt'
             type="time"
             value={threetime}
+            style={{fontSize:15,color:'#1A1A1B'}}
             onChange={(e) => {
               setThreetime(e.target.value)
               if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
@@ -4290,6 +4294,7 @@ const displayText = allLabels.slice(0, 30) + "..."
           <input
             className='inputttt'
             type="time"
+            style={{fontSize:15,color:'#1A1A1B'}}
             value={fourtime}
             onChange={(e) => {
               setFourtime(e.target.value)
@@ -4313,7 +4318,7 @@ const displayText = allLabels.slice(0, 30) + "..."
                 width: '100%', height: 45
               }}>
                 <div class="switch-container">
-                  <input type="checkbox" id="switch1" checked={venueradio} onChange={(e) => {
+                  <input type="checkbox" id="switch1" style={{fontSize:15}}  checked={venueradio} onChange={(e) => {
                     setVenueradio(e.target.checked)
                     if (e.target.checked === false) {
                       setSelectedOptions([])
@@ -4351,7 +4356,7 @@ const displayText = allLabels.slice(0, 30) + "..."
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff' }),
+                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B', backgroundColor: '#fff',fontSize:15  }),
                   }}
                 />
               </div>
@@ -4404,7 +4409,7 @@ const displayText = allLabels.slice(0, 30) + "..."
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15  }),
                   }}
                 />
 
@@ -4477,7 +4482,7 @@ const displayText = allLabels.slice(0, 30) + "..."
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15  }),
                   }}
                 />
               </div>
@@ -4524,7 +4529,7 @@ const displayText = allLabels.slice(0, 30) + "..."
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15  }),
                   }}
                 />
               </div>
@@ -4554,7 +4559,7 @@ const displayText = allLabels.slice(0, 30) + "..."
 
                   filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset' }} type="text" />
+                }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B'  }} type="text" />
 
 
                 <p style={{ fontSize: 19, display: 'contents' }} >|</p>
@@ -4565,7 +4570,7 @@ const displayText = allLabels.slice(0, 30) + "..."
                   filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
 
                   filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
+                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B'  }} type="text" />
               </div>
 
               <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
@@ -4612,7 +4617,7 @@ const displayText = allLabels.slice(0, 30) + "..."
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15  }),
                   }}
                 />
 
@@ -4652,7 +4657,7 @@ const displayText = allLabels.slice(0, 30) + "..."
               <div class="boxs">
                 <div className="d-flex justify-content-between" >
                   <div >
-                    <p className='asdfp' style={{ marginBottom: 0 }}>Dockets completion time</p>
+                    <p className='asdfp'  style={{fontSize:20,marginBottom: 0,fontWeight:600,color:'#1A1A1B'}}>Dockets completion time</p>
                     <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
                   </div>
                   <div >
@@ -4706,7 +4711,7 @@ const displayText = allLabels.slice(0, 30) + "..."
     setMeals(5)
   }} >
     <div class="boxs">
-      <p className='asdfp'>Dockets received - timeline</p>
+      <p className='asdfp'  style={{fontSize:20,marginBottom: 0,fontWeight:600,color:'#1A1A1B'}}>Dockets received - timeline</p>
       <div class="end-box d-flex justify-content-between">
         <img src="rts.png" className="d-flex justify-content-between" alt="Example Image" />
         <p className="asdfps w-50 m-0">(# of dockets received
@@ -4783,7 +4788,7 @@ const displayText = allLabels.slice(0, 30) + "..."
     <div class="boxs">
       <div className="d-flex justify-content-between" >
         <div >
-          <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
+          <p className='asdfp'  style={{fontSize:20,marginBottom: 0,fontWeight:600,color:'#1A1A1B'}}>Average completion - timeline</p>
           <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
         </div>
         <div >

@@ -1,16 +1,17 @@
 @font-face {
   font-family: 'Gotham';
-  src: url('./assets/fonts/GothamBook.ttf') format('opentype');
+  src: url('./assets/fonts/GothamSSm-Book.ttf') format('opentype');
   font-weight: normal;
   font-style: normal;
 
 }
 @font-face {
   font-family: 'Gotham';
-  src: url('./assets/fonts/GothamBold.ttf') format('opentype');
+  src: url('./assets/fonts/GothamSSm-Bold.ttf') format('opentype');
   font-weight: 700; 
   font-style: normal;
 }
+
 *{
   font-family:'Gotham',sans-serif !important;
 }

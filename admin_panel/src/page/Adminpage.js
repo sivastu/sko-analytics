@@ -155,14 +155,14 @@ let Adminpage = () => {
         }} >
           <div className="row justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', height: 52 }}>
 
-            <div style={{ padding: 13 }} className="d-flex col" >
+            <div style={{ padding: 16 }} className="d-flex col" >
               <p onClick={() => {
                 setIsOpen(true)
 
                 // sessionStorage.removeItem('data')
                 // navigate('/')
               }} style={{
-                fontSize: 20, fontWeight: '700', color: "#fff", marginTop: -3,
+                fontSize: 20, fontWeight: '700', color: "#fff", marginTop: -4,
                 cursor: 'pointer'
               }} >Logout</p>
             </div>
@@ -301,7 +301,7 @@ let Adminpage = () => {
             }
           }}
         >
-          <h2 style={{ marginBottom: '15px', fontSize: '20px', color: '#1A1A1B' }}>Are you sure you want to log out?</h2>
+          <h2 style={{ marginBottom: '15px', fontSize: '20px', color: '#1A1A1B' }}>Are you sure you want to logout?</h2>
           <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginTop: '20px' }}>
             <button
               onClick={() => {
