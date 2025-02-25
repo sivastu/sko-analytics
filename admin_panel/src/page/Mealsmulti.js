@@ -5173,7 +5173,7 @@ const selectReffive = useRef(null);
 
 
 
-                              <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                              <div   className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                 <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
                                   <Bar data={datafine} options={optionshshs} />
                                 </div>

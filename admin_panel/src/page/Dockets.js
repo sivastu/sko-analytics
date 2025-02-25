@@ -3871,8 +3871,11 @@ const displayText = allLabels.slice(0, 18) + "..."
 
   const chartContainerRef = useRef(null);
 
+  const chartContainerReffine = useRef(null);
+
   // Function to scroll left
   const scrollLeft = () => {
+    console.log(chartContainerRef , 'chartContainerRefchartContainerRefchartContainerRefchartContainerRef')
     if (chartContainerRef.current) {
       chartContainerRef.current.scrollLeft -= 100; // Adjust scroll distance
     }
@@ -3882,6 +3885,20 @@ const displayText = allLabels.slice(0, 18) + "..."
   const scrollRight = () => {
     if (chartContainerRef.current) {
       chartContainerRef.current.scrollLeft += 100;
+    }
+  };
+
+  const scrollLeftfine = () => {
+    console.log(chartContainerRef , 'chartContainerRefchartContainerRefchartContainerRefchartContainerRef')
+    if (chartContainerReffine.current) {
+      chartContainerReffine.current.scrollLeft -= 100; // Adjust scroll distance
+    }
+  };
+
+  // Function to scroll right
+  const scrollRightfine = () => {
+    if (chartContainerReffine.current) {
+      chartContainerReffine.current.scrollLeft += 100;
     }
   };
 
@@ -5394,17 +5411,18 @@ const displayText = allLabels.slice(0, 18) + "..."
 
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                               {/* Left Scroll Button */}
-                              <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
+                              <button onClick={scrollLeftfine}  style={buttonStyle}>⬅</button>
                               <p className="gggjgjjg"># of new dockets</p>
                               {/* Scrollable Chart Container */}
-                              <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
-                                <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                              <div ref={chartContainerReffine}  className="kiy" style={{ width: '100%', overflowX: 'auto',
+                                      border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                                <div    style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
                                   <Bar data={datafineone} options={optionshshs} />
                                 </div>
                               </div>
 
                               {/* Right Scroll Button */}
-                              <button onClick={scrollRight} style={buttonStyle}>➡</button>
+                              <button onClick={scrollRightfine}  style={buttonStyle}>➡</button>
 
 
                             </div>
@@ -5505,7 +5523,7 @@ const displayText = allLabels.slice(0, 18) + "..."
 
 
 
-                                <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                                <div  className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                   <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
                                     <Bar data={datafineone} options={optionshshs} />
                                   </div>
@@ -5680,7 +5698,7 @@ const displayText = allLabels.slice(0, 18) + "..."
 
 
 
-                                <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                                <div   className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                   <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
                                     <Bar data={datafine} options={optionshshs} />
                                   </div>
