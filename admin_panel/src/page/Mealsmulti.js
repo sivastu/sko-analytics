@@ -1169,7 +1169,7 @@ const selectReffive = useRef(null);
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, 25) + "..."
+      const displayText = allLabels.slice(0, 18) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
@@ -3344,14 +3344,17 @@ const selectReffive = useRef(null);
   };
 
   const [showDiv, setShowDiv] = useState(false);
-
+  const dropdownRef = useRef(null);
+  const toggleButtonRef = useRef(null);
   // Toggle the visibility of the div
-  const handleToggleDiv = () => {
+  const handleToggleDiv = (e) => {
+    e.stopPropagation();
     setShowDiv(!showDiv);
   };
 
   const [showDivs, setShowDivs] = useState(false);
-
+  const dropdownRefs = useRef(null);
+  const toggleButtonRefs = useRef(null);
   // Toggle the visibility of the div
   const fsgdgfdfgdf = () => {
     console.log('gggggggggggggggggggggg')
@@ -3360,20 +3363,60 @@ const selectReffive = useRef(null);
 
 
   const [showDivss, setShowDivss] = useState(false);
-
+  const dropdownRefss = useRef(null);
+  const toggleButtonRefss = useRef(null);
   // Toggle the visibility of the div
-  const handleToggleDivss = () => {
+  const handleToggleDivss = (e) => {
+    e.stopPropagation();
     setShowDivss(!showDivss);
   };
 
 
   const [showDivsss, setShowDivsss] = useState(false);
-
+  const dropdownRefsss = useRef(null);
+  const toggleButtonRefsss = useRef(null);
   // Toggle the visibility of the div
-  const handleToggleDivsss = () => {
+  const handleToggleDivsss = (e) => {
+    e.stopPropagation();
     setShowDivsss(!showDivsss);
   };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // List of all dropdown refs and their corresponding toggle button refs
+      const dropdowns = [
+        { content: dropdownRef, toggle: toggleButtonRef, isOpen: showDiv },
+        { content: dropdownRefs, toggle: toggleButtonRefs, isOpen: showDivs },
+        { content: dropdownRefss, toggle: toggleButtonRefss, isOpen: showDivss },
+        { content: dropdownRefsss, toggle: toggleButtonRefsss, isOpen: showDivsss },
 
+      ];
+      
+      // Check if click is outside ALL dropdown contents AND toggle buttons
+      const clickedOutside = dropdowns.every(({ content, toggle, isOpen }) => {
+        return !isOpen || (
+          (!content.current || !content.current.contains(event.target)) &&
+          (!toggle.current || !toggle.current.contains(event.target))
+        );
+      });
+      
+      if (clickedOutside) {
+        // Close all dropdowns
+        setShowDiv(false);
+        setShowDivs(false);
+        setShowDivss(false);
+        setShowDivsss(false);
+      }
+    };
+    
+    // Add listener if ANY dropdown is open
+    if (showDiv || showDivs || showDivss || showDivsss) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDiv, showDivs, showDivss, showDivsss]);
   let editexportpdf = async () => {
 
     const input = pdfRef.current;
@@ -3582,14 +3625,14 @@ const selectReffive = useRef(null);
 
         <div style={{}} className="dddd"  >
 
-          <div className="d-flex justify-content-between  pt-4 gap-3" >
+          <div className="d-flex justify-content-between  pt-4   gap-4" >
 
           <div style={{ width: '20%' }}>
                 <p onClick={() => {
 
                   checkkkk()
 
-                }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
+                }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 ,marginBottom:2}}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
 
                 <div style={{ width: '100%' }} >
                   <DatePicker
@@ -3614,7 +3657,7 @@ const selectReffive = useRef(null);
                     calendarClassName="custom-calendar"
                     dateFormat="d MMM yyyy"
                     customInput={
-                      <div className="custom-display-input">
+                      <div className="custom-display-input" style={{fontSize:15,color:'#1A1A1B'}}>
                         {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
                         <FaCaretDown className="calendar-icon" />
                       </div>
@@ -3627,6 +3670,7 @@ const selectReffive = useRef(null);
                       className='inputttt'
                       type="time"
                       value={onetime}
+                      style={{fontSize:15,color:'#1A1A1B'}}
                       onChange={(e) => {
                         console.log(e.target.value, 'eeee')
                         setOnetime(e.target.value)
@@ -3643,6 +3687,7 @@ const selectReffive = useRef(null);
                     <input
                       className='inputttt'
                       type="time"
+                      style={{fontSize:15,color:'#1A1A1B'}}
                       value={twotime}
                       onChange={(e) => {
                         setTwotime(e.target.value)
@@ -3674,7 +3719,7 @@ const selectReffive = useRef(null);
 
 
 
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen venue & hub</p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Chosen venue & hub</p>
                 <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
                   width: '100%', height: 45
                 }}>
@@ -3717,7 +3762,7 @@ const selectReffive = useRef(null);
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff' }),
+                      control: (base) => ({ ...base, border: 'unset', backgroundColor: '#fff' ,fontSize:15,color:'#1A1A1B' }),
                     }}
                   />
                 </div>
@@ -3770,7 +3815,7 @@ const selectReffive = useRef(null);
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset', color:'#1A1A1B',fontSize:15 }),
                     }}
                   />
 
@@ -3813,7 +3858,7 @@ const selectReffive = useRef(null);
 
 
 
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
                 <div ref={selectReffive} className="custom-inputoness d-flex justify-content-between" style={{
                   width: '100%', height: 45
                 }}>
@@ -3856,7 +3901,7 @@ const selectReffive = useRef(null);
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff' }),
+                      control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff', fontSize:15,color:'#1A1A1B' }),
                     }}
                   />
                 </div>
@@ -3909,7 +3954,7 @@ const selectReffive = useRef(null);
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset',  fontSize:15,color:'#1A1A1B' }),
                     }}
                   />
 
@@ -3944,7 +3989,7 @@ const selectReffive = useRef(null);
 
 
               <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by stages/courses</p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Filter by stages/courses</p>
                 <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
                   width: '100%',
                   height: 45
@@ -3988,7 +4033,7 @@ const selectReffive = useRef(null);
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
                     }}
                   />
                 </div>
@@ -4035,7 +4080,7 @@ const selectReffive = useRef(null);
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
                     }}
                   />
                 </div>
@@ -4044,7 +4089,7 @@ const selectReffive = useRef(null);
               </div>
 
               <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by tables/takeaways</p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 ,marginBottom:2}}>Filter by tables/takeaways</p>
 
                 <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
                   {/* <div class="switch-container">
@@ -4069,7 +4114,7 @@ const selectReffive = useRef(null);
                       
                     // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset' }} type="text" />
+                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset', fontSize:15,color:'#1A1A1B' }} type="text" />
 
 
                   <p style={{ fontSize: 19, display: 'contents' }} >|</p>
@@ -4128,7 +4173,7 @@ const selectReffive = useRef(null);
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
                     }}
                   />
 
@@ -4152,8 +4197,8 @@ const selectReffive = useRef(null);
                     <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
                       setMeals(5)
                     }} >
-                      <div class="boxs">
-                        <p className='asdfp'>Meals received - timeline</p>
+                      <div class="boxs" style={{cursor:'pointer'}}>
+                        <p className='asdfp' style={{fontWeight:600,color:'#1A1A1B'}}>Meals received - timeline</p>
                         <div class="end-box">
                           <img src="rts.png" className="" alt="Example Image" />
                           <p className="asdfps">(# of meals sent between specific time slots) </p>
@@ -4167,10 +4212,10 @@ const selectReffive = useRef(null);
                     <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
                       setMeals(2)
                     }}>
-                      <div class="boxs">
+                      <div class="boxs" style={{cursor:'pointer'}}>
                         <div className="d-flex justify-content-between" >
                           <div >
-                            <p className='asdfp' style={{ marginBottom: 0 }}>Edits</p>
+                            <p className='asdfp' style={{ marginBottom: 0,fontWeight:600,color:'#1A1A1B' }}>Edits</p>
                             <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
                           </div>
                           <div >
@@ -4242,10 +4287,10 @@ const selectReffive = useRef(null);
                     <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
                       setMeals(3)
                     }} >
-                      <div class="boxs">
+                      <div class="boxs" style={{cursor:'pointer'}}>
                         <div className="d-flex justify-content-between" >
                           <div >
-                            <p className='asdfp' style={{ marginBottom: 0 }}>Served meals</p>
+                            <p className='asdfp' style={{ marginBottom: 0,fontWeight:600,color:'#1A1A1B' }}>Served meals</p>
                             <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
                           </div>
                           <div >
@@ -4302,10 +4347,10 @@ const selectReffive = useRef(null);
                     <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
                       setMeals(4)
                     }}>
-                      <div class="boxs">
+                      <div class="boxs" style={{cursor:'pointer'}}>
                         <div className="d-flex justify-content-between" >
                           <div >
-                            <p className='asdfp' style={{ marginBottom: 0 }}>Refunded meals</p>
+                            <p className='asdfp' style={{ marginBottom: 0,fontWeight:600,color:'#1A1A1B' }}>Refunded meals</p>
                             <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
                           </div>
                           <div >
@@ -4370,14 +4415,15 @@ const selectReffive = useRef(null);
                         <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                           setMeals(1)
                         }} className="" alt="Example Image" />
-                        <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Edits</p>
+                        <p style={{fontWeight: '500',color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Edits</p>
                       </div>
 
                       <div >
-                        <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
+                        <img src="threedot.png" ref={toggleButtonRef} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
 
                         {showDiv && (
                           <div
+                          ref={dropdownRef}
                             style={{
                               width: 200,
                               marginTop: '0px',
@@ -4395,6 +4441,9 @@ const selectReffive = useRef(null);
                             <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
                               editexportpdf()
                             }}>PDF</p>
+                              <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                              // editexportpdf()
+                            }}>Excel sheet</p>
                           </div>
                         )}
 
@@ -4615,7 +4664,7 @@ const selectReffive = useRef(null);
                 </div>
 
                 : meals === 3 ?
-                  <div className="changeone" style={{ marginTop: 100 }} >
+                  <div className="changeone" style={{ marginTop: 80 }} >
                     <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                       <div className="d-flex justify-content-between" >
@@ -4623,16 +4672,18 @@ const selectReffive = useRef(null);
                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                             setMeals(1)
                           }} className="" alt="Example Image" />
-                          <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Served meals</p>
+                          <p style={{fontWeight: '500',color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Served meals</p>
                         </div>
 
                         <div >
-                          <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
+                          <img src="threedot.png" ref={toggleButtonRefs} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
 
                           {showDivs && (
                             <div
+                            ref={dropdownRefs}
                               style={{
                                 width: 200,
+                                zIndex:100,
                                 marginTop: '0px',
                                 padding: '10px',
                                 backgroundColor: '#f8f9fa',
@@ -4654,7 +4705,7 @@ const selectReffive = useRef(null);
                         </div>
                       </div>
 
-                      <div style={{ marginTop: 50, padding: 20 }} >
+                      <div style={{ marginTop: -20, padding: 20 }} >
                         <div className="d-flex justify-content-between" >
 
                           <div >
@@ -4697,7 +4748,7 @@ const selectReffive = useRef(null);
 
                         <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
-                        <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
+                        <div className="scroll" id="scrrrrol" style={{ height: 400, overflowY: 'auto' }} >
 
 
 
@@ -4790,7 +4841,7 @@ const selectReffive = useRef(null);
                   : meals === 4 ?
 
 
-                    <div className="changeone" style={{ marginTop: 100 }} >
+                    <div className="changeone" style={{ marginTop: 80 }} >
                       <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                         <div className="d-flex justify-content-between" >
@@ -4798,15 +4849,17 @@ const selectReffive = useRef(null);
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Refunded meals</p>
+                            <p style={{fontWeight: '500',color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Refunded meals</p>
                           </div>
 
                           <div >
-                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
+                            <img src="threedot.png" ref={toggleButtonRefss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
 
                             {showDivss && (
                               <div
+                              ref={dropdownRefss}
                                 style={{
+                                  zIndex:100,
                                   width: 200,
                                   marginTop: '0px',
                                   padding: '10px',
@@ -4828,7 +4881,7 @@ const selectReffive = useRef(null);
                           </div>
                         </div>
 
-                        <div style={{ marginTop: 50, padding: 20 }} >
+                        <div style={{ marginTop: -20, padding: 20 }} >
                           <div className="d-flex justify-content-between" >
 
                             <div >
@@ -4872,7 +4925,7 @@ const selectReffive = useRef(null);
 
                           <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
-                          <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
+                          <div className="scroll" id="scrrrrol" style={{ height: 400, overflowY: 'auto' }} >
 
 
 
@@ -4965,22 +5018,23 @@ const selectReffive = useRef(null);
 
                     :
 
-                    <div className="changeone" style={{ marginTop: 100 }} >
-                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                    <div className="changeone" style={{ marginTop: 100,overflowY:'hidden' }} >
+                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 580, padding: 20 }} >
 
                         <div className="d-flex justify-content-between" >
                           <div style={{}} className="d-flex " >
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Meals received - timeline</p>
+                            <p style={{fontWeight: '500',color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6, }}>Meals received - timeline</p>
                           </div>
 
                           <div >
-                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
+                            <img src="threedot.png" ref={toggleButtonRefsss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
 
                             {showDivsss && (
                               <div
+                              ref={dropdownRefsss}
                                 style={{
                                   width: 200,
                                   marginTop: '0px',
@@ -5003,7 +5057,7 @@ const selectReffive = useRef(null);
                           </div>
                         </div>
 
-                        <div style={{ marginTop: 50, padding: 20 }} >
+                        <div style={{ marginTop: 50, padding: 20,overflowY:'hidden' }} >
 
 
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

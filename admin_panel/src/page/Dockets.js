@@ -53,10 +53,12 @@ const customStyles = {
     right: 'auto',
     bottom: 'auto',
     marginRight: '-50%',
+    backgroundColor:'#F3F3F3',
     transform: 'translate(-50%, -50%)',
-    border: '3px solid #ababab',
+    border: '3px solid #707070',
     borderRadius: '10px',
-    width: '70%'
+    width: '60%',
+    boxShadow: '0 6px 1px rgba(0, 0, 0, 0.2)'
   },
 };
 
@@ -1370,7 +1372,7 @@ let Dockets = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, 25) + "..."
+const displayText = allLabels.slice(0, 18) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
@@ -3884,14 +3886,17 @@ let Dockets = () => {
   };
 
   const [showDiv, setShowDiv] = useState(false);
-
+  const dropdownRef = useRef(null);
+  const toggleButtonRef = useRef(null);
   // Toggle the visibility of the div
-  const handleToggleDiv = () => {
+  const handleToggleDiv = (e) => {
+    e.stopPropagation();
     setShowDiv(!showDiv);
   };
 
   const [showDivs, setShowDivs] = useState(false);
-
+  const dropdownRefs = useRef(null);
+  const toggleButtonRefs = useRef(null);
   // Toggle the visibility of the div
   const fsgdgfdfgdf = () => {
     console.log('gggggggggggggggggggggg')
@@ -3900,19 +3905,60 @@ let Dockets = () => {
 
 
   const [showDivss, setShowDivss] = useState(false);
-
+  const dropdownRefss = useRef(null);
+  const toggleButtonRefss = useRef(null);
   // Toggle the visibility of the div
-  const handleToggleDivss = () => {
+  const handleToggleDivss = (e) => {
+    e.stopPropagation();
     setShowDivss(!showDivss);
   };
 
 
   const [showDivsss, setShowDivsss] = useState(false);
-
+  const dropdownRefsss = useRef(null);
+  const toggleButtonRefsss = useRef(null);
   // Toggle the visibility of the div
-  const handleToggleDivsss = () => {
+  const handleToggleDivsss = (e) => {
+    e.stopPropagation();
     setShowDivsss(!showDivsss);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // List of all dropdown refs and their corresponding toggle button refs
+      const dropdowns = [
+        { content: dropdownRef, toggle: toggleButtonRef, isOpen: showDiv },
+        { content: dropdownRefs, toggle: toggleButtonRefs, isOpen: showDivs },
+        { content: dropdownRefss, toggle: toggleButtonRefss, isOpen: showDivss },
+        { content: dropdownRefsss, toggle: toggleButtonRefsss, isOpen: showDivsss },
+      ];
+      
+      // Check if click is outside ALL dropdown contents AND toggle buttons
+      const clickedOutside = dropdowns.every(({ content, toggle, isOpen }) => {
+        return !isOpen || (
+          (!content.current || !content.current.contains(event.target)) &&
+          (!toggle.current || !toggle.current.contains(event.target))
+        );
+      });
+      
+      if (clickedOutside) {
+        // Close all dropdowns
+        setShowDiv(false);
+        setShowDivs(false);
+        setShowDivss(false);
+        setShowDivsss(false);
+      }
+    };
+    
+    // Add listener if ANY dropdown is open
+    if (showDiv || showDivs || showDivss || showDivsss) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDiv, showDivs, showDivss, showDivsss]);
 
   let editexportpdf = async () => {
 
@@ -4198,7 +4244,7 @@ let Dockets = () => {
 
                   checkkkk()
 
-                }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
+                }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 ,marginBottom:2}}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
 
                 <div style={{ width: '100%' }} >
                   <DatePicker
@@ -4222,7 +4268,7 @@ let Dockets = () => {
                     calendarClassName="custom-calendar"
                     dateFormat="d MMM yyyy"
                     customInput={
-                      <div className="custom-display-input">
+                      <div className="custom-display-input" style={{color:'#1A1A1B',fontSize:15}}>
                         {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
                         <FaCaretDown className="calendar-icon" />
                       </div>
@@ -4235,6 +4281,7 @@ let Dockets = () => {
                       className='inputttt'
                       type="time"
                       value={onetime}
+                      style={{color:'#1A1A1B',fontSize:15}}
                       onChange={(e) => {
                         console.log(e.target.value, 'eeee')
                         setOnetime(e.target.value)
@@ -4251,6 +4298,7 @@ let Dockets = () => {
                       className='inputttt'
                       type="time"
                       value={twotime}
+                      style={{color:'#1A1A1B',fontSize:15}}
                       onChange={(e) => {
                         setTwotime(e.target.value)
                         if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
@@ -4270,7 +4318,7 @@ let Dockets = () => {
               </div>
 
               <div style={{ width: '20%' }}>
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
                 <div style={{ width: '100%' }}>
                   <DatePicker
                     selectsRange
@@ -4296,7 +4344,7 @@ let Dockets = () => {
                     calendarClassName="custom-calendar"
                     dateFormat="d MMM yyyy"
                     customInput={
-                      <div className="custom-display-input">
+                      <div className="custom-display-input" style={{color:'#1A1A1B',fontSize:15}}>
                         {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
                         <FaCaretDown className="calendar-icon" />
                       </div>
@@ -4308,6 +4356,7 @@ let Dockets = () => {
                     <input
                       className='inputttt'
                       type="time"
+                      style={{color:'#1A1A1B',fontSize:15}}
                       value={threetime}
                       onChange={(e) => {
                         setThreetime(e.target.value)
@@ -4322,6 +4371,7 @@ let Dockets = () => {
                     <input
                       className='inputttt'
                       type="time"
+                      style={{color:'#1A1A1B',fontSize:15}}
                       value={fourtime}
                       onChange={(e) => {
                         setFourtime(e.target.value)
@@ -4340,7 +4390,7 @@ let Dockets = () => {
 
 
               <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Chosen venue & hub</p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Chosen venue & hub</p>
                 <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
                   width: '100%', height: 45
                 }}>
@@ -4383,7 +4433,7 @@ let Dockets = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff' }),
+                      control: (base) => ({ ...base, border: 'unset', backgroundColor: '#fff',color:'#1A1A1B',fontSize:15 }),
                     }}
                   />
                 </div>
@@ -4436,7 +4486,7 @@ let Dockets = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15 }),
                     }}
                   />
 
@@ -4465,7 +4515,7 @@ let Dockets = () => {
               </div>
 
               <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by stages/courses</p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Filter by stages/courses</p>
                 <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
                   width: '100%',
                   height: 45
@@ -4509,7 +4559,7 @@ let Dockets = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15 }),
                     }}
                   />
                 </div>
@@ -4556,16 +4606,15 @@ let Dockets = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15 }),
                     }}
                   />
                 </div>
 
-
               </div>
 
               <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 }}>Filter by tables/takeaways</p>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Filter by tables/takeaways</p>
 
                 <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
                   {/* <div class="switch-container">
@@ -4586,7 +4635,7 @@ let Dockets = () => {
 
                     filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset' }} type="text" />
+                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset',color:'#1A1A1B',fontSize:15 }} type="text" />
 
 
                   <p style={{ fontSize: 19, display: 'contents' }} >|</p>
@@ -4597,7 +4646,7 @@ let Dockets = () => {
                     filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
 
                     filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
+                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',color:'#1A1A1B',fontSize:15 }} type="text" />
                 </div>
 
                 <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
@@ -4644,7 +4693,7 @@ let Dockets = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                      control: (base) => ({ ...base, border: 'unset', color:'#1A1A1B',fontSize:15 }),
                     }}
                   />
 
@@ -4669,10 +4718,10 @@ let Dockets = () => {
                         <div class="box" style={{ maxWidth: "600px" }} onClick={() => {
                           setMeals(2)
                         }}>
-                          <div class="boxs">
+                          <div class="boxs" style={{cursor:'pointer'}}>
                             <div className="d-flex justify-content-between" >
                               <div >
-                                <p className='asdfp' style={{ marginBottom: 0 }}>Dockets completion time</p>
+                                <p className='asdfp' style={{ marginBottom: 0,color:'#1A1A1B',fontWeight:600 }}>Dockets completion time</p>
                                 <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
                               </div>
                               <div >
@@ -4725,8 +4774,8 @@ let Dockets = () => {
                           <div class="box me-5" style={{ maxWidth: "600px" }} onClick={() => {
                             setMeals(5)
                           }} >
-                            <div class="boxs">
-                              <p className='asdfp'>Dockets received - timeline</p>
+                            <div class="boxs" style={{cursor:'pointer'}}>
+                              <p className='asdfp' style={{color:'#1A1A1B',fontWeight:600}}>Dockets received - timeline</p>
                               <div class="end-box d-flex justify-content-between">
                                 <img src="rts.png" className="d-flex justify-content-between" alt="Example Image" />
                                 <p className="asdfps w-50 m-0">(# of dockets received
@@ -4800,10 +4849,10 @@ let Dockets = () => {
                           <div class="box ms-5" style={{ maxWidth: "600px" }} onClick={() => {
                             setMeals(4)
                           }}>
-                            <div class="boxs">
+                            <div class="boxs" style={{cursor:'pointer'}}>
                               <div className="d-flex justify-content-between" >
                                 <div >
-                                  <p className='asdfp' style={{ marginBottom: 0 }}>Average completion - timeline</p>
+                                  <p className='asdfp' style={{ marginBottom: 0,color:'#1A1A1B',fontWeight:600 }}>Average completion - timeline</p>
                                   <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
                                 </div>
                                 <div >
@@ -4835,7 +4884,7 @@ let Dockets = () => {
 
                 : meals === 2 ?
 
-                  <div className="changeone" style={{ marginTop: 100 }} >
+                  <div className="changeone" style={{ marginTop: 80 }} >
                     <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                       <div className="d-flex justify-content-between" >
@@ -4843,10 +4892,10 @@ let Dockets = () => {
                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                             setMeals(1)
                           }} className="" alt="Example Image" />
-                          <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets completion time</p>
+                          <p style={{color:'#1A1A1B',fontWeight:600, fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets completion time</p>
                         </div>
 
-                        <div class="custom-inputonessfine  " >
+                        <div class="custom-inputonessfine pt-1 " >
 
                           <Select
                             className="newoneonee"
@@ -4912,13 +4961,14 @@ let Dockets = () => {
 
                           </div>
 
-                          <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
+                          <img src="threedot.png"  ref={toggleButtonRef} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
 
                           {showDiv && (
                             <div
+                            ref={dropdownRef}
                               style={{
                                 width: 200,
-                                marginTop: '0px',
+                                marginTop: '30px',
                                 padding: '10px',
                                 backgroundColor: '#f8f9fa',
                                 border: '1px solid #ccc',
@@ -4941,7 +4991,7 @@ let Dockets = () => {
                         </div>
                       </div>
 
-                      <div style={{ marginTop: 50, padding: 20 }} >
+                      <div style={{ marginTop: 20, padding: 20 }} >
                         <div className="d-flex justify-content-between" >
 
                           <div >
@@ -4989,7 +5039,7 @@ let Dockets = () => {
 
 
 
-                        <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 300, overflowY: 'auto' }} >
+                        <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 350, overflowY: 'auto' }} >
 
                           <div  >
 
@@ -5135,10 +5185,11 @@ let Dockets = () => {
                           </div>
 
                           <div >
-                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
+                            <img src="threedot.png" ref={toggleButtonRefs} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
 
                             {showDivs && (
                               <div
+                              ref={dropdownRefs}
                                 style={{
                                   width: 200,
                                   marginTop: '3px',
@@ -5306,17 +5357,18 @@ let Dockets = () => {
                               <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                                 setMeals(1)
                               }} className="" alt="Example Image" />
-                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Average completion - timeline</p>
+                              <p style={{color:'#1A1A1B',fontWeight:600, fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Average completion - timeline</p>
                             </div>
 
                             <div >
-                              <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
+                              <img src="threedot.png" ref={toggleButtonRefss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
 
                               {showDivss && (
                                 <div
+                                ref={dropdownRefss}
                                   style={{
                                     width: 200,
-                                    marginTop: '0px',
+                                    marginTop: '3px',
                                     padding: '10px',
                                     backgroundColor: '#f8f9fa',
                                     border: '1px solid #ccc',
@@ -5483,17 +5535,18 @@ let Dockets = () => {
                               <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                                 setMeals(1)
                               }} className="" alt="Example Image" />
-                              <p style={{fontWeight: '500', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets received - timeline</p>
+                              <p style={{color:'#1A1A1B',fontWeight:600, fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets received - timeline</p>
                             </div>
 
                             <div >
-                              <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
+                              <img src="threedot.png" ref={toggleButtonRefsss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
 
                               {showDivsss && (
                                 <div
+                                ref={dropdownRefsss}
                                   style={{
                                     width: 200,
-                                    marginTop: '0px',
+                                    marginTop: '3px',
                                     padding: '10px',
                                     backgroundColor: '#f8f9fa',
                                     border: '1px solid #ccc',
@@ -5882,9 +5935,9 @@ let Dockets = () => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <div style={{}} >
+        <div  >
           <div className="row" >
-            <div className="col-5" style={{ overflow: 'hidden' }} >
+            <div className="col-4" style={{ overflow: 'hidden' }} >
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Date: {cval1?.date}</p>
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time created: {(() => {
               })()} {cval1?.starttime.replace('@', '')}</p>
@@ -5924,7 +5977,7 @@ let Dockets = () => {
             <div className="col-1"  >
               <div class="vertical-line"></div>
             </div>
-            <div className="col-6 gggg" >
+            <div className="col-7 gggg" >
               <div style={{ height: 300 }}>
 
                 {/* <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>Course 1 : {cval1?.order?.COURSES}</p>

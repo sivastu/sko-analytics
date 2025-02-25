@@ -1,16 +1,17 @@
 @font-face {
   font-family: 'Gotham';
-  src: url('./assets/fonts/GothamBook.ttf') format('opentype');
+  src: url('./assets/fonts/GothamSSm-Book.ttf') format('opentype');
   font-weight: normal;
   font-style: normal;
 
 }
 @font-face {
   font-family: 'Gotham';
-  src: url('./assets/fonts/GothamBold.ttf') format('opentype');
+  src: url('./assets/fonts/GothamSSm-Bold.ttf') format('opentype');
   font-weight: 700; 
   font-style: normal;
 }
+
 *{
   font-family:'Gotham',sans-serif !important;
 }
@@ -271,6 +272,7 @@ code {
 
 .newoneoneess .css-1u0ia00-control {
   background-color : #ECF1F4 !important;
+  color:#1A1A1B !important
 }
 
 
@@ -278,6 +280,7 @@ code {
   width: 100%;
   font-size : 12px;
   margin-right : 30px;
+  color:#1A1A1B !important;
   background-color :  #ECF1F4 !important;
 }
 
