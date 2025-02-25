@@ -4701,7 +4701,7 @@ let Meals = () => {
 
                     filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B',textAlign:'center' }} type="text" />
+                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }} type="text" />
 
 
                 <p style={{ fontSize: 19, display: 'contents' }} >|</p>
@@ -4712,7 +4712,7 @@ let Meals = () => {
                   filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
 
                   filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B',textAlign:'center' }} type="text" />
+                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }} type="text" />
               </div>
 
               <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
@@ -5495,42 +5495,42 @@ let Meals = () => {
                     <div className="changeone" style={{ marginTop: 80 }} >
                       <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, padding: 20 }} >
 
-                        <div style={{marginTop:-20}} className="d-flex justify-content-between" >
+                        <div style={{ marginTop: -20 }} className="d-flex justify-content-between" >
                           <div style={{}} className="d-flex justify-content-center align-items-center gap-5 "  >
-                    <div className="d-flex pt-4">
-                    <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                              setMeals(1)
-                            }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Refunded meals</p>
+                            <div className="d-flex pt-4">
+                              <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                                setMeals(1)
+                              }} className="" alt="Example Image" />
+                              <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Refunded meals</p>
 
-                      </div>
+                            </div>
                             <div class="custom-inputonessfine pt-1 " >
 
-<Select
-  className="newoneonee"
-  options={basicfine}
-  // value={selectedOptionsfine}
-  // onChange={handleChangefine}
-  placeholder="Select options..."
-  components={{
-    // Option: CustomOptionfinal,
-    MultiValue: () => null, // Hides default tags
-    ValueContainer: ({ children, ...props }) => {
-      const selectedValues = props.getValue();
-      return (
-        <components.ValueContainer {...props}>
-          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-        </components.ValueContainer>
-      );
-    },
-  }}
-  hideSelectedOptions={false} // Show all options even if selected
-  styles={{
-    control: (base) => ({ ...base, border: 'unset', color: '#707070'}),
-  }}
-/>
+                              <Select
+                                className="newoneonee"
+                                options={basicfine}
+                                // value={selectedOptionsfine}
+                                // onChange={handleChangefine}
+                                placeholder="Select options..."
+                                components={{
+                                  // Option: CustomOptionfinal,
+                                  MultiValue: () => null, // Hides default tags
+                                  ValueContainer: ({ children, ...props }) => {
+                                    const selectedValues = props.getValue();
+                                    return (
+                                      <components.ValueContainer {...props}>
+                                        {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                      </components.ValueContainer>
+                                    );
+                                  },
+                                }}
+                                hideSelectedOptions={false} // Show all options even if selected
+                                styles={{
+                                  control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                                }}
+                              />
 
-</div>
+                            </div>
                           </div>
 
                           <div className="d-flex align-items-center" >
@@ -5765,8 +5765,25 @@ let Meals = () => {
                               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Meals received - timeline
                               </p>
 
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
+
+                                const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+                                const result = filteredOptions.map(item => item.label).join(", ");
+
+
+                                if (result === "" || result === undefined || result === null) {
+                                  return 'All Venue'
+                                } else {
+
+                                  return result
+
+                                }
+
+
+                              })()}</p>
+
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >Group name</p>
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
                                 const datefineda = new Date(dateRange[0]);
 
                                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -5787,7 +5804,7 @@ let Meals = () => {
 
                                 return (formattedDate)
                               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
                                 const datefineda = new Date(dateRangetwo[0]);
 
                                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -5809,20 +5826,7 @@ let Meals = () => {
                                 return (formattedDate)
                               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-                                const result = selectedOptions.map(item => item.value).join(",");
-
-                                if (result === "" || result === undefined || result === null) {
-                                  return 'All'
-                                } else {
-
-                                  return result
-
-                                }
-
-
-                              })()}</p>
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains: All</p>
                               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
 
                                 const result = selectedhubOptions.map(item => item.label).join(",");
@@ -6078,7 +6082,7 @@ let Meals = () => {
 
             </div>
 
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black',  }} />
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black', }} />
 
             <div className="d-flex justify-content-between" >
 
@@ -6115,7 +6119,7 @@ let Meals = () => {
 
             </div>
 
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black',   }} />
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black', }} />
 
             <div className="d-flex justify-content-between" >
 
@@ -6152,7 +6156,7 @@ let Meals = () => {
 
             </div>
 
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black',  }} />
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black', }} />
 
 
             <div className="d-flex justify-content-between" >
