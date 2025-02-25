@@ -86,10 +86,16 @@ let Mealsmulti = () => {
   let [oldhubtwo, setOldhubtwo] = useState([])
   const [venueradiofivese, setVenueradiofivese] = useState(true)
 
+  let [optionbarone, setOptionone] = useState([])
+  let [onebarone, setOneBarone] = useState([])
+
   const [venueradiosix, setVenueradiosix] = useState(true)
   const selectReffive = useRef(null);
 
   const [menuIsOpen, setMenuIsOpen] = useState(false);
+
+  let [filterdataone, setFilterdataone] = useState({})
+  let [filterdatatwo, setFilterdatatwo] = useState({})
 
   const [menuIsOpenone, setMenuIsOpenone] = useState(false);
   const [menuIsOpentwo, setMenuIsOpentwo] = useState(false);
@@ -132,7 +138,14 @@ let Mealsmulti = () => {
   }, []);
 
 
-
+  let [basicfine, setBasicfine] = useState([{
+    "value": "Maximum",
+    "label": "Maximum"
+  },
+  {
+    "value": "Minimum",
+    "label": "Minimum"
+  },])
   useEffect(() => {
     loginCheck()
     getone()
@@ -974,6 +987,8 @@ let Mealsmulti = () => {
       console.log(two, 'two')
 
 
+
+
       const categorizeItems = (datasssssss) => {
         const edited = ["2", "12", "22", "32"];
         const moved = ["3", "13", "23", "33"];
@@ -1653,7 +1668,892 @@ let Mealsmulti = () => {
 
 
   };
+  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
 
+    let alldat = basicall
+
+    console.log(JSON.stringify(alltype), 'val2245')
+
+    if (vals[1] === null || vals[1] === "null") {
+
+    } else {
+      let datesearch = (val) => {
+        // Convert the input dates into Date objects
+        let onee = val[0];
+        let date = new Date(onee);
+        date.setDate(date.getDate() + 1);
+        let formattedDate = date;  // Use this Date object directly
+
+        let two = val[1];
+        const datetwo = new Date(two);
+        datetwo.setDate(datetwo.getDate() + 1); // Keep the same date, no modification
+        const formattedDatetwo = datetwo;  // Use this Date object directly
+
+        console.log(formattedDate, 'formattedDate', formattedDatetwo);
+
+        // Function to generate all dates between formattedDate and formattedDatetwo
+        function generateDatesInRange(startDate, endDate) {
+          let dates = [];
+          let currentDate = new Date(startDate);
+
+          while (currentDate <= endDate) {
+            dates.push(currentDate.toISOString().split('T')[0]); // Push the date as string "YYYY-MM-DD"
+            currentDate.setDate(currentDate.getDate() + 1); // Move to the next day
+          }
+          return dates;
+        }
+
+        let dateRange = generateDatesInRange(formattedDate, formattedDatetwo);
+        console.log(dateRange, 'dateRange'); // This will show all dates between the range
+
+        // Recursive function to filter the data based on the date range
+        function filterObject(obj) {
+          let result = {};
+
+          for (const key in obj) {
+            // If the value is an object, recursively process it
+            if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
+              const filtered = filterObject(obj[key]);
+              if (Object.keys(filtered).length > 0) {
+                result[key] = filtered;
+              }
+            }
+            // If the value is an array and the key represents a date within the range
+            else if (Array.isArray(obj[key]) && dateRange.includes(key)) {
+              result[key] = obj[key];
+            }
+          }
+          return result;
+        }
+
+        return filterObject(alldat);  // Assuming `basicall` is your data to filter
+      }
+
+      alldat = datesearch(vals)
+
+      console.log(alldat, 'one')
+
+    }
+
+    if (time != "" && time2 === '') {
+      let filterDataByTime = (targetTime) => {
+        // Convert targetTime (e.g. "16:23") to a comparable Date object 
+        targetTime = targetTime.replace(":", "");
+        console.log(targetTime, 'targetTimetargetTimetargetTime')
+        // Function to process STAMP and filter based on time
+        function processData(obj) {
+          let result = {};
+
+          for (const dateKey in obj) {
+            if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
+              result[dateKey] = processData(obj[dateKey]);
+            } else if (Array.isArray(obj[dateKey])) {
+              // Filter items based on the STAMP field
+              result[dateKey] = obj[dateKey].filter(item => {
+                if (item.STAMP) {
+                  let stamp = item.STAMP;
+                  let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
+
+                  timeStr = timeStr.replace("R0", ""); // Remove "R0"
+
+                  // Compare the STAMP time with targetTime
+                  return timeStr === targetTime;
+                }
+                return false;
+              });
+            }
+          }
+
+          return result;
+        }
+
+        return processData(alldat);
+      };
+
+
+      alldat = filterDataByTime(time)
+      console.log(alldat, 'two')
+
+    }
+
+    if (time != "" && time2 != '') {
+      let filterDataByTimeRange = (startTime, endTime) => {
+
+        startTime = parseInt(startTime.replace(":", ""), 10);   // Make sure seconds are zero for comparison
+
+        endTime = parseInt(endTime.replace(":", ""), 10);
+
+        function processData(obj) {
+          let result = {};
+
+          for (const dateKey in obj) {
+            if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
+              result[dateKey] = processData(obj[dateKey]);
+            } else if (Array.isArray(obj[dateKey])) {
+              // Filter items based on the STAMP field
+              result[dateKey] = obj[dateKey].filter(item => {
+                if (item.STAMP) {
+                  let stamp = item.STAMP;
+                  let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
+                  timeStr = parseInt(timeStr.replace("R0", "")); // Remove "R0" 
+
+
+                  // Check if the time is within the range
+                  return timeStr >= startTime && timeStr <= endTime;
+                }
+                return false;
+              });
+            }
+          }
+
+          return result;
+        }
+
+        return processData(alldat);
+      };
+
+      let alldddd = filterDataByTimeRange(time, time2)
+
+      alldat = alldddd
+
+      console.log(alldddd, 'three')
+    }
+
+    if (val21.length != 0) {
+      const filteredData = {};
+
+      val21.forEach(filter => {
+        const key = filter.value;
+        for (const mainKey in alldat) {
+          if (alldat[mainKey][key]) {
+            if (!filteredData[mainKey]) {
+              filteredData[mainKey] = {}; // Initialize if not exists
+            }
+            filteredData[mainKey][key] = alldat[mainKey][key];
+          }
+        }
+      });
+
+      alldat = filteredData
+
+      console.log(filteredData, 'four')
+
+    }
+
+    if (val22.length === 0 || val22 === "") {
+
+
+
+    } else {
+      // function filterDataByDynamicKey(key) {
+      //   // Split the key into top-level key and hub name
+      //   const [topLevelKey, hubName] = key.split('-');
+
+      //   // Initialize an empty object for the filtered result
+      //   const filteredData = {};
+
+      //   // Check if the top-level key exists in the data
+      //   if (alldat[topLevelKey]) {
+      //     filteredData[topLevelKey] = {};
+
+      //     // Loop through each second-level key (e.g., "GreenbankServicesClubecall")
+      //     for (const secondLevelKey in alldat[topLevelKey]) {
+      //       if (alldat[topLevelKey].hasOwnProperty(secondLevelKey)) {
+      //         // Check if the second-level key contains the hub name
+      //         if (alldat[topLevelKey][secondLevelKey][hubName]) {
+      //           // Add the filtered data for that second-level key and hub name
+      //           filteredData[topLevelKey][secondLevelKey] = {
+      //             [hubName]: alldat[topLevelKey][secondLevelKey][hubName]
+      //           };
+      //         }
+      //       }
+      //     }
+      //   }
+
+      //   return filteredData;
+      // }
+
+      // alldat = filterDataByDynamicKey(val22)
+
+      // console.log(alldat, 'five')
+
+      const filterDataByDynamicKeys = (data, filterCriteria) => {
+        const filteredData = {};
+
+        filterCriteria.forEach(({ label }) => {
+          const [hub, parent] = label.split('-'); // Extract hub and parent names
+
+          // Find the corresponding key in the data
+          for (const key in data) {
+            if (data[key][parent] && data[key][parent][hub]) {
+              if (!filteredData[key]) filteredData[key] = {};
+              if (!filteredData[key][parent]) filteredData[key][parent] = {};
+              filteredData[key][parent][hub] = data[key][parent][hub];
+            }
+          }
+        });
+
+        return filteredData;
+      };
+
+
+
+      // function filterDataByDynamicKeys(keysArray) {
+      //   const filteredData = {};
+
+      //   keysArray.forEach(({ value }) => {
+      //     const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+
+      //     if (alldat[topLevelKey] && alldat[topLevelKey][secondTopLevelKey]) {
+      //       const secondLevelData = alldat[topLevelKey][secondTopLevelKey];
+
+      //       // Check if the hub exists
+      //       if (secondLevelData[hubName]) {
+      //         if (!filteredData[topLevelKey]) {
+      //           filteredData[topLevelKey] = {};
+      //         }
+
+      //         if (!filteredData[topLevelKey][secondTopLevelKey]) {
+      //           filteredData[topLevelKey][secondTopLevelKey] = {};
+      //         }
+
+      //         filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
+      //       }
+      //     }
+      //   });
+
+      //   return filteredData;
+      // }
+      let ofjfij = filterDataByDynamicKeys(alldat, val22)
+
+      alldat = ofjfij
+
+      console.log(alldat, 'five')
+
+    }
+
+    if (cources.length != 0) {
+
+
+      function filterByNoted(data, filterNotes) {
+        let filteredData = {};
+
+        // Extract only values from the filter list
+        const validNotes = filterNotes.map(item => item.value);
+
+        for (let group in data) {
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let filteredOrders = data[group][location][section][date].map(order => {
+                  let filteredItems = order.ITEMS.filter(item => {
+                    if (!item.NOTE) return false; // Ignore empty or undefined NOTE
+
+                    // Extract the word after (C<number>)
+                    const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                    if (match && match[1]) {
+                      return validNotes.includes(match[1]); // Keep only if in validNotes
+                    }
+                    return false;
+                  });
+
+                  return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
+                }).filter(order => order !== null);
+
+                if (filteredOrders.length > 0) {
+                  if (!filteredData[group]) filteredData[group] = {};
+                  if (!filteredData[group][location]) filteredData[group][location] = {};
+                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                  filteredData[group][location][section][date] = filteredOrders;
+                }
+              }
+            }
+          }
+        }
+
+        return filteredData;
+      }
+
+
+      alldat = filterByNoted(alldat, cources)
+
+      console.log(alldat, 'six')
+
+
+
+    }
+
+    if (takeaway.length != 0) {
+
+      function filterByNote(filters) {
+        const allowedNotes = filters.map(f => f.value); // Extract values from filter array
+        const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
+
+        function traverse(obj) {
+          if (Array.isArray(obj)) {
+            return obj.map(traverse).filter(entry => entry !== null);
+          } else if (typeof obj === "object" && obj !== null) {
+            let newObj = {};
+            let hasMatch = false;
+
+            for (let key in obj) {
+              if (key === "NOTE" && typeof obj[key] === "string" && regex.test(obj[key])) {
+                hasMatch = true;
+              } else {
+                let value = traverse(obj[key]);
+                if (value && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0)) {
+                  newObj[key] = value;
+                  hasMatch = true;
+                }
+              }
+            }
+
+            return hasMatch ? newObj : null;
+          }
+          return obj;
+        }
+
+        let result = {};
+        Object.keys(alldat).forEach(key => {
+          let filtered = traverse(alldat[key]);
+          if (filtered && Object.keys(filtered).length > 0) {
+            result[key] = filtered;
+          }
+        });
+
+        return result;
+      }
+
+
+      alldat = filterByNote(takeaway)
+
+      console.log(alldat, 'seven')
+
+    }
+
+    if (inone != undefined && intwo != undefined) {
+      let splitone = inone.split('-')
+
+      let splittwo = intwo.split('-')
+      console.log(splitone.length, 'ten    lll', splitone.length)
+      if (splitone.length === 2 && splittwo.length === 2) {
+
+        if (Number(splitone[0]) < Number(splitone[1]) && Number(splittwo[0]) < Number(splittwo[1])) {
+
+
+
+          function filterDataByTableRanges(data, ranges) {
+            const filteredData = {};
+
+            Object.entries(data).forEach(([groupKey, groupData]) => {
+              Object.entries(groupData).forEach(([venueKey, venueData]) => {
+                Object.entries(venueData).forEach(([areaKey, areaData]) => {
+                  Object.entries(areaData).forEach(([dateKey, records]) => {
+                    const filteredRecords = records.filter(record => {
+                      const tableNum = parseInt(record.TABLE, 10);
+                      return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
+                    });
+
+                    if (filteredRecords.length > 0) {
+                      if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                      if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                      if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                      filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                    }
+                  });
+                });
+              });
+            });
+
+            return filteredData;
+          }
+
+          const ranges = [[Number(splitone[0]), Number(splitone[1])], [Number(splittwo[0]), Number(splittwo[1])]];
+
+          let twelves = filterDataByTableRanges(alldat, ranges)
+
+          alldat = twelves
+
+
+          console.log(twelves, 'nine')
+        } else {
+
+        }
+
+      } else {
+
+      }
+    }
+
+    if (alltype === undefined || alltype.length === 0) {
+
+    } else {
+      function filterByStamp(data, filterValues) {
+        let filteredData = {};
+
+        // Create a mapping of values to stamp identifiers
+        const stampMapping = {
+          "R": "R0",
+          "H": "H0",
+          "P": "P0",
+          "S": "S0"
+        };
+
+        // Extract relevant values
+        const validStamps = filterValues.map(f => stampMapping[f.value]).filter(Boolean);
+
+        for (let group in data) {
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let orders = data[group][location][section][date].filter(order =>
+                  validStamps.some(stamp => order.STAMP.includes(stamp))
+                );
+
+                if (!filteredData[group]) filteredData[group] = {};
+                if (!filteredData[group][location]) filteredData[group][location] = {};
+                if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+
+                if (orders.length > 0) {
+                  filteredData[group][location][section][date] = orders;
+                }
+              }
+            }
+          }
+        }
+
+        return filteredData;
+      }
+
+
+      let resultss = filterByStamp(alldat, alltype);
+
+      alldat = resultss
+
+      console.log(resultss, 'tenten')
+    }
+
+    const filteredData = {};
+
+    Object.entries(alldat).forEach(([groupKey, groupData]) => {
+
+
+      Object.entries(groupData).forEach(([areas, areaDatas]) => {
+
+
+
+        Object.entries(areaDatas).forEach(([area, areaData]) => {
+
+
+          Object.entries(areaData).forEach(([dates, records]) => {
+            // Check if the date is within the range 
+            // Create the dynamic key based on the index and date
+            const index = `${Object.keys(filteredData).length + 1}`;
+
+            filteredData[`${index}) ${dates}`] = records;
+
+
+          });
+        });
+      });
+    });
+    setFilterdataone(filteredData)
+
+    callfordataone(filteredData)
+    let ghi = processTimeData(alldat)
+    let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
+    // Extract values into separate arrays
+    let timeLabels = kidshort.map(entry => entry.time);
+    let timeCounts = kidshort.map(entry => entry.count);
+
+    setOption(timeLabels)
+    setOneBar(timeCounts)
+
+    let ghione = processTimeDatatwo(alldat)
+    let kidshortone = ghione.sort((a, b) => a.time.localeCompare(b.time));
+    // Extract values into separate arrays
+    let timeLabelsone = kidshortone.map(entry => entry.time);
+    let timeCountsone = kidshortone.map(entry => entry.count);
+
+    setOptionone(timeLabelsone)
+    setOneBarone(timeCountsone)
+    console.log(JSON.stringify(ghione), 'thousand', ghione)
+
+
+
+  }
+  let callfordataonesearch = (one, bitedata) => {
+
+
+    function processData(data) {
+      let result = [];
+      let processTimes = [];
+
+      Object.entries(data).forEach(([dateKey, orders]) => {
+        orders.forEach(order => {
+          const date = dateKey.split(") ")[1]; // Extract the date from the key
+          const stampParts = order.STAMP.split(" ");
+          const extractedDate = stampParts[0].substring(0, 8); // Get the first 8 characters for the date
+          const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
+
+          const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
+          if (timeEntries.length >= 2) {
+            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
+            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
+
+            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
+            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
+
+            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+
+
+            if (processTime === parseInt(bitedata)) {
+
+              processTimes.push(processTime);
+
+              result.push({
+                date: formattedDate,
+                processtime: processTime, // Store as a number for sorting
+                table: `T${order.TABLE}`,
+                starttime: `@${startTimeFormatted}`,
+                staff: order.STAFF,
+                order: order
+              });
+
+
+            } else {
+
+            }
+
+
+
+            // Calculate processing time
+
+          }
+        });
+      });
+
+      // Sort orders by process time (high to low)
+      result.sort((a, b) => b.processtime - a.processtime);
+
+      // Convert process time back to string format for display
+      result = result.map(order => ({
+        ...order,
+        processtime: `${order.processtime}min`
+      }));
+
+      // Calculate average, min, and max processing time
+      if (processTimes.length > 0) {
+        const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
+        const averageTime = Math.round(totalTime / processTimes.length);
+        const minTime = Math.min(...processTimes);
+        const maxTime = Math.max(...processTimes);
+
+        return {
+          orders: result,
+          stats: {
+            averageProcessTime: `${averageTime}min`,
+            minProcessTime: `${minTime}min`,
+            maxProcessTime: `${maxTime}min`
+          }
+        };
+      }
+
+      return { orders: result, stats: null };
+    }
+
+
+    let newalldata = processData(one)
+
+    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
+    setEditall(newalldata)
+
+
+
+  }
+
+  let callfordataonetwosearch = (two, bitedata) => {
+
+
+    function processData(data) {
+      let result = [];
+      let processTimes = [];
+
+      Object.entries(data).forEach(([dateKey, orders]) => {
+        orders.forEach(order => {
+          const date = dateKey.split(") ")[1]; // Extract the date from the key
+          const stampParts = order.STAMP.split(" ");
+          const extractedDate = stampParts[0].substring(0, 8); // Get the first 8 characters for the date
+          const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
+
+          const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
+          if (timeEntries.length >= 2) {
+            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
+            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
+
+            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
+            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
+
+            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+
+
+            console.log(processTime, 'processTimeprocessTimeprocessTimeprocessTime')
+
+
+            if (processTime === parseInt(bitedata)) {
+              processTimes.push(processTime);
+
+              result.push({
+                date: formattedDate,
+                processtime: processTime, // Store as a number for sorting
+                table: `T${order.TABLE}`,
+                starttime: `@${startTimeFormatted}`,
+                staff: order.STAFF,
+                order: order
+              });
+            } else {
+
+            }
+
+
+
+            // Calculate processing time
+
+          }
+        });
+      });
+
+      // Sort orders by process time (high to low)
+      result.sort((a, b) => b.processtime - a.processtime);
+
+      // Convert process time back to string format for display
+      result = result.map(order => ({
+        ...order,
+        processtime: `${order.processtime}min`
+      }));
+
+      // Calculate average, min, and max processing time
+      if (processTimes.length > 0) {
+        const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
+        const averageTime = Math.round(totalTime / processTimes.length);
+        const minTime = Math.min(...processTimes);
+        const maxTime = Math.max(...processTimes);
+
+        return {
+          orders: result,
+          stats: {
+            averageProcessTime: `${averageTime}min`,
+            minProcessTime: `${minTime}min`,
+            maxProcessTime: `${maxTime}min`
+          }
+        };
+      }
+
+      return { orders: result, stats: null };
+    }
+
+
+
+    let newalldata = processData(two)
+
+    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
+    setEditallone(newalldata)
+
+    // const categorizeItems = (datasssssss) => {
+    //   const edited = ["2", "12", "22", "32"];
+    //   const moved = ["3", "13", "23", "33"];
+    //   const deleted = ["4", "24"];
+
+    //   const result = {
+    //     edited: [],
+    //     moved: [],
+    //     deleted: [],
+    //     served: [],
+    //     tableMoved: []
+    //   };
+
+    //   for (const [date, entries] of Object.entries(datasssssss)) {
+
+
+    //     entries.forEach(entry => {
+
+
+    //       if (entry.NOTE && entry.NOTE.includes("$ND$")) {
+    //         result.tableMoved.push(entry);
+    //       }
+
+
+    //       entry.ITEMS.forEach(item => {
+    //         if (edited.includes(item.STATUS)) {
+    //           result.edited.push(item);
+    //         } else if (moved.includes(item.STATUS)) {
+    //           result.moved.push(item);
+    //         } else if (deleted.includes(item.STATUS)) {
+    //           result.deleted.push(item);
+    //         } else if (parseInt(item.STATUS) > 20) {
+    //           result.served.push(item);
+    //         }
+    //       });
+    //     });
+
+    //   }
+
+    //   return result;
+    // };
+
+    // // let editttsone = categorizeItems(one)
+    // let editttstwo = categorizeItems(two)
+
+    // // console.log(editttsone, 'editttsoneeditttsone')
+
+
+    // // setEditall(editttsone)
+    // setEditallone(editttstwo)
+
+    // const processItems = (data) => {
+    //   const dishCounts = {};
+
+    //   // Iterate through the data to collect and process dishes
+    //   for (const [date, entries] of Object.entries(data)) {
+
+
+
+    //     entries.forEach(entry => {
+    //       entry.ITEMS.forEach(item => {
+    //         // Remove "Sp\\" prefix if present
+    //         const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
+
+    //         // If dish is already counted, increment its count and append data
+    //         if (dishCounts[cleanItemName]) {
+    //           dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
+    //           dishCounts[cleanItemName].data.push(item);
+    //         } else {
+    //           // If not, initialize a new entry for the dish
+    //           dishCounts[cleanItemName] = {
+    //             count: parseInt(item.QUANTITY, 10),
+    //             name: cleanItemName,
+    //             data: [item],
+    //           };
+    //         }
+    //       });
+    //     });
+    //   }
+
+    //   // Convert the dishCounts object to an array
+    //   return Object.values(dishCounts).sort((a, b) => b.count - a.count);
+    // };
+
+
+    // // let minnscount = processItems(one)
+    // let maxnscount = processItems(two)
+    // // setServed(minnscount)
+    // setServedone(maxnscount)
+
+    // const processRefundedItems = (data) => {
+    //   const results = [];
+
+    //   // Iterate through each date's data
+    //   for (const [date, entries] of Object.entries(data)) {
+    //     let refundedItems = [];
+
+
+
+    //     entries.forEach(entry => {
+    //       entry.ITEMS.forEach(item => {
+    //         // Check if "Refunded" exists in the ITEM field
+    //         if (item.NOTE.includes("Refunded")) {
+    //           refundedItems.push(item);
+    //         }
+    //       });
+    //     });
+
+    //     if (refundedItems.length > 0) {
+    //       // Calculate the total quantity for refunded items
+    //       const totalQuantity = refundedItems.reduce(
+    //         (sum, item) => sum + parseInt(item.QUANTITY, 10),
+    //         0
+    //       );
+
+    //       results.push({
+    //         date,
+    //         count: totalQuantity,
+    //         name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
+    //         data: refundedItems,
+    //       });
+    //     }
+    //   }
+
+    //   return results;
+    // };
+
+    // // let refundcount = processRefundedItems(one)
+    // let refundcounttwo = processRefundedItems(two)
+    // // setMinperday(refundcount)
+    // setMaxperday(refundcounttwo)
+
+
+
+
+  }
+  function processTimeDatatwo(data) {
+    let timeCounts = {};
+
+    function extractTime(stamp) {
+      // Match only S0, S1, S2, ... values in the stamp
+      let match = stamp.match(/\d{4}(S)/);
+      if (match) {
+        return match[0].slice(0, 2) + ":" + match[0].slice(2, 4); // Convert to HH:MM
+      }
+      return null; // Skip if S0, S1, etc., is not found
+    }
+
+    function roundToInterval(time) {
+      let [hour, minute] = time.split(":").map(Number);
+      let roundedMinute = Math.floor(minute / 10) * 10; // Round to nearest lower 10-minute mark
+      return `${hour}.${roundedMinute.toString().padStart(2, "0")}`;
+    }
+
+    for (let group in data) {
+      for (let location in data[group]) {
+        for (let section in data[group][location]) {
+          for (let date in data[group][location][section]) {
+            data[group][location][section][date].forEach(order => {
+              let stamps = order.STAMP.split(" "); // Split STAMP string
+              stamps.forEach(stamp => {
+                let extractedTime = extractTime(stamp);
+                if (extractedTime) {
+                  let interval = roundToInterval(extractedTime);
+                  timeCounts[interval] = (timeCounts[interval] || 0) + 1;
+                }
+              });
+            });
+          }
+        }
+      }
+    }
+
+    return Object.keys(timeCounts)
+      .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
+      .map(time => ({ time, count: timeCounts[time] })).slice(1);
+  }
+  let searchvalue = (e) => {
+    console.log(editall, 'searchvaluesearchvaluesearchvalue')
+
+    if (e === undefined || e === '' || e === null) {
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      return
+    } else {
+      callfordataonesearch(filterdataone, e)
+      callfordataonetwosearch(filterdatatwo, e)
+    }
+
+  }
 
   const handleChangehubtwo = (selectedss) => {
 
@@ -4114,7 +5014,7 @@ let Mealsmulti = () => {
 
                   // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B' }} type="text" />
+                }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B',textAlign:'center' }} type="text" />
 
 
                 <p style={{ fontSize: 19, display: 'contents' }} >|</p>
@@ -4126,7 +5026,7 @@ let Mealsmulti = () => {
                   filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
                     hubbtwo, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                   // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
+                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',textAlign:'center' }} type="text" />
               </div>
 
               <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
@@ -4667,15 +5567,81 @@ let Mealsmulti = () => {
                   <div className="changeone" style={{ marginTop: 80 }} >
                     <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-                      <div className="d-flex justify-content-between" >
-                        <div style={{}} className="d-flex " >
-                          <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                      <div style={{ marginTop: -20 }} className="d-flex justify-content-between" >
+                        <div className="d-flex justify-content-center align-items-center gap-5 " >
+                        <div className="d-flex pt-4">
+                        <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                             setMeals(1)
                           }} className="" alt="Example Image" />
                           <p style={{ fontWeight: '500', color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Served meals</p>
+                      
+                          </div>
+                          <div class="custom-inputonessfine pt-1 " >
+
+<Select
+  className="newoneonee"
+  options={basicfine}
+  // value={selectedOptionsfine}
+  // onChange={handleChangefine}
+  placeholder="Select options..."
+  components={{
+    // Option: CustomOptionfinal,
+    MultiValue: () => null, // Hides default tags
+    ValueContainer: ({ children, ...props }) => {
+      const selectedValues = props.getValue();
+      return (
+        <components.ValueContainer {...props}>
+          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+        </components.ValueContainer>
+      );
+    },
+  }}
+  hideSelectedOptions={false} // Show all options even if selected
+  styles={{
+    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+  }}
+/>
+
+</div>
                         </div>
 
-                        <div >
+                        <div className="d-flex justify-content-between align-items-center gap-5">
+                        <div className="custom-inputoness d-flex justify-content-between" style={{
+                            width: 250,
+                            height: 45,
+                            border: '1px solid rgb(203 203 203)'
+                          }}>
+
+                            <div className="input-group"  >
+                              <input
+                                onChange={(e) => {
+                                  searchvalue(e.target.value)
+                                }}
+                                type="text"
+                                className="form-control"
+                                placeholder="Meals Search..."
+                                style={{
+                                  border: "none",
+                                  boxShadow: "none",
+                                  marginRight: "45px",
+                                }}
+                              />
+                              <span
+                                className="input-group-text"
+                                style={{
+                                  background: "none",
+                                  border: "none",
+                                  cursor: "pointer",
+                                  position: "absolute",
+                                  right: 10,
+                                }}
+                              >
+                                🔍
+                              </span>
+                            </div>
+
+
+                          </div>
                           <img src="threedot.png" ref={toggleButtonRefs} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
 
                           {showDivs && (
@@ -4844,15 +5810,45 @@ let Mealsmulti = () => {
                     <div className="changeone" style={{ marginTop: 80 }} >
                       <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-                        <div className="d-flex justify-content-between" >
-                          <div style={{}} className="d-flex " >
-                            <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                        <div style={{marginTop:-20}} className="d-flex justify-content-between" >
+                          <div style={{}} className="d-flex justify-content-center align-items-center gap-5 "  >
+                           <div className="d-flex pt-4">
+                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
                             <p style={{ fontWeight: '500', color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Refunded meals</p>
+                            </div>
+                            <div class="custom-inputonessfine pt-1 " >
+
+<Select
+  className="newoneonee"
+  options={basicfine}
+  // value={selectedOptionsfine}
+  // onChange={handleChangefine}
+  placeholder="Select options..."
+  components={{
+    // Option: CustomOptionfinal,
+    MultiValue: () => null, // Hides default tags
+    ValueContainer: ({ children, ...props }) => {
+      const selectedValues = props.getValue();
+      return (
+        <components.ValueContainer {...props}>
+          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+        </components.ValueContainer>
+      );
+    },
+  }}
+  hideSelectedOptions={false} // Show all options even if selected
+  styles={{
+    control: (base) => ({ ...base, border: 'unset', color: '#707070'}),
+  }}
+/>
+
+</div>
+                        
                           </div>
 
-                          <div >
+                          <div  className="d-flex align-items-center" >
                             <img src="threedot.png" ref={toggleButtonRefss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
 
                             {showDivss && (
