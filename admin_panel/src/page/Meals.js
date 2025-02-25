@@ -5869,8 +5869,8 @@ let Meals = () => {
 
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Edits</p>
 
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20  , wordSpacing : -5  }} >Group name</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20  , wordSpacing : -5  }} >For the period {(() => {
             const datefineda = new Date(dateRange[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -5891,7 +5891,7 @@ let Meals = () => {
 
             return (formattedDate)
           })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20  , wordSpacing : -5 }} >Compared with the period {(() => {
             const datefineda = new Date(dateRangetwo[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
