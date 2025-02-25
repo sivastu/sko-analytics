@@ -5043,7 +5043,7 @@ let Multi_venue = () => {
 
                     // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B' }} type="text" />
+                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B',textAlign:'center' }} type="text" />
 
 
                   <p style={{ fontSize: 19, display: 'contents' }} >|</p>
@@ -5055,7 +5055,7 @@ let Multi_venue = () => {
                     filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
                       hubbtwo, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                     // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B' }} type="text" />
+                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B',textAlign:'center' }} type="text" />
                 </div>
 
                 <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{

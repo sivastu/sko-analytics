@@ -4648,7 +4648,7 @@ const displayText = allLabels.slice(0, 18) + "..."
 
                     filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset',color:'#1A1A1B',fontSize:15 }} type="text" />
+                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset',color:'#1A1A1B',fontSize:15 ,textAlign:'center'}} type="text" />
 
 
                   <p style={{ fontSize: 19, display: 'contents' }} >|</p>
@@ -4659,7 +4659,7 @@ const displayText = allLabels.slice(0, 18) + "..."
                     filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
 
                     filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',color:'#1A1A1B',fontSize:15 }} type="text" />
+                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',color:'#1A1A1B',fontSize:15,textAlign:'center' }} type="text" />
                 </div>
 
                 <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
