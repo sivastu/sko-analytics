@@ -97,6 +97,9 @@ let Mealsmulti = () => {
   let [filterdataone, setFilterdataone] = useState({})
   let [filterdatatwo, setFilterdatatwo] = useState({})
 
+   let [editallclone, setEditallclone] = useState([])
+    let [editalloneclone, setEditalloneclone] = useState([])
+
   const [menuIsOpenone, setMenuIsOpenone] = useState(false);
   const [menuIsOpentwo, setMenuIsOpentwo] = useState(false);
   const [menuIsOpenthree, setMenuIsOpenthree] = useState(false);
@@ -1081,7 +1084,9 @@ let Mealsmulti = () => {
       let minnscount = processItems(one)
       let maxnscount = processItems(two)
       setServed(minnscount)
+      setEditallclone(minnscount)
       setServedone(maxnscount)
+      setEditalloneclone(maxnscount)
 
       const processRefundedItems = (data) => {
         const results = [];
@@ -2540,20 +2545,7 @@ let Mealsmulti = () => {
       .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
       .map(time => ({ time, count: timeCounts[time] })).slice(1);
   }
-  let searchvalue = (e) => {
-    console.log(editall, 'searchvaluesearchvaluesearchvalue')
-
-    if (e === undefined || e === '' || e === null) {
-      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-      return
-    } else {
-      callfordataonesearch(filterdataone, e)
-      callfordataonetwosearch(filterdatatwo, e)
-    }
-
-  }
+   
 
   const handleChangehubtwo = (selectedss) => {
 
@@ -3994,6 +3986,7 @@ let Mealsmulti = () => {
     let minnscount = processItems(one)
     // let maxnscount = processItems(two)
     setServed(minnscount)
+    setEditallclone(minnscount)
     // setServedone(maxnscount)
 
     const processRefundedItems = (data) => {
@@ -4138,6 +4131,7 @@ let Mealsmulti = () => {
     let maxnscount = processItems(two)
     // setServed(minnscount)
     setServedone(maxnscount)
+    setEditalloneclone(maxnscount)
 
     const processRefundedItems = (data) => {
       const results = [];
@@ -4185,6 +4179,29 @@ let Mealsmulti = () => {
 
 
   }
+
+
+  const handleChangefinedd = (selected) => { 
+
+    if (minperday.length === 0) {
+
+    } else {
+      setMinperday((prevState) => [...prevState].reverse());
+    }
+
+    if (maxperday.length === 0) {
+
+    } else {
+      setMaxperday((prevState) => [...prevState].reverse());
+
+    }
+
+
+    // setSelectedOptionsfine(selected || []);
+
+
+  };
+
 
   let ggggrtsg = () => {
     let kkki = 0
@@ -4401,6 +4418,34 @@ let Mealsmulti = () => {
 
   }
 
+
+  const handleChangefine = (selected) => {
+    console.log(served, 'selected')
+
+ 
+
+    if (served.length === 0) {
+
+    } else {
+      setServed((prevState) => [...prevState].reverse());
+
+    }
+
+    if (servedone.length === 0) {
+
+    } else {
+      setServedone((prevState) => [...prevState].reverse());
+
+
+    }
+
+
+    // setSelectedOptionsfine(selected || []);
+
+
+  };
+
+
   let mealexportpdf = async () => {
     const input = pdfRefss.current;
 
@@ -4429,6 +4474,30 @@ let Mealsmulti = () => {
 
 
   }
+
+  let searchvalue = (e) => {
+    console.log(editallclone, 'searchvaluesearchvaluesearchvalue')
+ 
+    if (e === undefined || e === '' || e === null) {
+      setServed(editallclone)
+      setServedone(editalloneclone)
+    } else {
+      const regex = new RegExp(e, "i"); // Create regex dynamically (case-insensitive)
+
+
+      // Filter items where ITEM matches regex
+      const filteredData = editallclone.filter(obj => regex.test(obj.name));
+      const filteredDatatwo = editalloneclone.filter(obj => regex.test(obj.name));
+
+      setServed(filteredData)
+      setServedone(filteredDatatwo)
+
+      
+    }
+
+  }
+
+
   let chartexportpdf = async () => {
 
     const input = pdfRefred.current;
@@ -5014,7 +5083,7 @@ let Mealsmulti = () => {
 
                   // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B',textAlign:'center' }} type="text" />
+                }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }} type="text" />
 
 
                 <p style={{ fontSize: 19, display: 'contents' }} >|</p>
@@ -5026,7 +5095,7 @@ let Mealsmulti = () => {
                   filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
                     hubbtwo, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                   // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',textAlign:'center' }} type="text" />
+                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset', textAlign: 'center' }} type="text" />
               </div>
 
               <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
@@ -5564,291 +5633,294 @@ let Mealsmulti = () => {
                 </div>
 
                 : meals === 3 ?
-                  <div className="changeone" style={{ marginTop: 80 }} >
-                    <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
-
-                      <div style={{ marginTop: -20 }} className="d-flex justify-content-between" >
-                        <div className="d-flex justify-content-center align-items-center gap-5 " >
-                        <div className="d-flex pt-4">
-                        <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                            setMeals(1)
-                          }} className="" alt="Example Image" />
-                          <p style={{ fontWeight: '500', color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Served meals</p>
-                      
-                          </div>
-                          <div class="custom-inputonessfine pt-1 " >
-
-<Select
-  className="newoneonee"
-  options={basicfine}
-  // value={selectedOptionsfine}
-  // onChange={handleChangefine}
-  placeholder="Select options..."
-  components={{
-    // Option: CustomOptionfinal,
-    MultiValue: () => null, // Hides default tags
-    ValueContainer: ({ children, ...props }) => {
-      const selectedValues = props.getValue();
-      return (
-        <components.ValueContainer {...props}>
-          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-        </components.ValueContainer>
-      );
-    },
-  }}
-  hideSelectedOptions={false} // Show all options even if selected
-  styles={{
-    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
-  }}
-/>
-
-</div>
-                        </div>
-
-                        <div className="d-flex justify-content-between align-items-center gap-5">
-                        <div className="custom-inputoness d-flex justify-content-between" style={{
-                            width: 250,
-                            height: 45,
-                            border: '1px solid rgb(203 203 203)'
-                          }}>
-
-                            <div className="input-group"  >
-                              <input
-                                onChange={(e) => {
-                                  searchvalue(e.target.value)
-                                }}
-                                type="text"
-                                className="form-control"
-                                placeholder="Meals Search..."
-                                style={{
-                                  border: "none",
-                                  boxShadow: "none",
-                                  marginRight: "45px",
-                                }}
-                              />
-                              <span
-                                className="input-group-text"
-                                style={{
-                                  background: "none",
-                                  border: "none",
-                                  cursor: "pointer",
-                                  position: "absolute",
-                                  right: 10,
-                                }}
-                              >
-                                🔍
-                              </span>
-                            </div>
-
-
-                          </div>
-                          <img src="threedot.png" ref={toggleButtonRefs} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
-
-                          {showDivs && (
-                            <div
-                              ref={dropdownRefs}
-                              style={{
-                                width: 200,
-                                zIndex: 100,
-                                marginTop: '0px',
-                                padding: '10px',
-                                backgroundColor: '#f8f9fa',
-                                border: '1px solid #ccc',
-                                borderRadius: '4px',
-                                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                                position: 'absolute',
-                                right: '3%'
-                              }}
-                            >
-                              <p style={{ color: '#707070' }}>Export as</p>
-                              <hr />
-                              <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                mealexportpdf()
-                              }}>PDF</p>
-                            </div>
-                          )}
-
-                        </div>
-                      </div>
-
-                      <div style={{ marginTop: -20, padding: 20 }} >
-                        <div className="d-flex justify-content-between" >
-
-                          <div >
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                              ggggrt()}</span></p>
-                          </div>
-                          <div >
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-
-                              ggggrts()
-                            }</span></p>
-                          </div>
-                          <div >
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                              {(() => {
-                                let datd = ggggrt()
-
-                                let datdtwo = ggggrts()
-
-                                let tot = ((datd - datdtwo) / datdtwo) * 100
-
-                                return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" /> :
-                                  <img src="d_arw.png"
-                                    style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                    }} className="" alt="Example Image" />}</span></span>
-
-
-                                console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                              })()}</span></p>
-                          </div>
-
-                        </div>
-
-                        <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-                        <div className="scroll" id="scrrrrol" style={{ height: 400, overflowY: 'auto' }} >
-
-
-
-                          {
-                            served?.map((dfgh, index) => {
-                              const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
-
-                              return (
-                                <>
-                                  <div className="d-flex  ">
-
-                                    <div style={{ width: '33%' }}>
-                                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
-                                    </div>
-
-                                    {correspondingErv ? (
-                                      <div style={{ width: '33%', textAlign: 'center' }}>
-                                        <div >
-
-                                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                                        </div>
-                                      </div>
-                                    ) : (
-                                      <>
-                                        <div style={{ width: '33%' }} >
-                                        </div></>
-                                    )}
-
-                                    <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                                        ( Total )
-                                        <span>
-                                          {(() => {
-                                            const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                            const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-
-                                            const tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                                            return (
-                                              <span>
-                                                {tot.toFixed(2) + "%"}
-                                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                                  {tot > 0 ? (
-                                                    <img
-                                                      src="up_arw.png"
-                                                      style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                      alt="up arrow"
-                                                    />
-                                                  ) : (
-                                                    <img
-                                                      src="d_arw.png"
-                                                      style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                      alt="down arrow"
-                                                    />
-                                                  )}
+                    <div className="changeone" style={{ marginTop: 80 }} >
+                                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                  
+                                        <div style={{ marginTop: -10 }} className="d-flex justify-content-between" >
+                                          <div className="d-flex justify-content-center align-items-center gap-5 " >
+                                            <div className="d-flex pt-4">
+                                              <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                                                setMeals(1)
+                                              }} className="" alt="Example Image" />
+                                              <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Served meals</p>
+                  
+                                            </div>
+                                            <div class="custom-inputonessfine pt-1 " >
+                  
+                                              <Select
+                                                className="newoneonee"
+                                                options={basicfine}
+                                                onChange={handleChangefine}
+                                                // value={selectedOptionsfine}
+                                                // onChange={handleChangefine}
+                                                placeholder="Select options..."
+                                                components={{
+                                                  // Option: CustomOptionfinal,
+                                                  MultiValue: () => null, // Hides default tags
+                                                  ValueContainer: ({ children, ...props }) => {
+                                                    const selectedValues = props.getValue(); 
+                                                    return (
+                                                      <components.ValueContainer {...props}>
+                                                        {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                                      </components.ValueContainer>
+                                                    );
+                                                  },
+                                                }}
+                                                hideSelectedOptions={false} // Show all options even if selected
+                                                styles={{
+                                                  control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                                                }}
+                                              />
+                  
+                                            </div>
+                                          </div>
+                  
+                                          <div className="d-flex justify-content-between align-items-center gap-5">
+                                            <div className="custom-inputoness d-flex justify-content-between" style={{
+                                              width: 250,
+                                              height: 45,
+                                              border: '1px solid rgb(203 203 203)'
+                                            }}>
+                  
+                                              <div className="input-group"  >
+                                                <input
+                                                  onChange={(e) => {
+                  
+                  
+                                                    searchvalue(e.target.value)
+                                                  }}
+                                                  type="text"
+                                                  className="form-control"
+                                                  placeholder="Meals Search..."
+                                                  style={{
+                                                    border: "none",
+                                                    boxShadow: "none",
+                                                    marginRight: "45px",
+                                                  }}
+                                                />
+                                                <span
+                                                  className="input-group-text"
+                                                  style={{
+                                                    background: "none",
+                                                    border: "none",
+                                                    cursor: "pointer",
+                                                    position: "absolute",
+                                                    right: 10,
+                                                  }}
+                                                >
+                                                  🔍
                                                 </span>
-                                              </span>
-                                            );
-                                          })()}
-                                        </span>
-                                      </p>
+                                              </div>
+                  
+                  
+                                            </div>
+                                            <img src="threedot.png" ref={toggleButtonRefs} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
+                  
+                                            {showDivs && (
+                                              <div
+                                                ref={dropdownRefs}
+                                                style={{
+                                                  width: 200,
+                                                marginTop: '0px',
+                                                padding: '10px',
+                                                backgroundColor: '#f8f9fa',
+                                                border: '1px solid #ccc',
+                                                borderRadius: '4px',
+                                                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                                                position: 'absolute',
+                                                right: '4%',
+                                                marginTop : 60
+                                                }}
+                                              >
+                                                <p style={{ color: '#707070' }}>Export as</p>
+                                                <hr />
+                                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                                                  mealexportpdf()
+                                                }}>PDF</p>
+                                              </div>
+                                            )}
+                  
+                                          </div>
+                                        </div>
+                  
+                                        <div style={{ marginTop: -20, padding: 20 }} >
+                                          <div className="d-flex justify-content-between" >
+                  
+                                            <div >
+                                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                                                ggggrt()}</span></p>
+                                            </div>
+                                            <div >
+                                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                  
+                                                ggggrts()
+                                              }</span></p>
+                                            </div>
+                                            <div >
+                                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                                                {(() => {
+                                                  let datd = ggggrt()
+                  
+                                                  let datdtwo = ggggrts()
+                  
+                                                  let tot = ((datd - datdtwo) / datdtwo) * 100
+                  
+                                                  return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                                                    style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+                  
+                                                    }} className="" alt="Example Image" /> :
+                                                    <img src="d_arw.png"
+                                                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+                  
+                                                      }} className="" alt="Example Image" />}</span></span>
+                  
+                  
+                                                  console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                                                })()}</span></p>
+                                            </div>
+                  
+                                          </div>
+                  
+                                          <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                  
+                                          <div className="scroll" id="scrrrrol" style={{ height: 400, overflowY: 'auto' }} >
+                  
+                  
+                  
+                                            {
+                                              served?.map((dfgh, index) => {
+                                                const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+                  
+                                                return (
+                                                  <>
+                                                    <div className="d-flex  ">
+                  
+                                                      <div style={{ width: '33%' }}>
+                                                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                                                      </div>
+                  
+                                                      {correspondingErv ? (
+                                                        <div style={{ width: '33%', textAlign: 'center' }}>
+                                                          <div >
+                  
+                                                            <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                                                          </div>
+                                                        </div>
+                                                      ) : (
+                                                        <>
+                                                          <div style={{ width: '33%' }} >
+                                                          </div></>
+                                                      )}
+                  
+                                                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                                                          ( Total )
+                                                          <span>
+                                                            {(() => {
+                                                              const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                                                              const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+                  
+                  
+                                                              const tot = ((datd - datdtwo) / datdtwo) * 100;
+                  
+                                                              return (
+                                                                <span>
+                                                                  {tot.toFixed(2) + "%"}
+                                                                  <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                                                    {tot > 0 ? (
+                                                                      <img
+                                                                        src="up_arw.png"
+                                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                                                        alt="up arrow"
+                                                                      />
+                                                                    ) : (
+                                                                      <img
+                                                                        src="d_arw.png"
+                                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                                                        alt="down arrow"
+                                                                      />
+                                                                    )}
+                                                                  </span>
+                                                                </span>
+                                                              );
+                                                            })()}
+                                                          </span>
+                                                        </p>
+                                                      </div>
+                  
+                                                    </div>
+                  
+                                                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                                                  </>
+                                                );
+                                              })
+                                            }
+                  
+                  
+                                          </div>
+                  
+                  
+                  
+                  
+                  
+                                        </div>
+                  
+                  
+                  
+                  
+                  
+                                      </div>
                                     </div>
-
-                                  </div>
-
-                                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                                </>
-                              );
-                            })
-                          }
-
-
-                        </div>
-
-
-
-
-
-                      </div>
-
-
-
-
-
-                    </div>
-                  </div>
                   : meals === 4 ?
 
 
                     <div className="changeone" style={{ marginTop: 80 }} >
                       <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-                        <div style={{marginTop:-20}} className="d-flex justify-content-between" >
+                        <div style={{ marginTop: -20 }} className="d-flex justify-content-between" >
                           <div style={{}} className="d-flex justify-content-center align-items-center gap-5 "  >
-                           <div className="d-flex pt-4">
-                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                              setMeals(1)
-                            }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: '500', color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Refunded meals</p>
+                            <div className="d-flex pt-4">
+                              <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                                setMeals(1)
+                              }} className="" alt="Example Image" />
+                              <p style={{ fontWeight: '500', color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Refunded meals</p>
                             </div>
                             <div class="custom-inputonessfine pt-1 " >
 
-<Select
-  className="newoneonee"
-  options={basicfine}
-  // value={selectedOptionsfine}
-  // onChange={handleChangefine}
-  placeholder="Select options..."
-  components={{
-    // Option: CustomOptionfinal,
-    MultiValue: () => null, // Hides default tags
-    ValueContainer: ({ children, ...props }) => {
-      const selectedValues = props.getValue();
-      return (
-        <components.ValueContainer {...props}>
-          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-        </components.ValueContainer>
-      );
-    },
-  }}
-  hideSelectedOptions={false} // Show all options even if selected
-  styles={{
-    control: (base) => ({ ...base, border: 'unset', color: '#707070'}),
-  }}
-/>
+                              <Select
+                                className="newoneonee"
+                                options={basicfine}
+                                // value={selectedOptionsfine}
+                                onChange={handleChangefinedd}
+                                placeholder="Select options..."
+                                components={{
+                                  // Option: CustomOptionfinal,
+                                  MultiValue: () => null, // Hides default tags
+                                  ValueContainer: ({ children, ...props }) => {
+                                    const selectedValues = props.getValue();
+                                    return (
+                                      <components.ValueContainer {...props}>
+                                        {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                      </components.ValueContainer>
+                                    );
+                                  },
+                                }}
+                                hideSelectedOptions={false} // Show all options even if selected
+                                styles={{
+                                  control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                                }}
+                              />
 
-</div>
-                        
+                            </div>
+
                           </div>
 
-                          <div  className="d-flex align-items-center" >
+                          <div className="d-flex align-items-center" >
                             <img src="threedot.png" ref={toggleButtonRefss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
 
                             {showDivss && (
@@ -6077,11 +6149,27 @@ let Mealsmulti = () => {
                           <div style={{ visibility: 'hidden' }}>
                             <div ref={pdfRefred}  >
 
-                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Meals received - timeline
+                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Meals received - timeline
                               </p>
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
 
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+const result = filteredOptions.map(item => item.label).join(", ");
+
+
+if (result === "" || result === undefined || result === null) {
+  return 'All Venue'
+} else {
+
+  return result
+
+}
+
+
+})()}</p>
+
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 , wordSpacing: -5 }} >Group name</p>
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 , wordSpacing: -5 }} >For the period {(() => {
                                 const datefineda = new Date(dateRange[0]);
 
                                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6102,7 +6190,7 @@ let Mealsmulti = () => {
 
                                 return (formattedDate)
                               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 , wordSpacing: -5 }} >Compared with the period {(() => {
                                 const datefineda = new Date(dateRangetwo[0]);
 
                                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6124,21 +6212,8 @@ let Mealsmulti = () => {
                                 return (formattedDate)
                               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-                                const result = selectedOptions.map(item => item.value).join(",");
-
-                                if (result === "" || result === undefined || result === null) {
-                                  return 'All'
-                                } else {
-
-                                  return result
-
-                                }
-
-
-                              })()}</p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 , wordSpacing: -5 }} >Table ranges contains: All</p>
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 , wordSpacing: -5 }} >Stages contains: {(() => {
 
                                 const result = selectedhubOptions.map(item => item.label).join(",");
 
@@ -6152,7 +6227,7 @@ let Mealsmulti = () => {
 
 
                               })()} </p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 , wordSpacing: -5 }} >Courses contains: {(() => {
 
                                 const result = selectedCources.map(item => item.label).join(",");
 
@@ -6209,737 +6284,721 @@ let Mealsmulti = () => {
       </div>
 
 
-      <div style={{ visibility: 'hidden' }}>
-        <div ref={pdfRef}  >
-
-          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Edits</p>
-
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
-
-            const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-            const result = filteredOptions.map(item => item.label).join(", ");
-
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All Venue'
-            } else {
-
-              return result
-
-            }
-
-
-          })()}</p>
-
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >Group name</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
-            const datefineda = new Date(dateRange[0]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} to {(() => {
-            const datefineda = new Date(dateRange[1]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
-            const datefineda = new Date(dateRangetwo[0]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} to {(() => {
-            const datefineda = new Date(dateRangetwo[1]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-
-
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains: All</p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-
-            const result = selectedhubOptions.map(item => item.label).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()} </p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-
-            const result = selectedCources.map(item => item.label).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()}</p>
-
-
-          <div style={{ marginTop: 20, padding: 10 }} >
-            <div className="d-flex justify-content-between" >
-
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                  editall?.edited?.length
-                  + editall?.deleted?.length
-                  + editall?.moved?.length}</span></p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-
-                  editallone?.edited?.length
-                  + editallone?.deleted?.length
-                  + editallone?.moved?.length
-                }</span></p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                  {(() => {
-                    let datd = editallone?.edited?.length
+     <div style={{ visibility: 'hidden' }}>
+            <div ref={pdfRef}  >
+    
+              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Edits</p>
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
+    
+                const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+                const result = filteredOptions.map(item => item.label).join(", ");
+    
+    
+                if (result === "" || result === undefined || result === null) {
+                  return 'All Venue'
+                } else {
+    
+                  return result
+    
+                }
+    
+    
+              })()}</p>
+    
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >Group name</p>
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
+                const datefineda = new Date(dateRange[0]);
+    
+                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+    
+                return (formattedDate)
+              })()} to {(() => {
+                const datefineda = new Date(dateRange[1]);
+    
+                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+    
+                return (formattedDate)
+              })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
+                const datefineda = new Date(dateRangetwo[0]);
+    
+                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+    
+                return (formattedDate)
+              })()} to {(() => {
+                const datefineda = new Date(dateRangetwo[1]);
+    
+                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+    
+                return (formattedDate)
+              })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+    
+    
+    
+              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains: All</p>
+              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+    
+                const result = selectedhubOptions.map(item => item.label).join(",");
+    
+                if (result === "" || result === undefined || result === null) {
+                  return 'All'
+                } else {
+    
+                  return result
+    
+                }
+    
+    
+              })()} </p>
+              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+    
+                const result = selectedCources.map(item => item.label).join(",");
+    
+                if (result === "" || result === undefined || result === null) {
+                  return 'All'
+                } else {
+    
+                  return result
+    
+                }
+    
+    
+              })()}</p>
+    
+    
+              <div style={{ marginTop: 20, padding: 10 }} >
+                <div className="d-flex justify-content-between" >
+    
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                      editall?.edited?.length
+                      + editall?.deleted?.length
+                      + editall?.moved?.length}</span></p>
+                  </div>
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+    
+                      editallone?.edited?.length
                       + editallone?.deleted?.length
                       + editallone?.moved?.length
-
-                    let datdtwo = editall?.edited?.length
-                      + editall?.deleted?.length
-                      + editall?.moved?.length
-
-                    let tot = ((datdtwo - datd) / datd) * 100
-
-                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                      }} className="" alt="Example Image" /> :
-                      <img src="d_arw.png"
-                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" />}</span></span>
-
-
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                  })()}</span></p>
-              </div>
-
-            </div>
-
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black' }} />
-
-            <div className="d-flex justify-content-between" >
-
-              <div >
-                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.moved?.length}</p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}  </p>
-              </div>
-              <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                  {(() => {
-                    let datd = editallone?.moved?.length
-
-                    let datdtwo = editall?.moved?.length
-
-                    let tot = ((datdtwo - datd) / datd) * 100
-
-                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                      }} className="" alt="Example Image" /> :
-                      <img src="d_arw.png"
-                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" />}</span></span>
-
-
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                  })()}</span></p>
-              </div>
-
-            </div>
-
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black',  }} />
-
-            <div className="d-flex justify-content-between" >
-
-              <div >
-                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.edited?.length}</p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}  </p>
-              </div>
-              <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                  {(() => {
-                    let datd = editallone?.edited?.length
-
-                    let datdtwo = editall?.edited?.length
-
-                    let tot = ((datdtwo - datd) / datd) * 100
-
-                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                      }} className="" alt="Example Image" /> :
-                      <img src="d_arw.png"
-                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" />}</span></span>
-
-
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                  })()}</span></p>
-              </div>
-
-            </div>
-
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black',  }} />
-
-            <div className="d-flex justify-content-between" >
-
-              <div >
-                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.deleted?.length}</p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.deleted?.length}  </p>
-              </div>
-              <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                  {(() => {
-                    let datd = editallone?.deleted?.length
-
-                    let datdtwo = editall?.deleted?.length
-
-                    let tot = ((datdtwo - datd) / datd) * 100
-
-                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                      }} className="" alt="Example Image" /> :
-                      <img src="d_arw.png"
-                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" />}</span></span>
-
-
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                  })()}</span></p>
-              </div>
-
-            </div>
-
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black',   }} />
-
-
-            <div className="d-flex justify-content-between" >
-
-              <div >
-                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.tableMoved?.length}</p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.tableMoved?.length}  </p>
-              </div>
-              <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                  {(() => {
-                    let datd = editallone?.tableMoved?.length
-
-                    let datdtwo = editall?.tableMoved?.length
-
-                    let tot = ((datdtwo - datd) / datd) * 100
-
-                    console.log(tot, 'nan')
-
-                    return <span >{isNaN(tot) ? "+000.00" : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                      }} className="" alt="Example Image" /> :
-                      <img src="d_arw.png"
-                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" />}</span></span>
-
-
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                  })()}</span></p>
-              </div>
-
-            </div>
-
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-
-          </div>
-        </div >
-      </div>
-
-      <div style={{ visibility: 'hidden' }}>
-        <div ref={pdfRefss}  >
-
-          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Served meals</p>
-
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-            const datefineda = new Date(dateRange[0]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} to {(() => {
-            const datefineda = new Date(dateRange[1]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-            const datefineda = new Date(dateRangetwo[0]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} to {(() => {
-            const datefineda = new Date(dateRangetwo[1]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-            const result = selectedOptions.map(item => item.value).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()}</p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-
-            const result = selectedhubOptions.map(item => item.label).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()} </p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-
-            const result = selectedCources.map(item => item.label).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()}</p>
-
-
-          <div style={{ marginTop: 20, padding: 10 }} >
-
-            <div className="d-flex justify-content-between" >
-
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
-                  ggggrt()} </p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
-
-                  ggggrts()
-                } </p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
-                  ( Total ){" "}
-                  {(() => {
-                    let datd = ggggrt();
-                    let datdtwo = ggggrts();
-                    let tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                    return (
-                      <>
-                        {tot.toFixed(2) + "%"}{" "}
-                        <img
-                          src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                          style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
-                          alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
-                        />
-                      </>
-                    );
-                  })()}
-                </p>
-
-
-              </div>
-
-            </div>
-
-
-            {
-              served?.map((dfgh, index) => {
-                const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
-
-                return (
-                  <>
-                    <div className="d-flex  mt-3">
-
-                      <div style={{ width: '33%' }}>
-                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{dfgh?.count}</p>
-                      </div>
-
-                      {correspondingErv ? (
-                        <div style={{ width: '33%', textAlign: 'center' }}>
-                          <div >
-
-                            <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{correspondingErv?.count}</p>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div style={{ width: '33%' }} >
-                          </div></>
-                      )}
-
-                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
-                          ( Total ){" "}
-                          {(() => {
-                            const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                            const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-                            const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0; // Prevent division by zero
-
-                            return (
-                              <>
-                                {tot.toFixed(2) + "%"}{" "}
-                                <img
-                                  src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                                  style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
-                                  alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
-                                />
-                              </>
-                            );
-                          })()}
-                        </p>
-
-                      </div>
-
-                    </div>
-
-                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
-                  </>
-                );
-              })
-            }
-
-
-          </div>
-        </div >
-      </div>
-
-
-      <div style={{ visibility: 'hidden' }}>
-        <div ref={pdfRefsss}  >
-
-          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Refunded meals</p>
-
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-            const datefineda = new Date(dateRange[0]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} to {(() => {
-            const datefineda = new Date(dateRange[1]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-            const datefineda = new Date(dateRangetwo[0]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} to {(() => {
-            const datefineda = new Date(dateRangetwo[1]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-            const result = selectedOptions.map(item => item.value).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()}</p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-
-            const result = selectedhubOptions.map(item => item.label).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()} </p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-
-            const result = selectedCources.map(item => item.label).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()}</p>
-
-
-          <div style={{ marginTop: 20, padding: 10 }} >
-
-            <div className="d-flex justify-content-between" >
-
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                  ggggrtsg()}</span></p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-
-                  ggggrtsgg()
-                }</span></p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                  {(() => {
-                    let datd = ggggrtsg()
-
-                    let datdtwo = ggggrtsgg()
-
-                    let tot = ((datd - datdtwo) / datdtwo) * 100
-
-                    return <span >{isNaN(tot) ? 0 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{isNaN(tot) ?
-                      '%' : tot > 0 ? <img src="up_arw.png"
-                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" /> :
-                        <img src="d_arw.png"
+                    }</span></p>
+                  </div>
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                      {(() => {
+                        let datd = editallone?.edited?.length
+                          + editallone?.deleted?.length
+                          + editallone?.moved?.length
+    
+                        let datdtwo = editall?.edited?.length
+                          + editall?.deleted?.length
+                          + editall?.moved?.length
+    
+                        let tot = ((datdtwo - datd) / datd) * 100
+    
+                        return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                           style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                          }} className="" alt="Example Image" />}</span></span>
-
-
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                  })()}</span></p>
+    
+                          }} className="" alt="Example Image" /> :
+                          <img src="d_arw.png"
+                            style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+    
+                            }} className="" alt="Example Image" />}</span></span>
+    
+    
+                        console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                      })()}</span></p>
+                  </div>
+    
+                </div>
+    
+                <hr style={{ margin: '0px 0px', backgroundColor: 'black' }} />
+    
+                <div className="d-flex justify-content-between" >
+    
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.moved?.length}</p>
+                  </div>
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}  </p>
+                  </div>
+                  <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                      {(() => {
+                        let datd = editallone?.moved?.length
+    
+                        let datdtwo = editall?.moved?.length
+    
+                        let tot = ((datdtwo - datd) / datd) * 100
+    
+                        return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                          style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+    
+                          }} className="" alt="Example Image" /> :
+                          <img src="d_arw.png"
+                            style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+    
+                            }} className="" alt="Example Image" />}</span></span>
+    
+    
+                        console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                      })()}</span></p>
+                  </div>
+    
+                </div>
+    
+                <hr style={{ margin: '0px 0px', backgroundColor: 'black', }} />
+    
+                <div className="d-flex justify-content-between" >
+    
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.edited?.length}</p>
+                  </div>
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}  </p>
+                  </div>
+                  <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                      {(() => {
+                        let datd = editallone?.edited?.length
+    
+                        let datdtwo = editall?.edited?.length
+    
+                        let tot = ((datdtwo - datd) / datd) * 100
+    
+                        return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                          style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+    
+                          }} className="" alt="Example Image" /> :
+                          <img src="d_arw.png"
+                            style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+    
+                            }} className="" alt="Example Image" />}</span></span>
+    
+    
+                        console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                      })()}</span></p>
+                  </div>
+    
+                </div>
+    
+                <hr style={{ margin: '0px 0px', backgroundColor: 'black', }} />
+    
+                <div className="d-flex justify-content-between" >
+    
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.deleted?.length}</p>
+                  </div>
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.deleted?.length}  </p>
+                  </div>
+                  <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                      {(() => {
+                        let datd = editallone?.deleted?.length
+    
+                        let datdtwo = editall?.deleted?.length
+    
+                        let tot = ((datdtwo - datd) / datd) * 100
+    
+                        return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                          style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+    
+                          }} className="" alt="Example Image" /> :
+                          <img src="d_arw.png"
+                            style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+    
+                            }} className="" alt="Example Image" />}</span></span>
+    
+    
+                        console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                      })()}</span></p>
+                  </div>
+    
+                </div>
+    
+                <hr style={{ margin: '0px 0px', backgroundColor: 'black', }} />
+    
+    
+                <div className="d-flex justify-content-between" >
+    
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.tableMoved?.length}</p>
+                  </div>
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.tableMoved?.length}  </p>
+                  </div>
+                  <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                      {(() => {
+                        let datd = editallone?.tableMoved?.length
+    
+                        let datdtwo = editall?.tableMoved?.length
+    
+                        let tot = ((datdtwo - datd) / datd) * 100
+    
+                        console.log(tot, 'nan')
+    
+                        return <span >{isNaN(tot) ? "+000.00" : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                          style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+    
+                          }} className="" alt="Example Image" /> :
+                          <img src="d_arw.png"
+                            style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+    
+                            }} className="" alt="Example Image" />}</span></span>
+    
+    
+                        console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                      })()}</span></p>
+                  </div>
+    
+                </div>
+    
+                <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+    
+    
               </div>
+            </div >
+          </div>
 
-            </div>
+      <div style={{ visibility: 'hidden' }}>
+             <div ref={pdfRefss}  >
+     
+               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Served meals</p>
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
+     
+     const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+     const result = filteredOptions.map(item => item.label).join(", ");
+     
+     
+     if (result === "" || result === undefined || result === null) {
+       return 'All Venue'
+     } else {
+     
+       return result
+     
+     }
+     
+     
+     })()}</p>
+     
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 ,wordSpacing: -5 }} >Group name</p>
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 ,wordSpacing: -5 }} >For the period {(() => {
+                 const datefineda = new Date(dateRange[0]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} to {(() => {
+                 const datefineda = new Date(dateRange[1]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 ,wordSpacing: -5 }} >Compared with the period {(() => {
+                 const datefineda = new Date(dateRangetwo[0]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} to {(() => {
+                 const datefineda = new Date(dateRangetwo[1]);
+     
+                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                   day: "2-digit",
+                   month: "short",
+                   year: "numeric"
+                 });
+     
+                 return (formattedDate)
+               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+     
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains: All</p>
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 ,wordSpacing: -5}} >Stages contains: {(() => {
+     
+                 const result = selectedhubOptions.map(item => item.label).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()} </p>
+               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 ,wordSpacing: -5}} >Courses contains: {(() => {
+     
+                 const result = selectedCources.map(item => item.label).join(",");
+     
+                 if (result === "" || result === undefined || result === null) {
+                   return 'All'
+                 } else {
+     
+                   return result
+     
+                 }
+     
+     
+               })()}</p>
+     
+     
+               <div style={{ marginTop: 20, padding: 10 }} >
+     
+                 <div className="d-flex justify-content-between" >
+     
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+                       ggggrt()} </p>
+                   </div>
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+     
+                       ggggrts()
+                     } </p>
+                   </div>
+                   <div >
+                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
+                       ( Total ){" "}
+                       {(() => {
+                         let datd = ggggrt();
+                         let datdtwo = ggggrts();
+                         let tot = ((datd - datdtwo) / datdtwo) * 100;
+     
+                         return (
+                           <>
+                             {tot.toFixed(2) + "%"}{" "}
+                             <img
+                               src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                               style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
+                               alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+                             />
+                           </>
+                         );
+                       })()}
+                     </p>
+     
+     
+                   </div>
+     
+                 </div>
+                 <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
+     
+                 {
+                   served?.map((dfgh, index) => {
+                     const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+     
+                     return (
+                       <>
+                         <div className="d-flex  mt-3">
+     
+                           <div style={{ width: '33%' }}>
+                             <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{dfgh?.count}</p>
+                           </div>
+     
+                           {correspondingErv ? (
+                             <div style={{ width: '33%', textAlign: 'center' }}>
+                               <div >
+     
+                                 <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                 <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{correspondingErv?.count}</p>
+                               </div>
+                             </div>
+                           ) : (
+                             <>
+                               <div style={{ width: '33%' }} >
+                               </div></>
+                           )}
+     
+                           <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
+                               ( Total ){" "}
+                               {(() => {
+                                 const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                                 const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+     
+                                 const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0; // Prevent division by zero
+     
+                                 return (
+                                   <>
+                                     {tot.toFixed(2) + "%"}{" "}
+                                     <img
+                                       src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                                       style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
+                                       alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+                                     />
+                                   </>
+                                 );
+                               })()}
+                             </p>
+     
+                           </div>
+     
+                         </div>
+     
+                         <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
+                       </>
+                     );
+                   })
+                 }
+     
+     
+               </div>
+             </div >
+           </div>
 
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
-            <div className="scroll" id="scrrrrol"  >
-
-
-
-              {
-                minperday?.map((dfgh, index) => {
-
-                  const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
-
-                  return (
-                    <>
-                      <div className="d-flex  ">
-
-                        <div style={{ width: '33%' }}>
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
-                        </div>
-
-                        {correspondingErv ? (
-                          <div style={{ width: '33%', textAlign: 'center' }}>
-                            <div >
-
-                              <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                            </div>
+     <div style={{ visibility: 'hidden' }}>
+            <div ref={pdfRefsss}  >
+    
+              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5  }}>Refunded meals</p>
+    
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
+    
+    const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+    const result = filteredOptions.map(item => item.label).join(", ");
+    
+    
+    if (result === "" || result === undefined || result === null) {
+      return 'All Venue'
+    } else {
+    
+      return result
+    
+    }
+    
+    
+    })()}</p>
+    
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 , wordSpacing: -5  }} >Group name</p>
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 , wordSpacing: -5  }} >For the period {(() => {
+                const datefineda = new Date(dateRange[0]);
+    
+                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+    
+                return (formattedDate)
+              })()} to {(() => {
+                const datefineda = new Date(dateRange[1]);
+    
+                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+    
+                return (formattedDate)
+              })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 , wordSpacing: -5  }} >Compared with the period {(() => {
+                const datefineda = new Date(dateRangetwo[0]);
+    
+                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+    
+                return (formattedDate)
+              })()} to {(() => {
+                const datefineda = new Date(dateRangetwo[1]);
+    
+                const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric"
+                });
+    
+                return (formattedDate)
+              })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+    
+              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 , wordSpacing: -5  }} >Table ranges contains: All</p>
+              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 , wordSpacing: -5  }} >Stages contains: {(() => {
+    
+                const result = selectedhubOptions.map(item => item.label).join(",");
+    
+                if (result === "" || result === undefined || result === null) {
+                  return 'All'
+                } else {
+    
+                  return result
+    
+                }
+    
+    
+              })()} </p>
+              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 , wordSpacing: -5  }} >Courses contains: {(() => {
+    
+                const result = selectedCources.map(item => item.label).join(",");
+    
+                if (result === "" || result === undefined || result === null) {
+                  return 'All'
+                } else {
+    
+                  return result
+    
+                }
+    
+    
+              })()}</p>
+    
+    
+              <div style={{ marginTop: 20, padding: 10 }} >
+    
+                <div className="d-flex justify-content-between" >
+    
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+                      ggggrtsg()} </p>
+                  </div>
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) {
+    
+                      ggggrtsgg()
+                    } </p>
+                  </div>
+                  <div >
+                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+      ( Total )  
+      {(() => {
+        let datd = ggggrtsg();
+        let datdtwo = ggggrtsgg();
+        let tot = ((datd - datdtwo) / datdtwo) * 100;
+    
+        console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot);
+    
+        return (
+          <>
+            {isNaN(tot) ? 0 : tot.toFixed(2) + "%"}  
+          </>
+        );
+      })()} 
+    </p>
+    
+                  </div>
+    
+                </div>
+    
+                <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+    
+                <div className="scroll" id="scrrrrol"  >
+    
+    
+    
+                  {
+                    minperday?.map((dfgh, index) => {
+    
+                      const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
+    
+                      return (
+                        <>
+                        <div className="d-flex" style={{ }} >
+                          {/* Left Section */}
+                          <div style={{ width: '33%' }}>
+                            <p style={{ fontWeight: 700, color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                            <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
                           </div>
-                        ) : (
-                          <>
-                            <div style={{ width: '33%' }} >
-                            </div></>
-                        )}
-
-                        <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                            ( Total )
-                            <span>
+                      
+                          {/* Middle Section */}
+                          <div style={{ width: '33%', textAlign: 'center' }}>
+                            {correspondingErv ? (
+                              <>
+                                <p style={{ fontWeight: 700, color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                              </>
+                            ) : null}
+                          </div>
+                      
+                          {/* Right Section */}
+                          <div style={{ width: '33%', display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
+                            <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px', display: 'flex', alignItems: 'center' }}>
+                              ( Total )
                               {(() => {
-                                const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-
-                                const tot = ((datd - datdtwo) / datdtwo) * 100;
-
+                                const datd = dfgh?.count || 0;
+                                const datdtwo = correspondingErv?.count || 0;
+                                const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
                                 return (
-                                  <span>
-                                    {tot.toFixed(2) + "%"}
-                                    <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                      {tot > 0 ? (
-                                        <img
-                                          src="up_arw.png"
-                                          style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                          alt="up arrow"
-                                        />
-                                      ) : (
-                                        <img
-                                          src="d_arw.png"
-                                          style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                          alt="down arrow"
-                                        />
-                                      )}
-                                    </span>
-                                  </span>
+                                  <>
+                                    {tot.toFixed(2)}%
+                                    <img
+                                      src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                                      style={{ width: 16, height: 16, cursor: 'pointer', marginLeft: 5, verticalAlign: 'middle' }}
+                                      alt={tot > 0 ? "up arrow" : "down arrow"}
+                                    />
+                                  </>
                                 );
                               })()}
-                            </span>
-                          </p>
+                            </p>
+                          </div>
                         </div>
-
-                      </div>
-
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
-                    </>
-                  );
-                })
-              }
-
-
-            </div>
-
-
-
-
+                        <hr style={{ margin: 0, backgroundColor: 'black', height: 2 }} />
+                      </>
+                      
+                      
+                      );
+                    })
+                  }
+    
+    
+                </div>
+    
+    
+    
+    
+              </div>
+            </div >
           </div>
-        </div >
-      </div>
 
     </div>
   );

@@ -5823,11 +5823,28 @@ let Multi_venue = () => {
                             <div style={{ visibility: 'hidden' }}>
                               <div ref={pdfRefredone}  >
 
-                                <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
+                                <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5  }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
                                   {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
 
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+                                  <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
+
+const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+const result = filteredOptions.map(item => item.label).join(", ");
+
+
+if (result === "" || result === undefined || result === null) {
+  return 'All Venue'
+} else {
+
+  return result
+
+}
+
+
+})()}</p>
+
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 , wordSpacing: -5 }} >Group name</p>
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 , wordSpacing: -5 }} >For the period {(() => {
                                   const datefineda = new Date(dateRange[0]);
 
                                   const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -5848,7 +5865,7 @@ let Multi_venue = () => {
 
                                   return (formattedDate)
                                 })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 , wordSpacing: -5  }} >Compared with the period {(() => {
                                   const datefineda = new Date(dateRangetwo[0]);
 
                                   const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -5870,21 +5887,8 @@ let Multi_venue = () => {
                                   return (formattedDate)
                                 })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-                                  const result = selectedOptions.map(item => item.value).join(",");
-
-                                  if (result === "" || result === undefined || result === null) {
-                                    return 'All'
-                                  } else {
-
-                                    return result
-
-                                  }
-
-
-                                })()}</p>
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 , wordSpacing: -5  }} >Table ranges contains: All</p>
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20  , wordSpacing: -5  }} >Stages contains: {(() => {
 
                                   const result = selectedhubOptions.map(item => item.label).join(",");
 
@@ -5898,7 +5902,7 @@ let Multi_venue = () => {
 
 
                                 })()} </p>
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 , wordSpacing: -5  }} >Courses contains: {(() => {
 
                                   const result = selectedCources.map(item => item.label).join(",");
 
@@ -5999,11 +6003,27 @@ let Multi_venue = () => {
                             <div style={{ visibility: 'hidden' }}>
                               <div ref={pdfRefred}  >
 
-                                <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
+                                <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
                                   {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
+                                  <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
 
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+const result = filteredOptions.map(item => item.label).join(", ");
+
+
+if (result === "" || result === undefined || result === null) {
+  return 'All Venue'
+} else {
+
+  return result
+
+}
+
+
+})()}</p>
+
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 , wordSpacing: -5}} >Group name</p>
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
                                   const datefineda = new Date(dateRange[0]);
 
                                   const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6024,7 +6044,7 @@ let Multi_venue = () => {
 
                                   return (formattedDate)
                                 })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
                                   const datefineda = new Date(dateRangetwo[0]);
 
                                   const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6046,21 +6066,8 @@ let Multi_venue = () => {
                                   return (formattedDate)
                                 })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-                                  const result = selectedOptions.map(item => item.value).join(",");
-
-                                  if (result === "" || result === undefined || result === null) {
-                                    return 'All'
-                                  } else {
-
-                                    return result
-
-                                  }
-
-
-                                })()}</p>
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, wordSpacing: -5 }} >Table ranges contains: All</p>
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 , wordSpacing: -5}} >Stages contains: {(() => {
 
                                   const result = selectedhubOptions.map(item => item.label).join(",");
 
@@ -6074,7 +6081,7 @@ let Multi_venue = () => {
 
 
                                 })()} </p>
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 , wordSpacing: -5}} >Courses contains: {(() => {
 
                                   const result = selectedCources.map(item => item.label).join(",");
 

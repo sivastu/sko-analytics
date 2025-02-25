@@ -2559,25 +2559,18 @@ let Meals = () => {
 
   };
 
-  const handleChangefinedd = (selected) => {
-    console.log(editall, 'selected')
+  const handleChangefinedd = (selected) => { 
 
-    if (editall.length === 0) {
+    if (minperday.length === 0) {
 
     } else {
-      setEditall((prevState) => ({
-        ...prevState,
-        orders: [...prevState.orders].reverse() // Spread operator to avoid direct mutation
-      }));
+      setMinperday((prevState) => [...prevState].reverse());
     }
 
-    if (editallone.length === 0) {
+    if (maxperday.length === 0) {
 
     } else {
-      setEditallone((prevState) => ({
-        ...prevState,
-        orders: [...prevState.orders].reverse() // Spread operator to avoid direct mutation
-      }));
+      setMaxperday((prevState) => [...prevState].reverse());
 
     }
 
@@ -5384,14 +5377,15 @@ let Meals = () => {
                               ref={dropdownRefs}
                               style={{
                                 width: 200,
-                                marginTop: '0px',
-                                padding: '10px',
-                                backgroundColor: '#f8f9fa',
-                                border: '1px solid #ccc',
-                                borderRadius: '4px',
-                                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                                position: 'absolute',
-                                right: '3%'
+                              marginTop: '0px',
+                              padding: '10px',
+                              backgroundColor: '#f8f9fa',
+                              border: '1px solid #ccc',
+                              borderRadius: '4px',
+                              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                              position: 'absolute',
+                              right: '4%',
+                              marginTop : 60
                               }}
                             >
                               <p style={{ color: '#707070' }}>Export as</p>
@@ -5598,7 +5592,8 @@ let Meals = () => {
                                   borderRadius: '4px',
                                   boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
                                   position: 'absolute',
-                                  right: '3%'
+                                  right: '4%',
+                                  marginTop : 60
                                 }}
                               >
                                 <p style={{ color: '#707070' }}>Export as</p>
@@ -6460,10 +6455,27 @@ if (result === "" || result === undefined || result === null) {
       <div style={{ visibility: 'hidden' }}>
         <div ref={pdfRefsss}  >
 
-          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Refunded meals</p>
+          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5  }}>Refunded meals</p>
 
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
+
+const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+const result = filteredOptions.map(item => item.label).join(", ");
+
+
+if (result === "" || result === undefined || result === null) {
+  return 'All Venue'
+} else {
+
+  return result
+
+}
+
+
+})()}</p>
+
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 , wordSpacing: -5  }} >Group name</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 , wordSpacing: -5  }} >For the period {(() => {
             const datefineda = new Date(dateRange[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6484,7 +6496,7 @@ if (result === "" || result === undefined || result === null) {
 
             return (formattedDate)
           })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 , wordSpacing: -5  }} >Compared with the period {(() => {
             const datefineda = new Date(dateRangetwo[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6506,21 +6518,8 @@ if (result === "" || result === undefined || result === null) {
             return (formattedDate)
           })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-            const result = selectedOptions.map(item => item.value).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()}</p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 , wordSpacing: -5  }} >Table ranges contains: All</p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 , wordSpacing: -5  }} >Stages contains: {(() => {
 
             const result = selectedhubOptions.map(item => item.label).join(",");
 
@@ -6534,7 +6533,7 @@ if (result === "" || result === undefined || result === null) {
 
 
           })()} </p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 , wordSpacing: -5  }} >Courses contains: {(() => {
 
             const result = selectedCources.map(item => item.label).join(",");
 
@@ -6556,39 +6555,35 @@ if (result === "" || result === undefined || result === null) {
 
               <div >
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                  ggggrtsg()}</span></p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+                  ggggrtsg()} </p>
               </div>
               <div >
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) {
 
                   ggggrtsgg()
-                }</span></p>
+                } </p>
               </div>
               <div >
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                  {(() => {
-                    let datd = ggggrtsg()
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+  ( Total )  
+  {(() => {
+    let datd = ggggrtsg();
+    let datdtwo = ggggrtsgg();
+    let tot = ((datd - datdtwo) / datdtwo) * 100;
 
-                    let datdtwo = ggggrtsgg()
+    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot);
 
-                    let tot = ((datd - datdtwo) / datdtwo) * 100
+    return (
+      <>
+        {isNaN(tot) ? 0 : tot.toFixed(2) + "%"}  
+      </>
+    );
+  })()} 
+</p>
 
-                    return <span >{isNaN(tot) ? 0 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{isNaN(tot) ?
-                      '%' : tot > 0 ? <img src="up_arw.png"
-                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" /> :
-                        <img src="d_arw.png"
-                          style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                          }} className="" alt="Example Image" />}</span></span>
-
-
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                  })()}</span></p>
               </div>
 
             </div>
@@ -6606,67 +6601,49 @@ if (result === "" || result === undefined || result === null) {
 
                   return (
                     <>
-                      <div className="d-flex  ">
-
-                        <div style={{ width: '33%' }}>
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
-                        </div>
-
-                        {correspondingErv ? (
-                          <div style={{ width: '33%', textAlign: 'center' }}>
-                            <div >
-
-                              <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                            </div>
-                          </div>
-                        ) : (
-                          <>
-                            <div style={{ width: '33%' }} >
-                            </div></>
-                        )}
-
-                        <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                            ( Total )
-                            <span>
-                              {(() => {
-                                const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-
-                                const tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                                return (
-                                  <span>
-                                    {tot.toFixed(2) + "%"}
-                                    <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                      {tot > 0 ? (
-                                        <img
-                                          src="up_arw.png"
-                                          style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                          alt="up arrow"
-                                        />
-                                      ) : (
-                                        <img
-                                          src="d_arw.png"
-                                          style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                          alt="down arrow"
-                                        />
-                                      )}
-                                    </span>
-                                  </span>
-                                );
-                              })()}
-                            </span>
-                          </p>
-                        </div>
-
+                    <div className="d-flex" >
+                      {/* Left Section */}
+                      <div style={{ width: '33%' }}>
+                        <p style={{ fontWeight: 700, color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                        <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
                       </div>
-
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
-                    </>
+                  
+                      {/* Middle Section */}
+                      <div style={{ width: '33%', textAlign: 'center' }}>
+                        {correspondingErv ? (
+                          <>
+                            <p style={{ fontWeight: 700, color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                            <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                          </>
+                        ) : null}
+                      </div>
+                  
+                      {/* Right Section */}
+                      <div style={{ width: '33%', display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
+                        <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px', display: 'flex', alignItems: 'center' }}>
+                          ( Total )
+                          {(() => {
+                            const datd = dfgh?.count || 0;
+                            const datdtwo = correspondingErv?.count || 0;
+                            const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
+                            return (
+                              <>
+                                {tot.toFixed(2)}%
+                                <img
+                                  src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                                  style={{ width: 16, height: 16, cursor: 'pointer', marginLeft: 5, verticalAlign: 'middle' }}
+                                  alt={tot > 0 ? "up arrow" : "down arrow"}
+                                />
+                              </>
+                            );
+                          })()}
+                        </p>
+                      </div>
+                    </div>
+                    <hr style={{ margin: 0, backgroundColor: 'black', height: 2 }} />
+                  </>
+                  
+                  
                   );
                 })
               }
