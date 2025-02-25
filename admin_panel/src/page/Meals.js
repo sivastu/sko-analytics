@@ -2559,6 +2559,35 @@ let Meals = () => {
 
   };
 
+  const handleChangefinedd = (selected) => {
+    console.log(editall, 'selected')
+
+    if (editall.length === 0) {
+
+    } else {
+      setEditall((prevState) => ({
+        ...prevState,
+        orders: [...prevState.orders].reverse() // Spread operator to avoid direct mutation
+      }));
+    }
+
+    if (editallone.length === 0) {
+
+    } else {
+      setEditallone((prevState) => ({
+        ...prevState,
+        orders: [...prevState.orders].reverse() // Spread operator to avoid direct mutation
+      }));
+
+    }
+
+
+    setSelectedOptionsfine(selected || []);
+
+
+  };
+
+
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
 
     let alldat = basicall
@@ -5530,7 +5559,7 @@ let Meals = () => {
                                 className="newoneonee"
                                 options={basicfine}
                                 // value={selectedOptionsfine}
-                                // onChange={handleChangefine}
+                                onChange={handleChangefinedd}
                                 placeholder="Select options..."
                                 components={{
                                   // Option: CustomOptionfinal,
