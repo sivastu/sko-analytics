@@ -30,9 +30,9 @@ let UserRent = () => {
   let [forget, setForget] = useState(false)
   let [forgetvalue, setForgetvalse] = useState('')
 
-  useEffect(()=>{
+  useEffect(() => {
     loginCheck()
-  },[])
+  }, [])
 
   let loginCheck = async () => {
     let getdata = sessionStorage.getItem('data')
@@ -43,7 +43,7 @@ let UserRent = () => {
     let decry = decrypt(getdata)
 
     let parsedatajson = JSON.parse(decry)
- 
+
     const db = getDatabase(app);
     const newDocRef = ref(db, `user`);
 
@@ -54,13 +54,13 @@ let UserRent = () => {
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
 
-      if (foundUser) { 
+      if (foundUser) {
         navigate('/admin')
         // Check if the password matches
         if (foundUser.Password === parsedatajson.Password) {
 
         } else {
-          
+
           return
         }
       } else {
@@ -86,18 +86,18 @@ let UserRent = () => {
     }
   };
 
-   const encrypt = ( plainText ) => {
+  const encrypt = (plainText) => {
     const cipherText = CryptoJS.AES.encrypt(plainText, 'secretKey').toString()
-    console.log(cipherText ,'cipherText')
+    console.log(cipherText, 'cipherText')
     return cipherText
-}
+  }
 
- const decrypt = ( cipherText ) => {
-    const bytes = CryptoJS.AES.decrypt(cipherText, 'secretKey' )
+  const decrypt = (cipherText) => {
+    const bytes = CryptoJS.AES.decrypt(cipherText, 'secretKey')
     const plainText = bytes.toString(CryptoJS.enc.Utf8)
     return plainText
 
-}
+  }
 
   let sendmail = async () => {
 
@@ -158,47 +158,47 @@ let UserRent = () => {
           if (foundUser.Password === password) {
             console.log("Login successful:", foundUser);
 
-            let fing = encrypt( JSON.stringify(foundUser) )
+            let fing = encrypt(JSON.stringify(foundUser))
 
-            console.log(fing , 'fingfingfingfingfing')
-            sessionStorage.setItem('data' , fing )
+            console.log(fing, 'fingfingfingfingfing')
+            sessionStorage.setItem('data', fing)
 
             function getName(data) {
 
               if (!data.venue || data.venue.length === 0) {
                 return false; // Default to name if venue is missing or empty
               }
-          
+
               const hasAll = data.venue.some(v => v.value === "All");
-          
+
               if (hasAll && data.venue.length > 1) {
                 return false;
               } else if (data.venue.length === 1 && !hasAll) {
                 return true;
               }
-          
+
               return false;
             }
 
 
             if (foundUser.Role === 'admin') {
 
-              let funnnderr = getName(foundUser) 
-              if( funnnderr === true ){
+              let funnnderr = getName(foundUser)
+              if (funnnderr === true) {
                 navigate("/admin", { state: { userdata: foundUser } });
-              }else{
+              } else {
                 navigate("/admin", { state: { userdata: foundUser } });
               }
-            }else if(foundUser.Role === 'emp'){
+            } else if (foundUser.Role === 'emp') {
               navigate("/training");
-            }else{
-              let funnnderr = getName(foundUser) 
-              if( funnnderr === true ){
+            } else {
+              let funnnderr = getName(foundUser)
+              if (funnnderr === true) {
                 navigate("/admin", { state: { userdata: foundUser } });
-              }else{
+              } else {
                 navigate("/admin", { state: { userdata: foundUser } });
               }
-             
+
             }
           } else {
             setSwalProps({
@@ -283,7 +283,7 @@ let UserRent = () => {
 
 
             <div style={{ padding: 13 }} className="d-flex" >
-              <img src="Menu_Logo.png" style={{ width: 56, height: 28  }} alt="Example Image" />
+              <img src="Menu_Logo.png" style={{ width: 56, height: 28 }} alt="Example Image" />
               <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >web portal</p>
             </div>
 
@@ -310,21 +310,24 @@ let UserRent = () => {
 
                   <div className="kjok" style={{ marginTop: '7%' }} >
                     <div className="d-flex justify-content-around" >
-                      <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', paddingTop:12 }} >Username:</p>
-                      <input onChange={(e) => { 
+                      <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', paddingTop: 12 }} >Username:</p>
+                      <input onChange={(e) => {
                         setUsername(e.target.value)
-                      }} value={username} onKeyDown={handleKeyDownfiin} style={{ width: 290,color: '#1A1A1B', height: 50, borderRadius: 5, border: "1px solid #707070" ,
-                        paddingLeft : 11
-                       }} type="text" />
+                      }} value={username} onKeyDown={handleKeyDownfiin} style={{
+                        width: 290, color: '#1A1A1B', height: 50, borderRadius: 5, border: "1px solid #707070",
+                        paddingLeft: 11
+                      }} type="text" />
                     </div>
 
 
                     <div className="d-flex justify-content-around mt-3" >
-                      <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', paddingTop:12}}>Password:</p>
+                      <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', paddingTop: 12 }}>Password:</p>
                       <input onChange={(e) => {
                         setPassword(e.target.value)
-                      }} value={password} ref={input2Ref} onKeyDown={handleKeyDown} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070",
-                        paddingLeft : 11 }} type="password" />
+                      }} value={password} ref={input2Ref} onKeyDown={handleKeyDown} style={{
+                        width: 290, height: 50, borderRadius: 5, border: "1px solid #707070",
+                        paddingLeft: 11
+                      }} type="password" />
                     </div>
                     <p onClick={() => {
                       // setForget(true)
@@ -357,7 +360,7 @@ let UserRent = () => {
 
 
 
-<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 30, cursor: "pointer" }} >
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 30, cursor: "pointer" }} >
                 <div onClick={() => {
                   loginn()
                 }} style={{ backgroundColor: '#316AAF', width: 85, height: 30, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }} >
