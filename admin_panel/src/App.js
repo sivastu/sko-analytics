@@ -24,10 +24,11 @@ import Mealsmulti from "./page/Mealsmulti";
 
 //tra
 import Training from "./page/Training";
-
+import { ToastContainer } from 'react-toastify';
 function App() {
   return (
     <BrowserRouter>
+    <ToastContainer />
       <Routes>
         <Route path="/" element={<UserRent />} />   
         <Route path="*" element={<NoPage />} />

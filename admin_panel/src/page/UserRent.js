@@ -11,7 +11,7 @@ import app from "./firebase";
 import { getDatabase, ref, set, push, get, query, orderByChild, equalTo } from "firebase/database";
 import SweetAlert2 from 'react-sweetalert2';
 import * as CryptoJS from 'crypto-js'
-
+import { toast } from "react-toastify";
 
 
 let UserRent = () => {
@@ -26,6 +26,8 @@ let UserRent = () => {
 
   let [username, setUsername] = useState()
   let [password, setPassword] = useState()
+  const [usernameError, setUsernameError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   let [forget, setForget] = useState(false)
   let [forgetvalue, setForgetvalse] = useState('')
@@ -134,10 +136,47 @@ let UserRent = () => {
   };
 
 
+  const validateFields = () => {
+    let isValid = true;
+    
+    // Reset error messages
+    setUsernameError('');
+    setPasswordError('');
+    
+    // Validate username
+    if (!username) {
+      setUsernameError('Username is required');
+      isValid = false;
+    }
+    
+    // Validate password
+    if (!password) {
+      setPasswordError('Password is required');
+      isValid = false;
+    }
+    
+    return isValid;
+  };
 
   let loginn = async () => {
 
     console.log('gggggggggggggggggggggggggg')
+
+    if (!validateFields()) {
+      if (!username && !password) {
+        toast.error("All fields are mandatory");
+      } 
+      else if (!username) {
+        toast.error("Please enter the Username");
+      }
+      else {
+        toast.error("Please enter the Password");
+      }
+      setUsernameError('');
+      setPasswordError('');
+      return;
+    }
+ 
     try {
 
       const db = getDatabase(app);
@@ -313,11 +352,12 @@ let UserRent = () => {
                       <p style={{ color: '#1A1A1B', fontSize: 17, fontWeight: '400', paddingTop:12 }} >Username:</p>
                       <input onChange={(e) => { 
                         setUsername(e.target.value)
-                      }} value={username} onKeyDown={handleKeyDownfiin} style={{ width: 290,color: '#1A1A1B', height: 50, borderRadius: 5, border: "1px solid #707070" ,
+                      }} value={username} onKeyDown={handleKeyDownfiin} style={{ width: 290,color: '#1A1A1B', height: 50, borderRadius: 5, border: "1px solid #707070"   ,
                         paddingLeft : 11
                        }} type="text" />
+                           
                     </div>
-
+                 
 
                     <div className="d-flex justify-content-evenly mt-3" >
                       <p style={{ color: '#1A1A1B', fontSize: 17, fontWeight: '400',fontFamily: 'Roboto', paddingTop:12}}>Password:</p>
@@ -325,7 +365,9 @@ let UserRent = () => {
                         setPassword(e.target.value)
                       }} value={password} ref={input2Ref} onKeyDown={handleKeyDown} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070",
                         paddingLeft : 11 }} type="password" />
+                           
                     </div>
+                
                     <p onClick={() => {
                       // setForget(true)
                     }} style={{

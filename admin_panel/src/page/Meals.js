@@ -3083,14 +3083,17 @@ let Meals = () => {
   };
 
   const [showDiv, setShowDiv] = useState(false);
-
+  const dropdownRef = useRef(null);
+  const toggleButtonRef = useRef(null);
   // Toggle the visibility of the div
-  const handleToggleDiv = () => {
+  const handleToggleDiv = (e) => {
+    e.stopPropagation();
     setShowDiv(!showDiv);
   };
 
   const [showDivs, setShowDivs] = useState(false);
-
+  const dropdownRefs = useRef(null);
+  const toggleButtonRefs = useRef(null);
   // Toggle the visibility of the div
   const fsgdgfdfgdf = () => {
     console.log('gggggggggggggggggggggg')
@@ -3099,19 +3102,62 @@ let Meals = () => {
 
 
   const [showDivss, setShowDivss] = useState(false);
+  const dropdownRefss = useRef(null);
+  const toggleButtonRefss = useRef(null);
 
   // Toggle the visibility of the div
-  const handleToggleDivss = () => {
+  const handleToggleDivss = (e) => {
+    e.stopPropagation();
     setShowDivss(!showDivss);
   };
 
 
   const [showDivsss, setShowDivsss] = useState(false);
-
+  const dropdownRefsss = useRef(null);
+  const toggleButtonRefsss = useRef(null);
   // Toggle the visibility of the div
-  const handleToggleDivsss = () => {
+  const handleToggleDivsss = (e) => {
+    e.stopPropagation();
     setShowDivsss(!showDivsss);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // List of all dropdown refs and their corresponding toggle button refs
+      const dropdowns = [
+        { content: dropdownRef, toggle: toggleButtonRef, isOpen: showDiv },
+        { content: dropdownRefs, toggle: toggleButtonRefs, isOpen: showDivs },
+        { content: dropdownRefss, toggle: toggleButtonRefss, isOpen: showDivss },
+        { content: dropdownRefsss, toggle: toggleButtonRefsss, isOpen: showDivsss },
+
+      ];
+      
+      // Check if click is outside ALL dropdown contents AND toggle buttons
+      const clickedOutside = dropdowns.every(({ content, toggle, isOpen }) => {
+        return !isOpen || (
+          (!content.current || !content.current.contains(event.target)) &&
+          (!toggle.current || !toggle.current.contains(event.target))
+        );
+      });
+      
+      if (clickedOutside) {
+        // Close all dropdowns
+        setShowDiv(false);
+        setShowDivs(false);
+        setShowDivss(false);
+        setShowDivsss(false);
+      }
+    };
+    
+    // Add listener if ANY dropdown is open
+    if (showDiv || showDivs || showDivss || showDivsss) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDiv, showDivs, showDivss, showDivsss]);
 
   let editexportpdf = async () => {
 
@@ -3817,7 +3863,7 @@ let Meals = () => {
                       <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
                         setMeals(5)
                       }} >
-                        <div class="boxs">
+                        <div class="boxs" style={{cursor:'pointer'}}>
                           <p className='asdfp' style={{fontWeight:600,color:'#1A1A1B'}}>Meals received - timeline</p>
                           <div class="end-box">
                             <img src="rts.png" className="" alt="Example Image" />
@@ -3832,7 +3878,7 @@ let Meals = () => {
                       <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
                         setMeals(2)
                       }}>
-                        <div class="boxs">
+                        <div class="boxs" style={{cursor:'pointer'}}>
                           <div className="d-flex justify-content-between" >
                             <div >
                               <p className='asdfp' style={{ marginBottom: 0,fontWeight:600,color:'#1A1A1B' }}>Edits</p>
@@ -3907,7 +3953,7 @@ let Meals = () => {
                       <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
                         setMeals(3)
                       }} >
-                        <div class="boxs">
+                        <div class="boxs" style={{cursor:'pointer'}}>
                           <div className="d-flex justify-content-between" >
                             <div >
                               <p className='asdfp' style={{ marginBottom: 0,fontWeight:600,color:'#1A1A1B' }}>Served meals</p>
@@ -3967,7 +4013,7 @@ let Meals = () => {
                       <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
                         setMeals(4)
                       }}>
-                        <div class="boxs">
+                        <div class="boxs" style={{cursor:'pointer'}}>
                           <div className="d-flex justify-content-between" >
                             <div >
                               <p className='asdfp' style={{ marginBottom: 0,fontWeight:600,color:'#1A1A1B' }}>Refunded meals</p>
@@ -4041,10 +4087,11 @@ let Meals = () => {
                       </div>
 
                       <div >
-                        <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
+                        <img src="threedot.png" ref={toggleButtonRef} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
 
                         {showDiv && (
                           <div
+                          ref={dropdownRef}
                             style={{
                               width: 200,
                               marginTop: '0px',
@@ -4282,7 +4329,7 @@ let Meals = () => {
                 </div>
 
                 : meals === 3 ?
-                  <div className="changeone" style={{ marginTop: 100 }} >
+                  <div className="changeone" style={{ marginTop: 80 }} >
                     <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                       <div className="d-flex justify-content-between" >
@@ -4294,10 +4341,11 @@ let Meals = () => {
                         </div>
 
                         <div >
-                          <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
+                          <img src="threedot.png" ref={toggleButtonRefs} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
 
                           {showDivs && (
                             <div
+                            ref={dropdownRefs}
                               style={{
                                 width: 200,
                                 marginTop: '0px',
@@ -4321,7 +4369,7 @@ let Meals = () => {
                         </div>
                       </div>
 
-                      <div style={{ marginTop: 50, padding: 20 }} >
+                      <div style={{ marginTop: -20, padding: 20 }} >
                         <div className="d-flex justify-content-between" >
 
                           <div >
@@ -4364,7 +4412,7 @@ let Meals = () => {
 
                         <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
-                        <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
+                        <div className="scroll" id="scrrrrol" style={{ height: 400, overflowY: 'auto' }} >
 
 
 
@@ -4457,8 +4505,8 @@ let Meals = () => {
                   : meals === 4 ?
 
 
-                    <div className="changeone" style={{ marginTop: 100 }} >
-                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                    <div className="changeone" style={{ marginTop: 80 }} >
+                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, padding: 20 }} >
 
                         <div className="d-flex justify-content-between" >
                           <div style={{}} className="d-flex " >
@@ -4469,11 +4517,13 @@ let Meals = () => {
                           </div>
 
                           <div >
-                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
+                            <img src="threedot.png" ref={toggleButtonRefss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
 
                             {showDivss && (
                               <div
+                              ref={dropdownRefss}
                                 style={{
+                                  zIndex:100,
                                   width: 200,
                                   marginTop: '0px',
                                   padding: '10px',
@@ -4495,7 +4545,7 @@ let Meals = () => {
                           </div>
                         </div>
 
-                        <div style={{ marginTop: 50, padding: 20 }} >
+                        <div style={{ marginTop:-20, padding: 20 }} >
                           <div className="d-flex justify-content-between" >
 
                             <div >
@@ -4539,7 +4589,7 @@ let Meals = () => {
 
                           <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
-                          <div className="scroll" id="scrrrrol" style={{ height: 300, overflowY: 'auto' }} >
+                          <div className="scroll" id="scrrrrol" style={{ height: 420, overflowY: 'auto' }} >
 
 
 
@@ -4644,10 +4694,11 @@ let Meals = () => {
                           </div>
 
                           <div >
-                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
+                            <img src="threedot.png" ref={toggleButtonRefsss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
 
                             {showDivsss && (
                               <div
+                              ref={dropdownRefsss}
                                 style={{
                                   width: 200,
                                   margin: '0px',

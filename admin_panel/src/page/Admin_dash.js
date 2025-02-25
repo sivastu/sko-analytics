@@ -1077,11 +1077,11 @@ let Admin_dash = () => {
                             closeMenuOnSelect={false} // Keep dropdown open for further selection
                             hideSelectedOptions={false} // Show all options even if selected
                             styles={{
-                              control: (base) => ({ ...base, border: 'unset', color: '#707070', marginTop: -8 }),
+                              control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', marginTop: -8 }),
                             }}
                           /></p>
                       </div>
-                      <div style={{ width: '20%', paddingRight: 20 }}>
+                      <div style={{ width: '20%', paddingRight: 20,color: '#1A1A1B' }}>
                         <Select
                           isMulti
                           className="newoneonees"
@@ -1104,7 +1104,7 @@ let Admin_dash = () => {
                           closeMenuOnSelect={false} // Keep dropdown open for further selection
                           hideSelectedOptions={false} // Show all options even if selected
                           styles={{
-                            control: (base) => ({ ...base, border: 'unset', color: '#707070', marginTop: -8 }),
+                            control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', marginTop: -8 }),
                           }}
                         />
                       </div>
@@ -1321,7 +1321,7 @@ let Admin_dash = () => {
                               <div style={{ width: "20%" }}>
                                 <p style={{ color: "#1A1A1B", fontWeight: "400" }}>-</p>
                               </div>
-                              <div style={{ width: "20%", paddingRight: 20 }}>
+                              <div style={{ width: "20%", paddingRight: 20,color:'#1A1A1B' }}>
                                 <Select
                                   isMulti
                                   className="newoneoneess"
@@ -1344,7 +1344,7 @@ let Admin_dash = () => {
                                   hideSelectedOptions={false} // Show all options even if selected
                                   isOptionDisabled={() => true} // Disables all options from being selected
                                   styles={{
-                                    control: (base) => ({ ...base, border: 'unset', color: '#ECF1F4', marginTop: -8 }),
+                                    control: (base) => ({ ...base, border: 'unset', marginTop: -8, color: '#1A1A1B' }),
                                   }}
                                 />
 
@@ -1373,7 +1373,7 @@ let Admin_dash = () => {
                                   hideSelectedOptions={false} // Show all options even if selected
                                   isOptionDisabled={() => true} // Disables all options from being selected
                                   styles={{
-                                    control: (base) => ({ ...base, border: 'unset', color: '#ECF1F4', marginTop: -8 }),
+                                    control: (base) => ({ ...base, border: 'unset',  marginTop: -8 ,color: '#1A1A1B'}),
                                   }}
                                 />
                               </div>
@@ -1485,7 +1485,7 @@ let Admin_dash = () => {
                                   <div style={{ width: "20%" }}>
                                     <p style={{ color: "#1A1A1B", fontWeight: "400" }}>-</p>
                                   </div>
-                                  <div style={{ width: "20%", paddingRight: 20 }}>
+                                  <div style={{ width: "20%", color: "#1A1A1B", paddingRight: 20 }}>
                                     <Select
                                       isMulti
                                       className="newoneoneess"
