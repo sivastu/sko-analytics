@@ -3659,6 +3659,9 @@ let Meals = () => {
   }
 
 
+  
+
+
 
 
   let callfordataone = (one) => {
@@ -5267,6 +5270,7 @@ let Meals = () => {
                             <Select
                               className="newoneonee"
                               options={basicfine}
+                              onChange={handleChangefine}
                               // value={selectedOptionsfine}
                               // onChange={handleChangefine}
                               placeholder="Select options..."
@@ -5274,7 +5278,7 @@ let Meals = () => {
                                 // Option: CustomOptionfinal,
                                 MultiValue: () => null, // Hides default tags
                                 ValueContainer: ({ children, ...props }) => {
-                                  const selectedValues = props.getValue();
+                                  const selectedValues = props.getValue(); 
                                   return (
                                     <components.ValueContainer {...props}>
                                       {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
