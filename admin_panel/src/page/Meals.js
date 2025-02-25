@@ -6048,7 +6048,7 @@ let Meals = () => {
 
             </div>
 
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black',  }} />
 
             <div className="d-flex justify-content-between" >
 
@@ -6085,7 +6085,7 @@ let Meals = () => {
 
             </div>
 
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black',   }} />
 
             <div className="d-flex justify-content-between" >
 
@@ -6122,7 +6122,7 @@ let Meals = () => {
 
             </div>
 
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black',  }} />
 
 
             <div className="d-flex justify-content-between" >
