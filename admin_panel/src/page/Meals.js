@@ -69,7 +69,12 @@ let Meals = () => {
   //edit
   let [editall, setEditall] = useState([])
   let [editallone, setEditallone] = useState([])
-  let [served, setServed] = useState([])
+
+  let [editallclone, setEditallclone] = useState([])
+  let [editalloneclone, setEditalloneclone] = useState([])
+
+
+  let [served, setServed] = useState([]) 
   let [servedone, setServedone] = useState([])
 
   //refund meals
@@ -85,14 +90,15 @@ let Meals = () => {
   let [oldcou, setOldcou] = useState([])
   let [oldtak, setOldtak] = useState([])
 
-  let [basicfine, setBasicfine] = useState([{
+  let [basicfine, setBasicfine] = useState([
+    {
+      "value": "Minimum",
+      "label": "Minimum"
+    },{
     "value": "Maximum",
     "label": "Maximum"
   },
-  {
-    "value": "Minimum",
-    "label": "Minimum"
-  },])
+  ,])
   const [selectedOptionsfine, setSelectedOptionsfine] = useState([basicfine[0]]);
 
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -778,8 +784,7 @@ let Meals = () => {
 
     console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
     setEditall(newalldata)
-
-
+ 
 
   }
 
@@ -870,7 +875,7 @@ let Meals = () => {
     let newalldata = processData(two)
 
     console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
-    setEditallone(newalldata)
+    setEditallone(newalldata) 
 
     // const categorizeItems = (datasssssss) => {
     //   const edited = ["2", "12", "22", "32"];
@@ -1009,16 +1014,23 @@ let Meals = () => {
 
   }
   let searchvalue = (e) => {
-    console.log(editall, 'searchvaluesearchvaluesearchvalue')
-
+    console.log(editallclone, 'searchvaluesearchvaluesearchvalue')
+ 
     if (e === undefined || e === '' || e === null) {
-      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-      return
+      setServed(editallclone)
+      setServedone(editalloneclone)
     } else {
-      callfordataonesearch(filterdataone, e)
-      callfordataonetwosearch(filterdatatwo, e)
+      const regex = new RegExp(e, "i"); // Create regex dynamically (case-insensitive)
+
+
+      // Filter items where ITEM matches regex
+      const filteredData = editallclone.filter(obj => regex.test(obj.name));
+      const filteredDatatwo = editalloneclone.filter(obj => regex.test(obj.name));
+
+      setServed(filteredData)
+      setServedone(filteredDatatwo)
+
+      
     }
 
   }
@@ -1915,8 +1927,8 @@ let Meals = () => {
       console.log(editttsone, 'editttsoneeditttsone')
 
 
-      setEditall(editttsone)
-      setEditallone(editttstwo)
+      setEditall(editttsone) 
+      setEditallone(editttstwo) 
 
       const processItems = (data) => {
         const dishCounts = {};
@@ -1957,7 +1969,9 @@ let Meals = () => {
       let minnscount = processItems(one)
       let maxnscount = processItems(two)
       setServed(minnscount)
+      setEditallclone(minnscount)
       setServedone(maxnscount)
+      setEditalloneclone(maxnscount)
 
       const processRefundedItems = (data) => {
         const results = [];
@@ -2520,24 +2534,22 @@ let Meals = () => {
   }
 
   const handleChangefine = (selected) => {
-    console.log(editall, 'selected')
+    console.log(served, 'selected')
 
-    if (editall.length === 0) {
+ 
+
+    if (served.length === 0) {
 
     } else {
-      setEditall((prevState) => ({
-        ...prevState,
-        orders: [...prevState.orders].reverse() // Spread operator to avoid direct mutation
-      }));
+      setServed((prevState) => [...prevState].reverse());
+
     }
 
-    if (editallone.length === 0) {
+    if (servedone.length === 0) {
 
     } else {
-      setEditallone((prevState) => ({
-        ...prevState,
-        orders: [...prevState.orders].reverse() // Spread operator to avoid direct mutation
-      }));
+      setServedone((prevState) => [...prevState].reverse());
+
 
     }
 
@@ -3717,7 +3729,7 @@ let Meals = () => {
     console.log(editttsone, 'editttsoneeditttsone')
 
 
-    setEditall(editttsone)
+    setEditall(editttsone) 
     // setEditallone(editttstwo)
 
     const processItems = (data) => {
@@ -3757,6 +3769,7 @@ let Meals = () => {
     let minnscount = processItems(one)
     // let maxnscount = processItems(two)
     setServed(minnscount)
+    setEditallclone(minnscount)
     // setServedone(maxnscount)
 
     const processRefundedItems = (data) => {
@@ -3861,7 +3874,7 @@ let Meals = () => {
 
 
     // setEditall(editttsone)
-    setEditallone(editttstwo)
+    setEditallone(editttstwo) 
 
     const processItems = (data) => {
       const dishCounts = {};
@@ -3901,6 +3914,7 @@ let Meals = () => {
     let maxnscount = processItems(two)
     // setServed(minnscount)
     setServedone(maxnscount)
+    setEditalloneclone(maxnscount)
 
     const processRefundedItems = (data) => {
       const results = [];
@@ -5305,6 +5319,8 @@ let Meals = () => {
                             <div className="input-group"  >
                               <input
                                 onChange={(e) => {
+
+
                                   searchvalue(e.target.value)
                                 }}
                                 type="text"
@@ -6211,9 +6227,25 @@ let Meals = () => {
         <div ref={pdfRefss}  >
 
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Served meals</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
 
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+const result = filteredOptions.map(item => item.label).join(", ");
+
+
+if (result === "" || result === undefined || result === null) {
+  return 'All Venue'
+} else {
+
+  return result
+
+}
+
+
+})()}</p>
+
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 ,wordSpacing: -5 }} >Group name</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 ,wordSpacing: -5 }} >For the period {(() => {
             const datefineda = new Date(dateRange[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6234,7 +6266,7 @@ let Meals = () => {
 
             return (formattedDate)
           })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 ,wordSpacing: -5 }} >Compared with the period {(() => {
             const datefineda = new Date(dateRangetwo[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6256,21 +6288,8 @@ let Meals = () => {
             return (formattedDate)
           })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-            const result = selectedOptions.map(item => item.value).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()}</p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains: All</p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 ,wordSpacing: -5}} >Stages contains: {(() => {
 
             const result = selectedhubOptions.map(item => item.label).join(",");
 
@@ -6284,7 +6303,7 @@ let Meals = () => {
 
 
           })()} </p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 ,wordSpacing: -5}} >Courses contains: {(() => {
 
             const result = selectedCources.map(item => item.label).join(",");
 
@@ -6342,7 +6361,7 @@ let Meals = () => {
               </div>
 
             </div>
-
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
 
             {
               served?.map((dfgh, index) => {
