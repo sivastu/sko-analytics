@@ -54,10 +54,12 @@ const customStyles = {
     right: 'auto',
     bottom: 'auto',
     marginRight: '-50%',
+    backgroundColor:'#F3F3F3',
     transform: 'translate(-50%, -50%)',
     border: '3px solid #ababab',
     borderRadius: '10px',
-    width: '70%'
+    width: '60%',
+    boxShadow: '0 6px 1px rgba(0, 0, 0, 0.2)'
   },
 };
 
@@ -4184,36 +4186,83 @@ let Multi_venue = () => {
   };
 
   const [showDiv, setShowDiv] = useState(false);
+  const dropdownRef = useRef(null);
+  const toggleButtonRef = useRef(null);
 
   // Toggle the visibility of the div
-  const handleToggleDiv = () => {
+  const handleToggleDiv = (e) => {
+    e.stopPropagation();
     setShowDiv(!showDiv);
   };
 
+
   const [showDivs, setShowDivs] = useState(false);
 
+  const dropdownRefs = useRef(null);
+  const toggleButtonRefs = useRef(null);
   // Toggle the visibility of the div
   const fsgdgfdfgdf = () => {
     console.log('gggggggggggggggggggggg')
     setShowDivs(!showDivs);
+    
   };
 
 
   const [showDivss, setShowDivss] = useState(false);
-
+  const dropdownRefss = useRef(null);
+  const toggleButtonRefss = useRef(null);
   // Toggle the visibility of the div
-  const handleToggleDivss = () => {
+  const handleToggleDivss = (e) => {
+    e.stopPropagation();
     setShowDivss(!showDivss);
   };
 
 
   const [showDivsss, setShowDivsss] = useState(false);
-
+  const dropdownRefsss = useRef(null);
+  const toggleButtonRefsss = useRef(null);
   // Toggle the visibility of the div
-  const handleToggleDivsss = () => {
+  const handleToggleDivsss = (e) => {
+    e.stopPropagation();
     setShowDivsss(!showDivsss);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // List of all dropdown refs and their corresponding toggle button refs
+      const dropdowns = [
+        { content: dropdownRef, toggle: toggleButtonRef, isOpen: showDiv },
+        { content: dropdownRefs, toggle: toggleButtonRefs, isOpen: showDivs },
+        { content: dropdownRefss, toggle: toggleButtonRefss, isOpen: showDivss },
+        { content: dropdownRefsss, toggle: toggleButtonRefsss, isOpen: showDivsss },
+      ];
+      
+      // Check if click is outside ALL dropdown contents AND toggle buttons
+      const clickedOutside = dropdowns.every(({ content, toggle, isOpen }) => {
+        return !isOpen || (
+          (!content.current || !content.current.contains(event.target)) &&
+          (!toggle.current || !toggle.current.contains(event.target))
+        );
+      });
+      
+      if (clickedOutside) {
+        // Close all dropdowns
+        setShowDiv(false);
+        setShowDivs(false);
+        setShowDivss(false);
+        setShowDivsss(false);
+      }
+    };
+    
+    // Add listener if ANY dropdown is open
+    if (showDiv || showDivs || showDivss || showDivsss) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDiv, showDivs, showDivss, showDivsss]);
   let editexportpdf = async () => {
 
     const input = pdfRef.current;
@@ -5052,7 +5101,7 @@ let Multi_venue = () => {
 
             {
               meals === 1 ?
-                <div className="changeone" style={{ marginTop: 100 }} >
+                <div className="changeone" style={{ marginTop: 80 }} >
                   <div className="changetwos"   >
                     <div className='row '  >
 
@@ -5063,7 +5112,7 @@ let Multi_venue = () => {
                         <div class="box " style={{ maxWidth: "600px" }} onClick={() => {
                           setMeals(2)
                         }}>
-                          <div class="boxs">
+                          <div class="boxs" style={{cursor:'pointer'}}>
                             <div className="d-flex justify-content-between" >
                               <div >
                                 <p className='asdfp' style={{ marginBottom: 0,color:'#1A1A1B',fontWeight:600 ,fontSize:20 }}>Dockets completion time</p>
@@ -5119,7 +5168,7 @@ let Multi_venue = () => {
                           <div class="box me-5" style={{ maxWidth: "600px" }} onClick={() => {
                             setMeals(5)
                           }} >
-                            <div class="boxs">
+                            <div class="boxs" style={{cursor:'pointer'}}>
                               <p className='asdfp' style={{color:'#1A1A1B',fontWeight:600 ,fontSize:20}}>Dockets received - timeline</p>
                               <div class="end-box d-flex justify-content-between">
                                 <img src="rts.png" className="d-flex justify-content-between" alt="Example Image" />
@@ -5194,7 +5243,7 @@ let Multi_venue = () => {
                           <div class="box ms-5" style={{ maxWidth: "600px" }} onClick={() => {
                             setMeals(4)
                           }}>
-                            <div class="boxs">
+                            <div class="boxs" style={{cursor:'pointer'}}>
                               <div className="d-flex justify-content-between" >
                                 <div >
                                   <p className='asdfp' style={{ marginBottom: 0 ,color:'#1A1A1B',fontWeight:600 ,fontSize:20}}>Average completion - timeline</p>
@@ -5230,7 +5279,7 @@ let Multi_venue = () => {
 
                 : meals === 2 ?
 
-                  <div className="changeone" style={{ marginTop: 100 }} >
+                  <div className="changeone" style={{ marginTop: 80 }} >
                     <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                       <div className="d-flex justify-content-between" >
@@ -5241,7 +5290,7 @@ let Multi_venue = () => {
                           <p style={{fontWeight: '600',color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets completion time</p>
                         </div>
 
-                        <div class="custom-inputonessfine  " >
+                        <div class="custom-inputonessfine pt-1" >
 
                           <Select
                             className="newoneonee"
@@ -5307,13 +5356,14 @@ let Multi_venue = () => {
 
                           </div>
 
-                          <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
+                          <img src="threedot.png"   ref={toggleButtonRef} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
 
                           {showDiv && (
                             <div
+                            ref={dropdownRef}
                               style={{
                                 width: 200,
-                                marginTop: '0px',
+                                marginTop: '30px',
                                 padding: '10px',
                                 backgroundColor: '#f8f9fa',
                                 border: '1px solid #ccc',
@@ -5336,7 +5386,7 @@ let Multi_venue = () => {
                         </div>
                       </div>
 
-                      <div style={{ marginTop: 50, padding: 20 }} >
+                      <div style={{ marginTop: 20, padding: 20 }} >
                         <div className="d-flex justify-content-between" >
 
                           <div >
@@ -5384,7 +5434,7 @@ let Multi_venue = () => {
 
 
 
-                        <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 300, overflowY: 'auto' }} >
+                        <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 350, overflowY: 'auto' }} >
 
                           <div  >
 
@@ -5530,10 +5580,11 @@ let Multi_venue = () => {
                           </div>
 
                           <div >
-                            <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
+                            <img src="threedot.png" ref={toggleButtonRefs} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
 
                             {showDivs && (
                               <div
+                              ref={dropdownRefs}
                                 style={{
                                   width: 200,
                                   marginTop: '3px',
@@ -5705,13 +5756,14 @@ let Multi_venue = () => {
                             </div>
 
                             <div >
-                              <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
+                              <img src="threedot.png" ref={toggleButtonRefss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
 
                               {showDivss && (
                                 <div
+                                ref={dropdownRefss}
                                   style={{
                                     width: 200,
-                                    marginTop: '0px',
+                                    marginTop: '3px',
                                     padding: '10px',
                                     backgroundColor: '#f8f9fa',
                                     border: '1px solid #ccc',
@@ -5882,13 +5934,15 @@ let Multi_venue = () => {
                             </div>
 
                             <div >
-                              <img src="threedot.png" style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
+                              <img src="threedot.png" ref={toggleButtonRefsss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
 
                               {showDivsss && (
+
                                 <div
+                                ref={dropdownRefsss}
                                   style={{
                                     width: 200,
-                                    marginTop: '0px',
+                                    marginTop: '3px',
                                     padding: '10px',
                                     backgroundColor: '#f8f9fa',
                                     border: '1px solid #ccc',
@@ -6279,7 +6333,7 @@ let Multi_venue = () => {
       >
         <div style={{}} >
           <div className="row" >
-            <div className="col-5" style={{ overflow: 'hidden' }} >
+            <div className="col-4" style={{ overflow: 'hidden' }} >
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Date: {cval1?.date}</p>
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time created: {(() => {
               })()} {cval1?.starttime.replace('@', '')}</p>
@@ -6319,7 +6373,7 @@ let Multi_venue = () => {
             <div className="col-1"  >
               <div class="vertical-line"></div>
             </div>
-            <div className="col-6 gggg" >
+            <div className="col-7 gggg" >
               <div style={{ height: 300 }}>
 
                 {/* <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>Course 1 : {cval1?.order?.COURSES}</p>
