@@ -4,7 +4,7 @@ import axios from "axios";
 import { Base_url } from "../config";
 import { useNavigate } from "react-router-dom";
 import Headers from "../component/Headers"
-
+import { FiEyeOff } from "react-icons/fi";
 import ReactDOM from "react-dom";
 import ReactPaginate from "react-paginate";
 import bigInt from "big-integer";
@@ -13,9 +13,10 @@ import { getDatabase, ref, set, push, get, query, orderByChild, equalTo, update 
 import app from "./firebase";
 import Select, { components } from 'react-select';
 import SweetAlert2 from 'react-sweetalert2';
+import { FiEye } from "react-icons/fi";
 
 import { Nav } from "react-bootstrap";
-
+import {toast} from "react-toastify";
 let Admin_dash = () => {
   let [data, setData] = useState('1');
   let navigate = useNavigate();
@@ -491,7 +492,10 @@ let Admin_dash = () => {
     if (data === '4' || data === '5' || data === '6') {
       return
     }
-
+if(!username||!email){
+  toast.error('Please enter all the fields')
+  return
+}
 
 
     if (username === undefined || username === '' || username === null) {
@@ -921,7 +925,7 @@ let Admin_dash = () => {
                       marginTop: 30,
                       borderRadius: 10,
                       border: data === "4" ? "3px solid #316AAF" : "3px solid #ECF1F4",
-                      marginLeft: -33,
+                      marginLeft: -36,
                       height: 58,
                       padding: 10,
                       width: 191,
@@ -962,10 +966,10 @@ let Admin_dash = () => {
                       marginTop: 30,
                       borderRadius: 10,
                       border: data === "5" ? "3px solid #316AAF" : "3px solid #ECF1F4",
-                      marginLeft: -33,
+                      marginLeft: -40,
                       height: 58,
                       padding: 10,
-                      width: 191,
+                      width: 198,
                       cursor: 'pointer'
 
                     }}
@@ -1226,7 +1230,7 @@ let Admin_dash = () => {
                         <hr style={{ margin: "0px 0px", backgroundColor: "#9F9F9F", height: 1 }} />
 
 
-                        <div className="d-flex" style={{ padding: 20, height: 84, backgroundColor: "#ECF1F4" }}>
+                        <div className="d-flex" style={{ padding: 20, height: 60, backgroundColor: "#ECF1F4" }}>
                           <div style={{ width: "20%" }} className="d-flex">
                             <p style={{ color: "#316AAF", fontWeight: "400" }}>Email</p>
                           </div>
@@ -1282,8 +1286,8 @@ let Admin_dash = () => {
                               <input checked={editpassbool} onChange={(e) => {
                                 setEditpassbool(e.target.checked)
                               }} type="checkbox" />
-                              <span class="checkmark"></span>
-
+                                 {editpassbool?<FiEye />:<FiEyeOff />} 
+                         
                             </label>
                           </div>
                         </div>
