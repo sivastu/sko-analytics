@@ -4468,10 +4468,6 @@ const displayText = allLabels.slice(0, 18) + "..."
                     }} type="checkbox" id="switch3" />
                     <label class="switch-label" for="switch3"></label>
                   </div>
-
-
-
-
                   <Select
 
                     menuIsOpen={menuIsOpenone}
@@ -4503,7 +4499,7 @@ const displayText = allLabels.slice(0, 18) + "..."
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15 }),
+                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',background:'#fff',fontSize:15 }),
                     }}
                   />
 
@@ -4576,7 +4572,7 @@ const displayText = allLabels.slice(0, 18) + "..."
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15 }),
+                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',background:'#fff',fontSize:15 }),
                     }}
                   />
                 </div>
@@ -4623,7 +4619,7 @@ const displayText = allLabels.slice(0, 18) + "..."
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15 }),
+                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',background:'#fff',fontSize:15 }),
                     }}
                   />
                 </div>
@@ -4710,7 +4706,7 @@ const displayText = allLabels.slice(0, 18) + "..."
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', color:'#1A1A1B',fontSize:15 }),
+                      control: (base) => ({ ...base, border: 'unset', color:'#1A1A1B',fontSize:15,background:'#fff' }),
                     }}
                   />
 

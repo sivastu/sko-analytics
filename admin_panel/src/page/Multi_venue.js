@@ -4744,7 +4744,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
+                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B',background:'#fff' }),
                     }}
                   />
 
@@ -4883,7 +4883,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
+                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B',background:'#fff' }),
                     }}
                   />
 
@@ -4962,7 +4962,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset',fontSize:15,color:'#1A1A1B' }),
+                      control: (base) => ({ ...base, border: 'unset',fontSize:15,color:'#1A1A1B',background:'#fff' }),
                     }}
                   />
                 </div>
@@ -5009,7 +5009,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset',fontSize:15,color:'#1A1A1B' }),
+                      control: (base) => ({ ...base, border: 'unset',fontSize:15,color:'#1A1A1B',background:'#fff' }),
                     }}
                   />
                 </div>
@@ -5102,7 +5102,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
+                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B',background:'#fff' }),
                     }}
                   />
 

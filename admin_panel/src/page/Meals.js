@@ -4550,7 +4550,7 @@ let Meals = () => {
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset', color:'#1A1A1B',fontSize:15 }),
+                    control: (base) => ({ ...base, border: 'unset', color:'#1A1A1B',fontSize:15,background:'#fff' }),
                   }}
                 />
 
@@ -4623,7 +4623,7 @@ let Meals = () => {
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15 }),
+                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15,background:'#fff' }),
                   }}
                 />
               </div>
@@ -4670,7 +4670,7 @@ let Meals = () => {
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15 }),
+                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15,background:'#fff' }),
                   }}
                 />
               </div>
@@ -4759,7 +4759,7 @@ let Meals = () => {
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15 }),
+                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15,background:'#fff' }),
                   }}
                 />
 
