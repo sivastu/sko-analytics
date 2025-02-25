@@ -492,12 +492,19 @@ let Admin_dash = () => {
     if (data === '4' || data === '5' || data === '6') {
       return
     }
-if(!username||!email){
-  toast.error('Please enter all the fields')
+if(!username&&!email&&hubb.length === 0&&selectedOptions.length === 0){
+  setSwalProps({
+    show: true,
+    title: 'All fields are mandatory',
+    text: ' ',
+    icon: 'error',
+    didClose: () => {
+      console.log('Swal closed');
+      setSwalProps({ show: false });
+    }
+  });
   return
 }
-
-
     if (username === undefined || username === '' || username === null) {
       setSwalProps({
         show: true,
