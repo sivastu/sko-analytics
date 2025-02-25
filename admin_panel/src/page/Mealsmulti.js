@@ -55,13 +55,13 @@ let Mealsmulti = () => {
   let [basicall, setBasicall] = useState()
   let [basic, setBasic] = useState()
   let [basicone, setBasicone] = useState([])
- let [hubbtwo, setHubbtwo] = useState([])
+  let [hubbtwo, setHubbtwo] = useState([])
   let [hubb, setHubb] = useState([])
   let [hubbswitch, setHubbswitch] = useState(true)
- let [basiconefive, setBasiconefive] = useState([])
+  let [basiconefive, setBasiconefive] = useState([])
   //parse meals
   let [meals, setMeals] = useState(1)
- let [oldvenfive, setOldvenfive] = useState([])
+  let [oldvenfive, setOldvenfive] = useState([])
   const pdfRefred = useRef();
   //edit
   let [editall, setEditall] = useState([])
@@ -74,7 +74,7 @@ let Mealsmulti = () => {
   let [maxperday, setMaxperday] = useState([])
 
   let [alldrop, setAlldrop] = useState([])
- const [menuIsOpenfive, setMenuIsOpenfive] = useState(false);
+  const [menuIsOpenfive, setMenuIsOpenfive] = useState(false);
   const [menuIsOpensix, setMenuIsOpensix] = useState(false);
   ///old
   let [oldven, setOldven] = useState([])
@@ -83,11 +83,11 @@ let Mealsmulti = () => {
   let [oldcou, setOldcou] = useState([])
   let [oldtak, setOldtak] = useState([])
 
-    let [oldhubtwo, setOldhubtwo] = useState([])
-  const [venueradiofivese, setVenueradiofivese ] = useState(true)
+  let [oldhubtwo, setOldhubtwo] = useState([])
+  const [venueradiofivese, setVenueradiofivese] = useState(true)
 
-  const [venueradiosix , setVenueradiosix ] = useState(true)
-const selectReffive = useRef(null);
+  const [venueradiosix, setVenueradiosix] = useState(true)
+  const selectReffive = useRef(null);
 
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
@@ -156,38 +156,38 @@ const selectReffive = useRef(null);
   let [mydata, setMydata] = useState()
 
   function extractUniqueNotes(datad, predefinedValues) {
-            
-    console.log(predefinedValues , 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
+
+    console.log(predefinedValues, 'predefinedValuespredefinedValuespredefinedValuespredefinedValuespredefinedValues')
     let uniqueNotes = new Set();
 
     for (let group in datad) {
-        
 
-        for (let location in datad[group]) {
 
-          if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
+      for (let location in datad[group]) {
 
-            for (let section in datad[group][location]) {
-                for (let date in datad[group][location][section]) {
-                    datad[group][location][section][date].forEach(order => {
-                        order.ITEMS.forEach(item => {
-                            if (item.NOTE) {
-                                // Extract the word after (C<number>)
-                                const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                                if (match && match[1] && match[1] !== "undefined") {
-                                    uniqueNotes.add(match[1]); // Add only valid words
-                                }
-                            }
-                        });
-                    });
+        if (!predefinedValues.some(p => p.value === location)) continue; // Skip groups not in predefinedValues
+
+        for (let section in datad[group][location]) {
+          for (let date in datad[group][location][section]) {
+            datad[group][location][section][date].forEach(order => {
+              order.ITEMS.forEach(item => {
+                if (item.NOTE) {
+                  // Extract the word after (C<number>)
+                  const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                  if (match && match[1] && match[1] !== "undefined") {
+                    uniqueNotes.add(match[1]); // Add only valid words
+                  }
                 }
-            }
+              });
+            });
+          }
         }
+      }
     }
 
     // Convert Set to desired format
     return [...uniqueNotes].map(note => ({ value: note, label: note }));
-}
+  }
 
   let [usedname, setUsedname] = useState('')
   function getName(data) {
@@ -331,9 +331,9 @@ const selectReffive = useRef(null);
           }
 
           const cleanedData = removeTrainingNotes(eventss);
- 
 
-       
+
+
 
 
 
@@ -406,7 +406,7 @@ const selectReffive = useRef(null);
           //   label: hub,
           // }));
 
-  
+
           // console.log("optionss:", optionsstwo);
 
           let getdata = sessionStorage.getItem('data')
@@ -424,9 +424,9 @@ const selectReffive = useRef(null);
             setBasic(optionsone)
 
 
-            let uuuk = extractUniqueNotes(cleanedData , optionsone )
+            let uuuk = extractUniqueNotes(cleanedData, optionsone)
             uuuk.unshift({ label: "All Courses", value: "All" });
-  
+
             setFulldatafull(uuuk)
 
           } else {
@@ -434,15 +434,15 @@ const selectReffive = useRef(null);
             setBasic(parsedatajson.venue)
 
 
-            let uuuk = extractUniqueNotes(cleanedData , parsedatajson.venue )
+            let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
             uuuk.unshift({ label: "All Courses", value: "All" });
-  
+
             setFulldatafull(uuuk)
           }
 
 
-          
-        
+
+
 
           const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
           const optionstakeaway = [
@@ -1151,7 +1151,7 @@ const selectReffive = useRef(null);
             type="checkbox" id="switch3" />
           <label class="switch-label" for="switch3"></label>
         </div>}
-        <span style={{ flexGrow: 1,marginTop:6 }}>{data.label}</span>
+        <span style={{ flexGrow: 1, marginTop: 6 }}>{data.label}</span>
 
       </div>
     );
@@ -1163,9 +1163,9 @@ const selectReffive = useRef(null);
     const selected = getValue();
     if (selected.length) {
       const allLabels = selected
-      .filter(option => option.label && !option.label.startsWith("All ")) // Ensure label exists
-      .map(option => option.label)
-      .join(", ");
+        .filter(option => option.label && !option.label.startsWith("All ")) // Ensure label exists
+        .map(option => option.label)
+        .join(", ");
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
@@ -1179,361 +1179,361 @@ const selectReffive = useRef(null);
   const [selectedOptions, setSelectedOptions] = useState([]);
 
 
-   const handleChange = (selected) => {
- 
-     console.log(JSON.stringify(fulldatatwo), 'selected')
-     const hasAllValue = selected.some(item => item.value === "All");
-     const hasAllValueold = oldven.some(item => item.value === "All");
- 
- 
-     setOldven(selected)
- 
-     if (hasAllValue === false && hasAllValueold === true) {
+  const handleChange = (selected) => {
+
+    console.log(JSON.stringify(fulldatatwo), 'selected')
+    const hasAllValue = selected.some(item => item.value === "All");
+    const hasAllValueold = oldven.some(item => item.value === "All");
 
 
-      let uuuk = extractUniqueNotes( basicall , [] )
+    setOldven(selected)
+
+    if (hasAllValue === false && hasAllValueold === true) {
+
+
+      let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
 
 
-       setSelectedOptions([]);
- 
-       filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       // filterDataByDateonee(dateRange, onetime  , twotime  , selectedOptionsfive , 
-       //   hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       const output = [];
- 
-       // // Iterate through the search array
-       [].forEach(({ value }) => {
-         // Search in the data object
-         Object.entries(alldrop).forEach(([key, items]) => {
-           if (key === value) {
-             // If the key matches, add all items from the group to the output
-             items.forEach(item => {
-               output.push({ value: key + '-' + item.name, label: item.name });
-             });
-           } else {
-             // Search within the group's items
-             items.forEach(item => {
-               if (item.name === value) {
-                 output.push({ value: key + '-' + item.name, label: key });
-               }
-             });
-           }
-         });
-       });
- 
-       setBasicone(output)
- 
-       return
-     }
- 
- 
- 
-     if (hasAllValue === true) {
+      setSelectedOptions([]);
 
-      let uuuk = extractUniqueNotes( basicall , basic )
+      filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRange, onetime  , twotime  , selectedOptionsfive , 
+      //   hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      const output = [];
+
+      // // Iterate through the search array
+      [].forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasicone(output)
+
+      return
+    }
+
+
+
+    if (hasAllValue === true) {
+
+      let uuuk = extractUniqueNotes(basicall, basic)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
- 
-       setSelectedOptions(basic || []);
- 
-       filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       const output = [{
-         "label": "All Hub",
-         "value": "All"
-       }];
- 
-       // // Iterate through the search array
-       basic.forEach(({ value }) => {
-         // Search in the data object
-         Object.entries(alldrop).forEach(([key, items]) => {
-           if (key === value) {
-             // If the key matches, add all items from the group to the output
-             items.forEach(item => {
-               output.push({ value: key + '-' + item.name, label: item.name });
-             });
-           } else {
-             // Search within the group's items
-             items.forEach(item => {
-               if (item.name === value) {
-                 output.push({ value: key + '-' + item.name, label: key });
-               }
-             });
-           }
-         });
-       });
- 
-       setBasicone(output)
- 
- 
-     } else {
- 
-       let lengthss = selected.length
-       let lengthssone = basic.length
- 
-       // if (lengthss === lengthssone - 1) {
-       //   setSelectedOptions( []);
- 
-       //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       //   const output = [];
- 
-       //   // // Iterate through the search array
-       //   [].forEach(({ value }) => {
-       //     // Search in the data object
-       //     Object.entries(alldrop).forEach(([key, items]) => {
-       //       if (key === value) {
-       //         // If the key matches, add all items from the group to the output
-       //         items.forEach(item => {
-       //           output.push({ value: key + '-' + item.name, label: item.name });
-       //         });
-       //       } else {
-       //         // Search within the group's items
-       //         items.forEach(item => {
-       //           if (item.name === value) {
-       //             output.push({ value: key + '-' + item.name, label: key });
-       //           }
-       //         });
-       //       }
-       //     });
-       //   });
- 
-       //   setBasicone(output)
- 
-       //   return
-       // }
-       let uuuk = extractUniqueNotes( basicall , selected )
-       uuuk.unshift({ label: "All Courses", value: "All" });
- 
-       setFulldatafull(uuuk)
-       setSelectedOptions(selected || []);
- 
-       filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       const output = [{
-         "label": "All Hub",
-         "value": "All"
-       }];
- 
-       // // Iterate through the search array
-       selected.forEach(({ value }) => {
-         // Search in the data object
-         Object.entries(alldrop).forEach(([key, items]) => {
-           if (key === value) {
-             // If the key matches, add all items from the group to the output
-             items.forEach(item => {
-               output.push({ value: key + '-' + item.name, label: item.name });
-             });
-           } else {
-             // Search within the group's items
-             items.forEach(item => {
-               if (item.name === value) {
-                 output.push({ value: key + '-' + item.name, label: key });
-               }
-             });
-           }
-         });
-       });
- 
-       setBasicone(output)
-     }
- 
- 
-     // const validVenues = selected.map(item => item.value);
- 
-     //     // Filter the data
-     //     const filteredData = Object.fromEntries(
-     //       Object.entries(fulldatatwo).filter(([key, value]) => validVenues.includes(value.venue))
-     //     );
-     //     callfordata(filteredData , fulldata )
- 
-     //     setFulldatatwo(filteredData) 
- 
- 
-     //     const filteredDatatwo = Object.fromEntries(
-     //       Object.entries(fulldata).filter(([key, value]) => validVenues.includes(value.venue))
-     //     );
- 
-     //     callfordata(filteredData , filteredDatatwo )
-     //     setFulldata(filteredDatatwo)
- 
-   };
- 
-   const handleChangefive = (selected) => {
- 
-     console.log(JSON.stringify(fulldatatwo), 'selected')
-     const hasAllValue = selected.some(item => item.value === "All");
-     const hasAllValueold = oldvenfive.some(item => item.value === "All");
- 
- 
-     setOldvenfive(selected)
- 
-     if (hasAllValue === false && hasAllValueold === true) {
-       setSelectedOptionsfive([]);
- 
-       // filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       filterDataByDateonee(dateRange, onetime , twotime, [] , 
-         hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-         
-       const output = [];
- 
-       // // Iterate through the search array
-       [].forEach(({ value }) => {
-         // Search in the data object
-         Object.entries(alldrop).forEach(([key, items]) => {
-           if (key === value) {
-             // If the key matches, add all items from the group to the output
-             items.forEach(item => {
-               output.push({ value: key + '-' + item.name, label: item.name });
-             });
-           } else {
-             // Search within the group's items
-             items.forEach(item => {
-               if (item.name === value) {
-                 output.push({ value: key + '-' + item.name, label: key });
-               }
-             });
-           }
-         });
-       });
- 
-       setBasiconefive(output)
- 
-       return
-     }
- 
- 
- 
-     if (hasAllValue === true) {
- 
-       setSelectedOptionsfive(basic || []);
- 
-       // filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-       filterDataByDateonee(dateRange, onetime , twotime, basic  , 
-         hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-       const output = [{
-         "label": "All Hub",
-         "value": "All"
-       }];
- 
-       // // Iterate through the search array
-       basic.forEach(({ value }) => {
-         // Search in the data object
-         Object.entries(alldrop).forEach(([key, items]) => {
-           if (key === value) {
-             // If the key matches, add all items from the group to the output
-             items.forEach(item => {
-               output.push({ value: key + '-' + item.name, label: item.name });
-             });
-           } else {
-             // Search within the group's items
-             items.forEach(item => {
-               if (item.name === value) {
-                 output.push({ value: key + '-' + item.name, label: key });
-               }
-             });
-           }
-         });
-       });
- 
-       setBasiconefive(output)
- 
- 
-     } else {
- 
-       let lengthss = selected.length
-       let lengthssone = basic.length
- 
-       // if (lengthss === lengthssone - 1) {
-       //   setSelectedOptions( []);
- 
-       //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       //   const output = [];
- 
-       //   // // Iterate through the search array
-       //   [].forEach(({ value }) => {
-       //     // Search in the data object
-       //     Object.entries(alldrop).forEach(([key, items]) => {
-       //       if (key === value) {
-       //         // If the key matches, add all items from the group to the output
-       //         items.forEach(item => {
-       //           output.push({ value: key + '-' + item.name, label: item.name });
-       //         });
-       //       } else {
-       //         // Search within the group's items
-       //         items.forEach(item => {
-       //           if (item.name === value) {
-       //             output.push({ value: key + '-' + item.name, label: key });
-       //           }
-       //         });
-       //       }
-       //     });
-       //   });
- 
-       //   setBasicone(output)
- 
-       //   return
-       // }
- 
-       setSelectedOptionsfive(selected || []);
- 
-       // filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-       filterDataByDateonee(dateRange, onetime , twotime, selected  , 
-         hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-       const output = [{
-         "label": "All Hub",
-         "value": "All"
-       }];
- 
-       // // Iterate through the search array
-       selected.forEach(({ value }) => {
-         // Search in the data object
-         Object.entries(alldrop).forEach(([key, items]) => {
-           if (key === value) {
-             // If the key matches, add all items from the group to the output
-             items.forEach(item => {
-               output.push({ value: key + '-' + item.name, label: item.name });
-             });
-           } else {
-             // Search within the group's items
-             items.forEach(item => {
-               if (item.name === value) {
-                 output.push({ value: key + '-' + item.name, label: key });
-               }
-             });
-           }
-         });
-       });
- 
-       setBasiconefive(output)
-     }
- 
-  
-   };
+
+      setSelectedOptions(basic || []);
+
+      filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      const output = [{
+        "label": "All Hub",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      basic.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasicone(output)
+
+
+    } else {
+
+      let lengthss = selected.length
+      let lengthssone = basic.length
+
+      // if (lengthss === lengthssone - 1) {
+      //   setSelectedOptions( []);
+
+      //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      //   const output = [];
+
+      //   // // Iterate through the search array
+      //   [].forEach(({ value }) => {
+      //     // Search in the data object
+      //     Object.entries(alldrop).forEach(([key, items]) => {
+      //       if (key === value) {
+      //         // If the key matches, add all items from the group to the output
+      //         items.forEach(item => {
+      //           output.push({ value: key + '-' + item.name, label: item.name });
+      //         });
+      //       } else {
+      //         // Search within the group's items
+      //         items.forEach(item => {
+      //           if (item.name === value) {
+      //             output.push({ value: key + '-' + item.name, label: key });
+      //           }
+      //         });
+      //       }
+      //     });
+      //   });
+
+      //   setBasicone(output)
+
+      //   return
+      // }
+      let uuuk = extractUniqueNotes(basicall, selected)
+      uuuk.unshift({ label: "All Courses", value: "All" });
+
+      setFulldatafull(uuuk)
+      setSelectedOptions(selected || []);
+
+      filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      const output = [{
+        "label": "All Hub",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      selected.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasicone(output)
+    }
+
+
+    // const validVenues = selected.map(item => item.value);
+
+    //     // Filter the data
+    //     const filteredData = Object.fromEntries(
+    //       Object.entries(fulldatatwo).filter(([key, value]) => validVenues.includes(value.venue))
+    //     );
+    //     callfordata(filteredData , fulldata )
+
+    //     setFulldatatwo(filteredData) 
+
+
+    //     const filteredDatatwo = Object.fromEntries(
+    //       Object.entries(fulldata).filter(([key, value]) => validVenues.includes(value.venue))
+    //     );
+
+    //     callfordata(filteredData , filteredDatatwo )
+    //     setFulldata(filteredDatatwo)
+
+  };
+
+  const handleChangefive = (selected) => {
+
+    console.log(JSON.stringify(fulldatatwo), 'selected')
+    const hasAllValue = selected.some(item => item.value === "All");
+    const hasAllValueold = oldvenfive.some(item => item.value === "All");
+
+
+    setOldvenfive(selected)
+
+    if (hasAllValue === false && hasAllValueold === true) {
+      setSelectedOptionsfive([]);
+
+      // filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRange, onetime, twotime, [],
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      const output = [];
+
+      // // Iterate through the search array
+      [].forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasiconefive(output)
+
+      return
+    }
+
+
+
+    if (hasAllValue === true) {
+
+      setSelectedOptionsfive(basic || []);
+
+      // filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime, twotime, basic,
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      const output = [{
+        "label": "All Hub",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      basic.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasiconefive(output)
+
+
+    } else {
+
+      let lengthss = selected.length
+      let lengthssone = basic.length
+
+      // if (lengthss === lengthssone - 1) {
+      //   setSelectedOptions( []);
+
+      //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      //   const output = [];
+
+      //   // // Iterate through the search array
+      //   [].forEach(({ value }) => {
+      //     // Search in the data object
+      //     Object.entries(alldrop).forEach(([key, items]) => {
+      //       if (key === value) {
+      //         // If the key matches, add all items from the group to the output
+      //         items.forEach(item => {
+      //           output.push({ value: key + '-' + item.name, label: item.name });
+      //         });
+      //       } else {
+      //         // Search within the group's items
+      //         items.forEach(item => {
+      //           if (item.name === value) {
+      //             output.push({ value: key + '-' + item.name, label: key });
+      //           }
+      //         });
+      //       }
+      //     });
+      //   });
+
+      //   setBasicone(output)
+
+      //   return
+      // }
+
+      setSelectedOptionsfive(selected || []);
+
+      // filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime, twotime, selected,
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      const output = [{
+        "label": "All Hub",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      selected.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasiconefive(output)
+    }
+
+
+  };
 
 
 
@@ -1553,7 +1553,7 @@ const selectReffive = useRef(null);
   const [selectedhubOptions, setSelectedhubOptions] = useState([]);
 
 
-  
+
   const handleChangehub = (selected) => {
 
     const hasAllValue = selected.some(item => item.value === "All");
@@ -1567,8 +1567,8 @@ const selectReffive = useRef(null);
       setSelectedhubOptions([]);
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  inputvaluetwo, [])
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
       return
@@ -1580,8 +1580,8 @@ const selectReffive = useRef(null);
       setSelectedhubOptions(optionshub);
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  inputvaluetwo, optionshub )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, optionshub)
 
@@ -1589,8 +1589,8 @@ const selectReffive = useRef(null);
       setSelectedhubOptions(selected || []);
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  inputvaluetwo, selected )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selected)
 
     }
 
@@ -1672,8 +1672,8 @@ const selectReffive = useRef(null);
 
       // filterDataByDate(dateRange, onetime, twotime, selectedOptions, [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        [] , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, [], selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
@@ -1690,8 +1690,8 @@ const selectReffive = useRef(null);
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, basiconefive, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        basiconefive , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        basiconefive, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
     } else {
@@ -1699,8 +1699,8 @@ const selectReffive = useRef(null);
 
       setHubbtwo(selectedss)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        selectedss , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        selectedss, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
 
@@ -1732,7 +1732,7 @@ const selectReffive = useRef(null);
 
   const handleChangeCources = (selected) => {
 
- 
+
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldcou.some(item => item.value === "All");
 
@@ -1744,8 +1744,8 @@ const selectReffive = useRef(null);
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , [], selectedTakeaway, inputvalue ,  inputvaluetwo, selectedhubOptions )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
@@ -1758,8 +1758,8 @@ const selectReffive = useRef(null);
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , fulldatafull , selectedTakeaway, inputvalue ,  inputvaluetwo, selectedhubOptions )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -1770,8 +1770,8 @@ const selectReffive = useRef(null);
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selected , selectedTakeaway, inputvalue ,  inputvaluetwo, selectedhubOptions )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -1805,8 +1805,8 @@ const selectReffive = useRef(null);
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selectedCources , [], inputvalue ,  inputvaluetwo, selectedhubOptions )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, [], inputvalue, inputvaluetwo, selectedhubOptions)
@@ -1820,8 +1820,8 @@ const selectReffive = useRef(null);
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selectedCources , optionstakeaway , inputvalue ,  inputvaluetwo, selectedhubOptions )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, optionstakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -1830,8 +1830,8 @@ const selectReffive = useRef(null);
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-        hubbtwo , selectedCources , selected , inputvalue ,  inputvaluetwo, selectedhubOptions )
+      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+        hubbtwo, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selected, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -3390,7 +3390,7 @@ const selectReffive = useRef(null);
         { content: dropdownRefsss, toggle: toggleButtonRefsss, isOpen: showDivsss },
 
       ];
-      
+
       // Check if click is outside ALL dropdown contents AND toggle buttons
       const clickedOutside = dropdowns.every(({ content, toggle, isOpen }) => {
         return !isOpen || (
@@ -3398,7 +3398,7 @@ const selectReffive = useRef(null);
           (!toggle.current || !toggle.current.contains(event.target))
         );
       });
-      
+
       if (clickedOutside) {
         // Close all dropdowns
         setShowDiv(false);
@@ -3407,12 +3407,12 @@ const selectReffive = useRef(null);
         setShowDivsss(false);
       }
     };
-    
+
     // Add listener if ANY dropdown is open
     if (showDiv || showDivs || showDivss || showDivsss) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-    
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -3627,204 +3627,204 @@ const selectReffive = useRef(null);
 
           <div className="d-flex justify-content-between  pt-4   gap-4" >
 
-          <div style={{ width: '20%' }}>
-                <p onClick={() => {
+            <div style={{ width: '20%' }}>
+              <p onClick={() => {
 
-                  checkkkk()
+                checkkkk()
 
-                }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 ,marginBottom:2}}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
+              }} style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
 
-                <div style={{ width: '100%' }} >
-                  <DatePicker
-                    selectsRange
-                    startDate={startDate}
-                    endDate={endDate}
-                    onChange={(update) => {
-                      setDateRange(update)
+              <div style={{ width: '100%' }} >
+                <DatePicker
+                  selectsRange
+                  startDate={startDate}
+                  endDate={endDate}
+                  onChange={(update) => {
+                    setDateRange(update)
 
-                      if (update[1] === null || update[1] === "null") {
+                    if (update[1] === null || update[1] === "null") {
 
-                      } else {
-                        filterDataByDate(update, onetime, twotime, selectedOptions, hubb, 
-                          selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                    } else {
+                      filterDataByDate(update, onetime, twotime, selectedOptions, hubb,
+                        selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-                        filterDataByDateonee(update, onetime, twotime, selectedOptionsfive , 
-                          hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-                      }
-                    }} // Update both startDate and EndDate 
-                    placeholderText="Select a date range"
-                    className="custom-input"
-                    calendarClassName="custom-calendar"
-                    dateFormat="d MMM yyyy"
-                    customInput={
-                      <div className="custom-display-input" style={{fontSize:15,color:'#1A1A1B'}}>
-                        {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
-                        <FaCaretDown className="calendar-icon" />
-                      </div>
+                      filterDataByDateonee(update, onetime, twotime, selectedOptionsfive,
+                        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
                     }
-                  />
-                </div>
-                <div className="mt-3" >
-                  <div className="custom-inputone d-flex justify-content-between">
-                    <input
-                      className='inputttt'
-                      type="time"
-                      value={onetime}
-                      style={{fontSize:15,color:'#1A1A1B'}}
-                      onChange={(e) => {
-                        console.log(e.target.value, 'eeee')
-                        setOnetime(e.target.value)
-                        if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                          return
-                        }
-
-                        filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- filterDataByDateonee(dateRange, e.target.value , twotime, selectedOptionsfive , 
-                          hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-                      }}
-                    />
-                    <input
-                      className='inputttt'
-                      type="time"
-                      style={{fontSize:15,color:'#1A1A1B'}}
-                      value={twotime}
-                      onChange={(e) => {
-                        setTwotime(e.target.value)
-                        if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                          return
-                        }
-                        // tiemstampp(2, e.target.value)
-
-                        filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-                        filterDataByDateonee(dateRange, onetime  , e.target.value , selectedOptionsfive , 
-                          hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-                      }}
-                    />
-                  </div>
-                </div>
-
-
-
+                  }} // Update both startDate and EndDate 
+                  placeholderText="Select a date range"
+                  className="custom-input"
+                  calendarClassName="custom-calendar"
+                  dateFormat="d MMM yyyy"
+                  customInput={
+                    <div className="custom-display-input" style={{ fontSize: 15, color: '#1A1A1B' }}>
+                      {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
+                      <FaCaretDown className="calendar-icon" />
+                    </div>
+                  }
+                />
               </div>
-              <div style={{ width: '20%' }} >
-
-
-
-
-
-
-
-
-
-
-
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Chosen venue & hub</p>
-                <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
-                  width: '100%', height: 45
-                }}>
-                  <div class="switch-container">
-                    <input type="checkbox" id="switch1" checked={venueradio} onChange={(e) => {
-                      setVenueradio(e.target.checked)
-                      if (e.target.checked === false) {
-                        setSelectedOptions([])
-                      } else {
+              <div className="mt-3" >
+                <div className="custom-inputone d-flex justify-content-between">
+                  <input
+                    className='inputttt'
+                    type="time"
+                    value={onetime}
+                    style={{ fontSize: 15, color: '#1A1A1B' }}
+                    onChange={(e) => {
+                      console.log(e.target.value, 'eeee')
+                      setOnetime(e.target.value)
+                      if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                        return
                       }
 
-                      console.log(e.target.checked, 'ggggggggggggggg')
-                    }} />
-                    <label class="switch-label" for="switch1"></label>
-                  </div>
-                  <Select
-                    menuIsOpen={menuIsOpen}
-                    onMenuOpen={() => setMenuIsOpen(true)}
-                    onMenuClose={() => setMenuIsOpen(false)}
-                    onFocus={() => setMenuIsOpen(true)}
-                    isDisabled={!venueradio}
-                    isMulti
-                    className="newoneonee"
-                    options={basic}
-                    value={selectedOptions}
-                    onChange={handleChange}
-                    placeholder="All Venues"
-                    components={{
-                      Option: CustomOption,
-                      MultiValue: () => null, // Hides default tags
-                      ValueContainer: ({ children, ...props }) => {
-                        const selectedValues = props.getValue();
-                        return (
-                          <components.ValueContainer {...props}>
-                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                          </components.ValueContainer>
-                        );
-                      },
+                      filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                      filterDataByDateonee(dateRange, e.target.value, twotime, selectedOptionsfive,
+                        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
                     }}
-                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                    hideSelectedOptions={false} // Show all options even if selected
-                    styles={{
-                      control: (base) => ({ ...base, border: 'unset', backgroundColor: '#fff' ,fontSize:15,color:'#1A1A1B' }),
+                  />
+                  <input
+                    className='inputttt'
+                    type="time"
+                    style={{ fontSize: 15, color: '#1A1A1B' }}
+                    value={twotime}
+                    onChange={(e) => {
+                      setTwotime(e.target.value)
+                      if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                        return
+                      }
+                      // tiemstampp(2, e.target.value)
+
+                      filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                      filterDataByDateonee(dateRange, onetime, e.target.value, selectedOptionsfive,
+                        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
                     }}
                   />
                 </div>
-
-                <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                  width: '100%',
-                  height: 45
-                }}>
-
-                  <div class="switch-container">
-                    <input checked={hubbswitch} onChange={(e) => {
-                      setHubbswitch(e.target.checked)
-                      if (e.target.checked === false) {
-                      }
-                    }} type="checkbox" id="switch35" />
-                    <label class="switch-label" for="switch35"></label>
-                  </div>
+              </div>
 
 
 
-
-                  <Select
-
-                    menuIsOpen={menuIsOpenone}
-                    onMenuOpen={() => setMenuIsOpenone(true)}
-                    onMenuClose={() => setMenuIsOpenone(false)}
-                    onFocus={() => setMenuIsOpenone(true)}
-
-
-                    isDisabled={!hubbswitch}
-                    isMulti
-                    className="newoneonee"
-                    options={basicone}
-                    value={hubb}
-
-                    onChange={handleChangehubone}
-                    placeholder="All Hubs"
-                    components={{
-                      Option: CustomOption, // Custom tick option
-                      MultiValue: () => null, // Hides default tags
-                      ValueContainer: ({ children, ...props }) => {
-                        const selectedValues = props.getValue();
-                        return (
-                          <components.ValueContainer {...props}>
-                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                          </components.ValueContainer>
-                        );
-                      },
-                    }}
-                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                    hideSelectedOptions={false} // Show all options even if selected
-                    styles={{
-                      control: (base) => ({ ...base, border: 'unset', color:'#1A1A1B',fontSize:15 }),
-                    }}
-                  />
+            </div>
+            <div style={{ width: '20%' }} >
 
 
 
 
 
 
-                  {/* <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
+
+
+
+
+
+              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen venue & hub</p>
+              <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
+                width: '100%', height: 45
+              }}>
+                <div class="switch-container">
+                  <input type="checkbox" id="switch1" checked={venueradio} onChange={(e) => {
+                    setVenueradio(e.target.checked)
+                    if (e.target.checked === false) {
+                      setSelectedOptions([])
+                    } else {
+                    }
+
+                    console.log(e.target.checked, 'ggggggggggggggg')
+                  }} />
+                  <label class="switch-label" for="switch1"></label>
+                </div>
+                <Select
+                  menuIsOpen={menuIsOpen}
+                  onMenuOpen={() => setMenuIsOpen(true)}
+                  onMenuClose={() => setMenuIsOpen(false)}
+                  onFocus={() => setMenuIsOpen(true)}
+                  isDisabled={!venueradio}
+                  isMulti
+                  className="newoneonee"
+                  options={basic}
+                  value={selectedOptions}
+                  onChange={handleChange}
+                  placeholder="All Venues"
+                  components={{
+                    Option: CustomOption,
+                    MultiValue: () => null, // Hides default tags
+                    ValueContainer: ({ children, ...props }) => {
+                      const selectedValues = props.getValue();
+                      return (
+                        <components.ValueContainer {...props}>
+                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                        </components.ValueContainer>
+                      );
+                    },
+                  }}
+                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                  hideSelectedOptions={false} // Show all options even if selected
+                  styles={{
+                    control: (base) => ({ ...base, border: 'unset', backgroundColor: '#fff', fontSize: 15, color: '#1A1A1B' }),
+                  }}
+                />
+              </div>
+
+              <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{
+                width: '100%',
+                height: 45
+              }}>
+
+                <div class="switch-container">
+                  <input checked={hubbswitch} onChange={(e) => {
+                    setHubbswitch(e.target.checked)
+                    if (e.target.checked === false) {
+                    }
+                  }} type="checkbox" id="switch35" />
+                  <label class="switch-label" for="switch35"></label>
+                </div>
+
+
+
+
+                <Select
+
+                  menuIsOpen={menuIsOpenone}
+                  onMenuOpen={() => setMenuIsOpenone(true)}
+                  onMenuClose={() => setMenuIsOpenone(false)}
+                  onFocus={() => setMenuIsOpenone(true)}
+
+
+                  isDisabled={!hubbswitch}
+                  isMulti
+                  className="newoneonee"
+                  options={basicone}
+                  value={hubb}
+
+                  onChange={handleChangehubone}
+                  placeholder="All Hubs"
+                  components={{
+                    Option: CustomOption, // Custom tick option
+                    MultiValue: () => null, // Hides default tags
+                    ValueContainer: ({ children, ...props }) => {
+                      const selectedValues = props.getValue();
+                      return (
+                        <components.ValueContainer {...props}>
+                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                        </components.ValueContainer>
+                      );
+                    },
+                  }}
+                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                  hideSelectedOptions={false} // Show all options even if selected
+                  styles={{
+                    control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', fontSize: 15, background: '#fff' }),
+                  }}
+                />
+
+
+
+
+
+
+                {/* <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
                   setHubb(e.target.value)
                   filterDataByDate(dateRange, onetime, twotime, selectedOptions, e.target.value, selectedCources, selectedTakeaway)
 
@@ -3840,130 +3840,130 @@ const selectReffive = useRef(null);
                   ))}
                 </select> */}
 
-                </div>
-
-
-
-
-
-
-
-
-
-
-
               </div>
 
-              <div style={{ width: '20%' }}>
 
 
 
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
-                <div ref={selectReffive} className="custom-inputoness d-flex justify-content-between" style={{
-                  width: '100%', height: 45
-                }}>
-                  <div class="switch-container">
-                    <input type="checkbox" id="switch13" checked={venueradiofivese} onChange={(e) => {
-                      setVenueradiofivese(e.target.checked)
-                      if (e.target.checked === false) {
-                        setSelectedOptionsfive([])
-                      } else {
-                      }
 
-                      console.log(e.target.checked, 'ggggggggggggggg fdgbfgc')
-                    }} />
-                    <label class="switch-label" for="switch13"></label>
-                  </div>
-                  <Select
-                    menuIsOpen={menuIsOpenfive}
-                    onMenuOpen={() => setMenuIsOpenfive(true)}
-                    onMenuClose={() => setMenuIsOpenfive(false)}
-                    onFocus={() => setMenuIsOpenfive(true)}
-                    isDisabled={!venueradiofivese}
-                    isMulti
-                    className="newoneonee"
-                    options={basic}
-                    value={selectedOptionsfive}
-                    onChange={handleChangefive}
-                    placeholder="All Venues"
-                    components={{
-                      Option: CustomOption,
-                      MultiValue: () => null, // Hides default tags
-                      ValueContainer: ({ children, ...props }) => {
-                        const selectedValues = props.getValue();
-                        return (
-                          <components.ValueContainer {...props}>
-                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                          </components.ValueContainer>
-                        );
-                      },
-                    }}
-                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                    hideSelectedOptions={false} // Show all options even if selected
-                    styles={{
-                      control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff', fontSize:15,color:'#1A1A1B' }),
-                    }}
-                  />
+
+
+
+
+
+
+            </div>
+
+            <div style={{ width: '20%' }}>
+
+
+
+              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
+              <div ref={selectReffive} className="custom-inputoness d-flex justify-content-between" style={{
+                width: '100%', height: 45
+              }}>
+                <div class="switch-container">
+                  <input type="checkbox" id="switch13" checked={venueradiofivese} onChange={(e) => {
+                    setVenueradiofivese(e.target.checked)
+                    if (e.target.checked === false) {
+                      setSelectedOptionsfive([])
+                    } else {
+                    }
+
+                    console.log(e.target.checked, 'ggggggggggggggg fdgbfgc')
+                  }} />
+                  <label class="switch-label" for="switch13"></label>
+                </div>
+                <Select
+                  menuIsOpen={menuIsOpenfive}
+                  onMenuOpen={() => setMenuIsOpenfive(true)}
+                  onMenuClose={() => setMenuIsOpenfive(false)}
+                  onFocus={() => setMenuIsOpenfive(true)}
+                  isDisabled={!venueradiofivese}
+                  isMulti
+                  className="newoneonee"
+                  options={basic}
+                  value={selectedOptionsfive}
+                  onChange={handleChangefive}
+                  placeholder="All Venues"
+                  components={{
+                    Option: CustomOption,
+                    MultiValue: () => null, // Hides default tags
+                    ValueContainer: ({ children, ...props }) => {
+                      const selectedValues = props.getValue();
+                      return (
+                        <components.ValueContainer {...props}>
+                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                        </components.ValueContainer>
+                      );
+                    },
+                  }}
+                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                  hideSelectedOptions={false} // Show all options even if selected
+                  styles={{
+                    control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff', fontSize: 15, color: '#1A1A1B' }),
+                  }}
+                />
+              </div>
+
+              <div ref={selectRefsix} className="custom-inputoness d-flex justify-content-between mt-3" style={{
+                width: '100%',
+                height: 45
+              }}>
+
+                <div class="switch-container">
+                  <input checked={venueradiosix} onChange={(e) => {
+                    setVenueradiosix(e.target.checked)
+                    if (e.target.checked === false) {
+                    }
+                  }} type="checkbox" id="switch34" />
+                  <label class="switch-label" for="switch34"></label>
                 </div>
 
-                <div ref={selectRefsix} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                  width: '100%',
-                  height: 45
-                }}>
-
-                  <div class="switch-container">
-                    <input checked={venueradiosix} onChange={(e) => {
-                      setVenueradiosix(e.target.checked)
-                      if (e.target.checked === false) {
-                      }
-                    }} type="checkbox" id="switch34" />
-                    <label class="switch-label" for="switch34"></label>
-                  </div>
 
 
 
+                <Select
 
-                  <Select
-
-                    menuIsOpen={menuIsOpensix}
-                    onMenuOpen={() => setMenuIsOpensix(true)}
-                    onMenuClose={() => setMenuIsOpensix(false)}
-                    onFocus={() => setMenuIsOpensix(true)}
+                  menuIsOpen={menuIsOpensix}
+                  onMenuOpen={() => setMenuIsOpensix(true)}
+                  onMenuClose={() => setMenuIsOpensix(false)}
+                  onFocus={() => setMenuIsOpensix(true)}
 
 
-                    isDisabled={!venueradiosix}
-                    isMulti
-                    className="newoneonee"
-                    options={basiconefive}
-                    value={hubbtwo}
+                  isDisabled={!venueradiosix}
+                  isMulti
+                  className="newoneonee"
+                  options={basiconefive}
+                  value={hubbtwo}
 
-                    onChange={handleChangehubtwo}
-                    placeholder="All Hubs"
-                    components={{
-                      Option: CustomOption, // Custom tick option
-                      MultiValue: () => null, // Hides default tags
-                      ValueContainer: ({ children, ...props }) => {
-                        const selectedValues = props.getValue();
-                        return (
-                          <components.ValueContainer {...props}>
-                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                          </components.ValueContainer>
-                        );
-                      },
-                    }}
-                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                    hideSelectedOptions={false} // Show all options even if selected
-                    styles={{
-                      control: (base) => ({ ...base, border: 'unset',  fontSize:15,color:'#1A1A1B' }),
-                    }}
-                  />
+                  onChange={handleChangehubtwo}
+                  placeholder="All Hubs"
+                  components={{
+                    Option: CustomOption, // Custom tick option
+                    MultiValue: () => null, // Hides default tags
+                    ValueContainer: ({ children, ...props }) => {
+                      const selectedValues = props.getValue();
+                      return (
+                        <components.ValueContainer {...props}>
+                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                        </components.ValueContainer>
+                      );
+                    },
+                  }}
+                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                  hideSelectedOptions={false} // Show all options even if selected
+                  styles={{
+                    control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff' }),
+                  }}
+                />
 
 
 
 
 
 
-                  {/* <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
+                {/* <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
                   setHubb(e.target.value)
                   filterDataByDate(dateRange, onetime, twotime, selectedOptions, e.target.value, selectedCources, selectedTakeaway)
 
@@ -3979,208 +3979,208 @@ const selectReffive = useRef(null);
                   ))}
                 </select> */}
 
-                </div>
-
-
-
               </div>
 
 
 
+            </div>
 
-              <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Filter by stages/courses</p>
-                <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
-                  width: '100%',
-                  height: 45
-                }}>
 
-                  <div class="switch-container">
-                    <input type="checkbox" checked={Hubradio} onChange={(e) => {
-                      setHubradio(e.target.checked)
-                      if (e.target.checked === false) {
-                        setSelectedhubOptions([])
-                      }
-                    }} id="switch2" />
-                    <label class="switch-label" for="switch2"></label>
-                  </div>
 
-                  <Select
-                    menuIsOpen={menuIsOpentwo}
-                    onMenuOpen={() => setMenuIsOpentwo(true)}
-                    onMenuClose={() => setMenuIsOpentwo(false)}
-                    onFocus={() => setMenuIsOpentwo(true)}
 
-                    isDisabled={!Hubradio}
-                    isMulti
-                    className="newoneonee"
-                    options={optionshub}
-                    value={selectedhubOptions}
-                    onChange={handleChangehub}
-                    placeholder="All stages"
-                    components={{
-                      Option: CustomOption, // Custom tick option
-                      MultiValue: () => null, // Hides default tags
-                      ValueContainer: ({ children, ...props }) => {
-                        const selectedValues = props.getValue();
-                        return (
-                          <components.ValueContainer {...props}>
-                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                          </components.ValueContainer>
-                        );
-                      },
-                    }}
-                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                    hideSelectedOptions={false} // Show all options even if selected
-                    styles={{
-                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
-                    }}
-                  />
+            <div style={{ width: '20%' }} >
+              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by stages/courses</p>
+              <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
+                width: '100%',
+                height: 45
+              }}>
+
+                <div class="switch-container">
+                  <input type="checkbox" checked={Hubradio} onChange={(e) => {
+                    setHubradio(e.target.checked)
+                    if (e.target.checked === false) {
+                      setSelectedhubOptions([])
+                    }
+                  }} id="switch2" />
+                  <label class="switch-label" for="switch2"></label>
                 </div>
 
+                <Select
+                  menuIsOpen={menuIsOpentwo}
+                  onMenuOpen={() => setMenuIsOpentwo(true)}
+                  onMenuClose={() => setMenuIsOpentwo(false)}
+                  onFocus={() => setMenuIsOpentwo(true)}
 
-                <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                  width: '100%',
-                  height: 45
-                }}>
-                  <div class="switch-container">
-                    <input type="checkbox" checked={Cources} onChange={(e) => {
-                      setCources(e.target.checked)
-                      if (e.target.checked === false) {
-                        setSelectedCources([])
-                      }
-                    }} id="switch4" />
-                    <label class="switch-label" for="switch4"></label>
-                  </div>
-
-                  <Select
-                    menuIsOpen={menuIsOpenthree}
-                    onMenuOpen={() => setMenuIsOpenthree(true)}
-                    onMenuClose={() => setMenuIsOpenthree(false)}
-                    onFocus={() => setMenuIsOpenthree(true)}
-                    isDisabled={!Cources}
-                    isMulti
-                    className="newoneonee"
-                    options={fulldatafull}
-                    value={selectedCources}
-                    onChange={handleChangeCources}
-                    placeholder="All courses"
-                    components={{
-                      Option: CustomOption, // Custom tick option
-                      MultiValue: () => null, // Hides default tags
-                      ValueContainer: ({ children, ...props }) => {
-                        const selectedValues = props.getValue();
-                        return (
-                          <components.ValueContainer {...props}>
-                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                          </components.ValueContainer>
-                        );
-                      },
-                    }}
-                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                    hideSelectedOptions={false} // Show all options even if selected
-                    styles={{
-                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
-                    }}
-                  />
-                </div>
-
-
+                  isDisabled={!Hubradio}
+                  isMulti
+                  className="newoneonee"
+                  options={optionshub}
+                  value={selectedhubOptions}
+                  onChange={handleChangehub}
+                  placeholder="All stages"
+                  components={{
+                    Option: CustomOption, // Custom tick option
+                    MultiValue: () => null, // Hides default tags
+                    ValueContainer: ({ children, ...props }) => {
+                      const selectedValues = props.getValue();
+                      return (
+                        <components.ValueContainer {...props}>
+                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                        </components.ValueContainer>
+                      );
+                    },
+                  }}
+                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                  hideSelectedOptions={false} // Show all options even if selected
+                  styles={{
+                    control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff' }),
+                  }}
+                />
               </div>
 
-              <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15 ,marginBottom:2}}>Filter by tables/takeaways</p>
 
-                <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
-                  {/* <div class="switch-container">
+              <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{
+                width: '100%',
+                height: 45
+              }}>
+                <div class="switch-container">
+                  <input type="checkbox" checked={Cources} onChange={(e) => {
+                    setCources(e.target.checked)
+                    if (e.target.checked === false) {
+                      setSelectedCources([])
+                    }
+                  }} id="switch4" />
+                  <label class="switch-label" for="switch4"></label>
+                </div>
+
+                <Select
+                  menuIsOpen={menuIsOpenthree}
+                  onMenuOpen={() => setMenuIsOpenthree(true)}
+                  onMenuClose={() => setMenuIsOpenthree(false)}
+                  onFocus={() => setMenuIsOpenthree(true)}
+                  isDisabled={!Cources}
+                  isMulti
+                  className="newoneonee"
+                  options={fulldatafull}
+                  value={selectedCources}
+                  onChange={handleChangeCources}
+                  placeholder="All courses"
+                  components={{
+                    Option: CustomOption, // Custom tick option
+                    MultiValue: () => null, // Hides default tags
+                    ValueContainer: ({ children, ...props }) => {
+                      const selectedValues = props.getValue();
+                      return (
+                        <components.ValueContainer {...props}>
+                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                        </components.ValueContainer>
+                      );
+                    },
+                  }}
+                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                  hideSelectedOptions={false} // Show all options even if selected
+                  styles={{
+                    control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff' }),
+                  }}
+                />
+              </div>
+
+
+            </div>
+
+            <div style={{ width: '20%' }} >
+              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
+
+              <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
+                {/* <div class="switch-container">
                   <input type="checkbox" id="switch1" />
                   <label class="switch-label" for="switch1"></label>
                 </div> */}
 
-                  {/* <select name="cars" id="cars" style={{ border: 'unset', color: '#707070' }} >
+                {/* <select name="cars" id="cars" style={{ border: 'unset', color: '#707070' }} >
                   <option value="volvo">Volvo</option>
                   <option value="saab">Saab</option>
                   <option value="mercedes">Mercedes</option>
                   <option value="audi">Audi</option>
                 </select> */}
-                  <input onChange={(e) => {
-                    setInputvalue(e.target.value)
+                <input onChange={(e) => {
+                  setInputvalue(e.target.value)
 
-                    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
- 
-
-                    filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-                      hubbtwo , selectedCources, selectedTakeaway, e.target.value , inputvaluetwo, selectedhubOptions)
-                      
-                    // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
-
-                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset', fontSize:15,color:'#1A1A1B' }} type="text" />
+                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
 
-                  <p style={{ fontSize: 19, display: 'contents' }} >|</p>
+                  filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+                    hubbtwo, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+
+                  // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+
+                }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B' }} type="text" />
 
 
-                  <input onChange={(e) => {
-                    setInputvaluetwo(e.target.value)
-                    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                    filterDataByDateonee(dateRange, onetime , twotime, selectedOptionsfive  , 
-                      hubbtwo , selectedCources, selectedTakeaway, inputvalue ,  e.target.value, selectedhubOptions)
-                    // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
-                </div>
-
-                <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                  width: '100%',
-                  height: 45
-                }}>
+                <p style={{ fontSize: 19, display: 'contents' }} >|</p>
 
 
-
-                  <div class="switch-container">
-                    <input type="checkbox" checked={takeaway} onChange={(e) => {
-                      setTakeaway(e.target.checked)
-                      if (e.target.checked === false) {
-                        setSelectedTakeaway([])
-                      }
-                    }} id="switch5" />
-                    <label class="switch-label" for="switch5"></label>
-                  </div>
-
-                  <Select
-                    menuIsOpen={menuIsOpenfour}
-                    onMenuOpen={() => setMenuIsOpenfour(true)}
-                    onMenuClose={() => setMenuIsOpenfour(false)}
-                    onFocus={() => setMenuIsOpenfour(true)}
-                    isDisabled={!takeaway}
-                    isMulti
-                    className="newoneonee"
-                    options={optionstakeaway}
-                    value={selectedTakeaway}
-                    onChange={handleChangeTakeaway}
-                    placeholder="All takeaways"
-                    components={{
-                      Option: CustomOption, // Custom tick option
-                      MultiValue: () => null, // Hides default tags
-                      ValueContainer: ({ children, ...props }) => {
-                        const selectedValues = props.getValue();
-                        return (
-                          <components.ValueContainer {...props}>
-                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                          </components.ValueContainer>
-                        );
-                      },
-                    }}
-                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                    hideSelectedOptions={false} // Show all options even if selected
-                    styles={{
-                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
-                    }}
-                  />
-
-
-
-                </div>
+                <input onChange={(e) => {
+                  setInputvaluetwo(e.target.value)
+                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+                  filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
+                    hubbtwo, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+                  // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset' }} type="text" />
               </div>
+
+              <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
+                width: '100%',
+                height: 45
+              }}>
+
+
+
+                <div class="switch-container">
+                  <input type="checkbox" checked={takeaway} onChange={(e) => {
+                    setTakeaway(e.target.checked)
+                    if (e.target.checked === false) {
+                      setSelectedTakeaway([])
+                    }
+                  }} id="switch5" />
+                  <label class="switch-label" for="switch5"></label>
+                </div>
+
+                <Select
+                  menuIsOpen={menuIsOpenfour}
+                  onMenuOpen={() => setMenuIsOpenfour(true)}
+                  onMenuClose={() => setMenuIsOpenfour(false)}
+                  onFocus={() => setMenuIsOpenfour(true)}
+                  isDisabled={!takeaway}
+                  isMulti
+                  className="newoneonee"
+                  options={optionstakeaway}
+                  value={selectedTakeaway}
+                  onChange={handleChangeTakeaway}
+                  placeholder="All takeaways"
+                  components={{
+                    Option: CustomOption, // Custom tick option
+                    MultiValue: () => null, // Hides default tags
+                    ValueContainer: ({ children, ...props }) => {
+                      const selectedValues = props.getValue();
+                      return (
+                        <components.ValueContainer {...props}>
+                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                        </components.ValueContainer>
+                      );
+                    },
+                  }}
+                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                  hideSelectedOptions={false} // Show all options even if selected
+                  styles={{
+                    control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff' }),
+                  }}
+                />
+
+
+
+              </div>
+            </div>
 
           </div>
 
@@ -4188,218 +4188,218 @@ const selectReffive = useRef(null);
           {
             meals === 1 ?
               <div className="changeone" style={{ marginTop: 100 }} >
-                
+
                 <div className="changetwos"   >
 
-                <div className='row ' >
+                  <div className='row ' >
 
-                  <div className='col-6 d-flex justify-content-center ' >
-                    <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
-                      setMeals(5)
-                    }} >
-                      <div class="boxs" style={{cursor:'pointer'}}>
-                        <p className='asdfp' style={{fontWeight:600,color:'#1A1A1B'}}>Meals received - timeline</p>
-                        <div class="end-box">
-                          <img src="rts.png" className="" alt="Example Image" />
-                          <p className="asdfps">(# of meals sent between specific time slots) </p>
+                    <div className='col-6 d-flex justify-content-center ' >
+                      <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
+                        setMeals(5)
+                      }} >
+                        <div class="boxs" style={{ cursor: 'pointer' }}>
+                          <p className='asdfp' style={{ fontWeight: 600, color: '#1A1A1B' }}>Meals received - timeline</p>
+                          <div class="end-box">
+                            <img src="rts.png" className="" alt="Example Image" />
+                            <p className="asdfps">(# of meals sent between specific time slots) </p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
 
-                  <div className='col-6 d-flex justify-content-center' >
-                    <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
-                      setMeals(2)
-                    }}>
-                      <div class="boxs" style={{cursor:'pointer'}}>
-                        <div className="d-flex justify-content-between" >
-                          <div >
-                            <p className='asdfp' style={{ marginBottom: 0,fontWeight:600,color:'#1A1A1B' }}>Edits</p>
-                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                          </div>
-                          <div >
-                            <p className='asdfp' style={{ color: '#316AAF' }}>{parseInt(editall?.edited?.length)
-                              + parseInt(editall?.moved?.length) + parseInt(editall?.deleted?.length) + parseInt(editall?.tableMoved?.length) || 0}</p>
-                          </div>
-                        </div>
-
-                        <div class="end-box">
-                          <img src="ert.png" className="" alt="Example Image" />
-                          <div className='' >
-
-
-                            <div className="d-flex" style={{ marginBottom: 0 }}  >
-                              <div className=' ' style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Edited</p>
-                              </div>
-                              <div className=' ' style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.edited?.length || 0}</p>
-                              </div>
-                            </div>
-
-
-                            <div className="d-flex" style={{ marginBottom: 0 }}  >
-                              <div className=' ' style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Moved</p>
-                              </div>
-                              <div className=' ' style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.moved?.length || 0}</p>
-                              </div>
-                            </div>
-
-                            <div className="d-flex" style={{ marginBottom: 0 }}  >
-                              <div className=' ' style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Deleted</p>
-                              </div>
-                              <div className=' ' style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.deleted?.length || 0}</p>
-                              </div>
-                            </div>
-
-                            <div className="d-flex" style={{ marginBottom: 0 }}  >
-                              <div className=' ' style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Table moved</p>
-                              </div>
-                              <div className=' ' style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.tableMoved?.length || 0}</p>
-                              </div>
-                            </div>
-
-                          </div>
-
-
-
-
-
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
-
-                <div className='row mt-5' >
-
-                  <div className='col-6 d-flex justify-content-center' >
-                    <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
-                      setMeals(3)
-                    }} >
-                      <div class="boxs" style={{cursor:'pointer'}}>
-                        <div className="d-flex justify-content-between" >
-                          <div >
-                            <p className='asdfp' style={{ marginBottom: 0,fontWeight:600,color:'#1A1A1B' }}>Served meals</p>
-                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                          </div>
-                          <div >
-                            <p className='asdfp' style={{ color: '#316AAF' }}>{
-                              served ?
-                                ggggrt()
-                                : 0
-                            }</p>
-                          </div>
-                        </div>
-
-                        <div class="end-box">
-                          <img src="starr.png" className="" alt="Example Image" />
-                          <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
-
+                    <div className='col-6 d-flex justify-content-center' >
+                      <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
+                        setMeals(2)
+                      }}>
+                        <div class="boxs" style={{ cursor: 'pointer' }}>
+                          <div className="d-flex justify-content-between" >
                             <div >
-
-
-
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Most: <span style={{ fontWeight: '600' }} >{served[0]?.name || 0}</span></p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[0]?.count || 0}</p>
-                                </div>
-                              </div>
-
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Less: <span style={{ fontWeight: '600' }} >{served[served.length - 1]?.name || ''}</span></p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[served.length - 1]?.count || 0}</p>
-                                </div>
-                              </div>
+                              <p className='asdfp' style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Edits</p>
+                              <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
                             </div>
-                          </div>
-
-
-
-
-
-
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-
-                  <div className='col-6 d-flex justify-content-center' >
-                    <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
-                      setMeals(4)
-                    }}>
-                      <div class="boxs" style={{cursor:'pointer'}}>
-                        <div className="d-flex justify-content-between" >
-                          <div >
-                            <p className='asdfp' style={{ marginBottom: 0,fontWeight:600,color:'#1A1A1B' }}>Refunded meals</p>
-                            <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                          </div>
-                          <div >
-                            <p className='asdfp' style={{ color: '#316AAF' }}>{
-                              minperday ?
-                                ggggrtz()
-                                : 0
-                            }</p>
-                          </div>
-                        </div>
-
-                        <div class="end-box">
-                          <img src="refundd.png" className="" alt="Example Image" />
-                          <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
-
                             <div >
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum per day</p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[minperday.length - 1]?.count || 0}</p>
-                                </div>
-                              </div>
-
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum per day</p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[0]?.count || 0}</p>
-                                </div>
-                              </div>
+                              <p className='asdfp' style={{ color: '#316AAF' }}>{parseInt(editall?.edited?.length)
+                                + parseInt(editall?.moved?.length) + parseInt(editall?.deleted?.length) + parseInt(editall?.tableMoved?.length) || 0}</p>
                             </div>
                           </div>
 
+                          <div class="end-box">
+                            <img src="ert.png" className="" alt="Example Image" />
+                            <div className='' >
+
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Edited</p>
+                                </div>
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.edited?.length || 0}</p>
+                                </div>
+                              </div>
+
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Moved</p>
+                                </div>
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.moved?.length || 0}</p>
+                                </div>
+                              </div>
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Deleted</p>
+                                </div>
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.deleted?.length || 0}</p>
+                                </div>
+                              </div>
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                <div className=' ' style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Table moved</p>
+                                </div>
+                                <div className=' ' style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.tableMoved?.length || 0}</p>
+                                </div>
+                              </div>
+
+                            </div>
 
 
 
 
 
+
+                          </div>
                         </div>
                       </div>
                     </div>
+
+
                   </div>
 
+                  <div className='row mt-5' >
 
-                </div>
+                    <div className='col-6 d-flex justify-content-center' >
+                      <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
+                        setMeals(3)
+                      }} >
+                        <div class="boxs" style={{ cursor: 'pointer' }}>
+                          <div className="d-flex justify-content-between" >
+                            <div >
+                              <p className='asdfp' style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Served meals</p>
+                              <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                            </div>
+                            <div >
+                              <p className='asdfp' style={{ color: '#316AAF' }}>{
+                                served ?
+                                  ggggrt()
+                                  : 0
+                              }</p>
+                            </div>
+                          </div>
+
+                          <div class="end-box">
+                            <img src="starr.png" className="" alt="Example Image" />
+                            <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
+
+                              <div >
+
+
+
+
+                                <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                  <div className=' ' style={{ width: 200 }}>
+                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Most: <span style={{ fontWeight: '600' }} >{served[0]?.name || 0}</span></p>
+                                  </div>
+                                  <div className=' ' style={{ fontWeight: '600' }}>
+                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[0]?.count || 0}</p>
+                                  </div>
+                                </div>
+
+
+                                <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                  <div className=' ' style={{ width: 200 }}>
+                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Less: <span style={{ fontWeight: '600' }} >{served[served.length - 1]?.name || ''}</span></p>
+                                  </div>
+                                  <div className=' ' style={{ fontWeight: '600' }}>
+                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[served.length - 1]?.count || 0}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+
+
+
+
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div className='col-6 d-flex justify-content-center' >
+                      <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
+                        setMeals(4)
+                      }}>
+                        <div class="boxs" style={{ cursor: 'pointer' }}>
+                          <div className="d-flex justify-content-between" >
+                            <div >
+                              <p className='asdfp' style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Refunded meals</p>
+                              <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                            </div>
+                            <div >
+                              <p className='asdfp' style={{ color: '#316AAF' }}>{
+                                minperday ?
+                                  ggggrtz()
+                                  : 0
+                              }</p>
+                            </div>
+                          </div>
+
+                          <div class="end-box">
+                            <img src="refundd.png" className="" alt="Example Image" />
+                            <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
+
+                              <div >
+                                <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                  <div className=' ' style={{ width: 200 }}>
+                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum per day</p>
+                                  </div>
+                                  <div className=' ' style={{ fontWeight: '600' }}>
+                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[minperday.length - 1]?.count || 0}</p>
+                                  </div>
+                                </div>
+
+
+                                <div className="d-flex" style={{ marginBottom: 0 }}  >
+                                  <div className=' ' style={{ width: 200 }}>
+                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum per day</p>
+                                  </div>
+                                  <div className=' ' style={{ fontWeight: '600' }}>
+                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[0]?.count || 0}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+
+
+
+
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                  </div>
                 </div>
 
               </div>
@@ -4408,14 +4408,14 @@ const selectReffive = useRef(null);
               : meals === 2 ?
 
                 <div className="changeone" style={{ marginTop: 100 }} >
-                  <div className="changetwo"  style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+                  <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
                     <div className="d-flex justify-content-between" >
                       <div style={{}} className="d-flex " >
                         <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                           setMeals(1)
                         }} className="" alt="Example Image" />
-                        <p style={{fontWeight: '500',color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Edits</p>
+                        <p style={{ fontWeight: '500', color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Edits</p>
                       </div>
 
                       <div >
@@ -4423,7 +4423,7 @@ const selectReffive = useRef(null);
 
                         {showDiv && (
                           <div
-                          ref={dropdownRef}
+                            ref={dropdownRef}
                             style={{
                               width: 200,
                               marginTop: '0px',
@@ -4441,7 +4441,7 @@ const selectReffive = useRef(null);
                             <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
                               editexportpdf()
                             }}>PDF</p>
-                              <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                            <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
                               // editexportpdf()
                             }}>Excel sheet</p>
                           </div>
@@ -4672,7 +4672,7 @@ const selectReffive = useRef(null);
                           <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                             setMeals(1)
                           }} className="" alt="Example Image" />
-                          <p style={{fontWeight: '500',color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Served meals</p>
+                          <p style={{ fontWeight: '500', color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Served meals</p>
                         </div>
 
                         <div >
@@ -4680,10 +4680,10 @@ const selectReffive = useRef(null);
 
                           {showDivs && (
                             <div
-                            ref={dropdownRefs}
+                              ref={dropdownRefs}
                               style={{
                                 width: 200,
-                                zIndex:100,
+                                zIndex: 100,
                                 marginTop: '0px',
                                 padding: '10px',
                                 backgroundColor: '#f8f9fa',
@@ -4849,7 +4849,7 @@ const selectReffive = useRef(null);
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{fontWeight: '500',color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Refunded meals</p>
+                            <p style={{ fontWeight: '500', color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Refunded meals</p>
                           </div>
 
                           <div >
@@ -4857,9 +4857,9 @@ const selectReffive = useRef(null);
 
                             {showDivss && (
                               <div
-                              ref={dropdownRefss}
+                                ref={dropdownRefss}
                                 style={{
-                                  zIndex:100,
+                                  zIndex: 100,
                                   width: 200,
                                   marginTop: '0px',
                                   padding: '10px',
@@ -5018,7 +5018,7 @@ const selectReffive = useRef(null);
 
                     :
 
-                    <div className="changeone" style={{ marginTop: 100,overflowY:'hidden' }} >
+                    <div className="changeone" style={{ marginTop: 100, overflowY: 'hidden' }} >
                       <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 580, padding: 20 }} >
 
                         <div className="d-flex justify-content-between" >
@@ -5026,7 +5026,7 @@ const selectReffive = useRef(null);
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{fontWeight: '500',color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6, }}>Meals received - timeline</p>
+                            <p style={{ fontWeight: '500', color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6, }}>Meals received - timeline</p>
                           </div>
 
                           <div >
@@ -5034,7 +5034,7 @@ const selectReffive = useRef(null);
 
                             {showDivsss && (
                               <div
-                              ref={dropdownRefsss}
+                                ref={dropdownRefsss}
                                 style={{
                                   width: 200,
                                   marginTop: '0px',
@@ -5057,7 +5057,7 @@ const selectReffive = useRef(null);
                           </div>
                         </div>
 
-                        <div style={{ marginTop: 50, padding: 20,overflowY:'hidden' }} >
+                        <div style={{ marginTop: 50, padding: 20, overflowY: 'hidden' }} >
 
 
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -5173,7 +5173,7 @@ const selectReffive = useRef(null);
 
 
 
-                              <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                              <div className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                 <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
                                   <Bar data={datafine} options={optionshshs} />
                                 </div>
@@ -5218,8 +5218,25 @@ const selectReffive = useRef(null);
 
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Edits</p>
 
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
+
+            const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+            const result = filteredOptions.map(item => item.label).join(", ");
+
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All Venue'
+            } else {
+
+              return result
+
+            }
+
+
+          })()}</p>
+
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >Group name</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
             const datefineda = new Date(dateRange[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -5240,7 +5257,7 @@ const selectReffive = useRef(null);
 
             return (formattedDate)
           })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
             const datefineda = new Date(dateRangetwo[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -5262,20 +5279,9 @@ const selectReffive = useRef(null);
             return (formattedDate)
           })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-            const result = selectedOptions.map(item => item.value).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
 
 
-          })()}</p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains: All</p>
           <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
 
             const result = selectedhubOptions.map(item => item.label).join(",");
@@ -5392,7 +5398,7 @@ const selectReffive = useRef(null);
 
             </div>
 
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black',  }} />
 
             <div className="d-flex justify-content-between" >
 
@@ -5429,7 +5435,7 @@ const selectReffive = useRef(null);
 
             </div>
 
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black',  }} />
 
             <div className="d-flex justify-content-between" >
 
@@ -5466,7 +5472,7 @@ const selectReffive = useRef(null);
 
             </div>
 
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black',   }} />
 
 
             <div className="d-flex justify-content-between" >
@@ -5513,431 +5519,431 @@ const selectReffive = useRef(null);
         </div >
       </div>
 
-       <div style={{ visibility: 'hidden' }}>
-             <div ref={pdfRefss}  >
-     
-               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Served meals</p>
-     
-               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-                 const datefineda = new Date(dateRange[0]);
-     
-                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                   day: "2-digit",
-                   month: "short",
-                   year: "numeric"
-                 });
-     
-                 return (formattedDate)
-               })()} to {(() => {
-                 const datefineda = new Date(dateRange[1]);
-     
-                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                   day: "2-digit",
-                   month: "short",
-                   year: "numeric"
-                 });
-     
-                 return (formattedDate)
-               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-                 const datefineda = new Date(dateRangetwo[0]);
-     
-                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                   day: "2-digit",
-                   month: "short",
-                   year: "numeric"
-                 });
-     
-                 return (formattedDate)
-               })()} to {(() => {
-                 const datefineda = new Date(dateRangetwo[1]);
-     
-                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                   day: "2-digit",
-                   month: "short",
-                   year: "numeric"
-                 });
-     
-                 return (formattedDate)
-               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-     
-               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-     
-                 const result = selectedOptions.map(item => item.value).join(",");
-     
-                 if (result === "" || result === undefined || result === null) {
-                   return 'All'
-                 } else {
-     
-                   return result
-     
-                 }
-     
-     
-               })()}</p>
-               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-     
-                 const result = selectedhubOptions.map(item => item.label).join(",");
-     
-                 if (result === "" || result === undefined || result === null) {
-                   return 'All'
-                 } else {
-     
-                   return result
-     
-                 }
-     
-     
-               })()} </p>
-               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-     
-                 const result = selectedCources.map(item => item.label).join(",");
-     
-                 if (result === "" || result === undefined || result === null) {
-                   return 'All'
-                 } else {
-     
-                   return result
-     
-                 }
-     
-     
-               })()}</p>
-     
-     
-               <div style={{ marginTop: 20, padding: 10 }} >
-     
-                 <div className="d-flex justify-content-between" >
-     
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
-                       ggggrt()} </p>
-                   </div>
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
-     
-                       ggggrts()
-                     } </p>
-                   </div>
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
-                       ( Total ){" "}
-                       {(() => {
-                         let datd = ggggrt();
-                         let datdtwo = ggggrts();
-                         let tot = ((datd - datdtwo) / datdtwo) * 100;
-     
-                         return (
-                           <>
-                             {tot.toFixed(2) + "%"}{" "}
-                             <img
-                               src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                               style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
-                               alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
-                             />
-                           </>
-                         );
-                       })()}
-                     </p>
-     
-     
-                   </div>
-     
-                 </div>
-     
-     
-                 {
-                   served?.map((dfgh, index) => {
-                     const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
-     
-                     return (
-                       <>
-                         <div className="d-flex  mt-3">
-     
-                           <div style={{ width: '33%' }}>
-                             <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{dfgh?.count}</p>
-                           </div>
-     
-                           {correspondingErv ? (
-                             <div style={{ width: '33%', textAlign: 'center' }}>
-                               <div >
-     
-                                 <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                 <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{correspondingErv?.count}</p>
-                               </div>
-                             </div>
-                           ) : (
-                             <>
-                               <div style={{ width: '33%' }} >
-                               </div></>
-                           )}
-     
-                           <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
-                               ( Total ){" "}
-                               {(() => {
-                                 const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                 const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-     
-                                 const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0; // Prevent division by zero
-     
-                                 return (
-                                   <>
-                                     {tot.toFixed(2) + "%"}{" "}
-                                     <img
-                                       src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                                       style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
-                                       alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
-                                     />
-                                   </>
-                                 );
-                               })()}
-                             </p>
-     
-                           </div>
-     
-                         </div>
-     
-                         <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
-                       </>
-                     );
-                   })
-                 }
-     
-     
-               </div>
-             </div >
-           </div>
-     
-     
-           <div style={{ visibility: 'hidden' }}>
-             <div ref={pdfRefsss}  >
-     
-               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Refunded meals</p>
-     
-               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-                 const datefineda = new Date(dateRange[0]);
-     
-                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                   day: "2-digit",
-                   month: "short",
-                   year: "numeric"
-                 });
-     
-                 return (formattedDate)
-               })()} to {(() => {
-                 const datefineda = new Date(dateRange[1]);
-     
-                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                   day: "2-digit",
-                   month: "short",
-                   year: "numeric"
-                 });
-     
-                 return (formattedDate)
-               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-                 const datefineda = new Date(dateRangetwo[0]);
-     
-                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                   day: "2-digit",
-                   month: "short",
-                   year: "numeric"
-                 });
-     
-                 return (formattedDate)
-               })()} to {(() => {
-                 const datefineda = new Date(dateRangetwo[1]);
-     
-                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                   day: "2-digit",
-                   month: "short",
-                   year: "numeric"
-                 });
-     
-                 return (formattedDate)
-               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-     
-               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-     
-                 const result = selectedOptions.map(item => item.value).join(",");
-     
-                 if (result === "" || result === undefined || result === null) {
-                   return 'All'
-                 } else {
-     
-                   return result
-     
-                 }
-     
-     
-               })()}</p>
-               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-     
-                 const result = selectedhubOptions.map(item => item.label).join(",");
-     
-                 if (result === "" || result === undefined || result === null) {
-                   return 'All'
-                 } else {
-     
-                   return result
-     
-                 }
-     
-     
-               })()} </p>
-               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-     
-                 const result = selectedCources.map(item => item.label).join(",");
-     
-                 if (result === "" || result === undefined || result === null) {
-                   return 'All'
-                 } else {
-     
-                   return result
-     
-                 }
-     
-     
-               })()}</p>
-     
-     
-               <div style={{ marginTop: 20, padding: 10 }} >
-     
-                 <div className="d-flex justify-content-between" >
-     
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                       ggggrtsg()}</span></p>
-                   </div>
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-     
-                       ggggrtsgg()
-                     }</span></p>
-                   </div>
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                       {(() => {
-                         let datd = ggggrtsg()
-     
-                         let datdtwo = ggggrtsgg()
-     
-                         let tot = ((datd - datdtwo) / datdtwo) * 100
-     
-                         return <span >{isNaN(tot) ? 0 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{isNaN(tot) ?
-                           '%' : tot > 0 ? <img src="up_arw.png"
-                             style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-     
-                             }} className="" alt="Example Image" /> :
-                             <img src="d_arw.png"
-                               style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-     
-                               }} className="" alt="Example Image" />}</span></span>
-     
-     
-                         console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                       })()}</span></p>
-                   </div>
-     
-                 </div>
-     
-                 <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-     
-                 <div className="scroll" id="scrrrrol"  >
-     
-     
-     
-                   {
-                     minperday?.map((dfgh, index) => {
-      
-                       const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
-     
-                       return (
-                         <>
-                           <div className="d-flex  ">
-     
-                             <div style={{ width: '33%' }}>
-                               <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                               <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
-                             </div>
-     
-                             {correspondingErv ? (
-                               <div style={{ width: '33%', textAlign: 'center' }}>
-                                 <div >
-     
-                                   <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                   <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                                 </div>
-                               </div>
-                             ) : (
-                               <>
-                                 <div style={{ width: '33%' }} >
-                                 </div></>
-                             )}
-     
-                             <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                               <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                                 ( Total )
-                                 <span>
-                                   {(() => {
-                                     const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                     const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-     
-     
-                                     const tot = ((datd - datdtwo) / datdtwo) * 100;
-     
-                                     return (
-                                       <span>
-                                         {tot.toFixed(2) + "%"}
-                                         <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                           {tot > 0 ? (
-                                             <img
-                                               src="up_arw.png"
-                                               style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                               alt="up arrow"
-                                             />
-                                           ) : (
-                                             <img
-                                               src="d_arw.png"
-                                               style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                               alt="down arrow"
-                                             />
-                                           )}
-                                         </span>
-                                       </span>
-                                     );
-                                   })()}
-                                 </span>
-                               </p>
-                             </div>
-     
-                           </div>
-     
-                           <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
-                         </>
-                       );
-                     })
-                   }
-     
-     
-                 </div>
-     
-     
-     
-     
-               </div>
-             </div >
-           </div>
+      <div style={{ visibility: 'hidden' }}>
+        <div ref={pdfRefss}  >
+
+          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Served meals</p>
+
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+            const datefineda = new Date(dateRange[0]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            });
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRange[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            });
+
+            return (formattedDate)
+          })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+            const datefineda = new Date(dateRangetwo[0]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            });
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRangetwo[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            });
+
+            return (formattedDate)
+          })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+
+            const result = selectedOptions.map(item => item.value).join(",");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()}</p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+
+            const result = selectedhubOptions.map(item => item.label).join(",");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()} </p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+
+            const result = selectedCources.map(item => item.label).join(",");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()}</p>
+
+
+          <div style={{ marginTop: 20, padding: 10 }} >
+
+            <div className="d-flex justify-content-between" >
+
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+                  ggggrt()} </p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+
+                  ggggrts()
+                } </p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
+                  ( Total ){" "}
+                  {(() => {
+                    let datd = ggggrt();
+                    let datdtwo = ggggrts();
+                    let tot = ((datd - datdtwo) / datdtwo) * 100;
+
+                    return (
+                      <>
+                        {tot.toFixed(2) + "%"}{" "}
+                        <img
+                          src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                          style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
+                          alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+                        />
+                      </>
+                    );
+                  })()}
+                </p>
+
+
+              </div>
+
+            </div>
+
+
+            {
+              served?.map((dfgh, index) => {
+                const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+
+                return (
+                  <>
+                    <div className="d-flex  mt-3">
+
+                      <div style={{ width: '33%' }}>
+                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{dfgh?.count}</p>
+                      </div>
+
+                      {correspondingErv ? (
+                        <div style={{ width: '33%', textAlign: 'center' }}>
+                          <div >
+
+                            <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{correspondingErv?.count}</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div style={{ width: '33%' }} >
+                          </div></>
+                      )}
+
+                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
+                          ( Total ){" "}
+                          {(() => {
+                            const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                            const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+
+                            const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0; // Prevent division by zero
+
+                            return (
+                              <>
+                                {tot.toFixed(2) + "%"}{" "}
+                                <img
+                                  src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                                  style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
+                                  alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+                                />
+                              </>
+                            );
+                          })()}
+                        </p>
+
+                      </div>
+
+                    </div>
+
+                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
+                  </>
+                );
+              })
+            }
+
+
+          </div>
+        </div >
+      </div>
+
+
+      <div style={{ visibility: 'hidden' }}>
+        <div ref={pdfRefsss}  >
+
+          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Refunded meals</p>
+
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
+            const datefineda = new Date(dateRange[0]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            });
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRange[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            });
+
+            return (formattedDate)
+          })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
+            const datefineda = new Date(dateRangetwo[0]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            });
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRangetwo[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            });
+
+            return (formattedDate)
+          })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
+
+            const result = selectedOptions.map(item => item.value).join(",");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()}</p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+
+            const result = selectedhubOptions.map(item => item.label).join(",");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()} </p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+
+            const result = selectedCources.map(item => item.label).join(",");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()}</p>
+
+
+          <div style={{ marginTop: 20, padding: 10 }} >
+
+            <div className="d-flex justify-content-between" >
+
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                  ggggrtsg()}</span></p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+
+                  ggggrtsgg()
+                }</span></p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                  {(() => {
+                    let datd = ggggrtsg()
+
+                    let datdtwo = ggggrtsgg()
+
+                    let tot = ((datd - datdtwo) / datdtwo) * 100
+
+                    return <span >{isNaN(tot) ? 0 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{isNaN(tot) ?
+                      '%' : tot > 0 ? <img src="up_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" /> :
+                        <img src="d_arw.png"
+                          style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                          }} className="" alt="Example Image" />}</span></span>
+
+
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                  })()}</span></p>
+              </div>
+
+            </div>
+
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+            <div className="scroll" id="scrrrrol"  >
+
+
+
+              {
+                minperday?.map((dfgh, index) => {
+
+                  const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
+
+                  return (
+                    <>
+                      <div className="d-flex  ">
+
+                        <div style={{ width: '33%' }}>
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                        </div>
+
+                        {correspondingErv ? (
+                          <div style={{ width: '33%', textAlign: 'center' }}>
+                            <div >
+
+                              <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                            </div>
+                          </div>
+                        ) : (
+                          <>
+                            <div style={{ width: '33%' }} >
+                            </div></>
+                        )}
+
+                        <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                            ( Total )
+                            <span>
+                              {(() => {
+                                const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                                const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+
+
+                                const tot = ((datd - datdtwo) / datdtwo) * 100;
+
+                                return (
+                                  <span>
+                                    {tot.toFixed(2) + "%"}
+                                    <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                      {tot > 0 ? (
+                                        <img
+                                          src="up_arw.png"
+                                          style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                          alt="up arrow"
+                                        />
+                                      ) : (
+                                        <img
+                                          src="d_arw.png"
+                                          style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                          alt="down arrow"
+                                        />
+                                      )}
+                                    </span>
+                                  </span>
+                                );
+                              })()}
+                            </span>
+                          </p>
+                        </div>
+
+                      </div>
+
+                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
+                    </>
+                  );
+                })
+              }
+
+
+            </div>
+
+
+
+
+          </div>
+        </div >
+      </div>
 
     </div>
   );

@@ -4170,6 +4170,7 @@ let Multi_venue = () => {
 
 
   const chartContainerRef = useRef(null);
+  const finefine = useRef(null);
 
   // Function to scroll left
   const scrollLeft = () => {
@@ -4184,6 +4185,20 @@ let Multi_venue = () => {
       chartContainerRef.current.scrollLeft += 100;
     }
   };
+
+  const scrollLeftfine = () => {
+    if (finefine.current) {
+      finefine.current.scrollLeft -= 100; // Adjust scroll distance
+    }
+  };
+
+  // Function to scroll right
+  const scrollRightfine = () => {
+    if (finefine.current) {
+      finefine.current.scrollLeft += 100;
+    }
+  };
+
 
   const [showDiv, setShowDiv] = useState(false);
   const dropdownRef = useRef(null);
@@ -4729,7 +4744,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
+                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B',background:'#fff' }),
                     }}
                   />
 
@@ -4868,7 +4883,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
+                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B',background:'#fff' }),
                     }}
                   />
 
@@ -4947,7 +4962,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset',fontSize:15,color:'#1A1A1B' }),
+                      control: (base) => ({ ...base, border: 'unset',fontSize:15,color:'#1A1A1B',background:'#fff' }),
                     }}
                   />
                 </div>
@@ -4994,7 +5009,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset',fontSize:15,color:'#1A1A1B' }),
+                      control: (base) => ({ ...base, border: 'unset',fontSize:15,color:'#1A1A1B',background:'#fff' }),
                     }}
                   />
                 </div>
@@ -5028,7 +5043,7 @@ let Multi_venue = () => {
 
                     // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B' }} type="text" />
+                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B',textAlign:'center' }} type="text" />
 
 
                   <p style={{ fontSize: 19, display: 'contents' }} >|</p>
@@ -5040,7 +5055,7 @@ let Multi_venue = () => {
                     filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
                       hubbtwo, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                     // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B' }} type="text" />
+                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B',textAlign:'center' }} type="text" />
                 </div>
 
                 <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
@@ -5087,7 +5102,7 @@ let Multi_venue = () => {
                     closeMenuOnSelect={false} // Keep dropdown open for further selection
                     hideSelectedOptions={false} // Show all options even if selected
                     styles={{
-                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B' }),
+                      control: (base) => ({ ...base, border: 'unset', fontSize:15,color:'#1A1A1B',background:'#fff' }),
                     }}
                   />
 
@@ -5900,7 +5915,7 @@ let Multi_venue = () => {
 
 
 
-                                <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                                <div  className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                   <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
                                     <Bar data={datafineone} options={optionshshs} />
                                   </div>
@@ -5967,17 +5982,17 @@ let Multi_venue = () => {
 
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                               {/* Left Scroll Button */}
-                              <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
+                              <button onClick={scrollLeftfine} style={buttonStyle}>⬅</button>
                               <p className="gggjgjjg">Average waiting time</p>
                               {/* Scrollable Chart Container */}
-                              <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                              <div  ref={finefine}  className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                 <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
                                   <Bar data={datafine} options={optionshshs} />
                                 </div>
                               </div>
 
                               {/* Right Scroll Button */}
-                              <button onClick={scrollRight} style={buttonStyle}>➡</button>
+                              <button onClick={scrollRightfine} style={buttonStyle}>➡</button>
                             </div>
 
 
@@ -6076,7 +6091,7 @@ let Multi_venue = () => {
 
 
 
-                                <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                                <div  className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                   <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
                                     <Bar data={datafine} options={optionshshs} />
                                   </div>
