@@ -2054,9 +2054,9 @@ let Meals = () => {
     const selected = getValue();
     if (selected.length) {
       const allLabels = selected
-      .filter(option => option.label && !option.label.startsWith("All ")) // Ensure label exists
-      .map(option => option.label)
-      .join(", ");
+        .filter(option => option.label && !option.label.startsWith("All ")) // Ensure label exists
+        .map(option => option.label)
+        .join(", ");
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
@@ -4052,7 +4052,7 @@ let Meals = () => {
         { content: dropdownRefsss, toggle: toggleButtonRefsss, isOpen: showDivsss },
 
       ];
-      
+
       // Check if click is outside ALL dropdown contents AND toggle buttons
       const clickedOutside = dropdowns.every(({ content, toggle, isOpen }) => {
         return !isOpen || (
@@ -4060,7 +4060,7 @@ let Meals = () => {
           (!toggle.current || !toggle.current.contains(event.target))
         );
       });
-      
+
       if (clickedOutside) {
         // Close all dropdowns
         setShowDiv(false);
@@ -4069,12 +4069,12 @@ let Meals = () => {
         setShowDivsss(false);
       }
     };
-    
+
     // Add listener if ANY dropdown is open
     if (showDiv || showDivs || showDivss || showDivsss) {
       document.addEventListener('mousedown', handleClickOutside);
     }
-    
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -4178,11 +4178,11 @@ let Meals = () => {
     await doc.html(input, {
       callback: function (doc) {
         doc.save("output.pdf"); // Save after rendering
-      }, 
+      },
       y: 10,
       width: 190, // Fit content within page
       windowWidth: 1000, // Ensure full width capture  
-      margin : 10,
+      margin: 10,
 
 
       autoPaging: "text",
@@ -4297,7 +4297,7 @@ let Meals = () => {
 
                 checkkkk()
 
-              }} style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
+              }} style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
 
               <div style={{ width: '100%' }} >
                 <DatePicker
@@ -4324,9 +4324,9 @@ let Meals = () => {
                   calendarClassName="custom-calendar"
                   dateFormat="d MMM yyyy"
                   customInput={
-                    <div className="custom-display-input" style={{fontSize:15,color:'#1A1A1B'}}>
-{startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
-               <FaCaretDown className="calendar-icon" />
+                    <div className="custom-display-input" style={{ fontSize: 15, color: '#1A1A1B' }}>
+                      {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
+                      <FaCaretDown className="calendar-icon" />
                     </div>
                   }
                 />
@@ -4336,7 +4336,7 @@ let Meals = () => {
                   <input
                     className='inputttt'
                     type="time"
-                    style={{fontSize:15,color:'#1A1A1B'}}
+                    style={{ fontSize: 15, color: '#1A1A1B' }}
                     value={onetime}
                     onChange={(e) => {
                       setOnetime(e.target.value)
@@ -4357,7 +4357,7 @@ let Meals = () => {
                     className='inputttt'
                     type="time"
                     value={twotime}
-                    style={{fontSize:15,color:'#1A1A1B'}}
+                    style={{ fontSize: 15, color: '#1A1A1B' }}
                     onChange={(e) => {
                       setTwotime(e.target.value)
                       console.log(dateRange, 'dateRangedateRangedateRange')
@@ -4379,7 +4379,7 @@ let Meals = () => {
             </div>
 
             <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
+              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
               <div style={{ width: '100%' }} >
                 <DatePicker
                   selectsRange
@@ -4405,7 +4405,7 @@ let Meals = () => {
                   calendarClassName="custom-calendar"
                   dateFormat="d MMM yyyy"
                   customInput={
-                    <div className="custom-display-input" style={{fontSize:15,color:'#1A1A1B'}}>
+                    <div className="custom-display-input" style={{ fontSize: 15, color: '#1A1A1B' }}>
                       {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
                       <FaCaretDown className="calendar-icon" />
                     </div>
@@ -4417,7 +4417,7 @@ let Meals = () => {
                   <input
                     className='inputttt'
                     type="time"
-                    style={{fontSize:15,color:'#1A1A1B'}}
+                    style={{ fontSize: 15, color: '#1A1A1B' }}
                     value={threetime}
                     onChange={(e) => {
                       setThreetime(e.target.value)
@@ -4434,7 +4434,7 @@ let Meals = () => {
                   <input
                     className='inputttt'
                     type="time"
-                    style={{fontSize:15,color:'#1A1A1B'}}
+                    style={{ fontSize: 15, color: '#1A1A1B' }}
                     value={fourtime}
                     onChange={(e) => {
                       setFourtime(e.target.value)
@@ -4454,12 +4454,12 @@ let Meals = () => {
 
 
             <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Chosen venue & hub</p>
+              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen venue & hub</p>
               <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
                 width: '100%', height: 45
               }}>
                 <div class="switch-container">
-                  <input type="checkbox" id="switch1" style={{fontSize:15}} checked={venueradio} onChange={(e) => {
+                  <input type="checkbox" id="switch1" style={{ fontSize: 15 }} checked={venueradio} onChange={(e) => {
                     setVenueradio(e.target.checked)
                     if (e.target.checked === false) {
                       setSelectedOptions([])
@@ -4497,7 +4497,7 @@ let Meals = () => {
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff',fontSize:15,color:'#1A1A1B' }),
+                    control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff', fontSize: 15, color: '#1A1A1B' }),
                   }}
                 />
               </div>
@@ -4550,7 +4550,7 @@ let Meals = () => {
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset', color:'#1A1A1B',fontSize:15,background:'#fff' }),
+                    control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', fontSize: 15, background: '#fff' }),
                   }}
                 />
 
@@ -4579,7 +4579,7 @@ let Meals = () => {
             </div>
 
             <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Filter by stages/courses</p>
+              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by stages/courses</p>
               <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
                 width: '100%',
                 height: 45
@@ -4623,7 +4623,7 @@ let Meals = () => {
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15,background:'#fff' }),
+                    control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', fontSize: 15, background: '#fff' }),
                   }}
                 />
               </div>
@@ -4634,7 +4634,7 @@ let Meals = () => {
                 height: 45
               }}>
                 <div class="switch-container">
-                  <input type="checkbox" checked={Cources}  onChange={(e) => {
+                  <input type="checkbox" checked={Cources} onChange={(e) => {
                     setCources(e.target.checked)
                     if (e.target.checked === false) {
                       setSelectedCources([])
@@ -4670,7 +4670,7 @@ let Meals = () => {
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15,background:'#fff' }),
+                    control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', fontSize: 15, background: '#fff' }),
                   }}
                 />
               </div>
@@ -4679,7 +4679,7 @@ let Meals = () => {
             </div>
 
             <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Filter by tables/takeaways</p>
+              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
 
               <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
                 {/* <div class="switch-container">
@@ -4694,14 +4694,14 @@ let Meals = () => {
                   <option value="audi">Audi</option>
                 </select> */}
                 <input
-                onChange={(e) => {
-                  setInputvalue(e.target.value)
+                  onChange={(e) => {
+                    setInputvalue(e.target.value)
 
-                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+                    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+                    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
 
-                }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B' }} type="text" />
+                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B' }} type="text" />
 
 
                 <p style={{ fontSize: 19, display: 'contents' }} >|</p>
@@ -4712,7 +4712,7 @@ let Meals = () => {
                   filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
 
                   filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',fontSize:15,color:'#1A1A1B' }} type="text" />
+                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B' }} type="text" />
               </div>
 
               <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
@@ -4759,7 +4759,7 @@ let Meals = () => {
                   closeMenuOnSelect={false} // Keep dropdown open for further selection
                   hideSelectedOptions={false} // Show all options even if selected
                   styles={{
-                    control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',fontSize:15,background:'#fff' }),
+                    control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', fontSize: 15, background: '#fff' }),
                   }}
                 />
 
@@ -4784,8 +4784,8 @@ let Meals = () => {
                       <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
                         setMeals(5)
                       }} >
-                        <div class="boxs" style={{cursor:'pointer'}}>
-                          <p className='asdfp' style={{fontWeight:600,color:'#1A1A1B'}}>Meals received - timeline</p>
+                        <div class="boxs" style={{ cursor: 'pointer' }}>
+                          <p className='asdfp' style={{ fontWeight: 600, color: '#1A1A1B' }}>Meals received - timeline</p>
                           <div class="end-box">
                             <img src="rts.png" className="" alt="Example Image" />
                             <p className="asdfps">(# of meals sent between specific time slots) </p>
@@ -4799,10 +4799,10 @@ let Meals = () => {
                       <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
                         setMeals(2)
                       }}>
-                        <div class="boxs" style={{cursor:'pointer'}}>
+                        <div class="boxs" style={{ cursor: 'pointer' }}>
                           <div className="d-flex justify-content-between" >
                             <div >
-                              <p className='asdfp' style={{ marginBottom: 0,fontWeight:600,color:'#1A1A1B' }}>Edits</p>
+                              <p className='asdfp' style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Edits</p>
                               <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
                             </div>
                             <div >
@@ -4874,10 +4874,10 @@ let Meals = () => {
                       <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
                         setMeals(3)
                       }} >
-                        <div class="boxs" style={{cursor:'pointer'}}>
+                        <div class="boxs" style={{ cursor: 'pointer' }}>
                           <div className="d-flex justify-content-between" >
                             <div >
-                              <p className='asdfp' style={{ marginBottom: 0,fontWeight:600,color:'#1A1A1B' }}>Served meals</p>
+                              <p className='asdfp' style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Served meals</p>
                               <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
                             </div>
                             <div >
@@ -4934,10 +4934,10 @@ let Meals = () => {
                       <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
                         setMeals(4)
                       }}>
-                        <div class="boxs" style={{cursor:'pointer'}}>
+                        <div class="boxs" style={{ cursor: 'pointer' }}>
                           <div className="d-flex justify-content-between" >
                             <div >
-                              <p className='asdfp' style={{ marginBottom: 0,fontWeight:600,color:'#1A1A1B' }}>Refunded meals</p>
+                              <p className='asdfp' style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Refunded meals</p>
                               <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
                             </div>
                             <div >
@@ -5004,7 +5004,7 @@ let Meals = () => {
                         <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                           setMeals(1)
                         }} className="" alt="Example Image" />
-                        <p style={{ fontWeight:600,color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop : -6 }}>Edits</p>
+                        <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Edits</p>
                       </div>
 
                       <div >
@@ -5012,7 +5012,7 @@ let Meals = () => {
 
                         {showDiv && (
                           <div
-                          ref={dropdownRef}
+                            ref={dropdownRef}
                             style={{
                               width: 200,
                               marginTop: '0px',
@@ -5253,46 +5253,46 @@ let Meals = () => {
                   <div className="changeone" style={{ marginTop: 80 }} >
                     <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-                      <div style={{marginTop:-10}} className="d-flex justify-content-between" >
-                        <div  className="d-flex justify-content-center align-items-center gap-5 " >
-            <div className="d-flex pt-4">
-            <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                            setMeals(1)
-                          }} className="" alt="Example Image" />
-                          <p style={{ fontWeight:600,color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Served meals</p>
+                      <div style={{ marginTop: -10 }} className="d-flex justify-content-between" >
+                        <div className="d-flex justify-content-center align-items-center gap-5 " >
+                          <div className="d-flex pt-4">
+                            <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
+                              setMeals(1)
+                            }} className="" alt="Example Image" />
+                            <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Served meals</p>
 
-              </div>
+                          </div>
                           <div class="custom-inputonessfine pt-1 " >
 
-<Select
-  className="newoneonee"
-  options={basicfine}
-  // value={selectedOptionsfine}
-  // onChange={handleChangefine}
-  placeholder="Select options..."
-  components={{
-    // Option: CustomOptionfinal,
-    MultiValue: () => null, // Hides default tags
-    ValueContainer: ({ children, ...props }) => {
-      const selectedValues = props.getValue();
-      return (
-        <components.ValueContainer {...props}>
-          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-        </components.ValueContainer>
-      );
-    },
-  }}
-  hideSelectedOptions={false} // Show all options even if selected
-  styles={{
-    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
-  }}
-/>
+                            <Select
+                              className="newoneonee"
+                              options={basicfine}
+                              // value={selectedOptionsfine}
+                              // onChange={handleChangefine}
+                              placeholder="Select options..."
+                              components={{
+                                // Option: CustomOptionfinal,
+                                MultiValue: () => null, // Hides default tags
+                                ValueContainer: ({ children, ...props }) => {
+                                  const selectedValues = props.getValue();
+                                  return (
+                                    <components.ValueContainer {...props}>
+                                      {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                    </components.ValueContainer>
+                                  );
+                                },
+                              }}
+                              hideSelectedOptions={false} // Show all options even if selected
+                              styles={{
+                                control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                              }}
+                            />
 
-</div>
+                          </div>
                         </div>
-                    
+
                         <div className="d-flex justify-content-between align-items-center gap-5">
-                        <div className="custom-inputoness d-flex justify-content-between" style={{
+                          <div className="custom-inputoness d-flex justify-content-between" style={{
                             width: 250,
                             height: 45,
                             border: '1px solid rgb(203 203 203)'
@@ -5332,7 +5332,7 @@ let Meals = () => {
 
                           {showDivs && (
                             <div
-                            ref={dropdownRefs}
+                              ref={dropdownRefs}
                               style={{
                                 width: 200,
                                 marginTop: '0px',
@@ -5500,7 +5500,7 @@ let Meals = () => {
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{ fontWeight:600,color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6}}>Refunded meals</p>
+                            <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Refunded meals</p>
                           </div>
 
                           <div >
@@ -5508,9 +5508,9 @@ let Meals = () => {
 
                             {showDivss && (
                               <div
-                              ref={dropdownRefss}
+                                ref={dropdownRefss}
                                 style={{
-                                  zIndex:100,
+                                  zIndex: 100,
                                   width: 200,
                                   marginTop: '0px',
                                   padding: '10px',
@@ -5532,7 +5532,7 @@ let Meals = () => {
                           </div>
                         </div>
 
-                        <div style={{ marginTop:-20, padding: 20 }} >
+                        <div style={{ marginTop: -20, padding: 20 }} >
                           <div className="d-flex justify-content-between" >
 
                             <div >
@@ -5677,7 +5677,7 @@ let Meals = () => {
                             <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
                               setMeals(1)
                             }} className="" alt="Example Image" />
-                            <p style={{ fontWeight:600,color:'#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Meals received - timeline</p>
+                            <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Meals received - timeline</p>
                           </div>
 
                           <div >
@@ -5685,7 +5685,7 @@ let Meals = () => {
 
                             {showDivsss && (
                               <div
-                              ref={dropdownRefsss}
+                                ref={dropdownRefsss}
                                 style={{
                                   width: 200,
                                   margin: '0px',
@@ -5708,7 +5708,7 @@ let Meals = () => {
                           </div>
                         </div>
 
-                        <div style={{ marginTop: 50, padding: 20,height: '500px' }} >
+                        <div style={{ marginTop: 50, padding: 20, height: '500px' }} >
 
 
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -5824,7 +5824,7 @@ let Meals = () => {
 
 
 
-                              <div   className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
+                              <div className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                 <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
                                   <Bar data={datafine} options={optionshshs} />
                                 </div>
@@ -5868,9 +5868,25 @@ let Meals = () => {
         <div ref={pdfRef}  >
 
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Edits</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
 
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20  , wordSpacing : -5  }} >Group name</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20  , wordSpacing : -5  }} >For the period {(() => {
+            const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+            const result = filteredOptions.map(item => item.label).join(", ");
+
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All Venue'
+            } else {
+
+              return result
+
+            }
+
+
+          })()}</p>
+
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >Group name</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
             const datefineda = new Date(dateRange[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -5891,7 +5907,7 @@ let Meals = () => {
 
             return (formattedDate)
           })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20  , wordSpacing : -5 }} >Compared with the period {(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
             const datefineda = new Date(dateRangetwo[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -5913,20 +5929,9 @@ let Meals = () => {
             return (formattedDate)
           })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-            const result = selectedOptions.map(item => item.value).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
 
 
-          })()}</p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains: All</p>
           <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
 
             const result = selectedhubOptions.map(item => item.label).join(",");
@@ -6510,7 +6515,7 @@ let Meals = () => {
 
               {
                 minperday?.map((dfgh, index) => {
- 
+
                   const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
 
                   return (
