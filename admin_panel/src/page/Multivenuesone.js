@@ -96,10 +96,22 @@ let Multivenuesone = () => {
 
   }
 
+  const [boxWidth, setBoxWidth] = useState(window.innerWidth >= 1400 ? 27 : window.innerWidth >= 1024 ? 40 : 60);
+  const [imageWidth, setImageWidth] = useState(window.innerWidth >= 1400 ? 100 : window.innerWidth >= 1024 ? 80 : 70);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setBoxWidth(window.innerWidth >= 1400 ? 27 : window.innerWidth >= 1024 ? 40 : 60);
+      setImageWidth(window.innerWidth >= 1400 ? 100 : window.innerWidth >= 1024 ? 80 : 70);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
 
   return (
-    <div>
+    <div style={{overflow:"hidden"}} >
       <div style={{ scrollbarWidth: 'none' }}>
 
       
@@ -141,7 +153,7 @@ let Multivenuesone = () => {
 
 
             <div style={{ padding: 90 }} >
-              <div style={{ width: '25%', height: 190, backgroundColor: '#fff', borderRadius: 5, cursor: 'pointer' }} onClick={() => {
+              <div style={{ width: `${boxWidth}%`, height: 190, backgroundColor: '#fff', borderRadius: 5, cursor: 'pointer' }} onClick={() => {
                 navigate("/multivenuesmeals");
               }} >
                 <div className="row" style={{ height: 190,margin:"0 5px" }}>
@@ -151,26 +163,28 @@ let Multivenuesone = () => {
                     </p>
                   </div>
                   <div className="col-6 d-flex align-items-center justify-content-end" style={{ padding: 45 }}>
-                    <img src="asd7.png" alt="Example Image" style={{ width: 100, height: 100 }} />
+                    <img src="asd7.png" alt="Example Image" style={{ width: imageWidth, height: imageWidth  }} />
                   </div>
                 </div>
               </div>
 
-              <div style={{ width: "25%", height: 190, backgroundColor: '#fff', marginTop: 20, borderRadius: 5, marginBottom: 50, cursor: 'pointer' }}
+              <div style={{ width: `${boxWidth}%`, height: 190, backgroundColor: '#fff', marginTop: 20, borderRadius: 5, marginBottom: 50, cursor: 'pointer' }}
                 onClick={() => {
                   navigate("/multivenues");
                 }} >
-                <div className="row" style={{ height: 190 , margin:"0 5px"}} >
+              <div className="row" style={{ height: 180,margin:"0 5px" }} >
                   {/* Left column - centered text */}
-                  <div className="col-6 d-flex justify-content-center align-items-center" style={{ padding: 35 }}>
-                  <p style={{ fontSize: 35, fontWeight: '400', lineHeight: 1.3, color: '#000', margin: 0 }}>
-                  Dockets
-                    </p> 
+                  <div className="col-6 d-flex align-items-center" style={{ padding: 35 }}>
+                    
+
+                    <p style={{ fontSize: 35, fontWeight: '400', lineHeight: 1.3, color: '#000', margin: 0 }}>
+                    Dockets
+                    </p>
                   </div>
 
                   {/* Right column - aligned image */}
                   <div className="col-6 d-flex align-items-center justify-content-end" style={{ padding: 45 }}>
-                    <img src="asd6.png" alt="Example Image" style={{ width: 100, height: 55 }} />
+                    <img src="asd6.png" alt="Example Image" style={{ width: imageWidth, height: `${imageWidth - 20}px` }} />
                   </div>
                 </div>
               </div>

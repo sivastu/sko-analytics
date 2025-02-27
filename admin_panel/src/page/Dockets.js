@@ -4793,7 +4793,7 @@ const displayText = allLabels.slice(0, 18) + "..."
 </div> */}
 
 
-                        <div className='col-lg-6 col-md-12 mt-md-4 mb-4 d-flex justify-content-center' >
+                        <div className='col-lg-6 col-md-12 mt-lg-0 mt-md-4 mb-4 d-flex justify-content-center' >
                           <div class="box" style={{ maxWidth: "600px" }} onClick={() => {
                             setMeals(4)
                           }}>
