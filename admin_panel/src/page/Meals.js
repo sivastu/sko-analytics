@@ -4390,11 +4390,22 @@ let Meals = () => {
     saveAs(blob, "Meals_Received_Timeline.xlsx");
   };
   
-  
+  const [width, setWidth] = useState(window.innerWidth >= 1400 ? 20 : window.innerWidth >= 1024 ? 18 : 60);
+const[responsive,setResponsive]=useState(window.innerWidth >= 1400 ? 'xl' : window.innerWidth >= 1024 ? 'lg' : 'sm')
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth >= 1400 ? 20 : window.innerWidth >= 1024 ? 22 : 80);
+      setResponsive(window.innerWidth >= 1400 ? 'xl' : window.innerWidth >= 1024 ? 'lg' : 'sm');
+
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   
 
   return (
-    <div>
+    <div style={{overflowX:"hidden"}}>
       <div style={{ scrollbarWidth: 'none' }}>
 
         <div className="" style={{
@@ -4425,21 +4436,18 @@ let Meals = () => {
         </div>
       </div>
 
-      <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr">
+      <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr hide-scrollbar">
 
-        <div style={{}} className="dddd"  >
-
-          <div className="d-flex justify-content-between  pt-4 gap-3" >
-
-            <div style={{ width: '20%' }}>
-              <p onClick={() => {
-
-                checkkkk()
-
-              }} style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
-
-              <div style={{ width: '100%' }} >
-                <DatePicker
+        <div style={{}} className="dddd hide-scrollbar"  >
+        <div className="container-fluid px-0">
+  <div className="d-flex flex-wrap justify-content-around pt-4 gap-4">
+    {/* Date Range 1 */}
+    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+      <p onClick={() => {checkkkk()}} style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
+        Chosen range:<span style={{ fontWeight: '400' }}> Custom</span>
+      </p>
+      <div style={{ width: '100%' }}>
+      <DatePicker
                   selectsRange
                   startDate={startDate}
                   endDate={endDate}
@@ -4469,58 +4477,46 @@ let Meals = () => {
                     </div>
                   }
                 />
-              </div>
-              <div className="mt-3" >
-                <div className="custom-inputone d-flex justify-content-between">
-                  <input
-                    className='inputttt'
-                    type="time"
-                    style={{ fontSize: 15, color: '#1A1A1B' }}
-                    value={onetime}
-                    onChange={(e) => {
-                      setOnetime(e.target.value)
-                      if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                        return
-                      }
-                      console.log(e.target.value, 'eeee')
+      </div>
+      <div className="mt-3">
+        <div className="custom-inputone d-flex justify-content-between">
+          <input
+            className='inputttt'
+            type="time"
+            style={{ fontSize: 15, color: '#1A1A1B' }}
+            value={onetime}
+            onChange={(e) => {
+              setOnetime(e.target.value)
+              if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                return
+              }
+              filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+            }}
+          />
+          <input
+            className='inputttt'
+            type="time"
+            value={twotime}
+            style={{ fontSize: 15, color: '#1A1A1B' }}
+            onChange={(e) => {
+              setTwotime(e.target.value)
+              if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                return
+              }
+              filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+            }}
+          />
+        </div>
+      </div>
+    </div>
 
-
-
-
-                      filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-                    }}
-                  />
-                  <input
-                    className='inputttt'
-                    type="time"
-                    value={twotime}
-                    style={{ fontSize: 15, color: '#1A1A1B' }}
-                    onChange={(e) => {
-                      setTwotime(e.target.value)
-                      console.log(dateRange, 'dateRangedateRangedateRange')
-                      if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                        return
-                      }
-
-                      // tiemstampp(2, e.target.value)
-
-                      filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-                    }}
-                  />
-                </div>
-              </div>
-
-
-
-            </div>
-
-            <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
-              <div style={{ width: '100%' }} >
-                <DatePicker
+    {/* Date Range 2 - Comparison */}
+    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
+        Compare with:<span style={{ fontWeight: '400' }}> Custom</span>
+      </p>
+      <div style={{ width: '100%' }}>
+      <DatePicker
                   selectsRange
                   startDate={startDatetwo}
                   endDate={endDatetwo}
@@ -4550,1299 +4546,1143 @@ let Meals = () => {
                     </div>
                   }
                 />
-              </div>
-              <div className="mt-3" >
-                <div className="custom-inputone d-flex justify-content-between">
-                  <input
-                    className='inputttt'
-                    type="time"
-                    style={{ fontSize: 15, color: '#1A1A1B' }}
-                    value={threetime}
-                    onChange={(e) => {
-                      setThreetime(e.target.value)
-                      if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                        return
-                      }
+      </div>
+      <div className="mt-3">
+        <div className="custom-inputone d-flex justify-content-between">
+          <input
+            className='inputttt'
+            type="time"
+            style={{ fontSize: 15, color: '#1A1A1B' }}
+            value={threetime}
+            onChange={(e) => {
+              setThreetime(e.target.value)
+              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
+                return
+              }
+              filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+            }}
+          />
+          <input
+            className='inputttt'
+            type="time"
+            style={{ fontSize: 15, color: '#1A1A1B' }}
+            value={fourtime}
+            onChange={(e) => {
+              setFourtime(e.target.value)
+              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
+                return
+              }
+              filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+            }}
+          />
+        </div>
+      </div>
+    </div>
 
+    {/* Venue & Hub Filters */}
+    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen venue & hub</p>
+      <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
+        <div className="switch-container">
+          <input 
+            type="checkbox" 
+            id="switch1" 
+            style={{ fontSize: 15 }} 
+            checked={venueradio} 
+            onChange={(e) => {
+              setVenueradio(e.target.checked)
+              if (e.target.checked === false) {
+                setSelectedOptions([])
+              }
+            }} 
+          />
+          <label className="switch-label" htmlFor="switch1"></label>
+        </div>
+        <Select
+          menuIsOpen={menuIsOpen}
+          onMenuOpen={() => setMenuIsOpen(true)}
+          onMenuClose={() => setMenuIsOpen(false)}
+          onFocus={() => setMenuIsOpen(true)}
+          isDisabled={!venueradio}
+          isMulti
+          className="newoneonee"
+          options={basic}
+          value={selectedOptions}
+          onChange={handleChange}
+          placeholder="All Venues"
+          components={{
+            Option: CustomOption,
+            MultiValue: () => null,
+            ValueContainer: ({ children, ...props }) => {
+              const selectedValues = props.getValue();
+              return (
+                <components.ValueContainer {...props}>
+                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                </components.ValueContainer>
+              );
+            },
+          }}
+          closeMenuOnSelect={false}
+          hideSelectedOptions={false}
+          styles={{
+            control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff', fontSize: 15, color: '#1A1A1B' }),
+          }}
+        />
+      </div>
 
-                      filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+        <div className="switch-container">
+          <input 
+            checked={hubbswitch} 
+            onChange={(e) => {
+              setHubbswitch(e.target.checked)
+            }} 
+            type="checkbox" 
+            id="switch3" 
+          />
+          <label className="switch-label" htmlFor="switch3"></label>
+        </div>
+        <Select
+          menuIsOpen={menuIsOpenone}
+          onMenuOpen={() => setMenuIsOpenone(true)}
+          onMenuClose={() => setMenuIsOpenone(false)}
+          onFocus={() => setMenuIsOpenone(true)}
+          isDisabled={!hubbswitch}
+          isMulti
+          className="newoneonee"
+          options={basicone}
+          value={hubb}
+          onChange={handleChangehubone}
+          placeholder="All Hubs"
+          components={{
+            Option: CustomOption,
+            MultiValue: () => null,
+            ValueContainer: ({ children, ...props }) => {
+              const selectedValues = props.getValue();
+              return (
+                <components.ValueContainer {...props}>
+                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                </components.ValueContainer>
+              );
+            },
+          }}
+          closeMenuOnSelect={false}
+          hideSelectedOptions={false}
+          styles={{
+            control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', fontSize: 15, background: '#fff' }),
+          }}
+        />
+      </div>
+    </div>
 
+    {/* Stages/Courses Filters */}
+    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by stages/courses</p>
+      <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
+        <div className="switch-container">
+          <input 
+            type="checkbox" 
+            checked={Hubradio} 
+            onChange={(e) => {
+              setHubradio(e.target.checked)
+              if (e.target.checked === false) {
+                setSelectedhubOptions([])
+              }
+            }} 
+            id="switch2" 
+          />
+          <label className="switch-label" htmlFor="switch2"></label>
+        </div>
+        <Select
+          menuIsOpen={menuIsOpentwo}
+          onMenuOpen={() => setMenuIsOpentwo(true)}
+          onMenuClose={() => setMenuIsOpentwo(false)}
+          onFocus={() => setMenuIsOpentwo(true)}
+          isDisabled={!Hubradio}
+          isMulti
+          className="newoneonee"
+          options={optionshub}
+          value={selectedhubOptions}
+          onChange={handleChangehub}
+          placeholder="All stages"
+          components={{
+            Option: CustomOption,
+            MultiValue: () => null,
+            ValueContainer: ({ children, ...props }) => {
+              const selectedValues = props.getValue();
+              return (
+                <components.ValueContainer {...props}>
+                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                </components.ValueContainer>
+              );
+            },
+          }}
+          closeMenuOnSelect={false}
+          hideSelectedOptions={false}
+          styles={{
+            control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', fontSize: 15, background: '#fff' }),
+          }}
+        />
+      </div>
 
-                    }}
-                  />
-                  <input
-                    className='inputttt'
-                    type="time"
-                    style={{ fontSize: 15, color: '#1A1A1B' }}
-                    value={fourtime}
-                    onChange={(e) => {
-                      setFourtime(e.target.value)
-                      if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                        return
-                      }
+      <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+        <div className="switch-container">
+          <input 
+            type="checkbox" 
+            checked={Cources} 
+            onChange={(e) => {
+              setCources(e.target.checked)
+              if (e.target.checked === false) {
+                setSelectedCources([])
+              }
+            }} 
+            id="switch4" 
+          />
+          <label className="switch-label" htmlFor="switch4"></label>
+        </div>
+        <Select
+          menuIsOpen={menuIsOpenthree}
+          onMenuOpen={() => setMenuIsOpenthree(true)}
+          onMenuClose={() => setMenuIsOpenthree(false)}
+          onFocus={() => setMenuIsOpenthree(true)}
+          isDisabled={!Cources}
+          isMulti
+          className="newoneonee"
+          options={fulldatafull}
+          value={selectedCources}
+          onChange={handleChangeCources}
+          placeholder="All courses"
+          components={{
+            Option: CustomOption,
+            MultiValue: () => null,
+            ValueContainer: ({ children, ...props }) => {
+              const selectedValues = props.getValue();
+              return (
+                <components.ValueContainer {...props}>
+                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                </components.ValueContainer>
+              );
+            },
+          }}
+          closeMenuOnSelect={false}
+          hideSelectedOptions={false}
+          styles={{
+            control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', fontSize: 15, background: '#fff' }),
+          }}
+        />
+      </div>
+    </div>
 
-                      filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-                    }}
-                  />
-                </div>
-              </div>
+    {/* Tables/Takeaways Filters */}
+    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
+      <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
+        <input
+          onChange={(e) => {
+            setInputvalue(e.target.value)
+            filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+            filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+          }} 
+          value={inputvalue} 
+          placeholder="0-9999" 
+          style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }} 
+          type="text" 
+        />
+        <p style={{ fontSize: 19, display: 'contents' }}>|</p>
+        <input 
+          onChange={(e) => {
+            setInputvaluetwo(e.target.value)
+            filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+            filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+          }} 
+          value={inputvaluetwo} 
+          placeholder="9999-9999" 
+          style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }} 
+          type="text" 
+        />
+      </div>
 
-
-
-            </div>
-
-
-            <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen venue & hub</p>
-              <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
-                width: '100%', height: 45
-              }}>
-                <div class="switch-container">
-                  <input type="checkbox" id="switch1" style={{ fontSize: 15 }} checked={venueradio} onChange={(e) => {
-                    setVenueradio(e.target.checked)
-                    if (e.target.checked === false) {
-                      setSelectedOptions([])
-                    } else {
-                    }
-
-                    console.log(e.target.checked, 'ggggggggggggggg')
-                  }} />
-                  <label class="switch-label" for="switch1"></label>
-                </div>
-                <Select
-                  menuIsOpen={menuIsOpen}
-                  onMenuOpen={() => setMenuIsOpen(true)}
-                  onMenuClose={() => setMenuIsOpen(false)}
-                  onFocus={() => setMenuIsOpen(true)}
-                  isDisabled={!venueradio}
-                  isMulti
-                  className="newoneonee"
-                  options={basic}
-                  value={selectedOptions}
-                  onChange={handleChange}
-                  placeholder="All Venues"
-                  components={{
-                    Option: CustomOption,
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#707070', backgroundColor: '#fff', fontSize: 15, color: '#1A1A1B' }),
-                  }}
-                />
-              </div>
-
-              <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                width: '100%',
-                height: 45
-              }}>
-
-                <div class="switch-container">
-                  <input checked={hubbswitch} onChange={(e) => {
-                    setHubbswitch(e.target.checked)
-                    if (e.target.checked === false) {
-                    }
-                  }} type="checkbox" id="switch3" />
-                  <label class="switch-label " for="switch3"></label>
-                </div>
-
-
-
-
-                <Select
-
-                  menuIsOpen={menuIsOpenone}
-                  onMenuOpen={() => setMenuIsOpenone(true)}
-                  onMenuClose={() => setMenuIsOpenone(false)}
-                  onFocus={() => setMenuIsOpenone(true)}
-
-
-                  isDisabled={!hubbswitch}
-                  isMulti
-                  className="newoneonee"
-                  options={basicone}
-                  value={hubb}
-
-                  onChange={handleChangehubone}
-                  placeholder="All Hubs"
-                  components={{
-                    Option: CustomOption, // Custom tick option
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', fontSize: 15, background: '#fff' }),
-                  }}
-                />
-
-
-
-
-
-
-                {/* <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
-                  setHubb(e.target.value)
-                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, e.target.value, selectedCources, selectedTakeaway)
-
-
-                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, e.target.value, selectedCources, selectedTakeaway)
-
-
-                  console.log(e.target.value)
-                }} name="cars" id="cars" style={{ border: 'unset', color: '#707070' }} >
-                  <option value="">Select</option>
-                  {basicone?.map(item => (
-                    <option value={item.value}>{item.label}</option>
-                  ))}
-                </select> */}
-
-              </div>
-            </div>
-
-            <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by stages/courses</p>
-              <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
-                width: '100%',
-                height: 45
-              }}>
-
-                <div class="switch-container">
-                  <input type="checkbox" checked={Hubradio} onChange={(e) => {
-                    setHubradio(e.target.checked)
-                    if (e.target.checked === false) {
-                      setSelectedhubOptions([])
-                    }
-                  }} id="switch2" />
-                  <label class="switch-label" for="switch2"></label>
-                </div>
-
-                <Select
-                  menuIsOpen={menuIsOpentwo}
-                  onMenuOpen={() => setMenuIsOpentwo(true)}
-                  onMenuClose={() => setMenuIsOpentwo(false)}
-                  onFocus={() => setMenuIsOpentwo(true)}
-
-                  isDisabled={!Hubradio}
-                  isMulti
-                  className="newoneonee"
-                  options={optionshub}
-                  value={selectedhubOptions}
-                  onChange={handleChangehub}
-                  placeholder="All stages"
-                  components={{
-                    Option: CustomOption, // Custom tick option
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', fontSize: 15, background: '#fff' }),
-                  }}
-                />
-              </div>
-
-
-              <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                width: '100%',
-                height: 45
-              }}>
-                <div class="switch-container">
-                  <input type="checkbox" checked={Cources} onChange={(e) => {
-                    setCources(e.target.checked)
-                    if (e.target.checked === false) {
-                      setSelectedCources([])
-                    }
-                  }} id="switch4" />
-                  <label class="switch-label" for="switch4"></label>
-                </div>
-
-                <Select
-                  menuIsOpen={menuIsOpenthree}
-                  onMenuOpen={() => setMenuIsOpenthree(true)}
-                  onMenuClose={() => setMenuIsOpenthree(false)}
-                  onFocus={() => setMenuIsOpenthree(true)}
-                  isDisabled={!Cources}
-                  isMulti
-                  className="newoneonee"
-                  options={fulldatafull}
-                  value={selectedCources}
-                  onChange={handleChangeCources}
-                  placeholder="All courses"
-                  components={{
-                    Option: CustomOption, // Custom tick option
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props}>
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', fontSize: 15, background: '#fff' }),
-                  }}
-                />
-              </div>
-
-
-            </div>
-
-            <div style={{ width: '20%' }} >
-              <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
-
-              <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
-                {/* <div class="switch-container">
-                  <input type="checkbox" id="switch1" />
-                  <label class="switch-label" for="switch1"></label>
-                </div> */}
-
-                {/* <select name="cars" id="cars" style={{ border: 'unset', color: '#707070' }} >
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
-                  <option value="mercedes">Mercedes</option>
-                  <option value="audi">Audi</option>
-                </select> */}
-                <input
-                  onChange={(e) => {
-                    setInputvalue(e.target.value)
-
-                    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
-
-                    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
-
-                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }} type="text" />
-
-
-                <p style={{ fontSize: 19, display: 'contents' }} >|</p>
-
-
-                <input onChange={(e) => {
-                  setInputvaluetwo(e.target.value)
-                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-
-                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }} type="text" />
-              </div>
-
-              <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                width: '100%',
-                height: 45
-              }}>
-
-
-
-                <div class="switch-container">
-                  <input type="checkbox" checked={takeaway} onChange={(e) => {
-                    setTakeaway(e.target.checked)
-                    if (e.target.checked === false) {
-                      setSelectedTakeaway([])
-                    }
-                  }} id="switch5" />
-                  <label class="switch-label" for="switch5"></label>
-                </div>
-
-                <Select
-                  menuIsOpen={menuIsOpenfour}
-                  onMenuOpen={() => setMenuIsOpenfour(true)}
-                  onMenuClose={() => setMenuIsOpenfour(false)}
-                  onFocus={() => setMenuIsOpenfour(true)}
-                  isDisabled={!takeaway}
-                  isMulti
-                  className="newoneonee"
-                  options={optionstakeaway}
-                  value={selectedTakeaway}
-                  onChange={handleChangeTakeaway}
-                  placeholder="All takeaways"
-                  components={{
-                    Option: CustomOption, // Custom tick option
-                    MultiValue: () => null, // Hides default tags
-                    ValueContainer: ({ children, ...props }) => {
-                      const selectedValues = props.getValue();
-                      return (
-                        <components.ValueContainer {...props} >
-                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                        </components.ValueContainer>
-                      );
-                    },
-                  }}
-                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                  hideSelectedOptions={false} // Show all options even if selected
-                  styles={{
-                    control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', fontSize: 15, background: '#fff' }),
-                  }}
-                />
-
-
-
-              </div>
-            </div>
-
-          </div>
+      <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+        <div className="switch-container">
+          <input 
+            type="checkbox" 
+            checked={takeaway} 
+            onChange={(e) => {
+              setTakeaway(e.target.checked)
+              if (e.target.checked === false) {
+                setSelectedTakeaway([])
+              }
+            }} 
+            id="switch5" 
+          />
+          <label className="switch-label" htmlFor="switch5"></label>
+        </div>
+        <Select
+          menuIsOpen={menuIsOpenfour}
+          onMenuOpen={() => setMenuIsOpenfour(true)}
+          onMenuClose={() => setMenuIsOpenfour(false)}
+          onFocus={() => setMenuIsOpenfour(true)}
+          isDisabled={!takeaway}
+          isMulti
+          className="newoneonee"
+          options={optionstakeaway}
+          value={selectedTakeaway}
+          onChange={handleChangeTakeaway}
+          placeholder="All takeaways"
+          components={{
+            Option: CustomOption,
+            MultiValue: () => null,
+            ValueContainer: ({ children, ...props }) => {
+              const selectedValues = props.getValue();
+              return (
+                <components.ValueContainer {...props}>
+                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                </components.ValueContainer>
+              );
+            },
+          }}
+          closeMenuOnSelect={false}
+          hideSelectedOptions={false}
+          styles={{
+            control: (base) => ({ ...base, border: 'unset', color: '#1A1A1B', fontSize: 15, background: '#fff' }),
+          }}
+        />
+      </div>
+    </div>
+  </div>
+</div>
 
 
           {
             meals === 1 ?
-              <div className="changeone" style={{ marginTop: 100, }}  >
-
-                <div className="changetwos"   >
-
-
-                  <div className='row ' >
-
-                    <div className='col-6 d-flex justify-content-center ' >
-                      <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
-                        setMeals(5)
-                      }} >
-                        <div class="boxs" style={{ cursor: 'pointer' }}>
-                          <p className='asdfp' style={{ fontWeight: 600, color: '#1A1A1B' }}>Meals received - timeline</p>
-                          <div class="end-box">
-                            <img src="rts.png" className="" alt="Example Image" />
-                            <p className="asdfps">(# of meals sent between specific time slots) </p>
-                          </div>
-                        </div>
+            <div className="changeone  hide-scrollbar" style={{ marginTop: 100, overflow:'hidden' }}>
+            <div className="changetwos" style={{overflowX:'hidden'}}>
+              {/* First row */}
+              <div className="row">
+                {/* Meals received - timeline */}
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
+                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
+                    setMeals(5)
+                  }}>
+                    <div className="boxs" style={{ cursor: 'pointer' }}>
+                      <p className="asdfp" style={{ fontWeight: 600, color: '#1A1A1B' }}>Meals received - timeline</p>
+                      <div className="end-box">
+                        <img src="rts.png" className="" alt="Example Image" />
+                        <p className="asdfps">(# of meals sent between specific time slots)</p>
                       </div>
                     </div>
-
-
-                    <div className='col-6 d-flex justify-content-center' >
-                      <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
-                        setMeals(2)
-                      }}>
-                        <div class="boxs" style={{ cursor: 'pointer' }}>
-                          <div className="d-flex justify-content-between" >
-                            <div >
-                              <p className='asdfp' style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Edits</p>
-                              <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                            </div>
-                            <div >
-                              <p className='asdfp' style={{ color: '#316AAF' }}>{parseInt(editall?.edited?.length)
-                                + parseInt(editall?.moved?.length) + parseInt(editall?.deleted?.length) + parseInt(editall?.tableMoved?.length) || 0}</p>
-                            </div>
-                          </div>
-
-                          <div class="end-box">
-                            <img src="ert.png" className="" alt="Example Image" />
-                            <div className='' >
-
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Edited</p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.edited?.length || 0}</p>
-                                </div>
-                              </div>
-
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Moved</p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.moved?.length || 0}</p>
-                                </div>
-                              </div>
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Deleted</p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.deleted?.length || 0}</p>
-                                </div>
-                              </div>
-
-                              <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                <div className=' ' style={{ width: 200 }}>
-                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Table moved</p>
-                                </div>
-                                <div className=' ' style={{ fontWeight: '600' }}>
-                                  <p style={{ marginBottom: 0, paddingLeft: 30, }} >{editall?.tableMoved?.length || 0}</p>
-                                </div>
-                              </div>
-
-                            </div>
-
-
-
-
-
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-
                   </div>
-
-                  <div className='row mt-5' >
-
-                    <div className='col-6 d-flex justify-content-center' >
-                      <div class="box" style={{ maxWidth: "600px", marginLeft: 80 }} onClick={() => {
-                        setMeals(3)
-                      }} >
-                        <div class="boxs" style={{ cursor: 'pointer' }}>
-                          <div className="d-flex justify-content-between" >
-                            <div >
-                              <p className='asdfp' style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Served meals</p>
-                              <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
+                </div>
+          
+                {/* Edits */}
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
+                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
+                    setMeals(2)
+                  }}>
+                    <div className="boxs" style={{ cursor: 'pointer' }}>
+                      <div className="d-flex justify-content-between">
+                        <div>
+                          <p className="asdfp" style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Edits</p>
+                          <p className="asdfp" style={{ color: "#707070", fontSize: 16, fontWeight: '400' }}>(Total)</p>
+                        </div>
+                        <div>
+                          <p className="asdfp" style={{ color: '#316AAF' }}>
+                            {parseInt(editall?.edited?.length) + 
+                            parseInt(editall?.moved?.length) + 
+                            parseInt(editall?.deleted?.length) + 
+                            parseInt(editall?.tableMoved?.length) || 0}
+                          </p>
+                        </div>
+                      </div>
+          
+                      <div className="end-box">
+                        <img src="ert.png" className="" alt="Example Image" />
+                        <div>
+                          <div className="d-flex" style={{ marginBottom: 0 }}>
+                            <div style={{ width: 200 }}>
+                              <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Edited</p>
                             </div>
-                            <div >
-                              <p className='asdfp' style={{ color: '#316AAF' }}>{
-                                served ?
-                                  ggggrt()
-                                  : 0
-                              }</p>
+                            <div style={{ fontWeight: '600' }}>
+                              <p style={{ marginBottom: 0, paddingLeft: 30 }}>{editall?.edited?.length || 0}</p>
                             </div>
                           </div>
-
-                          <div class="end-box">
-                            <img src="starr.png" className="" alt="Example Image" />
-                            <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
-
-                              <div >
-
-
-
-
-                                <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                  <div className=' ' style={{ width: 200 }}>
-                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Most: <span style={{ fontWeight: '600' }} >{served[0]?.name || 0}</span></p>
-                                  </div>
-                                  <div className=' ' style={{ fontWeight: '600' }}>
-                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[0]?.count || 0}</p>
-                                  </div>
-                                </div>
-
-
-                                <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                  <div className=' ' style={{ width: 200 }}>
-                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Less: <span style={{ fontWeight: '600' }} >{served[served.length - 1]?.name || ''}</span></p>
-                                  </div>
-                                  <div className=' ' style={{ fontWeight: '600' }}>
-                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{served[served.length - 1]?.count || 0}</p>
-                                  </div>
-                                </div>
-                              </div>
+          
+                          <div className="d-flex" style={{ marginBottom: 0 }}>
+                            <div style={{ width: 200 }}>
+                              <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Moved</p>
                             </div>
-
-
-
-
-
-
+                            <div style={{ fontWeight: '600' }}>
+                              <p style={{ marginBottom: 0, paddingLeft: 30 }}>{editall?.moved?.length || 0}</p>
+                            </div>
+                          </div>
+          
+                          <div className="d-flex" style={{ marginBottom: 0 }}>
+                            <div style={{ width: 200 }}>
+                              <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Deleted</p>
+                            </div>
+                            <div style={{ fontWeight: '600' }}>
+                              <p style={{ marginBottom: 0, paddingLeft: 30 }}>{editall?.deleted?.length || 0}</p>
+                            </div>
+                          </div>
+          
+                          <div className="d-flex" style={{ marginBottom: 0 }}>
+                            <div style={{ width: 200 }}>
+                              <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Table moved</p>
+                            </div>
+                            <div style={{ fontWeight: '600' }}>
+                              <p style={{ marginBottom: 0, paddingLeft: 30 }}>{editall?.tableMoved?.length || 0}</p>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-
-
-                    <div className='col-6 d-flex justify-content-center' >
-                      <div class="box" style={{ maxWidth: "600px", marginRight: 80 }} onClick={() => {
-                        setMeals(4)
-                      }}>
-                        <div class="boxs" style={{ cursor: 'pointer' }}>
-                          <div className="d-flex justify-content-between" >
-                            <div >
-                              <p className='asdfp' style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Refunded meals</p>
-                              <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Total)</p>
-                            </div>
-                            <div >
-                              <p className='asdfp' style={{ color: '#316AAF' }}>{
-                                minperday ?
-                                  ggggrtz()
-                                  : 0
-                              }</p>
-                            </div>
-                          </div>
-
-                          <div class="end-box">
-                            <img src="refundd.png" className="" alt="Example Image" />
-                            <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }} className='' >
-
-                              <div >
-                                <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                  <div className=' ' style={{ width: 200 }}>
-                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Minimum per day</p>
-                                  </div>
-                                  <div className=' ' style={{ fontWeight: '600' }}>
-                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[minperday.length - 1]?.count || 0}</p>
-                                  </div>
-                                </div>
-
-
-                                <div className="d-flex" style={{ marginBottom: 0 }}  >
-                                  <div className=' ' style={{ width: 200 }}>
-                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }} >Maximum per day</p>
-                                  </div>
-                                  <div className=' ' style={{ fontWeight: '600' }}>
-                                    <p style={{ marginBottom: 0, paddingLeft: 30, }} >{minperday[0]?.count || 0}</p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-
-
-
-
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-
                   </div>
-
-
-                </div >
-
+                </div>
               </div>
+          
+              {/* Second row */}
+              <div className="row">
+                {/* Served meals */}
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
+                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
+                    setMeals(3)
+                  }}>
+                    <div className="boxs" style={{ cursor: 'pointer' }}>
+                      <div className="d-flex justify-content-between">
+                        <div>
+                          <p className="asdfp" style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Served meals</p>
+                          <p className="asdfp" style={{ color: "#707070", fontSize: 16, fontWeight: '400' }}>(Total)</p>
+                        </div>
+                        <div>
+                          <p className="asdfp" style={{ color: '#316AAF' }}>
+                            {served ? ggggrt() : 0}
+                          </p>
+                        </div>
+                      </div>
+          
+                      <div className="end-box">
+                        <img src="starr.png" className="" alt="Example Image" />
+                        <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }}>
+                          <div>
+                            <div className="d-flex" style={{ marginBottom: 0 }}>
+                              <div style={{ width: 200 }}>
+                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>
+                                  Most: <span style={{ fontWeight: '600' }}>{served[0]?.name || 0}</span>
+                                </p>
+                              </div>
+                              <div style={{ fontWeight: '600' }}>
+                                <p style={{ marginBottom: 0, paddingLeft: 30 }}>{served[0]?.count || 0}</p>
+                              </div>
+                            </div>
+          
+                            <div className="d-flex" style={{ marginBottom: 0 }}>
+                              <div style={{ width: 200 }}>
+                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>
+                                  Less: <span style={{ fontWeight: '600' }}>{served[served.length - 1]?.name || ''}</span>
+                                </p>
+                              </div>
+                              <div style={{ fontWeight: '600' }}>
+                                <p style={{ marginBottom: 0, paddingLeft: 30 }}>{served[served.length - 1]?.count || 0}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          
+                {/* Refunded meals */}
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
+                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
+                    setMeals(4)
+                  }}>
+                    <div className="boxs" style={{ cursor: 'pointer' }}>
+                      <div className="d-flex justify-content-between">
+                        <div>
+                          <p className="asdfp" style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Refunded meals</p>
+                          <p className="asdfp" style={{ color: "#707070", fontSize: 16, fontWeight: '400' }}>(Total)</p>
+                        </div>
+                        <div>
+                          <p className="asdfp" style={{ color: '#316AAF' }}>
+                            {minperday ? ggggrtz() : 0}
+                          </p>
+                        </div>
+                      </div>
+          
+                      <div className="end-box">
+                        <img src="refundd.png" className="" alt="Example Image" />
+                        <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }}>
+                          <div>
+                            <div className="d-flex" style={{ marginBottom: 0 }}>
+                              <div style={{ width: 200 }}>
+                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Minimum per day</p>
+                              </div>
+                              <div style={{ fontWeight: '600' }}>
+                                <p style={{ marginBottom: 0, paddingLeft: 30 }}>{minperday[minperday.length - 1]?.count || 0}</p>
+                              </div>
+                            </div>
+          
+                            <div className="d-flex" style={{ marginBottom: 0 }}>
+                              <div style={{ width: 200 }}>
+                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Maximum per day</p>
+                              </div>
+                              <div style={{ fontWeight: '600' }}>
+                                <p style={{ marginBottom: 0, paddingLeft: 30 }}>{minperday[0]?.count || 0}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
 
               : meals === 2 ?
 
-                <div className="changeone" style={{ marginTop: 100 }} >
-                  <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
-
-                    <div className="d-flex justify-content-between" >
-                      <div style={{}} className="d-flex " >
-                        <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                          setMeals(1)
-                        }} className="" alt="Example Image" />
-                        <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Edits</p>
+              <div className="changeone" style={{ marginTop: 100 }}>
+              <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }}>
+                <div className="d-flex justify-content-between">
+                  <div className="d-flex">
+                    <img 
+                      src="black_arrow.png" 
+                      style={{ width: 20, height: 20, cursor: 'pointer' }} 
+                      onClick={() => { setMeals(1) }} 
+                      className="" 
+                      alt="Example Image" 
+                    />
+                    <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10, marginTop: -6 }}>Edits</p>
+                  </div>
+            
+                  <div className="position-relative">
+                    <img 
+                      src="threedot.png" 
+                      ref={toggleButtonRef} 
+                      style={{ width: 5, height: 20, cursor: 'pointer' }} 
+                      onClick={handleToggleDiv} 
+                      className="" 
+                      alt="Example Image" 
+                    />
+            
+                    {showDiv && (
+                      <div
+                        ref={dropdownRef}
+                        style={{
+                          width: 200,
+                          padding: '10px',
+                          backgroundColor: '#f8f9fa',
+                          border: '1px solid #ccc',
+                          borderRadius: '4px',
+                          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                          position: 'absolute',
+                          right: 0,
+                          zIndex: 1000
+                        }}
+                      >
+                        <p style={{ color: '#707070' }}>Export as</p>
+                        <hr />
+                        <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                          editexportpdf()
+                        }}>PDF</p>
+                        <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                          // editexportpdf()
+                        }}>Excel sheet</p>
                       </div>
+                    )}
+                  </div>
+                </div>
+            
+                <div style={{ marginTop: 50, padding: 20 }}>
+                  <div className="row">
+                    <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+                      <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                        ( Total ) <span>{editall?.edited?.length + editall?.deleted?.length + editall?.moved?.length}</span>
+                      </p>
+                    </div>
+                    <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+                      <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                        ( Total ) <span>{editallone?.edited?.length + editallone?.deleted?.length + editallone?.moved?.length}</span>
+                      </p>
+                    </div>
+                    <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+                      <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                        ( Total ) <span>
+                          {(() => {
+                            let datd = editallone?.edited?.length + editallone?.deleted?.length + editallone?.moved?.length
+                            let datdtwo = editall?.edited?.length + editall?.deleted?.length + editall?.moved?.length
+                            let tot = ((datdtwo - datd) / datd) * 100
+                            return (
+                              <span>{tot.toFixed(2) + "%"} 
+                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                  {tot > 0 ? 
+                                    <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
+                                    <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
+                                  }
+                                </span>
+                              </span>
+                            )
+                          })()}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+            
+                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+            
+                  {/* Edited section */}
+                  <div className="row py-2">
+                    <div className="col-lg-4 col-md-4 col-sm-12">
+                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.moved?.length}</p>
+                    </div>
+                    <div className="col-lg-4 col-md-4 col-sm-12">
+                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}</p>
+                    </div>
+                    <div className="col-lg-4 col-md-4 col-sm-12 d-flex align-items-center">
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                        ( Total ) <span>
+                          {(() => {
+                            let datd = editallone?.moved?.length
+                            let datdtwo = editall?.moved?.length
+                            let tot = ((datdtwo - datd) / datd) * 100
+                            return (
+                              <span>{tot.toFixed(2) + "%"} 
+                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                  {tot > 0 ? 
+                                    <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
+                                    <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
+                                  }
+                                </span>
+                              </span>
+                            )
+                          })()}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+            
+                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+            
+                  {/* Moved section */}
+                  <div className="row py-2">
+                    <div className="col-lg-4 col-md-4 col-sm-12">
+                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.edited?.length}</p>
+                    </div>
+                    <div className="col-lg-4 col-md-4 col-sm-12">
+                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}</p>
+                    </div>
+                    <div className="col-lg-4 col-md-4 col-sm-12 d-flex align-items-center">
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                        ( Total ) <span>
+                          {(() => {
+                            let datd = editallone?.edited?.length
+                            let datdtwo = editall?.edited?.length
+                            let tot = ((datdtwo - datd) / datd) * 100
+                            return (
+                              <span>{tot.toFixed(2) + "%"} 
+                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                  {tot > 0 ? 
+                                    <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
+                                    <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
+                                  }
+                                </span>
+                              </span>
+                            )
+                          })()}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+            
+                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+            
+                  {/* Deleted section */}
+                  <div className="row py-2">
+                    <div className="col-lg-4 col-md-4 col-sm-12">
+                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.deleted?.length}</p>
+                    </div>
+                    <div className="col-lg-4 col-md-4 col-sm-12">
+                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.deleted?.length}</p>
+                    </div>
+                    <div className="col-lg-4 col-md-4 col-sm-12 d-flex align-items-center">
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                        ( Total ) <span>
+                          {(() => {
+                            let datd = editallone?.deleted?.length
+                            let datdtwo = editall?.deleted?.length
+                            let tot = ((datdtwo - datd) / datd) * 100
+                            return (
+                              <span>{tot.toFixed(2) + "%"} 
+                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                  {tot > 0 ? 
+                                    <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
+                                    <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
+                                  }
+                                </span>
+                              </span>
+                            )
+                          })()}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+            
+                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+            
+                  {/* Table moved section */}
+                  <div className="row py-2">
+                    <div className="col-lg-4 col-md-4 col-sm-12">
+                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.tableMoved?.length}</p>
+                    </div>
+                    <div className="col-lg-4 col-md-4 col-sm-12">
+                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.tableMoved?.length}</p>
+                    </div>
+                    <div className="col-lg-4 col-md-4 col-sm-12 d-flex align-items-center">
+                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                        ( Total ) <span>
+                          {(() => {
+                            let datd = editallone?.tableMoved?.length
+                            let datdtwo = editall?.tableMoved?.length
+                            let tot = ((datdtwo - datd) / datd) * 100
+                            return (
+                              <span>{isNaN(tot) ? "+000.00%" : tot.toFixed(2) + "%"} 
+                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                  {tot > 0 ? 
+                                    <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
+                                    <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
+                                  }
+                                </span>
+                              </span>
+                            )
+                          })()}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+            
+                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                </div>
+              </div>
+            </div>
 
-                      <div >
-                        <img src="threedot.png" ref={toggleButtonRef} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
-
-                        {showDiv && (
+                : meals === 3 ?
+                <div className="changeone" style={{ marginTop: 80 }}>
+                <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }}>
+                  
+                  <div style={{ marginTop: -10 }} className="d-flex justify-content-between align-items-center">
+                    {/* Left section with title and dropdown */}
+                    <div className="d-flex align-items-center">
+                      <div className="d-flex align-items-center">
+                        <img 
+                          src="black_arrow.png" 
+                          style={{ width: 20, height: 20, cursor: 'pointer' }} 
+                          onClick={() => { setMeals(1) }} 
+                          alt="Back Arrow" 
+                        />
+                        <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10,marginRight:5, marginBottom: 0 }}>Served meals</p>
+                      </div>
+                      <div className="custom-inputonessfine pt-2 mx-2 ml-2 ml-md-3" style={{ width: 'auto', maxWidth: '200px' }}>
+                        <Select
+                          className="newoneonee"
+                          options={basicfine}
+                          onChange={handleChangefine}
+                          placeholder="Select options..."
+                          components={{
+                            MultiValue: () => null, // Hides default tags
+                            ValueContainer: ({ children, ...props }) => {
+                              const selectedValues = props.getValue(); 
+                              return (
+                                <components.ValueContainer {...props}>
+                                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                </components.ValueContainer>
+                              );
+                            },
+                          }}
+                          hideSelectedOptions={false}
+                          styles={{
+                            control: (base) => ({ 
+                              ...base, 
+                              border: 'unset', 
+                              color: '#707070',
+                              minHeight: '38px',
+                              // Responsive width
+                              width: '100%',
+                              maxWidth: '190px',
+                            
+                            }),
+                            menu: (base) => ({
+                              ...base,
+                              width: 'auto',
+                              minWidth: '120px'
+                            })
+                          }}
+                        />
+                      </div>
+                    </div>
+              
+                    {/* Right section with search and menu */}
+                    <div className="d-flex align-items-center">
+                      <div className="custom-inputoness d-flex justify-content-between mx-2" style={{
+                        width: '250px',
+                        height: 45,
+                        border: '1px solid rgb(203 203 203)',
+                        '@media (max-width: 992px)': {
+                          width: '180px',
+                        },
+                        '@media (max-width: 768px)': {
+                          width: '150px',
+                        }
+                      }}>
+                        <div className="input-group">
+                          <input
+                            onChange={(e) => { searchvalue(e.target.value) }}
+                            type="text"
+                            className="form-control"
+                            placeholder="Meals Search..."
+                            style={{
+                              border: "none",
+                              boxShadow: "none",
+                              marginRight: "45px",
+                              fontSize: window.innerWidth < 768 ? '12px' : '14px'
+                            }}
+                          />
+                          <span
+                            className="input-group-text"
+                            style={{
+                              background: "none",
+                              border: "none",
+                              cursor: "pointer",
+                              position: "absolute",
+                              right: 10,
+                            }}
+                          >
+                            🔍
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* Three dot menu with better positioning */}
+                      <div className="position-relative">
+                        <img 
+                          src="threedot.png" 
+                          ref={toggleButtonRefs} 
+                          style={{ width: 5, height: 20, cursor: 'pointer' }} 
+                          onClick={fsgdgfdfgdf} 
+                          alt="Menu" 
+                        />
+              
+                        {showDivs && (
                           <div
-                            ref={dropdownRef}
+                            ref={dropdownRefs}
                             style={{
                               width: 200,
-                              marginTop: '0px',
                               padding: '10px',
                               backgroundColor: '#f8f9fa',
                               border: '1px solid #ccc',
                               borderRadius: '4px',
                               boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
                               position: 'absolute',
-                              right: '3%'
+                              top: '40px',
+                              right: 0,
+                              zIndex: 1000
                             }}
                           >
                             <p style={{ color: '#707070' }}>Export as</p>
                             <hr />
                             <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                              editexportpdf()
+                              mealexportpdf()
                             }}>PDF</p>
-                              <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                              // editexportpdf()
-                            }}>Excel sheet</p>
                           </div>
                         )}
-
-
                       </div>
                     </div>
-
-                    <div style={{ marginTop: 50, padding: 20 }} >
-                      <div className="d-flex justify-content-between" >
-
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                            editall?.edited?.length
-                            + editall?.deleted?.length
-                            + editall?.moved?.length}</span></p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-
-                            editallone?.edited?.length
-                            + editallone?.deleted?.length
-                            + editallone?.moved?.length
-                          }</span></p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                            {(() => {
-                              let datd = editallone?.edited?.length
-                                + editallone?.deleted?.length
-                                + editallone?.moved?.length
-
-                              let datdtwo = editall?.edited?.length
-                                + editall?.deleted?.length
-                                + editall?.moved?.length
-
-                              let tot = ((datdtwo - datd) / datd) * 100
-
-                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                }} className="" alt="Example Image" /> :
-                                <img src="d_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" />}</span></span>
-
-
-                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                            })()}</span></p>
-                        </div>
-
+                  </div>
+              
+                  {/* Stats section */}
+                  <div style={{ marginTop: 20, padding: 20 }}>
+                    <div className="d-flex justify-content-between">
+                      <div>
+                        <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>Chosen range</p>
+                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>( Total ) <span>{ggggrt()}</span></p>
                       </div>
-
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-                      <div className="d-flex justify-content-between" >
-
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.moved?.length}</p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}  </p>
-                        </div>
-                        <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                            {(() => {
-                              let datd = editallone?.moved?.length
-
-                              let datdtwo = editall?.moved?.length
-
-                              let tot = ((datdtwo - datd) / datd) * 100
-
-                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                }} className="" alt="Example Image" /> :
-                                <img src="d_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" />}</span></span>
-
-
-                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                            })()}</span></p>
-                        </div>
-
+                      <div>
+                        <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>Comparing range</p>
+                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>( Total ) <span>{ggggrts()}</span></p>
                       </div>
-
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-                      <div className="d-flex justify-content-between" >
-
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.edited?.length}</p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}  </p>
-                        </div>
-                        <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                            {(() => {
-                              let datd = editallone?.edited?.length
-
-                              let datdtwo = editall?.edited?.length
-
-                              let tot = ((datdtwo - datd) / datd) * 100
-
-                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                }} className="" alt="Example Image" /> :
-                                <img src="d_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" />}</span></span>
-
-
-                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                            })()}</span></p>
-                        </div>
-
+                      <div>
+                        <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>Variance</p>
+                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>( Total ) <span>
+                          {(() => {
+                            let datd = ggggrt()
+                            let datdtwo = ggggrts()
+                            let tot = ((datd - datdtwo) / datdtwo) * 100
+                            return <span>{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                              {tot > 0 ? 
+                                <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Up Arrow" /> :
+                                <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Down Arrow" />
+                              }
+                            </span></span>
+                          })()}
+                        </span></p>
                       </div>
-
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-                      <div className="d-flex justify-content-between" >
-
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.deleted?.length}</p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.deleted?.length}  </p>
-                        </div>
-                        <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                            {(() => {
-                              let datd = editallone?.deleted?.length
-
-                              let datdtwo = editall?.deleted?.length
-
-                              let tot = ((datdtwo - datd) / datd) * 100
-
-                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                }} className="" alt="Example Image" /> :
-                                <img src="d_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" />}</span></span>
-
-
-                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                            })()}</span></p>
-                        </div>
-
-                      </div>
-
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-
-                      <div className="d-flex justify-content-between" >
-
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.tableMoved?.length}</p>
-                        </div>
-                        <div >
-                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.tableMoved?.length}  </p>
-                        </div>
-                        <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                            {(() => {
-                              let datd = editallone?.tableMoved?.length
-
-                              let datdtwo = editall?.tableMoved?.length
-
-                              let tot = ((datdtwo - datd) / datd) * 100
-
-                              console.log(tot, 'nan')
-
-                              return <span >{isNaN(tot) ? "+000.00" : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                }} className="" alt="Example Image" /> :
-                                <img src="d_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" />}</span></span>
-
-
-                              console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                            })()}</span></p>
-                        </div>
-
-                      </div>
-
-                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-
                     </div>
-
-
-
-
-
+              
+                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+              
+                    {/* Table section */}
+                    <div className="scroll" id="scrrrrol" style={{ height: 400, overflowY: 'auto' }}>
+                      {served?.map((dfgh, index) => {
+                        const correspondingErv = servedone?.[index];
+                        
+                        return (
+                          <React.Fragment key={index}>
+                            <div className="d-flex">
+                              <div style={{ width: '33%' }}>
+                                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                              </div>
+              
+                              {correspondingErv ? (
+                                <div style={{ width: '33%', textAlign: 'center' }}>
+                                  <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                                </div>
+                              ) : (
+                                <div style={{ width: '33%' }}></div>
+                              )}
+              
+                              <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%' }}>
+                                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                                  ( Total )
+                                  <span>
+                                    {(() => {
+                                      const datd = dfgh?.count || 0;
+                                      const datdtwo = correspondingErv?.count || 0;
+                                      const tot = datdtwo === 0 ? 0 : ((datd - datdtwo) / datdtwo) * 100;
+              
+                                      return (
+                                        <span>
+                                          {tot.toFixed(2) + "%"}
+                                          <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                            {tot > 0 ? (
+                                              <img src="up_arw.png" style={{ width: 16, height: 16 }} alt="Up Arrow" />
+                                            ) : (
+                                              <img src="d_arw.png" style={{ width: 16, height: 16 }} alt="Down Arrow" />
+                                            )}
+                                          </span>
+                                        </span>
+                                      );
+                                    })()}
+                                  </span>
+                                </p>
+                              </div>
+                            </div>
+                            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                          </React.Fragment>
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
+              </div>
+                  : meals === 4 ?
 
-                : meals === 3 ?
-                  <div className="changeone" style={{ marginTop: 80 }} >
-                    <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-                      <div style={{ marginTop: -10 }} className="d-flex justify-content-between" >
-                        <div className="d-flex justify-content-center align-items-center gap-5 " >
-                          <div className="d-flex pt-4">
-                            <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                              setMeals(1)
-                            }} className="" alt="Example Image" />
-                            <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Served meals</p>
-
-                          </div>
-                          <div class="custom-inputonessfine pt-1 " >
-
-                            <Select
-                              className="newoneonee"
-                              options={basicfine}
-                              onChange={handleChangefine}
-                              // value={selectedOptionsfine}
-                              // onChange={handleChangefine}
-                              placeholder="Select options..."
-                              components={{
-                                // Option: CustomOptionfinal,
-                                MultiValue: () => null, // Hides default tags
-                                ValueContainer: ({ children, ...props }) => {
-                                  const selectedValues = props.getValue(); 
-                                  return (
-                                    <components.ValueContainer {...props}>
-                                      {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                                    </components.ValueContainer>
-                                  );
-                                },
-                              }}
-                              hideSelectedOptions={false} // Show all options even if selected
-                              styles={{
-                                control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
-                              }}
-                            />
-
-                          </div>
+                  <div className="changeone" style={{ marginTop: 80 }}>
+                  <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, padding: 20 }}>
+                
+                    <div style={{ marginTop: -20 }} className="d-flex justify-content-between align-items-center">
+                      <div className="d-flex justify-content-center align-items-center gap-2 gap-md-3 gap-lg-5">
+                        <div className="d-flex pt-4 align-items-center">
+                          <img 
+                            src="black_arrow.png" 
+                            style={{ width: 20, height: 20, cursor: 'pointer' }} 
+                            onClick={() => { setMeals(1) }} 
+                            alt="Back Arrow" 
+                          />
+                          <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10, marginBottom: 0 }}>Refunded meals</p>
                         </div>
-
-                        <div className="d-flex justify-content-between align-items-center gap-5">
-                          <div className="custom-inputoness d-flex justify-content-between" style={{
-                            width: 250,
-                            height: 45,
-                            border: '1px solid rgb(203 203 203)'
-                          }}>
-
-                            <div className="input-group"  >
-                              <input
-                                onChange={(e) => {
-
-
-                                  searchvalue(e.target.value)
-                                }}
-                                type="text"
-                                className="form-control"
-                                placeholder="Meals Search..."
-                                style={{
-                                  border: "none",
-                                  boxShadow: "none",
-                                  marginRight: "45px",
-                                }}
-                              />
-                              <span
-                                className="input-group-text"
-                                style={{
-                                  background: "none",
-                                  border: "none",
-                                  cursor: "pointer",
-                                  position: "absolute",
-                                  right: 10,
-                                }}
-                              >
-                                🔍
-                              </span>
-                            </div>
-
-
-                          </div>
-                          <img src="threedot.png" ref={toggleButtonRefs} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
-
-                          {showDivs && (
-                            <div
-                              ref={dropdownRefs}
-                              style={{
-                                width: 200,
-                              marginTop: '0px',
+                        <div className="custom-inputonessfine d-flex align-items-center pt-1">
+                          <Select
+                            className="newoneonee"
+                            options={basicfine}
+                            onChange={handleChangefinedd}
+                            placeholder="Select options..."
+                            components={{
+                              MultiValue: () => null,
+                              ValueContainer: ({ children, ...props }) => {
+                                const selectedValues = props.getValue();
+                                return (
+                                  <components.ValueContainer {...props}>
+                                    {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                  </components.ValueContainer>
+                                );
+                              },
+                            }}
+                            hideSelectedOptions={false}
+                            styles={{
+                              control: (base) => ({ 
+                                ...base, 
+                                border: 'unset', 
+                                color: '#707070',
+                              }),
+                              menu: (base) => ({
+                                ...base,
+                                width: 'auto',
+                                minWidth: '120px'
+                              })
+                            }}
+                          />
+                        </div>
+                      </div>
+                
+                      {/* Three dots menu with proper positioning */}
+                      <div className="position-relative">
+                        <img 
+                          src="threedot.png" 
+                          ref={toggleButtonRefss} 
+                          style={{ width: 5, height: 20, cursor: 'pointer' }} 
+                          onClick={handleToggleDivss} 
+                          alt="Menu Options" 
+                        />
+                
+                        {showDivss && (
+                          <div
+                            ref={dropdownRefss}
+                            style={{
+                              zIndex: 100,
+                              width: 200,
                               padding: '10px',
                               backgroundColor: '#f8f9fa',
                               border: '1px solid #ccc',
                               borderRadius: '4px',
                               boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
                               position: 'absolute',
-                              right: '4%',
-                              marginTop : 60
-                              }}
-                            >
-                              <p style={{ color: '#707070' }}>Export as</p>
-                              <hr />
-                              <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                mealexportpdf()
-                              }}>PDF</p>
-                            </div>
-                          )}
-
-                        </div>
+                              top: '30px',
+                              right: 0
+                            }}
+                          >
+                            <p style={{ color: '#707070', margin: '0 0 8px 0' }}>Export as</p>
+                            <hr style={{ margin: '8px 0' }} />
+                            <p style={{ color: '#000', cursor: 'pointer', margin: '8px 0 0 0' }} onClick={() => {
+                              refundexportpdf()
+                            }}>PDF</p>
+                          </div>
+                        )}
                       </div>
-
-                      <div style={{ marginTop: -20, padding: 20 }} >
-                        <div className="d-flex justify-content-between" >
-
-                          <div >
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                              ggggrt()}</span></p>
-                          </div>
-                          <div >
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-
-                              ggggrts()
-                            }</span></p>
-                          </div>
-                          <div >
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                    </div>
+                
+                    <div style={{ marginTop: 10, padding: '10px 20px' }}>
+                      <div className="d-flex justify-content-between flex-wrap">
+                        <div className="mb-2 mb-md-0" style={{ minWidth: '120px' }}>
+                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>Chosen range</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                            ( Total ) <span>{ggggrtsg()}</span>
+                          </p>
+                        </div>
+                        <div className="mb-2 mb-md-0" style={{ minWidth: '120px' }}>
+                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>Comparing range</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                            ( Total ) <span>{ggggrtsgg()}</span>
+                          </p>
+                        </div>
+                        <div style={{ minWidth: '120px' }}>
+                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>Variance</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                            ( Total ) <span>
                               {(() => {
-                                let datd = ggggrt()
-
-                                let datdtwo = ggggrts()
-
-                                let tot = ((datd - datdtwo) / datdtwo) * 100
-
-                                return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" /> :
-                                  <img src="d_arw.png"
-                                    style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                    }} className="" alt="Example Image" />}</span></span>
-
-
-                                console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                              })()}</span></p>
-                          </div>
-
+                                let datd = ggggrtsg();
+                                let datdtwo = ggggrtsgg();
+                                let tot = ((datd - datdtwo) / datdtwo) * 100;
+                
+                                return (
+                                  <span>
+                                    {isNaN(tot) ? 0 : tot.toFixed(2) + "%"} 
+                                    <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                      {isNaN(tot) ? '%' : tot > 0 ? 
+                                        <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Up Arrow" /> :
+                                        <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Down Arrow" />
+                                      }
+                                    </span>
+                                  </span>
+                                );
+                              })()}
+                            </span>
+                          </p>
                         </div>
-
-                        <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-                        <div className="scroll" id="scrrrrol" style={{ height: 400, overflowY: 'auto' }} >
-
-
-
-                          {
-                            served?.map((dfgh, index) => {
-                              const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
-
-                              return (
-                                <>
-                                  <div className="d-flex  ">
-
-                                    <div style={{ width: '33%' }}>
-                                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
-                                    </div>
-
-                                    {correspondingErv ? (
-                                      <div style={{ width: '33%', textAlign: 'center' }}>
-                                        <div >
-
-                                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                                        </div>
-                                      </div>
-                                    ) : (
-                                      <>
-                                        <div style={{ width: '33%' }} >
-                                        </div></>
-                                    )}
-
-                                    <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                                        ( Total )
-                                        <span>
-                                          {(() => {
-                                            const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                            const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-
-                                            const tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                                            return (
-                                              <span>
-                                                {tot.toFixed(2) + "%"}
-                                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                                  {tot > 0 ? (
-                                                    <img
-                                                      src="up_arw.png"
-                                                      style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                      alt="up arrow"
-                                                    />
-                                                  ) : (
-                                                    <img
-                                                      src="d_arw.png"
-                                                      style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                      alt="down arrow"
-                                                    />
-                                                  )}
-                                                </span>
-                                              </span>
-                                            );
-                                          })()}
-                                        </span>
-                                      </p>
-                                    </div>
-
-                                  </div>
-
-                                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                                </>
-                              );
-                            })
-                          }
-
-
-                        </div>
-
-
-
-
-
                       </div>
-
-
-
-
-
+                
+                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                
+                      <div className="scroll" id="scrrrrol" style={{ height: 420, overflowY: 'auto' }}>
+                        {minperday?.map((dfgh, index) => {
+                          const correspondingErv = maxperday?.[index];
+                
+                          return (
+                            <React.Fragment key={index}>
+                              <div className="d-flex">
+                                <div style={{ width: '33%' }}>
+                                  <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.name}</p>
+                                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.count}</p>
+                                </div>
+                
+                                {correspondingErv ? (
+                                  <div style={{ width: '33%', textAlign: 'center' }}>
+                                    <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.name}</p>
+                                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.count}</p>
+                                  </div>
+                                ) : (
+                                  <div style={{ width: '33%' }}></div>
+                                )}
+                
+                                <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%' }}>
+                                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                                    ( Total )
+                                    <span>
+                                      {(() => {
+                                        const datd = dfgh?.count || 0;
+                                        const datdtwo = correspondingErv?.count || 0;
+                                        const tot = datdtwo === 0 ? 0 : ((datd - datdtwo) / datdtwo) * 100;
+                
+                                        return (
+                                          <span>
+                                            {isNaN(tot) ? "0%" : tot.toFixed(2) + "%"}
+                                            <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                              {isNaN(tot) ? '' : tot > 0 ? (
+                                                <img src="up_arw.png" style={{ width: 16, height: 16 }} alt="Up Arrow" />
+                                              ) : (
+                                                <img src="d_arw.png" style={{ width: 16, height: 16 }} alt="Down Arrow" />
+                                              )}
+                                            </span>
+                                          </span>
+                                        );
+                                      })()}
+                                    </span>
+                                  </p>
+                                </div>
+                              </div>
+                              <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                            </React.Fragment>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
-                  : meals === 4 ?
-
-
-                    <div className="changeone" style={{ marginTop: 80 }} >
-                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, padding: 20 }} >
-
-                        <div style={{ marginTop: -20 }} className="d-flex justify-content-between" >
-                          <div style={{}} className="d-flex justify-content-center align-items-center gap-5 "  >
-                            <div className="d-flex pt-4">
-                              <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                                setMeals(1)
-                              }} className="" alt="Example Image" />
-                              <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Refunded meals</p>
-
-                            </div>
-                            <div class="custom-inputonessfine pt-1 " >
-
-                              <Select
-                                className="newoneonee"
-                                options={basicfine}
-                                // value={selectedOptionsfine}
-                                onChange={handleChangefinedd}
-                                placeholder="Select options..."
-                                components={{
-                                  // Option: CustomOptionfinal,
-                                  MultiValue: () => null, // Hides default tags
-                                  ValueContainer: ({ children, ...props }) => {
-                                    const selectedValues = props.getValue();
-                                    return (
-                                      <components.ValueContainer {...props}>
-                                        {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                                      </components.ValueContainer>
-                                    );
-                                  },
-                                }}
-                                hideSelectedOptions={false} // Show all options even if selected
-                                styles={{
-                                  control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
-                                }}
-                              />
-
-                            </div>
-                          </div>
-
-                          <div className="d-flex align-items-center" >
-                            <img src="threedot.png" ref={toggleButtonRefss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
-
-                            {showDivss && (
-                              <div
-                                ref={dropdownRefss}
-                                style={{
-                                  zIndex: 100,
-                                  width: 200,
-                                  marginTop: '0px',
-                                  padding: '10px',
-                                  backgroundColor: '#f8f9fa',
-                                  border: '1px solid #ccc',
-                                  borderRadius: '4px',
-                                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                                  position: 'absolute',
-                                  right: '4%',
-                                  marginTop : 60
-                                }}
-                              >
-                                <p style={{ color: '#707070' }}>Export as</p>
-                                <hr />
-                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                  refundexportpdf()
-                                }}>PDF</p>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                        <div style={{ marginTop: -20, padding: 20 }} >
-                          <div className="d-flex justify-content-between" >
-
-                            <div >
-                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                                ggggrtsg()}</span></p>
-                            </div>
-                            <div >
-                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-
-                                ggggrtsgg()
-                              }</span></p>
-                            </div>
-                            <div >
-                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                                {(() => {
-                                  let datd = ggggrtsg()
-
-                                  let datdtwo = ggggrtsgg()
-
-                                  let tot = ((datd - datdtwo) / datdtwo) * 100
-
-                                  return <span >{isNaN(tot) ? 0 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{isNaN(tot) ?
-                                    '%' : tot > 0 ? <img src="up_arw.png"
-                                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                      }} className="" alt="Example Image" /> :
-                                      <img src="d_arw.png"
-                                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                        }} className="" alt="Example Image" />}</span></span>
-
-
-                                  console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                                })()}</span></p>
-                            </div>
-
-                          </div>
-
-                          <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-                          <div className="scroll" id="scrrrrol" style={{ height: 420, overflowY: 'auto' }} >
-
-
-
-                            {
-                              minperday?.map((dfgh, index) => {
-                                const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
-
-                                return (
-                                  <>
-                                    <div className="d-flex  ">
-
-                                      <div style={{ width: '33%' }}>
-                                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
-                                      </div>
-
-                                      {correspondingErv ? (
-                                        <div style={{ width: '33%', textAlign: 'center' }}>
-                                          <div >
-
-                                            <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                                          </div>
-                                        </div>
-                                      ) : (
-                                        <>
-                                          <div style={{ width: '33%' }} >
-                                          </div></>
-                                      )}
-
-                                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                                          ( Total )
-                                          <span>
-                                            {(() => {
-                                              const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                              const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-
-                                              const tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                                              return (
-                                                <span>
-                                                  {tot.toFixed(2) + "%"}
-                                                  <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                                    {tot > 0 ? (
-                                                      <img
-                                                        src="up_arw.png"
-                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                        alt="up arrow"
-                                                      />
-                                                    ) : (
-                                                      <img
-                                                        src="d_arw.png"
-                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                        alt="down arrow"
-                                                      />
-                                                    )}
-                                                  </span>
-                                                </span>
-                                              );
-                                            })()}
-                                          </span>
-                                        </p>
-                                      </div>
-
-                                    </div>
-
-                                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                                  </>
-                                );
-                              })
-                            }
-
-
-                          </div>
-
-
-
-
-
-                        </div>
-
-
-
-
-
-                      </div>
-                    </div>
+                </div>
 
                     :
 

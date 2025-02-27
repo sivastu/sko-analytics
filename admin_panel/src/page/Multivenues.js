@@ -97,12 +97,23 @@ let Multivenues = () => {
     return plainText
 
   }
+  const [boxWidth, setBoxWidth] = useState(window.innerWidth >= 1400 ? 27 : window.innerWidth >= 1024 ? 40 : 60);
+  const [imageWidth, setImageWidth] = useState(window.innerWidth >= 1400 ? 100 : window.innerWidth >= 1024 ? 80 : 70);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setBoxWidth(window.innerWidth >= 1400 ? 27 : window.innerWidth >= 1024 ? 40 : 60);
+      setImageWidth(window.innerWidth >= 1400 ? 100 : window.innerWidth >= 1024 ? 80 : 70);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
 
   return (
-    <div>
-      <div style={{ scrollbarWidth: 'none' }}>
+    <div style={{overflow:"hidden"}}>
+      <div style={{ scrollbarWidth: 'none' }} >
         
         <div className="" style={{
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
@@ -142,7 +153,7 @@ let Multivenues = () => {
 
 
             <div style={{ padding: 90 }} >
-              <div style={{ width: '25%', height: 180, backgroundColor: '#fff', borderRadius: 5, cursor: 'pointer' }} onClick={() => {
+              <div style={{ width: `${boxWidth}%`, height: 180, backgroundColor: '#fff', borderRadius: 5, cursor: 'pointer' }} onClick={() => {
                 navigate("/meals");
               }} >
                 <div className="row" style={{ height: 180,margin:"0 5px" }}>
@@ -152,12 +163,12 @@ let Multivenues = () => {
                     </p>
                   </div>
                   <div className="col-6 d-flex align-items-center justify-content-end" style={{ padding: 45 }}>
-                    <img src="asd7.png" alt="Example Image" style={{ width: 100, height: 100 }} />
+                    <img src="asd7.png" alt="Example Image" style={{ width: imageWidth, height: imageWidth }} />
                   </div>
                 </div>
               </div>
         
-              <div style={{ width: "25%", height: 180, backgroundColor: '#fff', marginTop: 20, borderRadius: 5, marginBottom: 50, cursor: 'pointer' }}
+              <div style={{ width: `${boxWidth}%`, height: 180, backgroundColor: '#fff', marginTop: 20, borderRadius: 5, marginBottom: 50, cursor: 'pointer' }}
                 onClick={() => {
                   navigate("/dockets");
                 }} >
@@ -173,7 +184,7 @@ let Multivenues = () => {
 
                   {/* Right column - aligned image */}
                   <div className="col-6 d-flex align-items-center justify-content-end" style={{ padding: 45 }}>
-                    <img src="asd6.png" alt="Example Image" style={{ width: 100, height: 55 }} />
+                    <img src="asd6.png" alt="Example Image" style={{ width: imageWidth, height: `${imageWidth - 20}px`}} />
                   </div>
                 </div>
               </div>

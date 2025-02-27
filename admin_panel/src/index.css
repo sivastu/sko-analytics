@@ -241,6 +241,7 @@ code {
   /* For portrait layouts only */
   .finefinrr{
     padding-bottom : 10% !important; 
+    overflow:scroll;
   }
   .custom-input {
     font-size: 13px !important;

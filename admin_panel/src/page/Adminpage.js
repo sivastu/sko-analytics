@@ -147,7 +147,7 @@ let Adminpage = () => {
 
   return (
     <div>
-      <div style={{ scrollbarWidth: 'none' }}>
+      <div style={{ scrollbarWidth: 'none',overflow:"hidden" }}>
 
         <div className="" style={{
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
@@ -183,7 +183,7 @@ let Adminpage = () => {
       </div>
       <div style={{ backgroundColor: "#313233", height: '100vh' }} >
 
-        <div className="dddd" style={{ backgroundImage: "url('backs.jpg')", height: '100vh', padding: 0 }} >
+        <div className="dddd" style={{ backgroundImage: "url('backs.jpg')", height: '95vh', padding: 0 }} >
           <div style={{
             backgroundImage: "url('finefine.png')", height: '100%', backgroundSize: "230vh",
             backgroundPosition: "center", backgroundRepeat: "no-repeat",

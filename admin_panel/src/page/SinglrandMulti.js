@@ -101,9 +101,20 @@ let name = getName(parsedatajson)
   }
 
 
+  const [boxWidth, setBoxWidth] = useState(window.innerWidth >= 992 ? 752 : 580);
+  useEffect(() => {
+    const handleResize = () => {
+      setBoxWidth(window.innerWidth >= 992 ? 752 : 580);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
   return (
-    <div>
-      <div style={{ scrollbarWidth: 'none' }}>
+    <div style={{overflow:'hidden'}}>
+      <div className="" style={{ scrollbarWidth: 'none' }}>
 
       <div className="" style={{
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
@@ -139,7 +150,7 @@ let name = getName(parsedatajson)
 
 
 
-        <div className="dddd" style={{ backgroundImage: "url('backs.jpg')", height: '100vh', padding: 0 }} >
+        <div className="dddd" style={{ backgroundImage: "url('backs.jpg')", height: '95vh', padding: 0 }} >
           <div style={{
             backgroundImage: "url('finefine.png')", height: '100%', backgroundSize: "230vh",
             backgroundPosition: "center", backgroundRepeat: "no-repeat",
@@ -148,7 +159,7 @@ let name = getName(parsedatajson)
 
             <div
               style={{
-                width: 752,
+                width: boxWidth,
                 backgroundColor: "#F3F3F3",
                 borderRadius: 7,
                 cursor: "pointer",
@@ -160,9 +171,9 @@ let name = getName(parsedatajson)
                 navigate("/analytics");
               }}
             >
-              <div className="row w-100 gvdfvdf" >
-                <div className="col-6 d-flex align-items-center justify-content-center">
-                  <img style={{ width: "100%" }} src="as2.png" alt="Example Image" />
+              <div className="row  gvdfvdf" >
+                <div className="col-6 p-md-0 m-md-0 d-flex align-items-center justify-content-center">
+                  <img style={{ width: "100%",height:'100%' }} src="as2.png" alt="Example Image" />
                 </div>
                 <div className="col-6 d-flex align-items-center justify-content-center">
                   <div className="row w-100">
@@ -188,7 +199,7 @@ let name = getName(parsedatajson)
 
             <div
               style={{
-                width: 752,
+                width: boxWidth,
                 backgroundColor: "#F3F3F3",
                 borderRadius: 7,
                 cursor: "pointer",
@@ -202,7 +213,7 @@ let name = getName(parsedatajson)
             >
               <div className="row w-100 gvdfvdf" >
                 <div className="col-6 d-flex align-items-center justify-content-center">
-                  <img style={{ width: "100%" }} src="as1.png" alt="Example Image" />
+                  <img style={{ width: "100%",height:'100%' }} src="as1.png" alt="Example Image" />
                 </div>
                 <div className="col-6 d-flex align-items-center justify-content-center">
                   <div className="row w-100">

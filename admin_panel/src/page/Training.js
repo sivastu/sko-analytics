@@ -162,9 +162,8 @@ let Training = () => {
 
 
   return (
-    <div>
-      <div  >
-      <div className="" style={{
+    <div style={{overflowX:"hidden"}}>
+      <div className="fixed-top " style={{
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
           // border: "1px solid #dbdbdb"
         }} >
@@ -190,20 +189,18 @@ let Training = () => {
 
           </div>
         </div>
-
-      </div>
+ 
 
       <div style={{ backgroundColor: "#ECF1F4", height: '100vh' }} >
 
-        <div className="   p-5">
+        <div style={{backgroundColor:"#ECF1F4"}} className=" overflow-hidden  p-5">
 
 
-        <div style={{ width: "60%", margin: "auto", display: "block", position: "relative" }}>
+        <div className=" " style={{ margin: "auto",width:'100%', display: "block" ,overflow:'hidden'}}>
   {/* Search Box - Fixed at the Top */}
   <div
-    className="custom-inputoness d-flex justify-content-between"
+    className="col-lg-6 col-md-10  custom-inputoness d-flex justify-content-between overflow-hidden"
     style={{
-      width: "50%",
       height: 65,
       position: "fixed", // Make it fixed
       top: 100, // Stick to the top
@@ -241,10 +238,9 @@ let Training = () => {
       </span>
     </div>
   </div>
-
   {/* Scrollable Content */}
-  <div style={{ marginTop: "70px", overflowY: "auto", maxHeight: "calc(100vh - 60px)" }} className="hide-scrollbar">
-    <p style={{ marginTop: "5%", textAlign: "center", fontWeight: "600", fontSize: 30 }}>
+  <div style={{ marginTop: "120px", overflowY: "auto", maxHeight: "calc(100vh - 60px)" }} className="hide-scrollbar ">
+    <p style={{ marginTop: "2%", textAlign: "center", fontWeight: "600", fontSize: 30 }}>
       SKO system training videos
     </p>
 
@@ -291,8 +287,8 @@ let Training = () => {
             <hr style={{ padding: "0px", margin: "0px" }} />
             <div className="accordion-content px-4 py-3" style={{ display: "flex", alignItems: "center",flexDirection:"column" }}>
             <div className="col">
-            <div style={{ marginTop: 20, marginBottom:50 }} className="row">
-                <div className="col-6">
+            <div style={{ marginTop: 20, marginBottom:50 }} className="d-flex flex-column flex-md-column gap-lg-5 flex-lg-row">
+                <div className="col-lg-6 col-md-12">
                   <img src="/dash.png" alt="example" style={{ width: 100, height: 4,marginBottom:8 }} />
                   <p style={{ color: "#316AAA", fontSize: 24, fontWeight: 800 }}>SIMPLE</p>
                   <div className="w-100">
@@ -305,13 +301,13 @@ This gives chefs control over what dockets need to be prioritised and allows the
                     </p>
                   </div>
                 </div>
-                <div className="col-6 ">
+                <div className="col-lg-6 col-md-12 d-flex flex-column align-items-end align-items-md-center  ">
                 <img className="w-100" style={{borderRadius:"10px"}} src="https://sk-order.com/wp-content/uploads/2023/12/simple.webp" alt="example" />
 
                 </div>
               </div>
             </div>
-              <div className="col">
+              <div className="col d-md-none d-lg-block">
               <div style={{ marginTop: 20, marginBottom:20 }} className="row">
               <div className="col-6 ">
                   <img className="w-100" style={{borderRadius:"10px"}} src="https://sk-order.com/wp-content/uploads/2023/12/pdt2.webp" alt="example" />
@@ -333,9 +329,32 @@ This gives chefs control over what dockets need to be prioritised and allows the
                 
               </div>
               </div>
-              <div className="col">
-            <div style={{ marginTop: 20, marginBottom:50 }} className="row">
-                <div className="col-6">
+              <div className="col d-lg-none d-md-block">
+              <div style={{ marginTop: 20, marginBottom:20 }} className="row">
+              <div className="col-lg-6 col-md-12 d-flex flex-column  text-start  ms-auto align-self-start">
+<div className="d-flex align-self-start mb-2">
+<img src="/dash.png" alt="example" style={{ width: 100, height: 4, marginBottom: 8 }} />
+</div>
+  <p style={{ color: "#316AAA", fontSize: 24, fontWeight: 800 }}>VISIBLE</p>
+<div className="w-100 d-flex justify-content-end">
+<div className="">
+    <p>
+    Gone are the days of trying to find lost paper dockets. Instead, your digital rail will be placed directly in front of you with clear visibility of all dockets. SKO will automatically organise relevant dockets for each station so chefs know what to prepare and when to do it. Having a SKO setup ensures everyone is in agreement with what dockets are on display. This results in fewer mistakes and an increase in staff satisfaction.
+    </p>
+  </div>
+</div>
+</div>
+              <div className="col-lg-6 col-md-12 ">
+                  <img className="w-100" style={{borderRadius:"10px"}} src="https://sk-order.com/wp-content/uploads/2023/12/pdt2.webp" alt="example" />
+                </div>
+             
+
+                
+              </div>
+              </div>
+              <div className="col ">
+            <div style={{ marginTop: 20, marginBottom:50 }} className="d-flex flex-column flex-md-column gap-lg-5 flex-lg-row">
+                <div className="col-lg-6 col-md-12">
                   <img src="/dash.png" alt="example" style={{ width: 100, height: 4,marginBottom:8 }} />
                   <p style={{ color: "#316AAA", fontSize: 24, fontWeight: 800 }}>EFFICIENT</p>
                   <div className="w-100">
@@ -353,7 +372,7 @@ This gives chefs control over what dockets need to be prioritised and allows the
                     </p>
                   </div>
                 </div>
-                <div className="col-6 ">
+                <div className="col-lg-6 col-md-12 d-flex flex-column align-items-end align-items-md-center">
                 <img className="w-100" style={{borderRadius:"10px"}} src="https://sk-order.com/wp-content/uploads/2023/12/pdt1.webp" alt="example" />
                 
                 </div>
@@ -395,8 +414,8 @@ This gives chefs control over what dockets need to be prioritised and allows the
             <hr style={{ padding: "0px", margin: "0px" }} />
             <div className="accordion-content px-4 py-3" style={{ display: "flex", alignItems: "center",flexDirection:"column" }}>
             <div className="col">
-            <div style={{ marginTop: 20, marginBottom:50 }} className="row">
-                <div className="col-6">
+            <div style={{ marginTop: 20, marginBottom:50 }} className="d-flex flex-column flex-md-column gap-lg-5 flex-lg-row">
+                <div className="col-lg-6 col-md-12">
                   <img src="/dash.png" alt="example" style={{ width: 100, height: 4,marginBottom:8 }} />
                   <p style={{ color: "#316AAA", fontSize: 24, fontWeight: 800 }}>Edit & Move feature</p>
                   <div className="w-100">
@@ -412,7 +431,7 @@ This gives chefs control over what dockets need to be prioritised and allows the
                     </p>
                   </div>
                 </div>
-                <div className="col-6 ">
+                <div className="col-lg-6 col-md-12 d-flex flex-column align-items-end align-items-md-center ">
                   <video
                     className=""
                     style={{
@@ -431,8 +450,8 @@ This gives chefs control over what dockets need to be prioritised and allows the
                 </div>
               </div>
             </div>
-              <div className="col">
-              <div style={{ marginTop: 20, marginBottom:20 }} className="row">
+              <div className="col d-md-none d-lg-block">
+              <div style={{ marginTop: 20, marginBottom:20 }} className="row ">
               <div className="col-6 ">
                   <video
                     className=""
@@ -472,11 +491,47 @@ For example, if you prioritize an entree for a customer because you want it to b
                 
               </div>
               </div>
-
-              <div className="col">
-      <div style={{ marginTop: 20, marginBottom: 50 }} className="row">
+              <div className="col d-lg-none d-md-block">
+      <div style={{ marginTop: 20, marginBottom: 50 }} className=" col ">
         {/* Left Section (Text) */}
-        <div className="col-6">
+        <div className="col-lg-6">
+          <img src="/dash.png" alt="example" style={{ width: 100, height: 4, marginBottom: 8 }} />
+          <p style={{ color: "#316AAA", fontSize: 24, fontWeight: 800 }}>New Dockets Position</p>
+          <div className="w-100">
+            <p>
+            Need to prioritize a bowl of chips or entrees without affecting the order of other dockets?
+The ‘NEW’ window on your SKO screen allows you to do this. Simply move dockets left (to end) or right (to start) when deciding if they should be placed at the beginning or end of the rail.
+            </p>
+            <p> Fear not, positioning a docket to the beginning of your rail won't affect the chronological order of existing dockets.
+For example, if you prioritize an entree for a customer because you want it to be sent out before their main, you can move the docket to the beginning. Then the app will automatically place the other dockets back to their original order once the entree has been served.</p>
+          </div>
+        </div>
+
+        {/* Right Section (Images) */}
+        <div className="col-lg-6 col-md-12  d-flex flex-column align-items-end align-items-md-center ">
+          {/* Image Clickable to Open Modal */}
+          <video
+                    className=""
+                    style={{
+                      maxWidth:450,
+                      marginRight:-20
+                    }}
+                    autoPlay
+                    playsInline
+                    loop
+                    muted
+                    controls
+                    src="https://a5.techbuzz360.com/sko/wp-content/uploads/2024/04/2024-04-09_New-window-video.mp4"
+                  >
+                      <p>Your browser does not support the video tag.</p>
+                  </video>
+        </div>
+      </div>
+    </div>
+              <div className="col">
+      <div style={{ marginTop: 20, marginBottom: 50 }} className="d-flex flex-column flex-md-column flex-lg-row">
+        {/* Left Section (Text) */}
+        <div className="col-lg-6 col-md-12">
           <img src="/dash.png" alt="example" style={{ width: 100, height: 4, marginBottom: 8 }} />
           <p style={{ color: "#316AAA", fontSize: 24, fontWeight: 800 }}>Meals summary</p>
           <div className="w-100">
@@ -489,7 +544,7 @@ For example, if you prioritize an entree for a customer because you want it to b
         </div>
 
         {/* Right Section (Images) */}
-        <div className="col-6 d-flex flex-column align-items-center">
+        <div className="col-lg-6 col-md-12 d-flex flex-column align-items-center">
           {/* Image Clickable to Open Modal */}
           <div onClick={() => openModal("https://sk-order.com/wp-content/uploads/2023/12/SKO700_FrontView_MealsSummary.png")} style={{ cursor: "pointer" }}>
             <img
@@ -550,7 +605,7 @@ For example, if you prioritize an entree for a customer because you want it to b
       )}
     </div>
 
-    <div className="col">
+    <div className="col d-md-none d-lg-block">
               <div style={{ marginTop: 20, marginBottom:20 }} className="row">
               <div className="col-6 ">
                   <video
@@ -573,7 +628,7 @@ For example, if you prioritize an entree for a customer because you want it to b
 <div className="d-flex align-self-end mb-2">
 <img src="/dash.png" alt="example" style={{ width: 100, height: 4, marginBottom: 8 }} />
 </div>
-  <p style={{ color: "#316AAA", fontSize: 24, fontWeight: 800 }}>New Dockets Position</p>
+  <p style={{ color: "#316AAA", fontSize: 24, fontWeight: 800 }}>Run function & summary</p>
 <div className="w-100 d-flex justify-content-end">
 <div className="">
 <p>
@@ -600,6 +655,55 @@ Less questions will need to be asked and more time will be gained back for the t
                 
               </div>
               </div>
+
+                <div className="col d-lg-none d-md-block">
+      <div style={{ marginTop: 20, marginBottom: 50 }} className=" col ">
+        {/* Left Section (Text) */}
+        <div className="col-lg-6 col-md-12">
+          <img src="/dash.png" alt="example" style={{ width: 100, height: 4, marginBottom: 8 }} />
+          <p style={{ color: "#316AAA", fontSize: 24, fontWeight: 800 }}>Run function & summary</p>
+          <div className="w-100">
+          <p>
+            We understand how important it is for you, chef, to coordinate your team’s work while satisfying customers with meals delivered on time.
+            </p>
+            <p>Usually, you’d have to call dockets out that you want your team to work on to synchronise the workflow.
+We’ve made it simpler for you. How?</p>
+<p>
+Double-tap on the dockets you’d like your stations to see and they instantly shall see them.
+</p>
+<p>
+They can even access a summary of items to see what’s coming up next. No longer will you hear, “Chef, which tables are we going with?”.
+</p>
+<p>
+Instead, kitchen stations will see next orders on their SKO device.
+</p>
+<p>
+Less questions will need to be asked and more time will be gained back for the team.
+</p>
+          </div>
+        </div>
+
+        {/* Right Section (Images) */}
+        <div className="col-lg-6 col-md-12 d-flex flex-column align-items-end align-items-md-center ">
+          {/* Image Clickable to Open Modal */}
+          <video
+                    className=""
+                    style={{
+                      maxWidth:450,
+                      marginRight:-20
+                    }}
+                    autoPlay
+                    playsInline
+                    loop
+                    muted
+                    controls
+                    src="https://a5.techbuzz360.com/sko/wp-content/uploads/2024/04/2024-04-09_New-window-video.mp4"
+                  >
+                      <p>Your browser does not support the video tag.</p>
+                  </video>
+        </div>
+      </div>
+    </div>
             </div>
           </>
         )}
@@ -607,20 +711,6 @@ Less questions will need to be asked and more time will be gained back for the t
     </div>
   </div>
 </div>
-
-
-        </div>
-
-
-
-        <div className="d-flex justify-content-between p-5">
-
-          <div >
-
-          </div>
-        </div>
-
-        <div className="d-flex " style={{ height: '60%' }} >
 
 
         </div>

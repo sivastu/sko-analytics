@@ -318,32 +318,24 @@ let UserRent = () => {
           // border: "1px solid #dbdbdb"
         }} >
           <div className="d-flex justify-content-center " style={{ paddingLeft: '2%', paddingRight: '2%', height: 52 }}>
-
-
-
             <div style={{ padding: 13 }} className="d-flex" >
               <img src="Menu_Logo.png" style={{ width: 56, height: 28 }} alt="Example Image" />
               <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >web portal</p>
             </div>
-
           </div>
         </div>
 
       </div>
       <div style={{ backgroundColor: "#313233", height: '100vh' }} >
 
-
-
-
-
-        <div className="dddd" style={{ backgroundImage: "url('backs.jpg')", height: '100vh', padding: 0 }} >
+        <div className="dddd" style={{ backgroundImage: "url('backs.jpg')", height: '95vh', padding: 0 }} >
           <div style={{
             backgroundImage: "url('finefine.png')", height: '100%', backgroundSize: "230vh",
             backgroundPosition: "center", backgroundRepeat: "no-repeat",
             alignItems: "center", justifyContent: "center", display: 'flex', backgroundColor: "#313233"
           }} >
 
-            <div style={{ width: 550, height: 267, backgroundColor: "#F3F3F3", borderRadius: 7, }} >
+            <div style={{ maxWidth: 550, height: 267,width:"100%", backgroundColor: "#F3F3F3", borderRadius: 7, }} >
               {
                 forget === false ?
 
