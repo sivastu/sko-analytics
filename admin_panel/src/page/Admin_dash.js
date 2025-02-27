@@ -110,6 +110,8 @@ let Admin_dash = () => {
   }, [])
 
 
+
+
   const CustomPlaceholder = ({ children, getValue }) => {
     const selected = getValue();
     if (selected.length) {
@@ -302,6 +304,45 @@ let Admin_dash = () => {
 
     return data.name;
   }
+
+  let changeddddd = (seee , fineee , third) =>{
+
+   
+    const emailKey = fineee.Email.replace(/\.com/g, ""); // Firebase doesn't allow dots in keys
+
+    console.log(emailKey)
+ 
+    if(third === 'venue'){
+      const db = getDatabase(app);
+      const userRef = ref(db, `user/${emailKey}/venue`);
+
+      set(userRef, seee ) // Using `update` to modify only the `hub` field
+    .then(() => {
+      console.log(`Hub updated successfully for ${email}!`);
+      loginCheck()
+    })
+    .catch((error) => {
+      console.error(`Error updating hub for ${email}:`, error);
+    });
+
+      
+    }else{
+      const db = getDatabase(app);
+      const userRef = ref(db, `user/${emailKey}/hub`);
+
+      set(userRef, seee ) // Using `update` to modify only the `hub` field
+    .then(() => {
+      console.log(`Hub updated successfully for ${email}!`);
+      loginCheck()
+    })
+    .catch((error) => {
+      console.error(`Error updating hub for ${email}:`, error);
+    });
+    }
+    console.log(seee , fineee )
+  }
+
+
 
   let loginCheck = async () => {
     let getdata = sessionStorage.getItem('data')
@@ -1319,14 +1360,24 @@ if(!username&&!email&&hubb.length === 0&&selectedOptions.length === 0){
 
                       {Object.entries(user)
                         .filter(([_, value]) => value.Role === "admin") // Filter only admins
-                        .map(([key, value]) => (
+                        .map(([key, value]) => {
+
+                          // const modifiedData = value.venue.map(item => ({
+                          //   label: item.label,
+                          //   value: item.value.split("-")[0] // Extracts only the first part before "-"
+                          // }));
+
+                          
+                          return(
                           <>
                             <div className="d-flex" style={{ padding: 20, height: 60, backgroundColor: "#ECF1F4" }}>
                               <div style={{ width: "20%" }} className="d-flex">
                                 <img src="lolp.png" className="nerrrimg" alt="Example Image" />
                                 <p style={{ color: "#316AAF", fontWeight: "400" }}>{value.name}</p>
                               </div>
-                              <div style={{ width: "20%" }} className="d-flex">
+                              <div style={{ width: "20%" }} className="d-flex" onClick={()=>{
+                                console.log( JSON.stringify(basic) , 'value.hubvalue.hub')
+                              }}>
                                 <p style={{ color: "#707070", fontWeight: "400" }}>{value.Email}</p>
                               </div>
                               <div style={{ width: "20%" }}>
@@ -1336,11 +1387,12 @@ if(!username&&!email&&hubb.length === 0&&selectedOptions.length === 0){
                                 <Select
                                   isMulti
                                   className="newoneoneess"
-                                  options={value.venue}
-                                  value={[]} // Shows selected values
-                                  onChange={() => { }} // Prevent selection changes
+                                  options={basic}
+                                  value={value.venue} // Shows selected values
+                                  onChange={(e)=>{changeddddd(e , value , 'venue' )}} // Prevent selection changes
                                   placeholder={value.venue[0].label + '...'}
                                   components={{
+                                    Option: CustomOption,
                                     MultiValue: () => null, // Hides default tags
                                     ValueContainer: ({ children, ...props }) => {
                                       const selectedValues = props.getValue();
@@ -1350,10 +1402,9 @@ if(!username&&!email&&hubb.length === 0&&selectedOptions.length === 0){
                                         </components.ValueContainer>
                                       );
                                     },
-                                  }}
-                                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                                  hideSelectedOptions={false} // Show all options even if selected
-                                  isOptionDisabled={() => true} // Disables all options from being selected
+                                  }} // Keep dropdown open for further selection
+                                  closeMenuOnSelect={true} // Keep dropdown open for further selection
+                            hideSelectedOptions={false} // Disables all options from being selected
                                   styles={{
                                     control: (base) => ({ ...base, border: 'unset', marginTop: -8, color: '#1A1A1B' }),
                                   }}
@@ -1365,11 +1416,12 @@ if(!username&&!email&&hubb.length === 0&&selectedOptions.length === 0){
                                 <Select
                                   isMulti
                                   className="newoneoneess"
-                                  options={value.hub}
-                                  value={[]} // Shows selected values
+                                  options={basicone}
+                                  value={value.hub} // Shows selected values
                                   onChange={() => { }} // Prevent selection changes
                                   placeholder={value.hub[0].label + '...'}
                                   components={{
+                                    Option: CustomOption,
                                     MultiValue: () => null, // Hides default tags
                                     ValueContainer: ({ children, ...props }) => {
                                       const selectedValues = props.getValue();
@@ -1392,7 +1444,7 @@ if(!username&&!email&&hubb.length === 0&&selectedOptions.length === 0){
 
                             <hr style={{ margin: "0px 0px", backgroundColor: "#9F9F9F", height: 1 }} />
                           </>
-                        ))}
+                        )})}
 
 
                     </>
