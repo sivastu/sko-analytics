@@ -4367,7 +4367,7 @@ let Meals = () => {
       const canvas = await html2canvas(chartElement, {
         backgroundColor: "#fff", // Ensure a white background
         useCORS: true, // Fix cross-origin issues
-        scale: 2, // Higher quality capture
+        scale: 4, // Higher quality capture
       });
   
       const imageData = canvas.toDataURL("image/png");
@@ -4379,8 +4379,8 @@ let Meals = () => {
       });
   
       worksheet.addImage(imageId, {
-        tl: { col: 5, row:  6 }, // Position it properly
-        ext: { width: 800, height: 400 }, // Adjust as needed
+        tl: { col: 4, row:  5 }, // Position it properly
+        ext: { width: 1300, height: 500 }, // Adjust as needed
       });
     }
   
@@ -5900,7 +5900,7 @@ let Meals = () => {
                             {/* Scrollable Chart Container */}
                             <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                               <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                <Bar data={datafine} options={optionshshs} />
+                                <Bar data={datafine} options={optionshshs} id="chart-capture" />
                               </div>
                             </div>
 
