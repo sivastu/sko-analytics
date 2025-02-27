@@ -4216,7 +4216,7 @@ const displayText = allLabels.slice(0, 18) + "..."
 
 
   return (
-    <div>
+    <div style={{overflow:"hidden"}}>
       {/* <Header name={"Dockets"} center={"Name"} />
        */}
 
@@ -4249,485 +4249,420 @@ const displayText = allLabels.slice(0, 18) + "..."
           </div>
         </div>
       </div>
-      <div >
+      <div className=" hide-scrollbar">
         <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr">
 
-          <div style={{}} className="dddd"  >
-
-            <div className="d-flex justify-content-between  pt-4 gap-3" >
-
-              <div style={{ width: '20%' }}>
-                <p onClick={() => {
-
-                  checkkkk()
-
-                }} style={{ color: '#707070', fontWeight: '700', fontSize: 15 ,marginBottom:2}}>Chosen range:<span style={{ fontWeight: '400' }}> Custom</span></p>
-
-                <div style={{ width: '100%' }} >
-                  <DatePicker
-                    selectsRange
-                    startDate={startDate}
-                    endDate={endDate}
-                    onChange={(update) => {
-                      setDateRange(update)
-
-                      if (update[1] === null || update[1] === "null") {
-
-                      } else {
-                        filterDataByDate(update, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-
-                      }
-                    }} // Update both startDate and EndDate 
-                    placeholderText="Select a date range"
-                    className="custom-input"
-                    calendarClassName="custom-calendar"
-                    dateFormat="d MMM yyyy"
-                    customInput={
-                      <div className="custom-display-input" style={{color:'#1A1A1B',fontSize:15}}>
-                        {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
-                        <FaCaretDown className="calendar-icon" />
-                      </div>
-                    }
-                  />
-                </div>
-                <div className="mt-3" >
-                  <div className="custom-inputone d-flex justify-content-between">
-                    <input
-                      className='inputttt'
-                      type="time"
-                      value={onetime}
-                      style={{color:'#1A1A1B',fontSize:15}}
-                      onChange={(e) => {
-                        console.log(e.target.value, 'eeee')
-                        setOnetime(e.target.value)
-                        if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                          return
-                        }
-
-                        filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-                      }}
-                    />
-                    <input
-                      className='inputttt'
-                      type="time"
-                      value={twotime}
-                      style={{color:'#1A1A1B',fontSize:15}}
-                      onChange={(e) => {
-                        setTwotime(e.target.value)
-                        if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                          return
-                        }
-                        // tiemstampp(2, e.target.value)
-
-                        filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-                      }}
-                    />
-                  </div>
-                </div>
-
-
-
-              </div>
-
-              <div style={{ width: '20%' }}>
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Compare with:<span style={{ fontWeight: '400' }}> Custom</span></p>
-                <div style={{ width: '100%' }}>
-                  <DatePicker
-                    selectsRange
-                    startDate={startDatetwo}
-                    endDate={endDatetwo}
-                    onChange={(update) => {
-                      setDateRangetwo(update)
-
-                      if (update[1] === null || update[1] === "null") {
-
-                      } else {
-                        // updates(2, update)
-
-                        filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-                      }
-
-
-                    }} // Update both startDate and EndDate 
-                    placeholderText="Select a date range"
-                    className="custom-input"
-                    calendarClassName="custom-calendar"
-                    dateFormat="d MMM yyyy"
-                    customInput={
-                      <div className="custom-display-input" style={{color:'#1A1A1B',fontSize:15}}>
-                        {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
-                        <FaCaretDown className="calendar-icon" />
-                      </div>
-                    }
-                  />
-                </div>
-                <div className="mt-3" >
-                  <div className="custom-inputone d-flex justify-content-between">
-                    <input
-                      className='inputttt'
-                      type="time"
-                      style={{color:'#1A1A1B',fontSize:15}}
-                      value={threetime}
-                      onChange={(e) => {
-                        setThreetime(e.target.value)
-                        if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                          return
-                        }
-                        filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-                      }}
-                    />
-                    <input
-                      className='inputttt'
-                      type="time"
-                      style={{color:'#1A1A1B',fontSize:15}}
-                      value={fourtime}
-                      onChange={(e) => {
-                        setFourtime(e.target.value)
-                        if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                          return
-                        }
-                        filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-                      }}
-                    />
-                  </div>
-                </div>
-
-
-
-              </div>
-
-
-              <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Chosen venue & hub</p>
-                <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{
-                  width: '100%', height: 45
-                }}>
-                  <div class="switch-container">
-                    <input type="checkbox" id="switch1" checked={venueradio} onChange={(e) => {
-                      setVenueradio(e.target.checked)
-                      if (e.target.checked === false) {
-                        setSelectedOptions([])
-                      } else {
-                      }
-
-                      console.log(e.target.checked, 'ggggggggggggggg')
-                    }} />
-                    <label class="switch-label" for="switch1"></label>
-                  </div>
-                  <Select
-                    menuIsOpen={menuIsOpen}
-                    onMenuOpen={() => setMenuIsOpen(true)}
-                    onMenuClose={() => setMenuIsOpen(false)}
-                    onFocus={() => setMenuIsOpen(true)}
-                    isDisabled={!venueradio}
-                    isMulti
-                    className="newoneonee"
-                    options={basic}
-                    value={selectedOptions}
-                    onChange={handleChange}
-                    placeholder="All Venues"
-                    components={{
-                      Option: CustomOption,
-                      MultiValue: () => null, // Hides default tags
-                      ValueContainer: ({ children, ...props }) => {
-                        const selectedValues = props.getValue();
-                        return (
-                          <components.ValueContainer {...props}>
-                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                          </components.ValueContainer>
-                        );
-                      },
-                    }}
-                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                    hideSelectedOptions={false} // Show all options even if selected
-                    styles={{
-                      control: (base) => ({ ...base, border: 'unset', backgroundColor: '#fff',color:'#1A1A1B',fontSize:15 }),
-                    }}
-                  />
-                </div>
-
-                <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                  width: '100%',
-                  height: 45
-                }}>
-
-                  <div class="switch-container">
-                    <input checked={hubbswitch} onChange={(e) => {
-                      setHubbswitch(e.target.checked)
-                      if (e.target.checked === false) {
-                      }
-                    }} type="checkbox" id="switch3" />
-                    <label class="switch-label" for="switch3"></label>
-                  </div>
-                  <Select
-
-                    menuIsOpen={menuIsOpenone}
-                    onMenuOpen={() => setMenuIsOpenone(true)}
-                    onMenuClose={() => setMenuIsOpenone(false)}
-                    onFocus={() => setMenuIsOpenone(true)}
-
-
-                    isDisabled={!hubbswitch}
-                    isMulti
-                    className="newoneonee"
-                    options={basicone}
-                    value={hubb}
-
-                    onChange={handleChangehubone}
-                    placeholder="All Hubs"
-                    components={{
-                      Option: CustomOption, // Custom tick option
-                      MultiValue: () => null, // Hides default tags
-                      ValueContainer: ({ children, ...props }) => {
-                        const selectedValues = props.getValue();
-                        return (
-                          <components.ValueContainer {...props}>
-                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                          </components.ValueContainer>
-                        );
-                      },
-                    }}
-                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                    hideSelectedOptions={false} // Show all options even if selected
-                    styles={{
-                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',background:'#fff',fontSize:15 }),
-                    }}
-                  />
-
-
-
-
-
-
-                  {/* <select disabled={!hubbswitch} className="newoneonee" onChange={(e) => {
-                  setHubb(e.target.value)
-                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, e.target.value, selectedCources, selectedTakeaway)
-
-
-                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, e.target.value, selectedCources, selectedTakeaway)
-
-
-                  console.log(e.target.value)
-                }} name="cars" id="cars" style={{ border: 'unset', color: '#707070' }} >
-                  <option value="">Select</option>
-                  {basicone?.map(item => (
-                    <option value={item.value}>{item.label}</option>
-                  ))}
-                </select> */}
-
-                </div>
-              </div>
-
-              <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Filter by stages/courses</p>
-                <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{
-                  width: '100%',
-                  height: 45
-                }}>
-
-                  <div class="switch-container">
-                    <input type="checkbox" checked={Hubradio} onChange={(e) => {
-                      setHubradio(e.target.checked)
-                      if (e.target.checked === false) {
-                        setSelectedhubOptions([])
-                      }
-                    }} id="switch2" />
-                    <label class="switch-label" for="switch2"></label>
-                  </div>
-
-                  <Select
-                    menuIsOpen={menuIsOpentwo}
-                    onMenuOpen={() => setMenuIsOpentwo(true)}
-                    onMenuClose={() => setMenuIsOpentwo(false)}
-                    onFocus={() => setMenuIsOpentwo(true)}
-
-                    isDisabled={!Hubradio}
-                    isMulti
-                    className="newoneonee"
-                    options={optionshub}
-                    value={selectedhubOptions}
-                    onChange={handleChangehub}
-                    placeholder="All stages"
-                    components={{
-                      Option: CustomOption, // Custom tick option
-                      MultiValue: () => null, // Hides default tags
-                      ValueContainer: ({ children, ...props }) => {
-                        const selectedValues = props.getValue();
-                        return (
-                          <components.ValueContainer {...props}>
-                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                          </components.ValueContainer>
-                        );
-                      },
-                    }}
-                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                    hideSelectedOptions={false} // Show all options even if selected
-                    styles={{
-                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',background:'#fff',fontSize:15 }),
-                    }}
-                  />
-                </div>
-
-
-                <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                  width: '100%',
-                  height: 45
-                }}>
-                  <div class="switch-container">
-                    <input type="checkbox" checked={Cources} onChange={(e) => {
-                      setCources(e.target.checked)
-                      if (e.target.checked === false) {
-                        setSelectedCources([])
-                      }
-                    }} id="switch4" />
-                    <label class="switch-label" for="switch4"></label>
-                  </div>
-
-                  <Select
-                    menuIsOpen={menuIsOpenthree}
-                    onMenuOpen={() => setMenuIsOpenthree(true)}
-                    onMenuClose={() => setMenuIsOpenthree(false)}
-                    onFocus={() => setMenuIsOpenthree(true)}
-                    isDisabled={!Cources}
-                    isMulti
-                    className="newoneonee"
-                    options={fulldatafull}
-                    value={selectedCources}
-                    onChange={handleChangeCources}
-                    placeholder="All courses"
-                    components={{
-                      Option: CustomOption, // Custom tick option
-                      MultiValue: () => null, // Hides default tags
-                      ValueContainer: ({ children, ...props }) => {
-                        const selectedValues = props.getValue();
-                        return (
-                          <components.ValueContainer {...props}>
-                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                          </components.ValueContainer>
-                        );
-                      },
-                    }}
-                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                    hideSelectedOptions={false} // Show all options even if selected
-                    styles={{
-                      control: (base) => ({ ...base, border: 'unset',color:'#1A1A1B',background:'#fff',fontSize:15 }),
-                    }}
-                  />
-                </div>
-
-              </div>
-
-              <div style={{ width: '20%' }} >
-                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15,marginBottom:2 }}>Filter by tables/takeaways</p>
-
-                <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
-                  {/* <div class="switch-container">
-                  <input type="checkbox" id="switch1" />
-                  <label class="switch-label" for="switch1"></label>
-                </div> */}
-
-                  {/* <select name="cars" id="cars" style={{ border: 'unset', color: '#707070' }} >
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
-                  <option value="mercedes">Mercedes</option>
-                  <option value="audi">Audi</option>
-                </select> */}
-                  <input onChange={(e) => {
-                    setInputvalue(e.target.value)
-
-                    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
-
-                    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
-
-                  }} value={inputvalue} placeholder="0-9999" style={{ width: '50%', border: 'unset',color:'#1A1A1B',fontSize:15 ,textAlign:'center'}} type="text" />
-
-
-                  <p style={{ fontSize: 19, display: 'contents' }} >|</p>
-
-
-                  <input onChange={(e) => {
-                    setInputvaluetwo(e.target.value)
-                    filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-
-                    filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-                  }} value={inputvaluetwo} placeholder="9999-9999" style={{ width: '50%', border: 'unset',color:'#1A1A1B',fontSize:15,textAlign:'center' }} type="text" />
-                </div>
-
-                <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{
-                  width: '100%',
-                  height: 45
-                }}>
-
-
-
-                  <div class="switch-container">
-                    <input type="checkbox" checked={takeaway} onChange={(e) => {
-                      setTakeaway(e.target.checked)
-                      if (e.target.checked === false) {
-                        setSelectedTakeaway([])
-                      }
-                    }} id="switch5" />
-                    <label class="switch-label" for="switch5"></label>
-                  </div>
-
-                  <Select
-                    menuIsOpen={menuIsOpenfour}
-                    onMenuOpen={() => setMenuIsOpenfour(true)}
-                    onMenuClose={() => setMenuIsOpenfour(false)}
-                    onFocus={() => setMenuIsOpenfour(true)}
-                    isDisabled={!takeaway}
-                    isMulti
-                    className="newoneonee"
-                    options={optionstakeaway}
-                    value={selectedTakeaway}
-                    onChange={handleChangeTakeaway}
-                    placeholder="All takeaways"
-                    components={{
-                      Option: CustomOption, // Custom tick option
-                      MultiValue: () => null, // Hides default tags
-                      ValueContainer: ({ children, ...props }) => {
-                        const selectedValues = props.getValue();
-                        return (
-                          <components.ValueContainer {...props}>
-                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                          </components.ValueContainer>
-                        );
-                      },
-                    }}
-                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                    hideSelectedOptions={false} // Show all options even if selected
-                    styles={{
-                      control: (base) => ({ ...base, border: 'unset', color:'#1A1A1B',fontSize:15,background:'#fff' }),
-                    }}
-                  />
-
-
-
-                </div>
-              </div>
-
+          <div style={{}} className="dddd  hide-scrollbar"  >
+
+          <div className="container-fluid px-0  hide-scrollbar">
+  <div className="d-flex flex-wrap justify-content-around pt-4 gap-4  hide-scrollbar">
+    {/* Date Range 1 */}
+    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+      <p onClick={() => {checkkkk()}} style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
+        Chosen range:<span style={{ fontWeight: '400' }}> Custom</span>
+      </p>
+      <div style={{ width: '100%' }}>
+        <DatePicker
+          selectsRange
+          startDate={startDate}
+          endDate={endDate}
+          onChange={(update) => {
+            setDateRange(update)
+            if (update[1] === null || update[1] === "null") {
+            } else {
+              filterDataByDate(update, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+            }
+          }}
+          placeholderText="Select a date range"
+          className="custom-input"
+          calendarClassName="custom-calendar"
+          dateFormat="d MMM yyyy"
+          customInput={
+            <div className="custom-display-input" style={{ color: '#1A1A1B', fontSize: 15 }}>
+              {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
+              <FaCaretDown className="calendar-icon" />
             </div>
+          }
+        />
+      </div>
+      <div className="mt-3">
+        <div className="custom-inputone d-flex justify-content-between">
+          <input
+            className='inputttt'
+            type="time"
+            value={onetime}
+            style={{ color: '#1A1A1B', fontSize: 15 }}
+            onChange={(e) => {
+              setOnetime(e.target.value)
+              if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                return
+              }
+              filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+            }}
+          />
+          <input
+            className='inputttt'
+            type="time"
+            value={twotime}
+            style={{ color: '#1A1A1B', fontSize: 15 }}
+            onChange={(e) => {
+              setTwotime(e.target.value)
+              if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                return
+              }
+              filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+            }}
+          />
+        </div>
+      </div>
+    </div>
+
+    {/* Date Range 2 - Comparison */}
+    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
+        Compare with:<span style={{ fontWeight: '400' }}> Custom</span>
+      </p>
+      <div style={{ width: '100%' }}>
+        <DatePicker
+          selectsRange
+          startDate={startDatetwo}
+          endDate={endDatetwo}
+          onChange={(update) => {
+            setDateRangetwo(update)
+            if (update[1] === null || update[1] === "null") {
+            } else {
+              filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+            }
+          }}
+          placeholderText="Select a date range"
+          className="custom-input"
+          calendarClassName="custom-calendar"
+          dateFormat="d MMM yyyy"
+          customInput={
+            <div className="custom-display-input" style={{ color: '#1A1A1B', fontSize: 15 }}>
+              {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
+              <FaCaretDown className="calendar-icon" />
+            </div>
+          }
+        />
+      </div>
+      <div className="mt-3">
+        <div className="custom-inputone d-flex justify-content-between">
+          <input
+            className='inputttt'
+            type="time"
+            style={{ color: '#1A1A1B', fontSize: 15 }}
+            value={threetime}
+            onChange={(e) => {
+              setThreetime(e.target.value)
+              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
+                return
+              }
+              filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+            }}
+          />
+          <input
+            className='inputttt'
+            type="time"
+            style={{ color: '#1A1A1B', fontSize: 15 }}
+            value={fourtime}
+            onChange={(e) => {
+              setFourtime(e.target.value)
+              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
+                return
+              }
+              filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+            }}
+          />
+        </div>
+      </div>
+    </div>
+
+    {/* Venue & Hub Filters */}
+    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen venue & hub</p>
+      <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
+        <div className="switch-container">
+          <input 
+            type="checkbox" 
+            id="switch1" 
+            checked={venueradio} 
+            onChange={(e) => {
+              setVenueradio(e.target.checked)
+              if (e.target.checked === false) {
+                setSelectedOptions([])
+              }
+            }} 
+          />
+          <label className="switch-label" htmlFor="switch1"></label>
+        </div>
+        <Select
+          menuIsOpen={menuIsOpen}
+          onMenuOpen={() => setMenuIsOpen(true)}
+          onMenuClose={() => setMenuIsOpen(false)}
+          onFocus={() => setMenuIsOpen(true)}
+          isDisabled={!venueradio}
+          isMulti
+          className="newoneonee"
+          options={basic}
+          value={selectedOptions}
+          onChange={handleChange}
+          placeholder="All Venues"
+          components={{
+            Option: CustomOption,
+            MultiValue: () => null,
+            ValueContainer: ({ children, ...props }) => {
+              const selectedValues = props.getValue();
+              return (
+                <components.ValueContainer {...props}>
+                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                </components.ValueContainer>
+              );
+            },
+          }}
+          closeMenuOnSelect={false}
+          hideSelectedOptions={false}
+          styles={{
+            control: (base) => ({ ...base, border: 'unset', backgroundColor: '#fff', color: '#1A1A1B', fontSize: 15 }),
+          }}
+        />
+      </div>
+
+      <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+        <div className="switch-container">
+          <input 
+            checked={hubbswitch} 
+            onChange={(e) => {
+              setHubbswitch(e.target.checked)
+              if (e.target.checked === false) {
+              }
+            }} 
+            type="checkbox" 
+            id="switch3" 
+          />
+          <label className="switch-label" htmlFor="switch3"></label>
+        </div>
+        <Select
+          menuIsOpen={menuIsOpenone}
+          onMenuOpen={() => setMenuIsOpenone(true)}
+          onMenuClose={() => setMenuIsOpenone(false)}
+          onFocus={() => setMenuIsOpenone(true)}
+          isDisabled={!hubbswitch}
+          isMulti
+          className="newoneonee"
+          options={basicone}
+          value={hubb}
+          onChange={handleChangehubone}
+          placeholder="All Hubs"
+          components={{
+            Option: CustomOption,
+            MultiValue: () => null,
+            ValueContainer: ({ children, ...props }) => {
+              const selectedValues = props.getValue();
+              return (
+                <components.ValueContainer {...props}>
+                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                </components.ValueContainer>
+              );
+            },
+          }}
+          closeMenuOnSelect={false}
+          hideSelectedOptions={false}
+          styles={{
+            control: (base) => ({ ...base, border: 'unset', background: '#fff', color: '#1A1A1B', fontSize: 15 }),
+          }}
+        />
+      </div>
+    </div>
+
+    {/* Stages/Courses Filters */}
+    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by stages/courses</p>
+      <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
+        <div className="switch-container">
+          <input 
+            type="checkbox" 
+            checked={Hubradio} 
+            onChange={(e) => {
+              setHubradio(e.target.checked)
+              if (e.target.checked === false) {
+                setSelectedhubOptions([])
+              }
+            }} 
+            id="switch2" 
+          />
+          <label className="switch-label" htmlFor="switch2"></label>
+        </div>
+        <Select
+          menuIsOpen={menuIsOpentwo}
+          onMenuOpen={() => setMenuIsOpentwo(true)}
+          onMenuClose={() => setMenuIsOpentwo(false)}
+          onFocus={() => setMenuIsOpentwo(true)}
+          isDisabled={!Hubradio}
+          isMulti
+          className="newoneonee"
+          options={optionshub}
+          value={selectedhubOptions}
+          onChange={handleChangehub}
+          placeholder="All stages"
+          components={{
+            Option: CustomOption,
+            MultiValue: () => null,
+            ValueContainer: ({ children, ...props }) => {
+              const selectedValues = props.getValue();
+              return (
+                <components.ValueContainer {...props}>
+                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                </components.ValueContainer>
+              );
+            },
+          }}
+          closeMenuOnSelect={false}
+          hideSelectedOptions={false}
+          styles={{
+            control: (base) => ({ ...base, border: 'unset', background: '#fff', color: '#1A1A1B', fontSize: 15 }),
+          }}
+        />
+      </div>
+
+      <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+        <div className="switch-container">
+          <input 
+            type="checkbox" 
+            checked={Cources} 
+            onChange={(e) => {
+              setCources(e.target.checked)
+              if (e.target.checked === false) {
+                setSelectedCources([])
+              }
+            }} 
+            id="switch4" 
+          />
+          <label className="switch-label" htmlFor="switch4"></label>
+        </div>
+        <Select
+          menuIsOpen={menuIsOpenthree}
+          onMenuOpen={() => setMenuIsOpenthree(true)}
+          onMenuClose={() => setMenuIsOpenthree(false)}
+          onFocus={() => setMenuIsOpenthree(true)}
+          isDisabled={!Cources}
+          isMulti
+          className="newoneonee"
+          options={fulldatafull}
+          value={selectedCources}
+          onChange={handleChangeCources}
+          placeholder="All courses"
+          components={{
+            Option: CustomOption,
+            MultiValue: () => null,
+            ValueContainer: ({ children, ...props }) => {
+              const selectedValues = props.getValue();
+              return (
+                <components.ValueContainer {...props}>
+                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                </components.ValueContainer>
+              );
+            },
+          }}
+          closeMenuOnSelect={false}
+          hideSelectedOptions={false}
+          styles={{
+            control: (base) => ({ ...base, border: 'unset', background: '#fff', color: '#1A1A1B', fontSize: 15 }),
+          }}
+        />
+      </div>
+    </div>
+
+    {/* Tables/Takeaways Filters */}
+    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
+      <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
+        <input
+          onChange={(e) => {
+            setInputvalue(e.target.value)
+            filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+            filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+          }} 
+          value={inputvalue} 
+          placeholder="0-9999" 
+          style={{ width: '50%', border: 'unset', color: '#1A1A1B', fontSize: 15, textAlign: 'center' }} 
+          type="text" 
+        />
+        <p style={{ fontSize: 19, display: 'contents' }}>|</p>
+        <input 
+          onChange={(e) => {
+            setInputvaluetwo(e.target.value)
+            filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+            filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+          }} 
+          value={inputvaluetwo} 
+          placeholder="9999-9999" 
+          style={{ width: '50%', border: 'unset', color: '#1A1A1B', fontSize: 15, textAlign: 'center' }} 
+          type="text" 
+        />
+      </div>
+
+      <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+        <div className="switch-container">
+          <input 
+            type="checkbox" 
+            checked={takeaway} 
+            onChange={(e) => {
+              setTakeaway(e.target.checked)
+              if (e.target.checked === false) {
+                setSelectedTakeaway([])
+              }
+            }} 
+            id="switch5" 
+          />
+          <label className="switch-label" htmlFor="switch5"></label>
+        </div>
+        <Select
+          menuIsOpen={menuIsOpenfour}
+          onMenuOpen={() => setMenuIsOpenfour(true)}
+          onMenuClose={() => setMenuIsOpenfour(false)}
+          onFocus={() => setMenuIsOpenfour(true)}
+          isDisabled={!takeaway}
+          isMulti
+          className="newoneonee"
+          options={optionstakeaway}
+          value={selectedTakeaway}
+          onChange={handleChangeTakeaway}
+          placeholder="All takeaways"
+          components={{
+            Option: CustomOption,
+            MultiValue: () => null,
+            ValueContainer: ({ children, ...props }) => {
+              const selectedValues = props.getValue();
+              return (
+                <components.ValueContainer {...props}>
+                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                </components.ValueContainer>
+              );
+            },
+          }}
+          closeMenuOnSelect={false}
+          hideSelectedOptions={false}
+          styles={{
+            control: (base) => ({ ...base, border: 'unset', background: '#fff', color: '#1A1A1B', fontSize: 15 }),
+          }}
+        />
+      </div>
+    </div>
+  </div>
+</div>
 
 
             {
               meals === 1 ?
-                <div className="changeone" style={{ marginTop: 100 }} >
+                <div className="changeone  hide-scrollbar" style={{ marginTop: 100 }} >
                   <div className="changetwos"   >
                     <div className='row '  >
 
 
 
 
-                      <div className='col-6 w-100 d-flex justify-content-center' style={{ margin: 'auto' }} >
+                      <div className='col-lg-6 col-md-12 w-100 d-flex justify-content-center' style={{ margin: 'auto' }} >
                         <div class="box" style={{ maxWidth: "600px" }} onClick={() => {
                           setMeals(2)
                         }}>
@@ -4781,10 +4716,10 @@ const displayText = allLabels.slice(0, 18) + "..."
                     </div>
 
                     <div className="w-100 d-flex justify-content-center">
-                      <div className='row mt-5' >
+                      <div className='row mt-5 d-flex justify-content-center' >
 
-                        <div className='col-6' >
-                          <div class="box me-5" style={{ maxWidth: "600px" }} onClick={() => {
+                        <div className='col-lg-6 col-md-12 mb-4 d-flex justify-content-center' >
+                          <div class="box " style={{ maxWidth: "600px" }} onClick={() => {
                             setMeals(5)
                           }} >
                             <div class="boxs" style={{cursor:'pointer'}}>
@@ -4858,8 +4793,8 @@ const displayText = allLabels.slice(0, 18) + "..."
 </div> */}
 
 
-                        <div className='col-6 ' >
-                          <div class="box ms-5" style={{ maxWidth: "600px" }} onClick={() => {
+                        <div className='col-lg-6 col-md-12 mt-md-4 mb-4 d-flex justify-content-center' >
+                          <div class="box" style={{ maxWidth: "600px" }} onClick={() => {
                             setMeals(4)
                           }}>
                             <div class="boxs" style={{cursor:'pointer'}}>
@@ -4900,123 +4835,148 @@ const displayText = allLabels.slice(0, 18) + "..."
                   <div className="changeone" style={{ marginTop: 80 }} >
                     <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-                      <div className="d-flex justify-content-between" >
-                        <div style={{}} className="d-flex " >
-                          <img src="black_arrow.png" style={{ width: 20, height: 20, cursor: 'pointer' }} onClick={() => {
-                            setMeals(1)
-                          }} className="" alt="Example Image" />
-                          <p style={{color:'#1A1A1B',fontWeight:600, fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets completion time</p>
-                        </div>
+                    <div className="row">
+      {/* Left side - Title and Select */}
+      <div className="col-md-6 mb-0 mb-md-0">
+  <div className="d-flex flex-lg-row flex-md-column align-items-md-start align-items-lg-center">
+    <div className="d-flex align-items-center">
+      <img 
+        src="black_arrow.png" 
+        style={{ width: 20, height: 20, cursor: 'pointer' }} 
+        onClick={() => { setMeals(1) }} 
+        alt="Back Arrow" 
+      />
+      <p style={{color:'#1A1A1B', fontWeight: 600, fontSize: 20, marginLeft: 10, marginBottom: 0}}>
+        Dockets completion time
+      </p>
+    </div>
 
-                        <div class="custom-inputonessfine pt-1 " >
+    <div className="custom-inputonessfine mt-md-3 pt-lg-1  pt-md-2 mx-3">
+      <Select
+        className="newoneonee"
+        options={basicfine}
+        value={selectedOptionsfine}
+        onChange={handleChangefine}
+        placeholder="Select options..."
+        components={{
+          Option: CustomOptionfinal,
+          MultiValue: () => null,
+          ValueContainer: ({ children, ...props }) => {
+            const selectedValues = props.getValue();
+            return (
+              <components.ValueContainer {...props}>
+                {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+              </components.ValueContainer>
+            );
+          },
+        }}
+        hideSelectedOptions={false}
+        styles={{
+          control: (base) => ({ 
+            ...base, 
+            border: 'unset', 
+            color: '#707070',
+            minWidth: '180px',
+            maxWidth: '100%'
+          }),
+        }}
+      />
+    </div>
+  </div>
+</div>
 
-                          <Select
-                            className="newoneonee"
-                            options={basicfine}
-                            value={selectedOptionsfine}
-                            onChange={handleChangefine}
-                            placeholder="Select options..."
-                            components={{
-                              Option: CustomOptionfinal,
-                              MultiValue: () => null, // Hides default tags
-                              ValueContainer: ({ children, ...props }) => {
-                                const selectedValues = props.getValue();
-                                return (
-                                  <components.ValueContainer {...props}>
-                                    {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                                  </components.ValueContainer>
-                                );
-                              },
-                            }}
-                            hideSelectedOptions={false} // Show all options even if selected
-                            styles={{
-                              control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
-                            }}
-                          />
+      
+      {/* Right side - Search and Menu */}
+      <div className="col-md-6">
+        <div className="d-flex flex-column flex-sm-row justify-content-md-end align-items-sm-center">
+          <div className="custom-inputoness mb-2 mb-sm-0" style={{
+            maxWidth: '250px',
+            width: '100%',
+            height: 45,
+            border: '1px solid rgb(203 203 203)'
+          }}>
+            <div className="input-group">
+              <input
+                onChange={(e) => {
+                  searchvalue(e.target.value)
+                }}
+                type="text"
+                className="form-control"
+                placeholder="Docket Search..."
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  paddingRight: "45px",
+                }}
+              />
+              <span
+                className="input-group-text"
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  position: "absolute",
+                  right: 10,
+                  top: '50%',
+                  transform: 'translateY(-50%)'
+                }}
+              >
+                🔍
+              </span>
+            </div>
+          </div>
+          
+          <div className="position-relative  mx-3 ">
+            <img 
+              src="threedot.png"  
+              ref={toggleButtonRef} 
+              style={{ width: 5, height: 20, cursor: 'pointer' }} 
+              onClick={handleToggleDiv} 
+              className="" 
+              alt="Menu" 
+            />
+            
+            {showDiv && (
+              <div
+                ref={dropdownRef}
+                style={{
+                  width: 200,
+                  padding: '10px',
+                  backgroundColor: '#f8f9fa',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                  position: 'absolute',
+                  right: 0,
+                  zIndex: 1000
+                }}
+              >
+                <p style={{ color: '#707070' }}>Export as</p>
+                <hr />
+                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                  console.log(JSON.stringify(selectedOptions), 'dateRange')
+                  editexportpdf()
+                }}>PDF</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
 
-                        </div>
+                      <div style={{ marginTop: 50, padding: 20 }} >
+                        <div className="row" >
 
-                        <div className="d-flex justify-content-between gap-5">
-                          <div className="custom-inputoness d-flex justify-content-between" style={{
-                            width: 250,
-                            height: 45,
-                            border: '1px solid rgb(203 203 203)'
-                          }}>
-
-                            <div className="input-group"  >
-                              <input
-                                onChange={(e) => {
-                                  searchvalue(e.target.value)
-                                }}
-                                type="text"
-                                className="form-control"
-                                placeholder="Docket Search..."
-                                style={{
-                                  border: "none",
-                                  boxShadow: "none",
-                                  marginRight: "45px",
-                                }}
-                              />
-                              <span
-                                className="input-group-text"
-                                style={{
-                                  background: "none",
-                                  border: "none",
-                                  cursor: "pointer",
-                                  position: "absolute",
-                                  right: 10,
-                                }}
-                              >
-                                🔍
-                              </span>
-                            </div>
-
-
-                          </div>
-
-                          <img src="threedot.png"  ref={toggleButtonRef} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
-
-                          {showDiv && (
-                            <div
-                            ref={dropdownRef}
-                              style={{
-                                width: 200,
-                                marginTop: '30px',
-                                padding: '10px',
-                                backgroundColor: '#f8f9fa',
-                                border: '1px solid #ccc',
-                                borderRadius: '4px',
-                                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                                position: 'absolute',
-                                right: '3%'
-                              }}
-                            >
-                              <p style={{ color: '#707070' }}>Export as</p>
-                              <hr />
-                              <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                console.log(JSON.stringify(selectedOptions), 'dateRange')
-                                editexportpdf()
-                              }}>PDF</p>
-                            </div>
-                          )}
-
-
-                        </div>
-                      </div>
-
-                      <div style={{ marginTop: 20, padding: 20 }} >
-                        <div className="d-flex justify-content-between" >
-
-                          <div >
+                          <div className="col-lg-4 col-md-4  mb-3" >
                             <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{
                               editall?.stats?.averageProcessTime || 0}</span></p>
                           </div>
-                          <div >
+                          <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
                             <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{editallone?.stats?.averageProcessTime || 0}</span></p>
                           </div>
-                          <div >
+                          <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
                             <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >
                               {(() => {
@@ -5197,7 +5157,7 @@ const displayText = allLabels.slice(0, 18) + "..."
                             <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Served meals</p>
                           </div>
 
-                          <div >
+                          <div  className="position-relative">
                             <img src="threedot.png" ref={toggleButtonRefs} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
 
                             {showDivs && (
@@ -5205,14 +5165,14 @@ const displayText = allLabels.slice(0, 18) + "..."
                               ref={dropdownRefs}
                                 style={{
                                   width: 200,
-                                  marginTop: '3px',
                                   padding: '10px',
                                   backgroundColor: '#f8f9fa',
                                   border: '1px solid #ccc',
                                   borderRadius: '4px',
                                   boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
                                   position: 'absolute',
-                                  right: '3%'
+                                  right: 0,
+                                  zIndex: 1000
                                 }}
                               >
                                 <p style={{ color: '#707070' }}>Export as</p>
@@ -5373,7 +5333,7 @@ const displayText = allLabels.slice(0, 18) + "..."
                               <p style={{color:'#1A1A1B',fontWeight:600, fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Average completion - timeline</p>
                             </div>
 
-                            <div >
+                            <div className="position-relative">
                               <img src="threedot.png" ref={toggleButtonRefss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
 
                               {showDivss && (
@@ -5381,14 +5341,14 @@ const displayText = allLabels.slice(0, 18) + "..."
                                 ref={dropdownRefss}
                                   style={{
                                     width: 200,
-                                    marginTop: '3px',
                                     padding: '10px',
                                     backgroundColor: '#f8f9fa',
                                     border: '1px solid #ccc',
                                     borderRadius: '4px',
                                     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
                                     position: 'absolute',
-                                    right: '3%'
+                                    right: 0,
+                                    zIndex: 1000
                                   }}
                                 >
                                   <p style={{ color: '#707070' }}>Export as</p>
@@ -5556,7 +5516,7 @@ if (result === "" || result === undefined || result === null) {
                               <p style={{color:'#1A1A1B',fontWeight:600, fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets received - timeline</p>
                             </div>
 
-                            <div >
+                            <div className="position-relative" >
                               <img src="threedot.png" ref={toggleButtonRefsss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
 
                               {showDivsss && (
@@ -5564,14 +5524,14 @@ if (result === "" || result === undefined || result === null) {
                                 ref={dropdownRefsss}
                                   style={{
                                     width: 200,
-                                    marginTop: '3px',
                                     padding: '10px',
                                     backgroundColor: '#f8f9fa',
                                     border: '1px solid #ccc',
                                     borderRadius: '4px',
                                     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
                                     position: 'absolute',
-                                    right: '3%'
+                                    right: 0,
+                                    zIndex: 1000
                                   }}
                                 >
                                   <p style={{ color: '#707070' }}>Export as</p>
