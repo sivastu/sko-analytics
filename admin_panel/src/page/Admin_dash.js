@@ -1466,62 +1466,63 @@ if(!username&&!email&&hubb.length === 0&&selectedOptions.length === 0){
                                 <div style={{ width: "20%" }}>
                                   <p style={{ color: "#1A1A1B", fontWeight: "400" }}>-</p>
                                 </div>
-                                <div style={{ width: "20%", paddingRight: 20 }}>
-                                  <Select
-                                    isMulti
-                                    className="newoneoneess"
-                                    options={value.venue}
-                                    value={[]} // Shows selected values
-                                    onChange={() => { }} // Prevent selection changes
-                                    placeholder={value.venue[0].label + '...'}
-                                    components={{
-                                      MultiValue: () => null, // Hides default tags
-                                      ValueContainer: ({ children, ...props }) => {
-                                        const selectedValues = props.getValue();
-                                        return (
-                                          <components.ValueContainer {...props}>
-                                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                                          </components.ValueContainer>
-                                        );
-                                      },
-                                    }}
-                                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                                    hideSelectedOptions={false} // Show all options even if selected
-                                    isOptionDisabled={() => true} // Disables all options from being selected
-                                    styles={{
-                                      control: (base) => ({ ...base, border: 'unset', color: '#ECF1F4', marginTop: -8 }),
-                                    }}
-                                  />
+                                <div style={{ width: "20%", paddingRight: 20,color:'#1A1A1B' }}>
+                                <Select
+                                  isMulti
+                                  className="newoneoneess"
+                                  options={basic}
+                                  value={value.venue} // Shows selected values
+                                  onChange={(e)=>{changeddddd(e , value , 'venue' )}} // Prevent selection changes
+                                  placeholder={value.venue[0].label + '...'}
+                                  components={{
+                                    Option: CustomOption,
+                                    MultiValue: () => null, // Hides default tags
+                                    ValueContainer: ({ children, ...props }) => {
+                                      const selectedValues = props.getValue();
+                                      return (
+                                        <components.ValueContainer {...props}>
+                                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                        </components.ValueContainer>
+                                      );
+                                    },
+                                  }} // Keep dropdown open for further selection
+                                  closeMenuOnSelect={true} // Keep dropdown open for further selection
+                            hideSelectedOptions={false} // Disables all options from being selected
+                                  styles={{
+                                    control: (base) => ({ ...base, border: 'unset', marginTop: -8, color: '#1A1A1B' }),
+                                  }}
+                                />
 
 
-                                </div>
-                                <div style={{ width: "20%", paddingRight: 20 }}>
-                                  <Select
-                                    isMulti
-                                    className="newoneoneess"
-                                    options={value.hub}
-                                    value={[]} // Shows selected values
-                                    onChange={() => { }} // Prevent selection changes
-                                    placeholder={value.hub[0].label + '...'}
-                                    components={{
-                                      MultiValue: () => null, // Hides default tags
-                                      ValueContainer: ({ children, ...props }) => {
-                                        const selectedValues = props.getValue();
-                                        return (
-                                          <components.ValueContainer {...props}>
-                                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                                          </components.ValueContainer>
-                                        );
-                                      },
-                                    }}
-                                    closeMenuOnSelect={false} // Keep dropdown open for further selection
-                                    hideSelectedOptions={false} // Show all options even if selected
-                                    isOptionDisabled={() => true} // Disables all options from being selected
-                                    styles={{
-                                      control: (base) => ({ ...base, border: 'unset', color: '#ECF1F4', marginTop: -8 }),
-                                    }}
-                                  />
-                                </div>
+                              </div>
+                              <div style={{ width: "20%", paddingRight: 20 }}>
+                                <Select
+                                  isMulti
+                                  className="newoneoneess"
+                                  options={basicone}
+                                  value={value.hub} // Shows selected values
+                                  onChange={() => { }} // Prevent selection changes
+                                  placeholder={value.hub[0].label + '...'}
+                                  components={{
+                                    Option: CustomOption,
+                                    MultiValue: () => null, // Hides default tags
+                                    ValueContainer: ({ children, ...props }) => {
+                                      const selectedValues = props.getValue();
+                                      return (
+                                        <components.ValueContainer {...props}>
+                                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                        </components.ValueContainer>
+                                      );
+                                    },
+                                  }}
+                                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                  hideSelectedOptions={false} // Show all options even if selected
+                                  isOptionDisabled={() => true} // Disables all options from being selected
+                                  styles={{
+                                    control: (base) => ({ ...base, border: 'unset',  marginTop: -8 ,color: '#1A1A1B'}),
+                                  }}
+                                />
+                              </div>
                               </div>
 
                               <hr style={{ margin: "0px 0px", backgroundColor: "#9F9F9F", height: 1 }} />
@@ -1548,62 +1549,63 @@ if(!username&&!email&&hubb.length === 0&&selectedOptions.length === 0){
                                   <div style={{ width: "20%" }}>
                                     <p style={{ color: "#1A1A1B", fontWeight: "400" }}>-</p>
                                   </div>
-                                  <div style={{ width: "20%", color: "#1A1A1B", paddingRight: 20 }}>
-                                    <Select
-                                      isMulti
-                                      className="newoneoneess"
-                                      options={value.venue}
-                                      value={[]} // Shows selected values
-                                      onChange={() => { }} // Prevent selection changes
-                                      placeholder={value.venue[0].label + '...'}
-                                      components={{
-                                        MultiValue: () => null, // Hides default tags
-                                        ValueContainer: ({ children, ...props }) => {
-                                          const selectedValues = props.getValue();
-                                          return (
-                                            <components.ValueContainer {...props}>
-                                              {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                                            </components.ValueContainer>
-                                          );
-                                        },
-                                      }}
-                                      closeMenuOnSelect={false} // Keep dropdown open for further selection
-                                      hideSelectedOptions={false} // Show all options even if selected
-                                      isOptionDisabled={() => true} // Disables all options from being selected
-                                      styles={{
-                                        control: (base) => ({ ...base, border: 'unset', color: '#ECF1F4', marginTop: -8 }),
-                                      }}
-                                    />
+                                  <div style={{ width: "20%", paddingRight: 20,color:'#1A1A1B' }}>
+                                <Select
+                                  isMulti
+                                  className="newoneoneess"
+                                  options={basic}
+                                  value={value.venue} // Shows selected values
+                                  onChange={(e)=>{changeddddd(e , value , 'venue' )}} // Prevent selection changes
+                                  placeholder={value.venue[0].label + '...'}
+                                  components={{
+                                    Option: CustomOption,
+                                    MultiValue: () => null, // Hides default tags
+                                    ValueContainer: ({ children, ...props }) => {
+                                      const selectedValues = props.getValue();
+                                      return (
+                                        <components.ValueContainer {...props}>
+                                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                        </components.ValueContainer>
+                                      );
+                                    },
+                                  }} // Keep dropdown open for further selection
+                                  closeMenuOnSelect={true} // Keep dropdown open for further selection
+                            hideSelectedOptions={false} // Disables all options from being selected
+                                  styles={{
+                                    control: (base) => ({ ...base, border: 'unset', marginTop: -8, color: '#1A1A1B' }),
+                                  }}
+                                />
 
 
-                                  </div>
-                                  <div style={{ width: "20%", paddingRight: 20 }}>
-                                    <Select
-                                      isMulti
-                                      className="newoneoneess"
-                                      options={value.hub}
-                                      value={[]} // Shows selected values
-                                      onChange={() => { }} // Prevent selection changes
-                                      placeholder={value.hub[0].label + '...'}
-                                      components={{
-                                        MultiValue: () => null, // Hides default tags
-                                        ValueContainer: ({ children, ...props }) => {
-                                          const selectedValues = props.getValue();
-                                          return (
-                                            <components.ValueContainer {...props}>
-                                              {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                                            </components.ValueContainer>
-                                          );
-                                        },
-                                      }}
-                                      closeMenuOnSelect={false} // Keep dropdown open for further selection
-                                      hideSelectedOptions={false} // Show all options even if selected
-                                      isOptionDisabled={() => true} // Disables all options from being selected
-                                      styles={{
-                                        control: (base) => ({ ...base, border: 'unset', color: '#ECF1F4', marginTop: -8 }),
-                                      }}
-                                    />
-                                  </div>
+                              </div>
+                              <div style={{ width: "20%", paddingRight: 20 }}>
+                                <Select
+                                  isMulti
+                                  className="newoneoneess"
+                                  options={basicone}
+                                  value={value.hub} // Shows selected values
+                                  onChange={() => { }} // Prevent selection changes
+                                  placeholder={value.hub[0].label + '...'}
+                                  components={{
+                                    Option: CustomOption,
+                                    MultiValue: () => null, // Hides default tags
+                                    ValueContainer: ({ children, ...props }) => {
+                                      const selectedValues = props.getValue();
+                                      return (
+                                        <components.ValueContainer {...props}>
+                                          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                        </components.ValueContainer>
+                                      );
+                                    },
+                                  }}
+                                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                  hideSelectedOptions={false} // Show all options even if selected
+                                  isOptionDisabled={() => true} // Disables all options from being selected
+                                  styles={{
+                                    control: (base) => ({ ...base, border: 'unset',  marginTop: -8 ,color: '#1A1A1B'}),
+                                  }}
+                                />
+                              </div>
                                 </div>
 
                                 <hr style={{ margin: "0px 0px", backgroundColor: "#9F9F9F", height: 1 }} />
