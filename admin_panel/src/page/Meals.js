@@ -2025,8 +2025,11 @@ let Meals = () => {
       console.log(refundcount, 'refundcountrefundcount')
       console.log(refundcounttwo, 'refundcounttworefundcounttwo')
 
-      setMinperday(refundcount)
-      setMaxperday(refundcounttwo)
+      let finepa = refundcount.sort((a, b) => b.count - a.count)
+      let finepaone = refundcounttwo.sort((a, b) => b.count - a.count)
+
+      setMinperday(finepa)
+      setMaxperday(finepaone)
 
 
 
@@ -3831,8 +3834,9 @@ let Meals = () => {
     };
 
     let refundcount = processRefundedItems(one)
+    let finepaone = refundcount.sort((a, b) => b.count - a.count)
     // let refundcounttwo = processRefundedItems(two)
-    setMinperday(refundcount)
+    setMinperday(finepaone)
     console.log(refundcount, 'refundcountrefundcountrefundcount')
     // setMaxperday(refundcounttwo)
 
@@ -3977,7 +3981,9 @@ let Meals = () => {
     // let refundcount = processRefundedItems(one)
     let refundcounttwo = processRefundedItems(two)
     // setMinperday(refundcount)
-    setMaxperday(refundcounttwo)
+
+    let finepaone = refundcounttwo.sort((a, b) => b.count - a.count)
+    setMaxperday(finepaone)
 
 
 
@@ -5514,7 +5520,9 @@ const[responsive,setResponsive]=useState(window.innerWidth >= 1400 ? 'xl' : wind
                             onClick={() => { setMeals(1) }} 
                             alt="Back Arrow" 
                           />
-                          <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10, marginBottom: 0 }}>Refunded meals</p>
+                          <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10, marginBottom: 0 }}  onClick={()=>{
+                            console.log(  minperday , 'minperday minperday')
+                          }}>Refunded meals</p>
                         </div>
                         <div className="custom-inputonessfine d-flex align-items-center pt-1">
                           <Select
@@ -5633,7 +5641,7 @@ const[responsive,setResponsive]=useState(window.innerWidth >= 1400 ? 'xl' : wind
                           const correspondingErv = maxperday?.[index];
                 
                           return (
-                            <React.Fragment key={index}>
+                            <React.Fragment key={index} >
                               <div className="d-flex">
                                 <div style={{ width: '33%' }}>
                                   <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.name}</p>
