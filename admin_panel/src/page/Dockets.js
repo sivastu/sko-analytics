@@ -4835,119 +4835,134 @@ const displayText = allLabels.slice(0, 18) + "..."
                   <div className="changeone" style={{ marginTop: 80 }} >
                     <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
 
-                      <div className="d-flex justify-content-between" >
-                        <div style={{}} className="d-flex " >
-                    <div>
-                    <img 
-                      src="black_arrow.png" 
-                      style={{ width: 20, height: 20, cursor: 'pointer' }} 
-                      onClick={() => { setMeals(1) }} 
-                      className="" 
-                      alt="Example Image" 
-                    />
-                          <p style={{color:'#1A1A1B',fontWeight:600, fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets completion time</p>
+                    <div className="row">
+      {/* Left side - Title and Select */}
+      <div className="col-md-6 mb-0 mb-md-0">
+  <div className="d-flex flex-lg-row flex-md-column align-items-md-start align-items-lg-center">
+    <div className="d-flex align-items-center">
+      <img 
+        src="black_arrow.png" 
+        style={{ width: 20, height: 20, cursor: 'pointer' }} 
+        onClick={() => { setMeals(1) }} 
+        alt="Back Arrow" 
+      />
+      <p style={{color:'#1A1A1B', fontWeight: 600, fontSize: 20, marginLeft: 10, marginBottom: 0}}>
+        Dockets completion time
+      </p>
+    </div>
 
-                      </div>
-                          <div class="custom-inputonessfine d-flex align-items-center pt-1 " >
-
-<Select
-  className="newoneonee"
-  options={basicfine}
-  value={selectedOptionsfine}
-  onChange={handleChangefine}
-  placeholder="Select options..."
-  components={{
-    Option: CustomOptionfinal,
-    MultiValue: () => null, // Hides default tags
-    ValueContainer: ({ children, ...props }) => {
-      const selectedValues = props.getValue();
-      return (
-        <components.ValueContainer {...props}>
-          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-        </components.ValueContainer>
-      );
-    },
-  }}
-  hideSelectedOptions={false} // Show all options even if selected
-  styles={{
-    control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
-  }}
-/>
-
+    <div className="custom-inputonessfine mt-md-3 pt-lg-1  pt-md-2 mx-3">
+      <Select
+        className="newoneonee"
+        options={basicfine}
+        value={selectedOptionsfine}
+        onChange={handleChangefine}
+        placeholder="Select options..."
+        components={{
+          Option: CustomOptionfinal,
+          MultiValue: () => null,
+          ValueContainer: ({ children, ...props }) => {
+            const selectedValues = props.getValue();
+            return (
+              <components.ValueContainer {...props}>
+                {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+              </components.ValueContainer>
+            );
+          },
+        }}
+        hideSelectedOptions={false}
+        styles={{
+          control: (base) => ({ 
+            ...base, 
+            border: 'unset', 
+            color: '#707070',
+            minWidth: '180px',
+            maxWidth: '100%'
+          }),
+        }}
+      />
+    </div>
+  </div>
 </div>
-                        </div>
 
-                       
-
-                        <div className="d-flex justify-content-between gap-5">
-                          <div className="custom-inputoness d-flex justify-content-between" style={{
-                            width: 250,
-                            height: 45,
-                            border: '1px solid rgb(203 203 203)'
-                          }}>
-
-                            <div className="input-group"  >
-                              <input
-                                onChange={(e) => {
-                                  searchvalue(e.target.value)
-                                }}
-                                type="text"
-                                className="form-control"
-                                placeholder="Docket Search..."
-                                style={{
-                                  border: "none",
-                                  boxShadow: "none",
-                                  marginRight: "45px",
-                                }}
-                              />
-                              <span
-                                className="input-group-text"
-                                style={{
-                                  background: "none",
-                                  border: "none",
-                                  cursor: "pointer",
-                                  position: "absolute",
-                                  right: 10,
-                                }}
-                              >
-                                🔍
-                              </span>
-                            </div>
-
-
-                          </div>
-<div className="position-relative">
-
-<img src="threedot.png"  ref={toggleButtonRef} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDiv} className="" alt="Example Image" />
-
-{showDiv && (
-  <div
-  ref={dropdownRef}
-    style={{
-      width: 200,
-      padding: '10px',
-      backgroundColor: '#f8f9fa',
-      border: '1px solid #ccc',
-      borderRadius: '4px',
-      boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-      position: 'absolute',
-      right: 0,
-      zIndex: 1000
-    }}
-  >
-    <p style={{ color: '#707070' }}>Export as</p>
-    <hr />
-    <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-      console.log(JSON.stringify(selectedOptions), 'dateRange')
-      editexportpdf()
-    }}>PDF</p>
-  </div>
-)}
-  </div>
-
-
-                        </div>
-                      </div>
+      
+      {/* Right side - Search and Menu */}
+      <div className="col-md-6">
+        <div className="d-flex flex-column flex-sm-row justify-content-md-end align-items-sm-center">
+          <div className="custom-inputoness mb-2 mb-sm-0" style={{
+            maxWidth: '250px',
+            width: '100%',
+            height: 45,
+            border: '1px solid rgb(203 203 203)'
+          }}>
+            <div className="input-group">
+              <input
+                onChange={(e) => {
+                  searchvalue(e.target.value)
+                }}
+                type="text"
+                className="form-control"
+                placeholder="Docket Search..."
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  paddingRight: "45px",
+                }}
+              />
+              <span
+                className="input-group-text"
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  position: "absolute",
+                  right: 10,
+                  top: '50%',
+                  transform: 'translateY(-50%)'
+                }}
+              >
+                🔍
+              </span>
+            </div>
+          </div>
+          
+          <div className="position-relative  mx-3 ">
+            <img 
+              src="threedot.png"  
+              ref={toggleButtonRef} 
+              style={{ width: 5, height: 20, cursor: 'pointer' }} 
+              onClick={handleToggleDiv} 
+              className="" 
+              alt="Menu" 
+            />
+            
+            {showDiv && (
+              <div
+                ref={dropdownRef}
+                style={{
+                  width: 200,
+                  padding: '10px',
+                  backgroundColor: '#f8f9fa',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                  position: 'absolute',
+                  right: 0,
+                  zIndex: 1000
+                }}
+              >
+                <p style={{ color: '#707070' }}>Export as</p>
+                <hr />
+                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                  console.log(JSON.stringify(selectedOptions), 'dateRange')
+                  editexportpdf()
+                }}>PDF</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
 
                       <div style={{ marginTop: 50, padding: 20 }} >
                         <div className="row" >
@@ -5142,7 +5157,7 @@ const displayText = allLabels.slice(0, 18) + "..."
                             <p style={{ fontWeight: '500', fontSize: 20, marginTop: -6, marginLeft: 10 }}>Served meals</p>
                           </div>
 
-                          <div >
+                          <div  className="position-relative">
                             <img src="threedot.png" ref={toggleButtonRefs} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={fsgdgfdfgdf} className="" alt="Example Image" />
 
                             {showDivs && (
@@ -5150,14 +5165,14 @@ const displayText = allLabels.slice(0, 18) + "..."
                               ref={dropdownRefs}
                                 style={{
                                   width: 200,
-                                  marginTop: '3px',
                                   padding: '10px',
                                   backgroundColor: '#f8f9fa',
                                   border: '1px solid #ccc',
                                   borderRadius: '4px',
                                   boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
                                   position: 'absolute',
-                                  right: '3%'
+                                  right: 0,
+                                  zIndex: 1000
                                 }}
                               >
                                 <p style={{ color: '#707070' }}>Export as</p>
@@ -5318,7 +5333,7 @@ const displayText = allLabels.slice(0, 18) + "..."
                               <p style={{color:'#1A1A1B',fontWeight:600, fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Average completion - timeline</p>
                             </div>
 
-                            <div >
+                            <div className="position-relative">
                               <img src="threedot.png" ref={toggleButtonRefss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivss} className="" alt="Example Image" />
 
                               {showDivss && (
@@ -5326,14 +5341,14 @@ const displayText = allLabels.slice(0, 18) + "..."
                                 ref={dropdownRefss}
                                   style={{
                                     width: 200,
-                                    marginTop: '3px',
                                     padding: '10px',
                                     backgroundColor: '#f8f9fa',
                                     border: '1px solid #ccc',
                                     borderRadius: '4px',
                                     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
                                     position: 'absolute',
-                                    right: '3%'
+                                    right: 0,
+                                    zIndex: 1000
                                   }}
                                 >
                                   <p style={{ color: '#707070' }}>Export as</p>
@@ -5501,7 +5516,7 @@ if (result === "" || result === undefined || result === null) {
                               <p style={{color:'#1A1A1B',fontWeight:600, fontSize: 20, marginTop: 0, marginLeft: 10 , marginTop : -6 }}>Dockets received - timeline</p>
                             </div>
 
-                            <div >
+                            <div className="position-relative" >
                               <img src="threedot.png" ref={toggleButtonRefsss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
 
                               {showDivsss && (
@@ -5509,14 +5524,14 @@ if (result === "" || result === undefined || result === null) {
                                 ref={dropdownRefsss}
                                   style={{
                                     width: 200,
-                                    marginTop: '3px',
                                     padding: '10px',
                                     backgroundColor: '#f8f9fa',
                                     border: '1px solid #ccc',
                                     borderRadius: '4px',
                                     boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
                                     position: 'absolute',
-                                    right: '3%'
+                                    right: 0,
+                                    zIndex: 1000
                                   }}
                                 >
                                   <p style={{ color: '#707070' }}>Export as</p>
