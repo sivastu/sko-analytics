@@ -471,3 +471,55 @@ input[type="checkbox"]:checked + .switch-label::before {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  @media (min-width: 1200px) {  /* xl screens */
+    .custom-padding {
+      padding-left: 50px !important;
+      padding-right: 50px !important;
+    }
+    .font-size{
+      font-size: 21px; 
+    }
+    .img-com{
+      height:60px;
+    }
+  }
+  
+  @media (min-width: 992px) and (max-width: 1199px) {  /* lg screens */
+    .custom-padding {
+      padding-left: 20px !important;
+      padding-right: 20px !important;
+    }
+    .font-size{
+      font-size: 21px; 
+    }
+    .img-com{
+      height:50px;
+    }
+    .nerrrimg {
+      width: 40px;
+      height: 40px;
+      margin-top: -15px;
+      margin-right: 10px;
+    }
+  }
+  
+  @media (min-width: 768px) and (max-width: 991px) {  /* md screens */
+    .custom-padding {
+      padding-left: 10px !important;
+      padding-right: 10px !important;
+    }
+    .font-size{
+      font-size: 16px; 
+    }
+    .img-com{
+      height:40px;
+    }
+    .nerrrimg {
+      width: 30px;
+      height: 30px;
+      margin-top: -5px;
+      margin-right: 5px;
+      margin-left:-10px
+    }
+  }
+  
