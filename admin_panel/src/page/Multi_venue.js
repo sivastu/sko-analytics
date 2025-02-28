@@ -20,7 +20,8 @@ import { jsPDF } from 'jspdf';
 import Modal from 'react-modal';
 import html2canvas from "html2canvas";
 import * as CryptoJS from 'crypto-js'
-
+import { saveAs } from "file-saver";
+import ExcelJS from "exceljs";
 import app from "./firebase";
 import {
   getDatabase, ref, set, push, get, query,
@@ -4515,6 +4516,526 @@ let Multi_venue = () => {
   }
 
 
+// Function 1: downloadDocketsavgExcel with added styling
+const downloadDocketsavgExcel = async () => {
+  const selectedVenue = selectedOptions
+    .filter(item => item.label !== "All Venue")
+    .map(item => item.label)
+    .join(", ") || "All Venue";
+    
+  const selectedHub = selectedhubOptions
+    .filter(item => item.label !== "All Hub")
+    .map(item => item.label)
+    .join(", ") || "All Hub";
+    
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
+  };
+    
+  const chosenRange = `${formatDate(dateRange[0])} to ${formatDate(dateRange[1])} between ${onetime || "00:00"} to ${twotime || "24:00"}`;
+  const comparingRange = `${formatDate(dateRangetwo[0])} to ${formatDate(dateRangetwo[1])} between ${threetime || "00:00"} to ${fourtime || "24:00"}`;
+    
+  const selectedStages = selectedhubOptions.length > 0
+    ? selectedhubOptions.map(item => item.label).join(", ")
+    : "All";
+    
+  const tableRanges = `From ${inputvalue}; \n to ${inputvaluetwo}`;
+    
+  const selectedCourses = selectedCources.length > 0
+    ? selectedCources.map(item => item.label).join(", ")
+    : "All";
+    
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Meals Received Timeline");
+    
+  // Define styles (added from original function)
+  const headerStyle = {
+    font: { bold: true, color: { argb: "FFFFFFFF" } },
+    fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FF316AAF" } },
+    alignment: { horizontal: 'center', vertical: 'middle' }
+  };
+  
+  const alternatingRowStyle1 = {
+    fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FFFFFFFF" } }
+  };
+  
+  const alternatingRowStyle2 = {
+    fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FFE6F0FF" } }
+  };
+  
+  const titleStyle = {
+    font: { bold: true, size: 14, color: { argb: "FF316AAF" } }
+  };
+  
+  // Define border style
+  const borderStyle = {
+    top: { style: 'thin' },
+    left: { style: 'thin' },
+    bottom: { style: 'thin' },
+    right: { style: 'thin' }
+  };
+    
+  // **Add Filters Section**
+  const filtersRow = worksheet.addRow(["Filters:"]);
+  filtersRow.font = titleStyle.font;
+  
+  worksheet.addRow([`Venue: ${selectedVenue}`, `Stages: ${selectedStages}`, "Table Ranges:", tableRanges]);
+  worksheet.addRow(["", `Hub: ${selectedHub}`, `Courses: ${selectedCourses}`, ""]);
+  worksheet.addRow(["", "", `Chosen range:\n${chosenRange}`, `Comparing range:\n${comparingRange}`]);
+  worksheet.addRow([]); // Empty row for spacing
+    
+  // **Add Table Headers**
+  const headerRow = worksheet.addRow(["From - To", "From - To", "From - To"]);
+  headerRow.eachCell((cell, colNumber) => {
+    if (colNumber <= 3) { // Only for the table columns
+      cell.font = headerStyle.font;
+      cell.fill = headerStyle.fill;
+      cell.alignment = headerStyle.alignment;
+      cell.border = borderStyle;
+    }
+  });
+    
+  // **Add Table Data with alternating colors and borders**
+  optionbar.forEach((time, index) => {
+    const dataRow = worksheet.addRow([time, onebar[index] ?? "-", twobar[index] ?? "-"]);
+    
+    // Apply alternating row styles and borders
+    dataRow.eachCell((cell, colNumber) => {
+      if (colNumber <= 3) { // Only for the table columns
+        if (index % 2 === 0) {
+          cell.fill = alternatingRowStyle1.fill;
+        } else {
+          cell.fill = alternatingRowStyle2.fill;
+        }
+        cell.alignment = { horizontal: 'center' };
+        cell.border = borderStyle;
+      }
+    });
+  });
+    
+  // **Set Column Widths**
+  worksheet.columns = [
+    { width: 15 },
+    { width: 20 },
+    { width: 25 }
+  ];
+    
+  // **Capture and Insert Chart Image**
+  const chartElement = document.getElementById("AvgChart-capture");
+  
+  if (chartElement) {
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Ensure rendering completion
+        
+    const canvas = await html2canvas(chartElement, {
+      backgroundColor: "#fff", // Ensure a white background
+      useCORS: true, // Fix cross-origin issues
+      scale: 10, // Higher quality capture
+    });
+      
+    const imageData = canvas.toDataURL("image/png");
+    
+    // Add Image to Workbook
+    const imageId = workbook.addImage({
+      base64: imageData,
+      extension: "png",
+    });
+      
+    worksheet.addImage(imageId, {
+      tl: { col: 4, row: 4 }, // Position it properly
+      ext: { width: 1000, height: 250 }, // Adjust as needed
+    });
+  }
+    
+  // **Generate and Download the Excel File**
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  saveAs(blob, "MultiDockets_Average_Timeline.xlsx");
+};
+
+// Function 2: downloadDocketsrecExcel with added styling
+const downloadDocketsrecExcel = async () => {
+  const selectedVenue = selectedOptions
+    .filter(item => item.label !== "All Venue")
+    .map(item => item.label)
+    .join(", ") || "All Venue";
+    
+  const selectedHub = selectedhubOptions
+    .filter(item => item.label !== "All Hub")
+    .map(item => item.label)
+    .join(", ") || "All Hub";
+    
+  const formatDate = (date) => {
+    return new Date(date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
+  };
+    
+  const chosenRange = `${formatDate(dateRange[0])} to ${formatDate(dateRange[1])} between ${onetime || "00:00"} to ${twotime || "24:00"}`;
+  const comparingRange = `${formatDate(dateRangetwo[0])} to ${formatDate(dateRangetwo[1])} between ${threetime || "00:00"} to ${fourtime || "24:00"}`;
+    
+  const selectedStages = selectedhubOptions.length > 0
+    ? selectedhubOptions.map(item => item.label).join(", ")
+    : "All";
+    
+  const tableRanges = `From ${inputvalue}; \n to ${inputvaluetwo}`;
+    
+  const selectedCourses = selectedCources.length > 0
+    ? selectedCources.map(item => item.label).join(", ")
+    : "All";
+    
+  const workbook = new ExcelJS.Workbook();
+  const worksheet = workbook.addWorksheet("Meals Received Timeline");
+    
+  // Define styles (added from original function)
+  const headerStyle = {
+    font: { bold: true, color: { argb: "FFFFFFFF" } },
+    fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FF316AAF" } },
+    alignment: { horizontal: 'center', vertical: 'middle' }
+  };
+  
+  const alternatingRowStyle1 = {
+    fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FFFFFFFF" } }
+  };
+  
+  const alternatingRowStyle2 = {
+    fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FFE6F0FF" } }
+  };
+  
+  const titleStyle = {
+    font: { bold: true, size: 14, color: { argb: "FF316AAF" } }
+  };
+  
+  // Define border style
+  const borderStyle = {
+    top: { style: 'thin' },
+    left: { style: 'thin' },
+    bottom: { style: 'thin' },
+    right: { style: 'thin' }
+  };
+    
+  // **Add Filters Section**
+  const filtersRow = worksheet.addRow(["Filters:"]);
+  filtersRow.font = titleStyle.font;
+  
+  worksheet.addRow([`Venue: ${selectedVenue}`, `Stages: ${selectedStages}`, "Table Ranges:", tableRanges]);
+  worksheet.addRow(["", `Hub: ${selectedHub}`, `Courses: ${selectedCourses}`, ""]);
+  worksheet.addRow(["", "", `Chosen range:\n${chosenRange}`, `Comparing range:\n${comparingRange}`]);
+  worksheet.addRow([]); // Empty row for spacing
+    
+  // **Add Table Headers**
+  const headerRow = worksheet.addRow(["From - To", "From - To", "From - To"]);
+  headerRow.eachCell((cell, colNumber) => {
+    if (colNumber <= 3) { // Only for the table columns
+      cell.font = headerStyle.font;
+      cell.fill = headerStyle.fill;
+      cell.alignment = headerStyle.alignment;
+      cell.border = borderStyle;
+    }
+  });
+    
+  // **Add Table Data with alternating colors and borders**
+  optionbar.forEach((time, index) => {
+    const dataRow = worksheet.addRow([time, onebar[index] ?? "-", twobar[index] ?? "-"]);
+    
+    // Apply alternating row styles and borders
+    dataRow.eachCell((cell, colNumber) => {
+      if (colNumber <= 3) { // Only for the table columns
+        if (index % 2 === 0) {
+          cell.fill = alternatingRowStyle1.fill;
+        } else {
+          cell.fill = alternatingRowStyle2.fill;
+        }
+        cell.alignment = { horizontal: 'center' };
+        cell.border = borderStyle;
+      }
+    });
+  });
+    
+  // **Set Column Widths**
+  worksheet.columns = [
+    { width: 15 },
+    { width: 20 },
+    { width: 25 }
+  ];
+    
+  // **Capture and Insert Chart Image**
+  const chartElement = document.getElementById("docChart-capture");
+  
+  if (chartElement) {
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Ensure rendering completion
+        
+    const canvas = await html2canvas(chartElement, {
+      backgroundColor: "#fff", // Ensure a white background
+      useCORS: true, // Fix cross-origin issues
+      scale: 10, // Higher quality capture
+    });
+      
+    const imageData = canvas.toDataURL("image/png");
+    
+    // Add Image to Workbook
+    const imageId = workbook.addImage({
+      base64: imageData,
+      extension: "png",
+    });
+      
+    worksheet.addImage(imageId, {
+      tl: { col: 4, row: 4 }, // Position it properly
+      ext: { width: 1000, height: 250 }, // Adjust as needed
+    });
+  }
+    
+  // **Generate and Download the Excel File**
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+  saveAs(blob, "MultiDockets_Received_Timeline.xlsx");
+};
+
+  const downloadDocketseditExcel = async () => {
+    const data = editallone;  
+    // Create workbook and worksheet
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Dockets Completion");
+    
+    // Define styles
+    const headerStyle = {
+      font: { bold: true, color: { argb: "FFFFFFFF" } },
+      fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FF316AAF" } },
+      alignment: { horizontal: 'center', vertical: 'middle' }
+    };
+    
+    const alternatingRowStyle1 = {
+      fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FFFFFFFF" } }
+    };
+    
+    const alternatingRowStyle2 = {
+      fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FFE6F0FF" } }
+    };
+    
+    const titleStyle = {
+      font: { bold: true, size: 14, color: { argb: "FF316AAF" } }
+    };
+    
+    // Define border style
+    const borderStyle = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+  
+    // Define the column for the second table to start
+    const secondTableStartColumn = 6; // Starting from column F
+  
+    // Add Table 1 Headers
+    const table1HeaderRow = worksheet.addRow([
+      "Docket ID", 
+      "Time Created", 
+      "Time Served", 
+      "Waiting Time"
+    ]);
+    
+    // Apply header style to Table 1 headers
+    table1HeaderRow.eachCell((cell, colNumber) => {
+      if (colNumber <= 4) { // Only for the first table columns
+        cell.font = headerStyle.font;
+        cell.fill = headerStyle.fill;
+        cell.alignment = headerStyle.alignment;
+        cell.border = borderStyle;
+      }
+    });
+    
+    // Add Table 1 Data
+    if (data.orders && data.orders.length > 0) {
+      data.orders.forEach((order, index) => {
+        // Extract docket ID
+        const docketId = order.order?.DOCKETID || "-";
+        
+        // Extract time created from starttime (removing the @ symbol)
+        const timeCreated = order.starttime ? order.starttime.replace('@', '') : "-";
+        
+        // Extract time served by parsing STAMP (if available)
+        let timeServed = "-";
+        if (order.order?.STAMP) {
+          const stampParts = order.order.STAMP.split(' ');
+          if (stampParts.length > 1) {
+            // Find the part that ends with 'S0' (served)
+            const servedStamp = stampParts.find(part => part.endsWith('S0'));
+            if (servedStamp) {
+              // Extract time from stamp (assuming format like "1233S0" where 12:33 is the time)
+              timeServed = servedStamp.substring(0, 4).replace(/(\d{2})(\d{2})/, "$1:$2");
+            }
+          }
+        }
+        
+        // Get processing time
+        const waitingTime = order.processtime || "-";
+        
+        // Add data row
+        const dataRow = worksheet.getRow(index + 2); // +2 because row 1 is header
+        dataRow.getCell(1).value = docketId;
+        dataRow.getCell(2).value = timeCreated;
+        dataRow.getCell(3).value = timeServed;
+        dataRow.getCell(4).value = waitingTime;
+        
+        // Apply alternating row styles and borders
+        for (let i = 1; i <= 4; i++) {
+          const cell = dataRow.getCell(i);
+          if (index % 2 === 0) {
+            cell.fill = alternatingRowStyle1.fill;
+          } else {
+            cell.fill = alternatingRowStyle2.fill;
+          }
+          cell.alignment = { horizontal: 'center' };
+          cell.border = borderStyle;
+        }
+        
+        dataRow.commit();
+      });
+    } else {
+      const noDataRow = worksheet.getRow(2);
+      noDataRow.getCell(1).value = "No docket data available";
+      // Add borders
+      for (let i = 1; i <= 4; i++) {
+        noDataRow.getCell(i).border = borderStyle;
+      }
+      noDataRow.commit();
+    }
+    
+    // Add a separator column
+    worksheet.getColumn(5).width = 5;
+    
+    // Generate time intervals
+    const timeIntervals = generateTimeIntervals(); // You'll need to implement this function
+    
+    // Add Table 2 Headers in the first row, starting at column F (6)
+    const headers2 = ["From - To", "New Dockets Received", "Number of dockets served with a waiting time of more than 15 minutes"];
+    
+    headers2.forEach((header, index) => {
+      const cell = table1HeaderRow.getCell(secondTableStartColumn + index);
+      cell.value = header;
+      cell.font = headerStyle.font;
+      cell.fill = headerStyle.fill;
+      cell.alignment = headerStyle.alignment;
+      cell.border = borderStyle;
+    });
+    
+    // Add Table 2 Data
+    timeIntervals.forEach((interval, index) => {
+      // Count dockets received in this time interval
+      const docketsReceived = countDocketsInTimeInterval(data.orders, interval, 'received');
+      
+      // Count dockets served with waiting time > 15 min in this interval
+      const longWaitDockets = countLongWaitingDockets(data.orders, interval);
+      
+      // Add row data to the right of the first table
+      const rowNum = index + 2; // +2 because row 1 is header
+      const dataRow = worksheet.getRow(rowNum);
+      
+      dataRow.getCell(secondTableStartColumn).value = interval;
+      dataRow.getCell(secondTableStartColumn + 1).value = docketsReceived;
+      dataRow.getCell(secondTableStartColumn + 2).value = longWaitDockets;
+      
+      // Apply alternating row styles and borders
+      for (let i = secondTableStartColumn; i < secondTableStartColumn + 3; i++) {
+        const cell = dataRow.getCell(i);
+        if (index % 2 === 0) {
+          cell.fill = alternatingRowStyle1.fill;
+        } else {
+          cell.fill = alternatingRowStyle2.fill;
+        }
+        cell.alignment = { horizontal: 'center' };
+        cell.border = borderStyle;
+      }
+      
+      dataRow.commit();
+    });
+    
+    // Remove the section that was adding empty bordered cells to the second table
+    // This ensures the second table only has borders up to its actual content
+    
+    // Set Column Widths
+    worksheet.getColumn(1).width = 20;  // Column A
+    worksheet.getColumn(2).width = 20;  // Column B
+    worksheet.getColumn(3).width = 20;  // Column C
+    worksheet.getColumn(4).width = 20;  // Column D
+    // Column E is our separator
+    worksheet.getColumn(secondTableStartColumn).width = 25;     // Column F
+    worksheet.getColumn(secondTableStartColumn + 1).width = 25; // Column G
+    worksheet.getColumn(secondTableStartColumn + 2).width = 45; // Column H
+    
+    // Generate and Download the Excel File
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    saveAs(blob, "MultiDockets_completion_Report.xlsx");
+  };
+  
+  // Helper function to generate time intervals
+  const generateTimeIntervals = () => {
+    // Generate hourly intervals from 8:00 to 23:00
+    const intervals = [];
+    for (let hour = 8; hour < 23; hour++) {
+      const startHour = hour.toString().padStart(2, '0');
+      const endHour = (hour + 1).toString().padStart(2, '0');
+      intervals.push(`${startHour}:00 - ${endHour}:00`);
+    }
+    return intervals;
+  };
+  
+  // Helper function to count dockets received in a specific time interval
+  const countDocketsInTimeInterval = (orders, interval, type) => {
+    if (!orders || orders.length === 0) return 0;
+    
+    // Parse interval string (e.g., "08:00 - 09:00")
+    const [startTime, endTime] = interval.split(' - ');
+    
+    return orders.filter(order => {
+      // Extract time from starttime
+      const orderTime = order.starttime ? order.starttime.replace('@', '') : "";
+      
+      // Check if time is within interval
+      return isTimeInRange(orderTime, startTime, endTime);
+    }).length;
+  };
+  
+  // Helper function to count dockets with waiting time > 15 minutes in a given interval
+  const countLongWaitingDockets = (orders, interval) => {
+    if (!orders || orders.length === 0) return 0;
+    
+    // Parse interval string (e.g., "08:00 - 09:00")
+    const [startTime, endTime] = interval.split(' - ');
+    
+    return orders.filter(order => {
+      // Extract time from starttime
+      const orderTime = order.starttime ? order.starttime.replace('@', '') : "";
+      
+      // Check if time is within interval
+      if (!isTimeInRange(orderTime, startTime, endTime)) return false;
+      
+      // Check if waiting time > 15 minutes
+      const waitingTime = order.processtime || "";
+      if (!waitingTime) return false;
+      
+      // Parse waiting time (e.g., "15min")
+      const minutes = parseInt(waitingTime.replace('min', ''), 10);
+      return !isNaN(minutes) && minutes > 15;
+    }).length;
+  };
+  
+  // Helper function to check if a time is within a range
+  const isTimeInRange = (time, startTime, endTime) => {
+    if (!time) return false;
+    
+    // Convert to 24h format for comparison
+    const timeValue = time.includes(':') ? time : `${time.substring(0, 2)}:${time.substring(2, 4)}`;
+    
+    return timeValue >= startTime && timeValue < endTime;
+  };
 
   return (
     <div style={{overflow:'hidden'}}>
@@ -4549,13 +5070,13 @@ let Multi_venue = () => {
           </div>
         </div>
       </div>
-      <div >
-        <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr">
+
+        <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr hide-scrollbar">
 
           <div style={{}} className="dddd hide-scrollbar"  >
 
-          <div className="container-fluid px-0 hide-scrollbar">
-  <div className="d-flex flex-wrap justify-content-around pt-4 gap-4 hide-scrollbar">
+          <div className="container-fluid px-0">
+  <div className="d-flex flex-wrap justify-content-around pt-4 gap-4">
     {/* Date Range */}
     <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
       <p onClick={() => {checkkkk()}} style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
@@ -5224,6 +5745,9 @@ let Multi_venue = () => {
                                 console.log(JSON.stringify(selectedOptions), 'dateRange')
                                 editexportpdf()
                               }}>PDF</p>
+                               <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                  downloadDocketseditExcel()
+                }}>Excel sheet</p>
                             </div>
                           )}
                         </div>
@@ -5581,6 +6105,9 @@ let Multi_venue = () => {
                                   <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
                                     refundexportpdf()
                                   }}>PDF</p>
+                                    <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                              downloadDocketsavgExcel()
+                                }}>Excel sheet</p>
                                 </div>
                               )}
                             </div>
@@ -5597,7 +6124,7 @@ let Multi_venue = () => {
                               {/* Scrollable Chart Container */}
                               <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                 <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                  <Bar data={datafineone} options={optionshshs} />
+                                  <Bar data={datafineone} options={optionshshs} id="AvgChart-capture" />
                                 </div>
                               </div>
 
@@ -5764,6 +6291,9 @@ if (result === "" || result === undefined || result === null) {
                                   <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
                                     chartexportpdf()
                                   }}>PDF</p>
+                                        <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                              downloadDocketsrecExcel()
+                                }}>Excel sheet</p>
                                 </div>
                               )}
                             </div>
@@ -5779,7 +6309,7 @@ if (result === "" || result === undefined || result === null) {
                               {/* Scrollable Chart Container */}
                               <div  ref={finefine}  className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                 <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                  <Bar data={datafine} options={optionshshs} />
+                                  <Bar data={datafine} options={optionshshs} id="docChart-capture"  />
                                 </div>
                               </div>
 
@@ -5888,7 +6418,7 @@ if (result === "" || result === undefined || result === null) {
 
                                 <div  className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                   <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                    <Bar data={datafine} options={optionshshs} />
+                                    <Bar data={datafine} options={optionshshs} id="docChart-capture"/>
                                   </div>
                                 </div>
 
@@ -6130,7 +6660,7 @@ if (result === "" || result === undefined || result === null) {
 
 
         </div>
-      </div>
+
 
 
 

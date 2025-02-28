@@ -16,8 +16,10 @@ import Select, { components } from 'react-select';
 import { FaCheck } from 'react-icons/fa';
 import { Bar } from 'react-chartjs-2';
 import { jsPDF } from 'jspdf';
+import html2canvas from "html2canvas";
 import * as CryptoJS from 'crypto-js'
-
+import { saveAs } from "file-saver";
+import ExcelJS from "exceljs";
 import app from "./firebase";
 import {
   getDatabase, ref, set, push, get, query,
@@ -4556,7 +4558,144 @@ let Mealsmulti = () => {
 
   }
 
-
+  const downloadMealsExcel = async () => {
+    const selectedVenue = selectedOptions
+      .filter(item => item.label !== "All Venue")
+      .map(item => item.label)
+      .join(", ") || "All Venue";
+      
+    const selectedHub = selectedhubOptions
+      .filter(item => item.label !== "All Hub")
+      .map(item => item.label)
+      .join(", ") || "All Hub";
+      
+    const formatDate = (date) => {
+      return new Date(date).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
+    };
+      
+    const chosenRange = `${formatDate(dateRange[0])} to ${formatDate(dateRange[1])} between ${onetime || "00:00"} to ${twotime || "24:00"}`;
+    const comparingRange = `${formatDate(dateRangetwo[0])} to ${formatDate(dateRangetwo[1])} between ${threetime || "00:00"} to ${fourtime || "24:00"}`;
+      
+    const selectedStages = selectedhubOptions.length > 0
+      ? selectedhubOptions.map(item => item.label).join(", ")
+      : "All";
+      
+    const tableRanges = `From ${inputvalue}; \n to ${inputvaluetwo}`;
+      
+    const selectedCourses = selectedCources.length > 0
+      ? selectedCources.map(item => item.label).join(", ")
+      : "All";
+      
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Meals Received Timeline");
+      
+    // Define styles (enhanced styling)
+    const headerStyle = {
+      font: { bold: true, color: { argb: "FFFFFFFF" } },
+      fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FF316AAF" } },
+      alignment: { horizontal: 'center', vertical: 'middle' }
+    };
+    
+    const alternatingRowStyle1 = {
+      fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FFFFFFFF" } }
+    };
+    
+    const alternatingRowStyle2 = {
+      fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FFE6F0FF" } }
+    };
+    
+    const titleStyle = {
+      font: { bold: true, size: 14, color: { argb: "FF316AAF" } }
+    };
+    
+    // Define border style
+    const borderStyle = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+      
+    // **Add Filters Section**
+    const filtersRow = worksheet.addRow(["Filters:"]);
+    filtersRow.font = titleStyle.font;
+    
+    worksheet.addRow([`Venue: ${selectedVenue}`, `Stages: ${selectedStages}`, "Table Ranges:", tableRanges]);
+    worksheet.addRow(["", `Hub: ${selectedHub}`, `Courses: ${selectedCourses}`, ""]);
+    worksheet.addRow(["", "", `Chosen range:\n${chosenRange}`, `Comparing range:\n${comparingRange}`]);
+    worksheet.addRow([]); // Empty row for spacing
+      
+    // **Add Table Headers**
+    const headerRow = worksheet.addRow(["From - To", "From - To", "From - To"]);
+    headerRow.eachCell((cell, colNumber) => {
+      if (colNumber <= 3) { // Only for the table columns
+        cell.font = headerStyle.font;
+        cell.fill = headerStyle.fill;
+        cell.alignment = headerStyle.alignment;
+        cell.border = borderStyle;
+      }
+    });
+      
+    // **Add Table Data with alternating colors and borders**
+    optionbar.forEach((time, index) => {
+      const dataRow = worksheet.addRow([time, onebar[index] ?? "-", twobar[index] ?? "-"]);
+      
+      // Apply alternating row styles and borders
+      dataRow.eachCell((cell, colNumber) => {
+        if (colNumber <= 3) { // Only for the table columns
+          if (index % 2 === 0) {
+            cell.fill = alternatingRowStyle1.fill;
+          } else {
+            cell.fill = alternatingRowStyle2.fill;
+          }
+          cell.alignment = { horizontal: 'center' };
+          cell.border = borderStyle;
+        }
+      });
+    });
+      
+    // **Set Column Widths**
+    worksheet.columns = [
+      { width: 15 },
+      { width: 20 },
+      { width: 25 }
+    ];
+      
+    // **Capture and Insert Chart Image**
+    const chartElement = document.getElementById("chart-capture");
+    
+    if (chartElement) {
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Ensure rendering completion
+          
+      const canvas = await html2canvas(chartElement, {
+        backgroundColor: "#fff", // Ensure a white background
+        useCORS: true, // Fix cross-origin issues
+        scale: 10, // Higher quality capture
+      });
+        
+      const imageData = canvas.toDataURL("image/png");
+      
+      // Add Image to Workbook
+      const imageId = workbook.addImage({
+        base64: imageData,
+        extension: "png",
+      });
+        
+      worksheet.addImage(imageId, {
+        tl: { col: 4, row: 4 }, // Position it properly
+        ext: { width: 1000, height: 250 }, // Adjust as needed
+      });
+    }
+      
+    // **Generate and Download the Excel File**
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    saveAs(blob, "Meals_Received_Timeline.xlsx");
+  };
 
   return (
     <div style={{overflow:'hidden'}}>
@@ -4590,13 +4729,13 @@ let Mealsmulti = () => {
         </div>
       </div>
 
-      <div style={{ backgroundColor: "#DADADA", height: '100vh', overflow: 'auto', }} className="finefinrr">
+      <div style={{ backgroundColor: "#DADADA", height: '100vh' }} className="finefinrr">
 
         <div style={{}} className="dddd hide-scrollbar"  >
         <div className="container-fluid px-0">
   <div className="d-flex flex-wrap justify-content-around pt-4 gap-3">
     {/* Date Range 1 */}
-    <div className="filter-section" style={{ width: 'calc(20% - 12px)', minWidth: '240px', marginBottom: '15px' }}>
+    <div className="filter-section" style={{ width: 'calc(20% - 20px)', minWidth: '240px', marginBottom: '15px' }}>
       <p onClick={() => {checkkkk()}} style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
         Chosen range:<span style={{ fontWeight: '400' }}> Custom</span>
       </p>
@@ -4667,7 +4806,7 @@ let Mealsmulti = () => {
     </div>
 
     {/* Venue & Hub Filters */}
-    <div className="filter-section" style={{ width: 'calc(20% - 12px)', minWidth: '240px', marginBottom: '15px' }}>
+    <div className="filter-section" style={{ width: 'calc(20% - 20px)', minWidth: '240px', marginBottom: '15px' }}>
       <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen venue & hub</p>
       <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
         <div className="switch-container">
@@ -4765,7 +4904,7 @@ let Mealsmulti = () => {
     </div>
 
     {/* Compare with date range */}
-    <div className="filter-section" style={{ width: 'calc(20% - 12px)', minWidth: '240px', marginBottom: '15px' }}>
+    <div className="filter-section" style={{ width: 'calc(20% - 20px)', minWidth: '240px', marginBottom: '15px' }}>
       <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
         Compare with:<span style={{ fontWeight: '400' }}> Custom</span>
       </p>
@@ -4865,7 +5004,7 @@ let Mealsmulti = () => {
     </div>
 
     {/* Stages/Courses Filters */}
-    <div className="filter-section" style={{ width: 'calc(20% - 12px)', minWidth: '240px', marginBottom: '15px' }}>
+    <div className="filter-section" style={{ width: 'calc(20% - 20px)', minWidth: '240px', marginBottom: '15px' }}>
       <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by stages/courses</p>
       <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
         <div className="switch-container">
@@ -4963,7 +5102,7 @@ let Mealsmulti = () => {
     </div>
 
     {/* Tables/Takeaways Filters */}
-    <div className="filter-section" style={{ width: 'calc(20% - 12px)', minWidth: '240px', marginBottom: '15px' }}>
+    <div className="filter-section" style={{ width: 'calc(20% - 20px)', minWidth: '240px', marginBottom: '15px' }}>
       <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
       <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
         <input 
@@ -5940,6 +6079,9 @@ let Mealsmulti = () => {
                                 <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
                                   chartexportpdf()
                                 }}>PDF</p>
+                                   <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
+                              downloadMealsExcel()
+                                }}>Excel sheet</p>
                               </div>
                             )}
                           </div>
@@ -5957,7 +6099,7 @@ let Mealsmulti = () => {
                             {/* Scrollable Chart Container */}
                             <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                               <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                <Bar data={datafine} options={optionshshs} />
+                                <Bar data={datafine} options={optionshshs} id="chart-capture" />
                               </div>
                             </div>
 

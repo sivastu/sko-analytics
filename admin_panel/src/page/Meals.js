@@ -4302,12 +4302,12 @@ let Meals = () => {
       .filter(item => item.label !== "All Venue")
       .map(item => item.label)
       .join(", ") || "All Venue";
-  
+      
     const selectedHub = selectedhubOptions
       .filter(item => item.label !== "All Hub")
       .map(item => item.label)
       .join(", ") || "All Hub";
-  
+      
     const formatDate = (date) => {
       return new Date(date).toLocaleDateString("en-GB", {
         day: "2-digit",
@@ -4315,99 +4315,126 @@ let Meals = () => {
         year: "numeric"
       });
     };
-  
+      
     const chosenRange = `${formatDate(dateRange[0])} to ${formatDate(dateRange[1])} between ${onetime || "00:00"} to ${twotime || "24:00"}`;
     const comparingRange = `${formatDate(dateRangetwo[0])} to ${formatDate(dateRangetwo[1])} between ${threetime || "00:00"} to ${fourtime || "24:00"}`;
-  
+      
     const selectedStages = selectedhubOptions.length > 0
       ? selectedhubOptions.map(item => item.label).join(", ")
       : "All";
-  
+      
     const tableRanges = `From ${inputvalue}; \n to ${inputvaluetwo}`;
-  
+      
     const selectedCourses = selectedCources.length > 0
       ? selectedCources.map(item => item.label).join(", ")
       : "All";
-  
+      
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Meals Received Timeline");
-  
-    // **Apply Styling**
+      
+    // Define styles (enhanced styling)
     const headerStyle = {
       font: { bold: true, color: { argb: "FFFFFFFF" } },
-      fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FF316AAF" } }
+      fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FF316AAF" } },
+      alignment: { horizontal: 'center', vertical: 'middle' }
     };
-  
+    
+    const alternatingRowStyle1 = {
+      fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FFFFFFFF" } }
+    };
+    
+    const alternatingRowStyle2 = {
+      fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FFE6F0FF" } }
+    };
+    
+    const titleStyle = {
+      font: { bold: true, size: 14, color: { argb: "FF316AAF" } }
+    };
+    
+    // Define border style
+    const borderStyle = {
+      top: { style: 'thin' },
+      left: { style: 'thin' },
+      bottom: { style: 'thin' },
+      right: { style: 'thin' }
+    };
+      
     // **Add Filters Section**
-    worksheet.addRow(["Filters:"]).font = { bold: true, color: { argb: "FF316AAF" } };
+    const filtersRow = worksheet.addRow(["Filters:"]);
+    filtersRow.font = titleStyle.font;
+    
     worksheet.addRow([`Venue: ${selectedVenue}`, `Stages: ${selectedStages}`, "Table Ranges:", tableRanges]);
     worksheet.addRow(["", `Hub: ${selectedHub}`, `Courses: ${selectedCourses}`, ""]);
     worksheet.addRow(["", "", `Chosen range:\n${chosenRange}`, `Comparing range:\n${comparingRange}`]);
     worksheet.addRow([]); // Empty row for spacing
-  
+      
     // **Add Table Headers**
     const headerRow = worksheet.addRow(["From - To", "From - To", "From - To"]);
-    headerRow.eachCell(cell => {
-      cell.font = headerStyle.font;
-      cell.fill = headerStyle.fill;
+    headerRow.eachCell((cell, colNumber) => {
+      if (colNumber <= 3) { // Only for the table columns
+        cell.font = headerStyle.font;
+        cell.fill = headerStyle.fill;
+        cell.alignment = headerStyle.alignment;
+        cell.border = borderStyle;
+      }
     });
-  
-    // **Add Table Data**
+      
+    // **Add Table Data with alternating colors and borders**
     optionbar.forEach((time, index) => {
-      worksheet.addRow([time, onebar[index] ?? "-", twobar[index] ?? "-"]);
+      const dataRow = worksheet.addRow([time, onebar[index] ?? "-", twobar[index] ?? "-"]);
+      
+      // Apply alternating row styles and borders
+      dataRow.eachCell((cell, colNumber) => {
+        if (colNumber <= 3) { // Only for the table columns
+          if (index % 2 === 0) {
+            cell.fill = alternatingRowStyle1.fill;
+          } else {
+            cell.fill = alternatingRowStyle2.fill;
+          }
+          cell.alignment = { horizontal: 'center' };
+          cell.border = borderStyle;
+        }
+      });
     });
-  
+      
     // **Set Column Widths**
     worksheet.columns = [
       { width: 15 },
       { width: 20 },
       { width: 25 }
     ];
-  
+      
     // **Capture and Insert Chart Image**
     const chartElement = document.getElementById("chart-capture");
-
+    
     if (chartElement) {
       await new Promise((resolve) => setTimeout(resolve, 500)); // Ensure rendering completion
-      
+          
       const canvas = await html2canvas(chartElement, {
         backgroundColor: "#fff", // Ensure a white background
         useCORS: true, // Fix cross-origin issues
-        scale: 4, // Higher quality capture
+        scale: 10, // Higher quality capture
       });
-  
+        
       const imageData = canvas.toDataURL("image/png");
-
+      
       // Add Image to Workbook
       const imageId = workbook.addImage({
         base64: imageData,
         extension: "png",
       });
-  
+        
       worksheet.addImage(imageId, {
-        tl: { col: 4, row:  5 }, // Position it properly
-        ext: { width: 1300, height: 500 }, // Adjust as needed
+        tl: { col: 4, row: 4 }, // Position it properly
+        ext: { width: 1000, height: 250 }, // Adjust as needed
       });
     }
-  
+      
     // **Generate and Download the Excel File**
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     saveAs(blob, "Meals_Received_Timeline.xlsx");
   };
-  
-  const [width, setWidth] = useState(window.innerWidth >= 1400 ? 20 : window.innerWidth >= 1024 ? 18 : 60);
-const[responsive,setResponsive]=useState(window.innerWidth >= 1400 ? 'xl' : window.innerWidth >= 1024 ? 'lg' : 'sm')
-  useEffect(() => {
-    const handleResize = () => {
-      setWidth(window.innerWidth >= 1400 ? 20 : window.innerWidth >= 1024 ? 22 : 80);
-      setResponsive(window.innerWidth >= 1400 ? 'xl' : window.innerWidth >= 1024 ? 'lg' : 'sm');
-
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
   
 
   return (
