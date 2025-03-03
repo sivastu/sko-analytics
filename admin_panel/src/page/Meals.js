@@ -2491,8 +2491,8 @@ let Meals = () => {
   const [takeaway, setTakeaway] = useState(true)
   const optionstakeaway = [
     { value: 'All', label: 'All takeaways' },
-    { value: 'Takeaways', label: 'Takeaways' },
-    { value: 'Deliveries', label: 'Deliveries' },
+    { value: 'TAKEAWAY', label: 'Takeaways' },
+    { value: 'DELIVERY', label: 'Deliveries' },
     { value: 'Pick-ups', label: 'Pick-ups' },
   ];
   const [selectedTakeaway, setSelectedTakeaway] = useState(optionstakeaway);
@@ -5081,7 +5081,7 @@ let Meals = () => {
       <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
       <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
         <input
-          onChange={(e) => {
+          onChange={(e) => { 
             setInputvalue(e.target.value)
             filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
             filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
