@@ -535,3 +535,16 @@ input[type="checkbox"]:checked + .switch-label::before {
   color: rgb(0, 115, 230) !important;
 }
 
+.loader {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #000;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

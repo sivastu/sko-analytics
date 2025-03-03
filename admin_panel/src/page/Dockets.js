@@ -86,6 +86,8 @@ let Dockets = () => {
     "label": "Minimum"
   },])
 
+  let[isPdfLoad,setIsPdfLoad]=useState(false);
+  let[isExcelLoad,setIsExcelLoad]=useState(false);
   let [hubb, setHubb] = useState([])
   let [hubbswitch, setHubbswitch] = useState(true)
 
@@ -4018,16 +4020,22 @@ Refredone = useRef();
     await doc.html(input, {
       callback: function (doc) {
         doc.save("output.pdf"); // Save after rendering
+     setIsPdfLoad(false)
       },
       x: 10,
-      y: 32,
-      width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
-      autoPaging: "text",
+      y: 10,
+      width: 182, // A4 width minus margins
+      windowWidth: 785, // Base width for rendering
+      autoPaging: true, // Enable automatic paging
+      margin: [5, 10, 5, 10], // Margins [top, right, bottom, left]
       html2canvas: {
-        useCORS: true, // Handle cross-origin images
-      },
-    });
+        useCORS: true,
+        logging: false,
+        allowTaint: true,
+      }
+    }).catch(() => {
+      setIsPdfLoad(false);
+  });
 
 
 
@@ -4129,7 +4137,9 @@ Refredone = useRef();
       html2canvas: {
         useCORS: true, // Handle cross-origin images
       },
-    });
+    }).catch(() => {
+      setIsPdfLoad(false);
+  });
 
 
 
@@ -4212,7 +4222,9 @@ Refredone = useRef();
       html2canvas: {
         useCORS: true, // Handle cross-origin images
       },
-    });
+    }).catch(() => {
+      setIsPdfLoad(false);
+  });
 
   }
 
@@ -4354,6 +4366,7 @@ const downloadDocketsavgExcel = async () => {
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
   saveAs(blob, "MultiDockets_Average_Timeline.xlsx");
+  setIsExcelLoad(false)
 };
 
 // Function 2: downloadDocketsrecExcel with added styling
@@ -4494,6 +4507,7 @@ const downloadDocketsrecExcel = async () => {
   const buffer = await workbook.xlsx.writeBuffer();
   const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
   saveAs(blob, "MultiDockets_Received_Timeline.xlsx");
+  setIsExcelLoad(false)
 };
 
   const downloadDocketseditExcel = async () => {
@@ -4673,6 +4687,7 @@ const downloadDocketsrecExcel = async () => {
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     saveAs(blob, "MultiDockets_completion_Report.xlsx");
+    setIsExcelLoad(false)
   };
   
   // Helper function to generate time intervals
@@ -5598,13 +5613,45 @@ const downloadDocketsrecExcel = async () => {
               >
                 <p style={{ color: '#707070' }}>Export as</p>
                 <hr />
-                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                  console.log(JSON.stringify(selectedOptions), 'dateRange')
-                  editexportpdf()
-                }}>PDF</p>
-                   <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                  downloadDocketseditExcel()
-                }}>Excel sheet</p>
+                <p 
+  style={{ 
+    color: '#000', 
+    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsPdfLoad(true);  // Prevent click when loading
+      console.log(JSON.stringify(selectedOptions), 'dateRange');
+      editexportpdf();
+    }
+  }}
+>
+PDF
+  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
+<p 
+  style={{ 
+    color: '#000', 
+    cursor: isExcelLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsExcelLoad(true);  // Prevent click when loading
+      downloadDocketseditExcel()
+    }
+  }}
+>
+Excel sheet
+  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
               </div>
             )}
           </div>
@@ -5825,9 +5872,26 @@ const downloadDocketsrecExcel = async () => {
                               >
                                 <p style={{ color: '#707070' }}>Export as</p>
                                 <hr />
-                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                  mealexportpdf()
-                                }}>PDF</p>
+                                <p 
+  style={{ 
+    color: '#000', 
+    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsPdfLoad(true);  // Prevent click when loading
+      mealexportpdf()
+    }
+  }}
+>
+PDF
+  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
+
                               </div>
                             )}
 
@@ -6001,12 +6065,42 @@ const downloadDocketsrecExcel = async () => {
                                 >
                                   <p style={{ color: '#707070' }}>Export as</p>
                                   <hr />
-                                  <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                    refundexportpdf()
-                                  }}>PDF</p>
-                                                       <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                              downloadDocketsavgExcel()
-                                }}>Excel sheet</p>
+                                  <p 
+  style={{ 
+    color: '#000', 
+    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsPdfLoad(true);  // Prevent click when loading
+      refundexportpdf()
+    }
+  }}
+>
+PDF
+  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p><p 
+  style={{ 
+    color: '#000', 
+    cursor: isExcelLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      downloadDocketsavgExcel()
+    }
+  }}
+>
+Excel sheet
+  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
                                 </div>
                               )}
                             </div>
@@ -6187,12 +6281,44 @@ if (result === "" || result === undefined || result === null) {
                                 >
                                   <p style={{ color: '#707070' }}>Export as</p>
                                   <hr />
-                                  <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                    chartexportpdf()
-                                  }}>PDF</p>
-                                    <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                              downloadDocketsrecExcel()
-                                }}>Excel sheet</p>
+                                  <p 
+  style={{ 
+    color: '#000', 
+    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsPdfLoad(true);  // Prevent click when loading
+      chartexportpdf()
+    }
+  }}
+>
+PDF
+  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
+<p 
+  style={{ 
+    color: '#000', 
+    cursor: isExcelLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsExcelLoad(true);  // Prevent click when loading
+      downloadDocketsrecExcel()
+    }
+  }}
+>
+Excel sheet
+  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
                                 </div>
                               )}
                             </div>
