@@ -108,6 +108,10 @@ let Meals = () => {
     "label": "Maximum"
   },
   ,])
+
+  let[isPdfLoad,setIsPdfLoad]=useState(false);
+  let[isExcelLoad,setIsExcelLoad]=useState(false);
+
   const [selectedOptionsfine, setSelectedOptionsfine] = useState([basicfine[0]]);
 
   const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -4141,7 +4145,8 @@ let Meals = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf"); // Save after rendering
+        doc.save("output.pdf"); 
+        setIsPdfLoad(false);// Save after rendering
       },
       x: 10,
       y: 20,
@@ -4151,8 +4156,9 @@ let Meals = () => {
       html2canvas: {
         useCORS: true, // Handle cross-origin images
       },
-    });
-
+    }).catch(() => {
+      setIsPdfLoad(false);
+  });
 
 
     // var doc = new  jsPDF({
@@ -4201,7 +4207,8 @@ let Meals = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf"); // Save after rendering
+        doc.save("output.pdf"); 
+        setIsPdfLoad(false)// Save after rendering
       },
       y: 10,
       width: 190, // Fit content within page
@@ -4232,7 +4239,8 @@ let Meals = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf"); // Save after rendering
+        doc.save("output.pdf");
+        setIsPdfLoad(false) // Save after rendering
       },
       x: 10,
       y: 20,
@@ -4242,7 +4250,9 @@ let Meals = () => {
       html2canvas: {
         useCORS: true, // Handle cross-origin images
       },
-    });
+    }).catch(() => {
+      setIsPdfLoad(false);
+  });
 
 
   }
@@ -4262,7 +4272,8 @@ let Meals = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf"); // Save after rendering
+        doc.save("output.pdf");
+        setIsPdfLoad(false); // Save after rendering
       },
       x: 10,
       y: 20,
@@ -4272,7 +4283,9 @@ let Meals = () => {
       html2canvas: {
         useCORS: true, // Handle cross-origin images
       },
-    });
+    }).catch(() => {
+      setIsPdfLoad(false);
+  });
 
   }
 
@@ -4414,6 +4427,7 @@ let Meals = () => {
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     saveAs(blob, "Meals_Received_Timeline.xlsx");
+    setIsExcelLoad(false)
   };
   
 
@@ -5193,12 +5207,26 @@ let Meals = () => {
                       >
                         <p style={{ color: '#707070' }}>Export as</p>
                         <hr />
-                        <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                          editexportpdf()
-                        }}>PDF</p>
-                        <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                          // editexportpdf()
-                        }}>Excel sheet</p>
+                        <p 
+  style={{ 
+    color: '#000', 
+    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsPdfLoad(true);  // Prevent click when loading
+      console.log(JSON.stringify(selectedOptions), 'dateRange');
+      editexportpdf();
+    }
+  }}
+>
+PDF
+  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
                       </div>
                     )}
                   </div>
@@ -5511,9 +5539,25 @@ let Meals = () => {
                           >
                             <p style={{ color: '#707070' }}>Export as</p>
                             <hr />
-                            <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                              mealexportpdf()
-                            }}>PDF</p>
+                             <p 
+  style={{ 
+    color: '#000', 
+    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsPdfLoad(true);  // Prevent click when loading
+      mealexportpdf()
+    }
+  }}
+>
+PDF
+  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
                           </div>
                         )}
                       </div>
@@ -5688,9 +5732,26 @@ let Meals = () => {
                           >
                             <p style={{ color: '#707070', margin: '0 0 8px 0' }}>Export as</p>
                             <hr style={{ margin: '8px 0' }} />
-                            <p style={{ color: '#000', cursor: 'pointer', margin: '8px 0 0 0' }} onClick={() => {
-                              refundexportpdf()
-                            }}>PDF</p>
+                              <p 
+  style={{ 
+    color: '#000', 
+    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsPdfLoad(true);  // Prevent click when loading
+      refundexportpdf()
+    }
+  }}
+>
+PDF
+  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
+
                           </div>
                         )}
                       </div>
@@ -5827,12 +5888,43 @@ let Meals = () => {
                               >
                                 <p style={{ color: '#707070' }}>Export as</p>
                                 <hr />
-                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                  chartexportpdf()
-                                }}>PDF</p>
-                                        <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                              downloadMealsExcel()
-                                }}>Excel sheet</p>
+                                  <p 
+  style={{ 
+    color: '#000', 
+    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsPdfLoad(true);  // Prevent click when loading
+      chartexportpdf()
+    }
+  }}
+>
+PDF
+  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
+<p 
+  style={{ 
+    color: '#000', 
+    cursor: isExcelLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      downloadMealsExcel()
+    }
+  }}
+>
+Excel sheet
+  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
                               </div>
                             )}
                           </div>
