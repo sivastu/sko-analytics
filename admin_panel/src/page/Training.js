@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useContext } from "react";
 import Header from "../component/Header";
 import axios from "axios";
 import { Base_url } from "../config";
@@ -13,12 +13,15 @@ import { getDatabase, ref, set, push, get, query, orderByChild, equalTo, update 
 import app from "./firebase";
 import Select, { components } from 'react-select';
 import SweetAlert2 from 'react-sweetalert2';
-
+import { DataContext } from "../component/DataProvider";
 import { Nav } from "react-bootstrap";
 
-let Training = () => {
+let Training = () => { 
   let [data, setData] = useState('1');
   let navigate = useNavigate();
+
+  const { state } = useContext(DataContext);
+
   const [openDropdown, setOpenDropdown] = useState(true);
   const [swalProps, setSwalProps] = useState({ show: false });
 
@@ -73,7 +76,7 @@ let Training = () => {
   };
 
   useEffect(() => {
-    loginCheck()
+    loginCheck(state?.user)
   }, [])
 
 
@@ -100,7 +103,7 @@ let Training = () => {
     return data.name;
   }
 
-  let loginCheck = async () => {
+  let loginCheck = async (snapshot) => {
     let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
       navigate('/')
@@ -111,14 +114,9 @@ let Training = () => {
     let parsedatajson = JSON.parse(decry)
     let name = getName(parsedatajson)
     setUsedname(name)
-    setBasicall(parsedatajson)
-    const db = getDatabase(app);
-    const newDocRef = ref(db, `user`);
-
-    const snapshot = await get(newDocRef); // Fetch the data for the user
-
-    if (snapshot.exists()) {
-      const userData = snapshot.val();
+    setBasicall(parsedatajson) 
+ 
+      const userData = snapshot 
       setUser(userData)
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
@@ -141,8 +139,7 @@ let Training = () => {
         }
       } else {
         console.log("User does not exist.");
-      }
-    }
+      } 
   }
 
 

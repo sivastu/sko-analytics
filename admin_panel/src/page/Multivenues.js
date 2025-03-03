@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useContext } from "react";
 import Header from "../component/Header";
 import axios from "axios";
 import { Base_url } from "../config";
@@ -11,14 +11,15 @@ import bigInt from "big-integer";
 import * as CryptoJS from 'crypto-js'
 import { getDatabase, ref, set, push, get, query, orderByChild, equalTo } from "firebase/database";
 import app from "./firebase";
+import { DataContext } from "../component/DataProvider";
 
 let Multivenues = () => {
   let [data, setData] = useState();
   let navigate = useNavigate();
-
+ const { state } = useContext(DataContext);
 
   useEffect(() => {
-    loginCheck()
+    loginCheck(state?.user)
   }, []) 
 
 
@@ -41,7 +42,7 @@ let Multivenues = () => {
     }
     
 
-  let loginCheck = async () => {
+  let loginCheck = async (snapshot) => {
     let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
       sessionStorage.removeItem('data')
@@ -52,14 +53,10 @@ let Multivenues = () => {
 
     let parsedatajson = JSON.parse(decry)
     let name = getName(parsedatajson)
-    setUsedname(name)
-    const db = getDatabase(app);
-    const newDocRef = ref(db, `user`);
-
-    const snapshot = await get(newDocRef); // Fetch the data for the user
-
-    if (snapshot.exists()) {
-      const userData = snapshot.val();
+    setUsedname(name) 
+ 
+ 
+      const userData = snapshot 
 
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
@@ -79,8 +76,7 @@ let Multivenues = () => {
         }
       } else {
         console.log("User does not exist.");
-      }
-    }
+      } 
   }
 
 

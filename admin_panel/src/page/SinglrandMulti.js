@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Header from "../component/Header";
 import axios from "axios";
 import { Base_url } from "../config";
@@ -12,38 +12,40 @@ import * as CryptoJS from 'crypto-js'
 import { getDatabase, ref, set, push, get, query, orderByChild, equalTo } from "firebase/database";
 import app from "./firebase";
 import SweetAlert2 from 'react-sweetalert2';
-
+import { DataContext } from "../component/DataProvider";
 
 let SinglrandMulti = () => {
   let [data, setData] = useState();
   let navigate = useNavigate();
   const [swalProps, setSwalProps] = useState({ show: false });
 
+  const { state } = useContext(DataContext);
+
   useEffect(() => {
-    loginCheck()
+    loginCheck(state?.user)
   }, [])
- 
 
-    let [usedname, setUsedname] = useState('')
-    function getName(data) {
-      if (!data.venue || data.venue.length === 0) {
-          return data.name; // Default to name if venue is missing or empty
-      }
-  
-      const hasAll = data.venue.some(v => v.value === "All");
-  
-      if (hasAll && data.venue.length > 1) {
-          return data.name;
-      } else if (data.venue.length === 1 && !hasAll) {
-          return data.venue[0].value;
-      }
-  
+
+  let [usedname, setUsedname] = useState('')
+  function getName(data) {
+    if (!data.venue || data.venue.length === 0) {
+      return data.name; // Default to name if venue is missing or empty
+    }
+
+    const hasAll = data.venue.some(v => v.value === "All");
+
+    if (hasAll && data.venue.length > 1) {
       return data.name;
-  }
-  
-  
+    } else if (data.venue.length === 1 && !hasAll) {
+      return data.venue[0].value;
+    }
 
-  let loginCheck = async () => {
+    return data.name;
+  }
+
+
+
+  let loginCheck = async (snapshot) => {
     let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
       sessionStorage.removeItem('data')
@@ -53,21 +55,15 @@ let SinglrandMulti = () => {
     let decry = decrypt(getdata)
 
     let parsedatajson = JSON.parse(decry)
-let name = getName(parsedatajson)
-    setUsedname(name)
-    const db = getDatabase(app);
-    const newDocRef = ref(db, `user`);
-
-    const snapshot = await get(newDocRef); // Fetch the data for the user
-
-    if (snapshot.exists()) {
-      const userData = snapshot.val();
+    let name = getName(parsedatajson)
+    setUsedname(name) 
+      const userData = snapshot 
 
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
 
       if (foundUser) {
-        if(foundUser.Role === 'emp'){
+        if (foundUser.Role === 'emp') {
           sessionStorage.removeItem('data')
           navigate('/')
           return
@@ -82,7 +78,7 @@ let name = getName(parsedatajson)
       } else {
         console.log("User does not exist.");
       }
-    }
+    
   }
 
 
@@ -113,26 +109,26 @@ let name = getName(parsedatajson)
 
 
   return (
-    <div style={{overflow:'hidden'}}>
+    <div style={{ overflow: 'hidden' }}>
       <div className="" style={{ scrollbarWidth: 'none' }}>
 
-      <div className="" style={{
+        <div className="" style={{
           height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
           // border: "1px solid #dbdbdb"
         }} >
           <div className="row justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', height: 52 }}>
 
             <div style={{ padding: 13 }} className="d-flex col"
-             onClick={() => {
-              navigate(-1)
-            }}  >
-            <img src="arrow.png" style={{ width: 20, height: 20 ,marginTop:3}} alt="Example Image" />
+              onClick={() => {
+                navigate(-1)
+              }}  >
+              <img src="arrow.png" style={{ width: 20, height: 20, marginTop: 3 }} alt="Example Image" />
               <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >web portal</p>
             </div>
             <div style={{ padding: 13 }} className="d-flex text-center justify-content-center col" >
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop:-3 }} >
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", paddingLeft: 0, marginTop: -3 }} >
                 {usedname}
-                </p>
+              </p>
             </div>
 
             <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
@@ -173,7 +169,7 @@ let name = getName(parsedatajson)
             >
               <div className="row  gvdfvdf" >
                 <div className="col-6 p-md-0 m-md-0 d-flex align-items-center justify-content-center">
-                  <img style={{ width: "100%",height:'100%' }} src="as2.png" alt="Example Image" />
+                  <img style={{ width: "100%", height: '100%' }} src="as2.png" alt="Example Image" />
                 </div>
                 <div className="col-6 d-flex align-items-center justify-content-center">
                   <div className="row w-100">
@@ -213,7 +209,7 @@ let name = getName(parsedatajson)
             >
               <div className="row w-100 gvdfvdf" >
                 <div className="col-6 d-flex align-items-center justify-content-center">
-                  <img style={{ width: "100%",height:'100%' }} src="as1.png" alt="Example Image" />
+                  <img style={{ width: "100%", height: '100%' }} src="as1.png" alt="Example Image" />
                 </div>
                 <div className="col-6 d-flex align-items-center justify-content-center">
                   <div className="row w-100">
