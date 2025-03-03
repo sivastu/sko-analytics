@@ -534,3 +534,4 @@ input[type="checkbox"]:checked + .switch-label::before {
 .custom-select-takeaway [aria-selected="true"] span {
   color: rgb(0, 115, 230) !important;
 }
+

@@ -4808,7 +4808,7 @@ let Mealsmulti = () => {
     {/* Venue & Hub Filters */}
     <div className="filter-section" style={{ width: 'calc(20% - 20px)', minWidth: '240px', marginBottom: '15px' }}>
       <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen venue & hub</p>
-      <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
+      <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45,  borderRadius: menuIsOpen ? ' 8px 8px 0 0' : '8px',    border:menuIsOpen?'2px solid #707070':'none',borderBottom:'none' }}>
         <div className="switch-container">
           <input 
             type="checkbox" 
@@ -4850,12 +4850,31 @@ let Mealsmulti = () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', backgroundColor: '#fff', fontSize: 15, color: '#1A1A1B' ,outline:'none',boxShadow: 'none'}),
+            control: (base, state) => ({
+              ...base,
+              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+              backgroundColor: '#fff',
+              fontSize: 15,
+              color: '#1A1A1B',
+              outline: 'none', 
+              boxShadow: state.isFocused ? 'none' : 'none',
+              border:'none'
+            }),
+            menu: (base) => ({
+              ...base,
+              minWidth:'calc(100% + 72px)',
+             marginLeft:'-60px',
+          border:menuIsOpen?'black':'none',
+              borderTop: 'none',
+              borderRadius: '0 0 8px 8px',
+              border:menuIsOpen?'2px solid #707070':'none',
+              borderTop:'none'
+            }),
           }}
         />
       </div>
 
-      <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+      <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 ,  borderRadius: menuIsOpen ? ' 8px 8px 0 0' : '8px',  border:menuIsOpen?'2px solid #707070':'none',borderBottom:'none'}}>
         <div className="switch-container">
           <input 
             checked={hubbswitch} 
@@ -4897,7 +4916,26 @@ let Mealsmulti = () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff',outline:'none',boxShadow: 'none' }),
+            control: (base, state) => ({
+              ...base,
+              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+              backgroundColor: '#fff',
+              fontSize: 15,
+              color: '#1A1A1B',
+              outline: 'none', 
+              boxShadow: state.isFocused ? 'none' : 'none',
+              border:'none'
+            }),
+            menu: (base) => ({
+              ...base,
+              minWidth:'calc(100% + 72px)',
+             marginLeft:'-60px',
+          border:menuIsOpenone?'black':'none',
+              borderTop: 'none',
+              borderRadius: '0 0 8px 8px',
+              border:menuIsOpenone?'2px solid #707070':'none',
+              borderTop:'none'
+            }),
           }}
         />
       </div>
@@ -4908,7 +4946,7 @@ let Mealsmulti = () => {
       <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
         Compare with:<span style={{ fontWeight: '400' }}> Custom</span>
       </p>
-      <div ref={selectReffive} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
+      <div ref={selectReffive} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45,  borderRadius: menuIsOpenfive ? ' 8px 8px 0 0' : '8px',    border:menuIsOpenfive?'2px solid #707070':'none',borderBottom:'none' }}>
         <div className="switch-container">
           <input 
             type="checkbox" 
@@ -4950,12 +4988,31 @@ let Mealsmulti = () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', backgroundColor: '#fff', fontSize: 15, color: '#1A1A1B',outline:'none',boxShadow: 'none' }),
+            control: (base, state) => ({
+              ...base,
+              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+              backgroundColor: '#fff',
+              fontSize: 15,
+              color: '#1A1A1B',
+              outline: 'none', 
+              boxShadow: state.isFocused ? 'none' : 'none',
+              border:'none'
+            }),
+            menu: (base) => ({
+              ...base,
+              minWidth:'calc(100% + 72px)',
+             marginLeft:'-60px',
+          border:menuIsOpenfive?'black':'none',
+              borderTop: 'none',
+              borderRadius: '0 0 8px 8px',
+              border:menuIsOpenfive?'2px solid #707070':'none',
+              borderTop:'none'
+            }),
           }}
         />
       </div>
 
-      <div ref={selectRefsix} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+      <div ref={selectRefsix} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 ,  borderRadius: menuIsOpensix ? ' 8px 8px 0 0' : '8px',    border:menuIsOpensix?'2px solid #707070':'none',borderBottom:'none'}}>
         <div className="switch-container">
           <input 
             checked={venueradiosix} 
@@ -4997,7 +5054,26 @@ let Mealsmulti = () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff',outline:'none',boxShadow: 'none' }),
+            control: (base, state) => ({
+              ...base,
+              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+              backgroundColor: '#fff',
+              fontSize: 15,
+              color: '#1A1A1B',
+              outline: 'none', 
+              boxShadow: state.isFocused ? 'none' : 'none',
+              border:'none'
+            }),
+            menu: (base) => ({
+              ...base,
+              minWidth:'calc(100% + 72px)',
+             marginLeft:'-60px',
+          border:menuIsOpensix?'black':'none',
+              borderTop: 'none',
+              borderRadius: '0 0 8px 8px',
+              border:menuIsOpensix?'2px solid #707070':'none',
+              borderTop:'none'
+            }),
           }}
         />
       </div>
@@ -5006,7 +5082,7 @@ let Mealsmulti = () => {
     {/* Stages/Courses Filters */}
     <div className="filter-section" style={{ width: 'calc(20% - 20px)', minWidth: '240px', marginBottom: '15px' }}>
       <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by stages/courses</p>
-      <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
+      <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 ,  borderRadius: menuIsOpentwo ? ' 8px 8px 0 0' : '8px',    border:menuIsOpentwo?'2px solid #707070':'none',borderBottom:'none'}}>
         <div className="switch-container">
           <input 
             type="checkbox" 
@@ -5048,12 +5124,31 @@ let Mealsmulti = () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff' ,outline:'none',boxShadow: 'none'}),
+            control: (base, state) => ({
+              ...base,
+              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+              backgroundColor: '#fff',
+              fontSize: 15,
+              color: '#1A1A1B',
+              outline: 'none', 
+              boxShadow: state.isFocused ? 'none' : 'none',
+              border:'none'
+            }),
+            menu: (base) => ({
+              ...base,
+              minWidth:'calc(100% + 72px)',
+             marginLeft:'-60px',
+          border:menuIsOpentwo?'black':'none',
+              borderTop: 'none',
+              borderRadius: '0 0 8px 8px',
+              border:menuIsOpentwo?'2px solid #707070':'none',
+              borderTop:'none'
+            }),
           }}
         />
       </div>
 
-      <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+      <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45,  borderRadius: menuIsOpenthree ? ' 8px 8px 0 0' : '8px',    border:menuIsOpenthree?'2px solid #707070':'none',borderBottom:'none' }}>
         <div className="switch-container">
           <input 
             type="checkbox" 
@@ -5095,7 +5190,26 @@ let Mealsmulti = () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff',outline:'none',boxShadow: 'none' }),
+            control: (base, state) => ({
+              ...base,
+              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+              backgroundColor: '#fff',
+              fontSize: 15,
+              color: '#1A1A1B',
+              outline: 'none', 
+              boxShadow: state.isFocused ? 'none' : 'none',
+              border:'none'
+            }),
+            menu: (base) => ({
+              ...base,
+              minWidth:'calc(100% + 72px)',
+             marginLeft:'-60px',
+          border:menuIsOpenthree?'black':'none',
+              borderTop: 'none',
+              borderRadius: '0 0 8px 8px',
+              border:menuIsOpenthree?'2px solid #707070':'none',
+              borderTop:'none'
+            }),
           }}
         />
       </div>
@@ -5134,7 +5248,7 @@ let Mealsmulti = () => {
         />
       </div>
 
-      <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+      <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45,  borderRadius: menuIsOpenfour ? ' 8px 8px 0 0' : '8px',    border:menuIsOpenfour?'2px solid #707070':'none',borderBottom:'none' }}>
         <div className="switch-container">
           <input 
             type="checkbox" 
@@ -5176,7 +5290,26 @@ let Mealsmulti = () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff',outline:'none',boxShadow: 'none' }),
+            control: (base, state) => ({
+              ...base,
+              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+              backgroundColor: '#fff',
+              fontSize: 15,
+              color: '#1A1A1B',
+              outline: 'none', 
+              boxShadow: state.isFocused ? 'none' : 'none',
+              border:'none'
+            }),
+            menu: (base) => ({
+              ...base,
+              minWidth:'calc(100% + 72px)',
+             marginLeft:'-60px',
+          border:menuIsOpenfour?'black':'none',
+              borderTop: 'none',
+              borderRadius: '0 0 8px 8px',
+              border:menuIsOpenfour?'2px solid #707070':'none',
+              borderTop:'none'
+            }),
           }}
         />
       </div>

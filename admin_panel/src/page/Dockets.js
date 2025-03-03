@@ -1323,7 +1323,7 @@ let Dockets = () => {
           display: 'flex',
           alignItems: 'center',
           padding: '10px',
-          backgroundColor: isSelected ? 'white' : 'white',
+          backgroundColor: isSelected ? 'transparent' : 'transparent',
           color: isSelected ? 'black': 'black',
           cursor: 'pointer',
         }}
@@ -1825,7 +1825,9 @@ const displayText = allLabels.slice(0, 18) + "..."
   const pdfRef = useRef();
 
   const pdfRefred = useRef();
-  const pdfRefredone = useRef();
+  const 
+  
+Refredone = useRef();
 
 
   let ggggrt = () => {
@@ -4008,7 +4010,7 @@ const displayText = allLabels.slice(0, 18) + "..."
     // });
 
     const doc = new jsPDF({
-      orientation: "p",
+      orientation: "potrait",
       unit: "mm",
       format: "a4",
     });
@@ -4018,7 +4020,7 @@ const displayText = allLabels.slice(0, 18) + "..."
         doc.save("output.pdf"); // Save after rendering
       },
       x: 10,
-      y: 20,
+      y: 32,
       width: 190, // Fit content within page
       windowWidth: 1000, // Ensure full width capture
       autoPaging: "text",
