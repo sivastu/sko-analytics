@@ -451,13 +451,13 @@ let Mealsmulti = () => {
 
 
 
-          const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
-          const optionstakeaway = [
-            ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
-          ].map(value => ({ value, label: value }));
+          // const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
+          // const optionstakeaway = [
+          //   ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
+          // ].map(value => ({ value, label: value }));
 
 
-          console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
+          // console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
 
 
 
@@ -4691,6 +4691,25 @@ let Mealsmulti = () => {
     setIsExcelLoad(false)
   };
 
+
+  const getBoxWidth = () => {
+    if (window.innerWidth >= 1536) return 800; // 2xl
+    if (window.innerWidth >= 1280) return 800; // xl
+    if (window.innerWidth >= 1024) return 600; // lg
+    if (window.innerWidth >= 768) return 600;  // md
+    return 500; // default for smaller screens
+  };
+
+  const [boxWidth, setBoxWidth] = useState(getBoxWidth());
+
+  useEffect(() => {
+    const handleResize = () => setBoxWidth(getBoxWidth());
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
   return (
     <div style={{overflow:'hidden'}}>
       <div style={{ scrollbarWidth: 'none' }}>
@@ -5314,13 +5333,13 @@ let Mealsmulti = () => {
 
           {
             meals === 1 ?
-            <div className="changeone hide-scrollbar" style={{ marginTop: 100, overflow: 'hidden' }}>
+            <div className="changeone hide-scrollbar " style={{ marginTop: 100, overflow: 'hidden' }}>
             <div className="changetwos" style={{ overflowX: 'hidden' }}>
               {/* First row */}
               <div className="row">
-                {/* Meals received - timeline */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
-                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
+                {/* Meals received - timeline - positioned at flex-end */}
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-end" style={{paddingRight:60}} >
+                  <div className="box" style={{ maxWidth: `${boxWidth}px`}} onClick={() => {
                     setMeals(5)
                   }}>
                     <div className="boxs" style={{ cursor: 'pointer' }}>
@@ -5333,9 +5352,9 @@ let Mealsmulti = () => {
                   </div>
                 </div>
                 
-                {/* Edits */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
-                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
+                {/* Edits - positioned at flex-start */}
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-start" style={{paddingLeft:'60px'}}>
+                  <div className="box" style={{ maxWidth: "600px" }} onClick={() => {
                     setMeals(2)
                   }}>
                     <div className="boxs" style={{ cursor: 'pointer' }}>
@@ -5401,9 +5420,9 @@ let Mealsmulti = () => {
                 
               {/* Second row */}
               <div className="row">
-                {/* Served meals */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
-                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
+                {/* Served meals - positioned at flex-end */}
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-end" style={{paddingRight:'60px'}}>
+                  <div className="box" style={{ maxWidth: "600px" }} onClick={() => {
                     setMeals(3)
                   }}>
                     <div className="boxs" style={{ cursor: 'pointer' }}>
@@ -5451,9 +5470,9 @@ let Mealsmulti = () => {
                   </div>
                 </div>
                 
-                {/* Refunded meals */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
-                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
+                {/* Refunded meals - positioned at flex-start */}
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-start" style={{paddingLeft:'60px'}}>
+                  <div className="box" style={{ maxWidth: "600px" }} onClick={() => {
                     setMeals(4)
                   }}>
                     <div className="boxs" style={{ cursor: 'pointer' }}>
