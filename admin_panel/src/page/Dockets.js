@@ -4085,7 +4085,7 @@ Refredone = useRef();
 
     // Save the PDF with a filename
     doc.save('sample.pdf');
-
+    setIsPdfLoad(false)
     console.log('gggggggggggggggggggg')
 
   }
@@ -4128,6 +4128,7 @@ Refredone = useRef();
     await doc.html(input, {
       callback: function (doc) {
         doc.save("output.pdf"); // Save after rendering
+        setIsPdfLoad(false)
       },
       x: 10,
       y: 20,
@@ -4212,7 +4213,8 @@ Refredone = useRef();
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf"); // Save after rendering
+        doc.save("output.pdf"); 
+        setIsPdfLoad(false);// Save after rendering
       },
       x: 10,
       y: 20,
@@ -6083,7 +6085,8 @@ PDF
 PDF
   {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
 
-</p><p 
+</p>
+<p 
   style={{ 
     color: '#000', 
     cursor: isExcelLoad ? 'not-allowed' : 'pointer', 

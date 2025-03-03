@@ -95,7 +95,8 @@ let Multi_venue = () => {
   let [hubb, setHubb] = useState([])
   let [hubbtwo, setHubbtwo] = useState([])
   let [hubbswitch, setHubbswitch] = useState(true)
-
+  let[isPdfLoad,setIsPdfLoad]=useState(false);
+  let[isExcelLoad,setIsExcelLoad]=useState(false);
   //parse meals
   let [meals, setMeals] = useState(1)
 
@@ -4296,6 +4297,7 @@ let Multi_venue = () => {
     await doc.html(input, {
       callback: function (doc) {
         doc.save("output.pdf"); // Save after rendering
+        setIsPdfLoad(false)
       },
       x: 10,
       y: 20,
@@ -4305,7 +4307,10 @@ let Multi_venue = () => {
       html2canvas: {
         useCORS: true, // Handle cross-origin images
       },
-    });
+    }).catch(() => {
+      setIsPdfLoad(false);
+  });
+
 
 
 
@@ -4355,6 +4360,7 @@ let Multi_venue = () => {
 
     // Save the PDF with a filename
     doc.save('sample.pdf');
+    setIsPdfLoad(false)
 
     console.log('gggggggggggggggggggg')
 
@@ -4398,6 +4404,7 @@ let Multi_venue = () => {
     await doc.html(input, {
       callback: function (doc) {
         doc.save("output.pdf"); // Save after rendering
+        setIsPdfLoad(false)
       },
       x: 10,
       y: 20,
@@ -4407,7 +4414,9 @@ let Multi_venue = () => {
       html2canvas: {
         useCORS: true, // Handle cross-origin images
       },
-    });
+    }).catch(() => {
+      setIsPdfLoad(false);
+  });
 
 
 
@@ -4480,7 +4489,8 @@ let Multi_venue = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf"); // Save after rendering
+        doc.save("output.pdf");
+        setIsPdfLoad(false); // Save after rendering
       },
       x: 10,
       y: 20,
@@ -4490,7 +4500,9 @@ let Multi_venue = () => {
       html2canvas: {
         useCORS: true, // Handle cross-origin images
       },
-    });
+    }).catch(() => {
+      setIsPdfLoad(false);
+  });
 
   }
 
@@ -4633,6 +4645,7 @@ let Multi_venue = () => {
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     saveAs(blob, "MultiDockets_Average_Timeline.xlsx");
+    setIsExcelLoad(false)
   };
 
   // Function 2: downloadDocketsrecExcel with added styling
@@ -4773,6 +4786,7 @@ let Multi_venue = () => {
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     saveAs(blob, "MultiDockets_Received_Timeline.xlsx");
+    setIsExcelLoad(false)
   };
 
   const downloadDocketseditExcel = async () => {
@@ -4952,6 +4966,7 @@ let Multi_venue = () => {
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     saveAs(blob, "MultiDockets_completion_Report.xlsx");
+    setIsExcelLoad(false)
   };
 
   // Helper function to generate time intervals
@@ -5854,13 +5869,45 @@ let Multi_venue = () => {
                               >
                                 <p style={{ color: '#707070' }}>Export as</p>
                                 <hr />
-                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                  console.log(JSON.stringify(selectedOptions), 'dateRange')
-                                  editexportpdf()
-                                }}>PDF</p>
-                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                  downloadDocketseditExcel()
-                                }}>Excel sheet</p>
+                                <p 
+  style={{ 
+    color: '#000', 
+    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsPdfLoad(true);  // Prevent click when loading
+      console.log(JSON.stringify(selectedOptions), 'dateRange');
+      editexportpdf();
+    }
+  }}
+>
+PDF
+  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
+<p 
+  style={{ 
+    color: '#000', 
+    cursor: isExcelLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsExcelLoad(true);  // Prevent click when loading
+      downloadDocketseditExcel()
+    }
+  }}
+>
+Excel sheet
+  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
                               </div>
                             )}
                           </div>
@@ -6039,9 +6086,25 @@ let Multi_venue = () => {
                             >
                               <p style={{ color: '#707070' }}>Export as</p>
                               <hr />
-                              <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                mealexportpdf()
-                              }}>PDF</p>
+                              <p 
+  style={{ 
+    color: '#000', 
+    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsPdfLoad(true);  // Prevent click when loading
+      mealexportpdf()
+    }
+  }}
+>
+PDF
+  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
                             </div>
                           )}
 
@@ -6215,12 +6278,43 @@ let Multi_venue = () => {
                               >
                                 <p style={{ color: '#707070' }}>Export as</p>
                                 <hr />
-                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                  refundexportpdf()
-                                }}>PDF</p>
-                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                  downloadDocketsavgExcel()
-                                }}>Excel sheet</p>
+                                <p 
+  style={{ 
+    color: '#000', 
+    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsPdfLoad(true);  // Prevent click when loading
+      refundexportpdf()
+    }
+  }}
+>
+PDF
+  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
+<p 
+  style={{ 
+    color: '#000', 
+    cursor: isExcelLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      downloadDocketsavgExcel()
+    }
+  }}
+>
+Excel sheet
+  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
                               </div>
                             )}
                           </div>
@@ -6401,12 +6495,44 @@ let Multi_venue = () => {
                               >
                                 <p style={{ color: '#707070' }}>Export as</p>
                                 <hr />
-                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                  chartexportpdf()
-                                }}>PDF</p>
-                                <p style={{ color: '#000', cursor: 'pointer' }} onClick={() => {
-                                  downloadDocketsrecExcel()
-                                }}>Excel sheet</p>
+                                <p 
+  style={{ 
+    color: '#000', 
+    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsPdfLoad(true);  // Prevent click when loading
+      chartexportpdf()
+    }
+  }}
+>
+PDF
+  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
+<p 
+  style={{ 
+    color: '#000', 
+    cursor: isExcelLoad ? 'not-allowed' : 'pointer', 
+    display: 'flex', 
+    alignItems: 'center', 
+    gap: '8px' 
+  }} 
+  onClick={() => {
+    if (!isPdfLoad) {
+      setIsExcelLoad(true);  // Prevent click when loading
+      downloadDocketsrecExcel()
+    }
+  }}
+>
+Excel sheet
+  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
+
+</p>
                               </div>
                             )}
                           </div>
