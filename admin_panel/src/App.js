@@ -27,6 +27,15 @@ import Training from "./page/Training";
 import { ToastContainer } from 'react-toastify';
 import { DataProvider } from "./component/DataProvider";
 
+window.onload = () => {
+  
+  console.log('adfcv;lsjvio  dfbln don dlknbo nddonfx ndinio noeindfioniodenfongo kko odx dx kodnxko kodxk dox kjo')
+  if (window.location.pathname !== "/admin") {
+    window.location.href = "/admin";
+  }
+}
+
+
 
 function App() {
   return (
