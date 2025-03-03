@@ -196,520 +196,575 @@ let Meals = () => {
       .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
       .map(time => ({ time, count: timeCounts[time] })).slice(1);
   }
-  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
-
-    let alldat = basicall
-
-    console.log(JSON.stringify(alltype), 'val2245')
-
-    if (vals[1] === null || vals[1] === "null") {
-
-    } else {
-      let datesearch = (val) => {
-        // Convert the input dates into Date objects
-        let onee = val[0];
-        let date = new Date(onee);
-        date.setDate(date.getDate() + 1);
-        let formattedDate = date;  // Use this Date object directly
-
-        let two = val[1];
-        const datetwo = new Date(two);
-        datetwo.setDate(datetwo.getDate() + 1); // Keep the same date, no modification
-        const formattedDatetwo = datetwo;  // Use this Date object directly
-
-        console.log(formattedDate, 'formattedDate', formattedDatetwo);
-
-        // Function to generate all dates between formattedDate and formattedDatetwo
-        function generateDatesInRange(startDate, endDate) {
-          let dates = [];
-          let currentDate = new Date(startDate);
-
-          while (currentDate <= endDate) {
-            dates.push(currentDate.toISOString().split('T')[0]); // Push the date as string "YYYY-MM-DD"
-            currentDate.setDate(currentDate.getDate() + 1); // Move to the next day
-          }
-          return dates;
-        }
-
-        let dateRange = generateDatesInRange(formattedDate, formattedDatetwo);
-        console.log(dateRange, 'dateRange'); // This will show all dates between the range
-
-        // Recursive function to filter the data based on the date range
-        function filterObject(obj) {
-          let result = {};
-
-          for (const key in obj) {
-            // If the value is an object, recursively process it
-            if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
-              const filtered = filterObject(obj[key]);
-              if (Object.keys(filtered).length > 0) {
-                result[key] = filtered;
-              }
-            }
-            // If the value is an array and the key represents a date within the range
-            else if (Array.isArray(obj[key]) && dateRange.includes(key)) {
-              result[key] = obj[key];
-            }
-          }
-          return result;
-        }
-
-        return filterObject(alldat);  // Assuming `basicall` is your data to filter
-      }
-
-      alldat = datesearch(vals)
-
-      console.log(alldat, 'one')
-
-    }
-
-    if (time != "" && time2 === '') {
-      let filterDataByTime = (targetTime) => {
-        // Convert targetTime (e.g. "16:23") to a comparable Date object 
-        targetTime = targetTime.replace(":", "");
-        console.log(targetTime, 'targetTimetargetTimetargetTime')
-        // Function to process STAMP and filter based on time
-        function processData(obj) {
-          let result = {};
+  // function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
+  //   console.log(inone, 'ten    lll1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111',)
+    
+  //   return
+  //   let alldat = basicall
+
+  //   console.log(JSON.stringify(alltype), 'val2245')
+
+  //   if (vals[1] === null || vals[1] === "null") {
+
+  //   } else {
+  //     let datesearch = (val) => {
+  //       // Convert the input dates into Date objects
+  //       let onee = val[0];
+  //       let date = new Date(onee);
+  //       date.setDate(date.getDate() + 1);
+  //       let formattedDate = date;  // Use this Date object directly
+
+  //       let two = val[1];
+  //       const datetwo = new Date(two);
+  //       datetwo.setDate(datetwo.getDate() + 1); // Keep the same date, no modification
+  //       const formattedDatetwo = datetwo;  // Use this Date object directly
+
+  //       console.log(formattedDate, 'formattedDate', formattedDatetwo);
+
+  //       // Function to generate all dates between formattedDate and formattedDatetwo
+  //       function generateDatesInRange(startDate, endDate) {
+  //         let dates = [];
+  //         let currentDate = new Date(startDate);
+
+  //         while (currentDate <= endDate) {
+  //           dates.push(currentDate.toISOString().split('T')[0]); // Push the date as string "YYYY-MM-DD"
+  //           currentDate.setDate(currentDate.getDate() + 1); // Move to the next day
+  //         }
+  //         return dates;
+  //       }
+
+  //       let dateRange = generateDatesInRange(formattedDate, formattedDatetwo);
+  //       console.log(dateRange, 'dateRange'); // This will show all dates between the range
+
+  //       // Recursive function to filter the data based on the date range
+  //       function filterObject(obj) {
+  //         let result = {};
+
+  //         for (const key in obj) {
+  //           // If the value is an object, recursively process it
+  //           if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
+  //             const filtered = filterObject(obj[key]);
+  //             if (Object.keys(filtered).length > 0) {
+  //               result[key] = filtered;
+  //             }
+  //           }
+  //           // If the value is an array and the key represents a date within the range
+  //           else if (Array.isArray(obj[key]) && dateRange.includes(key)) {
+  //             result[key] = obj[key];
+  //           }
+  //         }
+  //         return result;
+  //       }
+
+  //       return filterObject(alldat);  // Assuming `basicall` is your data to filter
+  //     }
+
+  //     alldat = datesearch(vals)
+
+  //     console.log(alldat, 'one')
+
+  //   }
+
+  //   if (time != "" && time2 === '') {
+  //     let filterDataByTime = (targetTime) => {
+  //       // Convert targetTime (e.g. "16:23") to a comparable Date object 
+  //       targetTime = targetTime.replace(":", "");
+  //       console.log(targetTime, 'targetTimetargetTimetargetTime')
+  //       // Function to process STAMP and filter based on time
+  //       function processData(obj) {
+  //         let result = {};
+
+  //         for (const dateKey in obj) {
+  //           if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
+  //             result[dateKey] = processData(obj[dateKey]);
+  //           } else if (Array.isArray(obj[dateKey])) {
+  //             // Filter items based on the STAMP field
+  //             result[dateKey] = obj[dateKey].filter(item => {
+  //               if (item.STAMP) {
+  //                 let stamp = item.STAMP;
+  //                 let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
+
+  //                 timeStr = timeStr.replace("R0", ""); // Remove "R0"
+
+  //                 // Compare the STAMP time with targetTime
+  //                 return timeStr === targetTime;
+  //               }
+  //               return false;
+  //             });
+  //           }
+  //         }
+
+  //         return result;
+  //       }
+
+  //       return processData(alldat);
+  //     };
 
-          for (const dateKey in obj) {
-            if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
-              result[dateKey] = processData(obj[dateKey]);
-            } else if (Array.isArray(obj[dateKey])) {
-              // Filter items based on the STAMP field
-              result[dateKey] = obj[dateKey].filter(item => {
-                if (item.STAMP) {
-                  let stamp = item.STAMP;
-                  let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
 
-                  timeStr = timeStr.replace("R0", ""); // Remove "R0"
+  //     alldat = filterDataByTime(time)
+  //     console.log(alldat, 'two')
 
-                  // Compare the STAMP time with targetTime
-                  return timeStr === targetTime;
-                }
-                return false;
-              });
-            }
-          }
-
-          return result;
-        }
-
-        return processData(alldat);
-      };
+  //   }
 
+  //   if (time != "" && time2 != '') {
+  //     let filterDataByTimeRange = (startTime, endTime) => {
 
-      alldat = filterDataByTime(time)
-      console.log(alldat, 'two')
+  //       startTime = parseInt(startTime.replace(":", ""), 10);   // Make sure seconds are zero for comparison
 
-    }
+  //       endTime = parseInt(endTime.replace(":", ""), 10);
 
-    if (time != "" && time2 != '') {
-      let filterDataByTimeRange = (startTime, endTime) => {
+  //       function processData(obj) {
+  //         let result = {};
 
-        startTime = parseInt(startTime.replace(":", ""), 10);   // Make sure seconds are zero for comparison
+  //         for (const dateKey in obj) {
+  //           if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
+  //             result[dateKey] = processData(obj[dateKey]);
+  //           } else if (Array.isArray(obj[dateKey])) {
+  //             // Filter items based on the STAMP field
+  //             result[dateKey] = obj[dateKey].filter(item => {
+  //               if (item.STAMP) {
+  //                 let stamp = item.STAMP;
+  //                 let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
+  //                 timeStr = parseInt(timeStr.replace("R0", "")); // Remove "R0" 
 
-        endTime = parseInt(endTime.replace(":", ""), 10);
 
-        function processData(obj) {
-          let result = {};
+  //                 // Check if the time is within the range
+  //                 return timeStr >= startTime && timeStr <= endTime;
+  //               }
+  //               return false;
+  //             });
+  //           }
+  //         }
 
-          for (const dateKey in obj) {
-            if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
-              result[dateKey] = processData(obj[dateKey]);
-            } else if (Array.isArray(obj[dateKey])) {
-              // Filter items based on the STAMP field
-              result[dateKey] = obj[dateKey].filter(item => {
-                if (item.STAMP) {
-                  let stamp = item.STAMP;
-                  let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
-                  timeStr = parseInt(timeStr.replace("R0", "")); // Remove "R0" 
+  //         return result;
+  //       }
 
+  //       return processData(alldat);
+  //     };
 
-                  // Check if the time is within the range
-                  return timeStr >= startTime && timeStr <= endTime;
-                }
-                return false;
-              });
-            }
-          }
+  //     let alldddd = filterDataByTimeRange(time, time2)
 
-          return result;
-        }
+  //     alldat = alldddd
 
-        return processData(alldat);
-      };
+  //     console.log(alldddd, 'three')
+  //   }
 
-      let alldddd = filterDataByTimeRange(time, time2)
+  //   if (val21.length != 0) {
+  //     const filteredData = {};
 
-      alldat = alldddd
+  //     val21.forEach(filter => {
+  //       const key = filter.value;
+  //       for (const mainKey in alldat) {
+  //         if (alldat[mainKey][key]) {
+  //           if (!filteredData[mainKey]) {
+  //             filteredData[mainKey] = {}; // Initialize if not exists
+  //           }
+  //           filteredData[mainKey][key] = alldat[mainKey][key];
+  //         }
+  //       }
+  //     });
 
-      console.log(alldddd, 'three')
-    }
+  //     alldat = filteredData
 
-    if (val21.length != 0) {
-      const filteredData = {};
+  //     console.log(filteredData, 'four')
 
-      val21.forEach(filter => {
-        const key = filter.value;
-        for (const mainKey in alldat) {
-          if (alldat[mainKey][key]) {
-            if (!filteredData[mainKey]) {
-              filteredData[mainKey] = {}; // Initialize if not exists
-            }
-            filteredData[mainKey][key] = alldat[mainKey][key];
-          }
-        }
-      });
+  //   }
 
-      alldat = filteredData
+  //   if (val22.length === 0 || val22 === "") {
 
-      console.log(filteredData, 'four')
 
-    }
 
-    if (val22.length === 0 || val22 === "") {
+  //   } else {
+  //     // function filterDataByDynamicKey(key) {
+  //     //   // Split the key into top-level key and hub name
+  //     //   const [topLevelKey, hubName] = key.split('-');
 
+  //     //   // Initialize an empty object for the filtered result
+  //     //   const filteredData = {};
 
+  //     //   // Check if the top-level key exists in the data
+  //     //   if (alldat[topLevelKey]) {
+  //     //     filteredData[topLevelKey] = {};
 
-    } else {
-      // function filterDataByDynamicKey(key) {
-      //   // Split the key into top-level key and hub name
-      //   const [topLevelKey, hubName] = key.split('-');
+  //     //     // Loop through each second-level key (e.g., "GreenbankServicesClubecall")
+  //     //     for (const secondLevelKey in alldat[topLevelKey]) {
+  //     //       if (alldat[topLevelKey].hasOwnProperty(secondLevelKey)) {
+  //     //         // Check if the second-level key contains the hub name
+  //     //         if (alldat[topLevelKey][secondLevelKey][hubName]) {
+  //     //           // Add the filtered data for that second-level key and hub name
+  //     //           filteredData[topLevelKey][secondLevelKey] = {
+  //     //             [hubName]: alldat[topLevelKey][secondLevelKey][hubName]
+  //     //           };
+  //     //         }
+  //     //       }
+  //     //     }
+  //     //   }
 
-      //   // Initialize an empty object for the filtered result
-      //   const filteredData = {};
+  //     //   return filteredData;
+  //     // }
 
-      //   // Check if the top-level key exists in the data
-      //   if (alldat[topLevelKey]) {
-      //     filteredData[topLevelKey] = {};
+  //     // alldat = filterDataByDynamicKey(val22)
 
-      //     // Loop through each second-level key (e.g., "GreenbankServicesClubecall")
-      //     for (const secondLevelKey in alldat[topLevelKey]) {
-      //       if (alldat[topLevelKey].hasOwnProperty(secondLevelKey)) {
-      //         // Check if the second-level key contains the hub name
-      //         if (alldat[topLevelKey][secondLevelKey][hubName]) {
-      //           // Add the filtered data for that second-level key and hub name
-      //           filteredData[topLevelKey][secondLevelKey] = {
-      //             [hubName]: alldat[topLevelKey][secondLevelKey][hubName]
-      //           };
-      //         }
-      //       }
-      //     }
-      //   }
+  //     // console.log(alldat, 'five')
 
-      //   return filteredData;
-      // }
+  //     const filterDataByDynamicKeys = (data, filterCriteria) => {
+  //       const filteredData = {};
 
-      // alldat = filterDataByDynamicKey(val22)
+  //       filterCriteria.forEach(({ label }) => {
+  //         const [hub, parent] = label.split('-'); // Extract hub and parent names
 
-      // console.log(alldat, 'five')
+  //         // Find the corresponding key in the data
+  //         for (const key in data) {
+  //           if (data[key][parent] && data[key][parent][hub]) {
+  //             if (!filteredData[key]) filteredData[key] = {};
+  //             if (!filteredData[key][parent]) filteredData[key][parent] = {};
+  //             filteredData[key][parent][hub] = data[key][parent][hub];
+  //           }
+  //         }
+  //       });
 
-      const filterDataByDynamicKeys = (data, filterCriteria) => {
-        const filteredData = {};
+  //       return filteredData;
+  //     };
 
-        filterCriteria.forEach(({ label }) => {
-          const [hub, parent] = label.split('-'); // Extract hub and parent names
 
-          // Find the corresponding key in the data
-          for (const key in data) {
-            if (data[key][parent] && data[key][parent][hub]) {
-              if (!filteredData[key]) filteredData[key] = {};
-              if (!filteredData[key][parent]) filteredData[key][parent] = {};
-              filteredData[key][parent][hub] = data[key][parent][hub];
-            }
-          }
-        });
 
-        return filteredData;
-      };
+  //     // function filterDataByDynamicKeys(keysArray) {
+  //     //   const filteredData = {};
 
+  //     //   keysArray.forEach(({ value }) => {
+  //     //     const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
 
+  //     //     if (alldat[topLevelKey] && alldat[topLevelKey][secondTopLevelKey]) {
+  //     //       const secondLevelData = alldat[topLevelKey][secondTopLevelKey];
 
-      // function filterDataByDynamicKeys(keysArray) {
-      //   const filteredData = {};
+  //     //       // Check if the hub exists
+  //     //       if (secondLevelData[hubName]) {
+  //     //         if (!filteredData[topLevelKey]) {
+  //     //           filteredData[topLevelKey] = {};
+  //     //         }
 
-      //   keysArray.forEach(({ value }) => {
-      //     const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+  //     //         if (!filteredData[topLevelKey][secondTopLevelKey]) {
+  //     //           filteredData[topLevelKey][secondTopLevelKey] = {};
+  //     //         }
 
-      //     if (alldat[topLevelKey] && alldat[topLevelKey][secondTopLevelKey]) {
-      //       const secondLevelData = alldat[topLevelKey][secondTopLevelKey];
+  //     //         filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
+  //     //       }
+  //     //     }
+  //     //   });
 
-      //       // Check if the hub exists
-      //       if (secondLevelData[hubName]) {
-      //         if (!filteredData[topLevelKey]) {
-      //           filteredData[topLevelKey] = {};
-      //         }
+  //     //   return filteredData;
+  //     // }
+  //     let ofjfij = filterDataByDynamicKeys(alldat, val22)
 
-      //         if (!filteredData[topLevelKey][secondTopLevelKey]) {
-      //           filteredData[topLevelKey][secondTopLevelKey] = {};
-      //         }
+  //     alldat = ofjfij
 
-      //         filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
-      //       }
-      //     }
-      //   });
+  //     console.log(alldat, 'five')
 
-      //   return filteredData;
-      // }
-      let ofjfij = filterDataByDynamicKeys(alldat, val22)
+  //   }
 
-      alldat = ofjfij
+  //   if (cources.length != 0) {
 
-      console.log(alldat, 'five')
 
-    }
+  //     function filterByNoted(data, filterNotes) {
+  //       let filteredData = {};
 
-    if (cources.length != 0) {
+  //       // Extract only values from the filter list
+  //       const validNotes = filterNotes.map(item => item.value);
 
+  //       for (let group in data) {
+  //         for (let location in data[group]) {
+  //           for (let section in data[group][location]) {
+  //             for (let date in data[group][location][section]) {
+  //               let filteredOrders = data[group][location][section][date].map(order => {
+  //                 let filteredItems = order.ITEMS.filter(item => {
+  //                   if (!item.NOTE) return false; // Ignore empty or undefined NOTE
 
-      function filterByNoted(data, filterNotes) {
-        let filteredData = {};
+  //                   // Extract the word after (C<number>)
+  //                   const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+  //                   if (match && match[1]) {
+  //                     return validNotes.includes(match[1]); // Keep only if in validNotes
+  //                   }
+  //                   return false;
+  //                 });
 
-        // Extract only values from the filter list
-        const validNotes = filterNotes.map(item => item.value);
+  //                 return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
+  //               }).filter(order => order !== null);
 
-        for (let group in data) {
-          for (let location in data[group]) {
-            for (let section in data[group][location]) {
-              for (let date in data[group][location][section]) {
-                let filteredOrders = data[group][location][section][date].map(order => {
-                  let filteredItems = order.ITEMS.filter(item => {
-                    if (!item.NOTE) return false; // Ignore empty or undefined NOTE
+  //               if (filteredOrders.length > 0) {
+  //                 if (!filteredData[group]) filteredData[group] = {};
+  //                 if (!filteredData[group][location]) filteredData[group][location] = {};
+  //                 if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+  //                 filteredData[group][location][section][date] = filteredOrders;
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
 
-                    // Extract the word after (C<number>)
-                    const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                    if (match && match[1]) {
-                      return validNotes.includes(match[1]); // Keep only if in validNotes
-                    }
-                    return false;
-                  });
+  //       return filteredData;
+  //     }
 
-                  return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
-                }).filter(order => order !== null);
 
-                if (filteredOrders.length > 0) {
-                  if (!filteredData[group]) filteredData[group] = {};
-                  if (!filteredData[group][location]) filteredData[group][location] = {};
-                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                  filteredData[group][location][section][date] = filteredOrders;
-                }
-              }
-            }
-          }
-        }
+  //     alldat = filterByNoted(alldat, cources)
 
-        return filteredData;
-      }
+  //     console.log(alldat, 'six')
 
 
-      alldat = filterByNoted(alldat, cources)
 
-      console.log(alldat, 'six')
+  //   }
 
+  //   if (takeaway.length != 0) {
 
+  //     function filterByNote(filters) {
+  //       const allowedNotes = filters.map(f => f.value); // Extract values from filter array
+  //       const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
 
-    }
+  //       function traverse(obj) {
+  //         if (Array.isArray(obj)) {
+  //           return obj.map(traverse).filter(entry => entry !== null);
+  //         } else if (typeof obj === "object" && obj !== null) {
+  //           let newObj = {};
+  //           let hasMatch = false;
 
-    if (takeaway.length != 0) {
+  //           for (let key in obj) {
+  //             if (key === "NOTE" && typeof obj[key] === "string" && regex.test(obj[key])) {
+  //               hasMatch = true;
+  //             } else {
+  //               let value = traverse(obj[key]);
+  //               if (value && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0)) {
+  //                 newObj[key] = value;
+  //                 hasMatch = true;
+  //               }
+  //             }
+  //           }
 
-      function filterByNote(filters) {
-        const allowedNotes = filters.map(f => f.value); // Extract values from filter array
-        const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
+  //           return hasMatch ? newObj : null;
+  //         }
+  //         return obj;
+  //       }
 
-        function traverse(obj) {
-          if (Array.isArray(obj)) {
-            return obj.map(traverse).filter(entry => entry !== null);
-          } else if (typeof obj === "object" && obj !== null) {
-            let newObj = {};
-            let hasMatch = false;
+  //       let result = {};
+  //       Object.keys(alldat).forEach(key => {
+  //         let filtered = traverse(alldat[key]);
+  //         if (filtered && Object.keys(filtered).length > 0) {
+  //           result[key] = filtered;
+  //         }
+  //       });
 
-            for (let key in obj) {
-              if (key === "NOTE" && typeof obj[key] === "string" && regex.test(obj[key])) {
-                hasMatch = true;
-              } else {
-                let value = traverse(obj[key]);
-                if (value && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0)) {
-                  newObj[key] = value;
-                  hasMatch = true;
-                }
-              }
-            }
+  //       return result;
+  //     }
 
-            return hasMatch ? newObj : null;
-          }
-          return obj;
-        }
 
-        let result = {};
-        Object.keys(alldat).forEach(key => {
-          let filtered = traverse(alldat[key]);
-          if (filtered && Object.keys(filtered).length > 0) {
-            result[key] = filtered;
-          }
-        });
+  //     alldat = filterByNote(takeaway)
 
-        return result;
-      }
+  //     console.log(alldat, 'seven')
 
+  //   }
 
-      alldat = filterByNote(takeaway)
+  //   if (inone != undefined ) {
+  //     let splitone = inone.split('-')
+ 
+    
+  //     if (splitone.length === 2 ) {
 
-      console.log(alldat, 'seven')
+  //       if (Number(splitone[0]) < Number(splitone[1]) ) {
 
-    }
 
-    if (inone != undefined && intwo != undefined) {
-      let splitone = inone.split('-')
 
-      let splittwo = intwo.split('-')
-      console.log(splitone.length, 'ten    lll', splitone.length)
-      if (splitone.length === 2 && splittwo.length === 2) {
+  //         function filterDataByTableRanges(data, ranges) {
+  //           const filteredData = {};
 
-        if (Number(splitone[0]) < Number(splitone[1]) && Number(splittwo[0]) < Number(splittwo[1])) {
+  //           Object.entries(data).forEach(([groupKey, groupData]) => {
+  //             Object.entries(groupData).forEach(([venueKey, venueData]) => {
+  //               Object.entries(venueData).forEach(([areaKey, areaData]) => {
+  //                 Object.entries(areaData).forEach(([dateKey, records]) => {
+  //                   const filteredRecords = records.filter(record => {
+  //                     const tableNum = parseInt(record.TABLE, 10);
+  //                     return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
+  //                   });
 
+  //                   if (filteredRecords.length > 0) {
+  //                     if (!filteredData[groupKey]) filteredData[groupKey] = {};
+  //                     if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+  //                     if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+  //                     filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+  //                   }
+  //                 });
+  //               });
+  //             });
+  //           });
 
+  //           return filteredData;
+  //         }
 
-          function filterDataByTableRanges(data, ranges) {
-            const filteredData = {};
+  //         const ranges = [[Number(splitone[0]), Number(splitone[1])]];
 
-            Object.entries(data).forEach(([groupKey, groupData]) => {
-              Object.entries(groupData).forEach(([venueKey, venueData]) => {
-                Object.entries(venueData).forEach(([areaKey, areaData]) => {
-                  Object.entries(areaData).forEach(([dateKey, records]) => {
-                    const filteredRecords = records.filter(record => {
-                      const tableNum = parseInt(record.TABLE, 10);
-                      return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
-                    });
+  //         let twelves = filterDataByTableRanges(alldat, ranges)
 
-                    if (filteredRecords.length > 0) {
-                      if (!filteredData[groupKey]) filteredData[groupKey] = {};
-                      if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
-                      if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
-                      filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
-                    }
-                  });
-                });
-              });
-            });
+  //         alldat = twelves
 
-            return filteredData;
-          }
 
-          const ranges = [[Number(splitone[0]), Number(splitone[1])], [Number(splittwo[0]), Number(splittwo[1])]];
+  //         console.log(twelves, 'nine')
+  //       } else {
 
-          let twelves = filterDataByTableRanges(alldat, ranges)
+  //       }
 
-          alldat = twelves
+  //     } else {
 
+  //     }
+  //   }
 
-          console.log(twelves, 'nine')
-        } else {
+  //   if (inone != undefined && intwo != undefined) {
+  //     let splitone = inone.split('-')
 
-        }
+  //     let splittwo = intwo.split('-')
+  //     console.log(splitone.length, 'ten    lll', splitone.length)
+  //     if (splitone.length === 2 && splittwo.length === 2) {
 
-      } else {
+  //       if (Number(splitone[0]) < Number(splitone[1]) && Number(splittwo[0]) < Number(splittwo[1])) {
 
-      }
-    }
 
-    if (alltype === undefined || alltype.length === 0) {
 
-    } else {
-      function filterByStamp(data, filterValues) {
-        let filteredData = {};
+  //         function filterDataByTableRanges(data, ranges) {
+  //           const filteredData = {};
 
-        // Create a mapping of values to stamp identifiers
-        const stampMapping = {
-          "R": "R0",
-          "H": "H0",
-          "P": "P0",
-          "S": "S0"
-        };
+  //           Object.entries(data).forEach(([groupKey, groupData]) => {
+  //             Object.entries(groupData).forEach(([venueKey, venueData]) => {
+  //               Object.entries(venueData).forEach(([areaKey, areaData]) => {
+  //                 Object.entries(areaData).forEach(([dateKey, records]) => {
+  //                   const filteredRecords = records.filter(record => {
+  //                     const tableNum = parseInt(record.TABLE, 10);
+  //                     return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
+  //                   });
 
-        // Extract relevant values
-        const validStamps = filterValues.map(f => stampMapping[f.value]).filter(Boolean);
+  //                   if (filteredRecords.length > 0) {
+  //                     if (!filteredData[groupKey]) filteredData[groupKey] = {};
+  //                     if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+  //                     if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+  //                     filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+  //                   }
+  //                 });
+  //               });
+  //             });
+  //           });
 
-        for (let group in data) {
-          for (let location in data[group]) {
-            for (let section in data[group][location]) {
-              for (let date in data[group][location][section]) {
-                let orders = data[group][location][section][date].filter(order =>
-                  validStamps.some(stamp => order.STAMP.includes(stamp))
-                );
+  //           return filteredData;
+  //         }
 
-                if (!filteredData[group]) filteredData[group] = {};
-                if (!filteredData[group][location]) filteredData[group][location] = {};
-                if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+  //         const ranges = [[Number(splitone[0]), Number(splitone[1])], [Number(splittwo[0]), Number(splittwo[1])]];
 
-                if (orders.length > 0) {
-                  filteredData[group][location][section][date] = orders;
-                }
-              }
-            }
-          }
-        }
+  //         let twelves = filterDataByTableRanges(alldat, ranges)
 
-        return filteredData;
-      }
+  //         alldat = twelves
 
 
-      let resultss = filterByStamp(alldat, alltype);
+  //         console.log(twelves, 'nine')
+  //       } else {
 
-      alldat = resultss
+  //       }
 
-      console.log(resultss, 'tenten')
-    }
+  //     } else {
 
-    const filteredData = {};
+  //     }
+  //   }
 
-    Object.entries(alldat).forEach(([groupKey, groupData]) => {
+  //   if (alltype === undefined || alltype.length === 0) {
 
+  //   } else {
+  //     function filterByStamp(data, filterValues) {
+  //       let filteredData = {};
 
-      Object.entries(groupData).forEach(([areas, areaDatas]) => {
+  //       // Create a mapping of values to stamp identifiers
+  //       const stampMapping = {
+  //         "R": "R0",
+  //         "H": "H0",
+  //         "P": "P0",
+  //         "S": "S0"
+  //       };
 
+  //       // Extract relevant values
+  //       const validStamps = filterValues.map(f => stampMapping[f.value]).filter(Boolean);
 
+  //       for (let group in data) {
+  //         for (let location in data[group]) {
+  //           for (let section in data[group][location]) {
+  //             for (let date in data[group][location][section]) {
+  //               let orders = data[group][location][section][date].filter(order =>
+  //                 validStamps.some(stamp => order.STAMP.includes(stamp))
+  //               );
 
-        Object.entries(areaDatas).forEach(([area, areaData]) => {
+  //               if (!filteredData[group]) filteredData[group] = {};
+  //               if (!filteredData[group][location]) filteredData[group][location] = {};
+  //               if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
 
+  //               if (orders.length > 0) {
+  //                 filteredData[group][location][section][date] = orders;
+  //               }
+  //             }
+  //           }
+  //         }
+  //       }
 
-          Object.entries(areaData).forEach(([dates, records]) => {
-            // Check if the date is within the range 
-            // Create the dynamic key based on the index and date
-            const index = `${Object.keys(filteredData).length + 1}`;
+  //       return filteredData;
+  //     }
 
-            filteredData[`${index}) ${dates}`] = records;
 
+  //     let resultss = filterByStamp(alldat, alltype);
 
-          });
-        });
-      });
-    });
-    setFilterdataone(filteredData)
+  //     alldat = resultss
 
-    callfordataone(filteredData)
-    let ghi = processTimeData(alldat)
-    let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
-    // Extract values into separate arrays
-    let timeLabels = kidshort.map(entry => entry.time);
-    let timeCounts = kidshort.map(entry => entry.count);
+  //     console.log(resultss, 'tenten')
+  //   }
 
-    setOption(timeLabels)
-    setOneBar(timeCounts)
+  //   const filteredData = {};
 
-    let ghione = processTimeDatatwo(alldat)
-    let kidshortone = ghione.sort((a, b) => a.time.localeCompare(b.time));
-    // Extract values into separate arrays
-    let timeLabelsone = kidshortone.map(entry => entry.time);
-    let timeCountsone = kidshortone.map(entry => entry.count);
+  //   Object.entries(alldat).forEach(([groupKey, groupData]) => {
 
-    setOptionone(timeLabelsone)
-    setOneBarone(timeCountsone)
-    console.log(JSON.stringify(ghione), 'thousand', ghione)
 
+  //     Object.entries(groupData).forEach(([areas, areaDatas]) => {
 
 
-  }
+
+  //       Object.entries(areaDatas).forEach(([area, areaData]) => {
+
+
+  //         Object.entries(areaData).forEach(([dates, records]) => {
+  //           // Check if the date is within the range 
+  //           // Create the dynamic key based on the index and date
+  //           const index = `${Object.keys(filteredData).length + 1}`;
+
+  //           filteredData[`${index}) ${dates}`] = records;
+
+
+  //         });
+  //       });
+  //     });
+  //   });
+  //   setFilterdataone(filteredData)
+
+  //   callfordataone(filteredData)
+  //   let ghi = processTimeData(alldat)
+  //   let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
+  //   // Extract values into separate arrays
+  //   let timeLabels = kidshort.map(entry => entry.time);
+  //   let timeCounts = kidshort.map(entry => entry.count);
+
+  //   setOption(timeLabels)
+  //   setOneBar(timeCounts)
+
+  //   let ghione = processTimeDatatwo(alldat)
+  //   let kidshortone = ghione.sort((a, b) => a.time.localeCompare(b.time));
+  //   // Extract values into separate arrays
+  //   let timeLabelsone = kidshortone.map(entry => entry.time);
+  //   let timeCountsone = kidshortone.map(entry => entry.count);
+
+  //   setOptionone(timeLabelsone)
+  //   setOneBarone(timeCountsone)
+  //   console.log(JSON.stringify(ghione), 'thousand', ghione)
+
+
+
+  // }
   let callfordataonesearch = (one, bitedata) => {
 
 
@@ -1326,6 +1381,9 @@ let Meals = () => {
             let uuuk = extractUniqueNotes(cleanedData, optionsone)
             uuuk.unshift({ label: "All Courses", value: "All" });
 
+
+            setSelectedCources(uuuk)
+
             setFulldatafull(uuuk)
 
           } else {
@@ -1335,7 +1393,7 @@ let Meals = () => {
 
             let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
             uuuk.unshift({ label: "All Courses", value: "All" });
-
+            setSelectedCources(uuuk)
             setFulldatafull(uuuk)
           }
 
@@ -2288,7 +2346,7 @@ let Meals = () => {
   { value: 'S', label: 'Served' },
   ];
 
-  const [selectedhubOptions, setSelectedhubOptions] = useState([]);
+  const [selectedhubOptions, setSelectedhubOptions] = useState(optionshub);
   const handleChangehub = (selected) => {
     setMenuIsOpentwo(true)
     const hasAllValue = selected.some(item => item.value === "All");
@@ -2437,7 +2495,7 @@ let Meals = () => {
     { value: 'Deliveries', label: 'Deliveries' },
     { value: 'Pick-ups', label: 'Pick-ups' },
   ];
-  const [selectedTakeaway, setSelectedTakeaway] = useState([]);
+  const [selectedTakeaway, setSelectedTakeaway] = useState(optionstakeaway);
   const handleChangeTakeaway = (selected) => {
     setMenuIsOpenfour(true)
     const hasAllValue = selected.some(item => item.value === "All");
@@ -2940,11 +2998,67 @@ let Meals = () => {
 
     }
 
+
+    if (inone != undefined ) {
+      let splitone = inone.split('-')
+ 
+    
+      if (splitone.length === 2 ) {
+
+        if (Number(splitone[0]) < Number(splitone[1]) ) {
+
+
+
+          function filterDataByTableRanges(data, ranges) {
+            const filteredData = {};
+
+            Object.entries(data).forEach(([groupKey, groupData]) => {
+              Object.entries(groupData).forEach(([venueKey, venueData]) => {
+                Object.entries(venueData).forEach(([areaKey, areaData]) => {
+                  Object.entries(areaData).forEach(([dateKey, records]) => {
+                    const filteredRecords = records.filter(record => {
+                      const tableNum = parseInt(record.TABLE, 10);
+                      return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
+                    });
+
+                    if (filteredRecords.length > 0) {
+                      if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                      if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                      if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                      filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                    }
+                  });
+                });
+              });
+            });
+
+            return filteredData;
+          }
+
+          const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+
+          let twelves = filterDataByTableRanges(alldat, ranges)
+
+          alldat = twelves
+
+
+          console.log(twelves, 'nine')
+        } else {
+
+        }
+
+      } else {
+
+      }
+    }
+
+   
+
     if (inone != undefined && intwo != undefined) {
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
-      console.log(splitone.length, 'ten    lll', splitone.length)
+     
       if (splitone.length === 2 && splittwo.length === 2) {
 
         if (Number(splitone[0]) < Number(splitone[1]) && Number(splittwo[0]) < Number(splittwo[1])) {
@@ -3512,6 +3626,59 @@ let Meals = () => {
       console.log(alldat, 'seven')
 
     }
+
+    if (inone != undefined  ) {
+      let splitone = inone.split('-')
+  
+      if (splitone.length === 2 ) {
+
+        if (Number(splitone[0]) < Number(splitone[1]) ) {
+
+
+
+          function filterDataByTableRanges(data, ranges) {
+            const filteredData = {};
+
+            Object.entries(data).forEach(([groupKey, groupData]) => {
+              Object.entries(groupData).forEach(([venueKey, venueData]) => {
+                Object.entries(venueData).forEach(([areaKey, areaData]) => {
+                  Object.entries(areaData).forEach(([dateKey, records]) => {
+                    const filteredRecords = records.filter(record => {
+                      const tableNum = parseInt(record.TABLE, 10);
+                      return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
+                    });
+
+                    if (filteredRecords.length > 0) {
+                      if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                      if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                      if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                      filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                    }
+                  });
+                });
+              });
+            });
+
+            return filteredData;
+          }
+
+          const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+
+          let twelves = filterDataByTableRanges(alldat, ranges)
+
+          alldat = twelves
+
+
+          console.log(twelves, 'nine')
+        } else {
+
+        }
+
+      } else {
+
+      }
+    }
+
 
     if (inone != undefined && intwo != undefined) {
       let splitone = inone.split('-')

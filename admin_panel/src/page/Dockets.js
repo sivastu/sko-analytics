@@ -593,14 +593,14 @@ let Dockets = () => {
 
             let uuuk = extractUniqueNotes(cleanedData, optionsone)
             uuuk.unshift({ label: "All Courses", value: "All" });
-
+            setSelectedCources(uuuk)
             setFulldatafull(uuuk)
 
           } else {
             realven.push(parsedatajson.venue)
             setBasic(parsedatajson.venue)
 
-
+            setSelectedCources(uuuk)
             let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
             uuuk.unshift({ label: "All Courses", value: "All" });
 
@@ -1600,7 +1600,7 @@ const displayText = allLabels.slice(0, 18) + "..."
   { value: 'S', label: 'Served' },
   ];
 
-  const [selectedhubOptions, setSelectedhubOptions] = useState([]);
+  const [selectedhubOptions, setSelectedhubOptions] = useState(optionshub);
 
 
   const handleChangehub = (selected) => {
@@ -1755,7 +1755,7 @@ const displayText = allLabels.slice(0, 18) + "..."
     { value: 'Deliveries', label: 'Deliveries' },
     { value: 'Pick-ups', label: 'Pick-ups' },
   ];
-  const [selectedTakeaway, setSelectedTakeaway] = useState([]);
+  const [selectedTakeaway, setSelectedTakeaway] = useState(optionstakeaway);
   const handleChangeTakeaway = (selected) => {
 
     const hasAllValue = selected.some(item => item.value === "All");
@@ -2203,6 +2203,59 @@ Refredone = useRef();
 
       console.log(alldat, 'seven')
 
+    }
+
+    if (inone != undefined ) {
+      let splitone = inone.split('-')
+ 
+    
+      if (splitone.length === 2 ) {
+
+        if (Number(splitone[0]) < Number(splitone[1]) ) {
+
+
+
+          function filterDataByTableRanges(data, ranges) {
+            const filteredData = {};
+
+            Object.entries(data).forEach(([groupKey, groupData]) => {
+              Object.entries(groupData).forEach(([venueKey, venueData]) => {
+                Object.entries(venueData).forEach(([areaKey, areaData]) => {
+                  Object.entries(areaData).forEach(([dateKey, records]) => {
+                    const filteredRecords = records.filter(record => {
+                      const tableNum = parseInt(record.TABLE, 10);
+                      return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
+                    });
+
+                    if (filteredRecords.length > 0) {
+                      if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                      if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                      if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                      filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                    }
+                  });
+                });
+              });
+            });
+
+            return filteredData;
+          }
+
+          const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+
+          let twelves = filterDataByTableRanges(alldat, ranges)
+
+          alldat = twelves
+
+
+          console.log(twelves, 'nine')
+        } else {
+
+        }
+
+      } else {
+
+      }
     }
 
     if (inone != undefined && intwo != undefined) {
@@ -2805,6 +2858,59 @@ Refredone = useRef();
 
       console.log(alldat, 'seven')
 
+    }
+
+    if (inone != undefined ) {
+      let splitone = inone.split('-')
+ 
+    
+      if (splitone.length === 2 ) {
+
+        if (Number(splitone[0]) < Number(splitone[1]) ) {
+
+
+
+          function filterDataByTableRanges(data, ranges) {
+            const filteredData = {};
+
+            Object.entries(data).forEach(([groupKey, groupData]) => {
+              Object.entries(groupData).forEach(([venueKey, venueData]) => {
+                Object.entries(venueData).forEach(([areaKey, areaData]) => {
+                  Object.entries(areaData).forEach(([dateKey, records]) => {
+                    const filteredRecords = records.filter(record => {
+                      const tableNum = parseInt(record.TABLE, 10);
+                      return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
+                    });
+
+                    if (filteredRecords.length > 0) {
+                      if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                      if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                      if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                      filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                    }
+                  });
+                });
+              });
+            });
+
+            return filteredData;
+          }
+
+          const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+
+          let twelves = filterDataByTableRanges(alldat, ranges)
+
+          alldat = twelves
+
+
+          console.log(twelves, 'nine')
+        } else {
+
+        }
+
+      } else {
+
+      }
     }
 
     if (inone != undefined && intwo != undefined) {
