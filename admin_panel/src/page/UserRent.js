@@ -12,8 +12,8 @@ import { getDatabase, ref, set, push, get, query, orderByChild, equalTo } from "
 import SweetAlert2 from 'react-sweetalert2';
 import * as CryptoJS from 'crypto-js'
 import { toast } from "react-toastify";
-
-
+import { FaArrowLeft } from "react-icons/fa6";
+import emailjs from '@emailjs/browser';
 let UserRent = () => {
 
   let [data, setData] = useState();
@@ -22,13 +22,14 @@ let UserRent = () => {
   const input1Ref = useRef(null);
   const [value, setValue] = useState('');
   const [swalProps, setSwalProps] = useState({ show: false });
-
+  let navigate = useNavigate();
 
   let [username, setUsername] = useState()
   let [password, setPassword] = useState()
   const [usernameError, setUsernameError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-
+const[isLoading,setIsloading]=useState(false);
+const[send,setSend]=useState(false);
   let [forget, setForget] = useState(false)
   let [forgetvalue, setForgetvalse] = useState('')
 
@@ -70,7 +71,64 @@ let UserRent = () => {
       }
     }
   }
-
+  const handleVerify = async (e) => {
+    setIsloading(true);
+    e.preventDefault();
+  
+    if (!forgetvalue) {
+      toast.error("Please enter an email address");
+      setIsloading(false);
+      return;
+    }
+  
+    const db = getDatabase(app);
+    const userRef = ref(db, "user");
+    const emailQuery = query(userRef, orderByChild("Email"), equalTo(forgetvalue));
+  
+    try {
+      const snapshot = await get(emailQuery);
+      
+      if (!snapshot.exists()) {
+        toast.error("No user found with the given email.");
+        setIsloading(false);
+        return;
+      }
+  
+      snapshot.forEach(async (userSnapshot) => {
+        console.log(userSnapshot.key, userSnapshot.val());
+  
+        try {
+          await emailjs.send(
+            'service_70nfi2e',
+            'template_nxlgvq8',
+            {  
+              from_name: "SKO", 
+              to_name: forgetvalue.split("@")[0], 
+              to_email: forgetvalue, 
+              from_email: "stainsrubus@gmail.com",
+              subject: "Verification from SKO",
+              message: "............Verification link.............",
+            },
+            '4neAUe9l0jy_Tyrus'
+          );
+  
+          toast.success('Kindly check your email to verify your account!');
+          setForgetvalse('');
+          setSend(true);
+        } catch (error) {
+          console.error("EmailJS Error:", error.text);
+          toast.error('Failed to send email. Please try again.');
+        }
+      });
+  
+    } catch (error) {
+      console.error("Firebase Error:", error);
+      toast.error("Error fetching data.");
+    } finally {
+      setIsloading(false);
+    }
+  };
+  
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -127,7 +185,6 @@ let UserRent = () => {
   }
 
 
-  let navigate = useNavigate();
 
   const handleKeyDownfiin = (event) => {
     if (event.key === 'Enter') {
@@ -334,12 +391,10 @@ let UserRent = () => {
             backgroundPosition: "center", backgroundRepeat: "no-repeat",
             alignItems: "center", justifyContent: "center", display: 'flex', backgroundColor: "#313233"
           }} >
-
-            <div style={{ maxWidth: 550, height: 267,width:"100%", backgroundColor: "#F3F3F3", borderRadius: 7, }} >
-              {
+      {
                 forget === false ?
-
-                  <div className="kjok" style={{ marginTop: '7%' }} >
+            <div style={{ maxWidth: 550, height: 267,width:"100%", backgroundColor: "#F3F3F3", borderRadius: 7, }} >
+            <div className="kjok" style={{ marginTop: '7%' }} >
                     <div className="d-flex justify-content-evenly" >
                       <p style={{ color: '#1A1A1B', fontSize: 17, fontWeight: '400', paddingTop:12 }} >Username:</p>
                       <input onChange={(e) => { 
@@ -361,43 +416,73 @@ let UserRent = () => {
                     </div>
                 
                     <p onClick={() => {
-                      // setForget(true)
+                      setForget(true)
+                      // navigate('/forgetpassword')
                     }} style={{
                       color: "#707070", fontSize: 14, fontWeight: '400',fontFamily:'Roboto', textAlign: 'right', marginRight: 68, marginTop: 3,
                       cursor: "pointer"
                     }} >Reset password?</p>
-                  </div>
 
-                  :
-
-                  <div className="kjok" style={{ marginTop: '7%' }} >
-
-
-                    <div className="d-flex justify-content-around mt-3" >
-                      <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', }}>Enter Email :</p>
-                      <input onChange={(e) => {
-                        setForgetvalse(e.target.value)
-                      }} ref={input3Ref} value={forgetvalue} onKeyDown={handleKeyDowns} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070" }} type="text" />
-                    </div>
-                    <p onClick={() => {
-                      setForget(false)
-                    }} style={{
-                      color: "#707070", fontSize: 15, fontWeight: '700', textAlign: 'right', marginRight: 40, marginTop: 3,
-                      cursor: "pointer"
-                    }} >Login</p>
-                  </div>
-
-              }
-
-
-
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 30, cursor: "pointer" }} >
+<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 30, cursor: "pointer" }} >
                 <div onClick={() => {
                   loginn()
                 }} style={{ backgroundColor: '#316AAF', width: 85, height: 30, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }} >
                   <p style={{ textAlign: 'center',fontSize: 17, color: '#FCFCFC',fontWeight:700,fontFamily: 'Roboto',padding: 2 }} >Login</p>
                 </div>
               </div>
+                  </div>
+                  </div>
+             
+        
+              
+
+                  :
+send?<div className="fs-4 text-white">
+  <p>
+  We have sent an verification link to your registered mail. Kindly verify!!
+  </p>
+  <p onClick={() => {
+  setForget(false),
+  setSend(false)
+}} style={{
+  color: "#fff", fontSize: 15, fontWeight: '500', textAlign: 'center', marginRight: 40, marginTop: 3,
+  cursor: "pointer"
+}} ><FaArrowLeft /> Back to Login 
+</p>
+</div> :  
+<div style={{ maxWidth: 550, height: 267,width:"100%", backgroundColor: "#F3F3F3", borderRadius: 7, }} >
+<div className="kjok" style={{ marginTop: '15%' }} >
+
+
+<div className="d-flex justify-content-around mt-3" >
+  <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', }}>Enter Email :</p>
+  <input onChange={(e) => {
+    setForgetvalse(e.target.value)
+  }} ref={input3Ref} value={forgetvalue} onKeyDown={handleKeyDowns} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070" }} type="text" />
+</div>
+<p onClick={() => {
+  setForget(false)
+  setSend(false)
+}} style={{
+  color: "#707070", fontSize: 15, fontWeight: '500', textAlign: 'right', marginRight: 40, marginTop: 3,
+  cursor: "pointer"
+}} ><FaArrowLeft /> Back to Login </p>
+
+<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: 30, cursor: "pointer" }} >
+<div onClick={(e) => {
+handleVerify(e)
+}} style={{ backgroundColor: '#316AAF', width: isLoading?110:85, height: 30, borderRadius: 5, alignItems: 'center', justifyContent: 'center' }} >
+<p style={{ textAlign: 'center',fontSize: 17, color: '#FCFCFC',fontWeight:700,fontFamily: 'Roboto',padding: 2 }} >{isLoading?'Verifying..':'Verify'}</p>
+</div>
+</div>
+</div>
+         </div>       
+
+              }
+
+
+
+          
 
 
 
@@ -409,9 +494,6 @@ let UserRent = () => {
               {/* <button onClick={()=>{ saveData() }} >Submit</button>
               <button onClick={()=>{ fetchData() }} >get</button> */}
 
-
-
-            </div>
           </div>
         </div>
 
