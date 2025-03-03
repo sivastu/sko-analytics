@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef , useContext } from "react";
 import Header from "../component/Header";
 import axios from "axios";
 import { Base_url } from "../config";
@@ -15,12 +15,13 @@ import Swal from 'sweetalert2'
 import Select, { components } from 'react-select';
 import { FaCheck } from 'react-icons/fa';
 import { Bar } from 'react-chartjs-2';
-import { jsPDF } from 'jspdf';
+import { jsPDF } from 'jspdf'; 
 import html2canvas from "html2canvas";
 import * as CryptoJS from 'crypto-js'
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
 import app from "./firebase";
+import { DataContext } from "../component/DataProvider";
 import {
   getDatabase, ref, set, push, get, query,
   startAt, endAt, orderByChild, equalTo,
@@ -115,6 +116,8 @@ let Mealsmulti = () => {
   const selectRefthree = useRef(null);
   const selectReffour = useRef(null);
 
+    const { state } = useContext(DataContext);
+
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -152,9 +155,9 @@ let Mealsmulti = () => {
     "label": "Minimum"
   },])
   useEffect(() => {
-    loginCheck()
-    getone()
-    getonez()
+    loginCheck(state?.user)
+    getone(state?.data)
+    // getonez()
 
   }, [])
 
@@ -224,7 +227,7 @@ let Mealsmulti = () => {
     return data.name;
   }
 
-  let loginCheck = async () => {
+  let loginCheck = async (snapshot ) => {
     let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
       sessionStorage.removeItem('data')
@@ -235,14 +238,8 @@ let Mealsmulti = () => {
 
     let parsedatajson = JSON.parse(decry)
     let name = getName(parsedatajson)
-    setUsedname(name)
-    const db = getDatabase(app);
-    const newDocRef = ref(db, `user`);
-
-    const snapshot = await get(newDocRef); // Fetch the data for the user
-
-    if (snapshot.exists()) {
-      const userData = snapshot.val();
+    setUsedname(name) 
+      const userData = snapshot 
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
       if (foundUser.Role === 'emp') {
@@ -261,8 +258,7 @@ let Mealsmulti = () => {
         }
       } else {
         console.log("User does not exist.");
-      }
-    }
+      } 
   }
 
 
@@ -314,21 +310,10 @@ let Mealsmulti = () => {
 
   let [fulldatafull, setFulldatafull] = useState()
 
-  let getone = () => {
+  let getone = (snapshots) => {
 
-
-    const db = getDatabase(app);
-    const eventsRefs = ref(db, "Data");
-
-    const dateQuerys = query(
-      eventsRefs,
-    );
-
-    // Fetch the results
-    get(dateQuerys)
-      .then((snapshots) => {
-        if (snapshots.exists()) {
-          const eventss = snapshots.val();
+ 
+          const eventss = snapshots 
 
           function removeTrainingNotes(obj) {
             if (Array.isArray(obj)) {
@@ -553,13 +538,7 @@ let Mealsmulti = () => {
 
           filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-        } else {
-          console.log("No events found between the dates.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching events:", error);
-      });
+       
   }
 
   let getonez = () => {
