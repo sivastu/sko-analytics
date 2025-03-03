@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef , useContext } from "react";
 import Header from "../component/Header";
 import axios from "axios";
 import { Base_url } from "../config";
@@ -23,6 +23,7 @@ import html2canvas from "html2canvas";
 // import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import ExcelJS from "exceljs";
+import { DataContext } from "../component/DataProvider";
 
 import app from "./firebase";
 import {
@@ -95,6 +96,8 @@ let Meals = () => {
   let [oldpro, setOldpro] = useState([])
   let [oldcou, setOldcou] = useState([])
   let [oldtak, setOldtak] = useState([])
+
+  const { state } = useContext(DataContext);
 
   let [basicfine, setBasicfine] = useState([
     {
@@ -1042,9 +1045,9 @@ let Meals = () => {
   }
 
   useEffect(() => {
-    loginCheck()
-    getone()
-    getonez()
+    loginCheck(state?.user)
+    getone(state?.data)
+    // getonez()
 
   }, [])
 
@@ -1081,7 +1084,7 @@ let Meals = () => {
     return data.name;
   }
 
-  let loginCheck = async () => {
+  let loginCheck = async (snapshot) => {
     let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
       sessionStorage.removeItem('data')
@@ -1092,14 +1095,9 @@ let Meals = () => {
 
     let parsedatajson = JSON.parse(decry)
     let name = getName(parsedatajson)
-    setUsedname(name)
-    const db = getDatabase(app);
-    const newDocRef = ref(db, `user`);
-
-    const snapshot = await get(newDocRef); // Fetch the data for the user
-
-    if (snapshot.exists()) {
-      const userData = snapshot.val();
+    setUsedname(name) 
+ 
+      const userData = snapshot 
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
       if (foundUser.Role === 'emp') {
@@ -1118,8 +1116,7 @@ let Meals = () => {
         }
       } else {
         console.log("User does not exist.");
-      }
-    }
+      } 
   }
 
 
@@ -1204,21 +1201,10 @@ let Meals = () => {
 
   let [fulldatafull, setFulldatafull] = useState()
 
-  let getone = () => {
+  let getone = (snapshots) => {
 
-
-    const db = getDatabase(app);
-    const eventsRefs = ref(db, "Data");
-
-    const dateQuerys = query(
-      eventsRefs,
-    );
-
-    // Fetch the results
-    get(dateQuerys)
-      .then((snapshots) => {
-        if (snapshots.exists()) {
-          const eventss = snapshots.val();
+ 
+          const eventss = snapshots 
 
           function removeTrainingNotes(obj) {
             if (Array.isArray(obj)) {
@@ -1444,13 +1430,7 @@ let Meals = () => {
 
           filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-        } else {
-          console.log("No events found between the dates.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching events:", error);
-      });
+        
   }
 
   let getonez = () => {
