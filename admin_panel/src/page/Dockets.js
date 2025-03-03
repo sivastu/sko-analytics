@@ -4768,7 +4768,7 @@ const downloadDocketsrecExcel = async () => {
 
             <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
               <img src="Menu_Logo.png" style={{ width: 56, height: 28 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >analytics</p>
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 0 }} >analytics</p>
             </div>
 
           </div>
@@ -4906,7 +4906,7 @@ const downloadDocketsrecExcel = async () => {
     {/* Venue & Hub Filters */}
     <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
       <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen venue & hub</p>
-      <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
+      <div ref={selectRef} className="custom-inputoness  d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
         <div className="switch-container">
           <input 
             type="checkbox" 
@@ -4922,38 +4922,47 @@ const downloadDocketsrecExcel = async () => {
           <label className="switch-label" htmlFor="switch1"></label>
         </div>
         <Select
-          menuIsOpen={menuIsOpen}
-          onMenuOpen={() => setMenuIsOpen(true)}
-          onMenuClose={() => setMenuIsOpen(false)}
-          onFocus={() => setMenuIsOpen(true)}
-          isDisabled={!venueradio}
-          isMulti
-          className="newoneonee"
-          options={basic}
-          value={selectedOptions}
-          onChange={handleChange}
-          placeholder="All Venues"
-          components={{
-            Option: CustomOption,
-            MultiValue: () => null,
-            ValueContainer: ({ children, ...props }) => {
-              const selectedValues = props.getValue();
-              return (
-                <components.ValueContainer {...props}>
-                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                </components.ValueContainer>
-              );
-            },
-          }}
-          closeMenuOnSelect={false}
-          hideSelectedOptions={false}
-          styles={{
-            control: (base) => ({ ...base, border: 'unset', backgroundColor: '#fff', color: '#1A1A1B', fontSize: 15 }),
-          }}
-        />
+  menuIsOpen={menuIsOpen}
+  onMenuOpen={() => setMenuIsOpen(true)}
+  onMenuClose={() => setMenuIsOpen(false)}
+  onFocus={() => setMenuIsOpen(true)}
+  isDisabled={!venueradio}
+  isMulti
+  className="newoneonee"
+  options={basic}
+  value={selectedOptions}
+  onChange={handleChange}
+  placeholder="All Venues"
+  components={{
+    Option: CustomOption,
+    MultiValue: () => null,
+    ValueContainer: ({ children, ...props }) => {
+      const selectedValues = props.getValue();
+      return (
+        <components.ValueContainer {...props}>
+          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+        </components.ValueContainer>
+      );
+    },
+  }}
+  closeMenuOnSelect={false}
+  hideSelectedOptions={false}
+  styles={{
+    control: (base) => ({
+      ...base,
+      border: 'none', 
+      backgroundColor: '#fff',
+      color: '#1A1A1B',
+      fontSize: 15,
+      outline: 'none',  
+      boxShadow: 'none', 
+    }),
+  }}
+/>
+
       </div>
 
-      <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+      <div ref={selectRefone} className="custom-inputoness d-flex mt-3 " style={{ width: '100%', height: 45 }}>
         <div className="switch-container">
           <input 
             checked={hubbswitch} 
@@ -4994,7 +5003,7 @@ const downloadDocketsrecExcel = async () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', background: '#fff', color: '#1A1A1B', fontSize: 15 }),
+            control: (base) => ({ ...base, backgroundColor: '#fff', color: '#1A1A1B', fontSize: 15, outline: 'none',border:'none',boxShadow: 'none', }),
           }}
         />
       </div>
@@ -5045,7 +5054,7 @@ const downloadDocketsrecExcel = async () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', background: '#fff', color: '#1A1A1B', fontSize: 15 }),
+            control: (base) => ({ ...base, border: 'none', background: '#fff', color: '#1A1A1B', fontSize: 15,outline:'none',boxShadow: 'none'  }),
           }}
         />
       </div>
@@ -5092,7 +5101,7 @@ const downloadDocketsrecExcel = async () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', background: '#fff', color: '#1A1A1B', fontSize: 15 }),
+            control: (base) => ({ ...base, border: 'none', background: '#fff', color: '#1A1A1B', fontSize: 15,outline:'none',boxShadow: 'none'  }),
           }}
         />
       </div>
@@ -5110,7 +5119,7 @@ const downloadDocketsrecExcel = async () => {
           }} 
           value={inputvalue} 
           placeholder="0-9999" 
-          style={{ width: '50%', border: 'unset', color: '#1A1A1B', fontSize: 15, textAlign: 'center' }} 
+          style={{ width: '50%', border: 'none', color: '#1A1A1B', fontSize: 15, textAlign: 'center',outline:'none' }} 
           type="text" 
         />
         <p style={{ fontSize: 19, display: 'contents' }}>|</p>
@@ -5122,7 +5131,7 @@ const downloadDocketsrecExcel = async () => {
           }} 
           value={inputvaluetwo} 
           placeholder="9999-9999" 
-          style={{ width: '50%', border: 'unset', color: '#1A1A1B', fontSize: 15, textAlign: 'center' }} 
+          style={{ width: '50%', border: 'none', color: '#1A1A1B', fontSize: 15, textAlign: 'center' ,outline:'none'}} 
           type="text" 
         />
       </div>
@@ -5143,35 +5152,73 @@ const downloadDocketsrecExcel = async () => {
           <label className="switch-label" htmlFor="switch5"></label>
         </div>
         <Select
-          menuIsOpen={menuIsOpenfour}
-          onMenuOpen={() => setMenuIsOpenfour(true)}
-          onMenuClose={() => setMenuIsOpenfour(false)}
-          onFocus={() => setMenuIsOpenfour(true)}
-          isDisabled={!takeaway}
-          isMulti
-          className="newoneonee"
-          options={optionstakeaway}
-          value={selectedTakeaway}
-          onChange={handleChangeTakeaway}
-          placeholder="All takeaways"
-          components={{
-            Option: CustomOption,
-            MultiValue: () => null,
-            ValueContainer: ({ children, ...props }) => {
-              const selectedValues = props.getValue();
-              return (
-                <components.ValueContainer {...props}>
-                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                </components.ValueContainer>
-              );
-            },
-          }}
-          closeMenuOnSelect={false}
-          hideSelectedOptions={false}
-          styles={{
-            control: (base) => ({ ...base, border: 'unset', background: '#fff', color: '#1A1A1B', fontSize: 15 }),
-          }}
-        />
+  menuIsOpen={menuIsOpenfour}
+  onMenuOpen={() => setMenuIsOpenfour(true)}
+  onMenuClose={() => setMenuIsOpenfour(false)}
+  onFocus={() => setMenuIsOpenfour(true)}
+  isDisabled={!takeaway}
+  isMulti
+  className="newoneonee"
+  options={optionstakeaway}
+  value={selectedTakeaway}
+  onChange={handleChangeTakeaway}
+  placeholder="All takeaways"
+  components={{
+    Option: ({ children, isSelected, ...props }) => (
+      <components.Option {...props} isSelected={isSelected}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          padding: '10px',
+          backgroundColor: isSelected ? 'rgb(240, 248, 255)' : 'transparent',
+          color: isSelected ? 'rgb(0, 115, 230)' : '#1A1A1B',
+          cursor: 'pointer'
+        }}>
+          <div className="switch-containers" style={{ marginRight: '4px' }}>
+            <input 
+              type="checkbox" 
+              id={`switch-${props.data.value}`} 
+              checked={isSelected} 
+              readOnly 
+            />
+            <label className="switch-label" htmlFor={`switch-${props.data.value}`}></label>
+          </div>
+          <span style={{ flexGrow: 1, marginTop: '6px' }}>{props.data.label}</span>
+        </div>
+      </components.Option>
+    ),
+    MultiValue: () => null,
+    ValueContainer: ({ children, ...props }) => {
+      const selectedValues = props.getValue();
+      return (
+        <components.ValueContainer {...props}>
+          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+        </components.ValueContainer>
+      );
+    },
+  }}
+  closeMenuOnSelect={false}
+  hideSelectedOptions={false}
+  styles={{
+    control: (base) => ({ 
+      ...base, 
+      border: 'unset', 
+      background: '#fff', 
+      color: '#1A1A1B', 
+      fontSize: 15,
+      outline: 'none',
+      boxShadow: 'none' 
+    }),
+    option: (base, state) => ({
+      ...base,
+      backgroundColor: 'transparent',
+      padding: 0, // Remove default padding since we're applying it in the custom Option component
+      '&:hover': {
+        backgroundColor: 'transparent', // Make hover transparent as we're handling it in the custom component
+      }
+    }),
+  }}
+/>
       </div>
     </div>
   </div>

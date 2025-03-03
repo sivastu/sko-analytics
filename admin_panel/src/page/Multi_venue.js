@@ -1356,8 +1356,8 @@ let Multi_venue = () => {
           display: 'flex',
           alignItems: 'center',
           padding: '10px',
-          backgroundColor: isSelected ? '#f0f8ff' : 'white',
-          color: isSelected ? '#0073e6' : 'black',
+          backgroundColor: isSelected ? 'transparent' : 'transparent',
+          color: isSelected ? 'black' : 'black',
           cursor: 'pointer',
         }}
       >
@@ -5064,7 +5064,7 @@ const downloadDocketsrecExcel = async () => {
 
             <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
               <img src="Menu_Logo.png" style={{ width: 56, height: 28 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: -3 }} >analytics</p>
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 0 }} >analytics</p>
             </div>
 
           </div>
@@ -5150,7 +5150,7 @@ const downloadDocketsrecExcel = async () => {
     {/* Venue & Hub */}
     <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
       <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen venue & hub</p>
-      <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
+      <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45,  borderRadius: menuIsOpen ? ' 8px 8px 0 0' : '8px',    border:menuIsOpen?'2px solid #707070':'none',borderBottom:'none'}}>
         <div className="switch-container">
           <input 
             type="checkbox" 
@@ -5166,38 +5166,58 @@ const downloadDocketsrecExcel = async () => {
           <label className="switch-label" htmlFor="switch1"></label>
         </div>
         <Select
-          menuIsOpen={menuIsOpen}
-          onMenuOpen={() => setMenuIsOpen(true)}
-          onMenuClose={() => setMenuIsOpen(false)}
-          onFocus={() => setMenuIsOpen(true)}
-          isDisabled={!venueradio}
-          isMulti
-          className="newoneonee"
-          options={basic}
-          value={selectedOptions}
-          onChange={handleChange}
-          placeholder="All Venues"
-          components={{
-            Option: CustomOption,
-            MultiValue: () => null,
-            ValueContainer: ({ children, ...props }) => {
-              const selectedValues = props.getValue();
-              return (
-                <components.ValueContainer {...props}>
-                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                </components.ValueContainer>
-              );
-            },
-          }}
-          closeMenuOnSelect={false}
-          hideSelectedOptions={false}
-          styles={{
-            control: (base) => ({ ...base, border: 'unset', backgroundColor: '#fff', fontSize: 15, color: '#1A1A1B' }),
-          }}
-        />
+  menuIsOpen={menuIsOpen}
+  onMenuOpen={() => setMenuIsOpen(true)}
+  onMenuClose={() => setMenuIsOpen(false)}
+  onFocus={() => setMenuIsOpen(true)}
+  isDisabled={!venueradio}
+  isMulti
+  className="newoneonee"
+  options={basic}
+  value={selectedOptions}
+  onChange={handleChange}
+  placeholder="All Venues"
+  components={{
+    Option: CustomOption,
+    MultiValue: () => null,
+    ValueContainer: ({ children, ...props }) => {
+      const selectedValues = props.getValue();
+      return (
+        <components.ValueContainer {...props}>
+          {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+        </components.ValueContainer>
+      );
+    },
+  }}
+  closeMenuOnSelect={false}
+  hideSelectedOptions={false}
+  styles={{
+    control: (base, state) => ({
+      ...base,
+      // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+      backgroundColor: '#fff',
+      fontSize: 15,
+      color: '#1A1A1B',
+      outline: 'none', // ✅ Removes default browser outline
+      boxShadow: state.isFocused ? 'none' : 'none', // ✅ Prevents blue glow on focus
+      border:'none'
+    }),
+    menu: (base) => ({
+      ...base,
+      minWidth:'calc(100% + 72px)',
+     marginLeft:'-60px',
+  border:menuIsOpen?'black':'none',
+      borderTop: 'none',
+      borderRadius: '0 0 8px 8px',
+      border:menuIsOpen?'2px solid #707070':'none',
+      borderTop:'none'
+    }),
+  }}
+/>
+
       </div>
 
-      <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+      <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45,borderRadius: menuIsOpenone ? ' 8px 8px 0 0' : '8px',    border:menuIsOpenone?'2px solid #707070':'none',borderBottom:'none' }}>
         <div className="switch-container">
           <input 
             checked={hubbswitch} 
@@ -5239,7 +5259,26 @@ const downloadDocketsrecExcel = async () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff' }),
+            control: (base, state) => ({
+              ...base,
+              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+              backgroundColor: '#fff',
+              fontSize: 15,
+              color: '#1A1A1B',
+              outline: 'none', // ✅ Removes default browser outline
+              boxShadow: state.isFocused ? 'none' : 'none', // ✅ Prevents blue glow on focus
+              border:'none'
+            }),
+            menu: (base) => ({
+              ...base,
+              minWidth:'calc(100% + 72px)',
+             marginLeft:'-60px',
+          border:menuIsOpenone?'black':'none',
+              borderTop: 'none',
+              borderRadius: '0 0 8px 8px',
+              border:menuIsOpenone?'2px solid #707070':'none',
+              borderTop:'none'
+            }),
           }}
         />
       </div>
@@ -5250,7 +5289,7 @@ const downloadDocketsrecExcel = async () => {
       <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
         Compare with:<span style={{ fontWeight: '400' }}> Custom</span>
       </p>
-      <div ref={selectReffive} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
+      <div ref={selectReffive} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45,borderRadius: menuIsOpenfive ? ' 8px 8px 0 0' : '8px',    border:menuIsOpenfive?'2px solid #707070':'none',borderBottom:'none' }}>
         <div className="switch-container">
           <input 
             type="checkbox" 
@@ -5292,12 +5331,31 @@ const downloadDocketsrecExcel = async () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', backgroundColor: '#fff', fontSize: 15, color: '#1A1A1B' }),
+            control: (base, state) => ({
+              ...base,
+              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+              backgroundColor: '#fff',
+              fontSize: 15,
+              color: '#1A1A1B',
+              outline: 'none', // ✅ Removes default browser outline
+              boxShadow: state.isFocused ? 'none' : 'none', // ✅ Prevents blue glow on focus
+              border:'none'
+            }),
+            menu: (base) => ({
+              ...base,
+              minWidth:'calc(100% + 72px)',
+             marginLeft:'-60px',
+          border:menuIsOpenfive?'black':'none',
+              borderTop: 'none',
+              borderRadius: '0 0 8px 8px',
+              border:menuIsOpenfive?'2px solid #707070':'none',
+              borderTop:'none'
+            }),
           }}
         />
       </div>
 
-      <div ref={selectRefsix} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+      <div ref={selectRefsix} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45,borderRadius: menuIsOpensix ? ' 8px 8px 0 0' : '8px',    border:menuIsOpensix?'2px solid #707070':'none',borderBottom:'none' }}>
         <div className="switch-container">
           <input 
             checked={venueradiosix} 
@@ -5339,7 +5397,26 @@ const downloadDocketsrecExcel = async () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff' }),
+            control: (base, state) => ({
+              ...base,
+              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+              backgroundColor: '#fff',
+              fontSize: 15,
+              color: '#1A1A1B',
+              outline: 'none', // ✅ Removes default browser outline
+              boxShadow: state.isFocused ? 'none' : 'none', // ✅ Prevents blue glow on focus
+              border:'none'
+            }),
+            menu: (base) => ({
+              ...base,
+              minWidth:'calc(100% + 72px)',
+             marginLeft:'-60px',
+          border:menuIsOpen?'black':'none',
+              borderTop: 'none',
+              borderRadius: '0 0 8px 8px',
+              border:menuIsOpensix?'2px solid #707070':'none',
+              borderTop:'none'
+            }),
           }}
         />
       </div>
@@ -5348,7 +5425,7 @@ const downloadDocketsrecExcel = async () => {
     {/* Filter by stages/courses */}
     <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
       <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by stages/courses</p>
-      <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45 }}>
+      <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45,borderRadius: menuIsOpentwo ? ' 8px 8px 0 0' : '8px',    border:menuIsOpentwo?'2px solid #707070':'none',borderBottom:'none' }}>
         <div className="switch-container">
           <input 
             type="checkbox" 
@@ -5390,12 +5467,31 @@ const downloadDocketsrecExcel = async () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff' }),
+            control: (base, state) => ({
+              ...base,
+              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+              backgroundColor: '#fff',
+              fontSize: 15,
+              color: '#1A1A1B',
+              outline: 'none', // ✅ Removes default browser outline
+              boxShadow: state.isFocused ? 'none' : 'none', // ✅ Prevents blue glow on focus
+              border:'none'
+            }),
+            menu: (base) => ({
+              ...base,
+              minWidth:'calc(100% + 72px)',
+             marginLeft:'-60px',
+          border:menuIsOpentwo?'black':'none',
+              borderTop: 'none',
+              borderRadius: '0 0 8px 8px',
+              border:menuIsOpentwo?'2px solid #707070':'none',
+              borderTop:'none'
+            }),
           }}
         />
       </div>
 
-      <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+      <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45,borderRadius: menuIsOpenthree ? ' 8px 8px 0 0' : '8px',    border:menuIsOpenthree?'2px solid #707070':'none',borderBottom:'none' }}>
         <div className="switch-container">
           <input 
             type="checkbox" 
@@ -5437,7 +5533,26 @@ const downloadDocketsrecExcel = async () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff' }),
+            control: (base, state) => ({
+              ...base,
+              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+              backgroundColor: '#fff',
+              fontSize: 15,
+              color: '#1A1A1B',
+              outline: 'none', // ✅ Removes default browser outline
+              boxShadow: state.isFocused ? 'none' : 'none', // ✅ Prevents blue glow on focus
+              border:'none'
+            }),
+            menu: (base) => ({
+              ...base,
+              minWidth:'calc(100% + 72px)',
+             marginLeft:'-60px',
+          border:menuIsOpenthree?'black':'none',
+              borderTop: 'none',
+              borderRadius: '0 0 8px 8px',
+              border:menuIsOpen?'2px solid #707070':'none',
+              borderTop:'none'
+            }),
           }}
         />
       </div>
@@ -5474,7 +5589,7 @@ const downloadDocketsrecExcel = async () => {
         />
       </div>
 
-      <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 }}>
+      <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 ,borderRadius: menuIsOpenfour ? ' 8px 8px 0 0' : '8px',    border:menuIsOpenfour?'2px solid #707070':'none',borderBottom:'none'}}>
         <div className="switch-container">
           <input 
             type="checkbox" 
@@ -5516,7 +5631,26 @@ const downloadDocketsrecExcel = async () => {
           closeMenuOnSelect={false}
           hideSelectedOptions={false}
           styles={{
-            control: (base) => ({ ...base, border: 'unset', fontSize: 15, color: '#1A1A1B', background: '#fff' }),
+            control: (base, state) => ({
+              ...base,
+              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+              backgroundColor: '#fff',
+              fontSize: 15,
+              color: '#1A1A1B',
+              outline: 'none', // ✅ Removes default browser outline
+              boxShadow: state.isFocused ? 'none' : 'none', // ✅ Prevents blue glow on focus
+              border:'none'
+            }),
+            menu: (base) => ({
+              ...base,
+              minWidth:'calc(100% + 72px)',
+             marginLeft:'-60px',
+          border:menuIsOpen?'black':'none',
+              borderTop: 'none',
+              borderRadius: '0 0 8px 8px',
+              border:menuIsOpenfour?'2px solid #707070':'none',
+              borderTop:'none'
+            }),
           }}
         />
       </div>
