@@ -4913,6 +4913,15 @@ const downloadDocketsrecExcel = async () => {
               setVenueradio(e.target.checked)
               if (e.target.checked === false) {
                 setSelectedOptions([])
+              } else{
+
+
+
+                handleChange([...selectedOptions , ...[{
+                  "label": "All Venue",
+                  "value": "All"
+              }]])
+                console.log(selectedOptions , 'selectedOptions')
               }
             }} 
           />
@@ -4977,6 +4986,12 @@ const downloadDocketsrecExcel = async () => {
             onChange={(e) => {
               setHubbswitch(e.target.checked)
               if (e.target.checked === false) {
+                setHubb([])
+              }else{
+                handleChangehubone([...hubb , ...[{
+                  "label": "All Hub",
+                  "value": "All"
+              }]]) 
               }
             }} 
             type="checkbox" 
@@ -5048,6 +5063,11 @@ const downloadDocketsrecExcel = async () => {
               setHubradio(e.target.checked)
               if (e.target.checked === false) {
                 setSelectedhubOptions([])
+              }else{
+                handleChangehub([...selectedhubOptions , ...[{
+                  "label": "All Stages",
+                  "value": "All"
+                }]])
               }
             }} 
             id="switch2" 
@@ -5114,6 +5134,8 @@ const downloadDocketsrecExcel = async () => {
               setCources(e.target.checked)
               if (e.target.checked === false) {
                 setSelectedCources([])
+              }else{
+                handleChangeCources([...selectedCources , ...[ { label: "All Courses", value: "All" } ]])
               }
             }} 
             id="switch4" 
@@ -5210,6 +5232,8 @@ const downloadDocketsrecExcel = async () => {
               setTakeaway(e.target.checked)
               if (e.target.checked === false) {
                 setSelectedTakeaway([])
+              }else{
+                handleChangeTakeaway([...selectedTakeaway , ...[{ value: 'All', label: 'All takeaways' }]])
               }
             }} 
             id="switch5" 

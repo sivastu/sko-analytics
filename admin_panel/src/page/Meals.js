@@ -4621,6 +4621,22 @@ let Meals = () => {
               if (e.target.checked === false) {
                 setSelectedOptions([])
               }
+              
+              
+              else{
+
+
+
+                handleChange([...selectedOptions , ...[{
+                  "label": "All Venue",
+                  "value": "All"
+              }]])
+                console.log(selectedOptions , 'selectedOptions')
+              }
+
+
+
+
             }} 
           />
           <label className="switch-label" htmlFor="switch1"></label>
@@ -4682,6 +4698,17 @@ let Meals = () => {
             checked={hubbswitch} 
             onChange={(e) => {
               setHubbswitch(e.target.checked)
+
+              if (e.target.checked === false) {
+                setHubb([])
+              }else{
+                handleChangehubone([...hubb , ...[{
+                  "label": "All Hub",
+                  "value": "All"
+              }]]) 
+              }
+
+
             }} 
             type="checkbox" 
             id="switch3" 
@@ -4752,6 +4779,11 @@ let Meals = () => {
               setHubradio(e.target.checked)
               if (e.target.checked === false) {
                 setSelectedhubOptions([])
+              }else{
+                handleChangehub([...selectedhubOptions , ...[{
+                  "label": "All Stages",
+                  "value": "All"
+                }]])
               }
             }} 
             id="switch2" 
@@ -4818,6 +4850,8 @@ let Meals = () => {
               setCources(e.target.checked)
               if (e.target.checked === false) {
                 setSelectedCources([])
+              }else{
+                handleChangeCources([...selectedCources , ...[ { label: "All Courses", value: "All" } ]])
               }
             }} 
             id="switch4" 
@@ -4914,6 +4948,8 @@ let Meals = () => {
               setTakeaway(e.target.checked)
               if (e.target.checked === false) {
                 setSelectedTakeaway([])
+              }else{
+                handleChangeTakeaway([...selectedTakeaway , ...[{ value: 'All', label: 'All takeaways' }]])
               }
             }} 
             id="switch5" 
