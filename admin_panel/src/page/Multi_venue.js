@@ -5403,15 +5403,15 @@ const downloadDocketsrecExcel = async () => {
               backgroundColor: '#fff',
               fontSize: 15,
               color: '#1A1A1B',
-              outline: 'none', // ✅ Removes default browser outline
-              boxShadow: state.isFocused ? 'none' : 'none', // ✅ Prevents blue glow on focus
+              outline: 'none', 
+              boxShadow: state.isFocused ? 'none' : 'none', 
               border:'none'
             }),
             menu: (base) => ({
               ...base,
               minWidth:'calc(100% + 72px)',
              marginLeft:'-60px',
-          border:menuIsOpen?'black':'none',
+          border:menuIsOpensix?'black':'none',
               borderTop: 'none',
               borderRadius: '0 0 8px 8px',
               border:menuIsOpensix?'2px solid #707070':'none',
@@ -5550,7 +5550,7 @@ const downloadDocketsrecExcel = async () => {
           border:menuIsOpenthree?'black':'none',
               borderTop: 'none',
               borderRadius: '0 0 8px 8px',
-              border:menuIsOpen?'2px solid #707070':'none',
+              border:menuIsOpenthree?'2px solid #707070':'none',
               borderTop:'none'
             }),
           }}
