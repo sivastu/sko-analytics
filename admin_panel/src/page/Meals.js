@@ -4220,8 +4220,7 @@ let Meals = () => {
       html2canvas: {
         useCORS: true, // Handle cross-origin images
       },
-    });
-
+    })
 
 
   }
@@ -5953,6 +5952,7 @@ PDF
   }} 
   onClick={() => {
     if (!isPdfLoad) {
+      setIsExcelLoad(true)
       downloadMealsExcel()
     }
   }}
