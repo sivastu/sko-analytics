@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef , useContext } from "react";
 import Header from "../component/Header";
 import axios from "axios";
 import { Base_url } from "../config";
@@ -12,6 +12,7 @@ import { getDatabase, ref, set, push, get, query, orderByChild, equalTo } from "
 import SweetAlert2 from 'react-sweetalert2';
 import * as CryptoJS from 'crypto-js'
 import Modal from 'react-modal';
+import { DataContext } from "../component/DataProvider";
 
 let Adminpage = () => {
 
@@ -21,7 +22,7 @@ let Adminpage = () => {
   const input1Ref = useRef(null);
   const [value, setValue] = useState('');
   const [swalProps, setSwalProps] = useState({ show: false });
-
+  const { dispatch } = useContext(DataContext);
 
   let [username, setUsername] = useState()
   let [password, setPassword] = useState()
@@ -46,6 +47,7 @@ let Adminpage = () => {
   };
   useEffect(() => {
     loginCheck()
+    getone()
   }, [])
 
   function afterOpenModal() {
@@ -103,6 +105,8 @@ let Adminpage = () => {
     if (snapshot.exists()) {
       const userData = snapshot.val();
 
+      dispatch({ type: "SET_DATA", payload: { user :  userData } });
+
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
       if (foundUser.Role === 'emp') {
@@ -124,7 +128,7 @@ let Adminpage = () => {
       }
     }
   }
-
+ 
 
 
   const encrypt = (plainText) => {
@@ -140,6 +144,29 @@ let Adminpage = () => {
 
   }
 
+
+  let getone = () => {
+    const db = getDatabase(app);
+    const eventsRefs = ref(db, "Data");
+
+    const dateQuerys = query(eventsRefs);
+
+    // Fetch the results
+    get(dateQuerys)
+      .then((snapshots) => {
+        if (snapshots.exists()) {
+          const eventss = snapshots.val(); 
+
+          dispatch({ type: "SET_DATA", payload: { data :  eventss } });
+
+        } else {
+          console.log("No events found between the dates.");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching events:", error);
+      });
+  };
 
 
   let navigate = useNavigate();

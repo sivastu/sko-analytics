@@ -1,7 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom"; 
-import NoPage from "./page/nopge"; 
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import NoPage from "./page/nopge";
 
 //rent
 import UserRent from "./page/UserRent";
@@ -25,36 +25,41 @@ import Mealsmulti from "./page/Mealsmulti";
 //tra
 import Training from "./page/Training";
 import { ToastContainer } from 'react-toastify';
+import { DataProvider } from "./component/DataProvider";
+
+
 function App() {
   return (
-    <BrowserRouter>
-    <ToastContainer />
-      <Routes>
-        <Route path="/" element={<UserRent />} />   
-        <Route path="*" element={<NoPage />} />
+    <DataProvider>
+      <BrowserRouter>
+        <ToastContainer />
+        <Routes>
+          <Route path="/" element={<UserRent />} />
+          <Route path="*" element={<NoPage />} />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/grantedaccess" element={<SinglrandMulti />} />
-        <Route path="/analytics" element={<Multivenues />} />
-        <Route path="/singlevenues" element={<Singlevenues />} /> 
-        <Route path="/forgetpassword" element={<Forgetpassword />} /> 
+          <Route path="/login" element={<Login />} />
+          <Route path="/grantedaccess" element={<SinglrandMulti />} />
+          <Route path="/analytics" element={<Multivenues />} />
+          <Route path="/singlevenues" element={<Singlevenues />} />
+          <Route path="/forgetpassword" element={<Forgetpassword />} />
 
-        <Route path="/meals" element={<Meals />} />
-        <Route path="/dockets" element={<Dockets />} />
+          <Route path="/meals" element={<Meals />} />
+          <Route path="/dockets" element={<Dockets />} />
 
-        <Route path="/admin" element={<Adminpage />} />
-        <Route path="/dashboard" element={<Admin_dash />} />
-        <Route path="/multivenues" element={<Multi_venue />} />
+          <Route path="/admin" element={<Adminpage />} />
+          <Route path="/dashboard" element={<Admin_dash />} />
+          <Route path="/multivenues" element={<Multi_venue />} />
 
-        <Route path="/multivenue" element={<Multivenuesone />} />
+          <Route path="/multivenue" element={<Multivenuesone />} />
 
-        <Route path="/training" element={<Training />} />
+          <Route path="/training" element={<Training />} />
 
-        <Route path="/multivenuesmeals" element={<Mealsmulti />} />
+          <Route path="/multivenuesmeals" element={<Mealsmulti />} />
 
 
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </DataProvider>
   );
 }
 

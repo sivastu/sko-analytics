@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useContext  } from "react";
 import Header from "../component/Header";
 import axios from "axios";
 import { Base_url } from "../config";
@@ -28,6 +28,8 @@ import { VscThreeBars } from "react-icons/vsc";
 import { RxCross2 } from "react-icons/rx";
 import { Nav } from "react-bootstrap";
 import { toast } from "react-toastify";
+import { DataContext } from "../component/DataProvider";
+
 let Admin_dash = () => {
   let [data, setData] = useState("1");
   let navigate = useNavigate();
@@ -81,6 +83,7 @@ let Admin_dash = () => {
   let [btncolor, setButtoncolor] = useState(false);
 
   let [searchvalue, setSearchvalue] = useState("");
+  const { state } = useContext(DataContext);
 
   const handleChangehubone = (selectedss) => {
     console.log(selectedss, "selectedssselectedssselectedss");
@@ -120,11 +123,18 @@ let Admin_dash = () => {
   };
 
   useEffect(() => {
-    loginCheck();
+    loginCheckstart(state?.user)
+    // loginCheck();
   }, []);
 
+  
+
   useEffect(() => {
-    getone();
+
+    
+
+    console.log( state , 'statestatestatestatestate' )
+    getone(state?.data);
   }, []);
 
   useEffect(() => {
@@ -339,6 +349,50 @@ let Admin_dash = () => {
     console.log(seee, fineee);
   };
 
+  let loginCheckstart = async (snapshot) => {
+    let getdata = sessionStorage.getItem("data");
+    if (getdata === undefined || getdata === "" || getdata === null) {
+      sessionStorage.removeItem("data");
+      navigate("/");
+      return;
+    }
+    let decry = decrypt(getdata);
+
+    let parsedatajson = JSON.parse(decry);
+    let name = getName(parsedatajson);
+    setUsedname(name);
+    setBasicall(parsedatajson); 
+ 
+      const userData = snapshot 
+      setUser(userData);
+      setNewuser(userData);
+      // Check if the password matches
+      const foundUser = Object.values(userData).find(
+        (user) => user.Email === parsedatajson.Email
+      );
+
+      if (foundUser) {
+        if (foundUser.Role === "emp") {
+          sessionStorage.removeItem("data");
+          navigate("/");
+          return;
+        }
+        setMydata(foundUser);
+        // Check if the password matches
+        if (foundUser.Password === parsedatajson.Password) {
+          setEditname(foundUser.name);
+          setEditemail(foundUser.Email);
+          setEditpass(foundUser.Password);
+        } else {
+          // navigate('/')
+          return;
+        }
+      } else {
+        console.log("User does not exist.");
+      } 
+  };
+
+
   let loginCheck = async () => {
     let getdata = sessionStorage.getItem("data");
     if (getdata === undefined || getdata === "" || getdata === null) {
@@ -388,17 +442,7 @@ let Admin_dash = () => {
     }
   };
 
-  let getone = () => {
-    const db = getDatabase(app);
-    const eventsRefs = ref(db, "Data");
-
-    const dateQuerys = query(eventsRefs);
-
-    // Fetch the results
-    get(dateQuerys)
-      .then((snapshots) => {
-        if (snapshots.exists()) {
-          const eventss = snapshots.val();
+  let getone = (eventss) => {  
 
           const result = {};
           Object.entries(eventss).forEach(([groupName, groupData]) => {
@@ -427,13 +471,7 @@ let Admin_dash = () => {
           // console.log("optionss:", optionsstwo);
 
           setBasic(optionsone);
-        } else {
-          console.log("No events found between the dates.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching events:", error);
-      });
+      
   };
 
   const encrypt = (plainText) => {
