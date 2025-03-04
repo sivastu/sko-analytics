@@ -2125,7 +2125,7 @@ let Meals = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, 18) + "..."
+      const displayText = allLabels.slice(0, textCount) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
@@ -4595,10 +4595,50 @@ let Meals = () => {
     saveAs(blob, "Meals_Received_Timeline.xlsx");
     setIsExcelLoad(false)
   };
+  const getpadd=()=>{
+    if (window.innerWidth >= 1536) return 80; // 2xl
+      if (window.innerWidth >= 1280) return 60; // xl
+      if (window.innerWidth >= 1024) return 20; // lg
+      if (window.innerWidth >= 768) return 0;  // md
+      return 0;
+  }
+    const getBoxWidth = () => {
+      if (window.innerWidth >= 1836) return 800; // 2xl
+      if (window.innerWidth >= 1680) return 700; // xl
+      if (window.innerWidth >= 1024) return 600; // lg
+      if (window.innerWidth >= 768) return 600;  // md
+      return 500; // default for smaller screens
+    };
+    const gettextcount = () => {
+      if (window.innerWidth >= 1836) return 16;
+      if (window.innerWidth >= 1536) return 12; // 2xl
+      if (window.innerWidth >= 1380) return 9; // xl
+      if (window.innerWidth >= 1024) return 7; // lg
+      if (window.innerWidth >= 768) return 5;  // md
+      return 5; // default for smaller screens
+    };
+    const getBoxHeight = () => {
+      if (window.innerWidth >= 1536) return 250; // 2xl
+      if (window.innerWidth >= 1280) return 250; // xl
+      if (window.innerWidth >= 1024) return 250; // lg
+      if (window.innerWidth >= 768) return 250;  // md
+      return 250; // default for smaller screens
+    };
+    const [boxWidth, setBoxWidth] = useState(getBoxWidth());
+    const [Height, setHeight] = useState(getBoxHeight());
+  const[textCount,setTextCount]=useState(gettextcount());
+  const[padd,setPadd]=useState(getpadd());
+  const[paddOpp,setPaddOpp]=useState(0);
   
+    useEffect(() => {
+      const handleResize = () => 
+      {setBoxWidth(getBoxWidth()),setPadd(getpadd()),setPaddOpp(0),setHeight(getBoxHeight()),setTextCount(gettextcount()) };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
   return (
-    <div style={{overflowX:"hidden"}}>
+    <div >
       <div style={{ scrollbarWidth: 'none' }}>
 
         <div className="" style={{
@@ -5184,10 +5224,10 @@ let Meals = () => {
               {/* First row */}
               <div className="row">
                 {/* Meals received - timeline */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
-                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
-                    setMeals(5)
-                  }}>
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center" style={{ paddingRight: padd,paddingLeft:paddOpp }} >
+                      <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px`}} onClick={() => {
+                        setMeals(5)
+                      }}>
                     <div className="boxs" style={{ cursor: 'pointer' }}>
                       <p className="asdfp" style={{ fontWeight: 600, color: '#1A1A1B' }}>Meals received - timeline</p>
                       <div className="end-box">
@@ -5199,10 +5239,10 @@ let Meals = () => {
                 </div>
           
                 {/* Edits */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
-                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
-                    setMeals(2)
-                  }}>
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center"  style={{ paddingLeft: `${padd}px`,paddingRight:paddOpp }}>
+                <div className="box" style={{ maxWidth: `${boxWidth}px`,height: `${Height}px` }} onClick={() => {
+                        setMeals(2)
+                      }}>
                     <div className="boxs" style={{ cursor: 'pointer' }}>
                       <div className="d-flex justify-content-between">
                         <div>
@@ -5267,10 +5307,10 @@ let Meals = () => {
               {/* Second row */}
               <div className="row">
                 {/* Served meals */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
-                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
-                    setMeals(3)
-                  }}>
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center" style={{ paddingRight: `${padd}px`,paddingLeft:paddOpp }}>
+                      <div className="box" style={{ maxWidth: `${boxWidth}px`,height: `${Height}px` }} onClick={() => {
+                        setMeals(3)
+                      }}>
                     <div className="boxs" style={{ cursor: 'pointer' }}>
                       <div className="d-flex justify-content-between">
                         <div>
@@ -5317,10 +5357,10 @@ let Meals = () => {
                 </div>
           
                 {/* Refunded meals */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
-                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
-                    setMeals(4)
-                  }}>
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center " style={{ paddingLeft: `${padd}px`,paddingRight:paddOpp }}>
+                      <div className="box" style={{ maxWidth: `${boxWidth}px`,height: `${Height}px` }} onClick={() => {
+                        setMeals(4)
+                      }}>
                     <div className="boxs" style={{ cursor: 'pointer' }}>
                       <div className="d-flex justify-content-between">
                         <div>

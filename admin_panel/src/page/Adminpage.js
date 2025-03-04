@@ -217,7 +217,7 @@ let Adminpage = () => {
             alignItems: "center", justifyContent: "center", backgroundColor: "#313233", flexDirection: 'column', gap: '4%', display: 'flex'
           }} >
 
-            <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }} onClick={() => {
+            {/* <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }} onClick={() => {
               navigate('/training')
             }} >
 
@@ -230,7 +230,7 @@ let Adminpage = () => {
                 </div>
               </div>
 
-            </div>
+            </div> */}
             {
               username?.Role === 'admin' || username?.Role === 'manager' ?
 

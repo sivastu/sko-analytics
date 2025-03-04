@@ -6104,16 +6104,16 @@ Excel sheet
                     </div>
 
                     <div style={{ marginTop: 50, padding: 20 }}>
-                      <div className="row">
-                        <div className="col-lg-4 col-md-4 mb-3">
+                      <div className="d-flex gap-5">
+                        <div style={{ width: "40%" }}>
                           <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span>{editall?.stats?.averageProcessTime || 0}</span></p>
                         </div>
-                        <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+                        <div  style={{ width: "40%",display:'flex',alignItems:'start',flexDirection:'column'}}>
                           <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span>{editallone?.stats?.averageProcessTime || 0}</span></p>
                         </div>
-                        <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+                        <div  style={{ width: "20%",display:'flex',justifyContent:'end',alignItems:'end',flexDirection:'column' }}>
                           <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span>
                             {(() => {
@@ -6144,8 +6144,8 @@ Excel sheet
                                   <div className="d-flex gap-5">
                                     {/* Left Column */}
                                     <div style={{ width: "40%" }}>
-                                      <div className="d-flex" style={{}}>
-                                        <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
+                                      <div className="d-flex align-items-center" style={{}}>
+                                        <p style={{ fontWeight: "700", color: "#000", width: "60%", marginTop: 15 }}>
                                           {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{dfgh?.date + " " + "[" +
                                             dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
                                         </p>
@@ -6153,7 +6153,7 @@ Excel sheet
                                         <img
                                           onClick={() => { openModal(dfgh, correspondingErv) }}
                                           src="arrows.png"
-                                          style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
+                                          style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10 }}
                                           alt="up arrow"
                                         />
                                       </div>
@@ -6162,8 +6162,8 @@ Excel sheet
                                     {/* Center Column */}
                                     {correspondingErv ? (
                                       <div style={{ width: "40%" }}>
-                                        <div className="d-flex">
-                                          <p style={{ fontWeight: "700", color: "#000", width: "60%" }}>
+                                        <div className="d-flex align-items-center">
+                                          <p style={{ fontWeight: "700", color: "#000", width: "60%",marginTop:15 }}>
                                             {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{correspondingErv?.date + " " + "[" +
                                               correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                                           </p>
@@ -6171,13 +6171,13 @@ Excel sheet
                                           <img
                                             onClick={() => { openModal(dfgh, correspondingErv) }}
                                             src="arrows.png"
-                                            style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, marginTop: 13 }}
+                                            style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10 }}
                                             alt="up arrow"
                                           />
                                         </div>
                                       </div>
                                     ) : (
-                                      <div style={{ width: "33%" }}></div>
+                                      <div style={{ width: "40%" }}></div>
                                     )}
 
                                     {/* Right Column (Percentage Calculation) */}
@@ -6186,7 +6186,7 @@ Excel sheet
                                         justifyContent: "end",
                                         alignItems: "center",
                                         display: "flex",
-                                        width: "10%",
+                                        width: "20%",
                                       }}
                                     >
                                       <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
