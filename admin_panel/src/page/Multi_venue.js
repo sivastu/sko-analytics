@@ -5159,7 +5159,7 @@ let Multi_venue = () => {
       return 250; // default for smaller screens
     };
     const gettextcount = () => {
-      if (window.innerWidth >= 1536) return 15; // 2xl
+      if (window.innerWidth >= 1536) return 12; // 2xl
       if (window.innerWidth >= 1380) return 9; // xl
       if (window.innerWidth >= 1024) return 7; // lg
       if (window.innerWidth >= 768) return 5;  // md
@@ -5890,8 +5890,8 @@ let Multi_venue = () => {
                     </div>
                   </div>
 
-                  <div className="w-100 d-flex justify-content-center">
-                    <div className='row mt-5 d-flex justify-content-center'>
+                  <div className="w-100 ">
+                    <div className='row mt-5 '>
                       <div className='col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center' style={{ paddingRight: `${padd}px`,paddingLeft:paddOpp }}>
                         <div class="box" style={{  maxWidth: `${boxWidth}px`,height: `${Height}px`  }} onClick={() => {
                           setMeals(5)
