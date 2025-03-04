@@ -139,8 +139,7 @@ code {
 .css-1u0ia00-control {
   background-color : #fff !important;
 }
-.custom-inputoness {
-  min-width: 100% !important;
+.custom-inputoness { 
   padding: 5px 10px 10px 10px; /* Add space for the icon */ 
   border-radius: 8px;
   font-size: 16px;

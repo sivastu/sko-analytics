@@ -6712,7 +6712,7 @@ if (result === "" || result === undefined || result === null) {
               </div>
               <div >
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
+                <p style={{ fontWeight: '400', color: '#000',  }}>
                   ( Total ){" "}
                   {(() => {
                     let datd = ggggrt();
@@ -6721,12 +6721,7 @@ if (result === "" || result === undefined || result === null) {
 
                     return (
                       <>
-                        {tot.toFixed(2) + "%"}{" "}
-                        <img
-                          src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                          style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
-                          alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
-                        />
+                        {tot.toFixed(2) + "%"}{" "} 
                       </>
                     );
                   })()}
@@ -6746,27 +6741,27 @@ if (result === "" || result === undefined || result === null) {
                   <>
                     <div className="d-flex  mt-3">
 
-                      <div style={{ width: '33%' }}>
-                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{dfgh?.count}</p>
+                      <div style={{ width: '43%' }} className="d-flex">
+                        <p style={{ fontWeight: '700', color: '#000',  }}>{dfgh?.name}</p>
+                        <p style={{ fontWeight: '400', color: '#000',  marginLeft : 5 }}>{dfgh?.count}</p>
                       </div>
 
                       {correspondingErv ? (
                         <div style={{ width: '33%', textAlign: 'center' }}>
-                          <div >
+                          <div className="d-flex" >
 
-                            <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{correspondingErv?.count}</p>
+                            <p style={{ fontWeight: '700', color: '#000',  }}>{correspondingErv?.name}</p>
+                            <p style={{ fontWeight: '400', color: '#000',  marginLeft : 5 }}>{correspondingErv?.count}</p>
                           </div>
                         </div>
                       ) : (
                         <>
-                          <div style={{ width: '33%' }} >
+                          <div style={{ width: '23%' }} >
                           </div></>
                       )}
 
-                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
+                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex',   width: '23%' }}>
+                        <p style={{ fontWeight: '400', color: '#000',  display: 'inline-flex', alignItems: 'center' }}>
                           ( Total ){" "}
                           {(() => {
                             const datd = dfgh?.count || 0; // Fallback to 0 if no data
@@ -6791,7 +6786,7 @@ if (result === "" || result === undefined || result === null) {
 
                     </div>
 
-                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
+                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 1 }} />
                   </>
                 );
               })
