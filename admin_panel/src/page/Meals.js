@@ -4596,6 +4596,39 @@ let Meals = () => {
     setIsExcelLoad(false)
   };
   
+  const getpadd=()=>{
+    if (window.innerWidth >= 1536) return 80; // 2xl
+      if (window.innerWidth >= 1280) return 60; // xl
+      if (window.innerWidth >= 1024) return 20; // lg
+      if (window.innerWidth >= 768) return 0;  // md
+      return 0;
+  }
+    const getBoxWidth = () => {
+      if (window.innerWidth >= 1836) return 800; // 2xl
+      if (window.innerWidth >= 1680) return 700; // xl
+      if (window.innerWidth >= 1024) return 600; // lg
+      if (window.innerWidth >= 768) return 600;  // md
+      return 500; // default for smaller screens
+    };
+    const getBoxHeight = () => {
+      if (window.innerWidth >= 1536) return 320; // 2xl
+      if (window.innerWidth >= 1280) return 300; // xl
+      if (window.innerWidth >= 1024) return 250; // lg
+      if (window.innerWidth >= 768) return 250;  // md
+      return 250; // default for smaller screens
+    };
+    const [boxWidth, setBoxWidth] = useState(getBoxWidth());
+    const [Height, setHeight] = useState(getBoxHeight());
+  
+  const[padd,setPadd]=useState(getpadd());
+  const[paddOpp,setPaddOpp]=useState(0);
+  
+    useEffect(() => {
+      const handleResize = () => 
+      {setBoxWidth(getBoxWidth()),setPadd(getpadd()),setPaddOpp(0),setHeight(getBoxHeight()) };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
   return (
     <div style={{overflowX:"hidden"}}>
@@ -5179,13 +5212,13 @@ let Meals = () => {
 
           {
             meals === 1 ?
-            <div className="changeone  hide-scrollbar" style={{ marginTop: 100, overflow:'hidden' }}>
+            <div className="changeone  hide-scrollbar" style={{ marginTop: 100, overflowX:'hidden' }}>
             <div className="changetwos" style={{overflowX:'hidden'}}>
               {/* First row */}
               <div className="row">
                 {/* Meals received - timeline */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
-                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center" style={{ paddingRight: padd,paddingLeft:paddOpp }}>
+                  <div className="box " style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                     setMeals(5)
                   }}>
                     <div className="boxs" style={{ cursor: 'pointer' }}>
@@ -5199,8 +5232,8 @@ let Meals = () => {
                 </div>
           
                 {/* Edits */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
-                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center" style={{ paddingLeft: `${padd}px`,paddingRight:paddOpp }}>
+                  <div className="box " style={{ maxWidth: `${boxWidth}px`,height: `${Height}px` }} onClick={() => {
                     setMeals(2)
                   }}>
                     <div className="boxs" style={{ cursor: 'pointer' }}>
@@ -5267,8 +5300,8 @@ let Meals = () => {
               {/* Second row */}
               <div className="row">
                 {/* Served meals */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
-                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center" style={{ paddingRight: `${padd}px`,paddingLeft:paddOpp }}>
+                  <div className="box" style={{ maxWidth: `${boxWidth}px`,height: `${Height}px` }} onClick={() => {
                     setMeals(3)
                   }}>
                     <div className="boxs" style={{ cursor: 'pointer' }}>
@@ -5317,8 +5350,8 @@ let Meals = () => {
                 </div>
           
                 {/* Refunded meals */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-center">
-                  <div className="box mx-auto" style={{ maxWidth: "600px" }} onClick={() => {
+                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center " style={{ paddingLeft: `${padd}px`,paddingRight:paddOpp }}>
+                  <div className="box" style={{ maxWidth: `${boxWidth}px`,height: `${Height}px` }} onClick={() => {
                     setMeals(4)
                   }}>
                     <div className="boxs" style={{ cursor: 'pointer' }}>
