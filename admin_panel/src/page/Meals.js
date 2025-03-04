@@ -5673,7 +5673,7 @@ PDF
                         />
                         <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10,marginRight:5, marginBottom: 0 }}>Served meals</p>
                       </div>
-                      <div className="custom-inputonessfine pt-2 mx-2 ml-2 ml-md-3" style={{ width: 'auto', maxWidth: '200px' }}>
+                      <div className="custom-inputonessfine pt-2 mx-2 ml-2 ml-md-3 " style={{ width: 'auto', maxWidth: '200px' }}>
                         <Select
                           className="newoneonee"
                           options={basicfine}
@@ -5697,6 +5697,7 @@ PDF
                               border: 'unset', 
                               color: '#707070',
                               minHeight: '38px',
+                              boxShadow:'none',
                               // Responsive width
                               width: '100%',
                               maxWidth: '190px',
@@ -5912,7 +5913,7 @@ PDF
                             console.log(  minperday , 'minperday minperday')
                           }}>Refunded meals</p>
                         </div>
-                        <div className="custom-inputonessfine d-flex align-items-center pt-1">
+                        <div className="custom-inputonessfine d-flex align-items-center pt-1 mt-2">
                           <Select
                             className="newoneonee"
                             options={basicfine}
@@ -5935,6 +5936,7 @@ PDF
                                 ...base, 
                                 border: 'unset', 
                                 color: '#707070',
+                                boxShadow:'none',
                               }),
                               menu: (base) => ({
                                 ...base,

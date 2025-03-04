@@ -5956,7 +5956,7 @@ let Multi_venue = () => {
                             </p>
                           </div>
 
-                          <div className="custom-inputonessfine mt-md-3 pt-lg-1 pt-md-2 mx-3">
+                          <div className="custom-inputonessfine mt-lg-0 mt-md-3 pt-lg-1 pt-md-2 mx-3">
                             <Select
                               className="newoneonee"
                               options={basicfine}

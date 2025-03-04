@@ -6002,7 +6002,8 @@ const[paddOpp,setPaddOpp]=useState(0);
                                 control: (base) => ({
                                   ...base,
                                   border: 'unset',
-                                  color: '#707070'
+                                  color: '#707070',
+                                  boxShadow:'none',
                                 })
                               }}
                             />
@@ -6219,7 +6220,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                                 }}
                                 hideSelectedOptions={false} // Show all options even if selected
                                 styles={{
-                                  control: (base) => ({ ...base, border: 'unset', color: '#707070' }),
+                                  control: (base) => ({ ...base, border: 'unset', color: '#707070',   boxShadow:'none', }),
                                 }}
                               />
 
