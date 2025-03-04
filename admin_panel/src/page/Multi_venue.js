@@ -1385,7 +1385,7 @@ let Multi_venue = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, 18) + "..."
+      const displayText = allLabels.slice(0, textCount) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
@@ -5137,6 +5137,47 @@ let Multi_venue = () => {
     return timeValue >= startTime && timeValue < endTime;
   };
 
+  const getpadd=()=>{
+    if (window.innerWidth >= 1536) return 80; // 2xl
+      if (window.innerWidth >= 1280) return 60; // xl
+      if (window.innerWidth >= 1024) return 20; // lg
+      if (window.innerWidth >= 768) return 0;  // md
+      return 0;
+  }
+    const getBoxWidth = () => {
+      if (window.innerWidth >= 1836) return 800; // 2xl
+      if (window.innerWidth >= 1680) return 700; // xl
+      if (window.innerWidth >= 1024) return 600; // lg
+      if (window.innerWidth >= 768) return 600;  // md
+      return 500; // default for smaller screens
+    };
+    const getBoxHeight = () => {
+      if (window.innerWidth >= 1536) return 250; // 2xl
+      if (window.innerWidth >= 1280) return 250; // xl
+      if (window.innerWidth >= 1024) return 250; // lg
+      if (window.innerWidth >= 768) return 250;  // md
+      return 250; // default for smaller screens
+    };
+    const gettextcount = () => {
+      if (window.innerWidth >= 1536) return 15; // 2xl
+      if (window.innerWidth >= 1380) return 9; // xl
+      if (window.innerWidth >= 1024) return 7; // lg
+      if (window.innerWidth >= 768) return 5;  // md
+      return 5; // default for smaller screens
+    };
+    const [boxWidth, setBoxWidth] = useState(getBoxWidth());
+    const [Height, setHeight] = useState(getBoxHeight());
+    const[textCount,setTextCount]=useState(gettextcount());
+  const[padd,setPadd]=useState(getpadd());
+  const[paddOpp,setPaddOpp]=useState(0);
+  
+    useEffect(() => {
+      const handleResize = () => 
+      {setBoxWidth(getBoxWidth()),setPadd(getpadd()),setPaddOpp(0),setHeight(getBoxHeight()),setTextCount(gettextcount()) };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+  
   return (
     <div style={{ overflow: 'hidden' }}>
       {/* <Header name={"Dockets"} center={"Name"} />
@@ -5171,7 +5212,7 @@ let Multi_venue = () => {
         </div>
       </div>
 
-      <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr hide-scrollbar">
+      <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr ">
 
         <div style={{}} className="dddd hide-scrollbar"  >
 
@@ -5806,7 +5847,7 @@ let Multi_venue = () => {
                 <div className="changetwos">
                   <div className='row'>
                     <div className='col-lg-6 col-md-12 w-100 d-flex justify-content-center' style={{ margin: 'auto' }}>
-                      <div class="box" style={{ maxWidth: "600px" }} onClick={() => {
+                      <div class="box"  style={{maxWidth: `${boxWidth}px`,height: `${Height}px`}} onClick={() => {
                         setMeals(2)
                       }}>
                         <div class="boxs" style={{ cursor: 'pointer' }}>
@@ -5851,8 +5892,8 @@ let Multi_venue = () => {
 
                   <div className="w-100 d-flex justify-content-center">
                     <div className='row mt-5 d-flex justify-content-center'>
-                      <div className='col-lg-6 col-md-12 mb-4 d-flex justify-content-center'>
-                        <div class="box" style={{ maxWidth: "600px" }} onClick={() => {
+                      <div className='col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center' style={{ paddingRight: `${padd}px`,paddingLeft:paddOpp }}>
+                        <div class="box" style={{  maxWidth: `${boxWidth}px`,height: `${Height}px`  }} onClick={() => {
                           setMeals(5)
                         }}>
                           <div class="boxs" style={{ cursor: 'pointer' }}>
@@ -5865,8 +5906,8 @@ let Multi_venue = () => {
                         </div>
                       </div>
 
-                      <div className='col-lg-6 col-md-12 mt-md-4 mt-lg-0 mb-4 d-flex justify-content-center'>
-                        <div class="box" style={{ maxWidth: "600px" }} onClick={() => {
+                      <div className='col-lg-6 col-md-12 mt-md-4 mt-lg-0 mb-4 d-flex  justify-content-lg-start justify-content-center' style={{ paddingLeft: `${padd}px`,paddingRight:paddOpp }}>
+                        <div class="box" style={{maxWidth: `${boxWidth}px`,height: `${Height}px`}} onClick={() => {
                           setMeals(4)
                         }}>
                           <div class="boxs" style={{ cursor: 'pointer' }}>
@@ -6848,7 +6889,7 @@ Excel sheet
 
 
 
-        <div style={{ visibility: 'hidden' }}>
+        <div className="d-none" style={{ visibility: 'hidden' }}>
           <div ref={pdfRef}  >
 
             <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets Completion Time - From {selectedOptionsfine[0]?.label}to
