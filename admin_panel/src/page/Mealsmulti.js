@@ -4556,10 +4556,10 @@ let Mealsmulti = () => {
         doc.save("output.pdf");
         setIsPdfLoad(false)// Save after rendering
       },
-      x: 10,
-      y: 20,
+      y: 10,
       width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
+      windowWidth: 1000, // Ensure full width capture  
+      margin: 10,
       autoPaging: "text",
       html2canvas: {
         useCORS: true, // Handle cross-origin images
@@ -7042,111 +7042,106 @@ const[paddOpp,setPaddOpp]=useState(0);
           })()}</p>
 
 
-          <div style={{ marginTop: 20, padding: 10 }} >
+<div style={{ marginTop: 20, padding: 10 }} >
 
-            <div className="d-flex justify-content-between" >
+<div className="d-flex justify-content-between" >
 
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
-                  ggggrt()} </p>
+  <div >
+    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+      ggggrt()} </p>
+  </div>
+  <div >
+    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+
+      ggggrts()
+    } </p>
+  </div>
+  <div >
+    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+    <p style={{ fontWeight: '400', color: '#000',  }}>
+      ( Total ){" "}
+      {(() => {
+        let datd = ggggrt();
+        let datdtwo = ggggrts();
+        let tot = ((datd - datdtwo) / datdtwo) * 100;
+
+        return (
+          <>
+            {tot.toFixed(2) + "%"}{" "} 
+          </>
+        );
+      })()}
+    </p>
+
+
+  </div>
+
+</div>
+<hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
+
+{
+  served?.map((dfgh, index) => {
+    const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+
+    return (
+      <>
+        <div className="d-flex  mt-3">
+
+          <div style={{ width: '43%' }} className="d-flex">
+            <p style={{ fontWeight: '700', color: '#000',  }}>{dfgh?.name}</p>
+            <p style={{ fontWeight: '400', color: '#000',  marginLeft : 5 }}>{dfgh?.count}</p>
+          </div>
+
+          {correspondingErv ? (
+            <div style={{ width: '33%', textAlign: 'center' }}>
+              <div className="d-flex" >
+
+                <p style={{ fontWeight: '700', color: '#000',  }}>{correspondingErv?.name}</p>
+                <p style={{ fontWeight: '400', color: '#000',  marginLeft : 5 }}>{correspondingErv?.count}</p>
               </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
-
-                  ggggrts()
-                } </p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
-                  ( Total ){" "}
-                  {(() => {
-                    let datd = ggggrt();
-                    let datdtwo = ggggrts();
-                    let tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                    return (
-                      <>
-                        {tot.toFixed(2) + "%"}{" "}
-                        <img
-                          src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                          style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
-                          alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
-                        />
-                      </>
-                    );
-                  })()}
-                </p>
-
-
-              </div>
-
             </div>
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
+          ) : (
+            <>
+              <div style={{ width: '23%' }} >
+              </div></>
+          )}
 
-            {
-              served?.map((dfgh, index) => {
-                const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+          <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex',   width: '23%' }}>
+            <p style={{ fontWeight: '400', color: '#000',  display: 'inline-flex', alignItems: 'center' }}>
+              ( Total ){" "}
+              {(() => {
+                const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+
+                const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0; // Prevent division by zero
 
                 return (
                   <>
-                    <div className="d-flex  mt-3">
-
-                      <div style={{ width: '33%' }}>
-                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{dfgh?.count}</p>
-                      </div>
-
-                      {correspondingErv ? (
-                        <div style={{ width: '33%', textAlign: 'center' }}>
-                          <div >
-
-                            <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', marginTop: -4 }}>{correspondingErv?.count}</p>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div style={{ width: '33%' }} >
-                          </div></>
-                      )}
-
-                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', display: 'inline-flex', alignItems: 'center' }}>
-                          ( Total ){" "}
-                          {(() => {
-                            const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                            const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-                            const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0; // Prevent division by zero
-
-                            return (
-                              <>
-                                {tot.toFixed(2) + "%"}{" "}
-                                <img
-                                  src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                                  style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
-                                  alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
-                                />
-                              </>
-                            );
-                          })()}
-                        </p>
-
-                      </div>
-
-                    </div>
-
-                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
+                    {tot.toFixed(2) + "%"}{" "}
+                    <img
+                      src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                      style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
+                      alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+                    />
                   </>
                 );
-              })
-            }
-
+              })()}
+            </p>
 
           </div>
+
+        </div>
+
+        <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 1 }} />
+      </>
+    );
+  })
+}
+
+
+</div>
         </div >
       </div>
 
