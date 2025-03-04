@@ -1174,7 +1174,7 @@ let Mealsmulti = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, 18) + "..."
+      const displayText = allLabels.slice(0, textCount) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
@@ -4811,6 +4811,13 @@ const getpadd=()=>{
     if (window.innerWidth >= 768) return 600;  // md
     return 500; // default for smaller screens
   };
+  const gettextcount = () => {
+    if (window.innerWidth >= 1536) return 15; // 2xl
+    if (window.innerWidth >= 1380) return 9; // xl
+    if (window.innerWidth >= 1024) return 7; // lg
+    if (window.innerWidth >= 768) return 5;  // md
+    return 5; // default for smaller screens
+  };
   const getBoxHeight = () => {
     if (window.innerWidth >= 1536) return 250; // 2xl
     if (window.innerWidth >= 1280) return 250; // xl
@@ -4820,13 +4827,13 @@ const getpadd=()=>{
   };
   const [boxWidth, setBoxWidth] = useState(getBoxWidth());
   const [Height, setHeight] = useState(getBoxHeight());
-
+const[textCount,setTextCount]=useState(gettextcount());
 const[padd,setPadd]=useState(getpadd());
 const[paddOpp,setPaddOpp]=useState(0);
 
   useEffect(() => {
     const handleResize = () => 
-    {setBoxWidth(getBoxWidth()),setPadd(getpadd()),setPaddOpp(0),setHeight(getBoxHeight()) };
+    {setBoxWidth(getBoxWidth()),setPadd(getpadd()),setPaddOpp(0),setHeight(getBoxHeight()),setTextCount(gettextcount()) };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);

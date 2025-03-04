@@ -252,17 +252,18 @@ code {
     padding: 15px 40px 10px 10px !important;
   }
   .changeone{
-    overflowY: scroll;
-    height: 1500px !important;
+    overflowX:hidden;
+    /* overflowY: scroll; */
+    /* height: 1500px !important; */
   }
   .changetwo{
-    height: 1630px !important;
-    overflowY: scroll;
+    /* height: 1630px !important;
+    overflowY: scroll; */
   }
 
   .changetwos{
-    height: 1730px !important;
-    overflow: scroll;
+    /* height: 1730px !important;
+    overflow: scroll; */
   }
 }
 

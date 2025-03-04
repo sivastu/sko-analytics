@@ -1353,7 +1353,7 @@ let Dockets = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-const displayText = allLabels.slice(0, 18) + "..."
+const displayText = allLabels.slice(0, textCount) + "..."
 
       return <span title={allLabels}>{displayText}</span>;
     }
@@ -4859,27 +4859,34 @@ const downloadDocketsrecExcel = async () => {
       return 500; // default for smaller screens
     };
     const getBoxHeight = () => {
-      if (window.innerWidth >= 1536) return 320; // 2xl
-      if (window.innerWidth >= 1280) return 300; // xl
+      if (window.innerWidth >= 1536) return 250; // 2xl
+      if (window.innerWidth >= 1280) return 250; // xl
       if (window.innerWidth >= 1024) return 250; // lg
       if (window.innerWidth >= 768) return 250;  // md
       return 250; // default for smaller screens
     };
+    const gettextcount = () => {
+      if (window.innerWidth >= 1536) return 15; // 2xl
+      if (window.innerWidth >= 1380) return 9; // xl
+      if (window.innerWidth >= 1024) return 7; // lg
+      if (window.innerWidth >= 768) return 5;  // md
+      return 5; // default for smaller screens
+    };
     const [boxWidth, setBoxWidth] = useState(getBoxWidth());
     const [Height, setHeight] = useState(getBoxHeight());
-  
+    const[textCount,setTextCount]=useState(gettextcount());
   const[padd,setPadd]=useState(getpadd());
   const[paddOpp,setPaddOpp]=useState(0);
   
     useEffect(() => {
       const handleResize = () => 
-      {setBoxWidth(getBoxWidth()),setPadd(getpadd()),setPaddOpp(0),setHeight(getBoxHeight()) };
+      {setBoxWidth(getBoxWidth()),setPadd(getpadd()),setPaddOpp(0),setHeight(getBoxHeight()),setTextCount(gettextcount()) };
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
     }, []);
 
   return (
-    <div style={{overflowX:"hidden"}}>
+    <div className="hide-scrollbar overflow-auto">
       {/* <Header name={"Dockets"} center={"Name"} />
        */}
 
@@ -5461,13 +5468,13 @@ const downloadDocketsrecExcel = async () => {
             {
               meals === 1 ?
                 <div className="changeone  hide-scrollbar" style={{ marginTop: 100 }} >
-                  <div className="changetwos"   >
+                  <div className="changetwos hide-scrollbar"   >
                     <div className='row '  >
 
 
 
 
-                      <div className='col-lg-6 col-md-12 w-100 d-flex justify-content-center' style={{ margin: 'auto' }} >
+                      <div className='col-lg-6 col-md-12  d-flex justify-content-center' style={{ margin: 'auto' }} >
                         <div class="box" style={{maxWidth: `${boxWidth}px`,height: `${Height}px`}} onClick={() => {
                           setMeals(2)
                         }}>
@@ -5520,10 +5527,10 @@ const downloadDocketsrecExcel = async () => {
 
                     </div>
 
-                    <div className="w-100 d-flex justify-content-center">
-                      <div className='row mt-5 d-flex justify-content-center' >
+                    <div className="w-100 ">
+                      <div className='row mt-5 ' >
 
-                        <div className='col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center ' style={{ paddingLeft: `${padd}px`,paddingRight:paddOpp }} >
+                        <div className='col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center' style={{ paddingRight: `${padd}px`,paddingLeft:paddOpp }} >
                           <div class="box " style={{ maxWidth: `${boxWidth}px`,height: `${Height}px` }} onClick={() => {
                             setMeals(5)
                           }} >
@@ -5598,8 +5605,8 @@ const downloadDocketsrecExcel = async () => {
 </div> */}
 
 
-                        <div className='col-lg-6 col-md-12 mt-lg-0 mt-md-4 mb-4 d-flex justify-content-center' >
-                          <div class="box" style={{ maxWidth: "600px" }} onClick={() => {
+                        <div className='col-lg-6 col-md-12 mt-lg-0 mt-md-4 mb-4 d-flex justify-content-lg-start justify-content-center' style={{ paddingLeft: `${padd}px`,paddingRight:paddOpp }} >
+                          <div class="box" style={{maxWidth: `${boxWidth}px`,height: `${Height}px`}} onClick={() => {
                             setMeals(4)
                           }}>
                             <div class="boxs" style={{cursor:'pointer'}}>
@@ -6634,7 +6641,7 @@ if (result === "" || result === undefined || result === null) {
 
 
 
-          <div style={{ visibility: 'hidden' }}>
+          <div className="d-none" style={{ visibility: 'hidden' }}>
             <div ref={pdfRef}  >
 
               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets Completion Time - From {selectedOptionsfine[0]?.label}to
