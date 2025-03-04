@@ -4611,8 +4611,8 @@ let Meals = () => {
       return 500; // default for smaller screens
     };
     const getBoxHeight = () => {
-      if (window.innerWidth >= 1536) return 320; // 2xl
-      if (window.innerWidth >= 1280) return 300; // xl
+      if (window.innerWidth >= 1536) return 250; // 2xl
+      if (window.innerWidth >= 1280) return 250; // xl
       if (window.innerWidth >= 1024) return 250; // lg
       if (window.innerWidth >= 768) return 250;  // md
       return 250; // default for smaller screens
