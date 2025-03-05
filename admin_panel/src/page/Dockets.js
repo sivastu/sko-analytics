@@ -1419,7 +1419,7 @@ let Dockets = () => {
 
     setOldven(selected)
 
-    if (hasAllValue === false && hasAllValueold === true) {
+    if (hasAllValue === false && hasAllValueold === true || hasAllValue === false && hasAllValueold === false ) {
 
       let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
@@ -1682,7 +1682,7 @@ let Dockets = () => {
 
     setOldpro(selected)
 
-    if (hasAllValue === false && hasAllValueold === true) {
+    if (hasAllValue === false && hasAllValueold === true || hasAllValue === false && hasAllValueold === false ) {
 
 
       setSelectedhubOptions([]);
@@ -1720,7 +1720,7 @@ let Dockets = () => {
 
     setOldhub(selectedss)
 
-    if (hasAllValue === false && hasAllValueold === true) {
+    if (hasAllValue === false && hasAllValueold === true || hasAllValue === false && hasAllValueold === false ) {
 
       console.log(selectedss, 'selectedssselectedssselectedss')
 
@@ -1785,7 +1785,7 @@ let Dockets = () => {
 
     setOldcou(selected)
 
-    if (hasAllValue === false && hasAllValueold === true) {
+    if (hasAllValue === false && hasAllValueold === true || hasAllValue === false && hasAllValueold === false ) {
 
       setSelectedCources([]);
 
@@ -1820,7 +1820,7 @@ let Dockets = () => {
 
 
   //select takeaway
-  const [takeaway, setTakeaway] = useState(true)
+  const [takeaway, setTakeaway] = useState(false)
   const optionstakeaway = [
     { value: 'All', label: 'All takeaways' },
     { value: 'Takeaways', label: 'Takeaways' },
@@ -1835,7 +1835,7 @@ let Dockets = () => {
 
     setOldtak(selected)
 
-    if (hasAllValue === false && hasAllValueold === true) {
+    if (hasAllValue === false && hasAllValueold === true || hasAllValue === false && hasAllValueold === false ) {
 
       setSelectedTakeaway([]);
 
@@ -1912,7 +1912,7 @@ let Dockets = () => {
 
 
 
-  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
+  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
 
     let alldat = basicall
 
@@ -2227,52 +2227,95 @@ let Dockets = () => {
 
     }
 
-    if (takeaway.length != 0) {
+    if (takeaways.length != 0 && takeaway === true ) {
 
-      function filterByNote(filters) {
-        const allowedNotes = filters.map(f => f.value); // Extract values from filter array
-        const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
-
-        function traverse(obj) {
-          if (Array.isArray(obj)) {
-            return obj.map(traverse).filter(entry => entry !== null);
-          } else if (typeof obj === "object" && obj !== null) {
-            let newObj = {};
-            let hasMatch = false;
-
-            for (let key in obj) {
-              if (key === "NOTE" && typeof obj[key] === "string" && regex.test(obj[key])) {
-                hasMatch = true;
-              } else {
-                let value = traverse(obj[key]);
-                if (value && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0)) {
-                  newObj[key] = value;
-                  hasMatch = true;
+      function filterByNote(data, regex) {
+        if (Array.isArray(data)) {
+            return data
+                .map(item => filterByNote(item, regex))
+                .filter(item => item !== null);
+        } else if (typeof data === 'object' && data !== null) {
+            if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+                return {
+                    ...data,
+                    ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+                };
+            } else if (!data.hasOwnProperty('NOTE')) {
+                let filteredObject = {};
+                for (let key in data) {
+                    let filteredValue = filterByNote(data[key], regex);
+                    if (filteredValue !== null) {
+                        filteredObject[key] = filteredValue;
+                    }
                 }
-              }
+                return Object.keys(filteredObject).length > 0 ? filteredObject : null;
             }
-
-            return hasMatch ? newObj : null;
-          }
-          return obj;
         }
+        return null;
+    } 
+    const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
 
-        let result = {};
-        Object.keys(alldat).forEach(key => {
-          let filtered = traverse(alldat[key]);
-          if (filtered && Object.keys(filtered).length > 0) {
-            result[key] = filtered;
-          }
-        });
-
-        return result;
-      }
+    // const filteredData = filterByNote(originalData, regex);
+    alldat = filterByNote(alldat, regex);
 
 
-      alldat = filterByNote(takeaway)
+     
+      // function filterByNote(filters) {
+      //   console.log( JSON.stringify(filters) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
+
+      //   console.log( JSON.stringify(alldat) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
+
+
+      //   const allowedNotes = filters.map(f => f.value); // Extract values from filter array 
+      //   const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
+        
+      //   function traverse(obj) {
+      //     if (Array.isArray(obj)) {
+           
+      //       return obj.map(traverse).filter(entry => entry !== null);
+      //     } else if (typeof obj === "object" && obj !== null) {
+            
+      //       let newObj = {};
+      //       let hasMatch = false;
+
+      //       for (let key in obj) { 
+      //         if (key === "NOTE" && typeof obj[key] === "string" && regex.test(obj[key])) {
+      //           hasMatch = true;
+      //         } else {
+      //           let value = traverse(obj[key]);
+      //           if (value && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0)) {
+      //             newObj[key] = value;
+      //             hasMatch = true;
+      //           }
+      //         }
+      //       }
+
+      //       return hasMatch ? newObj : null;
+      //     }
+      //     return obj;
+      //   }
+
+
+
+      //   let result = {};
+      //   Object.keys(alldat).forEach(key => {
+      //     console.log(alldat , '')
+
+      //     let filtered = traverse(alldat[key]);
+      //     if (filtered && Object.keys(filtered).length > 0) {
+      //       result[key] = filtered;
+      //     }
+      //   });
+
+      //   return result;
+      // }
+
+
+      // alldat = filterByNote(takeaway)
 
       console.log(alldat, 'seven')
 
+    }else{ 
     }
 
     if (inone != undefined) {
@@ -2566,7 +2609,7 @@ let Dockets = () => {
 
 
 
-  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
+  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
 
 
     let alldat = basicall
@@ -2882,54 +2925,96 @@ let Dockets = () => {
 
     }
 
-    if (takeaway.length != 0) {
+    if (takeaways.length != 0 && takeaway === true ) {
 
-      function filterByNote(filters) {
-        const allowedNotes = filters.map(f => f.value); // Extract values from filter array
-        const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
-
-        function traverse(obj) {
-          if (Array.isArray(obj)) {
-            return obj.map(traverse).filter(entry => entry !== null);
-          } else if (typeof obj === "object" && obj !== null) {
-            let newObj = {};
-            let hasMatch = false;
-
-            for (let key in obj) {
-              if (key === "NOTE" && typeof obj[key] === "string" && regex.test(obj[key])) {
-                hasMatch = true;
-              } else {
-                let value = traverse(obj[key]);
-                if (value && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0)) {
-                  newObj[key] = value;
-                  hasMatch = true;
+      function filterByNote(data, regex) {
+        if (Array.isArray(data)) {
+            return data
+                .map(item => filterByNote(item, regex))
+                .filter(item => item !== null);
+        } else if (typeof data === 'object' && data !== null) {
+            if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+                return {
+                    ...data,
+                    ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+                };
+            } else if (!data.hasOwnProperty('NOTE')) {
+                let filteredObject = {};
+                for (let key in data) {
+                    let filteredValue = filterByNote(data[key], regex);
+                    if (filteredValue !== null) {
+                        filteredObject[key] = filteredValue;
+                    }
                 }
-              }
+                return Object.keys(filteredObject).length > 0 ? filteredObject : null;
             }
-
-            return hasMatch ? newObj : null;
-          }
-          return obj;
         }
+        return null;
+    } 
+    const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
 
-        let result = {};
-        Object.keys(alldat).forEach(key => {
-          let filtered = traverse(alldat[key]);
-          if (filtered && Object.keys(filtered).length > 0) {
-            result[key] = filtered;
-          }
-        });
-
-        return result;
-      }
+    // const filteredData = filterByNote(originalData, regex);
+    alldat = filterByNote(alldat, regex);
 
 
-      alldat = filterByNote(takeaway)
+     
+      // function filterByNote(filters) {
+      //   console.log( JSON.stringify(filters) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
+
+      //   console.log( JSON.stringify(alldat) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
+
+
+      //   const allowedNotes = filters.map(f => f.value); // Extract values from filter array 
+      //   const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
+        
+      //   function traverse(obj) {
+      //     if (Array.isArray(obj)) {
+           
+      //       return obj.map(traverse).filter(entry => entry !== null);
+      //     } else if (typeof obj === "object" && obj !== null) {
+            
+      //       let newObj = {};
+      //       let hasMatch = false;
+
+      //       for (let key in obj) { 
+      //         if (key === "NOTE" && typeof obj[key] === "string" && regex.test(obj[key])) {
+      //           hasMatch = true;
+      //         } else {
+      //           let value = traverse(obj[key]);
+      //           if (value && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0)) {
+      //             newObj[key] = value;
+      //             hasMatch = true;
+      //           }
+      //         }
+      //       }
+
+      //       return hasMatch ? newObj : null;
+      //     }
+      //     return obj;
+      //   }
+
+
+
+      //   let result = {};
+      //   Object.keys(alldat).forEach(key => {
+      //     console.log(alldat , '')
+
+      //     let filtered = traverse(alldat[key]);
+      //     if (filtered && Object.keys(filtered).length > 0) {
+      //       result[key] = filtered;
+      //     }
+      //   });
+
+      //   return result;
+      // }
+
+
+      // alldat = filterByNote(takeaway)
 
       console.log(alldat, 'seven')
 
+    }else{ 
     }
-
     if (inone != undefined) {
       let splitone = inone.split('-')
 
