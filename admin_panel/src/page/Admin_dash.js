@@ -883,8 +883,8 @@ let Admin_dash = () => {
           </div>
 
           <div className="col-12 col-md-8 col-lg-6">
-            <div className="custom-inputoness">
-              <div className="input-group position-relative d-flex align-items-center">
+            <div className="custom-inputoness" style={{ marginRight : '4%' , backgroundColor : 'rgb(226 227 227)' }}>
+              <div className="input-group position-relative d-flex align-items-center" style={{ backgroundColor : 'rgb(226 227 227)' }}>
                 <input
                   onChange={(e) => {
                     setSearchvalue(e.target.value);
@@ -897,10 +897,11 @@ let Admin_dash = () => {
                   style={{
                     paddingRight: "2.5rem",
                     height: sh,
+                    backgroundColor : 'rgb(226 227 227)'
                   }}
                 />
                 <div
-                  className="position-absolute"
+                  className="position-absolute fdfvdsfvsdvsdzxcvsd"
                   style={{
                     right: "15px",
                     top: "50%",
@@ -1165,7 +1166,7 @@ let Admin_dash = () => {
           />
         )}
 
-        <div className="d-flex " style={{ height: "60%" }}>
+        <div className="d-flex " style={{ height: "60%" , marginTop : 50 }}>
           <div className=" d-lg-block d-none">
             <div>
               <Nav.Link
@@ -1427,7 +1428,7 @@ let Admin_dash = () => {
             }}
           >
             <div
-              style={{ border: "1px solid #9F9F9F", height: "100%" }}
+              style={{ border: "1px solid #9F9F9F", height: "100%" , marginTop : 10 }}
               className="ggggggggg"
             >
               {data === "1" || data === "2" || data === "3" ? (
@@ -1979,7 +1980,7 @@ let Admin_dash = () => {
                     {Object.entries(user)
                       .filter(([_, value]) => value.Role === "admin") // Filter only admins
                       .map(([key, value]) => {
-                        // const modifiedData = value.venue.map(item => ({
+                        // const modifiedData = value.venue.map(item => ({   
                         //   label: item.label,
                         //   value: item.value.split("-")[0] // Extracts only the first part before "-"
                         // }));
@@ -2062,7 +2063,9 @@ let Admin_dash = () => {
                                   onChange={(e) => {
                                     changeddddd(e, value, "venue");
                                   }} // Prevent selection changes
-                                  placeholder={value.venue[0].label + "..."}
+                                  // placeholder={value.venue[0].label + "..."}
+                                  placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
+
                                   components={{
                                     Option: CustomOption,
                                     MultiValue: () => null, // Hides default tags
@@ -2102,7 +2105,9 @@ let Admin_dash = () => {
                                   options={basicone}
                                   value={value.hub} // Shows selected values
                                   onChange={() => {}} // Prevent selection changes
-                                  placeholder={value.hub[0].label + "..."}
+                                  // placeholder={value.hub[0].label + "..."}
+                                  placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
+
                                   components={{
                                     Option: CustomOption,
                                     MultiValue: () => null, // Hides default tags
@@ -2217,7 +2222,8 @@ let Admin_dash = () => {
                                 onChange={(e) => {
                                   changeddddd(e, value, "venue");
                                 }} // Prevent selection changes
-                                placeholder={value.venue[0].label + "..."}
+                                placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
+
                                 components={{
                                   Option: CustomOption,
                                   MultiValue: () => null, // Hides default tags
@@ -2254,7 +2260,9 @@ let Admin_dash = () => {
                                 options={basicone}
                                 value={value.hub} // Shows selected values
                                 onChange={() => {}} // Prevent selection changes
-                                placeholder={value.hub[0].label + "..."}
+                                // placeholder={value.hub[0].label + "..."}
+                                placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
+
                                 components={{
                                   Option: CustomOption,
                                   MultiValue: () => null, // Hides default tags
@@ -2352,7 +2360,8 @@ let Admin_dash = () => {
                                 onChange={(e) => {
                                   changeddddd(e, value, "venue");
                                 }} // Prevent selection changes
-                                placeholder={value.venue[0].label + "..."}
+                                placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
+
                                 components={{
                                   Option: CustomOption,
                                   MultiValue: () => null, // Hides default tags
@@ -2389,7 +2398,8 @@ let Admin_dash = () => {
                                 options={basicone}
                                 value={value.hub} // Shows selected values
                                 onChange={() => {}} // Prevent selection changes
-                                placeholder={value.hub[0].label + "..."}
+                                placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
+
                                 components={{
                                   Option: CustomOption,
                                   MultiValue: () => null, // Hides default tags

@@ -133,7 +133,7 @@ let SinglrandMulti = () => {
 
             <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
               <img src="Menu_Logo.png" style={{ width: 56, height: 28 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 0 }} >analytics</p>
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 0 }} >web app</p>
             </div>
 
           </div>

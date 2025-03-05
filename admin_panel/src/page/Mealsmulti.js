@@ -102,7 +102,7 @@ let Mealsmulti = () => {
 
   let [editallclone, setEditallclone] = useState([])
   let [editalloneclone, setEditalloneclone] = useState([])
-
+ 
   const [menuIsOpenone, setMenuIsOpenone] = useState(false);
   const [menuIsOpentwo, setMenuIsOpentwo] = useState(false);
   const [menuIsOpenthree, setMenuIsOpenthree] = useState(false);
@@ -532,6 +532,36 @@ let Mealsmulti = () => {
 
 
     }
+
+
+    
+        const output = [];
+    
+        // // Iterate through the search array
+        realven.forEach(({ value }) => {
+          // Search in the data object
+          Object.entries(result).forEach(([key, items]) => {
+            if (key === value) {
+              // If the key matches, add all items from the group to the output
+              items.forEach(item => {
+                output.push({ value: key + '-' + item.name, label: item.name });
+              });
+            } else {
+              // Search within the group's items
+              items.forEach(item => {
+                if (item.name === value) {
+                  output.push({ value : key + '-' + item.name, label: key });
+                }
+              });
+            }
+          });
+        });
+    
+        setBasicone(output) 
+        setHubb(output)
+
+
+
     setSelectedOptions(realven)
     // alldat = filteredDataonee
     const yesterday = [getFormattedDate(1), getFormattedDate(1)];
@@ -1176,7 +1206,26 @@ let Mealsmulti = () => {
       const maxLength = 10; // Adjust as needed
       const displayText = allLabels.slice(0, textCount) + "..."
 
-      return <span title={allLabels}>{displayText}</span>;
+      return <span style={{ color : allLabels === 'Maximum' ? 'red' :  allLabels === 'Minimum' ? 'blue' : ""  ,
+        fontWeight : allLabels === 'Maximum' ? '700' :  allLabels === 'Minimum' ? '700' : ""
+       }} title={allLabels}>{displayText}</span>;
+    }
+    return null;
+  };
+
+  const CustomPlaceholdersss = ({ children, getValue }) => {
+    const selected = getValue();
+    if (selected.length) {
+      const allLabels = selected
+        .filter(option => option.label && !option.label.startsWith("All ")) // Ensure label exists
+        .map(option => option.label)
+        .join(", ");
+
+      // Limit to single line with ellipsis
+      const maxLength = 10; // Adjust as needed
+      const displayText = allLabels.slice(0, textCount) + "..."
+
+      return <span style={{ color : allLabels === 'Maximum' ? 'red' : 'blue' , fontWeight : '700' }} title={allLabels}>{displayText}</span>;
     }
     return null;
   };
@@ -4274,16 +4323,35 @@ let Mealsmulti = () => {
 
   const handleChangefinedd = (selected) => {
 
-    if (minperday.length === 0) {
+    if (minperday.length === 0) { 
 
     } else {
-      setMinperday((prevState) => [...prevState].reverse());
+
+      if(selected.value === "Minimum") {
+        setMinperday((prevState) =>
+          [...prevState].sort((a, b) => a.count - b.count)
+        );
+      }else{
+        setMinperday((prevState) =>
+          [...prevState].sort((a, b) => b.count - a.count)
+        );
+      } 
     }
 
     if (maxperday.length === 0) {
 
     } else {
-      setMaxperday((prevState) => [...prevState].reverse());
+
+      if(selected.value === "Minimum") {
+        setMaxperday((prevState) =>
+          [...prevState].sort((a, b) => a.count - b.count)
+        );
+      }else{
+        setMaxperday((prevState) =>
+          [...prevState].sort((a, b) => b.count - a.count)
+        );
+      }  
+     
 
     }
 
@@ -4462,7 +4530,7 @@ let Mealsmulti = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf");
+        doc.save("Edits.pdf");
         setIsPdfLoad(false) // Save after rendering
       },
       x: 10,
@@ -4521,14 +4589,35 @@ let Mealsmulti = () => {
     if (served.length === 0) {
 
     } else {
-      setServed((prevState) => [...prevState].reverse());
+
+      if(selected.value === "Minimum") {
+        setServed((prevState) =>
+          [...prevState].sort((a, b) => a.count - b.count)
+        );
+      }else{
+        setServed((prevState) =>
+          [...prevState].sort((a, b) => b.count - a.count)
+        );
+      }
+ 
 
     }
 
     if (servedone.length === 0) {
 
     } else {
-      setServedone((prevState) => [...prevState].reverse());
+
+      if(selected.value === "Minimum") {
+        setServedone((prevState) =>
+          [...prevState].sort((a, b) => a.count - b.count)
+        );
+      }else{
+        setServedone((prevState) =>
+          [...prevState].sort((a, b) => b.count - a.count)
+        );
+      }
+
+ 
 
 
     }
@@ -4553,7 +4642,7 @@ let Mealsmulti = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf");
+        doc.save("Served meals.pdf");
         setIsPdfLoad(false)// Save after rendering
       },
       y: 10,
@@ -4607,7 +4696,7 @@ let Mealsmulti = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf");
+        doc.save("Meals received - timeline.pdf");
         setIsPdfLoad(false)// Save after rendering
       },
       x: 10,
@@ -4640,7 +4729,7 @@ let Mealsmulti = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf");
+        doc.save("Refunded meals.pdf");
         setIsPdfLoad(false);// Save after rendering
       },
       x: 10,
@@ -4864,7 +4953,7 @@ const[paddOpp,setPaddOpp]=useState(0);
 
             <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
               <img src="Menu_Logo.png" style={{ width: 56, height: 28 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 0 }} >analytics</p>
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 0 }} >web app</p>
             </div>
 
           </div>
@@ -5813,7 +5902,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}  </p>
                         </div>
                         <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}> <span >
                             {(() => {
                               let datd = editallone?.moved?.length
 
@@ -5821,7 +5910,7 @@ const[paddOpp,setPaddOpp]=useState(0);
 
                               let tot = ((datdtwo - datd) / datd) * 100
 
-                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                              return <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }} >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                                 style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
 
                                 }} className="" alt="Example Image" /> :
@@ -5850,7 +5939,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}  </p>
                         </div>
                         <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}> <span >
                             {(() => {
                               let datd = editallone?.edited?.length
 
@@ -5858,7 +5947,7 @@ const[paddOpp,setPaddOpp]=useState(0);
 
                               let tot = ((datdtwo - datd) / datd) * 100
 
-                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                              return <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }} >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                                 style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
 
                                 }} className="" alt="Example Image" /> :
@@ -5887,7 +5976,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.deleted?.length}  </p>
                         </div>
                         <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}> <span >
                             {(() => {
                               let datd = editallone?.deleted?.length
 
@@ -5895,7 +5984,7 @@ const[paddOpp,setPaddOpp]=useState(0);
 
                               let tot = ((datdtwo - datd) / datd) * 100
 
-                              return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                              return <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }} >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                                 style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
 
                                 }} className="" alt="Example Image" /> :
@@ -5925,7 +6014,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.tableMoved?.length}  </p>
                         </div>
                         <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}> <span >
                             {(() => {
                               let datd = editallone?.tableMoved?.length
 
@@ -5935,7 +6024,7 @@ const[paddOpp,setPaddOpp]=useState(0);
 
                               console.log(tot, 'nan')
 
-                              return <span >{isNaN(tot) ? "+000.00" : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                              return <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }} >{isNaN(tot) ? "+000.00" : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                                 style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
 
                                 }} className="" alt="Example Image" /> :
@@ -5992,7 +6081,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                                   const selectedValues = props.getValue();
                                   return (
                                     <components.ValueContainer {...props}>
-                                      {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                      {selectedValues.length > 0 ? <CustomPlaceholdersss {...props} /> : children}
                                     </components.ValueContainer>
                                   );
                                 },
@@ -6137,13 +6226,13 @@ const[paddOpp,setPaddOpp]=useState(0);
                               <div key={index}>
                                 <div className="row py-2">
                                   <div className="col-md-4 col-sm-12 mb-2 mb-md-0">
-                                    <p className="mb-1" style={{ fontWeight: '700', color: '#000' }}>{dfgh?.name}</p>
+                                    <p className="mb-1" style={{ fontWeight: '700', color: index === 0 ? 'red' :  '#000' }}>{dfgh?.name}</p>
                                     <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}>{dfgh?.count}</p>
                                   </div>
 
                                   {correspondingErv ? (
                                     <div className="col-md-4 col-sm-12 mb-2 mb-md-0 text-md-center">
-                                      <p className="mb-1" style={{ fontWeight: '700', color: '#000' }}>{correspondingErv?.name}</p>
+                                      <p className="mb-1" style={{ fontWeight: '700', color:  index === 0 ? 'blue' : '#000' }}>{correspondingErv?.name}</p>
                                       <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}>{correspondingErv?.count}</p>
                                     </div>
                                   ) : (
@@ -6151,8 +6240,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                                   )}
 
                                   <div className="col-md-4 col-sm-12 d-flex justify-content-md-end align-items-center">
-                                    <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}>
-                                      ( Total )
+                                    <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}> 
                                       <span>
                                         {(() => {
                                           const datd = dfgh?.count || 0;
@@ -6160,7 +6248,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                                           const tot = datdtwo === 0 ? 0 : ((datd - datdtwo) / datdtwo) * 100;
 
                                           return (
-                                            <span>
+                                            <span style={{ fontWeight: '700', color: '#000' }}>
                                               {tot.toFixed(2) + "%"}
                                               <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
                                                 {tot > 0 ? (
@@ -6297,7 +6385,7 @@ const[paddOpp,setPaddOpp]=useState(0);
 
                                   let tot = ((datd - datdtwo) / datdtwo) * 100
 
-                                  return <span >{isNaN(tot) ? 0 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{isNaN(tot) ?
+                                  return <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }} >{isNaN(tot) ? 0 : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{isNaN(tot) ?
                                     '%' : tot > 0 ? <img src="up_arw.png"
                                       style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
 
@@ -6329,7 +6417,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                                     <div className="d-flex  ">
 
                                       <div style={{ width: '33%' }}>
-                                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                                        <p style={{ fontWeight: '700', color: index === 0 ? 'red' : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
                                         <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
                                       </div>
 
@@ -6337,7 +6425,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                                         <div style={{ width: '33%', textAlign: 'center' }}>
                                           <div >
 
-                                            <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                            <p style={{ fontWeight: '700', color: index ===0 ? 'blue' : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
                                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
                                           </div>
                                         </div>
@@ -6348,8 +6436,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                                       )}
 
                                       <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                                          ( Total )
+                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}> 
                                           <span>
                                             {(() => {
                                               const datd = dfgh?.count || 0; // Fallback to 0 if no data
@@ -6359,7 +6446,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                                               const tot = ((datd - datdtwo) / datdtwo) * 100;
 
                                               return (
-                                                <span>
+                                                <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>
                                                   {tot.toFixed(2) + "%"}
                                                   <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
                                                     {tot > 0 ? (
@@ -7091,7 +7178,7 @@ const[paddOpp,setPaddOpp]=useState(0);
         <div className="d-flex  mt-3">
 
           <div style={{ width: '43%' }} className="d-flex">
-            <p style={{ fontWeight: '700', color: '#000',  }}>{dfgh?.name}</p>
+            <p style={{ fontWeight: '700', color: index === 0 ? 'red' :  '#000',  }}>{dfgh?.name}</p>
             <p style={{ fontWeight: '400', color: '#000',  marginLeft : 5 }}>{dfgh?.count}</p>
           </div>
 
@@ -7099,7 +7186,7 @@ const[paddOpp,setPaddOpp]=useState(0);
             <div style={{ width: '33%', textAlign: 'center' }}>
               <div className="d-flex" >
 
-                <p style={{ fontWeight: '700', color: '#000',  }}>{correspondingErv?.name}</p>
+                <p style={{ fontWeight: '700', color: index === 0 ? 'blue' :  '#000',  }}>{correspondingErv?.name}</p>
                 <p style={{ fontWeight: '400', color: '#000',  marginLeft : 5 }}>{correspondingErv?.count}</p>
               </div>
             </div>
@@ -7299,7 +7386,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                       <div className="d-flex" style={{}} >
                         {/* Left Section */}
                         <div style={{ width: '33%' }}>
-                          <p style={{ fontWeight: 700, color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                          <p style={{ fontWeight: 700, color: index === 0 ? 'red' :  '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
                           <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
                         </div>
 
@@ -7307,7 +7394,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                         <div style={{ width: '33%', textAlign: 'center' }}>
                           {correspondingErv ? (
                             <>
-                              <p style={{ fontWeight: 700, color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                              <p style={{ fontWeight: 700, color: index === 0 ? 'blue' : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
                               <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
                             </>
                           ) : null}

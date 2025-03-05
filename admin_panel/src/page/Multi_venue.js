@@ -75,7 +75,7 @@ let Multi_venue = () => {
   const [dateRange, setDateRange] = useState([null, null]); // [startDate, endDate]
   const [startDate, endDate] = dateRange;
 
- 
+
   let [basicall, setBasicall] = useState()
   let [basic, setBasic] = useState()
   let [basicone, setBasicone] = useState([])
@@ -95,8 +95,8 @@ let Multi_venue = () => {
   let [hubb, setHubb] = useState([])
   let [hubbtwo, setHubbtwo] = useState([])
   let [hubbswitch, setHubbswitch] = useState(true)
-  let[isPdfLoad,setIsPdfLoad]=useState(false);
-  let[isExcelLoad,setIsExcelLoad]=useState(false);
+  let [isPdfLoad, setIsPdfLoad] = useState(false);
+  let [isExcelLoad, setIsExcelLoad] = useState(false);
   //parse meals
   let [meals, setMeals] = useState(1)
 
@@ -238,7 +238,7 @@ let Multi_venue = () => {
       const groupedItems = {};
 
       order.ITEMS.forEach(item => {
-        let note = item.NOTE.trim();
+        let note = (item.NOTE || "").toString().trim();
 
         if (!note) {
           note = "empty"; // If NOTE is empty, assign "empty"
@@ -721,6 +721,36 @@ let Multi_venue = () => {
 
 
     }
+
+
+
+    const output = [];
+
+    // // Iterate through the search array
+    realven.forEach(({ value }) => {
+      // Search in the data object
+      Object.entries(result).forEach(([key, items]) => {
+        if (key === value) {
+          // If the key matches, add all items from the group to the output
+          items.forEach(item => {
+            output.push({ value: key + '-' + item.name, label: item.name });
+          });
+        } else {
+          // Search within the group's items
+          items.forEach(item => {
+            if (item.name === value) {
+              output.push({ value: key + '-' + item.name, label: key });
+            }
+          });
+        }
+      });
+    });
+
+    setBasicone(output)
+    setHubb(output)
+
+
+
     setSelectedOptions(realven)
     // alldat = filteredDataonee
     const yesterday = [getFormattedDate(1), getFormattedDate(1)];
@@ -1387,8 +1417,10 @@ let Multi_venue = () => {
       const maxLength = 10; // Adjust as needed
       const displayText = allLabels.slice(0, textCount) + "..."
 
-      return <span title={allLabels}>{displayText}</span>;
-    }
+      return <span style={{ color : allLabels === 'Maximum' ? 'red' :  allLabels === 'Minimum' ? 'blue' : ""  ,
+        fontWeight : allLabels === 'Maximum' ? '700' :  allLabels === 'Minimum' ? '700' : ""
+       }}  title={allLabels}>{displayText}</span>;
+    } 
     return null;
   };
 
@@ -1766,19 +1798,46 @@ let Multi_venue = () => {
     if (editall.length === 0) {
 
     } else {
-      setEditall((prevState) => ({
-        ...prevState,
-        orders: [...prevState.orders].reverse() // Spread operator to avoid direct mutation
-      }));
+
+      if (selected.value === "Minimum") {
+        setEditall((prevState) => ({
+          ...prevState,
+          orders: [...prevState.orders].sort(
+            (a, b) => parseInt(a.processtime.replace(/\D/g, '')) - parseInt(b.processtime.replace(/\D/g, ''))
+          ),
+        }));
+      } else {
+        setEditall((prevState) => ({
+          ...prevState,
+          orders: [...prevState.orders].sort(
+            (a, b) => parseInt(b.processtime.replace(/\D/g, '')) - parseInt(a.processtime.replace(/\D/g, ''))
+          ),
+        }));
+      }
+
+
+
     }
 
     if (editallone.length === 0) {
 
     } else {
-      setEditallone((prevState) => ({
-        ...prevState,
-        orders: [...prevState.orders].reverse() // Spread operator to avoid direct mutation
-      }));
+
+      if (selected.value === "Minimum") {
+        setEditallone((prevState) => ({
+          ...prevState,
+          orders: [...prevState.orders].sort(
+            (a, b) => parseInt(a.processtime.replace(/\D/g, '')) - parseInt(b.processtime.replace(/\D/g, ''))
+          ),
+        }));
+      } else {
+        setEditallone((prevState) => ({
+          ...prevState,
+          orders: [...prevState.orders].sort(
+            (a, b) => parseInt(b.processtime.replace(/\D/g, '')) - parseInt(a.processtime.replace(/\D/g, ''))
+          ),
+        }));
+      }
 
     }
 
@@ -2503,13 +2562,13 @@ let Multi_venue = () => {
 
     }
 
-    if (inone != undefined ) {
+    if (inone != undefined) {
       let splitone = inone.split('-')
- 
-    
-      if (splitone.length === 2 ) {
 
-        if (Number(splitone[0]) < Number(splitone[1]) ) {
+
+      if (splitone.length === 2) {
+
+        if (Number(splitone[0]) < Number(splitone[1])) {
 
 
 
@@ -3158,13 +3217,13 @@ let Multi_venue = () => {
 
     }
 
-    if (inone != undefined ) {
+    if (inone != undefined) {
       let splitone = inone.split('-')
- 
-    
-      if (splitone.length === 2 ) {
 
-        if (Number(splitone[0]) < Number(splitone[1]) ) {
+
+      if (splitone.length === 2) {
+
+        if (Number(splitone[0]) < Number(splitone[1])) {
 
 
 
@@ -3887,6 +3946,7 @@ let Multi_venue = () => {
 
   let callfordataonesearch = (one, bitedata) => {
 
+    console.log(one, bitedata, 'one, bitedataone, bitedataone, bitedataone, bitedataone, bitedata')
 
     function processData(data) {
       let result = [];
@@ -4402,7 +4462,7 @@ let Multi_venue = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf"); // Save after rendering
+        doc.save("Dockets Completion.pdf"); // Save after rendering
         setIsPdfLoad(false)
       },
       x: 10,
@@ -4415,7 +4475,7 @@ let Multi_venue = () => {
       },
     }).catch(() => {
       setIsPdfLoad(false);
-  });
+    });
 
 
 
@@ -4509,7 +4569,7 @@ let Multi_venue = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf"); // Save after rendering
+        doc.save("Dockets received - timeline.pdf"); // Save after rendering
         setIsPdfLoad(false)
       },
       x: 10,
@@ -4522,7 +4582,7 @@ let Multi_venue = () => {
       },
     }).catch(() => {
       setIsPdfLoad(false);
-  });
+    });
 
 
 
@@ -4595,7 +4655,7 @@ let Multi_venue = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf");
+        doc.save("Dockets received - timeline.pdf");
         setIsPdfLoad(false); // Save after rendering
       },
       x: 10,
@@ -4608,7 +4668,7 @@ let Multi_venue = () => {
       },
     }).catch(() => {
       setIsPdfLoad(false);
-  });
+    });
 
   }
 
@@ -5137,47 +5197,46 @@ let Multi_venue = () => {
     return timeValue >= startTime && timeValue < endTime;
   };
 
-  const getpadd=()=>{
+  const getpadd = () => {
     if (window.innerWidth >= 1536) return 80; // 2xl
-      if (window.innerWidth >= 1280) return 60; // xl
-      if (window.innerWidth >= 1024) return 20; // lg
-      if (window.innerWidth >= 768) return 0;  // md
-      return 0;
+    if (window.innerWidth >= 1280) return 60; // xl
+    if (window.innerWidth >= 1024) return 20; // lg
+    if (window.innerWidth >= 768) return 0;  // md
+    return 0;
   }
-    const getBoxWidth = () => {
-      if (window.innerWidth >= 1836) return 800; // 2xl
-      if (window.innerWidth >= 1680) return 700; // xl
-      if (window.innerWidth >= 1024) return 600; // lg
-      if (window.innerWidth >= 768) return 600;  // md
-      return 500; // default for smaller screens
-    };
-    const getBoxHeight = () => {
-      if (window.innerWidth >= 1536) return 250; // 2xl
-      if (window.innerWidth >= 1280) return 250; // xl
-      if (window.innerWidth >= 1024) return 250; // lg
-      if (window.innerWidth >= 768) return 250;  // md
-      return 250; // default for smaller screens
-    };
-    const gettextcount = () => {
-      if (window.innerWidth >= 1536) return 12; // 2xl
-      if (window.innerWidth >= 1380) return 9; // xl
-      if (window.innerWidth >= 1024) return 7; // lg
-      if (window.innerWidth >= 768) return 5;  // md
-      return 5; // default for smaller screens
-    };
-    const [boxWidth, setBoxWidth] = useState(getBoxWidth());
-    const [Height, setHeight] = useState(getBoxHeight());
-    const[textCount,setTextCount]=useState(gettextcount());
-  const[padd,setPadd]=useState(getpadd());
-  const[paddOpp,setPaddOpp]=useState(0);
-  
-    useEffect(() => {
-      const handleResize = () => 
-      {setBoxWidth(getBoxWidth()),setPadd(getpadd()),setPaddOpp(0),setHeight(getBoxHeight()),setTextCount(gettextcount()) };
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
-  
+  const getBoxWidth = () => {
+    if (window.innerWidth >= 1836) return 800; // 2xl
+    if (window.innerWidth >= 1680) return 700; // xl
+    if (window.innerWidth >= 1024) return 600; // lg
+    if (window.innerWidth >= 768) return 600;  // md
+    return 500; // default for smaller screens
+  };
+  const getBoxHeight = () => {
+    if (window.innerWidth >= 1536) return 250; // 2xl
+    if (window.innerWidth >= 1280) return 250; // xl
+    if (window.innerWidth >= 1024) return 250; // lg
+    if (window.innerWidth >= 768) return 250;  // md
+    return 250; // default for smaller screens
+  };
+  const gettextcount = () => {
+    if (window.innerWidth >= 1536) return 12; // 2xl
+    if (window.innerWidth >= 1380) return 9; // xl
+    if (window.innerWidth >= 1024) return 7; // lg
+    if (window.innerWidth >= 768) return 5;  // md
+    return 5; // default for smaller screens
+  };
+  const [boxWidth, setBoxWidth] = useState(getBoxWidth());
+  const [Height, setHeight] = useState(getBoxHeight());
+  const [textCount, setTextCount] = useState(gettextcount());
+  const [padd, setPadd] = useState(getpadd());
+  const [paddOpp, setPaddOpp] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => { setBoxWidth(getBoxWidth()), setPadd(getpadd()), setPaddOpp(0), setHeight(getBoxHeight()), setTextCount(gettextcount()) };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div style={{ overflow: 'hidden' }}>
       {/* <Header name={"Dockets"} center={"Name"} />
@@ -5205,7 +5264,7 @@ let Multi_venue = () => {
 
             <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
               <img src="Menu_Logo.png" style={{ width: 56, height: 28 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 0 }} >analytics</p>
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 0 }} >web app</p>
             </div>
 
           </div>
@@ -5301,15 +5360,15 @@ let Multi_venue = () => {
                         setVenueradio(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedOptions([])
-                        } else{
+                        } else {
 
 
 
-                          handleChange([...selectedOptions , ...[{
+                          handleChange([...selectedOptions, ...[{
                             "label": "All Venue",
                             "value": "All"
-                        }]])
-                          console.log(selectedOptions , 'selectedOptions')
+                          }]])
+                          console.log(selectedOptions, 'selectedOptions')
                         }
                       }}
                     />
@@ -5376,11 +5435,11 @@ let Multi_venue = () => {
                         if (e.target.checked === false) {
                           // Reset logic if needed
                           setHubb([])
-                        }else{
-                          handleChangehubone([...hubb , ...[{
+                        } else {
+                          handleChangehubone([...hubb, ...[{
                             "label": "All Hub",
                             "value": "All"
-                        }]]) 
+                          }]])
                         }
                       }}
                       type="checkbox"
@@ -5455,11 +5514,11 @@ let Multi_venue = () => {
                         setVenueradiofivese(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedOptionsfive([])
-                        }else{
-                          handleChangefive([...selectedOptionsfive , ...[{
+                        } else {
+                          handleChangefive([...selectedOptionsfive, ...[{
                             "label": "All Venues",
                             "value": "All"
-                        }]])
+                          }]])
                         }
                       }}
                     />
@@ -5525,11 +5584,11 @@ let Multi_venue = () => {
                         if (e.target.checked === false) {
                           // Reset logic if needed
                           setHubbtwo([])
-                        }else{
-                          handleChangehubtwo([...basiconefive , ...[{
+                        } else {
+                          handleChangehubtwo([...basiconefive, ...[{
                             "label": "All Hubs",
                             "value": "All"
-                        }]])
+                          }]])
                         }
                       }}
                       type="checkbox"
@@ -5601,11 +5660,11 @@ let Multi_venue = () => {
                         setHubradio(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedhubOptions([])
-                        }else{
-                          handleChangehub([...selectedhubOptions , ...[{
+                        } else {
+                          handleChangehub([...selectedhubOptions, ...[{
                             "label": "All stages",
                             "value": "All"
-                        }]])
+                          }]])
                         }
                       }}
                       id="switch2"
@@ -5672,11 +5731,11 @@ let Multi_venue = () => {
                         setCources(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedCources([])
-                        }else{
-                          handleChangeCources([ ...fulldatafull , ...[{
+                        } else {
+                          handleChangeCources([...fulldatafull, ...[{
                             "label": "All courses",
                             "value": "All"
-                        }]])
+                          }]])
                         }
                       }}
                       id="switch4"
@@ -5775,11 +5834,11 @@ let Multi_venue = () => {
                         setTakeaway(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedTakeaway([])
-                        }else{
-                          handleChangeTakeaway([...optionstakeaway , ...[{
+                        } else {
+                          handleChangeTakeaway([...optionstakeaway, ...[{
                             "label": "All takeaways",
                             "value": "All"
-                        }]])
+                          }]])
                         }
                       }}
                       id="switch5"
@@ -5847,7 +5906,7 @@ let Multi_venue = () => {
                 <div className="changetwos">
                   <div className='row'>
                     <div className='col-lg-6 col-md-12 w-100 d-flex justify-content-center' style={{ margin: 'auto' }}>
-                      <div class="box"  style={{maxWidth: `${boxWidth}px`,height: `${Height}px`}} onClick={() => {
+                      <div class="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                         setMeals(2)
                       }}>
                         <div class="boxs" style={{ cursor: 'pointer' }}>
@@ -5892,8 +5951,8 @@ let Multi_venue = () => {
 
                   <div className="w-100 ">
                     <div className='row mt-5 '>
-                      <div className='col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center' style={{ paddingRight: `${padd}px`,paddingLeft:paddOpp }}>
-                        <div class="box" style={{  maxWidth: `${boxWidth}px`,height: `${Height}px`  }} onClick={() => {
+                      <div className='col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center' style={{ paddingRight: `${padd}px`, paddingLeft: paddOpp }}>
+                        <div class="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                           setMeals(5)
                         }}>
                           <div class="boxs" style={{ cursor: 'pointer' }}>
@@ -5906,8 +5965,8 @@ let Multi_venue = () => {
                         </div>
                       </div>
 
-                      <div className='col-lg-6 col-md-12 mt-md-4 mt-lg-0 mb-4 d-flex  justify-content-lg-start justify-content-center' style={{ paddingLeft: `${padd}px`,paddingRight:paddOpp }}>
-                        <div class="box" style={{maxWidth: `${boxWidth}px`,height: `${Height}px`}} onClick={() => {
+                      <div className='col-lg-6 col-md-12 mt-md-4 mt-lg-0 mb-4 d-flex  justify-content-lg-start justify-content-center' style={{ paddingLeft: `${padd}px`, paddingRight: paddOpp }}>
+                        <div class="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                           setMeals(4)
                         }}>
                           <div class="boxs" style={{ cursor: 'pointer' }}>
@@ -6057,45 +6116,45 @@ let Multi_venue = () => {
                               >
                                 <p style={{ color: '#707070' }}>Export as</p>
                                 <hr />
-                                <p 
-  style={{ 
-    color: '#000', 
-    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '8px' 
-  }} 
-  onClick={() => {
-    if (!isPdfLoad) {
-      setIsPdfLoad(true);  // Prevent click when loading
-      console.log(JSON.stringify(selectedOptions), 'dateRange');
-      editexportpdf();
-    }
-  }}
->
-PDF
-  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+                                <p
+                                  style={{
+                                    color: '#000',
+                                    cursor: isPdfLoad ? 'not-allowed' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                  }}
+                                  onClick={() => {
+                                    if (!isPdfLoad) {
+                                      setIsPdfLoad(true);  // Prevent click when loading
+                                      console.log(JSON.stringify(selectedOptions), 'dateRange');
+                                      editexportpdf();
+                                    }
+                                  }}
+                                >
+                                  PDF
+                                  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
 
-</p>
-<p 
-  style={{ 
-    color: '#000', 
-    cursor: isExcelLoad ? 'not-allowed' : 'pointer', 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '8px' 
-  }} 
-  onClick={() => {
-    if (!isPdfLoad) {
-      setIsExcelLoad(true);  // Prevent click when loading
-      downloadDocketseditExcel()
-    }
-  }}
->
-Excel sheet
-  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
+                                </p>
+                                <p
+                                  style={{
+                                    color: '#000',
+                                    cursor: isExcelLoad ? 'not-allowed' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                  }}
+                                  onClick={() => {
+                                    if (!isPdfLoad) {
+                                      setIsExcelLoad(true);  // Prevent click when loading
+                                      downloadDocketseditExcel()
+                                    }
+                                  }}
+                                >
+                                  Excel sheet
+                                  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
 
-</p>
+                                </p>
                               </div>
                             )}
                           </div>
@@ -6109,11 +6168,11 @@ Excel sheet
                           <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span>{editall?.stats?.averageProcessTime || 0}</span></p>
                         </div>
-                        <div  style={{ width: "40%",display:'flex',alignItems:'start',flexDirection:'column'}}>
+                        <div style={{ width: "40%", display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
                           <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span>{editallone?.stats?.averageProcessTime || 0}</span></p>
                         </div>
-                        <div  style={{ width: "20%",display:'flex',justifyContent:'end',alignItems:'end',flexDirection:'column' }}>
+                        <div style={{ width: "20%", display: 'flex', justifyContent: 'end', alignItems: 'end', flexDirection: 'column' }}>
                           <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span>
                             {(() => {
@@ -6163,7 +6222,7 @@ Excel sheet
                                     {correspondingErv ? (
                                       <div style={{ width: "40%" }}>
                                         <div className="d-flex align-items-center">
-                                          <p style={{ fontWeight: "700", color: "#000", width: "60%",marginTop:15 }}>
+                                          <p style={{ fontWeight: "700", color: index === 0 ? 'red' : "#000", width: "60%", marginTop: 15 }}>
                                             {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{correspondingErv?.date + " " + "[" +
                                               correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                                           </p>
@@ -6201,7 +6260,7 @@ Excel sheet
                                             }
 
                                             return (
-                                              <span>
+                                              <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>
                                                 {percentageChange.toFixed(2) + "%"}
                                                 <span
                                                   style={{
@@ -6274,25 +6333,25 @@ Excel sheet
                             >
                               <p style={{ color: '#707070' }}>Export as</p>
                               <hr />
-                              <p 
-  style={{ 
-    color: '#000', 
-    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '8px' 
-  }} 
-  onClick={() => {
-    if (!isPdfLoad) {
-      setIsPdfLoad(true);  // Prevent click when loading
-      mealexportpdf()
-    }
-  }}
->
-PDF
-  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+                              <p
+                                style={{
+                                  color: '#000',
+                                  cursor: isPdfLoad ? 'not-allowed' : 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '8px'
+                                }}
+                                onClick={() => {
+                                  if (!isPdfLoad) {
+                                    setIsPdfLoad(true);  // Prevent click when loading
+                                    mealexportpdf()
+                                  }
+                                }}
+                              >
+                                PDF
+                                {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
 
-</p>
+                              </p>
                             </div>
                           )}
 
@@ -6466,43 +6525,43 @@ PDF
                               >
                                 <p style={{ color: '#707070' }}>Export as</p>
                                 <hr />
-                                <p 
-  style={{ 
-    color: '#000', 
-    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '8px' 
-  }} 
-  onClick={() => {
-    if (!isPdfLoad) {
-      setIsPdfLoad(true);  // Prevent click when loading
-      refundexportpdf()
-    }
-  }}
->
-PDF
-  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+                                <p
+                                  style={{
+                                    color: '#000',
+                                    cursor: isPdfLoad ? 'not-allowed' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                  }}
+                                  onClick={() => {
+                                    if (!isPdfLoad) {
+                                      setIsPdfLoad(true);  // Prevent click when loading
+                                      refundexportpdf()
+                                    }
+                                  }}
+                                >
+                                  PDF
+                                  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
 
-</p>
-<p 
-  style={{ 
-    color: '#000', 
-    cursor: isExcelLoad ? 'not-allowed' : 'pointer', 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '8px' 
-  }} 
-  onClick={() => {
-    if (!isPdfLoad) {
-      downloadDocketsavgExcel()
-    }
-  }}
->
-Excel sheet
-  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
+                                </p>
+                                <p
+                                  style={{
+                                    color: '#000',
+                                    cursor: isExcelLoad ? 'not-allowed' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                  }}
+                                  onClick={() => {
+                                    if (!isPdfLoad) {
+                                      downloadDocketsavgExcel()
+                                    }
+                                  }}
+                                >
+                                  Excel sheet
+                                  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
 
-</p>
+                                </p>
                               </div>
                             )}
                           </div>
@@ -6683,44 +6742,44 @@ Excel sheet
                               >
                                 <p style={{ color: '#707070' }}>Export as</p>
                                 <hr />
-                                <p 
-  style={{ 
-    color: '#000', 
-    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '8px' 
-  }} 
-  onClick={() => {
-    if (!isPdfLoad) {
-      setIsPdfLoad(true);  // Prevent click when loading
-      chartexportpdf()
-    }
-  }}
->
-PDF
-  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+                                <p
+                                  style={{
+                                    color: '#000',
+                                    cursor: isPdfLoad ? 'not-allowed' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                  }}
+                                  onClick={() => {
+                                    if (!isPdfLoad) {
+                                      setIsPdfLoad(true);  // Prevent click when loading
+                                      chartexportpdf()
+                                    }
+                                  }}
+                                >
+                                  PDF
+                                  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
 
-</p>
-<p 
-  style={{ 
-    color: '#000', 
-    cursor: isExcelLoad ? 'not-allowed' : 'pointer', 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '8px' 
-  }} 
-  onClick={() => {
-    if (!isPdfLoad) {
-      setIsExcelLoad(true);  // Prevent click when loading
-      downloadDocketsrecExcel()
-    }
-  }}
->
-Excel sheet
-  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
+                                </p>
+                                <p
+                                  style={{
+                                    color: '#000',
+                                    cursor: isExcelLoad ? 'not-allowed' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                  }}
+                                  onClick={() => {
+                                    if (!isPdfLoad) {
+                                      setIsExcelLoad(true);  // Prevent click when loading
+                                      downloadDocketsrecExcel()
+                                    }
+                                  }}
+                                >
+                                  Excel sheet
+                                  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
 
-</p>
+                                </p>
                               </div>
                             )}
                           </div>
@@ -6982,8 +7041,44 @@ Excel sheet
 
             })()}</p>
 
+            <div className="d-flex gap-5" style={{ marginTop: 20 }}>
 
-            <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+              <div style={{ width: "40%" }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{
+                  editall?.stats?.averageProcessTime || 0}</span></p>
+              </div>
+              <div style={{ width: "40%", display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{editallone?.stats?.averageProcessTime || 0}</span></p>
+              </div>
+              <div style={{ width: "20%", display: 'flex', justifyContent: 'end', alignItems: 'end', flexDirection: 'column' }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', textAlign: 'left' }}>Variance</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >
+                  {(() => {
+                    let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
+                    let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
+
+                    // Calculate average
+                    let average = Math.round((numOne + numTwo) / 2);
+
+                    return <span >{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }} >{average > 0 ? <img src="up_arw.png"
+                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                      }} className="" alt="Example Image" /> :
+                      <img src="d_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" />}</span></span>
+
+
+                  })()}</span></p>
+              </div>
+
+            </div>
+
+
+            <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 1 }} />
             {
               editall?.orders?.map((dfgh, index) => {
                 const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
@@ -6995,8 +7090,9 @@ Excel sheet
                       <div style={{ width: "40%" }}>
                         <div className="d-flex  " style={{}}>
                           <p style={{ paddingTop: 15 }}>
-                            <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.processtime + ". " || "N/A"} {dfgh?.date + " " + "[" +
-                              dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
+                            <span style={{ fontWeight: "400", color: index === 0 ? 'red' :  "#000", marginBlock: "4px" }} >{dfgh?.processtime + ". " || "N/A"} <span 
+                            style={{ color : '#000' }} > {dfgh?.date + " " + "[" +
+                              dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span></span>
                           </p>
 
                         </div>
@@ -7072,7 +7168,7 @@ Excel sheet
                       </div>
                     </div>
 
-                    <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+                    <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 1 }} />
                   </div>
                 );
               })

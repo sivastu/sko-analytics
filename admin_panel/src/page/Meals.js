@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef , useContext } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import Header from "../component/Header";
 import axios from "axios";
 import { Base_url } from "../config";
@@ -81,7 +81,7 @@ let Meals = () => {
   let [editalloneclone, setEditalloneclone] = useState([])
 
 
-  let [served, setServed] = useState([]) 
+  let [served, setServed] = useState([])
   let [servedone, setServedone] = useState([])
 
   //refund meals
@@ -103,14 +103,14 @@ let Meals = () => {
     {
       "value": "Minimum",
       "label": "Minimum"
-    },{
-    "value": "Maximum",
-    "label": "Maximum"
-  },
-  ,])
+    }, {
+      "value": "Maximum",
+      "label": "Maximum"
+    },
+    ,])
 
-  let[isPdfLoad,setIsPdfLoad]=useState(false);
-  let[isExcelLoad,setIsExcelLoad]=useState(false);
+  let [isPdfLoad, setIsPdfLoad] = useState(false);
+  let [isExcelLoad, setIsExcelLoad] = useState(false);
 
   const [selectedOptionsfine, setSelectedOptionsfine] = useState([basicfine[0]]);
 
@@ -198,7 +198,7 @@ let Meals = () => {
   }
   // function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
   //   console.log(inone, 'ten    lll1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111',)
-    
+
   //   return
   //   let alldat = basicall
 
@@ -563,8 +563,8 @@ let Meals = () => {
 
   //   if (inone != undefined ) {
   //     let splitone = inone.split('-')
- 
-    
+
+
   //     if (splitone.length === 2 ) {
 
   //       if (Number(splitone[0]) < Number(splitone[1]) ) {
@@ -852,7 +852,7 @@ let Meals = () => {
 
     console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
     setEditall(newalldata)
- 
+
 
   }
 
@@ -943,7 +943,7 @@ let Meals = () => {
     let newalldata = processData(two)
 
     console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
-    setEditallone(newalldata) 
+    setEditallone(newalldata)
 
     // const categorizeItems = (datasssssss) => {
     //   const edited = ["2", "12", "22", "32"];
@@ -1083,7 +1083,7 @@ let Meals = () => {
   }
   let searchvalue = (e) => {
     console.log(editallclone, 'searchvaluesearchvaluesearchvalue')
- 
+
     if (e === undefined || e === '' || e === null) {
       setServed(editallclone)
       setServedone(editalloneclone)
@@ -1098,7 +1098,7 @@ let Meals = () => {
       setServed(filteredData)
       setServedone(filteredDatatwo)
 
-      
+
     }
 
   }
@@ -1154,28 +1154,28 @@ let Meals = () => {
 
     let parsedatajson = JSON.parse(decry)
     let name = getName(parsedatajson)
-    setUsedname(name) 
- 
-      const userData = snapshot 
+    setUsedname(name)
+
+    const userData = snapshot
+    // Check if the password matches
+    const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
+    if (foundUser.Role === 'emp') {
+      sessionStorage.removeItem('data')
+      navigate('/')
+      return
+    }
+    if (foundUser) {
+      setMydata(foundUser)
       // Check if the password matches
-      const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
-      if (foundUser.Role === 'emp') {
-        sessionStorage.removeItem('data')
+      if (foundUser.Password === parsedatajson.Password) {
+
+      } else {
         navigate('/')
         return
       }
-      if (foundUser) {
-        setMydata(foundUser)
-        // Check if the password matches
-        if (foundUser.Password === parsedatajson.Password) {
-
-        } else {
-          navigate('/')
-          return
-        }
-      } else {
-        console.log("User does not exist.");
-      } 
+    } else {
+      console.log("User does not exist.");
+    }
   }
 
 
@@ -1262,237 +1262,302 @@ let Meals = () => {
 
   let getone = (snapshots) => {
 
- 
-          const eventss = snapshots 
 
-          function removeTrainingNotes(obj) {
-            if (Array.isArray(obj)) {
-              // If it's an array, filter out objects with "TRAINING" in the NOTE field
-              return obj.map(item => {
-                if (item.ITEMS) {
-                  item.ITEMS = item.ITEMS.filter(item => !item.NOTE.includes("TRAINING"));
-                }
-                return item;
-              });
-            } else if (typeof obj === "object" && obj !== null) {
-              // Recursively call for nested objects
-              for (const key in obj) {
-                obj[key] = removeTrainingNotes(obj[key]);
-              }
-            }
-            return obj;
+    const eventss = snapshots
+
+    function removeTrainingNotes(obj) {
+      if (Array.isArray(obj)) {
+        // If it's an array, filter out objects with "TRAINING" in the NOTE field
+        return obj.map(item => {
+          if (item.ITEMS) {
+            item.ITEMS = item.ITEMS.filter(item => !item.NOTE.includes("TRAINING"));
+          }
+          return item;
+        });
+      } else if (typeof obj === "object" && obj !== null) {
+        // Recursively call for nested objects
+        for (const key in obj) {
+          obj[key] = removeTrainingNotes(obj[key]);
+        }
+      }
+      return obj;
+    }
+
+    const cleanedData = removeTrainingNotes(eventss);
+
+
+
+
+
+
+
+    setBasicall(cleanedData)
+    // const transformData = (data) => {
+    //   const result = {};
+
+    //   for (const key of Object.keys(data)) {
+    //     const parts = key.split("-");
+    //     const [group, location, subLocation, year] = parts;
+
+    //     if (!result[group]) result[group] = {};
+    //     if (!result[group][location]) result[group][location] = {};
+    //     if (!result[group][location][subLocation]) result[group][location][subLocation] = new Set();
+
+    //     result[group][location][subLocation].add(year);
+    //   }
+
+    //   // Convert Sets to arrays for final output
+    //   const convertSetsToArrays = (obj) => {
+    //     for (const key in obj) {
+    //       if (obj[key] instanceof Set) {
+    //         obj[key] = Array.from(obj[key]);
+    //       } else if (typeof obj[key] === "object") {
+    //         convertSetsToArrays(obj[key]);
+    //       }
+    //     }
+    //   };
+
+    //   convertSetsToArrays(result);
+    //   return result;
+    // };
+
+    // const output = transformData(eventss);
+    const result = {};
+    Object.entries(cleanedData).forEach(([groupName, groupData]) => {
+
+
+      Object.entries(groupData).forEach(([keyss, valuess]) => {
+        Object.entries(valuess).forEach(([keyssa, valuessa]) => {
+
+          if (!result[keyss]) {
+            result[keyss] = [];
           }
 
-          const cleanedData = removeTrainingNotes(eventss);
-
-
-
-
-
-
-
-          setBasicall(cleanedData)
-          // const transformData = (data) => {
-          //   const result = {};
-
-          //   for (const key of Object.keys(data)) {
-          //     const parts = key.split("-");
-          //     const [group, location, subLocation, year] = parts;
-
-          //     if (!result[group]) result[group] = {};
-          //     if (!result[group][location]) result[group][location] = {};
-          //     if (!result[group][location][subLocation]) result[group][location][subLocation] = new Set();
-
-          //     result[group][location][subLocation].add(year);
-          //   }
-
-          //   // Convert Sets to arrays for final output
-          //   const convertSetsToArrays = (obj) => {
-          //     for (const key in obj) {
-          //       if (obj[key] instanceof Set) {
-          //         obj[key] = Array.from(obj[key]);
-          //       } else if (typeof obj[key] === "object") {
-          //         convertSetsToArrays(obj[key]);
-          //       }
-          //     }
-          //   };
-
-          //   convertSetsToArrays(result);
-          //   return result;
-          // };
-
-          // const output = transformData(eventss);
-          const result = {};
-          Object.entries(cleanedData).forEach(([groupName, groupData]) => {
-
-
-            Object.entries(groupData).forEach(([keyss, valuess]) => {
-              Object.entries(valuess).forEach(([keyssa, valuessa]) => {
-
-                if (!result[keyss]) {
-                  result[keyss] = [];
-                }
-
-                result[keyss].push({
-                  name: keyssa + "-" + keyss
-                });
-
-              });
-            });
-
-          });
-          setAlldrop(result)
-          console.log(result, 'keykeykeykey') // its oblect
-          const optionsone = [{
-            "label": "All Venue",
-            "value": "All"
-          }];
-          Object.entries(cleanedData).forEach(([groupName, groupData]) => {
-            Object.keys(groupData).forEach((key) => {
-              optionsone.push({ value: key, label: key });
-            });
+          result[keyss].push({
+            name: keyssa + "-" + keyss
           });
 
-          // Generate `optionss` for `data[0]` (assuming `GreenbankServicesClub` is the first group)
-          // const firstGroup = Object.keys(eventss.GreenbankServicesClub)[0]; // 'GreenbankServicesClub'
-          // const optionsstwo = Object.keys(eventss.GreenbankServicesClub[firstGroup]).map((hub) => ({
-          //   value: hub,
-          //   label: hub,
-          // }));
+        });
+      });
+
+    });
+    setAlldrop(result)
+    console.log(result, 'keykeykeykey') // its oblect
+    const optionsone = [{
+      "label": "All Venue",
+      "value": "All"
+    }];
+    Object.entries(cleanedData).forEach(([groupName, groupData]) => {
+      Object.keys(groupData).forEach((key) => {
+        optionsone.push({ value: key, label: key });
+      });
+    });
+
+    // Generate `optionss` for `data[0]` (assuming `GreenbankServicesClub` is the first group)
+    // const firstGroup = Object.keys(eventss.GreenbankServicesClub)[0]; // 'GreenbankServicesClub'
+    // const optionsstwo = Object.keys(eventss.GreenbankServicesClub[firstGroup]).map((hub) => ({
+    //   value: hub,
+    //   label: hub,
+    // }));
 
 
-          // console.log("optionss:", optionsstwo);
+    // console.log("optionss:", optionsstwo);
 
-          let getdata = sessionStorage.getItem('data')
+    let getdata = sessionStorage.getItem('data')
 
-          let decry = decrypt(getdata)
+    let decry = decrypt(getdata)
 
-          let parsedatajson = JSON.parse(decry)
-
-
-          const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-          let realven = []
-
-          if (hasAllValue === true) {
-            realven.push(...optionsone);
-            setBasic(optionsone)
+    let parsedatajson = JSON.parse(decry)
 
 
-            let uuuk = extractUniqueNotes(cleanedData, optionsone)
-            uuuk.unshift({ label: "All Courses", value: "All" });
+    const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
+    let realven = []
+
+    if (hasAllValue === true) {
+      realven.push(...optionsone);
+      setBasic(optionsone)
 
 
-            setSelectedCources(uuuk)
-
-            setFulldatafull(uuuk)
-
-          } else {
-            realven.push(parsedatajson.venue)
-            setBasic(parsedatajson.venue)
+      let uuuk = extractUniqueNotes(cleanedData, optionsone)
+      uuuk.unshift({ label: "All Courses", value: "All" });
 
 
-            let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
-            uuuk.unshift({ label: "All Courses", value: "All" });
-            setSelectedCources(uuuk)
-            setFulldatafull(uuuk)
+      setSelectedCources(uuuk)
+
+      setFulldatafull(uuuk)
+
+    } else {
+      realven.push(parsedatajson.venue)
+      setBasic(parsedatajson.venue)
+
+
+      let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
+      uuuk.unshift({ label: "All Courses", value: "All" });
+      setSelectedCources(uuuk)
+      setFulldatafull(uuuk)
+    }
+
+
+
+
+
+    const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
+    const optionstakeaway = [
+      ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
+    ].map(value => ({ value, label: value }));
+
+
+    console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
+
+
+
+
+
+    // const output = [];
+
+    //   // // Iterate through the search array
+    //   [].forEach(({ value }) => {
+    //     // Search in the data object
+    //     Object.entries(alldrop).forEach(([key, items]) => {
+    //       if (key === value) {
+    //         // If the key matches, add all items from the group to the output
+    //         items.forEach(item => {
+    //           output.push({ value: key + '-' + item.name, label: item.name });
+    //         });
+    //       } else {
+    //         // Search within the group's items
+    //         items.forEach(item => {
+    //           if (item.name === value) {
+    //             output.push({ value: key + '-' + item.name, label: key });
+    //           }
+    //         });
+    //       }
+    //     });
+    //   });
+
+    //   setBasicone(output)
+
+
+
+
+
+    const filteredDataonee = {};
+
+    console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
+    if (parsedatajson.venue) {
+
+      const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
+
+      console.log(hasAllValue, 'hasAllValue')
+      if (hasAllValue === true) {
+
+      } else {
+
+        parsedatajson.venue.forEach(filter => {
+          const key = filter.value;
+          if (cleanedData[key]) {
+            filteredDataonee[key] = cleanedData[key];
           }
+        });
+        setBasicall(filteredDataonee)
+      }
 
 
 
 
 
-          const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
-          const optionstakeaway = [
-            ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
-          ].map(value => ({ value, label: value }));
+    }
 
+    if (parsedatajson.hub) {
 
-          console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
+      const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
+      console.log(hasAllValue, 'hasAllValue hub')
 
+      if (hasAllValue === true) {
 
+      } else {
+        function filterDataByDynamicKeys(keysArray) {
+          const filteredData = {};
 
+          keysArray.forEach(({ value }) => {
+            const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
 
+            if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
+              const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
 
-          const filteredDataonee = {};
-
-          console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
-          if (parsedatajson.venue) {
-
-            const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-
-            console.log(hasAllValue, 'hasAllValue')
-            if (hasAllValue === true) {
-
-            } else {
-
-              parsedatajson.venue.forEach(filter => {
-                const key = filter.value;
-                if (cleanedData[key]) {
-                  filteredDataonee[key] = cleanedData[key];
+              // Check if the hub exists
+              if (secondLevelData[hubName]) {
+                if (!filteredData[topLevelKey]) {
+                  filteredData[topLevelKey] = {};
                 }
-              });
-              setBasicall(filteredDataonee)
-            }
 
+                if (!filteredData[topLevelKey][secondTopLevelKey]) {
+                  filteredData[topLevelKey][secondTopLevelKey] = {};
+                }
 
-
-
-
-          }
-
-          if (parsedatajson.hub) {
-
-            const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
-            console.log(hasAllValue, 'hasAllValue hub')
-
-            if (hasAllValue === true) {
-
-            } else {
-              function filterDataByDynamicKeys(keysArray) {
-                const filteredData = {};
-
-                keysArray.forEach(({ value }) => {
-                  const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
-
-                  if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
-                    const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
-
-                    // Check if the hub exists
-                    if (secondLevelData[hubName]) {
-                      if (!filteredData[topLevelKey]) {
-                        filteredData[topLevelKey] = {};
-                      }
-
-                      if (!filteredData[topLevelKey][secondTopLevelKey]) {
-                        filteredData[topLevelKey][secondTopLevelKey] = {};
-                      }
-
-                      filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
-                    }
-                  }
-                });
-
-                return filteredData;
+                filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
               }
-
-              let fina = filterDataByDynamicKeys(parsedatajson.hub)
-
-              setBasicall(fina)
             }
+          });
+
+          return filteredData;
+        }
+
+        let fina = filterDataByDynamicKeys(parsedatajson.hub)
+
+        setBasicall(fina)
+      }
 
 
-          }
-          setSelectedOptions(realven)
-          // alldat = filteredDataonee
-          const yesterday = [getFormattedDate(1), getFormattedDate(1)];
-          const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
-          setDateRangetwo(eightDaysBefore)
-          setDateRange(yesterday)
-          filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+    }
 
-          filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-        
+    console.log(realven , 'realvenrealvenrealvenrealvenrealvenrealvenrealvenrealven')
+    console.log(cleanedData , 'cleanedDatacleanedDatacleanedDatacleanedDatacleanedDatacleanedDatacleanedData')
+
+
+
+    const output = [];
+
+    // // Iterate through the search array
+    realven.forEach(({ value }) => {
+      // Search in the data object
+      Object.entries(result).forEach(([key, items]) => {
+        if (key === value) {
+          // If the key matches, add all items from the group to the output
+          items.forEach(item => {
+            output.push({ value: key + '-' + item.name, label: item.name });
+          });
+        } else {
+          // Search within the group's items
+          items.forEach(item => {
+            if (item.name === value) {
+              output.push({ value : key + '-' + item.name, label: key });
+            }
+          });
+        }
+      });
+    });
+
+    setBasicone(output) 
+    setHubb(output)
+
+
+
+
+
+    
+    setSelectedOptions(realven) 
+    // alldat = filteredDataonee
+    const yesterday = [getFormattedDate(1), getFormattedDate(1)];
+    const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
+    setDateRangetwo(eightDaysBefore)
+    setDateRange(yesterday)
+    filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+    filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
   }
 
   let getonez = () => {
@@ -1975,8 +2040,8 @@ let Meals = () => {
       console.log(editttsone, 'editttsoneeditttsone')
 
 
-      setEditall(editttsone) 
-      setEditallone(editttstwo) 
+      setEditall(editttsone)
+      setEditallone(editttstwo)
 
       const processItems = (data) => {
         const dishCounts = {};
@@ -2127,7 +2192,9 @@ let Meals = () => {
       const maxLength = 10; // Adjust as needed
       const displayText = allLabels.slice(0, textCount) + "..."
 
-      return <span title={allLabels}>{displayText}</span>;
+      return <span style={{ color : allLabels === 'Maximum' ? 'red' :  allLabels === 'Minimum' ? 'blue' : ""  ,
+        fontWeight : allLabels === 'Maximum' ? '700' :  allLabels === 'Minimum' ? '700' : ""
+       }} title={allLabels}>{displayText}</span>;
     }
     return null;
   };
@@ -2136,6 +2203,8 @@ let Meals = () => {
 
 
   const handleChange = (selected) => {
+
+
     setMenuIsOpen(true)
     console.log(JSON.stringify(fulldatatwo), 'selected')
     const hasAllValue = selected.some(item => item.value === "All");
@@ -2580,19 +2649,44 @@ let Meals = () => {
   const handleChangefine = (selected) => {
     console.log(served, 'selected')
 
- 
+   
+
+    
+
+
 
     if (served.length === 0) {
 
     } else {
-      setServed((prevState) => [...prevState].reverse());
+
+      if(selected.value === "Minimum") {
+        setServed((prevState) =>
+          [...prevState].sort((a, b) => a.count - b.count)
+        );
+      }else{
+        setServed((prevState) =>
+          [...prevState].sort((a, b) => b.count - a.count)
+        );
+      }
+
+       
 
     }
 
     if (servedone.length === 0) {
 
     } else {
-      setServedone((prevState) => [...prevState].reverse());
+
+      if(selected.value === "Minimum") {
+        setServedone((prevState) =>
+          [...prevState].sort((a, b) => a.count - b.count)
+        );
+      }else{
+        setServedone((prevState) =>
+          [...prevState].sort((a, b) => b.count - a.count)
+        );
+      }
+       
 
 
     }
@@ -2608,13 +2702,32 @@ let Meals = () => {
     if (minperday.length === 0) {
 
     } else {
-      setMinperday((prevState) => [...prevState].reverse());
+      if(selected.value === "Minimum") {
+        setMinperday((prevState) =>
+          [...prevState].sort((a, b) => a.count - b.count)
+        );
+      }else{
+        setMinperday((prevState) =>
+          [...prevState].sort((a, b) => b.count - a.count)
+        );
+      }
+       
     }
 
     if (maxperday.length === 0) {
 
     } else {
-      setMaxperday((prevState) => [...prevState].reverse());
+
+      if(selected.value === "Minimum") {
+        setMaxperday((prevState) =>
+          [...prevState].sort((a, b) => a.count - b.count)
+        );
+      }else{
+        setMaxperday((prevState) =>
+          [...prevState].sort((a, b) => b.count - a.count)
+        );
+      }
+       
 
     }
 
@@ -2999,13 +3112,13 @@ let Meals = () => {
     }
 
 
-    if (inone != undefined ) {
+    if (inone != undefined) {
       let splitone = inone.split('-')
- 
-    
-      if (splitone.length === 2 ) {
 
-        if (Number(splitone[0]) < Number(splitone[1]) ) {
+
+      if (splitone.length === 2) {
+
+        if (Number(splitone[0]) < Number(splitone[1])) {
 
 
 
@@ -3052,13 +3165,13 @@ let Meals = () => {
       }
     }
 
-   
+
 
     if (inone != undefined && intwo != undefined) {
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
-     
+
       if (splitone.length === 2 && splittwo.length === 2) {
 
         if (Number(splitone[0]) < Number(splitone[1]) && Number(splittwo[0]) < Number(splittwo[1])) {
@@ -3627,12 +3740,12 @@ let Meals = () => {
 
     }
 
-    if (inone != undefined  ) {
+    if (inone != undefined) {
       let splitone = inone.split('-')
-  
-      if (splitone.length === 2 ) {
 
-        if (Number(splitone[0]) < Number(splitone[1]) ) {
+      if (splitone.length === 2) {
+
+        if (Number(splitone[0]) < Number(splitone[1])) {
 
 
 
@@ -3846,7 +3959,7 @@ let Meals = () => {
   }
 
 
-  
+
 
 
 
@@ -3904,7 +4017,7 @@ let Meals = () => {
     console.log(editttsone, 'editttsoneeditttsone')
 
 
-    setEditall(editttsone) 
+    setEditall(editttsone)
     // setEditallone(editttstwo)
 
     const processItems = (data) => {
@@ -4050,7 +4163,7 @@ let Meals = () => {
 
 
     // setEditall(editttsone)
-    setEditallone(editttstwo) 
+    setEditallone(editttstwo)
 
     const processItems = (data) => {
       const dishCounts = {};
@@ -4312,7 +4425,7 @@ let Meals = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf"); 
+        doc.save("Edits.pdf");
         setIsPdfLoad(false);// Save after rendering
       },
       x: 10,
@@ -4325,7 +4438,7 @@ let Meals = () => {
       },
     }).catch(() => {
       setIsPdfLoad(false);
-  });
+    });
 
 
     // var doc = new  jsPDF({
@@ -4374,7 +4487,7 @@ let Meals = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf"); 
+        doc.save("Served meals.pdf");
         setIsPdfLoad(false)// Save after rendering
       },
       y: 10,
@@ -4405,7 +4518,7 @@ let Meals = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf");
+        doc.save("Meals received - timeline.pdf");
         setIsPdfLoad(false) // Save after rendering
       },
       x: 10,
@@ -4418,7 +4531,7 @@ let Meals = () => {
       },
     }).catch(() => {
       setIsPdfLoad(false);
-  });
+    });
 
 
   }
@@ -4438,7 +4551,7 @@ let Meals = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("output.pdf");
+        doc.save("Refunded meals.pdf");
         setIsPdfLoad(false); // Save after rendering
       },
       x: 10,
@@ -4451,7 +4564,7 @@ let Meals = () => {
       },
     }).catch(() => {
       setIsPdfLoad(false);
-  });
+    });
 
   }
 
@@ -4461,12 +4574,12 @@ let Meals = () => {
       .filter(item => item.label !== "All Venue")
       .map(item => item.label)
       .join(", ") || "All Venue";
-      
+
     const selectedHub = selectedhubOptions
       .filter(item => item.label !== "All Hub")
       .map(item => item.label)
       .join(", ") || "All Hub";
-      
+
     const formatDate = (date) => {
       return new Date(date).toLocaleDateString("en-GB", {
         day: "2-digit",
@@ -4474,42 +4587,42 @@ let Meals = () => {
         year: "numeric"
       });
     };
-      
+
     const chosenRange = `${formatDate(dateRange[0])} to ${formatDate(dateRange[1])} between ${onetime || "00:00"} to ${twotime || "24:00"}`;
     const comparingRange = `${formatDate(dateRangetwo[0])} to ${formatDate(dateRangetwo[1])} between ${threetime || "00:00"} to ${fourtime || "24:00"}`;
-      
+
     const selectedStages = selectedhubOptions.length > 0
       ? selectedhubOptions.map(item => item.label).join(", ")
       : "All";
-      
+
     const tableRanges = `From ${inputvalue}; \n to ${inputvaluetwo}`;
-      
+
     const selectedCourses = selectedCources.length > 0
       ? selectedCources.map(item => item.label).join(", ")
       : "All";
-      
+
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Meals Received Timeline");
-      
+
     // Define styles (enhanced styling)
     const headerStyle = {
       font: { bold: true, color: { argb: "FFFFFFFF" } },
       fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FF316AAF" } },
       alignment: { horizontal: 'center', vertical: 'middle' }
     };
-    
+
     const alternatingRowStyle1 = {
       fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FFFFFFFF" } }
     };
-    
+
     const alternatingRowStyle2 = {
       fill: { type: "pattern", pattern: "solid", fgColor: { argb: "FFE6F0FF" } }
     };
-    
+
     const titleStyle = {
       font: { bold: true, size: 14, color: { argb: "FF316AAF" } }
     };
-    
+
     // Define border style
     const borderStyle = {
       top: { style: 'thin' },
@@ -4517,16 +4630,16 @@ let Meals = () => {
       bottom: { style: 'thin' },
       right: { style: 'thin' }
     };
-      
+
     // **Add Filters Section**
     const filtersRow = worksheet.addRow(["Filters:"]);
     filtersRow.font = titleStyle.font;
-    
+
     worksheet.addRow([`Venue: ${selectedVenue}`, `Stages: ${selectedStages}`, "Table Ranges:", tableRanges]);
     worksheet.addRow(["", `Hub: ${selectedHub}`, `Courses: ${selectedCourses}`, ""]);
     worksheet.addRow(["", "", `Chosen range:\n${chosenRange}`, `Comparing range:\n${comparingRange}`]);
     worksheet.addRow([]); // Empty row for spacing
-      
+
     // **Add Table Headers**
     const headerRow = worksheet.addRow(["From - To", "From - To", "From - To"]);
     headerRow.eachCell((cell, colNumber) => {
@@ -4537,11 +4650,11 @@ let Meals = () => {
         cell.border = borderStyle;
       }
     });
-      
+
     // **Add Table Data with alternating colors and borders**
     optionbar.forEach((time, index) => {
       const dataRow = worksheet.addRow([time, onebar[index] ?? "-", twobar[index] ?? "-"]);
-      
+
       // Apply alternating row styles and borders
       dataRow.eachCell((cell, colNumber) => {
         if (colNumber <= 3) { // Only for the table columns
@@ -4555,87 +4668,86 @@ let Meals = () => {
         }
       });
     });
-      
+
     // **Set Column Widths**
     worksheet.columns = [
       { width: 15 },
       { width: 20 },
       { width: 25 }
     ];
-      
+
     // **Capture and Insert Chart Image**
     const chartElement = document.getElementById("chart-capture");
-    
+
     if (chartElement) {
       await new Promise((resolve) => setTimeout(resolve, 500)); // Ensure rendering completion
-          
+
       const canvas = await html2canvas(chartElement, {
         backgroundColor: "#fff", // Ensure a white background
         useCORS: true, // Fix cross-origin issues
         scale: 10, // Higher quality capture
       });
-        
+
       const imageData = canvas.toDataURL("image/png");
-      
+
       // Add Image to Workbook
       const imageId = workbook.addImage({
         base64: imageData,
         extension: "png",
       });
-        
+
       worksheet.addImage(imageId, {
         tl: { col: 4, row: 4 }, // Position it properly
         ext: { width: 1000, height: 250 }, // Adjust as needed
       });
     }
-      
+
     // **Generate and Download the Excel File**
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     saveAs(blob, "Meals_Received_Timeline.xlsx");
     setIsExcelLoad(false)
   };
-  const getpadd=()=>{
+  const getpadd = () => {
     if (window.innerWidth >= 1536) return 80; // 2xl
-      if (window.innerWidth >= 1280) return 60; // xl
-      if (window.innerWidth >= 1024) return 20; // lg
-      if (window.innerWidth >= 768) return 0;  // md
-      return 0;
+    if (window.innerWidth >= 1280) return 60; // xl
+    if (window.innerWidth >= 1024) return 20; // lg
+    if (window.innerWidth >= 768) return 0;  // md
+    return 0;
   }
-    const getBoxWidth = () => {
-      if (window.innerWidth >= 1836) return 800; // 2xl
-      if (window.innerWidth >= 1680) return 700; // xl
-      if (window.innerWidth >= 1024) return 600; // lg
-      if (window.innerWidth >= 768) return 600;  // md
-      return 500; // default for smaller screens
-    };
-    const gettextcount = () => {
-      if (window.innerWidth >= 1836) return 16;
-      if (window.innerWidth >= 1536) return 12; // 2xl
-      if (window.innerWidth >= 1380) return 9; // xl
-      if (window.innerWidth >= 1024) return 7; // lg
-      if (window.innerWidth >= 768) return 5;  // md
-      return 5; // default for smaller screens
-    };
-    const getBoxHeight = () => {
-      if (window.innerWidth >= 1536) return 250; // 2xl
-      if (window.innerWidth >= 1280) return 250; // xl
-      if (window.innerWidth >= 1024) return 250; // lg
-      if (window.innerWidth >= 768) return 250;  // md
-      return 250; // default for smaller screens
-    };
-    const [boxWidth, setBoxWidth] = useState(getBoxWidth());
-    const [Height, setHeight] = useState(getBoxHeight());
-  const[textCount,setTextCount]=useState(gettextcount());
-  const[padd,setPadd]=useState(getpadd());
-  const[paddOpp,setPaddOpp]=useState(0);
-  
-    useEffect(() => {
-      const handleResize = () => 
-      {setBoxWidth(getBoxWidth()),setPadd(getpadd()),setPaddOpp(0),setHeight(getBoxHeight()),setTextCount(gettextcount()) };
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
+  const getBoxWidth = () => {
+    if (window.innerWidth >= 1836) return 800; // 2xl
+    if (window.innerWidth >= 1680) return 700; // xl
+    if (window.innerWidth >= 1024) return 600; // lg
+    if (window.innerWidth >= 768) return 600;  // md
+    return 500; // default for smaller screens
+  };
+  const gettextcount = () => {
+    if (window.innerWidth >= 1836) return 16;
+    if (window.innerWidth >= 1536) return 12; // 2xl
+    if (window.innerWidth >= 1380) return 9; // xl
+    if (window.innerWidth >= 1024) return 7; // lg
+    if (window.innerWidth >= 768) return 5;  // md
+    return 5; // default for smaller screens
+  };
+  const getBoxHeight = () => {
+    if (window.innerWidth >= 1536) return 250; // 2xl
+    if (window.innerWidth >= 1280) return 250; // xl
+    if (window.innerWidth >= 1024) return 250; // lg
+    if (window.innerWidth >= 768) return 250;  // md
+    return 250; // default for smaller screens
+  };
+  const [boxWidth, setBoxWidth] = useState(getBoxWidth());
+  const [Height, setHeight] = useState(getBoxHeight());
+  const [textCount, setTextCount] = useState(gettextcount());
+  const [padd, setPadd] = useState(getpadd());
+  const [paddOpp, setPaddOpp] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => { setBoxWidth(getBoxWidth()), setPadd(getpadd()), setPaddOpp(0), setHeight(getBoxHeight()), setTextCount(gettextcount()) };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div >
@@ -4662,7 +4774,7 @@ let Meals = () => {
 
             <div style={{ padding: 13 }} className="d-flex  justify-content-end col" >
               <img src="Menu_Logo.png" style={{ width: 56, height: 28 }} alt="Example Image" />
-              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 0 }} >analytics</p>
+              <p style={{ fontSize: 20, fontWeight: '700', color: "#fff", marginLeft: 10, marginTop: 0 }} >web app</p>
             </div>
 
           </div>
@@ -4672,1101 +4784,769 @@ let Meals = () => {
       <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr hide-scrollbar">
 
         <div style={{}} className="dddd hide-scrollbar"  >
-        <div className="container-fluid px-0">
-  <div className="d-flex flex-wrap justify-content-around pt-4 gap-4">
-    {/* Date Range 1 */}
-    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
-      <p onClick={() => {checkkkk()}} style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
-        Chosen range:<span style={{ fontWeight: '400' }}> Custom</span>
-      </p>
-      <div style={{ width: '100%' }}>
-      <DatePicker
-                  selectsRange
-                  startDate={startDate}
-                  endDate={endDate}
-                  style={{ fontSize: 15 }}
-                  onChange={(update) => {
+          <div className="container-fluid px-0">
+            <div className="d-flex flex-wrap justify-content-around pt-4 gap-4">
+              {/* Date Range 1 */}
+              <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+                <p onClick={() => { checkkkk() }} style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
+                  Chosen range:<span style={{ fontWeight: '400' }}> Custom</span>
+                </p>
+                <div style={{ width: '100%' }}>
+                  <DatePicker
+                    selectsRange
+                    startDate={startDate}
+                    endDate={endDate}
+                    style={{ fontSize: 15 }}
+                    onChange={(update) => {
 
-                    console.log(update, 'update')
-                    setDateRange(update)
+                      console.log(update, 'update')
+                      setDateRange(update)
 
-                    if (update[1] === null || update[1] === "null") {
+                      if (update[1] === null || update[1] === "null") {
 
-                    } else {
-                      filterDataByDate(update, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-
-                    }
-                  }} // Update both startDate and EndDate 
-                  placeholderText="Select a date range"
-                  className="custom-input"
-                  calendarClassName="custom-calendar"
-                  dateFormat="d MMM yyyy"
-                  customInput={
-                    <div className="custom-display-input" style={{ fontSize: 15, color: '#1A1A1B' }}>
-                      {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
-                      <FaCaretDown className="calendar-icon" />
-                    </div>
-                  }
-                />
-      </div>
-      <div className="mt-3">
-        <div className="custom-inputone d-flex justify-content-between">
-          <input
-            className='inputttt'
-            type="time"
-            style={{ fontSize: 15, color: '#1A1A1B' }}
-            value={onetime}
-            onChange={(e) => {
-              setOnetime(e.target.value)
-              if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                return
-              }
-              filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-            }}
-          />
-          <input
-            className='inputttt'
-            type="time"
-            value={twotime}
-            style={{ fontSize: 15, color: '#1A1A1B' }}
-            onChange={(e) => {
-              setTwotime(e.target.value)
-              if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
-                return
-              }
-              filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-            }}
-          />
-        </div>
-      </div>
-    </div>
-
-    {/* Date Range 2 - Comparison */}
-    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
-      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
-        Compare with:<span style={{ fontWeight: '400' }}> Custom</span>
-      </p>
-      <div style={{ width: '100%' }}>
-      <DatePicker
-                  selectsRange
-                  startDate={startDatetwo}
-                  endDate={endDatetwo}
-                  onChange={(update) => {
-                    setDateRangetwo(update)
-
-                    if (update[1] === null || update[1] === "null") {
-
-                    } else {
-                      // updates(2, update)
-
-                      filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-                    }
-
-
-                  }} // Update both startDate and EndDate 
-                  placeholderText="Select a date range"
-                  className="custom-input"
-                  calendarClassName="custom-calendar"
-                  dateFormat="d MMM yyyy"
-                  customInput={
-                    <div className="custom-display-input" style={{ fontSize: 15, color: '#1A1A1B' }}>
-                      {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
-                      <FaCaretDown className="calendar-icon" />
-                    </div>
-                  }
-                />
-      </div>
-      <div className="mt-3">
-        <div className="custom-inputone d-flex justify-content-between">
-          <input
-            className='inputttt'
-            type="time"
-            style={{ fontSize: 15, color: '#1A1A1B' }}
-            value={threetime}
-            onChange={(e) => {
-              setThreetime(e.target.value)
-              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                return
-              }
-              filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-            }}
-          />
-          <input
-            className='inputttt'
-            type="time"
-            style={{ fontSize: 15, color: '#1A1A1B' }}
-            value={fourtime}
-            onChange={(e) => {
-              setFourtime(e.target.value)
-              if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
-                return
-              }
-              filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-            }}
-          />
-        </div>
-      </div>
-    </div>
-
-    {/* Venue & Hub Filters */}
-    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
-      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen venue & hub</p>
-      <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45,  borderRadius: menuIsOpen ? ' 8px 8px 0 0' : '8px',    border:menuIsOpen?'2px solid #707070':'none',borderBottom:'none'  }}>
-        <div className="switch-container">
-          <input 
-            type="checkbox" 
-            id="switch1" 
-            style={{ fontSize: 15 }} 
-            checked={venueradio} 
-            onChange={(e) => {
-              setVenueradio(e.target.checked)
-              if (e.target.checked === false) {
-                setSelectedOptions([])
-              }
-              
-              
-              else{
+                      } else {
+                        filterDataByDate(update, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
 
-                handleChange([...selectedOptions , ...[{
-                  "label": "All Venue",
-                  "value": "All"
-              }]])
-                console.log(selectedOptions , 'selectedOptions')
-              }
-
-
-
-
-            }} 
-          />
-          <label className="switch-label" htmlFor="switch1"></label>
-        </div>
-        <Select
-          menuIsOpen={menuIsOpen}
-          onMenuOpen={() => setMenuIsOpen(true)}
-          onMenuClose={() => setMenuIsOpen(false)}
-          onFocus={() => setMenuIsOpen(true)}
-          isDisabled={!venueradio}
-          isMulti
-          className="newoneonee"
-          options={basic}
-          value={selectedOptions}
-          onChange={handleChange}
-          placeholder="All Venues"
-          components={{
-            Option: CustomOption,
-            MultiValue: () => null,
-            ValueContainer: ({ children, ...props }) => {
-              const selectedValues = props.getValue();
-              return (
-                <components.ValueContainer {...props}>
-                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                </components.ValueContainer>
-              );
-            },
-          }}
-          closeMenuOnSelect={false}
-          hideSelectedOptions={false}
-          styles={{
-            control: (base, state) => ({
-              ...base,
-              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
-              backgroundColor: '#fff',
-              fontSize: 15,
-              color: '#1A1A1B',
-              outline: 'none', 
-              boxShadow: state.isFocused ? 'none' : 'none',
-              border:'none'
-            }),
-            menu: (base) => ({
-              ...base,
-              minWidth:'calc(100% + 72px)',
-             marginLeft:'-60px',
-          border:menuIsOpen?'black':'none',
-              borderTop: 'none',
-              borderRadius: '0 0 8px 8px',
-              border:menuIsOpen?'2px solid #707070':'none',
-              borderTop:'none'
-            }),
-          }}
-        />
-      </div>
-
-      <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45 ,  borderRadius: menuIsOpenone ? ' 8px 8px 0 0' : '8px',    border:menuIsOpenone?'2px solid #707070':'none',borderBottom:'none' }}>
-        <div className="switch-container">
-          <input 
-            checked={hubbswitch} 
-            onChange={(e) => {
-              setHubbswitch(e.target.checked)
-
-              if (e.target.checked === false) {
-                setHubb([])
-              }else{
-                handleChangehubone([...hubb , ...[{
-                  "label": "All Hub",
-                  "value": "All"
-              }]]) 
-              }
-
-
-            }} 
-            type="checkbox" 
-            id="switch3" 
-          />
-          <label className="switch-label" htmlFor="switch3"></label>
-        </div>
-        <Select
-          menuIsOpen={menuIsOpenone}
-          onMenuOpen={() => setMenuIsOpenone(true)}
-          onMenuClose={() => setMenuIsOpenone(false)}
-          onFocus={() => setMenuIsOpenone(true)}
-          isDisabled={!hubbswitch}
-          isMulti
-          className="newoneonee"
-          options={basicone}
-          value={hubb}
-          onChange={handleChangehubone}
-          placeholder="All Hubs"
-          components={{
-            Option: CustomOption,
-            MultiValue: () => null,
-            ValueContainer: ({ children, ...props }) => {
-              const selectedValues = props.getValue();
-              return (
-                <components.ValueContainer {...props}>
-                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                </components.ValueContainer>
-              );
-            },
-          }}
-          closeMenuOnSelect={false}
-          hideSelectedOptions={false}
-          styles={{
-            control: (base, state) => ({
-              ...base,
-              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
-              backgroundColor: '#fff',
-              fontSize: 15,
-              color: '#1A1A1B',
-              outline: 'none', 
-              boxShadow: state.isFocused ? 'none' : 'none',
-              border:'none'
-            }),
-            menu: (base) => ({
-              ...base,
-              minWidth:'calc(100% + 72px)',
-             marginLeft:'-60px',
-          border:menuIsOpenone?'black':'none',
-              borderTop: 'none',
-              borderRadius: '0 0 8px 8px',
-              border:menuIsOpenone?'2px solid #707070':'none',
-              borderTop:'none'
-            }),
-          }}
-        />
-      </div>
-    </div>
-
-    {/* Stages/Courses Filters */}
-    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
-      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by stages/courses</p>
-      <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45,  borderRadius: menuIsOpentwo ? ' 8px 8px 0 0' : '8px',    border:menuIsOpentwo?'2px solid #707070':'none',borderBottom:'none'  }}>
-        <div className="switch-container">
-          <input 
-            type="checkbox" 
-            checked={Hubradio} 
-            onChange={(e) => {
-              setHubradio(e.target.checked)
-              if (e.target.checked === false) {
-                setSelectedhubOptions([])
-              }else{
-                handleChangehub([...selectedhubOptions , ...[{
-                  "label": "All Stages",
-                  "value": "All"
-                }]])
-              }
-            }} 
-            id="switch2" 
-          />
-          <label className="switch-label" htmlFor="switch2"></label>
-        </div>
-        <Select
-          menuIsOpen={menuIsOpentwo}
-          onMenuOpen={() => setMenuIsOpentwo(true)}
-          onMenuClose={() => setMenuIsOpentwo(false)}
-          onFocus={() => setMenuIsOpentwo(true)}
-          isDisabled={!Hubradio}
-          isMulti
-          className="newoneonee"
-          options={optionshub}
-          value={selectedhubOptions}
-          onChange={handleChangehub}
-          placeholder="All stages"
-          components={{
-            Option: CustomOption,
-            MultiValue: () => null,
-            ValueContainer: ({ children, ...props }) => {
-              const selectedValues = props.getValue();
-              return (
-                <components.ValueContainer {...props}>
-                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                </components.ValueContainer>
-              );
-            },
-          }}
-          closeMenuOnSelect={false}
-          hideSelectedOptions={false}
-          styles={{
-            control: (base, state) => ({
-              ...base,
-              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
-              backgroundColor: '#fff',
-              fontSize: 15,
-              color: '#1A1A1B',
-              outline: 'none', 
-              boxShadow: state.isFocused ? 'none' : 'none',
-              border:'none'
-            }),
-            menu: (base) => ({
-              ...base,
-              minWidth:'calc(100% + 72px)',
-             marginLeft:'-60px',
-          border:menuIsOpentwo?'black':'none',
-              borderTop: 'none',
-              borderRadius: '0 0 8px 8px',
-              border:menuIsOpentwo?'2px solid #707070':'none',
-              borderTop:'none'
-            }),
-          }}
-        />
-      </div>
-
-      <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45,  borderRadius: menuIsOpenthree ? ' 8px 8px 0 0' : '8px',    border:menuIsOpenthree?'2px solid #707070':'none',borderBottom:'none'  }}>
-        <div className="switch-container">
-          <input 
-            type="checkbox" 
-            checked={Cources} 
-            onChange={(e) => {
-              setCources(e.target.checked)
-              if (e.target.checked === false) {
-                setSelectedCources([])
-              }else{
-                handleChangeCources([...selectedCources , ...[ { label: "All Courses", value: "All" } ]])
-              }
-            }} 
-            id="switch4" 
-          />
-          <label className="switch-label" htmlFor="switch4"></label>
-        </div>
-        <Select
-          menuIsOpen={menuIsOpenthree}
-          onMenuOpen={() => setMenuIsOpenthree(true)}
-          onMenuClose={() => setMenuIsOpenthree(false)}
-          onFocus={() => setMenuIsOpenthree(true)}
-          isDisabled={!Cources}
-          isMulti
-          className="newoneonee"
-          options={fulldatafull}
-          value={selectedCources}
-          onChange={handleChangeCources}
-          placeholder="All courses"
-          components={{
-            Option: CustomOption,
-            MultiValue: () => null,
-            ValueContainer: ({ children, ...props }) => {
-              const selectedValues = props.getValue();
-              return (
-                <components.ValueContainer {...props}>
-                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                </components.ValueContainer>
-              );
-            },
-          }}
-          closeMenuOnSelect={false}
-          hideSelectedOptions={false}
-          styles={{
-            control: (base, state) => ({
-              ...base,
-              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
-              backgroundColor: '#fff',
-              fontSize: 15,
-              color: '#1A1A1B',
-              outline: 'none', 
-              boxShadow: state.isFocused ? 'none' : 'none',
-              border:'none'
-            }),
-            menu: (base) => ({
-              ...base,
-              minWidth:'calc(100% + 72px)',
-             marginLeft:'-60px',
-          border:menuIsOpenthree?'black':'none',
-              borderTop: 'none',
-              borderRadius: '0 0 8px 8px',
-              border:menuIsOpenthree?'2px solid #707070':'none',
-              borderTop:'none'
-            }),
-          }}
-        />
-      </div>
-    </div>
-
-    {/* Tables/Takeaways Filters */}
-    <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
-      <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
-      <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
-        <input
-          onChange={(e) => { 
-            setInputvalue(e.target.value)
-            filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
-            filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
-          }} 
-          value={inputvalue} 
-          placeholder="0-9999" 
-          style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }} 
-          type="text" 
-        />
-        <p style={{ fontSize: 19, display: 'contents' }}>|</p>
-        <input 
-          onChange={(e) => {
-            setInputvaluetwo(e.target.value)
-            filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-            filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
-          }} 
-          value={inputvaluetwo} 
-          placeholder="9999-9999" 
-          style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }} 
-          type="text" 
-        />
-      </div>
-
-      <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45,  borderRadius: menuIsOpenfour ? ' 8px 8px 0 0' : '8px',    border:menuIsOpenfour?'2px solid #707070':'none',borderBottom:'none'  }}>
-        <div className="switch-container">
-          <input 
-            type="checkbox" 
-            checked={takeaway} 
-            onChange={(e) => {
-              setTakeaway(e.target.checked)
-              if (e.target.checked === false) {
-                setSelectedTakeaway([])
-              }else{
-                handleChangeTakeaway([...selectedTakeaway , ...[{ value: 'All', label: 'All takeaways' }]])
-              }
-            }} 
-            id="switch5" 
-          />
-          <label className="switch-label" htmlFor="switch5"></label>
-        </div>
-        <Select
-          menuIsOpen={menuIsOpenfour}
-          onMenuOpen={() => setMenuIsOpenfour(true)}
-          onMenuClose={() => setMenuIsOpenfour(false)}
-          onFocus={() => setMenuIsOpenfour(true)}
-          isDisabled={!takeaway}
-          isMulti
-          className="newoneonee"
-          options={optionstakeaway}
-          value={selectedTakeaway}
-          onChange={handleChangeTakeaway}
-          placeholder="All takeaways"
-          components={{
-            Option: CustomOption,
-            MultiValue: () => null,
-            ValueContainer: ({ children, ...props }) => {
-              const selectedValues = props.getValue();
-              return (
-                <components.ValueContainer {...props}>
-                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                </components.ValueContainer>
-              );
-            },
-          }}
-          closeMenuOnSelect={false}
-          hideSelectedOptions={false}
-          styles={{
-            control: (base, state) => ({
-              ...base,
-              // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
-              backgroundColor: '#fff',
-              fontSize: 15,
-              color: '#1A1A1B',
-              outline: 'none', 
-              boxShadow: state.isFocused ? 'none' : 'none',
-              border:'none'
-            }),
-            menu: (base) => ({
-              ...base,
-              minWidth:'calc(100% + 72px)',
-             marginLeft:'-60px',
-          border:menuIsOpenfour?'black':'none',
-              borderTop: 'none',
-              borderRadius: '0 0 8px 8px',
-              border:menuIsOpenfour?'2px solid #707070':'none',
-              borderTop:'none'
-            }),
-          }}
-        />
-      </div>
-    </div>
-  </div>
-</div>
-
-
-          {
-            meals === 1 ?
-            <div className="changeone  hide-scrollbar" style={{ marginTop: 100, overflow:'hidden' }}>
-            <div className="changetwos" style={{overflowX:'hidden'}}>
-              {/* First row */}
-              <div className="row">
-                {/* Meals received - timeline */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center" style={{ paddingRight: padd,paddingLeft:paddOpp }} >
-                      <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px`}} onClick={() => {
-                        setMeals(5)
-                      }}>
-                    <div className="boxs" style={{ cursor: 'pointer' }}>
-                      <p className="asdfp" style={{ fontWeight: 600, color: '#1A1A1B' }}>Meals received - timeline</p>
-                      <div className="end-box">
-                        <img src="rts.png" className="" alt="Example Image" />
-                        <p className="asdfps">(# of meals sent between specific time slots)</p>
+                      }
+                    }} // Update both startDate and EndDate 
+                    placeholderText="Select a date range"
+                    className="custom-input"
+                    calendarClassName="custom-calendar"
+                    dateFormat="d MMM yyyy"
+                    customInput={
+                      <div className="custom-display-input" style={{ fontSize: 15, color: '#1A1A1B' }}>
+                        {startDate || endDate ? formatRange(startDate, endDate) : "Select a date range"}
+                        <FaCaretDown className="calendar-icon" />
                       </div>
-                    </div>
-                  </div>
+                    }
+                  />
                 </div>
-          
-                {/* Edits */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center"  style={{ paddingLeft: `${padd}px`,paddingRight:paddOpp }}>
-                <div className="box" style={{ maxWidth: `${boxWidth}px`,height: `${Height}px` }} onClick={() => {
-                        setMeals(2)
-                      }}>
-                    <div className="boxs" style={{ cursor: 'pointer' }}>
-                      <div className="d-flex justify-content-between">
-                        <div>
-                          <p className="asdfp" style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Edits</p>
-                          <p className="asdfp" style={{ color: "#707070", fontSize: 16, fontWeight: '400' }}>(Total)</p>
-                        </div>
-                        <div>
-                          <p className="asdfp" style={{ color: '#316AAF' }}>
-                            {parseInt(editall?.edited?.length) + 
-                            parseInt(editall?.moved?.length) + 
-                            parseInt(editall?.deleted?.length) + 
-                            parseInt(editall?.tableMoved?.length) || 0}
-                          </p>
-                        </div>
-                      </div>
-          
-                      <div className="end-box">
-                        <img src="ert.png" className="" alt="Example Image" />
-                        <div>
-                          <div className="d-flex" style={{ marginBottom: 0 }}>
-                            <div style={{ width: 200 }}>
-                              <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Edited</p>
-                            </div>
-                            <div style={{ fontWeight: '600' }}>
-                              <p style={{ marginBottom: 0, paddingLeft: 30 }}>{editall?.edited?.length || 0}</p>
-                            </div>
-                          </div>
-          
-                          <div className="d-flex" style={{ marginBottom: 0 }}>
-                            <div style={{ width: 200 }}>
-                              <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Moved</p>
-                            </div>
-                            <div style={{ fontWeight: '600' }}>
-                              <p style={{ marginBottom: 0, paddingLeft: 30 }}>{editall?.moved?.length || 0}</p>
-                            </div>
-                          </div>
-          
-                          <div className="d-flex" style={{ marginBottom: 0 }}>
-                            <div style={{ width: 200 }}>
-                              <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Deleted</p>
-                            </div>
-                            <div style={{ fontWeight: '600' }}>
-                              <p style={{ marginBottom: 0, paddingLeft: 30 }}>{editall?.deleted?.length || 0}</p>
-                            </div>
-                          </div>
-          
-                          <div className="d-flex" style={{ marginBottom: 0 }}>
-                            <div style={{ width: 200 }}>
-                              <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Table moved</p>
-                            </div>
-                            <div style={{ fontWeight: '600' }}>
-                              <p style={{ marginBottom: 0, paddingLeft: 30 }}>{editall?.tableMoved?.length || 0}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                <div className="mt-3">
+                  <div className="custom-inputone d-flex justify-content-between">
+                    <input
+                      className='inputttt'
+                      type="time"
+                      style={{ fontSize: 15, color: '#1A1A1B' }}
+                      value={onetime}
+                      onChange={(e) => {
+                        setOnetime(e.target.value)
+                        if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                          return
+                        }
+                        filterDataByDate(dateRange, e.target.value, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                      }}
+                    />
+                    <input
+                      className='inputttt'
+                      type="time"
+                      value={twotime}
+                      style={{ fontSize: 15, color: '#1A1A1B' }}
+                      onChange={(e) => {
+                        setTwotime(e.target.value)
+                        if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
+                          return
+                        }
+                        filterDataByDate(dateRange, onetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                      }}
+                    />
                   </div>
                 </div>
               </div>
-          
-              {/* Second row */}
-              <div className="row">
-                {/* Served meals */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center" style={{ paddingRight: `${padd}px`,paddingLeft:paddOpp }}>
-                      <div className="box" style={{ maxWidth: `${boxWidth}px`,height: `${Height}px` }} onClick={() => {
-                        setMeals(3)
-                      }}>
-                    <div className="boxs" style={{ cursor: 'pointer' }}>
-                      <div className="d-flex justify-content-between">
-                        <div>
-                          <p className="asdfp" style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Served meals</p>
-                          <p className="asdfp" style={{ color: "#707070", fontSize: 16, fontWeight: '400' }}>(Total)</p>
-                        </div>
-                        <div>
-                          <p className="asdfp" style={{ color: '#316AAF' }}>
-                            {served ? ggggrt() : 0}
-                          </p>
-                        </div>
+
+              {/* Date Range 2 - Comparison */}
+              <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
+                  Compare with:<span style={{ fontWeight: '400' }}> Custom</span>
+                </p>
+                <div style={{ width: '100%' }}>
+                  <DatePicker
+                    selectsRange
+                    startDate={startDatetwo}
+                    endDate={endDatetwo}
+                    onChange={(update) => {
+                      setDateRangetwo(update)
+
+                      if (update[1] === null || update[1] === "null") {
+
+                      } else {
+                        // updates(2, update)
+
+                        filterDataByDateonee(update, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+                      }
+
+
+                    }} // Update both startDate and EndDate 
+                    placeholderText="Select a date range"
+                    className="custom-input"
+                    calendarClassName="custom-calendar"
+                    dateFormat="d MMM yyyy"
+                    customInput={
+                      <div className="custom-display-input" style={{ fontSize: 15, color: '#1A1A1B' }}>
+                        {startDatetwo || endDatetwo ? formatRange(startDatetwo, endDatetwo) : "Select a date range"}
+                        <FaCaretDown className="calendar-icon" />
                       </div>
-          
-                      <div className="end-box">
-                        <img src="starr.png" className="" alt="Example Image" />
-                        <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }}>
-                          <div>
-                            <div className="d-flex" style={{ marginBottom: 0 }}>
-                              <div style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>
-                                  Most: <span style={{ fontWeight: '600' }}>{served[0]?.name || 0}</span>
-                                </p>
-                              </div>
-                              <div style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30 }}>{served[0]?.count || 0}</p>
-                              </div>
-                            </div>
-          
-                            <div className="d-flex" style={{ marginBottom: 0 }}>
-                              <div style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>
-                                  Less: <span style={{ fontWeight: '600' }}>{served[served.length - 1]?.name || ''}</span>
-                                </p>
-                              </div>
-                              <div style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30 }}>{served[served.length - 1]?.count || 0}</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    }
+                  />
+                </div>
+                <div className="mt-3">
+                  <div className="custom-inputone d-flex justify-content-between">
+                    <input
+                      className='inputttt'
+                      type="time"
+                      style={{ fontSize: 15, color: '#1A1A1B' }}
+                      value={threetime}
+                      onChange={(e) => {
+                        setThreetime(e.target.value)
+                        if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
+                          return
+                        }
+                        filterDataByDateonee(dateRangetwo, e.target.value, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                      }}
+                    />
+                    <input
+                      className='inputttt'
+                      type="time"
+                      style={{ fontSize: 15, color: '#1A1A1B' }}
+                      value={fourtime}
+                      onChange={(e) => {
+                        setFourtime(e.target.value)
+                        if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
+                          return
+                        }
+                        filterDataByDateonee(dateRangetwo, threetime, e.target.value, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                      }}
+                    />
                   </div>
                 </div>
-          
-                {/* Refunded meals */}
-                <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center " style={{ paddingLeft: `${padd}px`,paddingRight:paddOpp }}>
-                      <div className="box" style={{ maxWidth: `${boxWidth}px`,height: `${Height}px` }} onClick={() => {
-                        setMeals(4)
-                      }}>
-                    <div className="boxs" style={{ cursor: 'pointer' }}>
-                      <div className="d-flex justify-content-between">
-                        <div>
-                          <p className="asdfp" style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Refunded meals</p>
-                          <p className="asdfp" style={{ color: "#707070", fontSize: 16, fontWeight: '400' }}>(Total)</p>
-                        </div>
-                        <div>
-                          <p className="asdfp" style={{ color: '#316AAF' }}>
-                            {minperday ? ggggrtz() : 0}
-                          </p>
-                        </div>
-                      </div>
-          
-                      <div className="end-box">
-                        <img src="refundd.png" className="" alt="Example Image" />
-                        <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }}>
-                          <div>
-                            <div className="d-flex" style={{ marginBottom: 0 }}>
-                              <div style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Minimum per day</p>
-                              </div>
-                              <div style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30 }}>{minperday[minperday.length - 1]?.count || 0}</p>
-                              </div>
-                            </div>
-          
-                            <div className="d-flex" style={{ marginBottom: 0 }}>
-                              <div style={{ width: 200 }}>
-                                <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Maximum per day</p>
-                              </div>
-                              <div style={{ fontWeight: '600' }}>
-                                <p style={{ marginBottom: 0, paddingLeft: 30 }}>{minperday[0]?.count || 0}</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+              </div>
+
+              {/* Venue & Hub Filters */}
+              <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Chosen venue & hub</p>
+                <div ref={selectRef} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45, borderRadius: menuIsOpen ? ' 8px 8px 0 0' : '8px', border: menuIsOpen ? '2px solid #707070' : 'none', borderBottom: 'none' }}>
+                  <div className="switch-container">
+                    <input
+                      type="checkbox"
+                      id="switch1"
+                      style={{ fontSize: 15 }}
+                      checked={venueradio}
+                      onChange={(e) => {
+                        setVenueradio(e.target.checked)
+                        if (e.target.checked === false) {
+                          setSelectedOptions([])
+                        }
+
+
+                        else {
+
+
+
+                          handleChange([...selectedOptions, ...[{
+                            "label": "All Venue",
+                            "value": "All"
+                          }]])
+                          console.log(selectedOptions, 'selectedOptions')
+                        }
+
+
+
+
+                      }}
+                    />
+                    <label className="switch-label" htmlFor="switch1"></label>
                   </div>
+                  <Select
+                    menuIsOpen={menuIsOpen}
+                    onMenuOpen={() => setMenuIsOpen(true)}
+                    onMenuClose={() => setMenuIsOpen(false)}
+                    onFocus={() => setMenuIsOpen(true)}
+                    isDisabled={!venueradio}
+                    isMulti
+                    className="newoneonee"
+                    options={basic}
+                    value={selectedOptions}
+                    onChange={handleChange}
+                    placeholder="All Venues"
+                    components={{
+                      Option: CustomOption,
+                      MultiValue: () => null,
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false}
+                    hideSelectedOptions={false}
+                    styles={{
+                      control: (base, state) => ({
+                        ...base,
+                        // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+                        backgroundColor: '#fff',
+                        fontSize: 15,
+                        color: '#1A1A1B',
+                        outline: 'none',
+                        boxShadow: state.isFocused ? 'none' : 'none',
+                        border: 'none'
+                      }),
+                      menu: (base) => ({
+                        ...base,
+                        minWidth: 'calc(100% + 72px)',
+                        marginLeft: '-60px',
+                        border: menuIsOpen ? 'black' : 'none',
+                        borderTop: 'none',
+                        borderRadius: '0 0 8px 8px',
+                        border: menuIsOpen ? '2px solid #707070' : 'none',
+                        borderTop: 'none'
+                      }),
+                    }}
+                  />
+                </div>
+
+                <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45, borderRadius: menuIsOpenone ? ' 8px 8px 0 0' : '8px', border: menuIsOpenone ? '2px solid #707070' : 'none', borderBottom: 'none' }}>
+                  <div className="switch-container">
+                    <input
+                      checked={hubbswitch}
+                      onChange={(e) => {
+                        setHubbswitch(e.target.checked)
+
+                        if (e.target.checked === false) {
+                          setHubb([])
+                        } else {
+                          handleChangehubone([...hubb, ...[{
+                            "label": "All Hub",
+                            "value": "All"
+                          }]])
+                        }
+
+
+                      }}
+                      type="checkbox"
+                      id="switch3"
+                    />
+                    <label className="switch-label" htmlFor="switch3"></label>
+                  </div>
+                  <Select
+                    menuIsOpen={menuIsOpenone}
+                    onMenuOpen={() => setMenuIsOpenone(true)}
+                    onMenuClose={() => setMenuIsOpenone(false)}
+                    onFocus={() => setMenuIsOpenone(true)}
+                    isDisabled={!hubbswitch}
+                    isMulti
+                    className="newoneonee"
+                    options={basicone}
+                    value={hubb}
+                    onChange={handleChangehubone}
+                    placeholder="All Hubs"
+                    components={{
+                      Option: CustomOption,
+                      MultiValue: () => null,
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false}
+                    hideSelectedOptions={false}
+                    styles={{
+                      control: (base, state) => ({
+                        ...base,
+                        // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+                        backgroundColor: '#fff',
+                        fontSize: 15,
+                        color: '#1A1A1B',
+                        outline: 'none',
+                        boxShadow: state.isFocused ? 'none' : 'none',
+                        border: 'none'
+                      }),
+                      menu: (base) => ({
+                        ...base,
+                        minWidth: 'calc(100% + 72px)',
+                        marginLeft: '-60px',
+                        border: menuIsOpenone ? 'black' : 'none',
+                        borderTop: 'none',
+                        borderRadius: '0 0 8px 8px',
+                        border: menuIsOpenone ? '2px solid #707070' : 'none',
+                        borderTop: 'none'
+                      }),
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Stages/Courses Filters */}
+              <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by stages/courses</p>
+                <div ref={selectReftwo} className="custom-inputoness d-flex justify-content-between" style={{ width: '100%', height: 45, borderRadius: menuIsOpentwo ? ' 8px 8px 0 0' : '8px', border: menuIsOpentwo ? '2px solid #707070' : 'none', borderBottom: 'none' }}>
+                  <div className="switch-container">
+                    <input
+                      type="checkbox"
+                      checked={Hubradio}
+                      onChange={(e) => {
+                        setHubradio(e.target.checked)
+                        if (e.target.checked === false) {
+                          setSelectedhubOptions([])
+                        } else {
+                          handleChangehub([...selectedhubOptions, ...[{
+                            "label": "All Stages",
+                            "value": "All"
+                          }]])
+                        }
+                      }}
+                      id="switch2"
+                    />
+                    <label className="switch-label" htmlFor="switch2"></label>
+                  </div>
+                  <Select
+                    menuIsOpen={menuIsOpentwo}
+                    onMenuOpen={() => setMenuIsOpentwo(true)}
+                    onMenuClose={() => setMenuIsOpentwo(false)}
+                    onFocus={() => setMenuIsOpentwo(true)}
+                    isDisabled={!Hubradio}
+                    isMulti
+                    className="newoneonee"
+                    options={optionshub}
+                    value={selectedhubOptions}
+                    onChange={handleChangehub}
+                    placeholder="All stages"
+                    components={{
+                      Option: CustomOption,
+                      MultiValue: () => null,
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false}
+                    hideSelectedOptions={false}
+                    styles={{
+                      control: (base, state) => ({
+                        ...base,
+                        // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+                        backgroundColor: '#fff',
+                        fontSize: 15,
+                        color: '#1A1A1B',
+                        outline: 'none',
+                        boxShadow: state.isFocused ? 'none' : 'none',
+                        border: 'none'
+                      }),
+                      menu: (base) => ({
+                        ...base,
+                        minWidth: 'calc(100% + 72px)',
+                        marginLeft: '-60px',
+                        border: menuIsOpentwo ? 'black' : 'none',
+                        borderTop: 'none',
+                        borderRadius: '0 0 8px 8px',
+                        border: menuIsOpentwo ? '2px solid #707070' : 'none',
+                        borderTop: 'none'
+                      }),
+                    }}
+                  />
+                </div>
+
+                <div ref={selectRefthree} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45, borderRadius: menuIsOpenthree ? ' 8px 8px 0 0' : '8px', border: menuIsOpenthree ? '2px solid #707070' : 'none', borderBottom: 'none' }}>
+                  <div className="switch-container">
+                    <input
+                      type="checkbox"
+                      checked={Cources}
+                      onChange={(e) => {
+                        setCources(e.target.checked)
+                        if (e.target.checked === false) {
+                          setSelectedCources([])
+                        } else {
+                          handleChangeCources([...selectedCources, ...[{ label: "All Courses", value: "All" }]])
+                        }
+                      }}
+                      id="switch4"
+                    />
+                    <label className="switch-label" htmlFor="switch4"></label>
+                  </div>
+                  <Select
+                    menuIsOpen={menuIsOpenthree}
+                    onMenuOpen={() => setMenuIsOpenthree(true)}
+                    onMenuClose={() => setMenuIsOpenthree(false)}
+                    onFocus={() => setMenuIsOpenthree(true)}
+                    isDisabled={!Cources}
+                    isMulti
+                    className="newoneonee"
+                    options={fulldatafull}
+                    value={selectedCources}
+                    onChange={handleChangeCources}
+                    placeholder="All courses"
+                    components={{
+                      Option: CustomOption,
+                      MultiValue: () => null,
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false}
+                    hideSelectedOptions={false}
+                    styles={{
+                      control: (base, state) => ({
+                        ...base,
+                        // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+                        backgroundColor: '#fff',
+                        fontSize: 15,
+                        color: '#1A1A1B',
+                        outline: 'none',
+                        boxShadow: state.isFocused ? 'none' : 'none',
+                        border: 'none'
+                      }),
+                      menu: (base) => ({
+                        ...base,
+                        minWidth: 'calc(100% + 72px)',
+                        marginLeft: '-60px',
+                        border: menuIsOpenthree ? 'black' : 'none',
+                        borderTop: 'none',
+                        borderRadius: '0 0 8px 8px',
+                        border: menuIsOpenthree ? '2px solid #707070' : 'none',
+                        borderTop: 'none'
+                      }),
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Tables/Takeaways Filters */}
+              <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
+                <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
+                <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
+                  <input
+                    onChange={(e) => {
+                      setInputvalue(e.target.value)
+                      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+                      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
+                    }}
+                    value={inputvalue}
+                    placeholder="0-9999"
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }}
+                    type="text"
+                  />
+                  <p style={{ fontSize: 19, display: 'contents' }}>|</p>
+                  <input
+                    onChange={(e) => {
+                      setInputvaluetwo(e.target.value)
+                      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+                      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
+                    }}
+                    value={inputvaluetwo}
+                    placeholder="9999-9999"
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }}
+                    type="text"
+                  />
+                </div>
+
+                <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45, borderRadius: menuIsOpenfour ? ' 8px 8px 0 0' : '8px', border: menuIsOpenfour ? '2px solid #707070' : 'none', borderBottom: 'none' }}>
+                  <div className="switch-container">
+                    <input
+                      type="checkbox"
+                      checked={takeaway}
+                      onChange={(e) => {
+                        setTakeaway(e.target.checked)
+                        if (e.target.checked === false) {
+                          setSelectedTakeaway([])
+                        } else {
+                          handleChangeTakeaway([...selectedTakeaway, ...[{ value: 'All', label: 'All takeaways' }]])
+                        }
+                      }}
+                      id="switch5"
+                    />
+                    <label className="switch-label" htmlFor="switch5"></label>
+                  </div>
+                  <Select
+                    menuIsOpen={menuIsOpenfour}
+                    onMenuOpen={() => setMenuIsOpenfour(true)}
+                    onMenuClose={() => setMenuIsOpenfour(false)}
+                    onFocus={() => setMenuIsOpenfour(true)}
+                    isDisabled={!takeaway}
+                    isMulti
+                    className="newoneonee"
+                    options={optionstakeaway}
+                    value={selectedTakeaway}
+                    onChange={handleChangeTakeaway}
+                    placeholder="All takeaways"
+                    components={{
+                      Option: CustomOption,
+                      MultiValue: () => null,
+                      ValueContainer: ({ children, ...props }) => {
+                        const selectedValues = props.getValue();
+                        return (
+                          <components.ValueContainer {...props}>
+                            {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                          </components.ValueContainer>
+                        );
+                      },
+                    }}
+                    closeMenuOnSelect={false}
+                    hideSelectedOptions={false}
+                    styles={{
+                      control: (base, state) => ({
+                        ...base,
+                        // border: selectedOptions?.length > 0 ? '2px solid #000' : 'unset',
+                        backgroundColor: '#fff',
+                        fontSize: 15,
+                        color: '#1A1A1B',
+                        outline: 'none',
+                        boxShadow: state.isFocused ? 'none' : 'none',
+                        border: 'none'
+                      }),
+                      menu: (base) => ({
+                        ...base,
+                        minWidth: 'calc(100% + 72px)',
+                        marginLeft: '-60px',
+                        border: menuIsOpenfour ? 'black' : 'none',
+                        borderTop: 'none',
+                        borderRadius: '0 0 8px 8px',
+                        border: menuIsOpenfour ? '2px solid #707070' : 'none',
+                        borderTop: 'none'
+                      }),
+                    }}
+                  />
                 </div>
               </div>
             </div>
           </div>
 
 
-              : meals === 2 ?
-
-              <div className="changeone" style={{ marginTop: 100 }}>
-              <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }}>
-                <div className="d-flex justify-content-between">
-                  <div className="d-flex">
-                    <img 
-                      src="black_arrow.png" 
-                      style={{ width: 20, height: 20, cursor: 'pointer' }} 
-                      onClick={() => { setMeals(1) }} 
-                      className="" 
-                      alt="Example Image" 
-                    />
-                    <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10, marginTop: -6 }}>Edits</p>
-                  </div>
-            
-                  <div className="position-relative">
-                    <img 
-                      src="threedot.png" 
-                      ref={toggleButtonRef} 
-                      style={{ width: 5, height: 20, cursor: 'pointer' }} 
-                      onClick={handleToggleDiv} 
-                      className="" 
-                      alt="Example Image" 
-                    />
-            
-                    {showDiv && (
-                      <div
-                        ref={dropdownRef}
-                        style={{
-                          width: 200,
-                          padding: '10px',
-                          backgroundColor: '#f8f9fa',
-                          border: '1px solid #ccc',
-                          borderRadius: '4px',
-                          boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                          position: 'absolute',
-                          right: 0,
-                          zIndex: 1000
-                        }}
-                      >
-                        <p style={{ color: '#707070' }}>Export as</p>
-                        <hr />
-                        <p 
-  style={{ 
-    color: '#000', 
-    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '8px' 
-  }} 
-  onClick={() => {
-    if (!isPdfLoad) {
-      setIsPdfLoad(true);  // Prevent click when loading
-      console.log(JSON.stringify(selectedOptions), 'dateRange');
-      editexportpdf();
-    }
-  }}
->
-PDF
-  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
-
-</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-            
-                <div style={{ marginTop: 50, padding: 20 }}>
+          {
+            meals === 1 ?
+              <div className="changeone  hide-scrollbar" style={{ marginTop: 100, overflow: 'hidden' }}>
+                <div className="changetwos" style={{ overflowX: 'hidden' }}>
+                  {/* First row */}
                   <div className="row">
-                    <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
-                      <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                        ( Total ) <span>{editall?.edited?.length + editall?.deleted?.length + editall?.moved?.length}</span>
-                      </p>
-                    </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
-                      <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                        ( Total ) <span>{editallone?.edited?.length + editallone?.deleted?.length + editallone?.moved?.length}</span>
-                      </p>
-                    </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
-                      <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                        ( Total ) <span>
-                          {(() => {
-                            let datd = editallone?.edited?.length + editallone?.deleted?.length + editallone?.moved?.length
-                            let datdtwo = editall?.edited?.length + editall?.deleted?.length + editall?.moved?.length
-                            let tot = ((datdtwo - datd) / datd) * 100
-                            return (
-                              <span>{tot.toFixed(2) + "%"} 
-                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                  {tot > 0 ? 
-                                    <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
-                                    <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
-                                  }
-                                </span>
-                              </span>
-                            )
-                          })()}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-            
-                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-            
-                  {/* Edited section */}
-                  <div className="row py-2">
-                    <div className="col-lg-4 col-md-4 col-sm-12">
-                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.moved?.length}</p>
-                    </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12">
-                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}</p>
-                    </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12 d-flex align-items-center">
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                        ( Total ) <span>
-                          {(() => {
-                            let datd = editallone?.moved?.length
-                            let datdtwo = editall?.moved?.length
-                            let tot = ((datdtwo - datd) / datd) * 100
-                            return (
-                              <span>{tot.toFixed(2) + "%"} 
-                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                  {tot > 0 ? 
-                                    <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
-                                    <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
-                                  }
-                                </span>
-                              </span>
-                            )
-                          })()}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-            
-                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-            
-                  {/* Moved section */}
-                  <div className="row py-2">
-                    <div className="col-lg-4 col-md-4 col-sm-12">
-                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.edited?.length}</p>
-                    </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12">
-                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}</p>
-                    </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12 d-flex align-items-center">
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                        ( Total ) <span>
-                          {(() => {
-                            let datd = editallone?.edited?.length
-                            let datdtwo = editall?.edited?.length
-                            let tot = ((datdtwo - datd) / datd) * 100
-                            return (
-                              <span>{tot.toFixed(2) + "%"} 
-                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                  {tot > 0 ? 
-                                    <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
-                                    <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
-                                  }
-                                </span>
-                              </span>
-                            )
-                          })()}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-            
-                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-            
-                  {/* Deleted section */}
-                  <div className="row py-2">
-                    <div className="col-lg-4 col-md-4 col-sm-12">
-                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.deleted?.length}</p>
-                    </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12">
-                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.deleted?.length}</p>
-                    </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12 d-flex align-items-center">
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                        ( Total ) <span>
-                          {(() => {
-                            let datd = editallone?.deleted?.length
-                            let datdtwo = editall?.deleted?.length
-                            let tot = ((datdtwo - datd) / datd) * 100
-                            return (
-                              <span>{tot.toFixed(2) + "%"} 
-                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                  {tot > 0 ? 
-                                    <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
-                                    <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
-                                  }
-                                </span>
-                              </span>
-                            )
-                          })()}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-            
-                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-            
-                  {/* Table moved section */}
-                  <div className="row py-2">
-                    <div className="col-lg-4 col-md-4 col-sm-12">
-                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.tableMoved?.length}</p>
-                    </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12">
-                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.tableMoved?.length}</p>
-                    </div>
-                    <div className="col-lg-4 col-md-4 col-sm-12 d-flex align-items-center">
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                        ( Total ) <span>
-                          {(() => {
-                            let datd = editallone?.tableMoved?.length
-                            let datdtwo = editall?.tableMoved?.length
-                            let tot = ((datdtwo - datd) / datd) * 100
-                            return (
-                              <span>{isNaN(tot) ? "+000.00%" : tot.toFixed(2) + "%"} 
-                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                  {tot > 0 ? 
-                                    <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
-                                    <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
-                                  }
-                                </span>
-                              </span>
-                            )
-                          })()}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-            
-                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                </div>
-              </div>
-            </div>
-
-                : meals === 3 ?
-                <div className="changeone" style={{ marginTop: 80 }}>
-                <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }}>
-                  
-                  <div style={{ marginTop: -10 }} className="d-flex justify-content-between align-items-center">
-                    {/* Left section with title and dropdown */}
-                    <div className="d-flex align-items-center">
-                      <div className="d-flex align-items-center">
-                        <img 
-                          src="black_arrow.png" 
-                          style={{ width: 20, height: 20, cursor: 'pointer' }} 
-                          onClick={() => { setMeals(1) }} 
-                          alt="Back Arrow" 
-                        />
-                        <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10,marginRight:5, marginBottom: 0 }}>Served meals</p>
-                      </div>
-                      <div className="custom-inputonessfine pt-2 mx-2 ml-2 ml-md-3 " style={{ width: 'auto', maxWidth: '200px' }}>
-                        <Select
-                          className="newoneonee"
-                          options={basicfine}
-                          onChange={handleChangefine}
-                          placeholder="Select options..."
-                          components={{
-                            MultiValue: () => null, // Hides default tags
-                            ValueContainer: ({ children, ...props }) => {
-                              const selectedValues = props.getValue(); 
-                              return (
-                                <components.ValueContainer {...props}>
-                                  {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                                </components.ValueContainer>
-                              );
-                            },
-                          }}
-                          hideSelectedOptions={false}
-                          styles={{
-                            control: (base) => ({ 
-                              ...base, 
-                              border: 'unset', 
-                              color: '#707070',
-                              minHeight: '38px',
-                              boxShadow:'none',
-                              // Responsive width
-                              width: '100%',
-                              maxWidth: '190px',
-                            
-                            }),
-                            menu: (base) => ({
-                              ...base,
-                              width: 'auto',
-                              minWidth: '120px'
-                            })
-                          }}
-                        />
-                      </div>
-                    </div>
-              
-                    {/* Right section with search and menu */}
-                    <div className="d-flex align-items-center">
-                      <div className="custom-inputoness d-flex justify-content-between mx-2" style={{
-                        width: '250px',
-                        height: 45,
-                        border: '1px solid rgb(203 203 203)',
-                        '@media (max-width: 992px)': {
-                          width: '180px',
-                        },
-                        '@media (max-width: 768px)': {
-                          width: '150px',
-                        }
+                    {/* Meals received - timeline */}
+                    <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center" style={{ paddingRight: padd, paddingLeft: paddOpp }} >
+                      <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
+                        setMeals(5)
                       }}>
-                        <div className="input-group">
-                          <input
-                            onChange={(e) => { searchvalue(e.target.value) }}
-                            type="text"
-                            className="form-control"
-                            placeholder="Meals Search..."
-                            style={{
-                              border: "none",
-                              boxShadow: "none",
-                              marginRight: "45px",
-                              fontSize: window.innerWidth < 768 ? '12px' : '14px'
-                            }}
-                          />
-                          <span
-                            className="input-group-text"
-                            style={{
-                              background: "none",
-                              border: "none",
-                              cursor: "pointer",
-                              position: "absolute",
-                              right: 10,
-                            }}
-                          >
-                            🔍
-                          </span>
+                        <div className="boxs" style={{ cursor: 'pointer' }}>
+                          <p className="asdfp" style={{ fontWeight: 600, color: '#1A1A1B' }}>Meals received - timeline</p>
+                          <div className="end-box">
+                            <img src="rts.png" className="" alt="Example Image" />
+                            <p className="asdfps">(# of meals sent between specific time slots)</p>
+                          </div>
                         </div>
                       </div>
-                      
-                      {/* Three dot menu with better positioning */}
-                      <div className="position-relative">
-                        <img 
-                          src="threedot.png" 
-                          ref={toggleButtonRefs} 
-                          style={{ width: 5, height: 20, cursor: 'pointer' }} 
-                          onClick={fsgdgfdfgdf} 
-                          alt="Menu" 
+                    </div>
+
+                    {/* Edits */}
+                    <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center" style={{ paddingLeft: `${padd}px`, paddingRight: paddOpp }}>
+                      <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
+                        setMeals(2)
+                      }}>
+                        <div className="boxs" style={{ cursor: 'pointer' }}>
+                          <div className="d-flex justify-content-between">
+                            <div>
+                              <p className="asdfp" style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Edits</p>
+                              <p className="asdfp" style={{ color: "#707070", fontSize: 16, fontWeight: '400' }}>(Total)</p>
+                            </div>
+                            <div>
+                              <p className="asdfp" style={{ color: '#316AAF' }}>
+                                {parseInt(editall?.edited?.length) +
+                                  parseInt(editall?.moved?.length) +
+                                  parseInt(editall?.deleted?.length) +
+                                  parseInt(editall?.tableMoved?.length) || 0}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="end-box">
+                            <img src="ert.png" className="" alt="Example Image" />
+                            <div>
+                              <div className="d-flex" style={{ marginBottom: 0 }}>
+                                <div style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Edited</p>
+                                </div>
+                                <div style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30 }}>{editall?.edited?.length || 0}</p>
+                                </div>
+                              </div>
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}>
+                                <div style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Moved</p>
+                                </div>
+                                <div style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30 }}>{editall?.moved?.length || 0}</p>
+                                </div>
+                              </div>
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}>
+                                <div style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Deleted</p>
+                                </div>
+                                <div style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30 }}>{editall?.deleted?.length || 0}</p>
+                                </div>
+                              </div>
+
+                              <div className="d-flex" style={{ marginBottom: 0 }}>
+                                <div style={{ width: 200 }}>
+                                  <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Table moved</p>
+                                </div>
+                                <div style={{ fontWeight: '600' }}>
+                                  <p style={{ marginBottom: 0, paddingLeft: 30 }}>{editall?.tableMoved?.length || 0}</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Second row */}
+                  <div className="row">
+                    {/* Served meals */}
+                    <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center" style={{ paddingRight: `${padd}px`, paddingLeft: paddOpp }}>
+                      <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
+                        setMeals(3)
+                      }}>
+                        <div className="boxs" style={{ cursor: 'pointer' }}>
+                          <div className="d-flex justify-content-between">
+                            <div>
+                              <p className="asdfp" style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Served meals</p>
+                              <p className="asdfp" style={{ color: "#707070", fontSize: 16, fontWeight: '400' }}>(Total)</p>
+                            </div>
+                            <div>
+                              <p className="asdfp" style={{ color: '#316AAF' }}>
+                                {served ? ggggrt() : 0}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="end-box">
+                            <img src="starr.png" className="" alt="Example Image" />
+                            <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }}>
+                              <div>
+                                <div className="d-flex" style={{ marginBottom: 0 }}>
+                                  <div style={{ width: 200 }}>
+                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>
+                                      Most: <span style={{ fontWeight: '600' }}>{served[0]?.name || 0}</span>
+                                    </p>
+                                  </div>
+                                  <div style={{ fontWeight: '600' }}>
+                                    <p style={{ marginBottom: 0, paddingLeft: 30 }}>{served[0]?.count || 0}</p>
+                                  </div>
+                                </div>
+
+                                <div className="d-flex" style={{ marginBottom: 0 }}>
+                                  <div style={{ width: 200 }}>
+                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>
+                                      Less: <span style={{ fontWeight: '600' }}>{served[served.length - 1]?.name || ''}</span>
+                                    </p>
+                                  </div>
+                                  <div style={{ fontWeight: '600' }}>
+                                    <p style={{ marginBottom: 0, paddingLeft: 30 }}>{served[served.length - 1]?.count || 0}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Refunded meals */}
+                    <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center " style={{ paddingLeft: `${padd}px`, paddingRight: paddOpp }}>
+                      <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
+                        setMeals(4)
+                      }}>
+                        <div className="boxs" style={{ cursor: 'pointer' }}>
+                          <div className="d-flex justify-content-between">
+                            <div>
+                              <p className="asdfp" style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Refunded meals</p>
+                              <p className="asdfp" style={{ color: "#707070", fontSize: 16, fontWeight: '400' }}>(Total)</p>
+                            </div>
+                            <div>
+                              <p className="asdfp" style={{ color: '#316AAF' }}>
+                                {minperday ? ggggrtz() : 0}
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="end-box">
+                            <img src="refundd.png" className="" alt="Example Image" />
+                            <div style={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }}>
+                              <div>
+                                <div className="d-flex" style={{ marginBottom: 0 }}>
+                                  <div style={{ width: 200 }}>
+                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Minimum per day</p>
+                                  </div>
+                                  <div style={{ fontWeight: '600' }}>
+                                    <p style={{ marginBottom: 0, paddingLeft: 30 }}>{minperday[minperday.length - 1]?.count || 0}</p>
+                                  </div>
+                                </div>
+
+                                <div className="d-flex" style={{ marginBottom: 0 }}>
+                                  <div style={{ width: 200 }}>
+                                    <p style={{ marginBottom: 0, width: 200, textAlign: 'right' }}>Maximum per day</p>
+                                  </div>
+                                  <div style={{ fontWeight: '600' }}>
+                                    <p style={{ marginBottom: 0, paddingLeft: 30 }}>{minperday[0]?.count || 0}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+              : meals === 2 ?
+
+                <div className="changeone" style={{ marginTop: 100 }}>
+                  <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }}>
+                    <div className="d-flex justify-content-between">
+                      <div className="d-flex">
+                        <img
+                          src="black_arrow.png"
+                          style={{ width: 20, height: 20, cursor: 'pointer' }}
+                          onClick={() => { setMeals(1) }}
+                          className=""
+                          alt="Example Image"
                         />
-              
-                        {showDivs && (
+                        <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10, marginTop: -6 }}>Edits</p>
+                      </div>
+
+                      <div className="position-relative">
+                        <img
+                          src="threedot.png"
+                          ref={toggleButtonRef}
+                          style={{ width: 5, height: 20, cursor: 'pointer' }}
+                          onClick={handleToggleDiv}
+                          className=""
+                          alt="Example Image"
+                        />
+
+                        {showDiv && (
                           <div
-                            ref={dropdownRefs}
+                            ref={dropdownRef}
                             style={{
                               width: 200,
                               padding: '10px',
@@ -5775,329 +5555,658 @@ PDF
                               borderRadius: '4px',
                               boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
                               position: 'absolute',
-                              top: '40px',
                               right: 0,
                               zIndex: 1000
                             }}
                           >
                             <p style={{ color: '#707070' }}>Export as</p>
                             <hr />
-                             <p 
-  style={{ 
-    color: '#000', 
-    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '8px' 
-  }} 
-  onClick={() => {
-    if (!isPdfLoad) {
-      setIsPdfLoad(true);  // Prevent click when loading
-      mealexportpdf()
-    }
-  }}
->
-PDF
-  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+                            <p
+                              style={{
+                                color: '#000',
+                                cursor: isPdfLoad ? 'not-allowed' : 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px'
+                              }}
+                              onClick={() => {
+                                if (!isPdfLoad) {
+                                  setIsPdfLoad(true);  // Prevent click when loading
+                                  console.log(JSON.stringify(selectedOptions), 'dateRange');
+                                  editexportpdf();
+                                }
+                              }}
+                            >
+                              PDF
+                              {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
 
-</p>
+                            </p>
                           </div>
                         )}
                       </div>
                     </div>
-                  </div>
-              
-                  {/* Stats section */}
-                  <div style={{ marginTop: 20, padding: 20 }}>
-                    <div className="d-flex justify-content-between">
-                      <div>
-                        <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>Chosen range</p>
-                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>( Total ) <span>{ggggrt()}</span></p>
-                      </div>
-                      <div>
-                        <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>Comparing range</p>
-                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>( Total ) <span>{ggggrts()}</span></p>
-                      </div>
-                      <div>
-                        <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>Variance</p>
-                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>( Total ) <span>
-                          {(() => {
-                            let datd = ggggrt()
-                            let datdtwo = ggggrts()
-                            let tot = ((datd - datdtwo) / datdtwo) * 100
-                            return <span>{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                              {tot > 0 ? 
-                                <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Up Arrow" /> :
-                                <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Down Arrow" />
-                              }
-                            </span></span>
-                          })()}
-                        </span></p>
-                      </div>
-                    </div>
-              
-                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-              
-                    {/* Table section */}
-                    <div className="scroll" id="scrrrrol" style={{ height: 400, overflowY: 'auto' }}>
-                      {served?.map((dfgh, index) => {
-                        const correspondingErv = servedone?.[index];
-                        
-                        return (
-                          <React.Fragment key={index}>
-                            <div className="d-flex">
-                              <div style={{ width: '33%' }}>
-                                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
-                              </div>
-              
-                              {correspondingErv ? (
-                                <div style={{ width: '33%', textAlign: 'center' }}>
-                                  <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                                </div>
-                              ) : (
-                                <div style={{ width: '33%' }}></div>
-                              )}
-              
-                              <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%' }}>
-                                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                                  ( Total )
-                                  <span>
-                                    {(() => {
-                                      const datd = dfgh?.count || 0;
-                                      const datdtwo = correspondingErv?.count || 0;
-                                      const tot = datdtwo === 0 ? 0 : ((datd - datdtwo) / datdtwo) * 100;
-              
-                                      return (
-                                        <span>
-                                          {tot.toFixed(2) + "%"}
-                                          <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                            {tot > 0 ? (
-                                              <img src="up_arw.png" style={{ width: 16, height: 16 }} alt="Up Arrow" />
-                                            ) : (
-                                              <img src="d_arw.png" style={{ width: 16, height: 16 }} alt="Down Arrow" />
-                                            )}
-                                          </span>
-                                        </span>
-                                      );
-                                    })()}
-                                  </span>
-                                </p>
-                              </div>
-                            </div>
-                            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                          </React.Fragment>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              </div>
-                  : meals === 4 ?
 
-
-                  <div className="changeone" style={{ marginTop: 80 }}>
-                  <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, padding: 20 }}>
-                
-                    <div style={{ marginTop: -20 }} className="d-flex justify-content-between align-items-center">
-                      <div className="d-flex justify-content-center align-items-center gap-2 gap-md-3 gap-lg-5">
-                        <div className="d-flex pt-4 align-items-center">
-                          <img 
-                            src="black_arrow.png" 
-                            style={{ width: 20, height: 20, cursor: 'pointer' }} 
-                            onClick={() => { setMeals(1) }} 
-                            alt="Back Arrow" 
-                          />
-                          <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10, marginBottom: 0 }}  onClick={()=>{
-                            console.log(  minperday , 'minperday minperday')
-                          }}>Refunded meals</p>
-                        </div>
-                        <div className="custom-inputonessfine d-flex align-items-center pt-1 mt-2">
-                          <Select
-                            className="newoneonee"
-                            options={basicfine}
-                            onChange={handleChangefinedd}
-                            placeholder="Select options..."
-                            components={{
-                              MultiValue: () => null,
-                              ValueContainer: ({ children, ...props }) => {
-                                const selectedValues = props.getValue();
-                                return (
-                                  <components.ValueContainer {...props}>
-                                    {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                                  </components.ValueContainer>
-                                );
-                              },
-                            }}
-                            hideSelectedOptions={false}
-                            styles={{
-                              control: (base) => ({ 
-                                ...base, 
-                                border: 'unset', 
-                                color: '#707070',
-                                boxShadow:'none',
-                              }),
-                              menu: (base) => ({
-                                ...base,
-                                width: 'auto',
-                                minWidth: '120px'
-                              })
-                            }}
-                          />
-                        </div>
-                      </div>
-                
-                      {/* Three dots menu with proper positioning */}
-                      <div className="position-relative">
-                        <img 
-                          src="threedot.png" 
-                          ref={toggleButtonRefss} 
-                          style={{ width: 5, height: 20, cursor: 'pointer' }} 
-                          onClick={handleToggleDivss} 
-                          alt="Menu Options" 
-                        />
-                
-                        {showDivss && (
-                          <div
-                            ref={dropdownRefss}
-                            style={{
-                              zIndex: 100,
-                              width: 200,
-                              padding: '10px',
-                              backgroundColor: '#f8f9fa',
-                              border: '1px solid #ccc',
-                              borderRadius: '4px',
-                              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                              position: 'absolute',
-                              top: '30px',
-                              right: 0
-                            }}
-                          >
-                            <p style={{ color: '#707070', margin: '0 0 8px 0' }}>Export as</p>
-                            <hr style={{ margin: '8px 0' }} />
-                              <p 
-  style={{ 
-    color: '#000', 
-    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '8px' 
-  }} 
-  onClick={() => {
-    if (!isPdfLoad) {
-      setIsPdfLoad(true);  // Prevent click when loading
-      refundexportpdf()
-    }
-  }}
->
-PDF
-  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
-
-</p>
-
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                
-                    <div style={{ marginTop: 10, padding: '10px 20px' }}>
-                      <div className="d-flex justify-content-between flex-wrap">
-                        <div className="mb-2 mb-md-0" style={{ minWidth: '120px' }}>
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>Chosen range</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
-                            ( Total ) <span>{ggggrtsg()}</span>
+                    <div style={{ marginTop: 50, padding: 20 }}>
+                      <div className="row">
+                        <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                            ( Total ) <span>{editall?.edited?.length + editall?.deleted?.length + editall?.moved?.length}</span>
                           </p>
                         </div>
-                        <div className="mb-2 mb-md-0" style={{ minWidth: '120px' }}>
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>Comparing range</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
-                            ( Total ) <span>{ggggrtsgg()}</span>
+                        <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                            ( Total ) <span>{editallone?.edited?.length + editallone?.deleted?.length + editallone?.moved?.length}</span>
                           </p>
                         </div>
-                        <div style={{ minWidth: '120px' }}>
-                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>Variance</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                        <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+                          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' , textAlign : 'end' }}>Variance</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' , textAlign : 'end' }}>
                             ( Total ) <span>
                               {(() => {
-                                let datd = ggggrtsg();
-                                let datdtwo = ggggrtsgg();
-                                let tot = ((datd - datdtwo) / datdtwo) * 100;
-                
+                                let datd = editallone?.edited?.length + editallone?.deleted?.length + editallone?.moved?.length
+                                let datdtwo = editall?.edited?.length + editall?.deleted?.length + editall?.moved?.length
+                                let tot = ((datdtwo - datd) / datd) * 100
                                 return (
-                                  <span>
-                                    {isNaN(tot) ? 0 : tot.toFixed(2) + "%"} 
+                                  <span >{isNaN(tot) ? "+000.00%" : tot.toFixed(2) + "%"}
                                     <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                      {isNaN(tot) ? '%' : tot > 0 ? 
-                                        <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Up Arrow" /> :
-                                        <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Down Arrow" />
+                                      {tot > 0 ?
+                                        <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
+                                        <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
                                       }
                                     </span>
                                   </span>
-                                );
+                                )
                               })()}
                             </span>
                           </p>
                         </div>
                       </div>
-                
+
                       <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                
-                      <div className="scroll" id="scrrrrol" style={{ height: 420, overflowY: 'auto' }}>
-                        {minperday?.map((dfgh, index) => {
-                          const correspondingErv = maxperday?.[index];
-                
-                          return (
-                            <React.Fragment key={index} >
-                              <div className="d-flex">
-                                <div style={{ width: '33%' }}>
-                                  <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.name}</p>
-                                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.count}</p>
-                                </div>
-                
-                                {correspondingErv ? (
-                                  <div style={{ width: '33%', textAlign: 'center' }}>
-                                    <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.name}</p>
-                                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.count}</p>
-                                  </div>
-                                ) : (
-                                  <div style={{ width: '33%' }}></div>
-                                )}
-                
-                                <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%' }}>
-                                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
-                                    ( Total )
-                                    <span>
-                                      {(() => {
-                                        const datd = dfgh?.count || 0;
-                                        const datdtwo = correspondingErv?.count || 0;
-                                        const tot = datdtwo === 0 ? 0 : ((datd - datdtwo) / datdtwo) * 100;
-                
-                                        return (
-                                          <span>
-                                            {isNaN(tot) ? "0%" : tot.toFixed(2) + "%"}
-                                            <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                              {isNaN(tot) ? '' : tot > 0 ? (
-                                                <img src="up_arw.png" style={{ width: 16, height: 16 }} alt="Up Arrow" />
-                                              ) : (
-                                                <img src="d_arw.png" style={{ width: 16, height: 16 }} alt="Down Arrow" />
-                                              )}
-                                            </span>
-                                          </span>
-                                        );
-                                      })()}
+
+                      {/* Edited section */}
+                      <div className="row py-2">
+                        <div className="col-lg-4 col-md-4 col-sm-12">
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.moved?.length}</p>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-12">
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}</p>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-12 ">
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', textAlign : 'end'  }}> <span>
+                              {(() => {
+                                let datd = editallone?.moved?.length
+                                let datdtwo = editall?.moved?.length
+                                let tot = ((datdtwo - datd) / datd) * 100
+                                return (
+                                  <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{isNaN(tot) ? "+000.00%" : tot.toFixed(2) + "%"}
+                                    <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                      {tot > 0 ?
+                                        <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
+                                        <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
+                                      }
                                     </span>
-                                  </p>
-                                </div>
-                              </div>
-                              <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                            </React.Fragment>
-                          );
-                        })}
+                                  </span>
+                                )
+                              })()}
+                            </span>
+                          </p>
+                        </div>
                       </div>
+
+                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+                      {/* Moved section */}
+                      <div className="row py-2">
+                        <div className="col-lg-4 col-md-4 col-sm-12">
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.edited?.length}</p>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-12">
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}</p>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-12  ">
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', textAlign : 'end'  }}>
+                              <span>
+                              {(() => {
+                                let datd = editallone?.edited?.length
+                                let datdtwo = editall?.edited?.length
+                                let tot = ((datdtwo - datd) / datd) * 100
+                                return (
+                                  <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{isNaN(tot) ? "+000.00%" : tot.toFixed(2) + "%" }
+                                    <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                      {tot > 0 ?
+                                        <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
+                                        <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
+                                      }
+                                    </span>
+                                  </span>
+                                )
+                              })()}
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+
+                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+                      {/* Deleted section */}
+                      <div className="row py-2">
+                        <div className="col-lg-4 col-md-4 col-sm-12">
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.deleted?.length}</p>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-12">
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.deleted?.length}</p>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-12  ">
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', textAlign : 'end'  }}>
+                             <span>
+                              {(() => {
+                                let datd = editallone?.deleted?.length
+                                let datdtwo = editall?.deleted?.length
+                                let tot = ((datdtwo - datd) / datd) * 100
+                                return (
+                                  <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{isNaN(tot) ? "+000.00%" : tot.toFixed(2) + "%"}
+                                    <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                      {tot > 0 ?
+                                        <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
+                                        <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
+                                      }
+                                    </span>
+                                  </span>
+                                )
+                              })()}
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+
+                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+                      {/* Table moved section */}
+                      <div className="row py-2">
+                        <div className="col-lg-4 col-md-4 col-sm-12">
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.tableMoved?.length}</p>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-12">
+                          <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.tableMoved?.length}</p>
+                        </div>
+                        <div className="col-lg-4 col-md-4 col-sm-12  ">
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', textAlign : 'end'  }}>
+                            <span>
+                              {(() => {
+                                let datd = editallone?.tableMoved?.length
+                                let datdtwo = editall?.tableMoved?.length
+                                let tot = ((datdtwo - datd) / datd) * 100
+                                return (
+                                  <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }} >{isNaN(tot) ? "+000.00%" : tot.toFixed(2) + "%"}
+                                    <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                      {tot > 0 ?
+                                        <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
+                                        <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
+                                      }
+                                    </span>
+                                  </span>
+                                )
+                              })()}
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+
+                      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
                     </div>
                   </div>
                 </div>
+
+                : meals === 3 ?
+                  <div className="changeone" style={{ marginTop: 80 }}>
+                    <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }}>
+
+                      <div style={{ marginTop: -10 }} className="d-flex justify-content-between align-items-center">
+                        {/* Left section with title and dropdown */}
+                        <div className="d-flex align-items-center">
+                          <div className="d-flex align-items-center">
+                            <img
+                              src="black_arrow.png"
+                              style={{ width: 20, height: 20, cursor: 'pointer' }}
+                              onClick={() => { setMeals(1) }}
+                              alt="Back Arrow"
+                            />
+                            <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10, marginRight: 5, marginBottom: 0 }}>Served meals</p>
+                          </div>
+                          <div className="custom-inputonessfine pt-2 mx-2 ml-2 ml-md-3 " style={{ width: 'auto', maxWidth: '200px' }}>
+                            <Select
+                              className="newoneonee"
+                              options={basicfine}
+                              onChange={handleChangefine}
+                              placeholder="Select options..."
+                              components={{
+                                MultiValue: () => null, // Hides default tags
+                                ValueContainer: ({ children, ...props }) => {
+                                  const selectedValues = props.getValue();
+                                  return (
+                                    <components.ValueContainer {...props}>
+                                      {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                    </components.ValueContainer>
+                                  );
+                                },
+                              }}
+                              hideSelectedOptions={false}
+                              styles={{
+                                control: (base) => ({
+                                  ...base,
+                                  border: 'unset',
+                                  color: '#707070',
+                                  minHeight: '38px',
+                                  boxShadow: 'none',
+                                  // Responsive width
+                                  width: '100%',
+                                  maxWidth: '190px',
+
+                                }),
+                                menu: (base) => ({
+                                  ...base,
+                                  width: 'auto',
+                                  minWidth: '120px'
+                                })
+                              }}
+                            />
+                          </div>
+                        </div>
+
+                        {/* Right section with search and menu */}
+                        <div className="d-flex align-items-center">
+                          <div className="custom-inputoness d-flex justify-content-between mx-2" style={{
+                            width: '250px',
+                            height: 45,
+                            border: '1px solid rgb(203 203 203)',
+                            '@media (max-width: 992px)': {
+                              width: '180px',
+                            },
+                            '@media (max-width: 768px)': {
+                              width: '150px',
+                            }
+                          }}>
+                            <div className="input-group">
+                              <input
+                                onChange={(e) => { searchvalue(e.target.value) }}
+                                type="text"
+                                className="form-control"
+                                placeholder="Meals Search..."
+                                style={{
+                                  border: "none",
+                                  boxShadow: "none",
+                                  marginRight: "45px",
+                                  fontSize: window.innerWidth < 768 ? '12px' : '14px'
+                                }}
+                              />
+                              <span
+                                className="input-group-text"
+                                style={{
+                                  background: "none",
+                                  border: "none",
+                                  cursor: "pointer",
+                                  position: "absolute",
+                                  right: 10,
+                                }}
+                              >
+                                🔍
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Three dot menu with better positioning */}
+                          <div className="position-relative">
+                            <img
+                              src="threedot.png"
+                              ref={toggleButtonRefs}
+                              style={{ width: 5, height: 20, cursor: 'pointer' }}
+                              onClick={fsgdgfdfgdf}
+                              alt="Menu"
+                            />
+
+                            {showDivs && (
+                              <div
+                                ref={dropdownRefs}
+                                style={{
+                                  width: 200,
+                                  padding: '10px',
+                                  backgroundColor: '#f8f9fa',
+                                  border: '1px solid #ccc',
+                                  borderRadius: '4px',
+                                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                                  position: 'absolute',
+                                  top: '40px',
+                                  right: 0,
+                                  zIndex: 1000
+                                }}
+                              >
+                                <p style={{ color: '#707070' }}>Export as</p>
+                                <hr />
+                                <p
+                                  style={{
+                                    color: '#000',
+                                    cursor: isPdfLoad ? 'not-allowed' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                  }}
+                                  onClick={() => {
+                                    if (!isPdfLoad) {
+                                      setIsPdfLoad(true);  // Prevent click when loading
+                                      mealexportpdf()
+                                    }
+                                  }}
+                                >
+                                  PDF
+                                  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Stats section */}
+                      <div style={{ marginTop: 20, padding: 20 }}>
+                        <div className="d-flex justify-content-between">
+                          <div>
+                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>Chosen range</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>( Total ) <span>{ggggrt()}</span></p>
+                          </div>
+                          <div>
+                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>Comparing range</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>( Total ) <span>{ggggrts()}</span></p>
+                          </div>
+                          <div>
+                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>Variance</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>( Total ) <span>
+                              {(() => {
+                                let datd = ggggrt()
+                                let datdtwo = ggggrts()
+                                let tot = ((datd - datdtwo) / datdtwo) * 100
+                                return <span>{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                  {tot > 0 ?
+                                    <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Up Arrow" /> :
+                                    <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Down Arrow" />
+                                  }
+                                </span></span>
+                              })()}
+                            </span></p>
+                          </div>
+                        </div>
+
+                        <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+                        {/* Table section */}
+                        <div className="scroll" id="scrrrrol" style={{ height: 400, overflowY: 'auto' }}>
+                          {served?.map((dfgh, index) => {
+                            const correspondingErv = servedone?.[index];
+
+                            return (
+                              <React.Fragment key={index}>
+                                <div className="d-flex">
+                                  <div style={{ width: '33%' }}>
+                                    <p style={{ fontWeight: '700', color: index === 0 ? "red" : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                                  </div>
+
+                                  {correspondingErv ? (
+                                    <div style={{ width: '33%', textAlign: 'center' }}>
+                                      <p style={{ fontWeight: '700', color: index === 0 ? "blue" : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                                    </div>
+                                  ) : (
+                                    <div style={{ width: '33%' }}></div>
+                                  )}
+
+                                  <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%' }}>
+                                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}> 
+                                      <span>
+                                        {(() => {
+                                          const datd = dfgh?.count || 0;
+                                          const datdtwo = correspondingErv?.count || 0;
+                                          const tot = datdtwo === 0 ? 0 : ((datd - datdtwo) / datdtwo) * 100;
+
+                                          return (
+                                            <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }} >
+                                              {isNaN(tot) ? "+000.00%" :  tot.toFixed(2) + "%"}
+                                              <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                                {tot > 0 ? (
+                                                  <img src="up_arw.png" style={{ width: 16, height: 16 }} alt="Up Arrow" />
+                                                ) : (
+                                                  <img src="d_arw.png" style={{ width: 16, height: 16 }} alt="Down Arrow" />
+                                                )}
+                                              </span>
+                                            </span>
+                                          );
+                                        })()}
+                                      </span>
+                                    </p>
+                                  </div>
+                                </div>
+                                <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                              </React.Fragment>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  : meals === 4 ?
+
+
+                    <div className="changeone" style={{ marginTop: 80 }}>
+                      <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, padding: 20 }}>
+
+                        <div style={{ marginTop: -20 }} className="d-flex justify-content-between align-items-center">
+                          <div className="d-flex justify-content-center align-items-center gap-2 gap-md-3 gap-lg-5">
+                            <div className="d-flex pt-4 align-items-center">
+                              <img
+                                src="black_arrow.png"
+                                style={{ width: 20, height: 20, cursor: 'pointer' }}
+                                onClick={() => { setMeals(1) }}
+                                alt="Back Arrow"
+                              />
+                              <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10, marginBottom: 0 }} onClick={() => {
+                                console.log(minperday, 'minperday minperday')
+                              }}>Refunded meals</p>
+                            </div>
+                            <div className="custom-inputonessfine d-flex align-items-center pt-1 mt-2">
+                              <Select
+                                className="newoneonee"
+                                options={basicfine}
+                                onChange={handleChangefinedd}
+                                placeholder="Select options..."
+                                components={{
+                                  MultiValue: () => null,
+                                  ValueContainer: ({ children, ...props }) => {
+                                    const selectedValues = props.getValue();
+                                    return (
+                                      <components.ValueContainer {...props}>
+                                        {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                      </components.ValueContainer>
+                                    );
+                                  },
+                                }}
+                                hideSelectedOptions={false}
+                                styles={{
+                                  control: (base) => ({
+                                    ...base,
+                                    border: 'unset',
+                                    color: '#707070',
+                                    boxShadow: 'none',
+                                  }),
+                                  menu: (base) => ({
+                                    ...base,
+                                    width: 'auto',
+                                    minWidth: '120px'
+                                  })
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          {/* Three dots menu with proper positioning */}
+                          <div className="position-relative">
+                            <img
+                              src="threedot.png"
+                              ref={toggleButtonRefss}
+                              style={{ width: 5, height: 20, cursor: 'pointer' }}
+                              onClick={handleToggleDivss}
+                              alt="Menu Options"
+                            />
+
+                            {showDivss && (
+                              <div
+                                ref={dropdownRefss}
+                                style={{
+                                  zIndex: 100,
+                                  width: 200,
+                                  padding: '10px',
+                                  backgroundColor: '#f8f9fa',
+                                  border: '1px solid #ccc',
+                                  borderRadius: '4px',
+                                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                                  position: 'absolute',
+                                  top: '30px',
+                                  right: 0
+                                }}
+                              >
+                                <p style={{ color: '#707070', margin: '0 0 8px 0' }}>Export as</p>
+                                <hr style={{ margin: '8px 0' }} />
+                                <p
+                                  style={{
+                                    color: '#000',
+                                    cursor: isPdfLoad ? 'not-allowed' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                  }}
+                                  onClick={() => {
+                                    if (!isPdfLoad) {
+                                      setIsPdfLoad(true);  // Prevent click when loading
+                                      refundexportpdf()
+                                    }
+                                  }}
+                                >
+                                  PDF
+                                  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+
+                                </p>
+
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        <div style={{ marginTop: 10, padding: '10px 20px' }}>
+                          <div className="d-flex justify-content-between flex-wrap">
+                            <div className="mb-2 mb-md-0" style={{ minWidth: '120px' }}>
+                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>Chosen range</p>
+                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                                ( Total ) <span>{ggggrtsg()}</span>
+                              </p>
+                            </div>
+                            <div className="mb-2 mb-md-0" style={{ minWidth: '120px' }}>
+                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>Comparing range</p>
+                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                                ( Total ) <span>{ggggrtsgg()}</span>
+                              </p>
+                            </div>
+                            <div style={{ minWidth: '120px' }}>
+                              <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>Variance</p>
+                              <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                                ( Total ) <span>
+                                  {(() => {
+                                    let datd = ggggrtsg();
+                                    let datdtwo = ggggrtsgg();
+                                    let tot = ((datd - datdtwo) / datdtwo) * 100;
+
+                                    return (
+                                      <span>
+                                        {isNaN(tot) ? 0 : tot.toFixed(2) + "%"}
+                                        <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                          {isNaN(tot) ? '%' : tot > 0 ?
+                                            <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Up Arrow" /> :
+                                            <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Down Arrow" />
+                                          }
+                                        </span>
+                                      </span>
+                                    );
+                                  })()}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+
+                          <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+                          <div className="scroll" id="scrrrrol" style={{ height: 420, overflowY: 'auto' }}>
+                            {minperday?.map((dfgh, index) => {
+                              const correspondingErv = maxperday?.[index];
+
+                              return (
+                                <React.Fragment key={index} >
+                                  <div className="d-flex">
+                                    <div style={{ width: '33%' }}>
+                                      <p style={{ fontWeight: '700', color: index === 0 ? "red" :  '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.name}</p>
+                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.count}</p>
+                                    </div>
+
+                                    {correspondingErv ? (
+                                      <div style={{ width: '33%', textAlign: 'center' }}>
+                                        <p style={{ fontWeight: '700', color: index === 0 ? "blue" :  '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.name}</p>
+                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.count}</p>
+                                      </div>
+                                    ) : (
+                                      <div style={{ width: '33%' }}></div>
+                                    )}
+
+                                    <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%' }}>
+                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}> 
+                                        <span>
+                                          {(() => {
+                                            const datd = dfgh?.count || 0;
+                                            const datdtwo = correspondingErv?.count || 0;
+                                            const tot = datdtwo === 0 ? 0 : ((datd - datdtwo) / datdtwo) * 100;
+
+                                            return (
+                                              <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                                                {isNaN(tot) ? "0%" : tot.toFixed(2) + "%"}
+                                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                                  {isNaN(tot) ? '' : tot > 0 ? (
+                                                    <img src="up_arw.png" style={{ width: 16, height: 16 }} alt="Up Arrow" />
+                                                  ) : (
+                                                    <img src="d_arw.png" style={{ width: 16, height: 16 }} alt="Down Arrow" />
+                                                  )}
+                                                </span>
+                                              </span>
+                                            );
+                                          })()}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                                </React.Fragment>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
                     :
 
@@ -6132,44 +6241,44 @@ PDF
                               >
                                 <p style={{ color: '#707070' }}>Export as</p>
                                 <hr />
-                                  <p 
-  style={{ 
-    color: '#000', 
-    cursor: isPdfLoad ? 'not-allowed' : 'pointer', 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '8px' 
-  }} 
-  onClick={() => {
-    if (!isPdfLoad) {
-      setIsPdfLoad(true);  // Prevent click when loading
-      chartexportpdf()
-    }
-  }}
->
-PDF
-  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+                                <p
+                                  style={{
+                                    color: '#000',
+                                    cursor: isPdfLoad ? 'not-allowed' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                  }}
+                                  onClick={() => {
+                                    if (!isPdfLoad) {
+                                      setIsPdfLoad(true);  // Prevent click when loading
+                                      chartexportpdf()
+                                    }
+                                  }}
+                                >
+                                  PDF
+                                  {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
 
-</p>
-<p 
-  style={{ 
-    color: '#000', 
-    cursor: isExcelLoad ? 'not-allowed' : 'pointer', 
-    display: 'flex', 
-    alignItems: 'center', 
-    gap: '8px' 
-  }} 
-  onClick={() => {
-    if (!isPdfLoad) {
-      setIsExcelLoad(true)
-      downloadMealsExcel()
-    }
-  }}
->
-Excel sheet
-  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
+                                </p>
+                                <p
+                                  style={{
+                                    color: '#000',
+                                    cursor: isExcelLoad ? 'not-allowed' : 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px'
+                                  }}
+                                  onClick={() => {
+                                    if (!isPdfLoad) {
+                                      setIsExcelLoad(true)
+                                      downloadMealsExcel()
+                                    }
+                                  }}
+                                >
+                                  Excel sheet
+                                  {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
 
-</p>
+                                </p>
                               </div>
                             )}
                           </div>
@@ -6296,8 +6405,8 @@ Excel sheet
 
 
                               <div className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
-                                <div id="chart-capture"  style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                  <Bar data={datafine} options={optionshshs}  />
+                                <div id="chart-capture" style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                                  <Bar data={datafine} options={optionshshs} />
                                 </div>
                               </div>
 
@@ -6646,23 +6755,23 @@ Excel sheet
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Served meals</p>
           <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
 
-const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-const result = filteredOptions.map(item => item.label).join(", ");
+            const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+            const result = filteredOptions.map(item => item.label).join(", ");
 
 
-if (result === "" || result === undefined || result === null) {
-  return 'All Venue'
-} else {
+            if (result === "" || result === undefined || result === null) {
+              return 'All Venue'
+            } else {
 
-  return result
+              return result
 
-}
+            }
 
 
-})()}</p>
+          })()}</p>
 
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 ,wordSpacing: -5 }} >Group name</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 ,wordSpacing: -5 }} >For the period {(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >Group name</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
             const datefineda = new Date(dateRange[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6683,7 +6792,7 @@ if (result === "" || result === undefined || result === null) {
 
             return (formattedDate)
           })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 ,wordSpacing: -5 }} >Compared with the period {(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
             const datefineda = new Date(dateRangetwo[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6706,7 +6815,7 @@ if (result === "" || result === undefined || result === null) {
           })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
           <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains: All</p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 ,wordSpacing: -5}} >Stages contains: {(() => {
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} >Stages contains: {(() => {
 
             const result = selectedhubOptions.map(item => item.label).join(",");
 
@@ -6720,7 +6829,7 @@ if (result === "" || result === undefined || result === null) {
 
 
           })()} </p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 ,wordSpacing: -5}} >Courses contains: {(() => {
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} >Courses contains: {(() => {
 
             const result = selectedCources.map(item => item.label).join(",");
 
@@ -6754,7 +6863,7 @@ if (result === "" || result === undefined || result === null) {
               </div>
               <div >
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                <p style={{ fontWeight: '400', color: '#000',  }}>
+                <p style={{ fontWeight: '400', color: '#000', }}>
                   ( Total ){" "}
                   {(() => {
                     let datd = ggggrt();
@@ -6763,7 +6872,7 @@ if (result === "" || result === undefined || result === null) {
 
                     return (
                       <>
-                        {tot.toFixed(2) + "%"}{" "} 
+                        {tot.toFixed(2) + "%"}{" "}
                       </>
                     );
                   })()}
@@ -6784,16 +6893,16 @@ if (result === "" || result === undefined || result === null) {
                     <div className="d-flex  mt-3">
 
                       <div style={{ width: '43%' }} className="d-flex">
-                        <p style={{ fontWeight: '700', color: '#000',  }}>{dfgh?.name}</p>
-                        <p style={{ fontWeight: '400', color: '#000',  marginLeft : 5 }}>{dfgh?.count}</p>
+                        <p style={{ fontWeight: '700', color: index ===0 ? 'red' :  '#000', }}>{dfgh?.name}</p>
+                        <p style={{ fontWeight: '400', color: '#000', marginLeft: 5 }}>{dfgh?.count}</p>
                       </div>
 
                       {correspondingErv ? (
                         <div style={{ width: '33%', textAlign: 'center' }}>
                           <div className="d-flex" >
 
-                            <p style={{ fontWeight: '700', color: '#000',  }}>{correspondingErv?.name}</p>
-                            <p style={{ fontWeight: '400', color: '#000',  marginLeft : 5 }}>{correspondingErv?.count}</p>
+                            <p style={{ fontWeight: '700', color:  index ===0 ? 'blue' : '#000', }}>{correspondingErv?.name}</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginLeft: 5 }}>{correspondingErv?.count}</p>
                           </div>
                         </div>
                       ) : (
@@ -6802,8 +6911,8 @@ if (result === "" || result === undefined || result === null) {
                           </div></>
                       )}
 
-                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex',   width: '23%' }}>
-                        <p style={{ fontWeight: '400', color: '#000',  display: 'inline-flex', alignItems: 'center' }}>
+                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '23%' }}>
+                        <p style={{ fontWeight: '400', color: '#000', display: 'inline-flex', alignItems: 'center' }}>
                           ( Total ){" "}
                           {(() => {
                             const datd = dfgh?.count || 0; // Fallback to 0 if no data
@@ -6843,27 +6952,27 @@ if (result === "" || result === undefined || result === null) {
       <div style={{ visibility: 'hidden' }}>
         <div ref={pdfRefsss}  >
 
-          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5  }}>Refunded meals</p>
+          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Refunded meals</p>
 
           <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
 
-const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-const result = filteredOptions.map(item => item.label).join(", ");
+            const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+            const result = filteredOptions.map(item => item.label).join(", ");
 
 
-if (result === "" || result === undefined || result === null) {
-  return 'All Venue'
-} else {
+            if (result === "" || result === undefined || result === null) {
+              return 'All Venue'
+            } else {
 
-  return result
+              return result
 
-}
+            }
 
 
-})()}</p>
+          })()}</p>
 
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 , wordSpacing: -5  }} >Group name</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 , wordSpacing: -5  }} >For the period {(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >Group name</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
             const datefineda = new Date(dateRange[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6884,7 +6993,7 @@ if (result === "" || result === undefined || result === null) {
 
             return (formattedDate)
           })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 , wordSpacing: -5  }} >Compared with the period {(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
             const datefineda = new Date(dateRangetwo[0]);
 
             const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6906,8 +7015,8 @@ if (result === "" || result === undefined || result === null) {
             return (formattedDate)
           })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 , wordSpacing: -5  }} >Table ranges contains: All</p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 , wordSpacing: -5  }} >Stages contains: {(() => {
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, wordSpacing: -5 }} >Table ranges contains: All</p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} >Stages contains: {(() => {
 
             const result = selectedhubOptions.map(item => item.label).join(",");
 
@@ -6921,7 +7030,7 @@ if (result === "" || result === undefined || result === null) {
 
 
           })()} </p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 , wordSpacing: -5  }} >Courses contains: {(() => {
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} >Courses contains: {(() => {
 
             const result = selectedCources.map(item => item.label).join(",");
 
@@ -6956,21 +7065,21 @@ if (result === "" || result === undefined || result === null) {
               <div >
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
                 <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-  ( Total )  
-  {(() => {
-    let datd = ggggrtsg();
-    let datdtwo = ggggrtsgg();
-    let tot = ((datd - datdtwo) / datdtwo) * 100;
+                  ( Total )
+                  {(() => {
+                    let datd = ggggrtsg();
+                    let datdtwo = ggggrtsgg();
+                    let tot = ((datd - datdtwo) / datdtwo) * 100;
 
-    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot);
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot);
 
-    return (
-      <>
-        {isNaN(tot) ? 0 : tot.toFixed(2) + "%"}  
-      </>
-    );
-  })()} 
-</p>
+                    return (
+                      <>
+                        {isNaN(tot) ? 0 : tot.toFixed(2) + "%"}
+                      </>
+                    );
+                  })()}
+                </p>
 
               </div>
 
@@ -6989,49 +7098,49 @@ if (result === "" || result === undefined || result === null) {
 
                   return (
                     <>
-                    <div className="d-flex" >
-                      {/* Left Section */}
-                      <div style={{ width: '33%' }}>
-                        <p style={{ fontWeight: 700, color: '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                        <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                      <div className="d-flex" >
+                        {/* Left Section */}
+                        <div style={{ width: '33%' }}>
+                          <p style={{ fontWeight: 700, color: index ===0 ? 'red' : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                          <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                        </div>
+
+                        {/* Middle Section */}
+                        <div style={{ width: '33%', textAlign: 'center' }}>
+                          {correspondingErv ? (
+                            <>
+                              <p style={{ fontWeight: 700, color: index ===0 ? 'blue' : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                              <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                            </>
+                          ) : null}
+                        </div>
+
+                        {/* Right Section */}
+                        <div style={{ width: '33%', display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
+                          <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px', display: 'flex', alignItems: 'center' }}>
+                            ( Total )
+                            {(() => {
+                              const datd = dfgh?.count || 0;
+                              const datdtwo = correspondingErv?.count || 0;
+                              const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
+                              return (
+                                <>
+                                  {tot.toFixed(2)}%
+                                  <img
+                                    src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                                    style={{ width: 16, height: 16, cursor: 'pointer', marginLeft: 5, verticalAlign: 'middle' }}
+                                    alt={tot > 0 ? "up arrow" : "down arrow"}
+                                  />
+                                </>
+                              );
+                            })()}
+                          </p>
+                        </div>
                       </div>
-                  
-                      {/* Middle Section */}
-                      <div style={{ width: '33%', textAlign: 'center' }}>
-                        {correspondingErv ? (
-                          <>
-                            <p style={{ fontWeight: 700, color: '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                            <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                          </>
-                        ) : null}
-                      </div>
-                  
-                      {/* Right Section */}
-                      <div style={{ width: '33%', display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
-                        <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px', display: 'flex', alignItems: 'center' }}>
-                          ( Total )
-                          {(() => {
-                            const datd = dfgh?.count || 0;
-                            const datdtwo = correspondingErv?.count || 0;
-                            const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
-                            return (
-                              <>
-                                {tot.toFixed(2)}%
-                                <img
-                                  src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                                  style={{ width: 16, height: 16, cursor: 'pointer', marginLeft: 5, verticalAlign: 'middle' }}
-                                  alt={tot > 0 ? "up arrow" : "down arrow"}
-                                />
-                              </>
-                            );
-                          })()}
-                        </p>
-                      </div>
-                    </div>
-                    <hr style={{ margin: 0, backgroundColor: 'black', height: 2 }} />
-                  </>
-                  
-                  
+                      <hr style={{ margin: 0, backgroundColor: 'black', height: 2 }} />
+                    </>
+
+
                   );
                 })
               }
