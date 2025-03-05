@@ -55,6 +55,8 @@ let Admin_dash = () => {
       });
     }
   };
+
+  
   let [fulldatafull, setFulldatafull] = useState();
   let [basicall, setBasicall] = useState();
   let [alldrop, setAlldrop] = useState([]);
@@ -2085,8 +2087,8 @@ let Admin_dash = () => {
                                       );
                                     },
                                   }} // Keep dropdown open for further selection
-                                  closeMenuOnSelect={true} // Keep dropdown open for further selection
-                                  hideSelectedOptions={false} // Disables all options from being selected
+                                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                        hideSelectedOptions={false} // Show all options even if selected
                                   styles={{
                                     control: (base) => ({
                                       ...base,
