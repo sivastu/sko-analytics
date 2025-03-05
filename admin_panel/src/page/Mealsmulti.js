@@ -535,7 +535,10 @@ let Mealsmulti = () => {
 
 
     
-        const output = [];
+        const output = [{
+          "label": "All Hubs",
+          "value": "All"
+        }];
     
         // // Iterate through the search array
         realven.forEach(({ value }) => {
@@ -1204,8 +1207,16 @@ let Mealsmulti = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, textCount) + "..."
+      let displayText = ''
 
+      let hasAllfinbyss = selected.some(option => option.label && option.label.startsWith("All "));
+      
+      if( hasAllfinbyss === true ) {
+        const allValue = selected.find(option => option.label && option.label.startsWith("All "))?.label || "";
+        displayText = allValue
+      }else{
+        displayText = allLabels.slice(0, textCount) + "..."
+      }
       return <span style={{ color : allLabels === 'Maximum' ? 'red' :  allLabels === 'Minimum' ? 'blue' : ""  ,
         fontWeight : allLabels === 'Maximum' ? '700' :  allLabels === 'Minimum' ? '700' : ""
        }} title={allLabels}>{displayText}</span>;
@@ -1223,7 +1234,16 @@ let Mealsmulti = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, textCount) + "..."
+      let displayText = ''
+
+      let hasAllfinbyss = selected.some(option => option.label && option.label.startsWith("All "));
+      
+      if( hasAllfinbyss === true ) {
+        const allValue = selected.find(option => option.label && option.label.startsWith("All "))?.label || "";
+        displayText = allValue
+      }else{
+        displayText = allLabels.slice(0, textCount) + "..."
+      }
 
       return <span style={{ color : allLabels === 'Maximum' ? 'red' : 'blue' , fontWeight : '700' }} title={allLabels}>{displayText}</span>;
     }

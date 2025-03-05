@@ -82,7 +82,7 @@ let Multi_venue = () => {
 
   let [basiconefive, setBasiconefive] = useState([])
   let [basiconesix, setBasiconesix] = useState([])
-
+ 
   let [basicfine, setBasicfine] = useState([{
     "value": "Maximum",
     "label": "Maximum"
@@ -724,7 +724,10 @@ let Multi_venue = () => {
 
 
 
-    const output = [];
+    const output = [{
+      "label": "All Hubs",
+      "value": "All"
+    }];
 
     // // Iterate through the search array
     realven.forEach(({ value }) => {
@@ -1415,7 +1418,16 @@ let Multi_venue = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, textCount) + "..."
+      let displayText = ''
+
+      let hasAllfinbyss = selected.some(option => option.label && option.label.startsWith("All "));
+      
+      if( hasAllfinbyss === true ) {
+        const allValue = selected.find(option => option.label && option.label.startsWith("All "))?.label || "";
+        displayText = allValue
+      }else{
+        displayText = allLabels.slice(0, textCount) + "..."
+      }
 
       return <span style={{ color : allLabels === 'Maximum' ? 'red' :  allLabels === 'Minimum' ? 'blue' : ""  ,
         fontWeight : allLabels === 'Maximum' ? '700' :  allLabels === 'Minimum' ? '700' : ""
@@ -3971,8 +3983,12 @@ let Multi_venue = () => {
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
             const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
+            const regex = new RegExp(bitedata, "i"); // "i" makes it case-insensitive
+            const isMatch = regex.test(order.DOCKETID);
 
-            if (processTime === parseInt(bitedata)) {
+
+
+            if ( isMatch ) {
 
               processTimes.push(processTime);
 
@@ -4065,9 +4081,12 @@ let Multi_venue = () => {
 
 
             console.log(processTime, 'processTimeprocessTimeprocessTimeprocessTime')
+            const regex = new RegExp(bitedata, "i"); // "i" makes it case-insensitive
+            const isMatch = regex.test(order.DOCKETID);
 
 
-            if (processTime === parseInt(bitedata)) {
+
+            if ( isMatch ) {
               processTimes.push(processTime);
 
               result.push({

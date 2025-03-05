@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useContext  } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Header from "../component/Header";
 import axios from "axios";
 import { Base_url } from "../config";
@@ -127,13 +127,13 @@ let Admin_dash = () => {
     // loginCheck();
   }, []);
 
-  
+
 
   useEffect(() => {
 
-    
 
-    console.log( state , 'statestatestatestatestate' )
+
+    console.log(state, 'statestatestatestatestate')
     getone(state?.data);
   }, []);
 
@@ -361,35 +361,35 @@ let Admin_dash = () => {
     let parsedatajson = JSON.parse(decry);
     let name = getName(parsedatajson);
     setUsedname(name);
-    setBasicall(parsedatajson); 
- 
-      const userData = snapshot 
-      setUser(userData);
-      setNewuser(userData);
-      // Check if the password matches
-      const foundUser = Object.values(userData).find(
-        (user) => user.Email === parsedatajson.Email
-      );
+    setBasicall(parsedatajson);
 
-      if (foundUser) {
-        if (foundUser.Role === "emp") {
-          sessionStorage.removeItem("data");
-          navigate("/");
-          return;
-        }
-        setMydata(foundUser);
-        // Check if the password matches
-        if (foundUser.Password === parsedatajson.Password) {
-          setEditname(foundUser.name);
-          setEditemail(foundUser.Email);
-          setEditpass(foundUser.Password);
-        } else {
-          // navigate('/')
-          return;
-        }
+    const userData = snapshot
+    setUser(userData);
+    setNewuser(userData);
+    // Check if the password matches
+    const foundUser = Object.values(userData).find(
+      (user) => user.Email === parsedatajson.Email
+    );
+
+    if (foundUser) {
+      if (foundUser.Role === "emp") {
+        sessionStorage.removeItem("data");
+        navigate("/");
+        return;
+      }
+      setMydata(foundUser);
+      // Check if the password matches
+      if (foundUser.Password === parsedatajson.Password) {
+        setEditname(foundUser.name);
+        setEditemail(foundUser.Email);
+        setEditpass(foundUser.Password);
       } else {
-        console.log("User does not exist.");
-      } 
+        // navigate('/')
+        return;
+      }
+    } else {
+      console.log("User does not exist.");
+    }
   };
 
 
@@ -442,36 +442,36 @@ let Admin_dash = () => {
     }
   };
 
-  let getone = (eventss) => {  
+  let getone = (eventss) => {
 
-          const result = {};
-          Object.entries(eventss).forEach(([groupName, groupData]) => {
-            Object.entries(groupData).forEach(([keyss, valuess]) => {
-              Object.entries(valuess).forEach(([keyssa, valuessa]) => {
-                if (!result[keyss]) {
-                  result[keyss] = [];
-                }
+    const result = {};
+    Object.entries(eventss).forEach(([groupName, groupData]) => {
+      Object.entries(groupData).forEach(([keyss, valuess]) => {
+        Object.entries(valuess).forEach(([keyssa, valuessa]) => {
+          if (!result[keyss]) {
+            result[keyss] = [];
+          }
 
-                result[keyss].push({
-                  name: keyssa + "-" + keyss,
-                });
-              });
-            });
+          result[keyss].push({
+            name: keyssa + "-" + keyss,
           });
-          setAlldrop(result);
+        });
+      });
+    });
+    setAlldrop(result);
 
-          const optionsone = [{ value: "All", label: "All Venue" }];
-          Object.entries(eventss).forEach(([groupName, groupData]) => {
-            Object.keys(groupData).forEach((key) => {
-              optionsone.push({ value: key, label: key });
-            });
-          });
+    const optionsone = [{ value: "All", label: "All Venue" }];
+    Object.entries(eventss).forEach(([groupName, groupData]) => {
+      Object.keys(groupData).forEach((key) => {
+        optionsone.push({ value: key, label: key });
+      });
+    });
 
-          console.log("options:", optionsone);
-          // console.log("optionss:", optionsstwo);
+    console.log("options:", optionsone);
+    // console.log("optionss:", optionsstwo);
 
-          setBasic(optionsone);
-      
+    setBasic(optionsone);
+
   };
 
   const encrypt = (plainText) => {
@@ -883,8 +883,8 @@ let Admin_dash = () => {
           </div>
 
           <div className="col-12 col-md-8 col-lg-6">
-            <div className="custom-inputoness" style={{ marginRight : '4%' , backgroundColor : 'rgb(226 227 227)' }}>
-              <div className="input-group position-relative d-flex align-items-center" style={{ backgroundColor : 'rgb(226 227 227)' }}>
+            <div className="custom-inputoness" style={{ marginRight: '4%', backgroundColor: 'rgb(226 227 227)' }}>
+              <div className="input-group position-relative d-flex align-items-center" style={{ backgroundColor: 'rgb(226 227 227)' }}>
                 <input
                   onChange={(e) => {
                     setSearchvalue(e.target.value);
@@ -897,7 +897,7 @@ let Admin_dash = () => {
                   style={{
                     paddingRight: "2.5rem",
                     height: sh,
-                    backgroundColor : 'rgb(226 227 227)'
+                    backgroundColor: 'rgb(226 227 227)'
                   }}
                 />
                 <div
@@ -1166,7 +1166,7 @@ let Admin_dash = () => {
           />
         )}
 
-        <div className="d-flex " style={{ height: "60%" , marginTop : 50 }}>
+        <div className="d-flex " style={{ height: "60%", marginTop: 50 }}>
           <div className=" d-lg-block d-none">
             <div>
               <Nav.Link
@@ -1428,7 +1428,7 @@ let Admin_dash = () => {
             }}
           >
             <div
-              style={{ border: "1px solid #9F9F9F", height: "100%" , marginTop : 10 }}
+              style={{ border: "1px solid #9F9F9F", height: "100%", marginTop: 10 }}
               className="ggggggggg"
             >
               {data === "1" || data === "2" || data === "3" ? (
@@ -1474,7 +1474,7 @@ let Admin_dash = () => {
                         Last sign-in
                       </p>
                     </div>
-                    <div  style={{ width: "20%" }}>
+                    <div style={{ width: "20%" }}>
                       <p
                         style={{
                           color: "#1A1A1B",
@@ -1705,17 +1705,17 @@ let Admin_dash = () => {
                     }}
                   >
                     <div style={{ width: "33%" }} className="d-flex mt-2">
-                      <p style={{ color: "#316AAF", fontWeight: "400",fontSize:fs }}>
+                      <p style={{ color: "#316AAF", fontWeight: "400", fontSize: fs }}>
                         Admin
                       </p>
                     </div>
                     <div style={{ width: "34%" }} className="d-flex mt-2">
-                      <p style={{ color: "#707070", fontWeight: "400",fontSize:fs }}>
+                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs }}>
                         Settings, Analytics, Training videos
                       </p>
                     </div>
-                    <div  className="mt-2" style={{ width: "33%" }}>
-                      <p style={{ color: "#707070", fontWeight: "400",fontSize:fs }}>
+                    <div className="mt-2" style={{ width: "33%" }}>
+                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs }}>
                         Create any users, Reset users passwords
                       </p>
                     </div>
@@ -1738,17 +1738,17 @@ let Admin_dash = () => {
                     }}
                   >
                     <div className="mt-2 d-flex" style={{ width: "33%" }} >
-                      <p style={{ color: "#316AAF", fontWeight: "400",fontSize:fs }}>
+                      <p style={{ color: "#316AAF", fontWeight: "400", fontSize: fs }}>
                         Managers
                       </p>
                     </div>
                     <div className="mt-2 d-flex" style={{ width: "34%" }}>
-                      <p style={{ color: "#707070", fontWeight: "400",   fontSize:fs }}>
+                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs }}>
                         Analytics, Training videos
                       </p>
                     </div>
                     <div className="mt-2" style={{ width: "33%" }}>
-                      <p style={{ color: "#707070", fontWeight: "400",fontSize:fs }}>
+                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs }}>
                         Create employee users, Reset personal password
                       </p>
                     </div>
@@ -1771,17 +1771,17 @@ let Admin_dash = () => {
                     }}
                   >
                     <div className="mt-2 d-flex" style={{ width: "33%" }}>
-                      <p style={{ color: "#316AAF", fontWeight: "400",fontSize:fs }}>
+                      <p style={{ color: "#316AAF", fontWeight: "400", fontSize: fs }}>
                         Employees
                       </p>
                     </div>
                     <div className="mt-2 d-flex" style={{ width: "34%" }} >
-                      <p style={{ color: "#707070", fontWeight: "400",fontSize:fs }}>
+                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs }}>
                         Training videos
                       </p>
                     </div>
                     <div className="mt-2" style={{ width: "33%" }}>
-                      <p style={{ color: "#707070", fontWeight: "400",fontSize:fs }}>
+                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs }}>
                         Reset personal password
                       </p>
                     </div>
@@ -2012,29 +2012,29 @@ let Admin_dash = () => {
                                 </p>
                               </div>
                               <div
-  style={{ 
-    width: "20%",  
-    display: "flex",  
-    alignItems: "center"  // Align text vertically
-  }}
-  onClick={() => {
-    console.log(JSON.stringify(basic), "value.hubvalue.hub");
-  }}
->
-  <p
-    style={{
-      color: "#707070",
-      fontWeight: "400",
-      fontSize: fs,
-      overflow: "hidden",
-      whiteSpace: "nowrap",
-      textOverflow: "ellipsis",
-      width: "100%",  // Ensure the text obeys the container width
-    }}
-  >
-    {value.Email}
-  </p>
-</div>
+                                style={{
+                                  width: "20%",
+                                  display: "flex",
+                                  alignItems: "center"  // Align text vertically
+                                }}
+                                onClick={() => {
+                                  console.log(JSON.stringify(basic), "value.hubvalue.hub");
+                                }}
+                              >
+                                <p
+                                  style={{
+                                    color: "#707070",
+                                    fontWeight: "400",
+                                    fontSize: fs,
+                                    overflow: "hidden",
+                                    whiteSpace: "nowrap",
+                                    textOverflow: "ellipsis",
+                                    width: "100%",  // Ensure the text obeys the container width
+                                  }}
+                                >
+                                  {value.Email}
+                                </p>
+                              </div>
 
                               <div className="ms-md-3 ms-lg-0" style={{ width: `20%` }}>
                                 <p
@@ -2104,7 +2104,7 @@ let Admin_dash = () => {
                                   className="newoneoneess"
                                   options={basicone}
                                   value={value.hub} // Shows selected values
-                                  onChange={() => {}} // Prevent selection changes
+                                  onChange={() => { }} // Prevent selection changes
                                   // placeholder={value.hub[0].label + "..."}
                                   placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
 
@@ -2259,7 +2259,7 @@ let Admin_dash = () => {
                                 className="newoneoneess"
                                 options={basicone}
                                 value={value.hub} // Shows selected values
-                                onChange={() => {}} // Prevent selection changes
+                                onChange={() => { }} // Prevent selection changes
                                 // placeholder={value.hub[0].label + "..."}
                                 placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
 
@@ -2386,7 +2386,7 @@ let Admin_dash = () => {
                                     border: "unset",
                                     marginTop: -8,
                                     color: "#1A1A1B",
-                                    fontSize:fss
+                                    fontSize: fss
                                   }),
                                 }}
                               />
@@ -2397,7 +2397,7 @@ let Admin_dash = () => {
                                 className="newoneoneess"
                                 options={basicone}
                                 value={value.hub} // Shows selected values
-                                onChange={() => {}} // Prevent selection changes
+                                onChange={() => { }} // Prevent selection changes
                                 placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
 
                                 components={{
@@ -2425,7 +2425,7 @@ let Admin_dash = () => {
                                     border: "unset",
                                     marginTop: -8,
                                     color: "#1A1A1B",
-                                    fontSize:fss
+                                    fontSize: fss
                                   }),
                                 }}
                               />

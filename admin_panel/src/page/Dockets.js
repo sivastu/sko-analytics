@@ -695,7 +695,10 @@ let Dockets = () => {
 
 
 
-    const output = [];
+    const output = [{
+      "label": "All Hubs",
+      "value": "All"
+    }];
 
     // // Iterate through the search array
     realven.forEach(({ value }) => {
@@ -1383,7 +1386,16 @@ let Dockets = () => {
 
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
-      const displayText = allLabels.slice(0, textCount) + "..."
+      let displayText = ''
+
+      let hasAllfinbyss = selected.some(option => option.label && option.label.startsWith("All "));
+      
+      if( hasAllfinbyss === true ) {
+        const allValue = selected.find(option => option.label && option.label.startsWith("All "))?.label || "";
+        displayText = allValue
+      }else{
+        displayText = allLabels.slice(0, textCount) + "..."
+      }
 
       return <span style={{
         color: allLabels === 'Maximum' ? 'red' : allLabels === 'Minimum' ? 'blue' : "",
@@ -3648,6 +3660,9 @@ let Dockets = () => {
   let callfordataonesearch = (one, bitedata) => {
 
 
+    console.log(one, bitedata , 'one, bitedata')
+ 
+
     function processData(data) {
       let result = [];
       let processTimes = [];
@@ -3672,7 +3687,12 @@ let Dockets = () => {
             const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
 
-            if (processTime === parseInt(bitedata)) {
+            const regex = new RegExp(bitedata, "i"); // "i" makes it case-insensitive
+            const isMatch = regex.test(order.DOCKETID);
+
+
+
+            if ( isMatch ) {
 
               processTimes.push(processTime);
 
@@ -3766,8 +3786,12 @@ let Dockets = () => {
 
             console.log(processTime, 'processTimeprocessTimeprocessTimeprocessTime')
 
+            const regex = new RegExp(bitedata, "i"); // "i" makes it case-insensitive
+            const isMatch = regex.test(order.DOCKETID);
 
-            if (processTime === parseInt(bitedata)) {
+
+
+            if ( isMatch ) {
               processTimes.push(processTime);
 
               result.push({
