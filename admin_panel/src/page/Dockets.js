@@ -599,12 +599,12 @@ let Dockets = () => {
     } else {
       realven.push(parsedatajson.venue)
       setBasic(parsedatajson.venue)
-
-      setSelectedCources(uuuk)
       let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
       setFulldatafull(uuuk)
+      setSelectedCources(uuuk)
+      
     }
 
 
