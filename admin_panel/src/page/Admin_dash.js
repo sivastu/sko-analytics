@@ -149,7 +149,7 @@ let Admin_dash = () => {
       const allLabels = selected.map((option) => option.label).join(", ");
 
       // Limit to single line with ellipsis
-      const maxLength = 10; // Adjust as needed
+      const maxLength = 17; // Adjust as needed
       const displayText =
         allLabels.length > maxLength
           ? allLabels.slice(0, maxLength) + "..."
@@ -319,6 +319,9 @@ let Admin_dash = () => {
   }
 
   let changeddddd = (seee, fineee, third) => {
+
+    console.log(seee, fineee, third , 'seee, fineee, third ff') 
+
     const emailKey = fineee.Email.replace(/\.com/g, ""); // Firebase doesn't allow dots in keys
 
     console.log(emailKey);
@@ -336,6 +339,8 @@ let Admin_dash = () => {
           console.error(`Error updating hub for ${email}:`, error);
         });
     } else {
+
+      console.log(seee, fineee, third , 'seee, fineee, third')
       const db = getDatabase(app);
       const userRef = ref(db, `user/${emailKey}/hub`);
 
@@ -348,7 +353,6 @@ let Admin_dash = () => {
           console.error(`Error updating hub for ${email}:`, error);
         });
     }
-    console.log(seee, fineee);
   };
 
   let loginCheckstart = async (snapshot) => {
@@ -1982,6 +1986,34 @@ let Admin_dash = () => {
                     {Object.entries(user)
                       .filter(([_, value]) => value.Role === "admin") // Filter only admins
                       .map(([key, value]) => {
+
+
+                        const output = [];
+ 
+                        
+                        if (Array.isArray(value.venue)) {
+                          value.venue.forEach(({ value }) => {
+                            // Search in the data object
+                            Object.entries(alldrop).forEach(([key, items]) => {
+                              if (key === value) {
+                                // If the key matches, add all items from the group to the output
+                                items.forEach(item => {
+                                  output.push({ value: key + '-' + item.name, label: item.name });
+                                });
+                              } else {
+                                // Search within the group's items
+                                items.forEach(item => {
+                                  if (item.name === value) {
+                                    output.push({ value: key + '-' + item.name, label: key });
+                                  }
+                                });
+                              }
+                            });
+                          });
+                        } else {
+                          console.error("value.venue is not an array or is undefined:", value.venue);
+                        }
+
                         // const modifiedData = value.venue.map(item => ({   
                         //   label: item.label,
                         //   value: item.value.split("-")[0] // Extracts only the first part before "-"
@@ -2087,7 +2119,7 @@ let Admin_dash = () => {
                                       );
                                     },
                                   }} // Keep dropdown open for further selection
-                                  closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                  closeMenuOnSelect={true} // Keep dropdown open for further selection
                         hideSelectedOptions={false} // Show all options even if selected
                                   styles={{
                                     control: (base) => ({
@@ -2104,9 +2136,13 @@ let Admin_dash = () => {
                                 <Select
                                   isMulti
                                   className="newoneoneess"
-                                  options={basicone}
+                                  options={output}
                                   value={value.hub} // Shows selected values
-                                  onChange={() => { }} // Prevent selection changes
+                                  onChange={(e) => {
+                                    
+
+                                    changeddddd(e, value, "hub"); 
+                                  }} // Prevent selection changes
                                   // placeholder={value.hub[0].label + "..."}
                                   placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
 
@@ -2129,9 +2165,8 @@ let Admin_dash = () => {
                                       );
                                     },
                                   }}
-                                  closeMenuOnSelect={false} // Keep dropdown open for further selection
-                                  hideSelectedOptions={false} // Show all options even if selected
-                                  isOptionDisabled={() => true} // Disables all options from being selected
+                                  closeMenuOnSelect={true} // Keep dropdown open for further selection
+                                  hideSelectedOptions={false} // Show all options even if selected 
                                   styles={{
                                     control: (base) => ({
                                       ...base,
@@ -2160,7 +2195,38 @@ let Admin_dash = () => {
                   <>
                     {Object.entries(user)
                       .filter(([_, value]) => value.Role === "manager") // Filter only admins
-                      .map(([key, value]) => (
+                      .map(([key, value]) => {
+
+                        const output = [];
+  
+ 
+                        
+                        if (Array.isArray(value.venue)) {
+                          value.venue.forEach(({ value }) => {
+                            // Search in the data object
+                            Object.entries(alldrop).forEach(([key, items]) => {
+                              if (key === value) {
+                                // If the key matches, add all items from the group to the output
+                                items.forEach(item => {
+                                  output.push({ value: key + '-' + item.name, label: item.name });
+                                });
+                              } else {
+                                // Search within the group's items
+                                items.forEach(item => {
+                                  if (item.name === value) {
+                                    output.push({ value: key + '-' + item.name, label: key });
+                                  }
+                                });
+                              }
+                            });
+                          });
+                        } else {
+                          console.error("value.venue is not an array or is undefined:", value.venue);
+                        }
+                        
+
+                        
+                        return(
                         <>
                           <div
                             className="d-flex"
@@ -2259,9 +2325,11 @@ let Admin_dash = () => {
                               <Select
                                 isMulti
                                 className="newoneoneess"
-                                options={basicone}
+                                options={output}
                                 value={value.hub} // Shows selected values
-                                onChange={() => { }} // Prevent selection changes
+                                onChange={(e) => { 
+                                  changeddddd(e, value, "hub"); 
+                                }} // Prevent selection changes
                                 // placeholder={value.hub[0].label + "..."}
                                 placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
 
@@ -2281,9 +2349,8 @@ let Admin_dash = () => {
                                     );
                                   },
                                 }}
-                                closeMenuOnSelect={false} // Keep dropdown open for further selection
-                                hideSelectedOptions={false} // Show all options even if selected
-                                isOptionDisabled={() => true} // Disables all options from being selected
+                                closeMenuOnSelect={true} // Keep dropdown open for further selection
+                                hideSelectedOptions={false} // Show all options even if selected 
                                 styles={{
                                   control: (base) => ({
                                     ...base,
@@ -2305,13 +2372,45 @@ let Admin_dash = () => {
                             }}
                           />
                         </>
-                      ))}
+                      )})}
                   </>
                 ) : data === "3" ? (
                   <>
                     {Object.entries(user)
                       .filter(([_, value]) => value.Role === "emp") // Filter only admins
-                      .map(([key, value]) => (
+                      .map(([key, value]) =>{ 
+
+
+                        const output = [];
+ 
+                        
+                        if (Array.isArray(value.venue)) {
+                          value.venue.forEach(({ value }) => {
+                            // Search in the data object
+                            Object.entries(alldrop).forEach(([key, items]) => {
+                              if (key === value) {
+                                // If the key matches, add all items from the group to the output
+                                items.forEach(item => {
+                                  output.push({ value: key + '-' + item.name, label: item.name });
+                                });
+                              } else {
+                                // Search within the group's items
+                                items.forEach(item => {
+                                  if (item.name === value) {
+                                    output.push({ value: key + '-' + item.name, label: key });
+                                  }
+                                });
+                              }
+                            });
+                          });
+                        } else {
+                          console.error("value.venue is not an array or is undefined:", value.venue);
+                        }
+                        
+
+
+                        
+                        return(
                         <>
                           <div
                             className="d-flex"
@@ -2397,9 +2496,11 @@ let Admin_dash = () => {
                               <Select
                                 isMulti
                                 className="newoneoneess"
-                                options={basicone}
+                                options={output}
                                 value={value.hub} // Shows selected values
-                                onChange={() => { }} // Prevent selection changes
+                                onChange={(e) => { 
+                                  changeddddd(e, value, "hub");
+                                 }} // Prevent selection changes
                                 placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
 
                                 components={{
@@ -2418,9 +2519,8 @@ let Admin_dash = () => {
                                     );
                                   },
                                 }}
-                                closeMenuOnSelect={false} // Keep dropdown open for further selection
-                                hideSelectedOptions={false} // Show all options even if selected
-                                isOptionDisabled={() => true} // Disables all options from being selected
+                                closeMenuOnSelect={true} // Keep dropdown open for further selection
+                                hideSelectedOptions={false} // Show all options even if selected 
                                 styles={{
                                   control: (base) => ({
                                     ...base,
@@ -2442,7 +2542,7 @@ let Admin_dash = () => {
                             }}
                           />
                         </>
-                      ))}
+                      )})}
                   </>
                 ) : data === "4" ? (
                   <></>

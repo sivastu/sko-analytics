@@ -106,13 +106,27 @@ let Dockets = () => {
   //refund meals
   let [minperday, setMinperday] = useState([])
   let [maxperday, setMaxperday] = useState([])
-
+  const optionstakeaway = [
+    { value: 'All', label: 'All takeaways' },
+    { value: 'Takeaways', label: 'Takeaways' },
+    { value: 'Deliveries', label: 'Deliveries' },
+    { value: 'Pick-ups', label: 'Pick-ups' },
+  ];
+  const optionshub = [{
+    "label": "All Stages",
+    "value": "All"
+  },
+  { value: 'R', label: 'On Process' },
+  { value: 'H', label: 'On Hold' },
+  { value: 'P', label: 'On Pass' },
+  { value: 'S', label: 'Served' },
+  ];
   ///old
   let [oldven, setOldven] = useState([])
   let [oldhub, setOldhub] = useState([])
-  let [oldpro, setOldpro] = useState([])
+  let [oldpro, setOldpro] = useState(optionshub)
   let [oldcou, setOldcou] = useState([])
-  let [oldtak, setOldtak] = useState([])
+  let [oldtak, setOldtak] = useState(optionstakeaway)
 
   let [alldrop, setAlldrop] = useState([])
 
@@ -475,268 +489,358 @@ let Dockets = () => {
 
 
   let getone = (snapshots) => {
-
-
-    const eventss = snapshots
-
-    function removeTrainingNotes(obj) {
-      if (Array.isArray(obj)) {
-        // If it's an array, filter out objects with "TRAINING" in the NOTE field
-        return obj.map(item => {
-          if (item.ITEMS) {
-            item.ITEMS = item.ITEMS.filter(item => !item.NOTE.includes("TRAINING"));
-          }
-          return item;
-        });
-      } else if (typeof obj === "object" && obj !== null) {
-        // Recursively call for nested objects
-        for (const key in obj) {
-          obj[key] = removeTrainingNotes(obj[key]);
-        }
-      }
-      return obj;
-    }
-
-    const cleanedData = removeTrainingNotes(eventss);
-
-
-
-
-
-
-    setBasicall(cleanedData)
-    // const transformData = (data) => {
-    //   const result = {};
-
-    //   for (const key of Object.keys(data)) {
-    //     const parts = key.split("-");
-    //     const [group, location, subLocation, year] = parts;
-
-    //     if (!result[group]) result[group] = {};
-    //     if (!result[group][location]) result[group][location] = {};
-    //     if (!result[group][location][subLocation]) result[group][location][subLocation] = new Set();
-
-    //     result[group][location][subLocation].add(year);
-    //   }
-
-    //   // Convert Sets to arrays for final output
-    //   const convertSetsToArrays = (obj) => {
-    //     for (const key in obj) {
-    //       if (obj[key] instanceof Set) {
-    //         obj[key] = Array.from(obj[key]);
-    //       } else if (typeof obj[key] === "object") {
-    //         convertSetsToArrays(obj[key]);
-    //       }
-    //     }
-    //   };
-
-    //   convertSetsToArrays(result);
-    //   return result;
-    // };
-
-    // const output = transformData(eventss);
-    const result = {};
-    Object.entries(cleanedData).forEach(([groupName, groupData]) => {
-
-
-      Object.entries(groupData).forEach(([keyss, valuess]) => {
-        Object.entries(valuess).forEach(([keyssa, valuessa]) => {
-
-          if (!result[keyss]) {
-            result[keyss] = [];
-          }
-
-          result[keyss].push({
-            name: keyssa + "-" + keyss
-          });
-
-        });
-      });
-
-    });
-    setAlldrop(result)
-    console.log(result, 'keykeykeykey') // its oblect
-    const optionsone = [{
-      "label": "All Venue",
-      "value": "All"
-    }];
-    Object.entries(cleanedData).forEach(([groupName, groupData]) => {
-      Object.keys(groupData).forEach((key) => {
-        optionsone.push({ value: key, label: key });
-      });
-    });
-
-    // Generate `optionss` for `data[0]` (assuming `GreenbankServicesClub` is the first group)
-    // const firstGroup = Object.keys(eventss.GreenbankServicesClub)[0]; // 'GreenbankServicesClub'
-    // const optionsstwo = Object.keys(eventss.GreenbankServicesClub[firstGroup]).map((hub) => ({
-    //   value: hub,
-    //   label: hub,
-    // }));
-
-
-    // console.log("optionss:", optionsstwo);
-
-    let getdata = sessionStorage.getItem('data')
-
-    let decry = decrypt(getdata)
-
-    let parsedatajson = JSON.parse(decry)
-
-
-    const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-    let realven = []
-
-    if (hasAllValue === true) {
-      realven.push(...optionsone);
-      setBasic(optionsone)
-
-
-      let uuuk = extractUniqueNotes(cleanedData, optionsone)
-      uuuk.unshift({ label: "All Courses", value: "All" });
-      setSelectedCources(uuuk)
-      setFulldatafull(uuuk)
-
-    } else {
-      realven.push(parsedatajson.venue)
-      setBasic(parsedatajson.venue)
-      let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
-      uuuk.unshift({ label: "All Courses", value: "All" });
-
-      setFulldatafull(uuuk)
-      setSelectedCources(uuuk)
-      
-    }
-
-
-
-
-
-    const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
-    const optionstakeaway = [
-      ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
-    ].map(value => ({ value, label: value }));
-
-
-    console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
-
-
-
-
-
-    const filteredDataonee = {};
-
-    console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
-    if (parsedatajson.venue) {
-
-      const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-
-      console.log(hasAllValue, 'hasAllValue')
-      if (hasAllValue === true) {
-
-      } else {
-
-        parsedatajson.venue.forEach(filter => {
-          const key = filter.value;
-          if (cleanedData[key]) {
-            filteredDataonee[key] = cleanedData[key];
-          }
-        });
-        setBasicall(filteredDataonee)
-      }
-
-
-
-
-
-    }
-
-    if (parsedatajson.hub) {
-
-      const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
-      console.log(hasAllValue, 'hasAllValue hub')
-
-      if (hasAllValue === true) {
-
-      } else {
-        function filterDataByDynamicKeys(keysArray) {
-          const filteredData = {};
-
-          keysArray.forEach(({ value }) => {
-            const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
-
-            if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
-              const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
-
-              // Check if the hub exists
-              if (secondLevelData[hubName]) {
-                if (!filteredData[topLevelKey]) {
-                  filteredData[topLevelKey] = {};
-                }
-
-                if (!filteredData[topLevelKey][secondTopLevelKey]) {
-                  filteredData[topLevelKey][secondTopLevelKey] = {};
-                }
-
-                filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
-              }
-            }
-          });
-
-          return filteredData;
-        }
-
-        let fina = filterDataByDynamicKeys(parsedatajson.hub)
-
-        setBasicall(fina)
-      }
-
-
-    }
-
-
-
-    const output = [{
-      "label": "All Hubs",
-      "value": "All"
-    }];
-
-    // // Iterate through the search array
-    realven.forEach(({ value }) => {
-      // Search in the data object
-      Object.entries(result).forEach(([key, items]) => {
-        if (key === value) {
-          // If the key matches, add all items from the group to the output
-          items.forEach(item => {
-            output.push({ value: key + '-' + item.name, label: item.name });
-          });
-        } else {
-          // Search within the group's items
-          items.forEach(item => {
-            if (item.name === value) {
-              output.push({ value: key + '-' + item.name, label: key });
-            }
-          });
-        }
-      });
-    });
-
-    setBasicone(output)
-    setHubb(output)
-
-
-
-    setSelectedOptions(realven)
-    // alldat = filteredDataonee
-    const yesterday = [getFormattedDate(1), getFormattedDate(1)];
-    const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
-    setDateRangetwo(eightDaysBefore)
-    setDateRange(yesterday)
-    filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-    filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-  }
+ 
+ 
+     const eventss = snapshots
+ 
+     function removeTrainingNotes(obj) {
+       if (Array.isArray(obj)) {
+         // If it's an array, filter out objects with "TRAINING" in the NOTE field
+         return obj.map(item => {
+           if (item.ITEMS) {
+             item.ITEMS = item.ITEMS.filter(item => !item.NOTE.includes("TRAINING"));
+           }
+           return item;
+         });
+       } else if (typeof obj === "object" && obj !== null) {
+         // Recursively call for nested objects
+         for (const key in obj) {
+           obj[key] = removeTrainingNotes(obj[key]);
+         }
+       }
+       return obj;
+     }
+ 
+     const cleanedData = removeTrainingNotes(eventss);
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+     setBasicall(cleanedData)
+     // const transformData = (data) => {
+     //   const result = {};
+ 
+     //   for (const key of Object.keys(data)) {
+     //     const parts = key.split("-");
+     //     const [group, location, subLocation, year] = parts;
+ 
+     //     if (!result[group]) result[group] = {};
+     //     if (!result[group][location]) result[group][location] = {};
+     //     if (!result[group][location][subLocation]) result[group][location][subLocation] = new Set();
+ 
+     //     result[group][location][subLocation].add(year);
+     //   }
+ 
+     //   // Convert Sets to arrays for final output
+     //   const convertSetsToArrays = (obj) => {
+     //     for (const key in obj) {
+     //       if (obj[key] instanceof Set) {
+     //         obj[key] = Array.from(obj[key]);
+     //       } else if (typeof obj[key] === "object") {
+     //         convertSetsToArrays(obj[key]);
+     //       }
+     //     }
+     //   };
+ 
+     //   convertSetsToArrays(result);
+     //   return result;
+     // };
+ 
+     // const output = transformData(eventss);
+     const result = {};
+     Object.entries(cleanedData).forEach(([groupName, groupData]) => {
+ 
+ 
+       Object.entries(groupData).forEach(([keyss, valuess]) => {
+         Object.entries(valuess).forEach(([keyssa, valuessa]) => {
+ 
+           if (!result[keyss]) {
+             result[keyss] = [];
+           }
+ 
+           result[keyss].push({
+             name: keyssa + "-" + keyss
+           });
+ 
+         });
+       });
+ 
+     });
+     setAlldrop(result)
+     console.log(result, 'keykeykeykey') // its oblect
+     const optionsone = [{
+       "label": "All Venue",
+       "value": "All"
+     }];
+     Object.entries(cleanedData).forEach(([groupName, groupData]) => {
+       Object.keys(groupData).forEach((key) => {
+         optionsone.push({ value: key, label: key });
+       });
+     });
+ 
+     // Generate `optionss` for `data[0]` (assuming `GreenbankServicesClub` is the first group)
+     // const firstGroup = Object.keys(eventss.GreenbankServicesClub)[0]; // 'GreenbankServicesClub'
+     // const optionsstwo = Object.keys(eventss.GreenbankServicesClub[firstGroup]).map((hub) => ({
+     //   value: hub,
+     //   label: hub,
+     // }));
+ 
+ 
+     // console.log("optionss:", optionsstwo);
+ 
+     let getdata = sessionStorage.getItem('data')
+ 
+     let decry = decrypt(getdata)
+ 
+     let parsedatajson = JSON.parse(decry)
+ 
+ 
+     const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
+     let realven = [{ label: "All Venues", value: "All" }]
+ 
+     if (hasAllValue === true) {
+       realven.push(...optionsone);
+       setBasic(optionsone)
+       setOldven(optionsone)
+       setSelectedOptions(optionsone)
+ 
+       let uuuk = extractUniqueNotes(cleanedData, optionsone)
+       uuuk.unshift({ label: "All Courses", value: "All" });
+ 
+       setOldcou(uuuk)
+       setSelectedCources(uuuk)
+ 
+       setFulldatafull(uuuk)
+ 
+ 
+       const output = [{
+         "label": "All Hubs",
+         "value": "All"
+       }];
+   
+       // // Iterate through the search array
+       optionsone.forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(result).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value : key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+   
+       setBasicone(output) 
+       setHubb(output)
+   
+   
+       setOldhub(output)
+ 
+ 
+ 
+     } else {
+       realven.push(parsedatajson.venue)
+       setBasic([ ...[{
+         "label": "All Venue",
+         "value": "All"
+       }] , ...parsedatajson.venue ])
+ 
+       setOldven([ ...[{
+         "label": "All Venue",
+         "value": "All"
+       }] , ...parsedatajson.venue ])
+ 
+       setSelectedOptions([ ...[{
+         "label": "All Venue",
+         "value": "All"
+       }] , ...parsedatajson.venue ])
+ 
+       const output = [{
+         "label": "All Hubs",
+         "value": "All"
+       }];
+   
+       // // Iterate through the search array
+       [ ...[{
+         "label": "All Venue",
+         "value": "All"
+       }] , ...parsedatajson.venue ].forEach(({ value }) => {
+         // Search in the data object
+         Object.entries(result).forEach(([key, items]) => {
+           if (key === value) {
+             // If the key matches, add all items from the group to the output
+             items.forEach(item => {
+               output.push({ value: key + '-' + item.name, label: item.name });
+             });
+           } else {
+             // Search within the group's items
+             items.forEach(item => {
+               if (item.name === value) {
+                 output.push({ value : key + '-' + item.name, label: key });
+               }
+             });
+           }
+         });
+       });
+   
+       setBasicone(output) 
+       setHubb(output)
+   
+   
+       setOldhub(output)
+ 
+ 
+ 
+ 
+       let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
+       uuuk.unshift({ label: "All Courses", value: "All" });
+       setSelectedCources(uuuk)
+       setOldcou(uuuk)
+       setFulldatafull(uuuk)
+     }
+ 
+ 
+ 
+ 
+ 
+     const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
+     const optionstakeaway = [
+       ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
+     ].map(value => ({ value, label: value }));
+ 
+ 
+     console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
+ 
+ 
+ 
+ 
+ 
+     // const output = [];
+ 
+     //   // // Iterate through the search array
+     //   [].forEach(({ value }) => {
+     //     // Search in the data object
+     //     Object.entries(alldrop).forEach(([key, items]) => {
+     //       if (key === value) {
+     //         // If the key matches, add all items from the group to the output
+     //         items.forEach(item => {
+     //           output.push({ value: key + '-' + item.name, label: item.name });
+     //         });
+     //       } else {
+     //         // Search within the group's items
+     //         items.forEach(item => {
+     //           if (item.name === value) {
+     //             output.push({ value: key + '-' + item.name, label: key });
+     //           }
+     //         });
+     //       }
+     //     });
+     //   });
+ 
+     //   setBasicone(output)
+ 
+ 
+ 
+ 
+ 
+     const filteredDataonee = {};
+ 
+     console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
+     if (parsedatajson.venue) {
+ 
+       const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
+ 
+       console.log(hasAllValue, 'hasAllValue')
+       if (hasAllValue === true) {
+ 
+       } else {
+ 
+         parsedatajson.venue.forEach(filter => {
+           const key = filter.value;
+           if (cleanedData[key]) {
+             filteredDataonee[key] = cleanedData[key];
+           }
+         });
+         setBasicall(filteredDataonee)
+       }
+ 
+ 
+ 
+ 
+ 
+     }
+ 
+     if (parsedatajson.hub) {
+ 
+       const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
+       console.log(hasAllValue, 'hasAllValue hub')
+ 
+       if (hasAllValue === true) {
+ 
+       } else {
+         function filterDataByDynamicKeys(keysArray) {
+           const filteredData = {};
+ 
+           keysArray.forEach(({ value }) => {
+             const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+ 
+             if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
+               const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
+ 
+               // Check if the hub exists
+               if (secondLevelData[hubName]) {
+                 if (!filteredData[topLevelKey]) {
+                   filteredData[topLevelKey] = {};
+                 }
+ 
+                 if (!filteredData[topLevelKey][secondTopLevelKey]) {
+                   filteredData[topLevelKey][secondTopLevelKey] = {};
+                 }
+ 
+                 filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
+               }
+             }
+           });
+ 
+           return filteredData;
+         }
+ 
+         let fina = filterDataByDynamicKeys(parsedatajson.hub)
+ 
+         setBasicall(fina)
+       }
+ 
+ 
+     }
+ 
+  
+    
+ 
+ 
+     
+   
+     // alldat = filteredDataonee
+     const yesterday = [getFormattedDate(1), getFormattedDate(1)];
+     const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
+     setDateRangetwo(eightDaysBefore)
+     setDateRange(yesterday)
+     filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+     filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+ 
+ 
+   }
 
 
   let getonez = () => {
@@ -1419,7 +1523,7 @@ let Dockets = () => {
 
     setOldven(selected)
 
-    if (hasAllValue === false && hasAllValueold === true || hasAllValue === false && hasAllValueold === false ) {
+    if (hasAllValue === false && hasAllValueold === true ) {
 
       let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
@@ -1662,15 +1766,7 @@ let Dockets = () => {
   //.select options hub
 
   const [Hubradio, setHubradio] = useState(true)
-  const optionshub = [{
-    "label": "All Stages",
-    "value": "All"
-  },
-  { value: 'R', label: 'On Process' },
-  { value: 'H', label: 'On Hold' },
-  { value: 'P', label: 'On Pass' },
-  { value: 'S', label: 'Served' },
-  ];
+ 
 
   const [selectedhubOptions, setSelectedhubOptions] = useState(optionshub);
 
@@ -1682,7 +1778,7 @@ let Dockets = () => {
 
     setOldpro(selected)
 
-    if (hasAllValue === false && hasAllValueold === true || hasAllValue === false && hasAllValueold === false ) {
+    if (hasAllValue === false && hasAllValueold === true   ) {
 
 
       setSelectedhubOptions([]);
@@ -1720,7 +1816,7 @@ let Dockets = () => {
 
     setOldhub(selectedss)
 
-    if (hasAllValue === false && hasAllValueold === true || hasAllValue === false && hasAllValueold === false ) {
+    if (hasAllValue === false && hasAllValueold === true  ) {
 
       console.log(selectedss, 'selectedssselectedssselectedss')
 
@@ -1785,7 +1881,7 @@ let Dockets = () => {
 
     setOldcou(selected)
 
-    if (hasAllValue === false && hasAllValueold === true || hasAllValue === false && hasAllValueold === false ) {
+    if (hasAllValue === false && hasAllValueold === true   ) {
 
       setSelectedCources([]);
 
@@ -1821,12 +1917,7 @@ let Dockets = () => {
 
   //select takeaway
   const [takeaway, setTakeaway] = useState(false)
-  const optionstakeaway = [
-    { value: 'All', label: 'All takeaways' },
-    { value: 'Takeaways', label: 'Takeaways' },
-    { value: 'Deliveries', label: 'Deliveries' },
-    { value: 'Pick-ups', label: 'Pick-ups' },
-  ];
+
   const [selectedTakeaway, setSelectedTakeaway] = useState(optionstakeaway);
   const handleChangeTakeaway = (selected) => {
 
@@ -1835,7 +1926,7 @@ let Dockets = () => {
 
     setOldtak(selected)
 
-    if (hasAllValue === false && hasAllValueold === true || hasAllValue === false && hasAllValueold === false ) {
+    if (hasAllValue === false && hasAllValueold === true   ) {
 
       setSelectedTakeaway([]);
 
@@ -1913,7 +2004,7 @@ let Dockets = () => {
 
 
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
-
+    cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
 
     console.log(JSON.stringify(alltype), 'val2245')
@@ -2611,7 +2702,7 @@ let Dockets = () => {
 
   function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
 
-
+    cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
 
     console.log(JSON.stringify(alltype), 'val2245')
@@ -5537,7 +5628,9 @@ let Dockets = () => {
                     />
                   </div>
 
-                  <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45, borderRadius: menuIsOpenfour ? ' 8px 8px 0 0' : '8px', border: menuIsOpenfour ? '2px solid #707070' : 'none', borderBottom: 'none' }}>
+                  <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3"
+                   style={{ width: '100%', height: 45, borderRadius: menuIsOpenfour ? ' 8px 8px 0 0' : '8px', 
+                   border: menuIsOpenfour ? '2px solid #707070' : 'none', borderBottom: 'none' }}>
                     <div className="switch-container">
                       <input
                         type="checkbox"
@@ -5567,29 +5660,7 @@ let Dockets = () => {
                       onChange={handleChangeTakeaway}
                       placeholder="All takeaways"
                       components={{
-                        Option: ({ children, isSelected, ...props }) => (
-                          <components.Option {...props} isSelected={isSelected}>
-                            <div style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              padding: '10px',
-                              backgroundColor: isSelected ? 'rgb(240, 248, 255)' : 'transparent',
-                              color: isSelected ? 'rgb(0, 115, 230)' : '#1A1A1B',
-                              cursor: 'pointer'
-                            }}>
-                              <div className="switch-containers" style={{ marginRight: '4px' }}>
-                                <input
-                                  type="checkbox"
-                                  id={`switch-${props.data.value}`}
-                                  checked={isSelected}
-                                  readOnly
-                                />
-                                <label className="switch-label" htmlFor={`switch-${props.data.value}`}></label>
-                              </div>
-                              <span style={{ flexGrow: 1, marginTop: '6px' }}>{props.data.label}</span>
-                            </div>
-                          </components.Option>
-                        ),
+                        Option: CustomOption,
                         MultiValue: () => null,
                         ValueContainer: ({ children, ...props }) => {
                           const selectedValues = props.getValue();
