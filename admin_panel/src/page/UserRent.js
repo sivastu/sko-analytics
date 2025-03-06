@@ -14,8 +14,8 @@ import * as CryptoJS from 'crypto-js'
 import { toast } from "react-toastify";
 import { FaArrowLeft } from "react-icons/fa6";
 import emailjs from '@emailjs/browser';
+import { v4 as uuidv4 } from "uuid";
 let UserRent = () => {
-
   let [data, setData] = useState();
   const input2Ref = useRef(null);
   const input3Ref = useRef(null);
@@ -36,7 +36,7 @@ const[send,setSend]=useState(false);
   useEffect(() => {
     loginCheck()
   }, [])
-
+  // const token = uuidv4();
   let loginCheck = async () => {
     let getdata = sessionStorage.getItem('data')
     if (getdata === undefined || getdata === '' || getdata === null) {
@@ -71,6 +71,8 @@ const[send,setSend]=useState(false);
       }
     }
   }
+
+
   const handleVerify = async (e) => {
     setIsloading(true);
     e.preventDefault();
@@ -93,9 +95,15 @@ const[send,setSend]=useState(false);
         setIsloading(false);
         return;
       }
+      const currentTime = Date.now();
+      const dataToEncrypt = JSON.stringify({ email: forgetvalue, timestamp: currentTime });
   
+
+      const encryptedData = encrypt(dataToEncrypt);
+      const resetLink = `http://sko-analytics.vercel.app/forgetpassword?token=${encodeURIComponent(encryptedData)}`;
+
       snapshot.forEach(async (userSnapshot) => {
-        console.log(userSnapshot.key, userSnapshot.val());
+        // console.log(userSnapshot.key, userSnapshot.val());
   
         try {
           await emailjs.send(
@@ -107,7 +115,7 @@ const[send,setSend]=useState(false);
               to_email: forgetvalue, 
               from_email: "stainsrubus@gmail.com",
               subject: "Verification from SKO",
-              message: "............Verification link.............",
+              message: `Click the link below to reset your password: ${resetLink}`,
             },
             '4neAUe9l0jy_Tyrus'
           );
@@ -115,18 +123,20 @@ const[send,setSend]=useState(false);
           toast.success('Kindly check your email to verify your account!');
           setForgetvalse('');
           setSend(true);
+      setIsloading(false);
+
         } catch (error) {
           console.error("EmailJS Error:", error.text);
           toast.error('Failed to send email. Please try again.');
+      setIsloading(false);
+
         }
       });
   
     } catch (error) {
       console.error("Firebase Error:", error);
       toast.error("Error fetching data.");
-    } finally {
-      setIsloading(false);
-    }
+    } 
   };
   
 
@@ -458,7 +468,7 @@ send?<div className="fs-4 text-white">
   <p style={{ color: '#1A1A1B', fontSize: 21, fontWeight: '500', }}>Enter Email :</p>
   <input onChange={(e) => {
     setForgetvalse(e.target.value)
-  }} ref={input3Ref} value={forgetvalue} onKeyDown={handleKeyDowns} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070" }} type="text" />
+  }} ref={input3Ref} value={forgetvalue} onKeyDown={handleKeyDowns} style={{ width: 290, height: 50, borderRadius: 5, border: "1px solid #707070",    paddingLeft : 11 }} type="text" />
 </div>
 <p onClick={() => {
   setForget(false)

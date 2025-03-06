@@ -30,10 +30,10 @@ import { DataProvider } from "./component/DataProvider";
 window.onload = () => {
   
   console.log('adfcv;lsjvio  dfbln don dlknbo nddonfx ndinio noeindfioniodenfongo kko odx dx kodnxko kodxk dox kjo')
-  if (window.location.pathname === "/") {
-   return
-  }else if (window.location.pathname !== "/admin") {
-    window.location.href = "/admin";
+  const allowedPaths = ["/", "/admin", "/forgetpassword"];
+
+  if (!allowedPaths.includes(window.location.pathname)) {
+    window.location.replace("/admin");
   }
 }
 
@@ -47,7 +47,7 @@ function App() {
         <Routes>
           <Route path="/" element={<UserRent />} />
           <Route path="*" element={<NoPage />} />
-
+          <Route path='/resetPassword' element={<NoPage />}/>
           <Route path="/login" element={<Login />} />
           <Route path="/grantedaccess" element={<SinglrandMulti />} />
           <Route path="/analytics" element={<Multivenues />} />
