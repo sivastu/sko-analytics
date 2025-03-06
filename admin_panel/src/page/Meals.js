@@ -2266,7 +2266,7 @@ let Meals = () => {
       
       if( hasAllfinbyss === true ) {
         const allValue = selected.find(option => option.label && option.label.startsWith("All "))?.label || "";
-        displayText = allValue
+        displayText = allValue.slice(0, textCount) 
       }else{
         displayText = allLabels.slice(0, textCount) + "..."
       }
@@ -5398,7 +5398,7 @@ let Meals = () => {
                 <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }} onClick={()=>{
                   console.log(selectedTakeaway)
                 }}>Filter by tables/takeaways</p>
-                <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
+                <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' ,paddingBottom:2,paddingTop:2 }}>
                   <input
                     onChange={(e) => {
                       setInputvalue(e.target.value)
@@ -5407,10 +5407,9 @@ let Meals = () => {
                     }}
                     value={inputvalue}
                     placeholder="0-9999"
-                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }}
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B',borderRight:'1px solid #707070', textAlign: 'center',paddingTop:9,paddingBottom:9 }}
                     type="text"
                   />
-                  <p style={{ fontSize: 19, display: 'contents' }}>|</p>
                   <input
                     onChange={(e) => {
                       setInputvaluetwo(e.target.value)
@@ -5419,7 +5418,7 @@ let Meals = () => {
                     }}
                     value={inputvaluetwo}
                     placeholder="9999-9999"
-                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }}
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center',paddingTop:5 }}
                     type="text"
                   />
                 </div>

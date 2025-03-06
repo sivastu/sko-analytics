@@ -1322,7 +1322,7 @@ let Mealsmulti = () => {
       
       if( hasAllfinbyss === true ) {
         const allValue = selected.find(option => option.label && option.label.startsWith("All "))?.label || "";
-        displayText = allValue
+        displayText = allValue.slice(0, textCount) 
       }else{
         displayText = allLabels.slice(0, textCount) + "..."
       }
@@ -5141,7 +5141,7 @@ const[paddOpp,setPaddOpp]=useState(0);
               {/* Tables/Takeaways Filters */}
               <div className="filter-section" style={{ width: 'calc(20% - 20px)', minWidth: '240px', marginBottom: '15px' }}>
                 <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
-                <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' }}>
+                <div className="custom-inputoness d-flex justify-content-between gap-1 " style={{ width: '100%',paddingBottom:2,paddingTop:2 }}>
                   <input
                     onChange={(e) => {
                       setInputvalue(e.target.value)
@@ -5152,10 +5152,11 @@ const[paddOpp,setPaddOpp]=useState(0);
                     }}
                     value={inputvalue}
                     placeholder="0-9999"
-                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }}
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B',borderRight:'1px solid #707070', textAlign: 'center',paddingTop:9,paddingBottom:9 }}
                     type="text"
                   />
-                  <p style={{ fontSize: 19, display: 'contents' }}>|</p>
+               
+                  {/* <p style={{ fontSize: 19, display: 'contents',paddingTop:5 }}>|</p> */}
                   <input
                     onChange={(e) => {
                       setInputvaluetwo(e.target.value)
@@ -5166,7 +5167,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                     }}
                     value={inputvaluetwo}
                     placeholder="9999-9999"
-                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center' }}
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center',paddingTop:5 }}
                     type="text"
                   />
                 </div>

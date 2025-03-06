@@ -9,6 +9,8 @@ import ReactDOM from "react-dom";
 import ReactPaginate from "react-paginate";
 import bigInt from "big-integer";
 import * as CryptoJS from "crypto-js";
+import { FaEdit } from "react-icons/fa";
+import { FaRegTrashCan } from "react-icons/fa6";
 import {
   getDatabase,
   ref,
@@ -87,11 +89,192 @@ let Admin_dash = () => {
   let [searchvalue, setSearchvalue] = useState("");
   const { state } = useContext(DataContext);
 
+  const [showEditModalAdmin, setShowEditModalAdmin] = useState(false); // For edit modal
+  const [showDeleteModalAdmin, setShowDeleteModalAdmin] = useState(false); // For delete modal
+  const [selectedAdmin, setSelectedAdmin] = useState(null); // For selected admin
+  const [adminToDelete, setAdminToDelete] = useState(null); // For admin to delete
+
+  const [showEditModalManager, setShowEditModalManager] = useState(false); // For edit modal
+const [showDeleteModalManager, setShowDeleteModalManager] = useState(false); // For delete modal
+const [selectedManager, setSelectedManager] = useState(null); // For selected manager
+const [managerToDelete, setManagerToDelete] = useState(null); // For manager to delete
+
+  const [showEditModalEmployee, setShowEditModalEmployee] = useState(false); // For edit modal
+const [showDeleteModalEmployee, setShowDeleteModalEmployee] = useState(false); // For delete modal
+const [selectedEmployee, setSelectedEmployee] = useState(null); // For selected employee
+const [employeeToDelete, setEmployeeToDelete] = useState(null); // For employee to delete
+
+
+// Handle edit button click for admins
+const handleAdminEditClick = (admin) => {
+  setSelectedAdmin({
+    ...admin,
+    oldEmail: admin.Email, // Store the old email for reference
+  });
+  setShowEditModalAdmin(true); // Open the edit modal
+};
+
+// Handle delete button click for admins
+const handleDeleteAdminClick = (admin) => {
+  setAdminToDelete(admin); // Set the admin to delete
+  setShowDeleteModalAdmin(true); // Open the delete modal
+};
+
+ // Handle edit button click for managers
+const handleManagerEditClick = (manager) => {
+  setSelectedManager(manager); // Set the selected manager
+  setShowEditModalManager(true); // Open the edit modal
+};
+
+const handleDeleteManagerClick = (manager) => {
+  setManagerToDelete(manager); // Set the manager to delete
+  setShowDeleteModalManager(true); // Open the delete modal
+};
+  const handleEditModalClose = () => {
+    setShowEditModal(false);
+    setSelectedManager(null);
+  };
+  const handleManagerInputChange = (e) => {
+    setSelectedManager({
+      ...selectedManager,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Handle editing an admin
+const handleEditAdmin = async () => {
+  if (!selectedAdmin) return;
+
+  const db = getDatabase(app);
+
+  // Get the old email (before editing)
+  const EmailKey = selectedAdmin.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+  const userRef = ref(db, `user/${EmailKey}`)
+
+  try {
+    // Step 1: Delete the old admin entry
+    await set(userRef, selectedAdmin);
+    toast.success("Admin updated successfully!");
+    setShowEditModalAdmin(false); // Close the modal
+    getuser(); // Refresh the user list
+    // console.log(selectedAdmin)
+    // setUsedname(selectedAdmin.name)
+  } catch (error) {
+    console.error("Error updating admin:", error);
+    toast.error("An error occurred while updating the admin.");
+  }
+};
+
+// Handle deleting an admin
+const handleDeleteAdmin = async () => {
+  if (!adminToDelete) return;
+
+  const db = getDatabase(app);
+  const emailKey = adminToDelete.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+  const userRef = ref(db, `user/${emailKey}`);
+
+  try {
+    await set(userRef, null); // Delete the admin from the database
+    toast.success("Admin deleted successfully!");
+    setShowDeleteModalAdmin(false); // Close the modal
+    getuser(); // Refresh the user list
+  } catch (error) {
+    console.error("Error deleting admin:", error);
+    toast.error("An error occurred while deleting the admin.");
+  }
+};
+// Handle editing a manager
+const handleEditManager = async () => {
+  if (!selectedManager) return;
+
+  const db = getDatabase(app);
+  const emailKey = selectedManager.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+  const userRef = ref(db, `user/${emailKey}`);
+
+  try {
+    await set(userRef, selectedManager); // Update the manager in the database
+    toast.success("Manager updated successfully!");
+    setShowEditModalManager(false); // Close the modal
+    getuser(); // Refresh the user list
+  } catch (error) {
+    console.error("Error updating manager:", error);
+    toast.error("An error occurred while updating the manager.");
+  }
+};
+
+// Handle deleting a manager
+const handleDeleteManager = async () => {
+  if (!managerToDelete) return;
+
+  const db = getDatabase(app);
+  const emailKey = managerToDelete.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+  const userRef = ref(db, `user/${emailKey}`);
+
+  try {
+    await set(userRef, null); // Delete the manager from the database
+    toast.success("Manager deleted successfully!");
+    setShowDeleteModalManager(false); // Close the modal
+    getuser(); // Refresh the user list
+  } catch (error) {
+    console.error("Error deleting manager:", error);
+    toast.error("An error occurred while deleting the manager.");
+  }
+};
+  // Handle edit button click for employees
+const handleEmployeeEditClick = (employee) => {
+  setSelectedEmployee(employee); // Set the selected employee
+  setShowEditModalEmployee(true); // Open the edit modal
+};
+
+// Handle delete button click for employees
+const handleDeleteEmployeeClick = (employee) => {
+  setEmployeeToDelete(employee); // Set the employee to delete
+  setShowDeleteModalEmployee(true); // Open the delete modal
+};
+// Handle editing an employee
+const handleEditEmployee = async () => {
+  if (!selectedEmployee) return;
+
+  const db = getDatabase(app);
+  const emailKey = selectedEmployee.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+  const userRef = ref(db, `user/${emailKey}`);
+
+  try {
+    await set(userRef, selectedEmployee); // Update the employee in the database
+    toast.success("Employee updated successfully!");
+    setShowEditModalEmployee(false); // Close the modal
+    getuser(); // Refresh the user list
+  } catch (error) {
+    console.error("Error updating employee:", error);
+    toast.error("An error occurred while updating the employee.");
+  }
+};
+
+// Handle deleting an employee
+const handleDeleteEmployee = async () => {
+  if (!employeeToDelete) return;
+
+  const db = getDatabase(app);
+  const emailKey = employeeToDelete.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+  const userRef = ref(db, `user/${emailKey}`);
+
+  try {
+    await set(userRef, null); // Delete the employee from the database
+    toast.success("Employee deleted successfully!");
+    setShowDeleteModalEmployee(false); // Close the modal
+    getuser(); // Refresh the user list
+  } catch (error) {
+    console.error("Error deleting employee:", error);
+    toast.error("An error occurred while deleting the employee.");
+  }
+};
+
   const handleChangehubone = (selectedss) => {
     console.log(selectedss, "selectedssselectedssselectedss");
     setHubb(selectedss);
     checkuserddd();
   };
+
 
   const handleChange = (selected) => {
     console.log(JSON.stringify(selected), "selected");
@@ -149,10 +332,10 @@ let Admin_dash = () => {
       const allLabels = selected.map((option) => option.label).join(", ");
 
       // Limit to single line with ellipsis
-      const maxLength = 17; // Adjust as needed
+      const maxLength = 10; // Adjust as needed
       const displayText =
-        allLabels.length > maxLength
-          ? allLabels.slice(0, maxLength) + "..."
+        allLabels.length > textCount
+          ? allLabels.slice(0, textCount) + "..."
           : allLabels;
 
       return <span title={allLabels}>{displayText}</span>;
@@ -750,6 +933,15 @@ let Admin_dash = () => {
 
     setUser(filteredUsers);
   };
+  const gettextcount = () => {
+    if (window.innerWidth >= 1836) return 15;
+    if (window.innerWidth >= 1536) return 10; // 2xl
+    if (window.innerWidth >= 1380) return 8; // xl
+    if (window.innerWidth >= 1024) return 7; // lg
+    if (window.innerWidth >= 768) return 5;  // md
+    return 5; // default for smaller screens
+  };
+  const [textCount, setTextCount] = useState(gettextcount());
 
   const [boxWidth, setBoxWidth] = useState(
     window.innerWidth >= 1400 ? 190 : window.innerWidth >= 1024 ? 180 : 160
@@ -772,6 +964,7 @@ let Admin_dash = () => {
 
   useEffect(() => {
     const handleResize = () => {
+      setTextCount(gettextcount()),
       setBoxWidth(
         window.innerWidth >= 1400 ? 190 : window.innerWidth >= 1024 ? 180 : 160
       );
@@ -785,7 +978,7 @@ let Admin_dash = () => {
         window.innerWidth >= 1400 ? 45 : window.innerWidth >= 1024 ? 40 : 35
       );
       setFs(
-        window.innerWidth >= 1400 ? 20 : window.innerWidth >= 1024 ? 16 : 16
+        window.innerWidth >= 1400 ? 20 : window.innerWidth >= 1024 ? 14 : 14
       );
       setFss(
         window.innerWidth >= 1400 ? 16 : window.innerWidth >= 1024 ? 14 : 14
@@ -869,7 +1062,7 @@ let Admin_dash = () => {
                 marginTop: -3,
               }}
             >
-              knowledge
+              web app
             </p>
           </div>
         </div>
@@ -1447,7 +1640,7 @@ let Admin_dash = () => {
                       height: 60,
                     }}
                   >
-                    <div style={{ width: "20%" }}>
+                    <div style={{ width: "19%" }}>
                       <p
                         style={{
                           color: "#1A1A1B",
@@ -1458,7 +1651,7 @@ let Admin_dash = () => {
                         Name
                       </p>
                     </div>
-                    <div style={{ width: "20%" }}>
+                    <div style={{ width: "19%" }}>
                       <p
                         style={{
                           color: "#1A1A1B",
@@ -1469,7 +1662,7 @@ let Admin_dash = () => {
                         Email
                       </p>
                     </div>
-                    <div style={{ width: "20%" }}>
+                    <div style={{ width: "19%" }}>
                       <p
                         style={{
                           color: "#1A1A1B",
@@ -1480,7 +1673,7 @@ let Admin_dash = () => {
                         Last sign-in
                       </p>
                     </div>
-                    <div style={{ width: "20%" }}>
+                    <div style={{ width: "19%" }}>
                       <p
                         style={{
                           color: "#1A1A1B",
@@ -1492,7 +1685,7 @@ let Admin_dash = () => {
                         Venue permission
                       </p>
                     </div>
-                    <div className="px-md-2 px-lg-0" style={{ width: "20%" }}>
+                    <div className="px-md-2 px-lg-0" style={{ width: "19%" }}>
                       <p
                         style={{
                           color: "#1A1A1B",
@@ -1501,6 +1694,17 @@ let Admin_dash = () => {
                         }}
                       >
                         Hub permission
+                      </p>
+                    </div>
+                    <div className="px-md-2 px-lg-0" style={{ width: "5%" }}>
+                      <p
+                        style={{
+                          color: "#1A1A1B",
+                          fontWeight: "400",
+                          fontSize: fs,
+                        }}
+                      >
+                        Action
                       </p>
                     </div>
                   </div>
@@ -1513,7 +1717,7 @@ let Admin_dash = () => {
                       backgroundColor: "#FCFCFC",
                     }}
                   >
-                    <div style={{ width: "20%" }} className="d-flex">
+                    <div style={{ width: "19%" }} className="d-flex">
                       <img
                         src="lolp.png"
                         className="nerrrimg"
@@ -1536,7 +1740,7 @@ let Admin_dash = () => {
                         }}
                       />
                     </div>
-                    <div style={{ width: "20%" }} className="d-flex">
+                    <div style={{ width: "19%" }} className="d-flex">
                       {" "}
                       <input
                         type="text"
@@ -1555,10 +1759,10 @@ let Admin_dash = () => {
                         }}
                       />
                     </div>
-                    <div className="ms-md-3 ms-lg-0" style={{ width: "20%" }}>
+                    <div className="ms-md-3 ms-lg-0" style={{ width: "19%" }}>
                       <p style={{ color: "#1A1A1B", fontWeight: "400" }}>-</p>
                     </div>
-                    <div style={{ width: "20%", paddingRight: 20 }}>
+                    <div style={{ width: "19%", paddingRight: 20 }}>
                       <p
                         style={{
                           color: "#1A1A1B",
@@ -1605,7 +1809,7 @@ let Admin_dash = () => {
                     </div>
                     <div
                       style={{
-                        width: "20%",
+                        width: "19%",
                         paddingRight: 20,
                         color: "#1A1A1B",
                         fontSize: fs,
@@ -1646,7 +1850,9 @@ let Admin_dash = () => {
                           }),
                         }}
                       />
+
                     </div>
+               
                   </div>
 
                   <hr
@@ -2029,7 +2235,7 @@ let Admin_dash = () => {
                                 backgroundColor: "#ECF1F4",
                               }}
                             >
-                              <div style={{ width: "20%" }} className="d-flex">
+                              <div style={{ width: "19%" }} className="d-flex">
                                 <img
                                   src="lolp.png"
                                   className="nerrrimg"
@@ -2047,7 +2253,7 @@ let Admin_dash = () => {
                               </div>
                               <div
                                 style={{
-                                  width: "20%",
+                                  width: "19%",
                                   display: "flex",
                                   alignItems: "center"  // Align text vertically
                                 }}
@@ -2083,7 +2289,7 @@ let Admin_dash = () => {
                               </div>
                               <div
                                 style={{
-                                  width: `20%`,
+                                  width: `19%`,
                                   paddingRight: 20,
                                   color: "#1A1A1B",
                                   fontSize: fs,
@@ -2132,7 +2338,7 @@ let Admin_dash = () => {
                                   }}
                                 />
                               </div>
-                              <div style={{ width: "20%", paddingRight: 20 }}>
+                              <div style={{ width: "19%", paddingRight: 20 }}>
                                 <Select
                                   isMulti
                                   className="newoneoneess"
@@ -2178,6 +2384,20 @@ let Admin_dash = () => {
                                   }}
                                 />
                               </div>
+                              <div style={{ width: "5%", paddingLeft: "1%" }} className="d-flex justify-content-between gap-3 align-items-center ">
+              <div
+                onClick={() => handleAdminEditClick(value)} // Edit button
+                style={{ cursor: "pointer" }}
+              >
+                <FaEdit />
+              </div>
+              <div
+                onClick={() => handleDeleteAdminClick(value)} // Delete button
+                style={{ color: "red", cursor: "pointer", marginTop: 5 }}
+              >
+                <FaRegTrashCan />
+              </div>
+            </div>
                             </div>
 
                             <hr
@@ -2236,7 +2456,7 @@ let Admin_dash = () => {
                               backgroundColor: "#ECF1F4",
                             }}
                           >
-                            <div style={{ width: "20%" }} className="d-flex">
+                            <div style={{ width: "19%" }} className="d-flex">
                               <img
                                 src="lolp.png"
                                 className="nerrrimg"
@@ -2252,7 +2472,7 @@ let Admin_dash = () => {
                                 {value.name}
                               </p>
                             </div>
-                            <div style={{ width: "20%" }} className="d-flex">
+                            <div style={{ width: "19%" }} className="d-flex">
                               <p
                                 style={{
                                   color: "#707070",
@@ -2263,7 +2483,7 @@ let Admin_dash = () => {
                                 {value.Email}
                               </p>
                             </div>
-                            <div style={{ width: "20%" }}>
+                            <div style={{ width: "18%" }}>
                               <p
                                 style={{
                                   color: "#1A1A1B",
@@ -2276,7 +2496,7 @@ let Admin_dash = () => {
                             </div>
                             <div
                               style={{
-                                width: "20%",
+                                width: "19%",
                                 paddingRight: 20,
                                 color: "#1A1A1B",
                                 fontSize: fs,
@@ -2321,7 +2541,7 @@ let Admin_dash = () => {
                                 }}
                               />
                             </div>
-                            <div style={{ width: "20%", paddingRight: 20 }}>
+                            <div style={{ width: "19%", paddingRight: 20 }}>
                               <Select
                                 isMulti
                                 className="newoneoneess"
@@ -2362,6 +2582,14 @@ let Admin_dash = () => {
                                 }}
                               />
                             </div>
+                           <div style={{width:'5%',paddingLeft:"1%"}} className="d-flex justify-content-between gap-3 align-items-center ">
+                           <div onClick={() => handleManagerEditClick(value)} style={{ cursor: "pointer" }}>
+              <FaEdit />
+            </div>
+            <div className=""  onClick={() => handleDeleteManagerClick(value)}  style={{ color: "red", cursor: "pointer" }}>
+              <FaRegTrashCan />
+            </div>
+                           </div>
                           </div>
 
                           <hr
@@ -2371,8 +2599,10 @@ let Admin_dash = () => {
                               height: 1,
                             }}
                           />
+                         
                         </>
                       )})}
+                      
                   </>
                 ) : data === "3" ? (
                   <>
@@ -2420,7 +2650,7 @@ let Admin_dash = () => {
                               backgroundColor: "#ECF1F4",
                             }}
                           >
-                            <div style={{ width: "20%" }} className="d-flex">
+                            <div style={{ width: "19%" }} className="d-flex">
                               <img
                                 src="lolp.png"
                                 className="nerrrimg"
@@ -2432,14 +2662,14 @@ let Admin_dash = () => {
                                 {value.name}
                               </p>
                             </div>
-                            <div style={{ width: "20%" }} className="d-flex">
+                            <div style={{ width: "19%" }} className="d-flex">
                               <p
                                 style={{ color: "#707070", fontWeight: "400" }}
                               >
                                 {value.Email}
                               </p>
                             </div>
-                            <div style={{ width: "20%" }}>
+                            <div style={{ width: "19%" }}>
                               <p
                                 style={{ color: "#1A1A1B", fontWeight: "400" }}
                               >
@@ -2448,7 +2678,7 @@ let Admin_dash = () => {
                             </div>
                             <div
                               style={{
-                                width: "20%",
+                                width: "19%",
                                 paddingRight: 20,
                                 color: "#1A1A1B",
                               }}
@@ -2492,7 +2722,7 @@ let Admin_dash = () => {
                                 }}
                               />
                             </div>
-                            <div style={{ width: "20%", paddingRight: 20 }}>
+                            <div style={{ width: "19%", paddingRight: 20 }}>
                               <Select
                                 isMulti
                                 className="newoneoneess"
@@ -2532,6 +2762,20 @@ let Admin_dash = () => {
                                 }}
                               />
                             </div>
+                            <div className="d-flex justify-content-between gap-3 align-items-center " style={{ width: "5%", paddingLeft: "1%" }}>
+              <div
+                onClick={() => handleEmployeeEditClick(value)} // Edit button
+                style={{ cursor: "pointer" }}
+              >
+                <FaEdit />
+              </div>
+              <div
+                onClick={() => handleDeleteEmployeeClick(value)} // Delete button
+                style={{ color: "red", cursor: "pointer", marginTop: 5 }}
+              >
+                <FaRegTrashCan />
+              </div>
+            </div>
                           </div>
 
                           <hr
@@ -2628,6 +2872,520 @@ let Admin_dash = () => {
             </div>
           </div>
         )}
+  {/* Edit Modal for Managers */}
+{showEditModalManager && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    }}
+  >
+    <div
+      style={{
+        backgroundColor: "#fff",
+        padding: 20,
+        borderRadius: 8,
+        width: 400,
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+      }}
+    >
+      <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+        Edit Manager
+      </h2>
+
+      {/* Name Input */}
+      <div style={{ marginBottom: 15 }}>
+        <label style={{ display: "block", marginBottom: 5 }}>Name:</label>
+        <input
+          type="text"
+          name="name"
+          value={selectedManager?.name || ""}
+          onChange={(e) =>
+            setSelectedManager({
+              ...selectedManager,
+              name: e.target.value,
+            })
+          }
+          style={{
+            width: "100%",
+            padding: 8,
+            border: "1px solid #ccc",
+            borderRadius: 4,
+          }}
+        />
+      </div>
+
+      {/* Email Input */}
+      <div style={{ marginBottom: 15 }}>
+        <label style={{ display: "block", marginBottom: 5 }}>Email:</label>
+        <input
+          type="email"
+          name="Email"
+          disabled
+          value={selectedManager?.Email || ""}
+          onChange={(e) =>
+            setSelectedManager({
+              ...selectedManager,
+              Email: e.target.value,
+            })
+          }
+          style={{
+            width: "100%",
+            padding: 8,
+            border: "1px solid #ccc",
+            borderRadius: 4,
+          }}
+        />
+      </div>
+
+      {/* Buttons */}
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+        <button
+          onClick={() => setShowEditModalManager(false)} // Close the modal
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#ccc",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleEditManager} // Handle edit
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#316AAF",
+            color: "#fff",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+{/* Delete Confirmation Modal for Managers */}
+{showDeleteModalManager && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    }}
+  >
+    <div
+      style={{
+        backgroundColor: "#fff",
+        padding: 20,
+        borderRadius: 8,
+        width: 400,
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+      }}
+    >
+      <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+        Delete Manager
+      </h2>
+
+      <p style={{ marginBottom: 20 }}>
+        Are you sure you want to delete{" "}
+        <strong>{managerToDelete?.name}</strong>?
+      </p>
+
+      {/* Buttons */}
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+        <button
+          onClick={() => setShowDeleteModalManager(false)} // Close the modal
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#ccc",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleDeleteManager} // Handle deletion
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#ff4d4f", // Red color for delete button
+            color: "#fff",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{/* Edit Modal for Employees */}
+{showEditModalEmployee && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    }}
+  >
+    <div
+      style={{
+        backgroundColor: "#fff",
+        padding: 20,
+        borderRadius: 8,
+        width: 400,
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+      }}
+    >
+      <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+        Edit Employee
+      </h2>
+
+      {/* Name Input */}
+      <div style={{ marginBottom: 15 }}>
+        <label style={{ display: "block", marginBottom: 5 }}>Name:</label>
+        <input
+          type="text"
+          name="name"
+          value={selectedEmployee?.name || ""}
+          onChange={(e) =>
+            setSelectedEmployee({
+              ...selectedEmployee,
+              name: e.target.value,
+            })
+          }
+      
+          style={{
+            width: "100%",
+            padding: 8,
+            border: "1px solid #ccc",
+            borderRadius: 4,
+          }}
+        />
+      </div>
+
+      {/* Email Input */}
+      <div style={{ marginBottom: 15 }}>
+        <label style={{ display: "block", marginBottom: 5 }}>Email:</label>
+        <input
+          type="email"
+          name="Email"
+          disabled
+          value={selectedEmployee?.Email || ""}
+          onChange={(e) =>
+            setSelectedEmployee({
+              ...selectedEmployee,
+              Email: e.target.value,
+            })
+          }
+          style={{
+            width: "100%",
+            padding: 8,
+            border: "1px solid #ccc",
+            borderRadius: 4,
+          }}
+        />
+      </div>
+
+      {/* Buttons */}
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+        <button
+          onClick={() => setShowEditModalEmployee(false)} // Close the modal
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#ccc",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleEditEmployee} // Handle edit
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#316AAF",
+            color: "#fff",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+{/* Delete Confirmation Modal for Employees */}
+{showDeleteModalEmployee && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    }}
+  >
+    <div
+      style={{
+        backgroundColor: "#fff",
+        padding: 20,
+        borderRadius: 8,
+        width: 400,
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+      }}
+    >
+      <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+        Delete Employee
+      </h2>
+
+      <p style={{ marginBottom: 20 }}>
+        Are you sure you want to delete{" "}
+        <strong>{employeeToDelete?.name}</strong>?
+      </p>
+
+      {/* Buttons */}
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+        <button
+          onClick={() => setShowDeleteModalEmployee(false)} // Close the modal
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#ccc",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleDeleteEmployee} // Handle deletion
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#ff4d4f", // Red color for delete button
+            color: "#fff",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+{/* Edit Modal for Admins */}
+{showEditModalAdmin && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    }}
+  >
+    <div
+      style={{
+        backgroundColor: "#fff",
+        padding: 20,
+        borderRadius: 8,
+        width: 400,
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+      }}
+    >
+      <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+        Edit Admin
+      </h2>
+
+      {/* Name Input */}
+      <div style={{ marginBottom: 15 }}>
+        <label style={{ display: "block", marginBottom: 5 }}>Name:</label>
+        <input
+          type="text"
+          name="name"
+          value={selectedAdmin?.name || ""}
+          onChange={(e) =>
+            setSelectedAdmin({
+              ...selectedAdmin,
+              name: e.target.value,
+            })
+          }
+          style={{
+            width: "100%",
+            padding: 8,
+            border: "1px solid #ccc",
+            borderRadius: 4,
+          }}
+        />
+      </div>
+
+      {/* Email Input */}
+      <div  style={{ marginBottom: 15 }}>
+        <label style={{ display: "block", marginBottom: 5 }}>Email:</label>
+        <input
+          type="email"
+          name="Email"
+          value={selectedAdmin?.Email || ""}
+          onChange={(e) =>
+            setSelectedAdmin({
+              ...selectedAdmin,
+              Email: e.target.value,
+            })
+          }
+          disabled
+          style={{
+            width: "100%",
+            padding: 8,
+            border: "1px solid #ccc",
+            borderRadius: 4,
+          }}
+        />
+      </div>
+
+      {/* Buttons */}
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+        <button
+          onClick={() => setShowEditModalAdmin(false)} // Close the modal
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#ccc",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleEditAdmin} // Handle edit
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#316AAF",
+            color: "#fff",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          Update
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+{/* Delete Confirmation Modal for Admins */}
+{showDeleteModalAdmin && (
+  <div
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    }}
+  >
+    <div
+      style={{
+        backgroundColor: "#fff",
+        padding: 20,
+        borderRadius: 8,
+        width: 400,
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+      }}
+    >
+      <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+        Delete Admin
+      </h2>
+
+      <p style={{ marginBottom: 20 }}>
+        Are you sure you want to delete{" "}
+        <strong>{adminToDelete?.name}</strong>?
+      </p>
+
+      {/* Buttons */}
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+        <button
+          onClick={() => setShowDeleteModalAdmin(false)} // Close the modal
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#ccc",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleDeleteAdmin} // Handle deletion
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#ff4d4f", // Red color for delete button
+            color: "#fff",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)}
       </div>
 
       <SweetAlert2 {...swalProps} />
