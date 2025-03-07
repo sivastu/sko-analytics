@@ -58,7 +58,7 @@ let Admin_dash = () => {
     }
   };
 
-  
+
   let [fulldatafull, setFulldatafull] = useState();
   let [basicall, setBasicall] = useState();
   let [alldrop, setAlldrop] = useState([]);
@@ -95,41 +95,41 @@ let Admin_dash = () => {
   const [adminToDelete, setAdminToDelete] = useState(null); // For admin to delete
 
   const [showEditModalManager, setShowEditModalManager] = useState(false); // For edit modal
-const [showDeleteModalManager, setShowDeleteModalManager] = useState(false); // For delete modal
-const [selectedManager, setSelectedManager] = useState(null); // For selected manager
-const [managerToDelete, setManagerToDelete] = useState(null); // For manager to delete
+  const [showDeleteModalManager, setShowDeleteModalManager] = useState(false); // For delete modal
+  const [selectedManager, setSelectedManager] = useState(null); // For selected manager
+  const [managerToDelete, setManagerToDelete] = useState(null); // For manager to delete
 
   const [showEditModalEmployee, setShowEditModalEmployee] = useState(false); // For edit modal
-const [showDeleteModalEmployee, setShowDeleteModalEmployee] = useState(false); // For delete modal
-const [selectedEmployee, setSelectedEmployee] = useState(null); // For selected employee
-const [employeeToDelete, setEmployeeToDelete] = useState(null); // For employee to delete
+  const [showDeleteModalEmployee, setShowDeleteModalEmployee] = useState(false); // For delete modal
+  const [selectedEmployee, setSelectedEmployee] = useState(null); // For selected employee
+  const [employeeToDelete, setEmployeeToDelete] = useState(null); // For employee to delete
 
 
-// Handle edit button click for admins
-const handleAdminEditClick = (admin) => {
-  setSelectedAdmin({
-    ...admin,
-    oldEmail: admin.Email, // Store the old email for reference
-  });
-  setShowEditModalAdmin(true); // Open the edit modal
-};
+  // Handle edit button click for admins
+  const handleAdminEditClick = (admin) => {
+    setSelectedAdmin({
+      ...admin,
+      oldEmail: admin.Email, // Store the old email for reference
+    });
+    setShowEditModalAdmin(true); // Open the edit modal
+  };
 
-// Handle delete button click for admins
-const handleDeleteAdminClick = (admin) => {
-  setAdminToDelete(admin); // Set the admin to delete
-  setShowDeleteModalAdmin(true); // Open the delete modal
-};
+  // Handle delete button click for admins
+  const handleDeleteAdminClick = (admin) => {
+    setAdminToDelete(admin); // Set the admin to delete
+    setShowDeleteModalAdmin(true); // Open the delete modal
+  };
 
- // Handle edit button click for managers
-const handleManagerEditClick = (manager) => {
-  setSelectedManager(manager); // Set the selected manager
-  setShowEditModalManager(true); // Open the edit modal
-};
+  // Handle edit button click for managers
+  const handleManagerEditClick = (manager) => {
+    setSelectedManager(manager); // Set the selected manager
+    setShowEditModalManager(true); // Open the edit modal
+  };
 
-const handleDeleteManagerClick = (manager) => {
-  setManagerToDelete(manager); // Set the manager to delete
-  setShowDeleteModalManager(true); // Open the delete modal
-};
+  const handleDeleteManagerClick = (manager) => {
+    setManagerToDelete(manager); // Set the manager to delete
+    setShowDeleteModalManager(true); // Open the delete modal
+  };
   const handleEditModalClose = () => {
     setShowEditModal(false);
     setSelectedManager(null);
@@ -142,132 +142,132 @@ const handleDeleteManagerClick = (manager) => {
   };
 
   // Handle editing an admin
-const handleEditAdmin = async () => {
-  if (!selectedAdmin) return;
+  const handleEditAdmin = async () => {
+    if (!selectedAdmin) return;
 
-  const db = getDatabase(app);
+    const db = getDatabase(app);
 
-  // Get the old email (before editing)
-  const EmailKey = selectedAdmin.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
-  const userRef = ref(db, `user/${EmailKey}`)
+    // Get the old email (before editing)
+    const EmailKey = selectedAdmin.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+    const userRef = ref(db, `user/${EmailKey}`)
 
-  try {
-    // Step 1: Delete the old admin entry
-    await set(userRef, selectedAdmin);
-    toast.success("Admin updated successfully!");
-    setShowEditModalAdmin(false); // Close the modal
-    getuser(); // Refresh the user list
-    // console.log(selectedAdmin)
-    // setUsedname(selectedAdmin.name)
-  } catch (error) {
-    console.error("Error updating admin:", error);
-    toast.error("An error occurred while updating the admin.");
-  }
-};
+    try {
+      // Step 1: Delete the old admin entry
+      await set(userRef, selectedAdmin);
+      toast.success("Admin updated successfully!");
+      setShowEditModalAdmin(false); // Close the modal
+      getuser(); // Refresh the user list
+      // console.log(selectedAdmin)
+      // setUsedname(selectedAdmin.name)
+    } catch (error) {
+      console.error("Error updating admin:", error);
+      toast.error("An error occurred while updating the admin.");
+    }
+  };
 
-// Handle deleting an admin
-const handleDeleteAdmin = async () => {
-  if (!adminToDelete) return;
+  // Handle deleting an admin
+  const handleDeleteAdmin = async () => {
+    if (!adminToDelete) return;
 
-  const db = getDatabase(app);
-  const emailKey = adminToDelete.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
-  const userRef = ref(db, `user/${emailKey}`);
+    const db = getDatabase(app);
+    const emailKey = adminToDelete.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+    const userRef = ref(db, `user/${emailKey}`);
 
-  try {
-    await set(userRef, null); // Delete the admin from the database
-    toast.success("Admin deleted successfully!");
-    setShowDeleteModalAdmin(false); // Close the modal
-    getuser(); // Refresh the user list
-  } catch (error) {
-    console.error("Error deleting admin:", error);
-    toast.error("An error occurred while deleting the admin.");
-  }
-};
-// Handle editing a manager
-const handleEditManager = async () => {
-  if (!selectedManager) return;
+    try {
+      await set(userRef, null); // Delete the admin from the database
+      toast.success("Admin deleted successfully!");
+      setShowDeleteModalAdmin(false); // Close the modal
+      getuser(); // Refresh the user list
+    } catch (error) {
+      console.error("Error deleting admin:", error);
+      toast.error("An error occurred while deleting the admin.");
+    }
+  };
+  // Handle editing a manager
+  const handleEditManager = async () => {
+    if (!selectedManager) return;
 
-  const db = getDatabase(app);
-  const emailKey = selectedManager.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
-  const userRef = ref(db, `user/${emailKey}`);
+    const db = getDatabase(app);
+    const emailKey = selectedManager.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+    const userRef = ref(db, `user/${emailKey}`);
 
-  try {
-    await set(userRef, selectedManager); // Update the manager in the database
-    toast.success("Manager updated successfully!");
-    setShowEditModalManager(false); // Close the modal
-    getuser(); // Refresh the user list
-  } catch (error) {
-    console.error("Error updating manager:", error);
-    toast.error("An error occurred while updating the manager.");
-  }
-};
+    try {
+      await set(userRef, selectedManager); // Update the manager in the database
+      toast.success("Manager updated successfully!");
+      setShowEditModalManager(false); // Close the modal
+      getuser(); // Refresh the user list
+    } catch (error) {
+      console.error("Error updating manager:", error);
+      toast.error("An error occurred while updating the manager.");
+    }
+  };
 
-// Handle deleting a manager
-const handleDeleteManager = async () => {
-  if (!managerToDelete) return;
+  // Handle deleting a manager
+  const handleDeleteManager = async () => {
+    if (!managerToDelete) return;
 
-  const db = getDatabase(app);
-  const emailKey = managerToDelete.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
-  const userRef = ref(db, `user/${emailKey}`);
+    const db = getDatabase(app);
+    const emailKey = managerToDelete.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+    const userRef = ref(db, `user/${emailKey}`);
 
-  try {
-    await set(userRef, null); // Delete the manager from the database
-    toast.success("Manager deleted successfully!");
-    setShowDeleteModalManager(false); // Close the modal
-    getuser(); // Refresh the user list
-  } catch (error) {
-    console.error("Error deleting manager:", error);
-    toast.error("An error occurred while deleting the manager.");
-  }
-};
+    try {
+      await set(userRef, null); // Delete the manager from the database
+      toast.success("Manager deleted successfully!");
+      setShowDeleteModalManager(false); // Close the modal
+      getuser(); // Refresh the user list
+    } catch (error) {
+      console.error("Error deleting manager:", error);
+      toast.error("An error occurred while deleting the manager.");
+    }
+  };
   // Handle edit button click for employees
-const handleEmployeeEditClick = (employee) => {
-  setSelectedEmployee(employee); // Set the selected employee
-  setShowEditModalEmployee(true); // Open the edit modal
-};
+  const handleEmployeeEditClick = (employee) => {
+    setSelectedEmployee(employee); // Set the selected employee
+    setShowEditModalEmployee(true); // Open the edit modal
+  };
 
-// Handle delete button click for employees
-const handleDeleteEmployeeClick = (employee) => {
-  setEmployeeToDelete(employee); // Set the employee to delete
-  setShowDeleteModalEmployee(true); // Open the delete modal
-};
-// Handle editing an employee
-const handleEditEmployee = async () => {
-  if (!selectedEmployee) return;
+  // Handle delete button click for employees
+  const handleDeleteEmployeeClick = (employee) => {
+    setEmployeeToDelete(employee); // Set the employee to delete
+    setShowDeleteModalEmployee(true); // Open the delete modal
+  };
+  // Handle editing an employee
+  const handleEditEmployee = async () => {
+    if (!selectedEmployee) return;
 
-  const db = getDatabase(app);
-  const emailKey = selectedEmployee.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
-  const userRef = ref(db, `user/${emailKey}`);
+    const db = getDatabase(app);
+    const emailKey = selectedEmployee.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+    const userRef = ref(db, `user/${emailKey}`);
 
-  try {
-    await set(userRef, selectedEmployee); // Update the employee in the database
-    toast.success("Employee updated successfully!");
-    setShowEditModalEmployee(false); // Close the modal
-    getuser(); // Refresh the user list
-  } catch (error) {
-    console.error("Error updating employee:", error);
-    toast.error("An error occurred while updating the employee.");
-  }
-};
+    try {
+      await set(userRef, selectedEmployee); // Update the employee in the database
+      toast.success("Employee updated successfully!");
+      setShowEditModalEmployee(false); // Close the modal
+      getuser(); // Refresh the user list
+    } catch (error) {
+      console.error("Error updating employee:", error);
+      toast.error("An error occurred while updating the employee.");
+    }
+  };
 
-// Handle deleting an employee
-const handleDeleteEmployee = async () => {
-  if (!employeeToDelete) return;
+  // Handle deleting an employee
+  const handleDeleteEmployee = async () => {
+    if (!employeeToDelete) return;
 
-  const db = getDatabase(app);
-  const emailKey = employeeToDelete.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
-  const userRef = ref(db, `user/${emailKey}`);
+    const db = getDatabase(app);
+    const emailKey = employeeToDelete.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+    const userRef = ref(db, `user/${emailKey}`);
 
-  try {
-    await set(userRef, null); // Delete the employee from the database
-    toast.success("Employee deleted successfully!");
-    setShowDeleteModalEmployee(false); // Close the modal
-    getuser(); // Refresh the user list
-  } catch (error) {
-    console.error("Error deleting employee:", error);
-    toast.error("An error occurred while deleting the employee.");
-  }
-};
+    try {
+      await set(userRef, null); // Delete the employee from the database
+      toast.success("Employee deleted successfully!");
+      setShowDeleteModalEmployee(false); // Close the modal
+      getuser(); // Refresh the user list
+    } catch (error) {
+      console.error("Error deleting employee:", error);
+      toast.error("An error occurred while deleting the employee.");
+    }
+  };
 
   const handleChangehubone = (selectedss) => {
     console.log(selectedss, "selectedssselectedssselectedss");
@@ -503,7 +503,7 @@ const handleDeleteEmployee = async () => {
 
   let changeddddd = (seee, fineee, third) => {
 
-    console.log(seee, fineee, third , 'seee, fineee, third ff') 
+    console.log(seee, fineee, third, 'seee, fineee, third ff')
 
     const emailKey = fineee.Email.replace(/\.com/g, ""); // Firebase doesn't allow dots in keys
 
@@ -523,7 +523,7 @@ const handleDeleteEmployee = async () => {
         });
     } else {
 
-      console.log(seee, fineee, third , 'seee, fineee, third')
+      console.log(seee, fineee, third, 'seee, fineee, third')
       const db = getDatabase(app);
       const userRef = ref(db, `user/${emailKey}/hub`);
 
@@ -944,7 +944,7 @@ const handleDeleteEmployee = async () => {
   const [textCount, setTextCount] = useState(gettextcount());
 
   const [boxWidth, setBoxWidth] = useState(
-    window.innerWidth >= 1400 ? 190 : window.innerWidth >= 1024 ? 180 : 160
+    window.innerWidth >= 1400 ? 'auto' : window.innerWidth >= 1024 ? 'auto' : 'auto'
   );
   const [ml, setMl] = useState(
     window.innerWidth >= 1400 ? 50 : window.innerWidth >= 1024 ? 45 : 40
@@ -965,9 +965,9 @@ const handleDeleteEmployee = async () => {
   useEffect(() => {
     const handleResize = () => {
       setTextCount(gettextcount()),
-      setBoxWidth(
-        window.innerWidth >= 1400 ? 190 : window.innerWidth >= 1024 ? 180 : 160
-      );
+        setBoxWidth(
+          window.innerWidth >= 1400 ? 'auto' : window.innerWidth >= 1024 ? 'auto' : 'auto'
+        );
       setMl(
         window.innerWidth >= 1400 ? 50 : window.innerWidth >= 1024 ? 45 : 40
       );
@@ -1195,8 +1195,8 @@ const handleDeleteEmployee = async () => {
                   height: 58,
                   padding: 10,
                   marginLeft: -33,
-                  width: "100%",
-                  cursor: "pointer",
+                  width: 50,
+                  cursor: "pointer", 
                 }}
               >
                 <p
@@ -1616,160 +1616,110 @@ const handleDeleteEmployee = async () => {
             </div>
           </div>
 
-          <div
-            className="custom-padding "
-            style={{
-              width: "100%",
-              overflow:
-                data === "1" || data === "2" || data === "3"
-                  ? "auto"
-                  : "hidden",
-            }}
-          >
-            <div
-              style={{ border: "1px solid #9F9F9F", height: "100%", marginTop: 10 }}
-              className="ggggggggg"
-            >
-              {data === "1" || data === "2" || data === "3" ? (
-                <>
-                  <div
-                    className="d-flex"
-                    style={{
-                      backgroundColor: "#DADADA",
-                      padding: 20,
-                      height: 60,
-                    }}
-                  >
-                    <div style={{ width: "19%" }}>
-                      <p
-                        style={{
-                          color: "#1A1A1B",
-                          fontWeight: "400",
-                          fontSize: fs,
-                        }}
-                      >
-                        Name
-                      </p>
-                    </div>
-                    <div style={{ width: "19%" }}>
-                      <p
-                        style={{
-                          color: "#1A1A1B",
-                          fontWeight: "400",
-                          fontSize: fs,
-                        }}
-                      >
-                        Email
-                      </p>
-                    </div>
-                    <div style={{ width: "19%" }}>
-                      <p
-                        style={{
-                          color: "#1A1A1B",
-                          fontWeight: "400",
-                          fontSize: fs,
-                        }}
-                      >
-                        Last sign-in
-                      </p>
-                    </div>
-                    <div style={{ width: "19%" }}>
-                      <p
-                        style={{
-                          color: "#1A1A1B",
-                          fontWeight: "400",
-                          fontSize: fs,
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        Venue permission
-                      </p>
-                    </div>
-                    <div className="px-md-2 px-lg-0" style={{ width: "19%" }}>
-                      <p
-                        style={{
-                          color: "#1A1A1B",
-                          fontWeight: "400",
-                          fontSize: fs,
-                        }}
-                      >
-                        Hub permission
-                      </p>
-                    </div>
-                    <div className="px-md-2 px-lg-0" style={{ width: "5%" }}>
-                      <p
-                        style={{
-                          color: "#1A1A1B",
-                          fontWeight: "400",
-                          fontSize: fs,
-                        }}
-                      >
-                        Action
-                      </p>
-                    </div>
-                  </div>
+          {data === "1" || data === "2" || data === "3" ? (
+            <>
+              <div className="custom-padding " style={{ width: '100%' }}>
+                <div
 
+                  style={{
+                    width: "100%",
+                    overflow: "auto",
+                    border: "1px solid #9F9F9F", height: "100%", marginTop: 10
+                  }}
+                >
                   <div
-                    className="d-flex "
-                    style={{
-                      padding: 20,
-                      height: 60,
-                      backgroundColor: "#FCFCFC",
-                    }}
+                    style={{}}
                   >
-                    <div style={{ width: "19%" }} className="d-flex">
-                      <img
-                        src="lolp.png"
-                        className="nerrrimg"
-                        alt="Example Image"
-                      />
-                      <input
-                        onChange={(e) => {
-                          setUsername(e.target.value);
-                          checkuserddd();
-                        }}
-                        value={username}
-                        type="text"
-                        className="form-control"
-                        placeholder="Add new user"
-                        style={{
-                          fontSize: fs,
-                          border: "none",
-                          padding: "0",
-                          boxShadow: "none",
-                        }}
-                      />
+
+
+                    <div
+                      className="d-flex"
+                      style={{
+                        backgroundColor: "#DADADA",
+                        padding: 20,
+                        height: 60,
+                      }}
+                    >
+                      {[
+                        "Name",
+                        "Email",
+                        "Last sign-in",
+                        "Venue permission",
+                        "Hub permission",
+                        "Action",
+                      ].map((header, index) => (
+                        <div
+                          key={index}
+                          style={{
+                            width: index === 5 ? "5%" : "19%", // "Action" column gets smaller width
+                          }}
+                          className={index >= 4 ? "px-md-2 px-lg-0" : ""}
+                        >
+                          <p
+                            style={{
+                              color: "#1A1A1B",
+                              fontWeight: "400",
+                              fontSize: fs,
+                              whiteSpace: header === "Venue permission" ? "nowrap" : "normal",
+                            }}
+                          >
+                            {header}
+                          </p>
+                        </div>
+                      ))}
                     </div>
-                    <div style={{ width: "19%" }} className="d-flex">
-                      {" "}
-                      <input
-                        type="text"
-                        onChange={(e) => {
-                          setEmail(e.target.value);
-                          checkuserddd();
-                        }}
-                        value={email}
-                        className="form-control"
-                        placeholder="Type in email"
-                        style={{
-                          fontSize: fs,
-                          border: "none",
-                          boxShadow: "none",
-                          marginLeft: -14,
-                        }}
-                      />
-                    </div>
-                    <div className="ms-md-3 ms-lg-0" style={{ width: "19%" }}>
-                      <p style={{ color: "#1A1A1B", fontWeight: "400" }}>-</p>
-                    </div>
-                    <div style={{ width: "19%", paddingRight: 20 }}>
-                      <p
-                        style={{
-                          color: "#1A1A1B",
-                          fontWeight: "400",
-                          fontSize: fs,
-                        }}
-                      >
+
+                    <div
+                      className="d-flex"
+                      style={{
+                        padding: 20,
+                        height: 60,
+                        backgroundColor: "#FCFCFC",
+                      }}
+                    >
+                      <div style={{ width: "19%" }} className="d-flex">
+                        <img src="lolp.png" className="nerrrimg" alt="Example Image" />
+                        <input
+                          onChange={(e) => {
+                            setUsername(e.target.value);
+                            checkuserddd();
+                          }}
+                          value={username}
+                          type="text"
+                          className="form-control"
+                          placeholder="Add new user"
+                          style={{
+                            fontSize: fs,
+                            border: "none",
+                            padding: "0",
+                            boxShadow: "none",
+                          }}
+                        />
+                      </div>
+
+                      <div style={{ width: "19%" }} className="d-flex">
+                        <input
+                          type="text"
+                          onChange={(e) => {
+                            setEmail(e.target.value);
+                            checkuserddd();
+                          }}
+                          value={email}
+                          className="form-control"
+                          placeholder="Type in email"
+                          style={{
+                            fontSize: fs,
+                            border: "none",
+                            boxShadow: "none",
+                            marginLeft: -14,
+                          }}
+                        />
+                      </div>
+
+                      <div className="ms-md-3 ms-lg-0" style={{ width: "19%" }}>
+                        <p style={{ color: "#1A1A1B", fontWeight: "400" }}>-</p>
+                      </div>
+                      <div style={{ width: "19%", paddingRight: 20 }}>
                         <Select
                           isMulti
                           className="newoneonees"
@@ -1779,7 +1729,7 @@ const handleDeleteEmployee = async () => {
                           placeholder="Select options..."
                           components={{
                             Option: CustomOption,
-                            MultiValue: () => null, // Hides default tags
+                            MultiValue: () => null,
                             ValueContainer: ({ children, ...props }) => {
                               const selectedValues = props.getValue();
                               return (
@@ -1793,8 +1743,8 @@ const handleDeleteEmployee = async () => {
                               );
                             },
                           }}
-                          closeMenuOnSelect={false} // Keep dropdown open for further selection
-                          hideSelectedOptions={false} // Show all options even if selected
+                          closeMenuOnSelect={false}
+                          hideSelectedOptions={false}
                           styles={{
                             control: (base) => ({
                               ...base,
@@ -1805,999 +1755,916 @@ const handleDeleteEmployee = async () => {
                             }),
                           }}
                         />
-                      </p>
-                    </div>
-                    <div
-                      style={{
-                        width: "19%",
-                        paddingRight: 20,
-                        color: "#1A1A1B",
-                        fontSize: fs,
-                      }}
-                    >
-                      <Select
-                        isMulti
-                        className="newoneonees"
-                        options={basicone}
-                        value={hubb}
-                        onChange={handleChangehubone}
-                        placeholder="Select options..."
-                        components={{
-                          Option: CustomOption, // Custom tick option
-                          MultiValue: () => null, // Hides default tags
-                          ValueContainer: ({ children, ...props }) => {
-                            const selectedValues = props.getValue();
-                            return (
-                              <components.ValueContainer {...props}>
-                                {selectedValues.length > 0 ? (
-                                  <CustomPlaceholder {...props} />
-                                ) : (
-                                  children
-                                )}
-                              </components.ValueContainer>
-                            );
-                          },
-                        }}
-                        closeMenuOnSelect={false} // Keep dropdown open for further selection
-                        hideSelectedOptions={false} // Show all options even if selected
-                        styles={{
-                          control: (base) => ({
-                            ...base,
-                            border: "unset",
-                            color: "#1A1A1B",
-                            marginTop: -8,
-                            fontSize: fss,
-                          }),
-                        }}
-                      />
+                      </div>
 
+                      <div style={{ width: "19%", paddingRight: 20 }}>
+                        <Select
+                          isMulti
+                          className="newoneonees"
+                          options={basicone}
+                          value={hubb}
+                          onChange={handleChangehubone}
+                          placeholder="Select options..."
+                          components={{
+                            Option: CustomOption,
+                            MultiValue: () => null,
+                            ValueContainer: ({ children, ...props }) => {
+                              const selectedValues = props.getValue();
+                              return (
+                                <components.ValueContainer {...props}>
+                                  {selectedValues.length > 0 ? (
+                                    <CustomPlaceholder {...props} />
+                                  ) : (
+                                    children
+                                  )}
+                                </components.ValueContainer>
+                              );
+                            },
+                          }}
+                          closeMenuOnSelect={false}
+                          hideSelectedOptions={false}
+                          styles={{
+                            control: (base) => ({
+                              ...base,
+                              border: "unset",
+                              color: "#1A1A1B",
+                              marginTop: -8,
+                              fontSize: fss,
+                            }),
+                          }}
+                        />
+                      </div>
                     </div>
-               
+                    <hr
+                      style={{
+                        margin: "0px 0px",
+                        backgroundColor: "#9F9F9F",
+                        height: 1,
+                      }}
+                    />
                   </div>
 
-                  <hr
+                  <div style={{ overflow: "auto", height: "46vh" }}>
+                    {data === "1" ? (
+                      <>
+                        {Object.entries(user)
+                          .filter(([_, value]) => value.Role === "admin") // Filter only admins
+                          .map(([key, value]) => {
+
+
+                            const output = [];
+
+
+                            if (Array.isArray(value.venue)) {
+                              value.venue.forEach(({ value }) => {
+                                // Search in the data object
+                                Object.entries(alldrop).forEach(([key, items]) => {
+                                  if (key === value) {
+                                    // If the key matches, add all items from the group to the output
+                                    items.forEach(item => {
+                                      output.push({ value: key + '-' + item.name, label: item.name });
+                                    });
+                                  } else {
+                                    // Search within the group's items
+                                    items.forEach(item => {
+                                      if (item.name === value) {
+                                        output.push({ value: key + '-' + item.name, label: key });
+                                      }
+                                    });
+                                  }
+                                });
+                              });
+                            } else {
+                              console.error("value.venue is not an array or is undefined:", value.venue);
+                            }
+
+                            // const modifiedData = value.venue.map(item => ({   
+                            //   label: item.label,
+                            //   value: item.value.split("-")[0] // Extracts only the first part before "-"
+                            // }));
+
+                            return (
+                              <>
+                                <div
+                                  className="d-flex"
+                                  style={{
+                                    padding: 20,
+                                    height: 60,
+                                    backgroundColor: "#ECF1F4",
+                                  }}
+                                >
+                                  <div style={{ width: "19%", display: "flex", alignItems: "center" }}>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center", // Centers items vertically
+                                        overflow: "hidden", // Prevents content from overflowing
+                                        whiteSpace: "nowrap", // Keeps text in a single line
+                                      }}
+                                    >
+                                      <img
+                                        src="lolp.png"
+                                        alt="Example Image"
+                                        style={{ height: "auto", verticalAlign: "middle", maxWidth: "100%" }}
+                                      />
+                                      <p
+                                        style={{
+                                          color: "#316AAF",
+                                          fontWeight: "400",
+                                          fontSize: fs,
+                                          margin: 0, // Remove default margin
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis", // Adds "..." for overflowed text
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width
+                                          marginLeft : 7 , marginRight : 7
+                                        }}
+                                      >
+                                        {value.name}
+                                      </p>
+                                    </div>
+                                  </div>
+
+
+
+                                  <div
+                                    style={{
+                                      width: "19%",
+                                      display: "flex",
+                                      alignItems: "center", // Centers the p vertically
+                                      height: "100%", // Ensures the div has a height
+                                    }}
+                                    onClick={() => {
+                                      console.log(JSON.stringify(basic), "value.hubvalue.hub");
+                                    }}
+                                  >
+                                    <p
+                                      style={{
+                                        color: "#707070",
+                                        fontWeight: "400",
+                                        fontSize: fs,
+                                        overflow: "hidden",
+                                        whiteSpace: "nowrap",
+                                        textOverflow: "ellipsis",
+                                        width: "100%", // Ensures text obeys the container width
+                                        margin: 0, // Remove default margin
+                                      }}
+                                    >
+                                      {value.Email}
+                                    </p>
+                                  </div>
+
+
+                                  <div className="ms-md-3 ms-lg-0" style={{ width: `19%` }}>
+                                    <p
+                                      style={{
+                                        color: "#1A1A1B",
+                                        fontWeight: "400",
+                                        fontSize: fs,
+                                      }}
+                                    >
+                                      -
+                                    </p>
+                                  </div>
+                                  <div
+                                    style={{
+                                      width: `19%`,
+                                      paddingRight: 20,
+                                      color: "#1A1A1B",
+                                      fontSize: fs,
+                                    }}
+                                  >
+                                    <Select
+                                      isMulti
+                                      className="newoneoneess"
+                                      options={basic}
+                                      value={value.venue} // Shows selected values
+                                      onChange={(e) => {
+                                        changeddddd(e, value, "venue");
+                                      }} // Prevent selection changes
+                                      // placeholder={value.venue[0].label + "..."}
+                                      placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
+
+                                      components={{
+                                        Option: CustomOption,
+                                        MultiValue: () => null, // Hides default tags
+                                        ValueContainer: ({
+                                          children,
+                                          ...props
+                                        }) => {
+                                          const selectedValues = props.getValue();
+                                          return (
+                                            <components.ValueContainer {...props}>
+                                              {selectedValues.length > 0 ? (
+                                                <CustomPlaceholder {...props} />
+                                              ) : (
+                                                children
+                                              )}
+                                            </components.ValueContainer>
+                                          );
+                                        },
+                                      }} // Keep dropdown open for further selection
+                                      closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                      hideSelectedOptions={false} // Show all options even if selected
+                                      styles={{
+                                        control: (base) => ({
+                                          ...base,
+                                          border: "unset",
+                                          marginTop: -8,
+                                          color: "#1A1A1B",
+                                          fontSize: fss,
+                                        }),
+                                      }}
+                                    />
+                                  </div>
+                                  <div style={{ width: "19%", paddingRight: 20 }}>
+                                    <Select
+                                      isMulti
+                                      className="newoneoneess"
+                                      options={output}
+                                      value={value.hub} // Shows selected values
+                                      onChange={(e) => {
+
+
+                                        changeddddd(e, value, "hub");
+                                      }} // Prevent selection changes
+                                      // placeholder={value.hub[0].label + "..."}
+                                      placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
+
+                                      components={{
+                                        Option: CustomOption,
+                                        MultiValue: () => null, // Hides default tags
+                                        ValueContainer: ({
+                                          children,
+                                          ...props
+                                        }) => {
+                                          const selectedValues = props.getValue();
+                                          return (
+                                            <components.ValueContainer {...props}>
+                                              {selectedValues.length > 0 ? (
+                                                <CustomPlaceholder {...props} />
+                                              ) : (
+                                                children
+                                              )}
+                                            </components.ValueContainer>
+                                          );
+                                        },
+                                      }}
+                                      closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                      hideSelectedOptions={false} // Show all options even if selected 
+                                      styles={{
+                                        control: (base) => ({
+                                          ...base,
+                                          border: "unset",
+                                          marginTop: -8,
+                                          color: "#1A1A1B",
+                                          fontSize: fss,
+                                        }),
+                                      }}
+                                    />
+                                  </div>
+                                  <div style={{ width: "5%", paddingLeft: "1%" }} className="d-flex justify-content-between gap-3 align-items-center ">
+                                    <div
+                                      onClick={() => handleAdminEditClick(value)} // Edit button
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      <FaEdit />
+                                    </div>
+                                    <div
+                                      onClick={() => handleDeleteAdminClick(value)} // Delete button
+                                      style={{ color: "red", cursor: "pointer", marginTop: 5 }}
+                                    >
+                                      <FaRegTrashCan />
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <hr
+                                  style={{
+                                    margin: "0px 0px",
+                                    backgroundColor: "#9F9F9F",
+                                    height: 1,
+                                  }}
+                                />
+                              </>
+                            );
+                          })}
+                      </>
+                    ) : data === "2" ? (
+                      <>
+                        {Object.entries(user)
+                          .filter(([_, value]) => value.Role === "manager") // Filter only admins
+                          .map(([key, value]) => {
+
+                            const output = [];
+
+
+
+                            if (Array.isArray(value.venue)) {
+                              value.venue.forEach(({ value }) => {
+                                // Search in the data object
+                                Object.entries(alldrop).forEach(([key, items]) => {
+                                  if (key === value) {
+                                    // If the key matches, add all items from the group to the output
+                                    items.forEach(item => {
+                                      output.push({ value: key + '-' + item.name, label: item.name });
+                                    });
+                                  } else {
+                                    // Search within the group's items
+                                    items.forEach(item => {
+                                      if (item.name === value) {
+                                        output.push({ value: key + '-' + item.name, label: key });
+                                      }
+                                    });
+                                  }
+                                });
+                              });
+                            } else {
+                              console.error("value.venue is not an array or is undefined:", value.venue);
+                            }
+
+
+
+                            return (
+                              <>
+                                <div
+                                  className="d-flex"
+                                  style={{
+                                    padding: 20,
+                                    height: 60,
+                                    backgroundColor: "#ECF1F4",
+                                  }}
+                                >
+                                   <div style={{ width: "19%", display: "flex", alignItems: "center" }}>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center", // Centers items vertically
+                                        overflow: "hidden", // Prevents content from overflowing
+                                        whiteSpace: "nowrap", // Keeps text in a single line
+                                      }}
+                                    >
+                                      <img
+                                        src="lolp.png"
+                                        alt="Example Image"
+                                        style={{ height: "auto", verticalAlign: "middle", maxWidth: "100%" }}
+                                      />
+                                      <p
+                                        style={{
+                                          color: "#316AAF",
+                                          fontWeight: "400",
+                                          fontSize: fs,
+                                          margin: 0, // Remove default margin
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis", // Adds "..." for overflowed text
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width
+                                          marginLeft : 7 , marginRight : 7
+                                        }}
+                                      >
+                                        {value.name}
+                                      </p>
+                                    </div>
+                                  </div>
+
+
+
+                                  <div
+                                    style={{
+                                      width: "19%",
+                                      display: "flex",
+                                      alignItems: "center", // Centers the p vertically
+                                      height: "100%", // Ensures the div has a height
+                                    }}
+                                    onClick={() => {
+                                      console.log(JSON.stringify(basic), "value.hubvalue.hub");
+                                    }}
+                                  >
+                                    <p
+                                      style={{
+                                        color: "#707070",
+                                        fontWeight: "400",
+                                        fontSize: fs,
+                                        overflow: "hidden",
+                                        whiteSpace: "nowrap",
+                                        textOverflow: "ellipsis",
+                                        width: "100%", // Ensures text obeys the container width
+                                        margin: 0, // Remove default margin
+                                      }}
+                                    >
+                                      {value.Email}
+                                    </p>
+                                  </div>
+
+                                  <div style={{ width: "19%" }}>
+                                    <p
+                                      style={{
+                                        color: "#1A1A1B",
+                                        fontWeight: "400",
+                                        fontSize: fs,
+                                      }}
+                                    >
+                                      -
+                                    </p>
+                                  </div>
+                                  <div
+                                    style={{
+                                      width: "19%",
+                                      paddingRight: 20,
+                                      color: "#1A1A1B",
+                                      fontSize: fs,
+                                    }}
+                                  >
+                                    <Select
+                                      isMulti
+                                      className="newoneoneess"
+                                      options={basic}
+                                      value={value.venue} // Shows selected values
+                                      onChange={(e) => {
+                                        changeddddd(e, value, "venue");
+                                      }} // Prevent selection changes
+                                      placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
+
+                                      components={{
+                                        Option: CustomOption,
+                                        MultiValue: () => null, // Hides default tags
+                                        ValueContainer: ({ children, ...props }) => {
+                                          const selectedValues = props.getValue();
+                                          return (
+                                            <components.ValueContainer {...props}>
+                                              {selectedValues.length > 0 ? (
+                                                <CustomPlaceholder {...props} />
+                                              ) : (
+                                                children
+                                              )}
+                                            </components.ValueContainer>
+                                          );
+                                        },
+                                      }} // Keep dropdown open for further selection
+                                      closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                      hideSelectedOptions={false} // Disables all options from being selected
+                                      styles={{
+                                        control: (base) => ({
+                                          ...base,
+                                          border: "unset",
+                                          marginTop: -8,
+                                          color: "#1A1A1B",
+                                          fontSize: fss,
+                                        }),
+                                      }}
+                                    />
+                                  </div>
+                                  <div style={{ width: "19%", paddingRight: 20 }}>
+                                    <Select
+                                      isMulti
+                                      className="newoneoneess"
+                                      options={output}
+                                      value={value.hub} // Shows selected values
+                                      onChange={(e) => {
+                                        changeddddd(e, value, "hub");
+                                      }} // Prevent selection changes
+                                      // placeholder={value.hub[0].label + "..."}
+                                      placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
+
+                                      components={{
+                                        Option: CustomOption,
+                                        MultiValue: () => null, // Hides default tags
+                                        ValueContainer: ({ children, ...props }) => {
+                                          const selectedValues = props.getValue();
+                                          return (
+                                            <components.ValueContainer {...props}>
+                                              {selectedValues.length > 0 ? (
+                                                <CustomPlaceholder {...props} />
+                                              ) : (
+                                                children
+                                              )}
+                                            </components.ValueContainer>
+                                          );
+                                        },
+                                      }}
+                                      closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                      hideSelectedOptions={false} // Show all options even if selected 
+                                      styles={{
+                                        control: (base) => ({
+                                          ...base,
+                                          border: "unset",
+                                          marginTop: -8,
+                                          color: "#1A1A1B",
+                                          fontSize: fss,
+                                        }),
+                                      }}
+                                    />
+                                  </div>
+                                  <div style={{ width: '5%', paddingLeft: "1%" }} className="d-flex justify-content-between gap-3 align-items-center ">
+                                    <div onClick={() => handleManagerEditClick(value)} style={{ cursor: "pointer" }}>
+                                      <FaEdit />
+                                    </div>
+                                    <div className="" onClick={() => handleDeleteManagerClick(value)} style={{ color: "red", cursor: "pointer" }}>
+                                      <FaRegTrashCan />
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <hr
+                                  style={{
+                                    margin: "0px 0px",
+                                    backgroundColor: "#9F9F9F",
+                                    height: 1,
+                                  }}
+                                />
+
+                              </>
+                            )
+                          })}
+
+                      </>
+                    ) : data === "3" ? (
+                      <>
+                        {Object.entries(user)
+                          .filter(([_, value]) => value.Role === "emp") // Filter only admins
+                          .map(([key, value]) => {
+
+
+                            const output = [];
+
+
+                            if (Array.isArray(value.venue)) {
+                              value.venue.forEach(({ value }) => {
+                                // Search in the data object
+                                Object.entries(alldrop).forEach(([key, items]) => {
+                                  if (key === value) {
+                                    // If the key matches, add all items from the group to the output
+                                    items.forEach(item => {
+                                      output.push({ value: key + '-' + item.name, label: item.name });
+                                    });
+                                  } else {
+                                    // Search within the group's items
+                                    items.forEach(item => {
+                                      if (item.name === value) {
+                                        output.push({ value: key + '-' + item.name, label: key });
+                                      }
+                                    });
+                                  }
+                                });
+                              });
+                            } else {
+                              console.error("value.venue is not an array or is undefined:", value.venue);
+                            }
+
+
+
+
+                            return (
+                              <>
+                                <div
+                                  className="d-flex"
+                                  style={{
+                                    padding: 20,
+                                    height: 60,
+                                    backgroundColor: "#ECF1F4",
+                                  }}
+                                >
+                                  <div style={{ width: "19%", display: "flex", alignItems: "center" }}>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center", // Centers items vertically
+                                        overflow: "hidden", // Prevents content from overflowing
+                                        whiteSpace: "nowrap", // Keeps text in a single line
+                                      }}
+                                    >
+                                      <img
+                                        src="lolp.png"
+                                        alt="Example Image"
+                                        style={{ height: "auto", verticalAlign: "middle", maxWidth: "100%" }}
+                                      />
+                                      <p
+                                        style={{
+                                          color: "#316AAF",
+                                          fontWeight: "400",
+                                          fontSize: fs,
+                                          margin: 0, // Remove default margin
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis", // Adds "..." for overflowed text
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width
+                                          marginLeft : 7 , marginRight : 7
+                                        }}
+                                      >
+                                        {value.name}
+                                      </p>
+                                    </div>
+                                  </div>
+
+
+
+                                  <div
+                                    style={{
+                                      width: "19%",
+                                      display: "flex",
+                                      alignItems: "center", // Centers the p vertically
+                                      height: "100%", // Ensures the div has a height
+                                    }}
+                                    onClick={() => {
+                                      console.log(JSON.stringify(basic), "value.hubvalue.hub");
+                                    }}
+                                  >
+                                    <p
+                                      style={{
+                                        color: "#707070",
+                                        fontWeight: "400",
+                                        fontSize: fs,
+                                        overflow: "hidden",
+                                        whiteSpace: "nowrap",
+                                        textOverflow: "ellipsis",
+                                        width: "100%", // Ensures text obeys the container width
+                                        margin: 0, // Remove default margin
+                                      }}
+                                    >
+                                      {value.Email}
+                                    </p>
+                                  </div>
+
+                                  <div style={{ width: "19%" }}>
+                                    <p
+                                      style={{ color: "#1A1A1B", fontWeight: "400" }}
+                                    >
+                                      -
+                                    </p>
+                                  </div>
+                                  <div
+                                    style={{
+                                      width: "19%",
+                                      paddingRight: 20,
+                                      color: "#1A1A1B",
+                                    }}
+                                  >
+                                    <Select
+                                      isMulti
+                                      className="newoneoneess"
+                                      options={basic}
+                                      value={value.venue} // Shows selected values
+                                      onChange={(e) => {
+                                        changeddddd(e, value, "venue");
+                                      }} // Prevent selection changes
+                                      placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
+
+                                      components={{
+                                        Option: CustomOption,
+                                        MultiValue: () => null, // Hides default tags
+                                        ValueContainer: ({ children, ...props }) => {
+                                          const selectedValues = props.getValue();
+                                          return (
+                                            <components.ValueContainer {...props}>
+                                              {selectedValues.length > 0 ? (
+                                                <CustomPlaceholder {...props} />
+                                              ) : (
+                                                children
+                                              )}
+                                            </components.ValueContainer>
+                                          );
+                                        },
+                                      }} // Keep dropdown open for further selection
+                                      closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                      hideSelectedOptions={false} // Disables all options from being selected
+                                      styles={{
+                                        control: (base) => ({
+                                          ...base,
+                                          border: "unset",
+                                          marginTop: -8,
+                                          color: "#1A1A1B",
+                                          fontSize: fss
+                                        }),
+                                      }}
+                                    />
+                                  </div>
+                                  <div style={{ width: "19%", paddingRight: 20 }}>
+                                    <Select
+                                      isMulti
+                                      className="newoneoneess"
+                                      options={output}
+                                      value={value.hub} // Shows selected values
+                                      onChange={(e) => {
+                                        changeddddd(e, value, "hub");
+                                      }} // Prevent selection changes
+                                      placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
+
+                                      components={{
+                                        Option: CustomOption,
+                                        MultiValue: () => null, // Hides default tags
+                                        ValueContainer: ({ children, ...props }) => {
+                                          const selectedValues = props.getValue();
+                                          return (
+                                            <components.ValueContainer {...props}>
+                                              {selectedValues.length > 0 ? (
+                                                <CustomPlaceholder {...props} />
+                                              ) : (
+                                                children
+                                              )}
+                                            </components.ValueContainer>
+                                          );
+                                        },
+                                      }}
+                                      closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                      hideSelectedOptions={false} // Show all options even if selected 
+                                      styles={{
+                                        control: (base) => ({
+                                          ...base,
+                                          border: "unset",
+                                          marginTop: -8,
+                                          color: "#1A1A1B",
+                                          fontSize: fss
+                                        }),
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="d-flex justify-content-between gap-3 align-items-center " style={{ width: "5%", paddingLeft: "1%" }}>
+                                    <div
+                                      onClick={() => handleEmployeeEditClick(value)} // Edit button
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      <FaEdit />
+                                    </div>
+                                    <div
+                                      onClick={() => handleDeleteEmployeeClick(value)} // Delete button
+                                      style={{ color: "red", cursor: "pointer", marginTop: 5 }}
+                                    >
+                                      <FaRegTrashCan />
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <hr
+                                  style={{
+                                    margin: "0px 0px",
+                                    backgroundColor: "#9F9F9F",
+                                    height: 1,
+                                  }}
+                                />
+                              </>
+                            )
+                          })}
+                      </>
+                    ) : data === "4" ? (
+                      <></>
+                    ) : data === "5" ? (
+                      <></>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </div>
+
+              </div>
+            </>
+
+          ) : data === "4" ? (
+
+
+            <div style={{ padding: "0 50px", width: '100%' }}> {/* Adds 10% side spacing */}
+              <div style={{ border: "1px solid #9F9F9F", overflow: "hidden", height: '100%' }}>
+                {/* Header Row */}
+                <div className="d-flex" style={{ backgroundColor: "#DADADA", padding: "12px", borderBottom: "1px solid #9F9F9F" }}>
+                  <div style={{ width: "33%", display: "flex", alignItems: "center" }}>
+                    <p style={{ color: "#1A1A1B", fontWeight: "600", fontSize: fs, marginBottom: 0 }}>Name</p>
+                  </div>
+                  <div style={{ width: "34%", display: "flex", alignItems: "center" }}>
+                    <p style={{ color: "#1A1A1B", fontWeight: "600", fontSize: fs, marginBottom: 0 }}>Access</p>
+                  </div>
+                  <div style={{ width: "33%", display: "flex", alignItems: "center" }}>
+                    <p style={{ color: "#1A1A1B", fontWeight: "600", fontSize: fs, marginBottom: 0 }}>Permissions</p>
+                  </div>
+                </div>
+
+                {/* Data Rows */}
+                {[
+                  { name: "Admin", access: "Settings, Analytics, Training videos", permissions: "Create any users, Reset users passwords" },
+                  { name: "Managers", access: "Analytics, Training videos", permissions: "Create employee users, Reset personal password" },
+                  { name: "Employees", access: "Training videos", permissions: "Reset personal password" },
+                ].map((item, index, array) => (
+                  <div
+                    key={index}
+                    className="d-flex"
                     style={{
-                      margin: "0px 0px",
-                      backgroundColor: "#9F9F9F",
-                      height: 1,
+                      padding: "30px",
+                      borderBottom: "1px solid #9F9F9F",  // Adds border to all rows
+                      backgroundColor: "#ECF1F4"
                     }}
-                  />
-                </>
-              ) : data === "4" ? (
-                <div style={{ height: "40vh" }}>
+                  >
+                    <div style={{ width: "33%", display: "flex", alignItems: "center" }}>
+                      <p style={{ color: "#316AAF", fontWeight: "500", fontSize: fs, marginBottom: 0 }}>{item.name}</p>
+                    </div>
+                    <div style={{ width: "34%", display: "flex", alignItems: "center" }}>
+                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs, marginBottom: 0 }}>{item.access}</p>
+                    </div>
+                    <div style={{ width: "33%", display: "flex", alignItems: "center" }}>
+                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs, marginBottom: 0 }}>{item.permissions}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <>
+              <div style={{ padding: "0 50px", width: "100%" }}>
+                <div style={{ border: "1px solid #9F9F9F", overflow: "hidden", height: "100%" }}>
+
+                  {/* Header Row */}
                   <div
                     className="d-flex"
                     style={{
                       backgroundColor: "#DADADA",
                       padding: 20,
-                      height: 84,
+                      height: 60,
+                      borderBottom: "1px solid #9F9F9F",
                     }}
                   >
-                    <div style={{ width: "33%" }}>
-                      <p
+                    <div style={{ width: "33%" }}></div>
+                    <div style={{ width: "34%" }}></div>
+                    <div style={{ width: "33%" }}></div>
+                  </div>
+
+                  {/* Rows */}
+                  {[
+                    { label: "Full Name", value: editname, setValue: setEditname, disabled: editnamebool, setDisabled: setEditnamebool, type: "text", icon: true },
+                    { label: "Email", value: editemail, setValue: setEditemail, disabled: true, icon: false },
+                    { label: "Password", value: editpass, setValue: setEditpass, type: editpassbool ? "text" : "password", toggle: setEditpassbool, isPassword: true },
+                  ].map((item, index) => (
+                    <React.Fragment key={index}>
+                      <div
+                        className="d-flex"
                         style={{
-                          color: "#1A1A1B",
-                          fontWeight: "400",
-                          fontSize: fs,
+                          padding: 40,
+                          height: 60,
+                          backgroundColor: "#ECF1F4",
                         }}
                       >
-                        Name
-                      </p>
-                    </div>
-                    <div style={{ width: "34%" }}>
-                      <p
-                        style={{
-                          color: "#1A1A1B",
-                          fontWeight: "400",
-                          fontSize: fs,
-                        }}
-                      >
-                        Access
-                      </p>
-                    </div>
-                    <div style={{ width: "33%" }}>
-                      <p
-                        style={{
-                          color: "#1A1A1B",
-                          fontWeight: "400",
-                          fontSize: fs,
-                        }}
-                      >
-                        Permissions
-                      </p>
-                    </div>
-                  </div>
-
-                  <div
-                    className="d-flex"
-                    style={{
-                      padding: 20,
-                      height: 84,
-                      backgroundColor: "#ECF1F4",
-                    }}
-                  >
-                    <div style={{ width: "33%" }} className="d-flex mt-2">
-                      <p style={{ color: "#316AAF", fontWeight: "400", fontSize: fs }}>
-                        Admin
-                      </p>
-                    </div>
-                    <div style={{ width: "34%" }} className="d-flex mt-2">
-                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs }}>
-                        Settings, Analytics, Training videos
-                      </p>
-                    </div>
-                    <div className="mt-2" style={{ width: "33%" }}>
-                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs }}>
-                        Create any users, Reset users passwords
-                      </p>
-                    </div>
-                  </div>
-
-                  <hr
-                    style={{
-                      margin: "0px 0px",
-                      backgroundColor: "#9F9F9F",
-                      height: 1,
-                    }}
-                  />
-
-                  <div
-                    className="d-flex"
-                    style={{
-                      padding: 20,
-                      height: 84,
-                      backgroundColor: "#ECF1F4",
-                    }}
-                  >
-                    <div className="mt-2 d-flex" style={{ width: "33%" }} >
-                      <p style={{ color: "#316AAF", fontWeight: "400", fontSize: fs }}>
-                        Managers
-                      </p>
-                    </div>
-                    <div className="mt-2 d-flex" style={{ width: "34%" }}>
-                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs }}>
-                        Analytics, Training videos
-                      </p>
-                    </div>
-                    <div className="mt-2" style={{ width: "33%" }}>
-                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs }}>
-                        Create employee users, Reset personal password
-                      </p>
-                    </div>
-                  </div>
-
-                  <hr
-                    style={{
-                      margin: "0px 0px",
-                      backgroundColor: "#9F9F9F",
-                      height: 1,
-                    }}
-                  />
-
-                  <div
-                    className="d-flex"
-                    style={{
-                      padding: 20,
-                      height: 84,
-                      backgroundColor: "#ECF1F4",
-                    }}
-                  >
-                    <div className="mt-2 d-flex" style={{ width: "33%" }}>
-                      <p style={{ color: "#316AAF", fontWeight: "400", fontSize: fs }}>
-                        Employees
-                      </p>
-                    </div>
-                    <div className="mt-2 d-flex" style={{ width: "34%" }} >
-                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs }}>
-                        Training videos
-                      </p>
-                    </div>
-                    <div className="mt-2" style={{ width: "33%" }}>
-                      <p style={{ color: "#707070", fontWeight: "400", fontSize: fs }}>
-                        Reset personal password
-                      </p>
-                    </div>
-                  </div>
-
-                  <hr
-                    style={{
-                      margin: "0px 0px",
-                      backgroundColor: "#9F9F9F",
-                      height: 1,
-                    }}
-                  />
-                </div>
-              ) : (
-                <>
-                  <div style={{ height: "40vh" }}>
-                    <div
-                      className="d-flex"
-                      style={{
-                        backgroundColor: "#DADADA",
-                        padding: 20,
-                        height: 60,
-                      }}
-                    >
-                      <div style={{ width: "33%" }}></div>
-                      <div style={{ width: "34%" }}></div>
-                      <div style={{ width: "33%" }}></div>
-                    </div>
-
-                    <div
-                      className="d-flex"
-                      style={{
-                        padding: 20,
-                        height: 60,
-                        backgroundColor: "#ECF1F4",
-                      }}
-                    >
-                      <div style={{ width: "20%" }} className="d-flex">
-                        <p style={{ color: "#316AAF", fontWeight: "400" }}>
-                          Full Name
-                        </p>
-                      </div>
-                      <div style={{ width: "20%" }} className="d-flex">
-                        <input
-                          value={editname}
-                          onChange={(e) => {
-                            setEditname(e.target.value);
-                            setButtoncolor(true);
-                          }}
-                          className="form-control"
-                          placeholder="Search..."
-                          style={{
-                            border: "none",
-                            boxShadow: "none",
-                            width: "100%",
-                            height: 40,
-                            backgroundColor: "#ECF1F4",
-                            marginTop: -9,
-                          }}
-                          disabled={editnamebool}
-                          type="text"
-                          id="switch3"
-                        />
-                      </div>
-                      <div style={{ width: "40%" }}>
-                        <img
-                          onClick={(e) => {
-                            setEditnamebool(!editnamebool);
-                          }}
-                          src="pencil.png"
-                          alt="Example Image"
-                        />
-                      </div>
-                    </div>
-
-                    <hr
-                      style={{
-                        margin: "0px 0px",
-                        backgroundColor: "#9F9F9F",
-                        height: 1,
-                      }}
-                    />
-
-                    <div
-                      className="d-flex"
-                      style={{
-                        padding: 20,
-                        height: 60,
-                        backgroundColor: "#ECF1F4",
-                      }}
-                    >
-                      <div style={{ width: "20%" }} className="d-flex">
-                        <p style={{ color: "#316AAF", fontWeight: "400" }}>
-                          Email
-                        </p>
-                      </div>
-                      <div style={{ width: "20%" }} className="d-flex">
-                        <input
-                          value={editemail}
-                          onChange={(e) => {
-                            setEditemail(e.target.value);
-                            setButtoncolor(true);
-                          }}
-                          className="form-control"
-                          placeholder="Search..."
-                          style={{
-                            border: "none",
-                            boxShadow: "none",
-                            width: "100%",
-                            height: 40,
-                            backgroundColor: "#ECF1F4",
-                            marginTop: -9,
-                          }}
-                          disabled={true}
-                          type="text"
-                          id="switch3"
-                        />
-                      </div>
-                      <div style={{ width: "40%" }}>
-                        {/* <img onClick={(e) => {
-                              setEditemailbool(!editemailbool)
-                            }} src="pencil.png" alt="Example Image" /> */}
-                      </div>
-                    </div>
-
-                    <hr
-                      style={{
-                        margin: "0px 0px",
-                        backgroundColor: "#9F9F9F",
-                        height: 1,
-                      }}
-                    />
-
-                    <div
-                      className="d-flex"
-                      style={{
-                        padding: 20,
-                        height: 60,
-                        backgroundColor: "#ECF1F4",
-                      }}
-                    >
-                      <div style={{ width: "20%" }} className="d-flex">
-                        <p style={{ color: "#316AAF", fontWeight: "400" }}>
-                          Password
-                        </p>
-                      </div>
-                      <div style={{ width: "20%" }} className="d-flex">
-                        <input
-                          value={editpass}
-                          onChange={(e) => {
-                            setEditpass(e.target.value);
-                            setButtoncolor(true);
-                          }}
-                          className="form-control"
-                          placeholder="Search..."
-                          style={{
-                            border: "none",
-                            boxShadow: "none",
-                            width: "100%",
-                            height: 40,
-                            backgroundColor: "#ECF1F4",
-                            marginTop: -9,
-                          }}
-                          type={editpassbool === true ? "text" : "password"}
-                          id="switch3"
-                        />
-                      </div>
-                      <div style={{ width: "40%" }}>
-                        <label class="round-checkbox">
+                        <div style={{ width: "20%" }} className="d-flex">
+                          <p style={{ color: "#316AAF", fontWeight: "400" }}>{item.label}</p>
+                        </div>
+                        <div style={{ width: "20%" }} className="d-flex">
                           <input
-                            checked={editpassbool}
+                            value={item.value}
                             onChange={(e) => {
-                              setEditpassbool(e.target.checked);
+                              item.setValue(e.target.value);
+                              setButtoncolor(true);
                             }}
-                            type="checkbox"
+                            className="form-control"
+                            placeholder="Search..."
+                            style={{
+                              border: "none",
+                              boxShadow: "none",
+                              width: "100%",
+                              height: 40,
+                              backgroundColor: "#ECF1F4",
+                              marginTop: -9,
+                            }}
+                            disabled={item.disabled}
+                            type={item.type || "text"}
+                            id="switch3"
                           />
-                          {editpassbool ? <FiEye /> : <FiEyeOff />}
-                        </label>
-                      </div>
-                    </div>
-
-                    <hr
-                      style={{
-                        margin: "0px 0px",
-                        backgroundColor: "#9F9F9F",
-                        height: 1,
-                      }}
-                    />
-                  </div>
-                </>
-              )}
-
-              <div style={{ overflow: "auto", height: "46vh" }}>
-                {data === "1" ? (
-                  <>
-                    {Object.entries(user)
-                      .filter(([_, value]) => value.Role === "admin") // Filter only admins
-                      .map(([key, value]) => {
-
-
-                        const output = [];
- 
-                        
-                        if (Array.isArray(value.venue)) {
-                          value.venue.forEach(({ value }) => {
-                            // Search in the data object
-                            Object.entries(alldrop).forEach(([key, items]) => {
-                              if (key === value) {
-                                // If the key matches, add all items from the group to the output
-                                items.forEach(item => {
-                                  output.push({ value: key + '-' + item.name, label: item.name });
-                                });
-                              } else {
-                                // Search within the group's items
-                                items.forEach(item => {
-                                  if (item.name === value) {
-                                    output.push({ value: key + '-' + item.name, label: key });
-                                  }
-                                });
-                              }
-                            });
-                          });
-                        } else {
-                          console.error("value.venue is not an array or is undefined:", value.venue);
-                        }
-
-                        // const modifiedData = value.venue.map(item => ({   
-                        //   label: item.label,
-                        //   value: item.value.split("-")[0] // Extracts only the first part before "-"
-                        // }));
-
-                        return (
-                          <>
-                            <div
-                              className="d-flex"
-                              style={{
-                                padding: 20,
-                                height: 60,
-                                backgroundColor: "#ECF1F4",
-                              }}
-                            >
-                              <div style={{ width: "19%" }} className="d-flex">
-                                <img
-                                  src="lolp.png"
-                                  className="nerrrimg"
-                                  alt="Example Image"
-                                />
-                                <p
-                                  style={{
-                                    color: "#316AAF",
-                                    fontWeight: "400",
-                                    fontSize: fs,
-                                  }}
-                                >
-                                  {value.name}
-                                </p>
-                              </div>
-                              <div
-                                style={{
-                                  width: "19%",
-                                  display: "flex",
-                                  alignItems: "center"  // Align text vertically
-                                }}
-                                onClick={() => {
-                                  console.log(JSON.stringify(basic), "value.hubvalue.hub");
-                                }}
-                              >
-                                <p
-                                  style={{
-                                    color: "#707070",
-                                    fontWeight: "400",
-                                    fontSize: fs,
-                                    overflow: "hidden",
-                                    whiteSpace: "nowrap",
-                                    textOverflow: "ellipsis",
-                                    width: "100%",  // Ensure the text obeys the container width
-                                  }}
-                                >
-                                  {value.Email}
-                                </p>
-                              </div>
-
-                              <div className="ms-md-3 ms-lg-0" style={{ width: `20%` }}>
-                                <p
-                                  style={{
-                                    color: "#1A1A1B",
-                                    fontWeight: "400",
-                                    fontSize: fs,
-                                  }}
-                                >
-                                  -
-                                </p>
-                              </div>
-                              <div
-                                style={{
-                                  width: `19%`,
-                                  paddingRight: 20,
-                                  color: "#1A1A1B",
-                                  fontSize: fs,
-                                }}
-                              >
-                                <Select
-                                  isMulti
-                                  className="newoneoneess"
-                                  options={basic}
-                                  value={value.venue} // Shows selected values
-                                  onChange={(e) => {
-                                    changeddddd(e, value, "venue");
-                                  }} // Prevent selection changes
-                                  // placeholder={value.venue[0].label + "..."}
-                                  placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
-
-                                  components={{
-                                    Option: CustomOption,
-                                    MultiValue: () => null, // Hides default tags
-                                    ValueContainer: ({
-                                      children,
-                                      ...props
-                                    }) => {
-                                      const selectedValues = props.getValue();
-                                      return (
-                                        <components.ValueContainer {...props}>
-                                          {selectedValues.length > 0 ? (
-                                            <CustomPlaceholder {...props} />
-                                          ) : (
-                                            children
-                                          )}
-                                        </components.ValueContainer>
-                                      );
-                                    },
-                                  }} // Keep dropdown open for further selection
-                                  closeMenuOnSelect={true} // Keep dropdown open for further selection
-                        hideSelectedOptions={false} // Show all options even if selected
-                                  styles={{
-                                    control: (base) => ({
-                                      ...base,
-                                      border: "unset",
-                                      marginTop: -8,
-                                      color: "#1A1A1B",
-                                      fontSize: fss,
-                                    }),
-                                  }}
-                                />
-                              </div>
-                              <div style={{ width: "19%", paddingRight: 20 }}>
-                                <Select
-                                  isMulti
-                                  className="newoneoneess"
-                                  options={output}
-                                  value={value.hub} // Shows selected values
-                                  onChange={(e) => {
-                                    
-
-                                    changeddddd(e, value, "hub"); 
-                                  }} // Prevent selection changes
-                                  // placeholder={value.hub[0].label + "..."}
-                                  placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
-
-                                  components={{
-                                    Option: CustomOption,
-                                    MultiValue: () => null, // Hides default tags
-                                    ValueContainer: ({
-                                      children,
-                                      ...props
-                                    }) => {
-                                      const selectedValues = props.getValue();
-                                      return (
-                                        <components.ValueContainer {...props}>
-                                          {selectedValues.length > 0 ? (
-                                            <CustomPlaceholder {...props} />
-                                          ) : (
-                                            children
-                                          )}
-                                        </components.ValueContainer>
-                                      );
-                                    },
-                                  }}
-                                  closeMenuOnSelect={true} // Keep dropdown open for further selection
-                                  hideSelectedOptions={false} // Show all options even if selected 
-                                  styles={{
-                                    control: (base) => ({
-                                      ...base,
-                                      border: "unset",
-                                      marginTop: -8,
-                                      color: "#1A1A1B",
-                                      fontSize: fss,
-                                    }),
-                                  }}
-                                />
-                              </div>
-                              <div style={{ width: "5%", paddingLeft: "1%" }} className="d-flex justify-content-between gap-3 align-items-center ">
-              <div
-                onClick={() => handleAdminEditClick(value)} // Edit button
-                style={{ cursor: "pointer" }}
-              >
-                <FaEdit />
-              </div>
-              <div
-                onClick={() => handleDeleteAdminClick(value)} // Delete button
-                style={{ color: "red", cursor: "pointer", marginTop: 5 }}
-              >
-                <FaRegTrashCan />
-              </div>
-            </div>
-                            </div>
-
-                            <hr
-                              style={{
-                                margin: "0px 0px",
-                                backgroundColor: "#9F9F9F",
-                                height: 1,
-                              }}
+                        </div>
+                        <div style={{ width: "40%" }}>
+                          {item.icon && (
+                            <img
+                              onClick={() => item.setDisabled(!item.disabled)}
+                              src="pencil.png"
+                              alt="Edit"
                             />
-                          </>
-                        );
-                      })}
-                  </>
-                ) : data === "2" ? (
-                  <>
-                    {Object.entries(user)
-                      .filter(([_, value]) => value.Role === "manager") // Filter only admins
-                      .map(([key, value]) => {
-
-                        const output = [];
-  
- 
-                        
-                        if (Array.isArray(value.venue)) {
-                          value.venue.forEach(({ value }) => {
-                            // Search in the data object
-                            Object.entries(alldrop).forEach(([key, items]) => {
-                              if (key === value) {
-                                // If the key matches, add all items from the group to the output
-                                items.forEach(item => {
-                                  output.push({ value: key + '-' + item.name, label: item.name });
-                                });
-                              } else {
-                                // Search within the group's items
-                                items.forEach(item => {
-                                  if (item.name === value) {
-                                    output.push({ value: key + '-' + item.name, label: key });
-                                  }
-                                });
-                              }
-                            });
-                          });
-                        } else {
-                          console.error("value.venue is not an array or is undefined:", value.venue);
-                        }
-                        
-
-                        
-                        return(
-                        <>
-                          <div
-                            className="d-flex"
-                            style={{
-                              padding: 20,
-                              height: 60,
-                              backgroundColor: "#ECF1F4",
-                            }}
-                          >
-                            <div style={{ width: "19%" }} className="d-flex">
-                              <img
-                                src="lolp.png"
-                                className="nerrrimg"
-                                alt="Example Image"
+                          )}
+                          {item.isPassword && (
+                            <label className="round-checkbox">
+                              <input
+                                checked={editpassbool}
+                                onChange={(e) => item.toggle(e.target.checked)}
+                                type="checkbox"
                               />
-                              <p
-                                style={{
-                                  color: "#316AAF",
-                                  fontWeight: "400",
-                                  fontSize: fs,
-                                }}
-                              >
-                                {value.name}
-                              </p>
-                            </div>
-                            <div style={{ width: "19%" }} className="d-flex">
-                              <p
-                                style={{
-                                  color: "#707070",
-                                  fontWeight: "400",
-                                  fontSize: fs,
-                                }}
-                              >
-                                {value.Email}
-                              </p>
-                            </div>
-                            <div style={{ width: "18%" }}>
-                              <p
-                                style={{
-                                  color: "#1A1A1B",
-                                  fontWeight: "400",
-                                  fontSize: fs,
-                                }}
-                              >
-                                -
-                              </p>
-                            </div>
-                            <div
-                              style={{
-                                width: "19%",
-                                paddingRight: 20,
-                                color: "#1A1A1B",
-                                fontSize: fs,
-                              }}
-                            >
-                              <Select
-                                isMulti
-                                className="newoneoneess"
-                                options={basic}
-                                value={value.venue} // Shows selected values
-                                onChange={(e) => {
-                                  changeddddd(e, value, "venue");
-                                }} // Prevent selection changes
-                                placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
+                              {editpassbool ? <FiEye /> : <FiEyeOff />}
+                            </label>
+                          )}
+                        </div>
+                      </div>
 
-                                components={{
-                                  Option: CustomOption,
-                                  MultiValue: () => null, // Hides default tags
-                                  ValueContainer: ({ children, ...props }) => {
-                                    const selectedValues = props.getValue();
-                                    return (
-                                      <components.ValueContainer {...props}>
-                                        {selectedValues.length > 0 ? (
-                                          <CustomPlaceholder {...props} />
-                                        ) : (
-                                          children
-                                        )}
-                                      </components.ValueContainer>
-                                    );
-                                  },
-                                }} // Keep dropdown open for further selection
-                                closeMenuOnSelect={true} // Keep dropdown open for further selection
-                                hideSelectedOptions={false} // Disables all options from being selected
-                                styles={{
-                                  control: (base) => ({
-                                    ...base,
-                                    border: "unset",
-                                    marginTop: -8,
-                                    color: "#1A1A1B",
-                                    fontSize: fss,
-                                  }),
-                                }}
-                              />
-                            </div>
-                            <div style={{ width: "19%", paddingRight: 20 }}>
-                              <Select
-                                isMulti
-                                className="newoneoneess"
-                                options={output}
-                                value={value.hub} // Shows selected values
-                                onChange={(e) => { 
-                                  changeddddd(e, value, "hub"); 
-                                }} // Prevent selection changes
-                                // placeholder={value.hub[0].label + "..."}
-                                placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
-
-                                components={{
-                                  Option: CustomOption,
-                                  MultiValue: () => null, // Hides default tags
-                                  ValueContainer: ({ children, ...props }) => {
-                                    const selectedValues = props.getValue();
-                                    return (
-                                      <components.ValueContainer {...props}>
-                                        {selectedValues.length > 0 ? (
-                                          <CustomPlaceholder {...props} />
-                                        ) : (
-                                          children
-                                        )}
-                                      </components.ValueContainer>
-                                    );
-                                  },
-                                }}
-                                closeMenuOnSelect={true} // Keep dropdown open for further selection
-                                hideSelectedOptions={false} // Show all options even if selected 
-                                styles={{
-                                  control: (base) => ({
-                                    ...base,
-                                    border: "unset",
-                                    marginTop: -8,
-                                    color: "#1A1A1B",
-                                    fontSize: fss,
-                                  }),
-                                }}
-                              />
-                            </div>
-                           <div style={{width:'5%',paddingLeft:"1%"}} className="d-flex justify-content-between gap-3 align-items-center ">
-                           <div onClick={() => handleManagerEditClick(value)} style={{ cursor: "pointer" }}>
-              <FaEdit />
-            </div>
-            <div className=""  onClick={() => handleDeleteManagerClick(value)}  style={{ color: "red", cursor: "pointer" }}>
-              <FaRegTrashCan />
-            </div>
-                           </div>
-                          </div>
-
-                          <hr
-                            style={{
-                              margin: "0px 0px",
-                              backgroundColor: "#9F9F9F",
-                              height: 1,
-                            }}
-                          />
-                         
-                        </>
-                      )})}
-                      
-                  </>
-                ) : data === "3" ? (
-                  <>
-                    {Object.entries(user)
-                      .filter(([_, value]) => value.Role === "emp") // Filter only admins
-                      .map(([key, value]) =>{ 
-
-
-                        const output = [];
- 
-                        
-                        if (Array.isArray(value.venue)) {
-                          value.venue.forEach(({ value }) => {
-                            // Search in the data object
-                            Object.entries(alldrop).forEach(([key, items]) => {
-                              if (key === value) {
-                                // If the key matches, add all items from the group to the output
-                                items.forEach(item => {
-                                  output.push({ value: key + '-' + item.name, label: item.name });
-                                });
-                              } else {
-                                // Search within the group's items
-                                items.forEach(item => {
-                                  if (item.name === value) {
-                                    output.push({ value: key + '-' + item.name, label: key });
-                                  }
-                                });
-                              }
-                            });
-                          });
-                        } else {
-                          console.error("value.venue is not an array or is undefined:", value.venue);
-                        }
-                        
-
-
-                        
-                        return(
-                        <>
-                          <div
-                            className="d-flex"
-                            style={{
-                              padding: 20,
-                              height: 60,
-                              backgroundColor: "#ECF1F4",
-                            }}
-                          >
-                            <div style={{ width: "19%" }} className="d-flex">
-                              <img
-                                src="lolp.png"
-                                className="nerrrimg"
-                                alt="Example Image"
-                              />
-                              <p
-                                style={{ color: "#316AAF", fontWeight: "400" }}
-                              >
-                                {value.name}
-                              </p>
-                            </div>
-                            <div style={{ width: "19%" }} className="d-flex">
-                              <p
-                                style={{ color: "#707070", fontWeight: "400" }}
-                              >
-                                {value.Email}
-                              </p>
-                            </div>
-                            <div style={{ width: "19%" }}>
-                              <p
-                                style={{ color: "#1A1A1B", fontWeight: "400" }}
-                              >
-                                -
-                              </p>
-                            </div>
-                            <div
-                              style={{
-                                width: "19%",
-                                paddingRight: 20,
-                                color: "#1A1A1B",
-                              }}
-                            >
-                              <Select
-                                isMulti
-                                className="newoneoneess"
-                                options={basic}
-                                value={value.venue} // Shows selected values
-                                onChange={(e) => {
-                                  changeddddd(e, value, "venue");
-                                }} // Prevent selection changes
-                                placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
-
-                                components={{
-                                  Option: CustomOption,
-                                  MultiValue: () => null, // Hides default tags
-                                  ValueContainer: ({ children, ...props }) => {
-                                    const selectedValues = props.getValue();
-                                    return (
-                                      <components.ValueContainer {...props}>
-                                        {selectedValues.length > 0 ? (
-                                          <CustomPlaceholder {...props} />
-                                        ) : (
-                                          children
-                                        )}
-                                      </components.ValueContainer>
-                                    );
-                                  },
-                                }} // Keep dropdown open for further selection
-                                closeMenuOnSelect={true} // Keep dropdown open for further selection
-                                hideSelectedOptions={false} // Disables all options from being selected
-                                styles={{
-                                  control: (base) => ({
-                                    ...base,
-                                    border: "unset",
-                                    marginTop: -8,
-                                    color: "#1A1A1B",
-                                    fontSize: fss
-                                  }),
-                                }}
-                              />
-                            </div>
-                            <div style={{ width: "19%", paddingRight: 20 }}>
-                              <Select
-                                isMulti
-                                className="newoneoneess"
-                                options={output}
-                                value={value.hub} // Shows selected values
-                                onChange={(e) => { 
-                                  changeddddd(e, value, "hub");
-                                 }} // Prevent selection changes
-                                placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
-
-                                components={{
-                                  Option: CustomOption,
-                                  MultiValue: () => null, // Hides default tags
-                                  ValueContainer: ({ children, ...props }) => {
-                                    const selectedValues = props.getValue();
-                                    return (
-                                      <components.ValueContainer {...props}>
-                                        {selectedValues.length > 0 ? (
-                                          <CustomPlaceholder {...props} />
-                                        ) : (
-                                          children
-                                        )}
-                                      </components.ValueContainer>
-                                    );
-                                  },
-                                }}
-                                closeMenuOnSelect={true} // Keep dropdown open for further selection
-                                hideSelectedOptions={false} // Show all options even if selected 
-                                styles={{
-                                  control: (base) => ({
-                                    ...base,
-                                    border: "unset",
-                                    marginTop: -8,
-                                    color: "#1A1A1B",
-                                    fontSize: fss
-                                  }),
-                                }}
-                              />
-                            </div>
-                            <div className="d-flex justify-content-between gap-3 align-items-center " style={{ width: "5%", paddingLeft: "1%" }}>
-              <div
-                onClick={() => handleEmployeeEditClick(value)} // Edit button
-                style={{ cursor: "pointer" }}
-              >
-                <FaEdit />
+                      {/* Add separator for all rows */}
+                      <hr
+                        style={{
+                          margin: "0px 0px",
+                          backgroundColor: "#9F9F9F",
+                          height: 1,
+                        }}
+                      />
+                    </React.Fragment>
+                  ))}
+                </div>
               </div>
-              <div
-                onClick={() => handleDeleteEmployeeClick(value)} // Delete button
-                style={{ color: "red", cursor: "pointer", marginTop: 5 }}
-              >
-                <FaRegTrashCan />
-              </div>
-            </div>
-                          </div>
 
-                          <hr
-                            style={{
-                              margin: "0px 0px",
-                              backgroundColor: "#9F9F9F",
-                              height: 1,
-                            }}
-                          />
-                        </>
-                      )})}
-                  </>
-                ) : data === "4" ? (
-                  <></>
-                ) : data === "5" ? (
-                  <></>
-                ) : (
-                  ""
-                )}
-              </div>
-            </div>
-          </div>
+            </>
+          )}
+
+
         </div>
         {data === "1" || data === "2" || data === "3" || data == "4" ? (
           <div
@@ -2872,520 +2739,520 @@ const handleDeleteEmployee = async () => {
             </div>
           </div>
         )}
-  {/* Edit Modal for Managers */}
-{showEditModalManager && (
-  <div
-    style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 1000,
-    }}
-  >
-    <div
-      style={{
-        backgroundColor: "#fff",
-        padding: 20,
-        borderRadius: 8,
-        width: 400,
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      }}
-    >
-      <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
-        Edit Manager
-      </h2>
+        {/* Edit Modal for Managers */}
+        {showEditModalManager && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1000,
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#fff",
+                padding: 20,
+                borderRadius: 8,
+                width: 400,
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+                Edit Manager
+              </h2>
 
-      {/* Name Input */}
-      <div style={{ marginBottom: 15 }}>
-        <label style={{ display: "block", marginBottom: 5 }}>Name:</label>
-        <input
-          type="text"
-          name="name"
-          value={selectedManager?.name || ""}
-          onChange={(e) =>
-            setSelectedManager({
-              ...selectedManager,
-              name: e.target.value,
-            })
-          }
-          style={{
-            width: "100%",
-            padding: 8,
-            border: "1px solid #ccc",
-            borderRadius: 4,
-          }}
-        />
-      </div>
+              {/* Name Input */}
+              <div style={{ marginBottom: 15 }}>
+                <label style={{ display: "block", marginBottom: 5 }}>Name:</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={selectedManager?.name || ""}
+                  onChange={(e) =>
+                    setSelectedManager({
+                      ...selectedManager,
+                      name: e.target.value,
+                    })
+                  }
+                  style={{
+                    width: "100%",
+                    padding: 8,
+                    border: "1px solid #ccc",
+                    borderRadius: 4,
+                  }}
+                />
+              </div>
 
-      {/* Email Input */}
-      <div style={{ marginBottom: 15 }}>
-        <label style={{ display: "block", marginBottom: 5 }}>Email:</label>
-        <input
-          type="email"
-          name="Email"
-          disabled
-          value={selectedManager?.Email || ""}
-          onChange={(e) =>
-            setSelectedManager({
-              ...selectedManager,
-              Email: e.target.value,
-            })
-          }
-          style={{
-            width: "100%",
-            padding: 8,
-            border: "1px solid #ccc",
-            borderRadius: 4,
-          }}
-        />
-      </div>
+              {/* Email Input */}
+              <div style={{ marginBottom: 15 }}>
+                <label style={{ display: "block", marginBottom: 5 }}>Email:</label>
+                <input
+                  type="email"
+                  name="Email"
+                  disabled
+                  value={selectedManager?.Email || ""}
+                  onChange={(e) =>
+                    setSelectedManager({
+                      ...selectedManager,
+                      Email: e.target.value,
+                    })
+                  }
+                  style={{
+                    width: "100%",
+                    padding: 8,
+                    border: "1px solid #ccc",
+                    borderRadius: 4,
+                  }}
+                />
+              </div>
 
-      {/* Buttons */}
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
-        <button
-          onClick={() => setShowEditModalManager(false)} // Close the modal
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#ccc",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-          }}
-        >
-          Cancel
-        </button>
-        <button
-          onClick={handleEditManager} // Handle edit
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#316AAF",
-            color: "#fff",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-          }}
-        >
-          Update
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+              {/* Buttons */}
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+                <button
+                  onClick={() => setShowEditModalManager(false)} // Close the modal
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#ccc",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleEditManager} // Handle edit
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#316AAF",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
-{/* Delete Confirmation Modal for Managers */}
-{showDeleteModalManager && (
-  <div
-    style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 1000,
-    }}
-  >
-    <div
-      style={{
-        backgroundColor: "#fff",
-        padding: 20,
-        borderRadius: 8,
-        width: 400,
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      }}
-    >
-      <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
-        Delete Manager
-      </h2>
+        {/* Delete Confirmation Modal for Managers */}
+        {showDeleteModalManager && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1000,
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#fff",
+                padding: 20,
+                borderRadius: 8,
+                width: 400,
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+                Delete Manager
+              </h2>
 
-      <p style={{ marginBottom: 20 }}>
-        Are you sure you want to delete{" "}
-        <strong>{managerToDelete?.name}</strong>?
-      </p>
+              <p style={{ marginBottom: 20 }}>
+                Are you sure you want to delete{" "}
+                <strong>{managerToDelete?.name}</strong>?
+              </p>
 
-      {/* Buttons */}
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
-        <button
-          onClick={() => setShowDeleteModalManager(false)} // Close the modal
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#ccc",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-          }}
-        >
-          Cancel
-        </button>
-        <button
-          onClick={handleDeleteManager} // Handle deletion
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#ff4d4f", // Red color for delete button
-            color: "#fff",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-          }}
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-{/* Edit Modal for Employees */}
-{showEditModalEmployee && (
-  <div
-    style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 1000,
-    }}
-  >
-    <div
-      style={{
-        backgroundColor: "#fff",
-        padding: 20,
-        borderRadius: 8,
-        width: 400,
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      }}
-    >
-      <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
-        Edit Employee
-      </h2>
+              {/* Buttons */}
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+                <button
+                  onClick={() => setShowDeleteModalManager(false)} // Close the modal
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#ccc",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteManager} // Handle deletion
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#ff4d4f", // Red color for delete button
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Edit Modal for Employees */}
+        {showEditModalEmployee && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1000,
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#fff",
+                padding: 20,
+                borderRadius: 8,
+                width: 400,
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+                Edit Employee
+              </h2>
 
-      {/* Name Input */}
-      <div style={{ marginBottom: 15 }}>
-        <label style={{ display: "block", marginBottom: 5 }}>Name:</label>
-        <input
-          type="text"
-          name="name"
-          value={selectedEmployee?.name || ""}
-          onChange={(e) =>
-            setSelectedEmployee({
-              ...selectedEmployee,
-              name: e.target.value,
-            })
-          }
-      
-          style={{
-            width: "100%",
-            padding: 8,
-            border: "1px solid #ccc",
-            borderRadius: 4,
-          }}
-        />
-      </div>
+              {/* Name Input */}
+              <div style={{ marginBottom: 15 }}>
+                <label style={{ display: "block", marginBottom: 5 }}>Name:</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={selectedEmployee?.name || ""}
+                  onChange={(e) =>
+                    setSelectedEmployee({
+                      ...selectedEmployee,
+                      name: e.target.value,
+                    })
+                  }
 
-      {/* Email Input */}
-      <div style={{ marginBottom: 15 }}>
-        <label style={{ display: "block", marginBottom: 5 }}>Email:</label>
-        <input
-          type="email"
-          name="Email"
-          disabled
-          value={selectedEmployee?.Email || ""}
-          onChange={(e) =>
-            setSelectedEmployee({
-              ...selectedEmployee,
-              Email: e.target.value,
-            })
-          }
-          style={{
-            width: "100%",
-            padding: 8,
-            border: "1px solid #ccc",
-            borderRadius: 4,
-          }}
-        />
-      </div>
+                  style={{
+                    width: "100%",
+                    padding: 8,
+                    border: "1px solid #ccc",
+                    borderRadius: 4,
+                  }}
+                />
+              </div>
 
-      {/* Buttons */}
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
-        <button
-          onClick={() => setShowEditModalEmployee(false)} // Close the modal
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#ccc",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-          }}
-        >
-          Cancel
-        </button>
-        <button
-          onClick={handleEditEmployee} // Handle edit
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#316AAF",
-            color: "#fff",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-          }}
-        >
-          Update
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+              {/* Email Input */}
+              <div style={{ marginBottom: 15 }}>
+                <label style={{ display: "block", marginBottom: 5 }}>Email:</label>
+                <input
+                  type="email"
+                  name="Email"
+                  disabled
+                  value={selectedEmployee?.Email || ""}
+                  onChange={(e) =>
+                    setSelectedEmployee({
+                      ...selectedEmployee,
+                      Email: e.target.value,
+                    })
+                  }
+                  style={{
+                    width: "100%",
+                    padding: 8,
+                    border: "1px solid #ccc",
+                    borderRadius: 4,
+                  }}
+                />
+              </div>
 
-{/* Delete Confirmation Modal for Employees */}
-{showDeleteModalEmployee && (
-  <div
-    style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 1000,
-    }}
-  >
-    <div
-      style={{
-        backgroundColor: "#fff",
-        padding: 20,
-        borderRadius: 8,
-        width: 400,
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      }}
-    >
-      <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
-        Delete Employee
-      </h2>
+              {/* Buttons */}
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+                <button
+                  onClick={() => setShowEditModalEmployee(false)} // Close the modal
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#ccc",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleEditEmployee} // Handle edit
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#316AAF",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
-      <p style={{ marginBottom: 20 }}>
-        Are you sure you want to delete{" "}
-        <strong>{employeeToDelete?.name}</strong>?
-      </p>
+        {/* Delete Confirmation Modal for Employees */}
+        {showDeleteModalEmployee && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1000,
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#fff",
+                padding: 20,
+                borderRadius: 8,
+                width: 400,
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+                Delete Employee
+              </h2>
 
-      {/* Buttons */}
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
-        <button
-          onClick={() => setShowDeleteModalEmployee(false)} // Close the modal
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#ccc",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-          }}
-        >
-          Cancel
-        </button>
-        <button
-          onClick={handleDeleteEmployee} // Handle deletion
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#ff4d4f", // Red color for delete button
-            color: "#fff",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-          }}
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-{/* Edit Modal for Admins */}
-{showEditModalAdmin && (
-  <div
-    style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 1000,
-    }}
-  >
-    <div
-      style={{
-        backgroundColor: "#fff",
-        padding: 20,
-        borderRadius: 8,
-        width: 400,
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      }}
-    >
-      <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
-        Edit Admin
-      </h2>
+              <p style={{ marginBottom: 20 }}>
+                Are you sure you want to delete{" "}
+                <strong>{employeeToDelete?.name}</strong>?
+              </p>
 
-      {/* Name Input */}
-      <div style={{ marginBottom: 15 }}>
-        <label style={{ display: "block", marginBottom: 5 }}>Name:</label>
-        <input
-          type="text"
-          name="name"
-          value={selectedAdmin?.name || ""}
-          onChange={(e) =>
-            setSelectedAdmin({
-              ...selectedAdmin,
-              name: e.target.value,
-            })
-          }
-          style={{
-            width: "100%",
-            padding: 8,
-            border: "1px solid #ccc",
-            borderRadius: 4,
-          }}
-        />
-      </div>
+              {/* Buttons */}
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+                <button
+                  onClick={() => setShowDeleteModalEmployee(false)} // Close the modal
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#ccc",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteEmployee} // Handle deletion
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#ff4d4f", // Red color for delete button
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Edit Modal for Admins */}
+        {showEditModalAdmin && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1000,
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#fff",
+                padding: 20,
+                borderRadius: 8,
+                width: 400,
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+                Edit Admin
+              </h2>
 
-      {/* Email Input */}
-      <div  style={{ marginBottom: 15 }}>
-        <label style={{ display: "block", marginBottom: 5 }}>Email:</label>
-        <input
-          type="email"
-          name="Email"
-          value={selectedAdmin?.Email || ""}
-          onChange={(e) =>
-            setSelectedAdmin({
-              ...selectedAdmin,
-              Email: e.target.value,
-            })
-          }
-          disabled
-          style={{
-            width: "100%",
-            padding: 8,
-            border: "1px solid #ccc",
-            borderRadius: 4,
-          }}
-        />
-      </div>
+              {/* Name Input */}
+              <div style={{ marginBottom: 15 }}>
+                <label style={{ display: "block", marginBottom: 5 }}>Name:</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={selectedAdmin?.name || ""}
+                  onChange={(e) =>
+                    setSelectedAdmin({
+                      ...selectedAdmin,
+                      name: e.target.value,
+                    })
+                  }
+                  style={{
+                    width: "100%",
+                    padding: 8,
+                    border: "1px solid #ccc",
+                    borderRadius: 4,
+                  }}
+                />
+              </div>
 
-      {/* Buttons */}
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
-        <button
-          onClick={() => setShowEditModalAdmin(false)} // Close the modal
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#ccc",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-          }}
-        >
-          Cancel
-        </button>
-        <button
-          onClick={handleEditAdmin} // Handle edit
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#316AAF",
-            color: "#fff",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-          }}
-        >
-          Update
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+              {/* Email Input */}
+              <div style={{ marginBottom: 15 }}>
+                <label style={{ display: "block", marginBottom: 5 }}>Email:</label>
+                <input
+                  type="email"
+                  name="Email"
+                  value={selectedAdmin?.Email || ""}
+                  onChange={(e) =>
+                    setSelectedAdmin({
+                      ...selectedAdmin,
+                      Email: e.target.value,
+                    })
+                  }
+                  disabled
+                  style={{
+                    width: "100%",
+                    padding: 8,
+                    border: "1px solid #ccc",
+                    borderRadius: 4,
+                  }}
+                />
+              </div>
 
-{/* Delete Confirmation Modal for Admins */}
-{showDeleteModalAdmin && (
-  <div
-    style={{
-      position: "fixed",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 1000,
-    }}
-  >
-    <div
-      style={{
-        backgroundColor: "#fff",
-        padding: 20,
-        borderRadius: 8,
-        width: 400,
-        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      }}
-    >
-      <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
-        Delete Admin
-      </h2>
+              {/* Buttons */}
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+                <button
+                  onClick={() => setShowEditModalAdmin(false)} // Close the modal
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#ccc",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleEditAdmin} // Handle edit
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#316AAF",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
-      <p style={{ marginBottom: 20 }}>
-        Are you sure you want to delete{" "}
-        <strong>{adminToDelete?.name}</strong>?
-      </p>
+        {/* Delete Confirmation Modal for Admins */}
+        {showDeleteModalAdmin && (
+          <div
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1000,
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: "#fff",
+                padding: 20,
+                borderRadius: 8,
+                width: 400,
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <h2 style={{ fontSize: 20, fontWeight: "bold", marginBottom: 20 }}>
+                Delete Admin
+              </h2>
 
-      {/* Buttons */}
-      <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
-        <button
-          onClick={() => setShowDeleteModalAdmin(false)} // Close the modal
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#ccc",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-          }}
-        >
-          Cancel
-        </button>
-        <button
-          onClick={handleDeleteAdmin} // Handle deletion
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#ff4d4f", // Red color for delete button
-            color: "#fff",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-          }}
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+              <p style={{ marginBottom: 20 }}>
+                Are you sure you want to delete{" "}
+                <strong>{adminToDelete?.name}</strong>?
+              </p>
+
+              {/* Buttons */}
+              <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+                <button
+                  onClick={() => setShowDeleteModalAdmin(false)} // Close the modal
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#ccc",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDeleteAdmin} // Handle deletion
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#ff4d4f", // Red color for delete button
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: 4,
+                    cursor: "pointer",
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       <SweetAlert2 {...swalProps} />

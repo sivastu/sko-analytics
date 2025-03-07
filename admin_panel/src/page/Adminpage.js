@@ -112,11 +112,11 @@ let Adminpage = () => {
 
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
-      if (foundUser.Role === 'emp') {
-        sessionStorage.removeItem('data')
-        navigate('/')
-        return
-      }
+      // if (foundUser.Role === 'emp') {
+      //   sessionStorage.removeItem('data')
+      //   navigate('/')
+      //   return
+      // }
       if (foundUser) {
 
         // Check if the password matches
@@ -262,10 +262,31 @@ useEffect(()=>{
                 </div>
                 : ''
             }
+
+{
+              username?.Role === 'emp' ?
+                <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }}
+                  onClick={() => {
+                    navigate('/training')
+                  }} >
+                  <div className="row" style={{ padding: 30 }} >
+                    <div className="col-6 d-flex justify-content-center align-items-center ">
+                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginTop: 20, marginLeft: 8 }}>Training <br />videos</p>
+                    </div>
+                    <div className="col-6">
+                      <img src="starr.png" style={{ width: 95, height: 90, margin: 'auto', display: 'block' }} alt="Example Image" />
+                    </div>
+                  </div>
+                </div>
+                : ''
+            }
             <SweetAlert2 {...swalProps} />
           </div>
         </div>
-        <div style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)' }}>
+        {
+              username?.Role === 'emp' ?
+              "":
+              <div style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)' }}>
           <button
             onClick={getone}
             style={{
@@ -284,6 +305,9 @@ useEffect(()=>{
             Fetch Data
           </button>
         </div>
+
+        }
+        
       </div>
 
       {/* Loader Modal */}

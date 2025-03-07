@@ -5719,7 +5719,11 @@ const[paddOpp,setPaddOpp]=useState(0);
                             <img
                               src="black_arrow.png"
                               style={{ width: 20, height: 20, cursor: 'pointer' }}
-                              onClick={() => { setMeals(1) }}
+                              onClick={() => { 
+                                
+                                setServed(editallclone)
+                                
+                                setMeals(1) }}
                               alt="Back Arrow"
                               className="img-fluid"
                             />

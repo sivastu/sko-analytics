@@ -82,7 +82,7 @@ let Multi_venue = () => {
 
   let [basiconefive, setBasiconefive] = useState([])
   let [basiconesix, setBasiconesix] = useState([])
- 
+
   let [basicfine, setBasicfine] = useState([{
     "value": "Maximum",
     "label": "Maximum"
@@ -519,360 +519,360 @@ let Multi_venue = () => {
     return [...uniqueNotes].map(note => ({ value: note, label: note }));
   }
 
-let getone = (snapshots) => {
-  
-  
-      const eventss = snapshots
-  
-      function removeTrainingNotes(obj) {
-        if (Array.isArray(obj)) {
-          // If it's an array, filter out objects with "TRAINING" in the NOTE field
-          return obj.map(item => {
-            if (item.ITEMS) {
-              item.ITEMS = item.ITEMS.filter(item => !item.NOTE.includes("TRAINING"));
-            }
-            return item;
-          });
-        } else if (typeof obj === "object" && obj !== null) {
-          // Recursively call for nested objects
-          for (const key in obj) {
-            obj[key] = removeTrainingNotes(obj[key]);
+  let getone = (snapshots) => {
+
+
+    const eventss = snapshots
+
+    function removeTrainingNotes(obj) {
+      if (Array.isArray(obj)) {
+        // If it's an array, filter out objects with "TRAINING" in the NOTE field
+        return obj.map(item => {
+          if (item.ITEMS) {
+            item.ITEMS = item.ITEMS.filter(item => !item.NOTE.includes("TRAINING"));
           }
-        }
-        return obj;
-      }
-  
-      const cleanedData = removeTrainingNotes(eventss);
-  
-  
-  
-  
-  
-  
-  
-      setBasicall(cleanedData)
-      // const transformData = (data) => {
-      //   const result = {};
-  
-      //   for (const key of Object.keys(data)) {
-      //     const parts = key.split("-");
-      //     const [group, location, subLocation, year] = parts;
-  
-      //     if (!result[group]) result[group] = {};
-      //     if (!result[group][location]) result[group][location] = {};
-      //     if (!result[group][location][subLocation]) result[group][location][subLocation] = new Set();
-  
-      //     result[group][location][subLocation].add(year);
-      //   }
-  
-      //   // Convert Sets to arrays for final output
-      //   const convertSetsToArrays = (obj) => {
-      //     for (const key in obj) {
-      //       if (obj[key] instanceof Set) {
-      //         obj[key] = Array.from(obj[key]);
-      //       } else if (typeof obj[key] === "object") {
-      //         convertSetsToArrays(obj[key]);
-      //       }
-      //     }
-      //   };
-  
-      //   convertSetsToArrays(result);
-      //   return result;
-      // };
-  
-      // const output = transformData(eventss);
-      const result = {};
-      Object.entries(cleanedData).forEach(([groupName, groupData]) => {
-  
-  
-        Object.entries(groupData).forEach(([keyss, valuess]) => {
-          Object.entries(valuess).forEach(([keyssa, valuessa]) => {
-  
-            if (!result[keyss]) {
-              result[keyss] = [];
-            }
-  
-            result[keyss].push({
-              name: keyssa + "-" + keyss
-            });
-  
-          });
+          return item;
         });
-  
+      } else if (typeof obj === "object" && obj !== null) {
+        // Recursively call for nested objects
+        for (const key in obj) {
+          obj[key] = removeTrainingNotes(obj[key]);
+        }
+      }
+      return obj;
+    }
+
+    const cleanedData = removeTrainingNotes(eventss);
+
+
+
+
+
+
+
+    setBasicall(cleanedData)
+    // const transformData = (data) => {
+    //   const result = {};
+
+    //   for (const key of Object.keys(data)) {
+    //     const parts = key.split("-");
+    //     const [group, location, subLocation, year] = parts;
+
+    //     if (!result[group]) result[group] = {};
+    //     if (!result[group][location]) result[group][location] = {};
+    //     if (!result[group][location][subLocation]) result[group][location][subLocation] = new Set();
+
+    //     result[group][location][subLocation].add(year);
+    //   }
+
+    //   // Convert Sets to arrays for final output
+    //   const convertSetsToArrays = (obj) => {
+    //     for (const key in obj) {
+    //       if (obj[key] instanceof Set) {
+    //         obj[key] = Array.from(obj[key]);
+    //       } else if (typeof obj[key] === "object") {
+    //         convertSetsToArrays(obj[key]);
+    //       }
+    //     }
+    //   };
+
+    //   convertSetsToArrays(result);
+    //   return result;
+    // };
+
+    // const output = transformData(eventss);
+    const result = {};
+    Object.entries(cleanedData).forEach(([groupName, groupData]) => {
+
+
+      Object.entries(groupData).forEach(([keyss, valuess]) => {
+        Object.entries(valuess).forEach(([keyssa, valuessa]) => {
+
+          if (!result[keyss]) {
+            result[keyss] = [];
+          }
+
+          result[keyss].push({
+            name: keyssa + "-" + keyss
+          });
+
+        });
       });
-      setAlldrop(result)
-      console.log(result, 'keykeykeykey') // its oblect
-      const optionsone = [{
-        "label": "All Venue",
+
+    });
+    setAlldrop(result)
+    console.log(result, 'keykeykeykey') // its oblect
+    const optionsone = [{
+      "label": "All Venue",
+      "value": "All"
+    }];
+    Object.entries(cleanedData).forEach(([groupName, groupData]) => {
+      Object.keys(groupData).forEach((key) => {
+        optionsone.push({ value: key, label: key });
+      });
+    });
+
+    // Generate `optionss` for `data[0]` (assuming `GreenbankServicesClub` is the first group)
+    // const firstGroup = Object.keys(eventss.GreenbankServicesClub)[0]; // 'GreenbankServicesClub'
+    // const optionsstwo = Object.keys(eventss.GreenbankServicesClub[firstGroup]).map((hub) => ({
+    //   value: hub,
+    //   label: hub,
+    // }));
+
+
+    // console.log("optionss:", optionsstwo);
+
+    let getdata = sessionStorage.getItem('data')
+
+    let decry = decrypt(getdata)
+
+    let parsedatajson = JSON.parse(decry)
+
+
+    const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
+    let realven = [{ label: "All Venues", value: "All" }]
+
+    if (hasAllValue === true) {
+      realven.push(...optionsone);
+      setBasic(optionsone)
+      setOldven(optionsone)
+      setSelectedOptions(optionsone)
+
+      let uuuk = extractUniqueNotes(cleanedData, optionsone)
+      uuuk.unshift({ label: "All Courses", value: "All" });
+
+      setOldcou(uuuk)
+      setSelectedCources(uuuk)
+
+      setFulldatafull(uuuk)
+
+
+      const output = [{
+        "label": "All Hubs",
         "value": "All"
       }];
-      Object.entries(cleanedData).forEach(([groupName, groupData]) => {
-        Object.keys(groupData).forEach((key) => {
-          optionsone.push({ value: key, label: key });
-        });
-      });
-  
-      // Generate `optionss` for `data[0]` (assuming `GreenbankServicesClub` is the first group)
-      // const firstGroup = Object.keys(eventss.GreenbankServicesClub)[0]; // 'GreenbankServicesClub'
-      // const optionsstwo = Object.keys(eventss.GreenbankServicesClub[firstGroup]).map((hub) => ({
-      //   value: hub,
-      //   label: hub,
-      // }));
-  
-  
-      // console.log("optionss:", optionsstwo);
-  
-      let getdata = sessionStorage.getItem('data')
-  
-      let decry = decrypt(getdata)
-  
-      let parsedatajson = JSON.parse(decry)
-  
-  
-      const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-      let realven = [{ label: "All Venues", value: "All" }]
-  
-      if (hasAllValue === true) {
-        realven.push(...optionsone);
-        setBasic(optionsone)
-        setOldven(optionsone)
-        setSelectedOptions(optionsone)
-  
-        let uuuk = extractUniqueNotes(cleanedData, optionsone)
-        uuuk.unshift({ label: "All Courses", value: "All" });
-  
-        setOldcou(uuuk)
-        setSelectedCources(uuuk)
-  
-        setFulldatafull(uuuk)
-  
-  
-        const output = [{
-          "label": "All Hubs",
-          "value": "All"
-        }];
-    
-        // // Iterate through the search array
-        optionsone.forEach(({ value }) => {
-          // Search in the data object
-          Object.entries(result).forEach(([key, items]) => {
-            if (key === value) {
-              // If the key matches, add all items from the group to the output
-              items.forEach(item => {
-                output.push({ value: key + '-' + item.name, label: item.name });
-              });
-            } else {
-              // Search within the group's items
-              items.forEach(item => {
-                if (item.name === value) {
-                  output.push({ value : key + '-' + item.name, label: key });
-                }
-              });
-            }
-          });
-        });
-    
-        setBasicone(output) 
-        setHubb(output)
-    
-    
-        setOldhub(output)
-  
-  
-  
-      } else {
-        realven.push(parsedatajson.venue)
-        setBasic([ ...[{
-          "label": "All Venue",
-          "value": "All"
-        }] , ...parsedatajson.venue ])
-  
-        setOldven([ ...[{
-          "label": "All Venue",
-          "value": "All"
-        }] , ...parsedatajson.venue ])
-  
-        setSelectedOptions([ ...[{
-          "label": "All Venue",
-          "value": "All"
-        }] , ...parsedatajson.venue ])
-  
-        const output = [{
-          "label": "All Hubs",
-          "value": "All"
-        }];
-    
-        // // Iterate through the search array
-        [ ...[{
-          "label": "All Venue",
-          "value": "All"
-        }] , ...parsedatajson.venue ].forEach(({ value }) => {
-          // Search in the data object
-          Object.entries(result).forEach(([key, items]) => {
-            if (key === value) {
-              // If the key matches, add all items from the group to the output
-              items.forEach(item => {
-                output.push({ value: key + '-' + item.name, label: item.name });
-              });
-            } else {
-              // Search within the group's items
-              items.forEach(item => {
-                if (item.name === value) {
-                  output.push({ value : key + '-' + item.name, label: key });
-                }
-              });
-            }
-          });
-        });
-    
-        setBasicone(output) 
-        setHubb(output)
-    
-    
-        setOldhub(output)
-  
-  
-  
-  
-        let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
-        uuuk.unshift({ label: "All Courses", value: "All" });
-        setSelectedCources(uuuk)
-        setOldcou(uuuk)
-        setFulldatafull(uuuk)
-      }
-  
-  
-  
-  
-  
-      const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
-      const optionstakeaway = [
-        ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
-      ].map(value => ({ value, label: value }));
-  
-  
-      console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
-  
-  
-  
-  
-  
-      // const output = [];
-  
-      //   // // Iterate through the search array
-      //   [].forEach(({ value }) => {
-      //     // Search in the data object
-      //     Object.entries(alldrop).forEach(([key, items]) => {
-      //       if (key === value) {
-      //         // If the key matches, add all items from the group to the output
-      //         items.forEach(item => {
-      //           output.push({ value: key + '-' + item.name, label: item.name });
-      //         });
-      //       } else {
-      //         // Search within the group's items
-      //         items.forEach(item => {
-      //           if (item.name === value) {
-      //             output.push({ value: key + '-' + item.name, label: key });
-      //           }
-      //         });
-      //       }
-      //     });
-      //   });
-  
-      //   setBasicone(output)
-  
-  
-  
-  
-  
-      const filteredDataonee = {};
-  
-      console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
-      if (parsedatajson.venue) {
-  
-        const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-  
-        console.log(hasAllValue, 'hasAllValue')
-        if (hasAllValue === true) {
-  
-        } else {
-  
-          parsedatajson.venue.forEach(filter => {
-            const key = filter.value;
-            if (cleanedData[key]) {
-              filteredDataonee[key] = cleanedData[key];
-            }
-          });
-          setBasicall(filteredDataonee)
-        }
-  
-  
-  
-  
-  
-      }
-  
-      if (parsedatajson.hub) {
-  
-        const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
-        console.log(hasAllValue, 'hasAllValue hub')
-  
-        if (hasAllValue === true) {
-  
-        } else {
-          function filterDataByDynamicKeys(keysArray) {
-            const filteredData = {};
-  
-            keysArray.forEach(({ value }) => {
-              const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
-  
-              if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
-                const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
-  
-                // Check if the hub exists
-                if (secondLevelData[hubName]) {
-                  if (!filteredData[topLevelKey]) {
-                    filteredData[topLevelKey] = {};
-                  }
-  
-                  if (!filteredData[topLevelKey][secondTopLevelKey]) {
-                    filteredData[topLevelKey][secondTopLevelKey] = {};
-                  }
-  
-                  filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
-                }
+
+      // // Iterate through the search array
+      optionsone.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(result).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
               }
             });
-  
-            return filteredData;
           }
-  
-          let fina = filterDataByDynamicKeys(parsedatajson.hub)
-  
-          setBasicall(fina)
-        }
-  
-  
-      }
-  
-   
-     
-  
-  
-      
-    
-      // alldat = filteredDataonee
-      const yesterday = [getFormattedDate(1), getFormattedDate(1)];
-      const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
-      setDateRangetwo(eightDaysBefore)
-      setDateRange(yesterday)
-      // filterDataByDate(dateRange, onetime, twotime, basic , hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-  
-      // filterDataByDateonee(dateRange, onetime, twotime, basic ,
-      //   hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-  
-  
+        });
+      });
+
+      setBasicone(output)
+      setHubb(output)
+
+
+      setOldhub(output)
+
+
+
+    } else {
+      realven.push(parsedatajson.venue)
+      setBasic([...[{
+        "label": "All Venue",
+        "value": "All"
+      }], ...parsedatajson.venue])
+
+      setOldven([...[{
+        "label": "All Venue",
+        "value": "All"
+      }], ...parsedatajson.venue])
+
+      setSelectedOptions([...[{
+        "label": "All Venue",
+        "value": "All"
+      }], ...parsedatajson.venue])
+
+      const output = [{
+        "label": "All Hubs",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      [...[{
+        "label": "All Venue",
+        "value": "All"
+      }], ...parsedatajson.venue].forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(result).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasicone(output)
+      setHubb(output)
+
+
+      setOldhub(output)
+
+
+
+
+      let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
+      uuuk.unshift({ label: "All Courses", value: "All" });
+      setSelectedCources(uuuk)
+      setOldcou(uuuk)
+      setFulldatafull(uuuk)
     }
+
+
+
+
+
+    const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
+    const optionstakeaway = [
+      ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
+    ].map(value => ({ value, label: value }));
+
+
+    console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
+
+
+
+
+
+    // const output = [];
+
+    //   // // Iterate through the search array
+    //   [].forEach(({ value }) => {
+    //     // Search in the data object
+    //     Object.entries(alldrop).forEach(([key, items]) => {
+    //       if (key === value) {
+    //         // If the key matches, add all items from the group to the output
+    //         items.forEach(item => {
+    //           output.push({ value: key + '-' + item.name, label: item.name });
+    //         });
+    //       } else {
+    //         // Search within the group's items
+    //         items.forEach(item => {
+    //           if (item.name === value) {
+    //             output.push({ value: key + '-' + item.name, label: key });
+    //           }
+    //         });
+    //       }
+    //     });
+    //   });
+
+    //   setBasicone(output)
+
+
+
+
+
+    const filteredDataonee = {};
+
+    console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
+    if (parsedatajson.venue) {
+
+      const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
+
+      console.log(hasAllValue, 'hasAllValue')
+      if (hasAllValue === true) {
+
+      } else {
+
+        parsedatajson.venue.forEach(filter => {
+          const key = filter.value;
+          if (cleanedData[key]) {
+            filteredDataonee[key] = cleanedData[key];
+          }
+        });
+        setBasicall(filteredDataonee)
+      }
+
+
+
+
+
+    }
+
+    if (parsedatajson.hub) {
+
+      const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
+      console.log(hasAllValue, 'hasAllValue hub')
+
+      if (hasAllValue === true) {
+
+      } else {
+        function filterDataByDynamicKeys(keysArray) {
+          const filteredData = {};
+
+          keysArray.forEach(({ value }) => {
+            const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+
+            if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
+              const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
+
+              // Check if the hub exists
+              if (secondLevelData[hubName]) {
+                if (!filteredData[topLevelKey]) {
+                  filteredData[topLevelKey] = {};
+                }
+
+                if (!filteredData[topLevelKey][secondTopLevelKey]) {
+                  filteredData[topLevelKey][secondTopLevelKey] = {};
+                }
+
+                filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
+              }
+            }
+          });
+
+          return filteredData;
+        }
+
+        let fina = filterDataByDynamicKeys(parsedatajson.hub)
+
+        setBasicall(fina)
+      }
+
+
+    }
+
+
+
+
+
+
+
+    // alldat = filteredDataonee
+    const yesterday = [getFormattedDate(1), getFormattedDate(1)];
+    const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
+    setDateRangetwo(eightDaysBefore)
+    setDateRange(yesterday)
+    // filterDataByDate(dateRange, onetime, twotime, basic , hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+    // filterDataByDateonee(dateRange, onetime, twotime, basic ,
+    //   hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+  }
 
 
   let getonez = () => {
@@ -1528,18 +1528,19 @@ let getone = (snapshots) => {
       let displayText = ''
 
       let hasAllfinbyss = selected.some(option => option.label && option.label.startsWith("All "));
-      
-      if( hasAllfinbyss === true ) {
+
+      if (hasAllfinbyss === true) {
         const allValue = selected.find(option => option.label && option.label.startsWith("All "))?.label || "";
-        displayText = allValue.slice(0, textCount) 
-      }else{
+        displayText = allValue.slice(0, textCount)
+      } else {
         displayText = allLabels.slice(0, textCount) + "..."
       }
 
-      return <span style={{ color : allLabels === 'Maximum' ? 'red' :  allLabels === 'Minimum' ? 'blue' : ""  ,
-        fontWeight : allLabels === 'Maximum' ? '700' :  allLabels === 'Minimum' ? '700' : ""
-       }}  title={allLabels}>{displayText}</span>;
-    } 
+      return <span style={{
+        color: allLabels === 'Maximum' ? 'red' : allLabels === 'Minimum' ? 'blue' : "",
+        fontWeight: allLabels === 'Maximum' ? '700' : allLabels === 'Minimum' ? '700' : ""
+      }} title={allLabels}>{displayText}</span>;
+    }
     return null;
   };
 
@@ -1561,7 +1562,7 @@ let getone = (snapshots) => {
 
     setOldven(selected)
 
-    if (hasAllValue === false && hasAllValueold === true   ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
       let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
@@ -1757,7 +1758,7 @@ let getone = (snapshots) => {
 
     setOldvenfive(selected)
 
-    if (hasAllValue === false && hasAllValueold === true  ) {
+    if (hasAllValue === false && hasAllValueold === true) {
       setSelectedOptionsfive([]);
 
       // filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -1972,7 +1973,7 @@ let getone = (snapshots) => {
   //.select options hub
 
   const [Hubradio, setHubradio] = useState(true)
- 
+
 
   const [selectedhubOptions, setSelectedhubOptions] = useState(optionshub);
 
@@ -1984,7 +1985,7 @@ let getone = (snapshots) => {
 
     setOldpro(selected)
 
-    if (hasAllValue === false && hasAllValueold === true  ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
 
       setSelectedhubOptions([]);
@@ -2032,7 +2033,7 @@ let getone = (snapshots) => {
 
     setOldhub(selectedss)
 
-    if (hasAllValue === false && hasAllValueold === true  ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
       console.log(selectedss, 'selectedssselectedssselectedss')
 
@@ -2086,7 +2087,7 @@ let getone = (snapshots) => {
 
     setOldhubtwo(selectedss)
 
-    if (hasAllValue === false && hasAllValueold === true  ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
       console.log(selectedss, 'selectedssselectedssselectedss')
 
@@ -2160,7 +2161,7 @@ let getone = (snapshots) => {
 
     setOldcou(selected)
 
-    if (hasAllValue === false && hasAllValueold === true  ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
       setSelectedCources([]);
 
@@ -2207,7 +2208,7 @@ let getone = (snapshots) => {
 
   //select takeaway
   const [takeaway, setTakeaway] = useState(false)
- 
+
   const [selectedTakeaway, setSelectedTakeaway] = useState(optionstakeaway);
   const handleChangeTakeaway = (selected) => {
 
@@ -2216,7 +2217,7 @@ let getone = (snapshots) => {
 
     setOldtak(selected)
 
-    if (hasAllValue === false && hasAllValueold === true  ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
       setSelectedTakeaway([]);
 
@@ -2654,7 +2655,7 @@ let getone = (snapshots) => {
     // alldat = filterByNote(alldat, regex);
 
 
-     
+
     //   // function filterByNote(filters) {
     //   //   console.log( JSON.stringify(filters) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
 
@@ -2663,13 +2664,13 @@ let getone = (snapshots) => {
 
     //   //   const allowedNotes = filters.map(f => f.value); // Extract values from filter array 
     //   //   const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
-        
+
     //   //   function traverse(obj) {
     //   //     if (Array.isArray(obj)) {
-           
+
     //   //       return obj.map(traverse).filter(entry => entry !== null);
     //   //     } else if (typeof obj === "object" && obj !== null) {
-            
+
     //   //       let newObj = {};
     //   //       let hasMatch = false;
 
@@ -3320,39 +3321,39 @@ let getone = (snapshots) => {
 
     }
 
-    if (takeaways.length != 0 && takeaway === true ) {
+    if (takeaways.length != 0 && takeaway === true) {
 
       function filterByNote(data, regex) {
         if (Array.isArray(data)) {
-            return data
-                .map(item => filterByNote(item, regex))
-                .filter(item => item !== null);
+          return data
+            .map(item => filterByNote(item, regex))
+            .filter(item => item !== null);
         } else if (typeof data === 'object' && data !== null) {
-            if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
-                return {
-                    ...data,
-                    ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
-                };
-            } else if (!data.hasOwnProperty('NOTE')) {
-                let filteredObject = {};
-                for (let key in data) {
-                    let filteredValue = filterByNote(data[key], regex);
-                    if (filteredValue !== null) {
-                        filteredObject[key] = filteredValue;
-                    }
-                }
-                return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+          if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+            return {
+              ...data,
+              ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+            };
+          } else if (!data.hasOwnProperty('NOTE')) {
+            let filteredObject = {};
+            for (let key in data) {
+              let filteredValue = filterByNote(data[key], regex);
+              if (filteredValue !== null) {
+                filteredObject[key] = filteredValue;
+              }
             }
+            return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+          }
         }
         return null;
-    } 
-    const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
+      }
+      const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
 
-    // const filteredData = filterByNote(originalData, regex);
-    alldat = filterByNote(alldat, regex);
+      // const filteredData = filterByNote(originalData, regex);
+      alldat = filterByNote(alldat, regex);
 
 
-     
+
       // function filterByNote(filters) {
       //   console.log( JSON.stringify(filters) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
 
@@ -3361,13 +3362,13 @@ let getone = (snapshots) => {
 
       //   const allowedNotes = filters.map(f => f.value); // Extract values from filter array 
       //   const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
-        
+
       //   function traverse(obj) {
       //     if (Array.isArray(obj)) {
-           
+
       //       return obj.map(traverse).filter(entry => entry !== null);
       //     } else if (typeof obj === "object" && obj !== null) {
-            
+
       //       let newObj = {};
       //       let hasMatch = false;
 
@@ -3408,7 +3409,7 @@ let getone = (snapshots) => {
 
       console.log(alldat, 'seven')
 
-    }else{ 
+    } else {
     }
 
     if (inone != undefined) {
@@ -3602,9 +3603,9 @@ let getone = (snapshots) => {
 
     console.log(filteredData, 'eight')
 
-   
-      callfordataonetwo(filteredData)
- 
+
+    callfordataonetwo(filteredData)
+
 
     let ghi = processTimeData(alldat)
 
@@ -4162,7 +4163,7 @@ let getone = (snapshots) => {
 
 
 
-            if ( isMatch ) {
+            if (isMatch) {
 
               processTimes.push(processTime);
 
@@ -4260,7 +4261,7 @@ let getone = (snapshots) => {
 
 
 
-            if ( isMatch ) {
+            if (isMatch) {
               processTimes.push(processTime);
 
               result.push({
@@ -5990,7 +5991,7 @@ let getone = (snapshots) => {
               {/* Filter by tables/takeaways */}
               <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
                 <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
-                <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%' ,paddingBottom:2,paddingTop:2}}>
+                <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%', paddingBottom: 2, paddingTop: 2 }}>
                   <input
                     onChange={(e) => {
                       setInputvalue(e.target.value)
@@ -6000,10 +6001,10 @@ let getone = (snapshots) => {
                     }}
                     value={inputvalue}
                     placeholder="0-9999"
-                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B',borderRight:'1px solid #707070', textAlign: 'center',paddingTop:9,paddingBottom:9 }}
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', borderRight: '1px solid #707070', textAlign: 'center', paddingTop: 9, paddingBottom: 9 }}
                     type="text"
                   />
-  
+
                   <input
                     onChange={(e) => {
                       setInputvaluetwo(e.target.value)
@@ -6013,7 +6014,7 @@ let getone = (snapshots) => {
                     }}
                     value={inputvaluetwo}
                     placeholder="9999-9999"
-                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center',paddingTop:5 }}
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center', paddingTop: 5 }}
                     type="text"
                   />
                 </div>
@@ -6200,7 +6201,13 @@ let getone = (snapshots) => {
                             <img
                               src="black_arrow.png"
                               style={{ width: 20, height: 20, cursor: 'pointer' }}
-                              onClick={() => { setMeals(1) }}
+                              onClick={() => {
+
+                                filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+                                filterDataByDateonee(dateRangetwo, onetime, twotime, selectedOptionsfive, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                                setMeals(1)
+                              }}
                               alt="Back Arrow"
                             />
                             <p style={{ color: '#1A1A1B', fontWeight: 600, fontSize: 20, marginLeft: 10, marginBottom: 0 }}>
@@ -6782,7 +6789,7 @@ let getone = (snapshots) => {
                           </div>
 
 
-                          <div style={{ visibility: 'hidden' }}>
+                          <div style={{ visibility: 'hidden' , position : 'absolute' }}>
                             <div ref={pdfRefredone}  >
 
                               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
@@ -6997,7 +7004,7 @@ let getone = (snapshots) => {
                           </div>
 
 
-                          <div style={{ visibility: 'hidden' }}>
+                          <div style={{ visibility: 'hidden' , position : 'absolute' }}>
                             <div ref={pdfRefred}  >
 
                               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
@@ -7283,9 +7290,9 @@ let getone = (snapshots) => {
                       <div style={{ width: "40%" }}>
                         <div className="d-flex  " style={{}}>
                           <p style={{ paddingTop: 15 }}>
-                            <span style={{ fontWeight: "400", color: index === 0 ? 'red' :  "#000", marginBlock: "4px" }} >{dfgh?.processtime + ". " || "N/A"} <span 
-                            style={{ color : '#000' }} > {dfgh?.date + " " + "[" +
-                              dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span></span>
+                            <span style={{ fontWeight: "400", color: index === 0 ? 'red' : "#000", marginBlock: "4px" }} >{dfgh?.processtime + ". " || "N/A"} <span
+                              style={{ color: '#000' }} > {dfgh?.date + " " + "[" +
+                                dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span></span>
                           </p>
 
                         </div>

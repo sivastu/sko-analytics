@@ -5891,7 +5891,12 @@ let Dockets = () => {
                               <img
                                 src="black_arrow.png"
                                 style={{ width: 20, height: 20, cursor: 'pointer' }}
-                                onClick={() => { setMeals(1) }}
+                                onClick={() => { 
+                                  
+                                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                                  setMeals(1) }}
                                 alt="Back Arrow"
                               />
                               <p style={{ color: '#1A1A1B', fontWeight: 600, fontSize: 20, marginLeft: 10, marginBottom: 0 }}>
@@ -6511,7 +6516,7 @@ let Dockets = () => {
                             </div>
 
 
-                            <div style={{ visibility: 'hidden' }}>
+                            <div style={{ visibility: 'hidden' , position : 'absolute' }}>
                               <div ref={pdfRefredone}  >
 
                                 <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
@@ -6725,7 +6730,7 @@ let Dockets = () => {
                             </div>
 
 
-                            <div style={{ visibility: 'hidden' }}>
+                            <div style={{ visibility: 'hidden' , position : 'absolute' }}>
                               <div ref={pdfRefred}  >
 
                                 <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to

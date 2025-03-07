@@ -296,7 +296,8 @@ const[send,setSend]=useState(false);
                 navigate("/admin", { state: { userdata: foundUser } });
               }
             } else if (foundUser.Role === 'emp') {
-              navigate("/training");
+              navigate("/admin", { state: { userdata: foundUser } });
+              // navigate("/training");
             } else {
               let funnnderr = getName(foundUser)
               if (funnnderr === true) {

@@ -4948,7 +4948,7 @@ let Meals = () => {
         </div>
       </div>
 
-      <div style={{ backgroundColor: "#DADADA", height: '100vh', }} className="finefinrr hide-scrollbar">
+      <div style={{ backgroundColor: "#DADADA", height: meals === 5 ? 'auto' : '100vh', }} className="finefinrr hide-scrollbar">
 
         <div style={{}} className="dddd hide-scrollbar"  >
           <div className="container-fluid px-0">
@@ -5587,12 +5587,13 @@ let Meals = () => {
                     {/* Served meals */}
                     <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center" style={{ paddingRight: `${padd}px`, paddingLeft: paddOpp }}>
                       <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
+                       
                         setMeals(3)
                       }}>
                         <div className="boxs" style={{ cursor: 'pointer' }}>
                           <div className="d-flex justify-content-between">
                             <div>
-                              <p className="asdfp" style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Served meals</p>
+                              <p className="asdfp" style={{ marginBottom: 0, fontWeight: 600, color: '#1A1A1B' }}>Served meals</p> 
                               <p className="asdfp" style={{ color: "#707070", fontSize: 16, fontWeight: '400' }}>(Total)</p>
                             </div>
                             <div>
@@ -5945,7 +5946,9 @@ let Meals = () => {
                             <img
                               src="black_arrow.png"
                               style={{ width: 20, height: 20, cursor: 'pointer' }}
-                              onClick={() => { setMeals(1) }}
+                              onClick={() => { 
+                                setServed(editallclone)
+                                setMeals(1) }}
                               alt="Back Arrow"
                             />
                             <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10, marginRight: 5, marginBottom: 0 }}>Served meals</p>

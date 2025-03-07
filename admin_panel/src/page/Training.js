@@ -121,11 +121,7 @@ let Training = () => {
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
 
-      if (foundUser.Role === 'emp') {
-        navigate('/')
-        return
-      }
-
+      
       if (foundUser) {
         setMydata(foundUser)
         // Check if the password matches
