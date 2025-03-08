@@ -31,6 +31,8 @@ import { RxCross2 } from "react-icons/rx";
 import { Nav } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { DataContext } from "../component/DataProvider";
+import { concat, debounce } from "lodash";
+
 
 let Admin_dash = () => {
   let [data, setData] = useState("1");
@@ -593,8 +595,7 @@ let Admin_dash = () => {
           padding: "10px",
           backgroundColor: isSelected ? "#f0f8ff" : "white",
           color: isSelected ? "#0073e6" : "black",
-          cursor: "pointer",
-          zIndex : '100000000'
+          cursor: "pointer", 
         }}
       >
         {
@@ -626,13 +627,23 @@ let Admin_dash = () => {
   }
 
 
+  const debounce = (func, delay) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
+
+  
+
 
   let changeddddd = (seee, fineee, third) => {
 
-    console.log(seee, fineee, third, 'seee, fineee, third ff')
-
- 
-
+   
+   
     const emailKey = fineee.Email.replace(/\.com/g, ""); // Firebase doesn't allow dots in keys
 
     console.log(emailKey);
@@ -1089,6 +1100,12 @@ let Admin_dash = () => {
   const [fss, setFss] = useState(
     window.innerWidth >= 1400 ? 16 : window.innerWidth >= 1024 ? 14 : 14
   );
+
+
+  const handleChanges = debounce((e, value , byebye) => {
+    changeddddd(e, value, byebye );
+  }, 300);
+  
 
   useEffect(() => {
     const handleResize = () => {
@@ -2081,17 +2098,22 @@ let Admin_dash = () => {
                                     }}
                                   >
                                     <Select
+                                      isSearchable={false}
                                       isMulti
                                       className="newoneoneess"
+                                      menuPortalTarget={document.body} 
                                       options={basic}
                                       value={value.venue}
                                       onChange={(e, { action }) => {
-                                        if (action === "select-option" || action === "remove-value") {
-                                          changeddddd(e, value, "venue");
-                                        }
-                                        if (action === "select-option") {
-                                          document.activeElement.blur();
-                                        }
+ 
+                                        console.log(action)
+                                        if (action === "select-option" || action === "remove-value" || action === "clear" ||  action === "deselect-option"   ) { 
+
+                                        
+                                          handleChanges(e, value , "venue");
+                                        } 
+
+                                        
                                       }} // Prevent selection changes
                                       // placeholder={value.venue[0].label + "..."}
                                       placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
@@ -2118,22 +2140,34 @@ let Admin_dash = () => {
                                           border: "unset",
                                           marginTop: -8,
                                           color: "#1A1A1B",
-                                          fontSize: fss,
-                                          zIndex : 1000000
+                                          fontSize: fss, 
+                                        }),
+                                        menu: (base) => ({
+                                          ...base,
+                                          zIndex: 1000001, // Ensure dropdown appears above everything
                                         }),
                                       }}
                                     />
                                   </div>
                                   <div style={{ width: "19%", paddingRight: 20 }}>
                                     <Select
+                                    isSearchable={false}
                                       isMulti
                                       className="newoneoneess"
+                                      menuPortalTarget={document.body} 
                                       options={output}
                                       value={value.hub} // Shows selected values
                                       onChange={(e, { action }) => {
-                                        if (action === "select-option" || action === "remove-value") {
-                                          changeddddd(e, value, "hub");
-                                        }
+                                        console.log('kkkkkkkkkkkkkkkk' , value ) 
+
+                                        if (action === "select-option" || action === "remove-value" || action === "clear" ||  action === "deselect-option"   ) { 
+
+                                        
+                                          handleChanges(e, value , "hub");
+                                        } 
+ 
+
+                                        
                                        
                                       }} // Prevent selection changes
                                       // placeholder={value.hub[0].label + "..."}
@@ -2167,7 +2201,12 @@ let Admin_dash = () => {
                                           color: "#1A1A1B",
                                           fontSize: fss,
                                         }),
+                                        menu: (base) => ({
+                                          ...base,
+                                          zIndex: 1000001, // Ensure dropdown appears above everything
+                                        }),
                                       }}
+                                      
                                     />
                                   </div>
                                   <div style={{ width: "5%", paddingLeft: "1%" }} className="d-flex justify-content-between gap-3 align-items-center ">
@@ -2325,13 +2364,21 @@ let Admin_dash = () => {
                                   >
                                     <Select
                                       isMulti
+                                      isSearchable={false}
                                       className="newoneoneess"
+                                      menuPortalTarget={document.body} 
                                       options={basic}
                                       value={value.venue}
                                       onChange={(e, { action }) => {
-                                        if (action === "select-option" || action === "remove-value") {
-                                        changeddddd(e, value, "venue");
-                                        }
+
+                                        if (action === "select-option" || action === "remove-value" || action === "clear" ||  action === "deselect-option"   ) { 
+
+                                        
+                                          handleChanges(e, value , "venue");
+                                        } 
+
+
+                                         
                                       }}
                                       placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
                                       components={{
@@ -2341,18 +2388,12 @@ let Admin_dash = () => {
                                           const selectedValues = props.getValue();
                                           return (
                                             <components.ValueContainer {...props}>
-                                              <div style={{
-                                                visibility: "hidden"
-                                              }}>
-                                                {children}
-                                              </div>
-
-                                              {selectedValues.length > 0 && (
-                                                <CustomPlaceholder {...props} />
-                                              )}
-
-
-                                            </components.ValueContainer>
+                                            {selectedValues.length > 0 ? (
+                                              <CustomPlaceholder {...props} />
+                                            ) : (
+                                              children
+                                            )}
+                                          </components.ValueContainer>
                                           );
                                         },
                                       }} // Keep dropdown open for further selection
@@ -2364,8 +2405,11 @@ let Admin_dash = () => {
                                           border: "unset",
                                           marginTop: -8,
                                           color: "#1A1A1B",
-                                          fontSize: fss,
-                                          zIndex : 1000000
+                                          fontSize: fss, 
+                                        }),
+                                        menu: (base) => ({
+                                          ...base,
+                                          zIndex: 1000001, // Ensure dropdown appears above everything
                                         }),
                                       }}
                                     />
@@ -2373,13 +2417,18 @@ let Admin_dash = () => {
                                   <div style={{ width: "19%", paddingRight: 20 }}>
                                     <Select
                                       isMulti
+                                      isSearchable={false}
                                       className="newoneoneess"
                                       options={output}
                                       value={value.hub} // Shows selected values
+                                      menuPortalTarget={document.body} 
                                       onChange={(e, { action }) => {
-                                        if (action === "select-option" || action === "remove-value") {
-                                        changeddddd(e, value, "hub");
-                                        }
+                                        
+                                        if (action === "select-option" || action === "remove-value" || action === "clear" ||  action === "deselect-option"   ) { 
+
+                                        
+                                          handleChanges(e, value , "hub");
+                                        }  
                                       }} // Prevent selection changes
                                       // placeholder={value.hub[0].label + "..."}
                                       placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
@@ -2409,6 +2458,10 @@ let Admin_dash = () => {
                                           marginTop: -8,
                                           color: "#1A1A1B",
                                           fontSize: fss,
+                                        }),
+                                        menu: (base) => ({
+                                          ...base,
+                                          zIndex: 1000001, // Ensure dropdown appears above everything
                                         }),
                                       }}
                                     />
@@ -2565,17 +2618,19 @@ let Admin_dash = () => {
                                   >
                                     <Select
                                       isMulti
+                                      isSearchable={false}
                                       className="newoneoneess"
                                       options={basic}
-                                      value={value.venue}  
-                                      onMenuOpen={() => setOpenSelectId("venue-" + value.venue)}
-                                      onMenuClose={() => setOpenSelectId(null)}
-                                      menuIsOpen={"venue-" + value.venue == openSelectId}
+                                      value={value.venue}    
                                       onChange={(e, { action }) => {
-                                        if (action === "select-option" || action === "remove-value") {
-                                        changeddddd(e, value, "venue");
-                                        }
-                                        setOpenSelectId(null);
+
+                                        if (action === "select-option" || action === "remove-value" || action === "clear" ||  action === "deselect-option"   ) { 
+
+                                        
+                                          handleChanges(e, value , "venue");
+                                        } 
+
+                                        
                                       }} 
                                       placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
                                       menuPortalTarget={document.body} 
@@ -2603,8 +2658,7 @@ let Admin_dash = () => {
                                           border: "unset",
                                           marginTop: -8,
                                           color: "#1A1A1B",
-                                          fontSize: fss,
-                                          zIndex : 1000000
+                                          fontSize: fss, 
                                         }),
                                         menu: (base) => ({
                                           ...base,
@@ -2616,13 +2670,19 @@ let Admin_dash = () => {
                                   <div style={{ width: "19%", paddingRight: 20 }}>
                                     <Select
                                       isMulti
+                                      isSearchable={false} 
                                       className="newoneoneess custom-select-container"
                                       options={output}
                                       value={value.hub} // Shows selected values
                                       onChange={(e, { action }) => {
-                                        if (action === "select-option" || action === "remove-value") {
-                                        changeddddd(e, value, "hub");
-                                        }
+
+                                        if (action === "select-option" || action === "remove-value" || action === "clear" ||  action === "deselect-option"   ) { 
+
+                                        
+                                          handleChanges(e, value , "hub");
+                                        } 
+
+                                        
                                       }} // Prevent selection changes
                                       placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
 
@@ -2644,6 +2704,7 @@ let Admin_dash = () => {
                                       }}
                                       closeMenuOnSelect={false} // Keep dropdown open for further selection
                                       hideSelectedOptions={false} // Show all options even if selected 
+                                      menuPortalTarget={document.body} 
                                       styles={{
                                         control: (base) => ({
                                           ...base,
@@ -2651,6 +2712,10 @@ let Admin_dash = () => {
                                           marginTop: -8,
                                           color: "#1A1A1B",
                                           fontSize: fss
+                                        }),
+                                        menu: (base) => ({
+                                          ...base,
+                                          zIndex: 1000001, // Ensure dropdown appears above everything
                                         }),
                                       }}
                                     />
