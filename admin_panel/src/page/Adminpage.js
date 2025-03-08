@@ -8,7 +8,7 @@ import ReactDOM from "react-dom";
 import ReactPaginate from "react-paginate";
 import bigInt from "big-integer";
 import app from "./firebase";
-import { getDatabase, ref, set, push, get, query, orderByChild, equalTo } from "firebase/database";
+import { getDatabase, ref, set, push, get, query, orderByChild, equalTo , update } from "firebase/database";
 import SweetAlert2 from 'react-sweetalert2';
 import * as CryptoJS from 'crypto-js'
 import Modal from 'react-modal';
@@ -88,11 +88,11 @@ let Adminpage = () => {
       sessionStorage.removeItem('data')
       navigate('/')
       return
-    }
+    } 
     let decry = decrypt(getdata)
 
     let parsedatajson = JSON.parse(decry)
-
+ 
     setUsername(parsedatajson)
 
     let name = getName(parsedatajson)
@@ -108,7 +108,21 @@ let Adminpage = () => {
     if (snapshot.exists()) {
       const userData = snapshot.val();
 
+
+      console.log(userData , 'userDatauserDatauserDatauserData')
+ 
+
       dispatch({ type: "SET_DATA", payload: { user: userData } });
+ 
+      const emailKey = parsedatajson.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+      const userRefs = ref(db, `user/${emailKey}`);
+  
+      try {
+        await update(userRefs,  {  // Replace with actual value
+          date: new Date().toISOString(), // Store the current date in ISO format
+        } ); // Update the manager in the database  
+      } catch (error) { 
+      }
 
       // Check if the password matches
       const foundUser = Object.values(userData).find(user => user.Email === parsedatajson.Email);
@@ -147,7 +161,7 @@ let Adminpage = () => {
   let getone = () => {
     setLoading(true)
     const db = getDatabase(app);
-    const eventsRefs = ref(db, "Data");
+    const eventsRefs = ref(db, "Data"); 
 
     const dateQuerys = query(eventsRefs);
 

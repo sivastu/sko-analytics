@@ -250,6 +250,9 @@ let Admin_dash = () => {
     }
   };
 
+    let [oldtak, setOldtak] = useState([])
+    let [oldtaks, setOldtaks] = useState([])
+
   // Handle deleting an employee
   const handleDeleteEmployee = async () => {
     if (!employeeToDelete) return;
@@ -270,41 +273,138 @@ let Admin_dash = () => {
   };
 
   const handleChangehubone = (selectedss) => {
-    console.log(selectedss, "selectedssselectedssselectedss");
-    setHubb(selectedss);
-    checkuserddd();
+
+    const hasAllValue = selectedss.some(item => item.value === "All");
+    const hasAllValueold = oldtaks.some(item => item.value === "All");
+
+
+    console.log(hasAllValue , hasAllValueold , 'hasAllValuehasAllValuehasAllValuehasAllValue')
+
+    setOldtaks(selectedss)
+    
+    if (hasAllValue === false && hasAllValueold === true ) {
+
+      console.log(hasAllValue , hasAllValueold , 'workeeedddddddd')
+      setHubb([]);
+      checkuserddd();
+      return
+    }
+
+   
+
+    if (hasAllValue === true) {
+
+      setHubb([...basicone , ...[{ value: "All", label: "All Hubs" }]]);
+      checkuserddd();
+       
+
+    } else {
+      setHubb(selectedss);
+      checkuserddd();
+    }
+  
+   
   };
 
 
   const handleChange = (selected) => {
     console.log(JSON.stringify(selected), "selected");
 
-    setSelectedOptions(selected || []);
+    // setSelectedOptions(selected || []); 
 
-    const output = [{ value: "All", label: "All Hubs" }];
+    
+///   { value: "All", label: "All Hubs" }
+ 
+    const hasAllValue = selected.some(item => item.value === "All");
+    const hasAllValueold = oldtak.some(item => item.value === "All");
+
+    setOldtak(selected)
+
+    if (hasAllValue === false && hasAllValueold === true ) {
+      const output = [];
+      [].forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach((item) => {
+              output.push({ value: key + "-" + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach((item) => {
+              if (item.name === value) {
+                output.push({ value: key + "-" + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+      setSelectedOptions(  []); 
+      setBasicone(output);
+      checkuserddd();
+
+      return
+
+    }
+
+    if (hasAllValue === true) {
+
+      const output = [{ value: "All", label: "All Hubs" }];
+      basic.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach((item) => {
+              output.push({ value: key + "-" + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach((item) => {
+              if (item.name === value) {
+                output.push({ value: key + "-" + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+      setSelectedOptions(basic  ); 
+      setBasicone(output);
+      checkuserddd();
+
+       
+
+    } else {
+      const output = [{ value: "All", label: "All Hubs" }];
+      selected.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach((item) => {
+              output.push({ value: key + "-" + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach((item) => {
+              if (item.name === value) {
+                output.push({ value: key + "-" + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+      setSelectedOptions(selected  ); 
+      setBasicone(output);
+      checkuserddd();
+    }
+ 
+
+
 
     // // Iterate through the search array
-    selected.forEach(({ value }) => {
-      // Search in the data object
-      Object.entries(alldrop).forEach(([key, items]) => {
-        if (key === value) {
-          // If the key matches, add all items from the group to the output
-          items.forEach((item) => {
-            output.push({ value: key + "-" + item.name, label: item.name });
-          });
-        } else {
-          // Search within the group's items
-          items.forEach((item) => {
-            if (item.name === value) {
-              output.push({ value: key + "-" + item.name, label: key });
-            }
-          });
-        }
-      });
-    });
-
-    setBasicone(output);
-    checkuserddd();
+   
   };
 
   useEffect(() => {
@@ -316,9 +416,7 @@ let Admin_dash = () => {
 
   useEffect(() => {
 
-
-
-    console.log(state, 'statestatestatestatestate')
+ 
     getone(state?.data);
   }, []);
 
@@ -326,7 +424,24 @@ let Admin_dash = () => {
     // getuser()
   }, []);
 
-  const CustomPlaceholder = ({ children, getValue }) => {
+  const [openSelectId, setOpenSelectId] = useState(null); // Track open Select
+ 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (!event.target.closest(".custom-select-container")) {
+        setOpenSelectId(null);
+        console.log("😂");
+      } 
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+  
+
+
+
+
+  const CustomPlaceholder = ({ getValue }) => {
     const selected = getValue();
     if (selected.length) {
       const allLabels = selected.map((option) => option.label).join(", ");
@@ -334,11 +449,19 @@ let Admin_dash = () => {
       // Limit to single line with ellipsis
       const maxLength = 10; // Adjust as needed
       const displayText =
-        allLabels.length > textCount
-          ? allLabels.slice(0, textCount) + "..."
-          : allLabels;
+        allLabels.length > maxLength ? allLabels.slice(0, maxLength) + "..." : allLabels;
 
-      return <span title={allLabels}>{displayText}</span>;
+      return (
+        <span title={allLabels} style={{
+          display: "inline-block",
+          maxWidth: "100px", // Adjust width as needed
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis"
+        }}>
+          {displayText}
+        </span>
+      );
     }
     return null;
   };
@@ -471,6 +594,7 @@ let Admin_dash = () => {
           backgroundColor: isSelected ? "#f0f8ff" : "white",
           color: isSelected ? "#0073e6" : "black",
           cursor: "pointer",
+          zIndex : '100000000'
         }}
       >
         {
@@ -501,9 +625,13 @@ let Admin_dash = () => {
     return data.name;
   }
 
+
+
   let changeddddd = (seee, fineee, third) => {
 
     console.log(seee, fineee, third, 'seee, fineee, third ff')
+
+ 
 
     const emailKey = fineee.Email.replace(/\.com/g, ""); // Firebase doesn't allow dots in keys
 
@@ -988,7 +1116,21 @@ let Admin_dash = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  function formatReadableDate(isoDate) {
+    const date = new Date(isoDate);
 
+    const day = date.getDate(); // Get day (1-31)
+    const month = date.getMonth() + 1; // Months are 0-based, so add 1
+    const year = date.getFullYear(); // Get full year
+
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "pm" : "am";
+
+    hours = hours % 12 || 12; // Convert 24-hour to 12-hour format
+
+    return `${day}/${month}/${year} ${hours}.${minutes < 10 ? "0" : ""}${minutes}${ampm}`;
+  }
   return (
     <div className="hide-scrollbar" style={{ overflow: "hidden" }}>
       <div
@@ -1068,9 +1210,10 @@ let Admin_dash = () => {
         </div>
       </div>
 
+
       <div style={{ backgroundColor: "#ECF1F4", height: "100vh" }}>
         <div className="d-flex flex-column flex-md-row justify-content-between p-3 ">
-          <div className="d-flex align-items-center mb-3 mb-md-0">
+          <div className="d-flex align-items-center mb-3 mb-md-0" style={{ paddingLeft: '1%' }}>
             <img
               src="sett.png"
               style={{ width: 30, height: 30 }}
@@ -1079,6 +1222,8 @@ let Admin_dash = () => {
             <p className="mb-0 ms-2 fs-4  fw-bold" style={{ color: "#1A1A1B" }}>
               SETTINGS
             </p>
+ 
+
           </div>
 
           <div className="col-12 col-md-8 col-lg-6">
@@ -1196,7 +1341,7 @@ let Admin_dash = () => {
                   padding: 10,
                   marginLeft: -33,
                   width: 50,
-                  cursor: "pointer", 
+                  cursor: "pointer",
                 }}
               >
                 <p
@@ -1379,6 +1524,7 @@ let Admin_dash = () => {
                   color: "#1A1A1B",
                   fontWeight: "400",
                   width: boxWidth,
+                  display: 'flex'
                 }}
               >
                 <img
@@ -1402,7 +1548,7 @@ let Admin_dash = () => {
                   }}
                   alt="Example Image"
                 />
-                <span className="font-size"> Users</span>
+                <span className="font-size" style={{ marginTop: openDropdown === false ? -10 : -10 }}> Users</span>
               </Nav.Link>
               {openDropdown && (
                 <div className="ms-lg-3 ms-md-0">
@@ -1726,14 +1872,14 @@ let Admin_dash = () => {
                           options={basic}
                           value={selectedOptions}
                           onChange={handleChange}
-                          placeholder="Select options..."
                           components={{
                             Option: CustomOption,
                             MultiValue: () => null,
+
                             ValueContainer: ({ children, ...props }) => {
                               const selectedValues = props.getValue();
                               return (
-                                <components.ValueContainer {...props}>
+                                <components.ValueContainer {...props} >
                                   {selectedValues.length > 0 ? (
                                     <CustomPlaceholder {...props} />
                                   ) : (
@@ -1764,7 +1910,6 @@ let Admin_dash = () => {
                           options={basicone}
                           value={hubb}
                           onChange={handleChangehubone}
-                          placeholder="Select options..."
                           components={{
                             Option: CustomOption,
                             MultiValue: () => null,
@@ -1878,7 +2023,7 @@ let Admin_dash = () => {
                                           whiteSpace: "nowrap",
                                           textOverflow: "ellipsis", // Adds "..." for overflowed text
                                           maxWidth: "100%", // Ensures it doesn't exceed container width
-                                          marginLeft : 7 , marginRight : 7
+                                          marginLeft: 7, marginRight: 7
                                         }}
                                       >
                                         {value.name}
@@ -1919,12 +2064,12 @@ let Admin_dash = () => {
                                   <div className="ms-md-3 ms-lg-0" style={{ width: `19%` }}>
                                     <p
                                       style={{
-                                        color: "#1A1A1B",
+                                        color: "rgb(112, 112, 112)",
                                         fontWeight: "400",
                                         fontSize: fs,
                                       }}
                                     >
-                                      -
+                                      {value?.date ? formatReadableDate(value?.date) : '-'}
                                     </p>
                                   </div>
                                   <div
@@ -1939,20 +2084,20 @@ let Admin_dash = () => {
                                       isMulti
                                       className="newoneoneess"
                                       options={basic}
-                                      value={value.venue} // Shows selected values
-                                      onChange={(e) => {
-                                        changeddddd(e, value, "venue");
+                                      value={value.venue}
+                                      onChange={(e, { action }) => {
+                                        if (action === "select-option" || action === "remove-value") {
+                                          changeddddd(e, value, "venue");
+                                        }
+                                        if (action === "select-option") {
+                                          document.activeElement.blur();
+                                        }
                                       }} // Prevent selection changes
                                       // placeholder={value.venue[0].label + "..."}
                                       placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
-
                                       components={{
                                         Option: CustomOption,
-                                        MultiValue: () => null, // Hides default tags
-                                        ValueContainer: ({
-                                          children,
-                                          ...props
-                                        }) => {
+                                        ValueContainer: ({ children, ...props }) => {
                                           const selectedValues = props.getValue();
                                           return (
                                             <components.ValueContainer {...props}>
@@ -1964,9 +2109,9 @@ let Admin_dash = () => {
                                             </components.ValueContainer>
                                           );
                                         },
-                                      }} // Keep dropdown open for further selection
-                                      closeMenuOnSelect={false} // Keep dropdown open for further selection
-                                      hideSelectedOptions={false} // Show all options even if selected
+                                      }}
+                                      closeMenuOnSelect={false}
+                                      hideSelectedOptions={false}
                                       styles={{
                                         control: (base) => ({
                                           ...base,
@@ -1974,6 +2119,7 @@ let Admin_dash = () => {
                                           marginTop: -8,
                                           color: "#1A1A1B",
                                           fontSize: fss,
+                                          zIndex : 1000000
                                         }),
                                       }}
                                     />
@@ -1984,14 +2130,14 @@ let Admin_dash = () => {
                                       className="newoneoneess"
                                       options={output}
                                       value={value.hub} // Shows selected values
-                                      onChange={(e) => {
-
-
-                                        changeddddd(e, value, "hub");
+                                      onChange={(e, { action }) => {
+                                        if (action === "select-option" || action === "remove-value") {
+                                          changeddddd(e, value, "hub");
+                                        }
+                                       
                                       }} // Prevent selection changes
                                       // placeholder={value.hub[0].label + "..."}
                                       placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
-
                                       components={{
                                         Option: CustomOption,
                                         MultiValue: () => null, // Hides default tags
@@ -2096,7 +2242,7 @@ let Admin_dash = () => {
                                     backgroundColor: "#ECF1F4",
                                   }}
                                 >
-                                   <div style={{ width: "19%", display: "flex", alignItems: "center" }}>
+                                  <div style={{ width: "19%", display: "flex", alignItems: "center" }}>
                                     <div
                                       style={{
                                         display: "flex",
@@ -2121,7 +2267,7 @@ let Admin_dash = () => {
                                           whiteSpace: "nowrap",
                                           textOverflow: "ellipsis", // Adds "..." for overflowed text
                                           maxWidth: "100%", // Ensures it doesn't exceed container width
-                                          marginLeft : 7 , marginRight : 7
+                                          marginLeft: 7, marginRight: 7
                                         }}
                                       >
                                         {value.name}
@@ -2161,12 +2307,12 @@ let Admin_dash = () => {
                                   <div style={{ width: "19%" }}>
                                     <p
                                       style={{
-                                        color: "#1A1A1B",
+                                        color: "rgb(112, 112, 112)",
                                         fontWeight: "400",
                                         fontSize: fs,
                                       }}
                                     >
-                                      -
+                                      {value?.date ? formatReadableDate(value?.date) : '-'}
                                     </p>
                                   </div>
                                   <div
@@ -2181,24 +2327,31 @@ let Admin_dash = () => {
                                       isMulti
                                       className="newoneoneess"
                                       options={basic}
-                                      value={value.venue} // Shows selected values
-                                      onChange={(e) => {
+                                      value={value.venue}
+                                      onChange={(e, { action }) => {
+                                        if (action === "select-option" || action === "remove-value") {
                                         changeddddd(e, value, "venue");
-                                      }} // Prevent selection changes
+                                        }
+                                      }}
                                       placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
-
                                       components={{
                                         Option: CustomOption,
-                                        MultiValue: () => null, // Hides default tags
+                                        MultiValue: () => null,
                                         ValueContainer: ({ children, ...props }) => {
                                           const selectedValues = props.getValue();
                                           return (
                                             <components.ValueContainer {...props}>
-                                              {selectedValues.length > 0 ? (
+                                              <div style={{
+                                                visibility: "hidden"
+                                              }}>
+                                                {children}
+                                              </div>
+
+                                              {selectedValues.length > 0 && (
                                                 <CustomPlaceholder {...props} />
-                                              ) : (
-                                                children
                                               )}
+
+
                                             </components.ValueContainer>
                                           );
                                         },
@@ -2212,6 +2365,7 @@ let Admin_dash = () => {
                                           marginTop: -8,
                                           color: "#1A1A1B",
                                           fontSize: fss,
+                                          zIndex : 1000000
                                         }),
                                       }}
                                     />
@@ -2222,8 +2376,10 @@ let Admin_dash = () => {
                                       className="newoneoneess"
                                       options={output}
                                       value={value.hub} // Shows selected values
-                                      onChange={(e) => {
+                                      onChange={(e, { action }) => {
+                                        if (action === "select-option" || action === "remove-value") {
                                         changeddddd(e, value, "hub");
+                                        }
                                       }} // Prevent selection changes
                                       // placeholder={value.hub[0].label + "..."}
                                       placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
@@ -2351,7 +2507,7 @@ let Admin_dash = () => {
                                           whiteSpace: "nowrap",
                                           textOverflow: "ellipsis", // Adds "..." for overflowed text
                                           maxWidth: "100%", // Ensures it doesn't exceed container width
-                                          marginLeft : 7 , marginRight : 7
+                                          marginLeft: 7, marginRight: 7
                                         }}
                                       >
                                         {value.name}
@@ -2390,9 +2546,13 @@ let Admin_dash = () => {
 
                                   <div style={{ width: "19%" }}>
                                     <p
-                                      style={{ color: "#1A1A1B", fontWeight: "400" }}
+                                      style={{
+                                        color: "rgb(112, 112, 112)",
+                                        fontWeight: "400",
+                                        fontSize: fs,
+                                      }}
                                     >
-                                      -
+                                      {value?.date ? formatReadableDate(value?.date) : '-'}
                                     </p>
                                   </div>
                                   <div
@@ -2401,20 +2561,27 @@ let Admin_dash = () => {
                                       paddingRight: 20,
                                       color: "#1A1A1B",
                                     }}
+                                    className="custom-select-container"
                                   >
                                     <Select
                                       isMulti
                                       className="newoneoneess"
                                       options={basic}
-                                      value={value.venue} // Shows selected values
-                                      onChange={(e) => {
+                                      value={value.venue}  
+                                      onMenuOpen={() => setOpenSelectId("venue-" + value.venue)}
+                                      onMenuClose={() => setOpenSelectId(null)}
+                                      menuIsOpen={"venue-" + value.venue == openSelectId}
+                                      onChange={(e, { action }) => {
+                                        if (action === "select-option" || action === "remove-value") {
                                         changeddddd(e, value, "venue");
-                                      }} // Prevent selection changes
+                                        }
+                                        setOpenSelectId(null);
+                                      }} 
                                       placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"}
-
+                                      menuPortalTarget={document.body} 
                                       components={{
                                         Option: CustomOption,
-                                        MultiValue: () => null, // Hides default tags
+                                        MultiValue: () => null,  
                                         ValueContainer: ({ children, ...props }) => {
                                           const selectedValues = props.getValue();
                                           return (
@@ -2427,16 +2594,21 @@ let Admin_dash = () => {
                                             </components.ValueContainer>
                                           );
                                         },
-                                      }} // Keep dropdown open for further selection
-                                      closeMenuOnSelect={false} // Keep dropdown open for further selection
-                                      hideSelectedOptions={false} // Disables all options from being selected
+                                      }}  
+                                      closeMenuOnSelect={false} 
+                                      hideSelectedOptions={false} 
                                       styles={{
                                         control: (base) => ({
                                           ...base,
                                           border: "unset",
                                           marginTop: -8,
                                           color: "#1A1A1B",
-                                          fontSize: fss
+                                          fontSize: fss,
+                                          zIndex : 1000000
+                                        }),
+                                        menu: (base) => ({
+                                          ...base,
+                                          zIndex: 1000001, // Ensure dropdown appears above everything
                                         }),
                                       }}
                                     />
@@ -2444,11 +2616,13 @@ let Admin_dash = () => {
                                   <div style={{ width: "19%", paddingRight: 20 }}>
                                     <Select
                                       isMulti
-                                      className="newoneoneess"
+                                      className="newoneoneess custom-select-container"
                                       options={output}
                                       value={value.hub} // Shows selected values
-                                      onChange={(e) => {
+                                      onChange={(e, { action }) => {
+                                        if (action === "select-option" || action === "remove-value") {
                                         changeddddd(e, value, "hub");
+                                        }
                                       }} // Prevent selection changes
                                       placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
 
