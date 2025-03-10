@@ -150,7 +150,7 @@ let Admin_dash = () => {
     const db = getDatabase(app);
 
     // Get the old email (before editing)
-    const EmailKey = selectedAdmin.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+    const EmailKey = selectedAdmin.Email.replace(/\.com$/, "").replace(/[.#$/\[\]]/g, ""); // Firebase doesn't allow dots in keys
     const userRef = ref(db, `user/${EmailKey}`)
 
     try {
@@ -172,7 +172,7 @@ let Admin_dash = () => {
     if (!adminToDelete) return;
 
     const db = getDatabase(app);
-    const emailKey = adminToDelete.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+    const emailKey = adminToDelete.replace(/\.com$/, "").replace(/[.#$/\[\]]/g, ""); // Firebase doesn't allow dots in keys
     const userRef = ref(db, `user/${emailKey}`);
 
     try {
@@ -190,7 +190,7 @@ let Admin_dash = () => {
     if (!selectedManager) return;
 
     const db = getDatabase(app);
-    const emailKey = selectedManager.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+    const emailKey = selectedManager.Email.replace(/\.com$/, "").replace(/[.#$/\[\]]/g, ""); // Firebase doesn't allow dots in keys
     const userRef = ref(db, `user/${emailKey}`);
 
     try {
@@ -209,7 +209,7 @@ let Admin_dash = () => {
     if (!managerToDelete) return;
 
     const db = getDatabase(app);
-    const emailKey = managerToDelete.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+    const emailKey = managerToDelete.Email.replace(/\.com$/, "").replace(/[.#$/\[\]]/g, ""); // Firebase doesn't allow dots in keys
     const userRef = ref(db, `user/${emailKey}`);
 
     try {
@@ -238,7 +238,7 @@ let Admin_dash = () => {
     if (!selectedEmployee) return;
 
     const db = getDatabase(app);
-    const emailKey = selectedEmployee.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+    const emailKey = selectedEmployee.Email.replace(/\.com$/, "").replace(/[.#$/\[\]]/g, ""); // Firebase doesn't allow dots in keys
     const userRef = ref(db, `user/${emailKey}`);
 
     try {
@@ -260,7 +260,7 @@ let Admin_dash = () => {
     if (!employeeToDelete) return;
 
     const db = getDatabase(app);
-    const emailKey = employeeToDelete.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+    const emailKey = employeeToDelete.Email.replace(/\.com$/, "").replace(/[.#$/\[\]]/g, ""); // Firebase doesn't allow dots in keys
     const userRef = ref(db, `user/${emailKey}`);
 
     try {
@@ -510,7 +510,7 @@ let Admin_dash = () => {
     // });
 
     let newData = {
-      [mydata.Email.replace(".com", "")]: {
+      [mydata.Email.replace(/\.com$/, "").replace(/[.#$/\[\]]/g, "")]: {
         Password: editpass,
         name: editname,
 
@@ -992,7 +992,7 @@ let Admin_dash = () => {
     // });
 
     let newData = {
-      [email.replace(".com", "")]: {
+      [email.replace(/\.com$/, "").replace(/[.#$/\[\]]/g, "")]: {
         Email: email,
         Password: "password",
         Role: data === "1" ? "admin" : data === "2" ? "manager" : "emp",

@@ -114,7 +114,7 @@ let Adminpage = () => {
 
       dispatch({ type: "SET_DATA", payload: { user: userData } });
  
-      const emailKey = parsedatajson.Email.replace(".com", ""); // Firebase doesn't allow dots in keys
+      const emailKey = parsedatajson.Email.replace(/\.com$/, "").replace(/[.#$/\[\]]/g, ""); // Firebase doesn't allow dots in keys
       const userRefs = ref(db, `user/${emailKey}`);
   
       try {
