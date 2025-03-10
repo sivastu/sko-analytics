@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext , useRef } from "react";
 import Header from "../component/Header";
 import axios from "axios";
 import { Base_url } from "../config";
@@ -107,6 +107,35 @@ let Admin_dash = () => {
   const [showDeleteModalEmployee, setShowDeleteModalEmployee] = useState(false); // For delete modal
   const [selectedEmployee, setSelectedEmployee] = useState(null); // For selected employee
   const [employeeToDelete, setEmployeeToDelete] = useState(null); // For employee to delete
+
+  const selectRef = useRef(null);
+  const selectRefone = useRef(null);
+
+  const [menuIsOpen, setMenuIsOpen] = useState(false);
+  const [menuIsOpenone, setMenuIsOpenone] = useState(false);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+          if (selectRef.current && !selectRef.current.contains(event.target)) {
+            setMenuIsOpen(false);
+          } 
+
+
+          if (selectRefone.current && !selectRefone.current.contains(event.target)) {
+            setMenuIsOpenone(false);
+          }
+
+
+        };
+    
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, []);
+  
+
+
 
 
   // Handle edit button click for admins
@@ -431,7 +460,7 @@ let Admin_dash = () => {
 
   const [openSelectId, setOpenSelectId] = useState(null); // Track open Select
 
- 
+
 
 
   const customContentRenderer = ({ props, state }) => {
@@ -654,9 +683,6 @@ let Admin_dash = () => {
 
     console.log(seee, 'third')
 
-    return
-
-
 
     const emailKey = fineee.Email.replace(/\.com$/, "").replace(/[.#$/\[\]]/g, ""); // Firebase doesn't allow dots in keys
 
@@ -682,7 +708,7 @@ let Admin_dash = () => {
 
       set(userRef, seee) // Using `update` to modify only the `hub` field
         .then(() => {
-          console.log(`Hub updated successfully for ${email}!`);
+          console.log(`Hub updated successfully for ${emailKey}!`);
           loginCheck();
         })
         .catch((error) => {
@@ -754,7 +780,11 @@ let Admin_dash = () => {
     const snapshot = await get(newDocRef); // Fetch the data for the user
 
     if (snapshot.exists()) {
+
+
       const userData = snapshot.val();
+
+      console.log(userData, 'thsi is snapshot')
       setUser(userData);
       setNewuser(userData);
       // Check if the password matches
@@ -802,7 +832,7 @@ let Admin_dash = () => {
     });
     setAlldrop(result);
 
-    const optionsone = [];
+    const optionsone = [{ value: "All", label: "All Venues" }];
     Object.entries(eventss).forEach(([groupName, groupData]) => {
       Object.keys(groupData).forEach((key) => {
         optionsone.push({ value: key, label: key });
@@ -1897,8 +1927,12 @@ let Admin_dash = () => {
                       <div className="ms-md-3 ms-lg-0" style={{ width: "19%" }}>
                         <p style={{ color: "#1A1A1B", fontWeight: "400" }}>-</p>
                       </div>
-                      <div style={{ width: "19%", paddingRight: 20 }}>
+                      <div  ref={selectRef}   style={{ width: "19%", paddingRight: 20 }}>
                         <Select
+                           menuIsOpen={menuIsOpen}
+                           onMenuOpen={() => setMenuIsOpen(true)}
+                           onMenuClose={() => setMenuIsOpen(false)}
+                           onFocus={() => setMenuIsOpen(true)}
                           isMulti
                           className="newoneonees"
                           options={basic}
@@ -1926,7 +1960,6 @@ let Admin_dash = () => {
                           styles={{
                             control: (base) => ({
                               ...base,
-                              border: "unset",
                               color: "#1A1A1B",
                               marginTop: -8,
                               fontSize: fss,
@@ -1935,8 +1968,13 @@ let Admin_dash = () => {
                         />
                       </div>
 
-                      <div style={{ width: "19%", paddingRight: 20 }}>
+                      <div ref={selectRefone} style={{ width: "19%", paddingRight: 20 }}>
                         <Select
+                         menuIsOpen={menuIsOpenone}
+                         onMenuOpen={() => setMenuIsOpenone(true)}
+                         onMenuClose={() => setMenuIsOpenone(false)}
+                         onFocus={() => setMenuIsOpenone(true)}
+
                           isMulti
                           className="newoneonees"
                           options={basicone}
@@ -1963,7 +2001,6 @@ let Admin_dash = () => {
                           styles={{
                             control: (base) => ({
                               ...base,
-                              border: "unset",
                               color: "#1A1A1B",
                               marginTop: -8,
                               fontSize: fss,
@@ -1987,6 +2024,7 @@ let Admin_dash = () => {
                         {Object.entries(user)
                           .filter(([_, value]) => value.Role === "admin") // Filter only admins
                           .map(([key, value]) => {
+
 
 
                             const output = [];
@@ -2027,6 +2065,7 @@ let Admin_dash = () => {
                                   style={{
                                     padding: 20,
                                     backgroundColor: "#ECF1F4",
+                                    height: 60
                                   }}
                                 >
                                   <div style={{ width: "19%", display: "flex", alignItems: "center" }}>
@@ -2131,27 +2170,26 @@ let Admin_dash = () => {
                                       paddingRight: 20,
                                       color: "#1A1A1B",
                                       fontSize: fs,
-                                      display : "flex" ,
-                                      alignItems : 'center'
+                                      display: "flex",
+                                      alignItems: 'center'
                                     }}
 
                                     className="finefffff"
                                   >
 
+
+
                                     <DropdownSelect
-                                      options={basic}
+                                     
+                                      options={basic.filter(item => item.value !== "All")}
                                       values={value.venue}
                                       multi={true}
                                       onChange={(val) => {
-
-                                        console.log(val , 'successsuccesssuccesssuccesssuccess')
- 
                                         handleChanges(val, value, "venue");
                                       }}
-                                      placeholder="Select an option"
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
-                                        <div style={{ maxHeight: "300px" , zIndex : 100000 }}>
+                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}>
                                           {/* First Option (Placeholder) */}
                                           {/* <div
                                             key="placeholder-dropdown"
@@ -2197,7 +2235,7 @@ let Admin_dash = () => {
                                               >
                                                 {/* Checkbox Toggle */}
                                                 <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
-                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`}  disabled  />
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
                                                   <label class="switch-label" for={`switch-${option.value}`}></label>
                                                 </div>
                                                 {/* Option Label */}
@@ -2212,6 +2250,9 @@ let Admin_dash = () => {
                                         fontSize: fss,
                                       }}
                                     />
+
+
+
 
 
 
@@ -2252,26 +2293,29 @@ let Admin_dash = () => {
                                       }}
                                     /> */}
                                   </div>
-                                  <div style={{ width: "19%", paddingRight: 20 ,
-                                      display : "flex" ,
-                                      alignItems : 'center'}}
-                                      className="finefffff"
-                                      >
+                                  <div style={{
+                                    width: "19%", paddingRight: 20,
+                                    display: "flex",
+                                    alignItems: 'center'
+                                  }}
+                                    className="finefffff"
+                                  >
 
 
-                                  <DropdownSelect
-                                       options={output}
+
+
+
+
+                                    <DropdownSelect
+                                      options={output}
                                       value={value.hub}
                                       multi={true}
                                       onChange={(val) => {
-
-                                        console.log(val , 'successsuccesssuccesssuccesssuccess')
- 
                                         handleChanges(val, value, "hub");
-                                      }} 
+                                      }}
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
-                                        <div style={{ maxHeight: "300px" , zIndex : 100000 }}>
+                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}>
                                           {/* First Option (Placeholder) */}
                                           {/* <div
                                             key="placeholder-dropdown"
@@ -2296,10 +2340,27 @@ let Admin_dash = () => {
 
                                           {/* Other Options */}
                                           {props.options.map((option) => {
+
+                                            // state.values.some((val) => {
+
+
+                                            //   console.log(val.value, 'val.valueval.valueval.valueval.valueval.value')
+                                            //   console.log(option.value, 'val.valueval.valueval.valueval.valueval.value22222222222222222222222')
+
+
+
+
+                                            // });
+
+
+
+
                                             const isSelected = state.values.some((val) => val.value === option.value);
+                                            console.log(state, 'val.valueval.valueval.valueval.valueval.value22222222222222222222222')
+
                                             return (
                                               <div
-                                                key={option.value + "-dropdown"}
+                                                key={option.value}
                                                 onClick={(e) => {
                                                   e.stopPropagation();
                                                   methods.addItem(option);
@@ -2317,7 +2378,7 @@ let Admin_dash = () => {
                                               >
                                                 {/* Checkbox Toggle */}
                                                 <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
-                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`}  disabled  />
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
                                                   <label class="switch-label" for={`switch-${option.value}`}></label>
                                                 </div>
                                                 {/* Option Label */}
@@ -2535,7 +2596,7 @@ let Admin_dash = () => {
                                         color: "rgb(112, 112, 112)",
                                         fontWeight: "400",
                                         fontSize: fs,
-                                        marginTop : -3
+                                        marginTop: -3
                                       }}
                                     >
                                       {value?.date ? formatReadableDate(value?.date) : '-'}
@@ -2547,8 +2608,8 @@ let Admin_dash = () => {
                                       paddingRight: 20,
                                       color: "#1A1A1B",
                                       fontSize: fs,
-                                      display : "flex" ,
-                                      alignItems : 'center'
+                                      display: "flex",
+                                      alignItems: 'center'
                                     }}
 
                                     className="finefffff"
@@ -2606,20 +2667,20 @@ let Admin_dash = () => {
                                       }}
                                     /> */}
 
-<DropdownSelect
+                                    <DropdownSelect
                                       options={basic}
                                       values={value.venue}
                                       multi={true}
                                       onChange={(val) => {
 
-                                        console.log(val , 'successsuccesssuccesssuccesssuccess')
- 
+                                        console.log(val, 'successsuccesssuccesssuccesssuccess')
+
                                         handleChanges(val, value, "venue");
                                       }}
                                       placeholder="Select an option"
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
-                                        <div style={{ maxHeight: "300px" , zIndex : 100000 }}>
+                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}>
                                           {/* First Option (Placeholder) */}
                                           {/* <div
                                             key="placeholder-dropdown"
@@ -2665,7 +2726,7 @@ let Admin_dash = () => {
                                               >
                                                 {/* Checkbox Toggle */}
                                                 <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
-                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`}  disabled  />
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
                                                   <label class="switch-label" for={`switch-${option.value}`}></label>
                                                 </div>
                                                 {/* Option Label */}
@@ -2682,26 +2743,28 @@ let Admin_dash = () => {
                                     />
 
                                   </div>
-                                  <div style={{ width: "19%", paddingRight: 20 ,
-                                      display : "flex" ,
-                                      alignItems : 'center' }}
-                                      
-                                      className="finefffff"
-                                      >
-                                  <DropdownSelect
-                                       options={output}
+                                  <div style={{
+                                    width: "19%", paddingRight: 20,
+                                    display: "flex",
+                                    alignItems: 'center'
+                                  }}
+
+                                    className="finefffff"
+                                  >
+                                    <DropdownSelect
+                                      options={output}
                                       value={value.hub}
                                       multi={true}
                                       onChange={(val) => {
 
-                                        console.log(val , 'successsuccesssuccesssuccesssuccess')
- 
+                                        console.log(val, 'successsuccesssuccesssuccesssuccess')
+
                                         handleChanges(val, value, "hub");
                                       }}
                                       placeholder="Select an option"
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
-                                        <div style={{ maxHeight: "300px" , zIndex : 100000 }}>
+                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}>
                                           {/* First Option (Placeholder) */}
                                           {/* <div
                                             key="placeholder-dropdown"
@@ -2747,7 +2810,7 @@ let Admin_dash = () => {
                                               >
                                                 {/* Checkbox Toggle */}
                                                 <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
-                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`}  disabled  />
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
                                                   <label class="switch-label" for={`switch-${option.value}`}></label>
                                                 </div>
                                                 {/* Option Label */}
@@ -2960,27 +3023,27 @@ let Admin_dash = () => {
                                       width: "19%",
                                       paddingRight: 20,
                                       color: "#1A1A1B",
-                                      display : "flex" ,
-                                      alignItems : 'center'
+                                      display: "flex",
+                                      alignItems: 'center'
                                     }}
-                                    
+
                                     className="custom-select-container finefffff"
                                   >
 
-<DropdownSelect
+                                    <DropdownSelect
                                       options={basic}
                                       values={value.venue}
                                       multi={true}
                                       onChange={(val) => {
 
-                                        console.log(val , 'successsuccesssuccesssuccesssuccess')
- 
+                                        console.log(val, 'successsuccesssuccesssuccesssuccess')
+
                                         handleChanges(val, value, "venue");
                                       }}
                                       placeholder="Select an option"
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
-                                        <div style={{ maxHeight: "300px" , zIndex : 100000 }}>
+                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}>
                                           {/* First Option (Placeholder) */}
                                           {/* <div
                                             key="placeholder-dropdown"
@@ -3026,7 +3089,7 @@ let Admin_dash = () => {
                                               >
                                                 {/* Checkbox Toggle */}
                                                 <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
-                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`}  disabled  />
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
                                                   <label class="switch-label" for={`switch-${option.value}`}></label>
                                                 </div>
                                                 {/* Option Label */}
@@ -3093,11 +3156,13 @@ let Admin_dash = () => {
                                       }}
                                     /> */}
                                   </div>
-                                  <div style={{ width: "19%", paddingRight: 20 ,
-                                      display : "flex" ,
-                                      alignItems : 'center' }}
-                                      className="finefffff"
-                                       >
+                                  <div style={{
+                                    width: "19%", paddingRight: 20,
+                                    display: "flex",
+                                    alignItems: 'center'
+                                  }}
+                                    className="finefffff"
+                                  >
                                     {/* <Select
                                       isMulti
                                       isSearchable={false}
@@ -3151,20 +3216,20 @@ let Admin_dash = () => {
                                     /> */}
 
 
-<DropdownSelect
-                                       options={output}
+                                    <DropdownSelect
+                                      options={output}
                                       value={value.hub}
                                       multi={true}
                                       onChange={(val) => {
 
-                                        console.log(val , 'successsuccesssuccesssuccesssuccess')
- 
+                                        console.log(val, 'successsuccesssuccesssuccesssuccess')
+
                                         handleChanges(val, value, "hub");
                                       }}
                                       placeholder="Select an option"
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
-                                        <div style={{ maxHeight: "300px" , zIndex : 100000 }}>
+                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}>
                                           {/* First Option (Placeholder) */}
                                           {/* <div
                                             key="placeholder-dropdown"
@@ -3210,7 +3275,7 @@ let Admin_dash = () => {
                                               >
                                                 {/* Checkbox Toggle */}
                                                 <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
-                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`}  disabled  />
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
                                                   <label class="switch-label" for={`switch-${option.value}`}></label>
                                                 </div>
                                                 {/* Option Label */}
