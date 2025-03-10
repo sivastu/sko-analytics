@@ -2131,7 +2131,11 @@ let Admin_dash = () => {
                                       paddingRight: 20,
                                       color: "#1A1A1B",
                                       fontSize: fs,
+                                      display : "flex" ,
+                                      alignItems : 'center'
                                     }}
+
+                                    className="finefffff"
                                   >
 
                                     <DropdownSelect
@@ -2248,7 +2252,11 @@ let Admin_dash = () => {
                                       }}
                                     /> */}
                                   </div>
-                                  <div style={{ width: "19%", paddingRight: 20 }}>
+                                  <div style={{ width: "19%", paddingRight: 20 ,
+                                      display : "flex" ,
+                                      alignItems : 'center'}}
+                                      className="finefffff"
+                                      >
 
 
                                   <DropdownSelect
@@ -2260,8 +2268,7 @@ let Admin_dash = () => {
                                         console.log(val , 'successsuccesssuccesssuccesssuccess')
  
                                         handleChanges(val, value, "hub");
-                                      }}
-                                      placeholder="Select an option"
+                                      }} 
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
                                         <div style={{ maxHeight: "300px" , zIndex : 100000 }}>
@@ -2528,6 +2535,7 @@ let Admin_dash = () => {
                                         color: "rgb(112, 112, 112)",
                                         fontWeight: "400",
                                         fontSize: fs,
+                                        marginTop : -3
                                       }}
                                     >
                                       {value?.date ? formatReadableDate(value?.date) : '-'}
@@ -2539,7 +2547,12 @@ let Admin_dash = () => {
                                       paddingRight: 20,
                                       color: "#1A1A1B",
                                       fontSize: fs,
+                                      display : "flex" ,
+                                      alignItems : 'center'
                                     }}
+
+                                    className="finefffff"
+
                                   >
                                     {/* <Select
                                       isMulti
@@ -2669,7 +2682,12 @@ let Admin_dash = () => {
                                     />
 
                                   </div>
-                                  <div style={{ width: "19%", paddingRight: 20 }}>
+                                  <div style={{ width: "19%", paddingRight: 20 ,
+                                      display : "flex" ,
+                                      alignItems : 'center' }}
+                                      
+                                      className="finefffff"
+                                      >
                                   <DropdownSelect
                                        options={output}
                                       value={value.hub}
@@ -2942,8 +2960,11 @@ let Admin_dash = () => {
                                       width: "19%",
                                       paddingRight: 20,
                                       color: "#1A1A1B",
+                                      display : "flex" ,
+                                      alignItems : 'center'
                                     }}
-                                    className="custom-select-container"
+                                    
+                                    className="custom-select-container finefffff"
                                   >
 
 <DropdownSelect
@@ -3020,7 +3041,7 @@ let Admin_dash = () => {
                                         fontSize: fss,
                                       }}
                                     />
-                                    
+
                                     {/* <Select
                                       isMulti
                                       isSearchable={false}
@@ -3072,7 +3093,11 @@ let Admin_dash = () => {
                                       }}
                                     /> */}
                                   </div>
-                                  <div style={{ width: "19%", paddingRight: 20 }}>
+                                  <div style={{ width: "19%", paddingRight: 20 ,
+                                      display : "flex" ,
+                                      alignItems : 'center' }}
+                                      className="finefffff"
+                                       >
                                     {/* <Select
                                       isMulti
                                       isSearchable={false}

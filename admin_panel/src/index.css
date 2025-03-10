@@ -547,3 +547,12 @@ input[type="checkbox"]:checked + .switch-label::before {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+.css-zn0ehl-DropDown{
+  background-color: rgb(0, 115, 230) !important;
+}
+
+
+.finefffff > div {
+
+width: 100% !important;
+}

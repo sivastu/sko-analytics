@@ -11,6 +11,12 @@ body{
   pointer-events: none;
 }
 
+.css-zn0ehl-DropDown{
+  background-color: rgb(240, 248, 255) !important;
+}
+
+
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -19,6 +25,8 @@ body{
 .kiy::-webkit-scrollbar {
   display: none;
 }
+
+
 
 .chartWrapper {
   position: relative;
