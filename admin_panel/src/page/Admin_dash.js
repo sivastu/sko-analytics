@@ -431,33 +431,24 @@ let Admin_dash = () => {
 
   const [openSelectId, setOpenSelectId] = useState(null); // Track open Select
 
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (!event.target.closest(".custom-select-container")) {
-        setOpenSelectId(null);
-        console.log("😂");
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+ 
 
 
   const customContentRenderer = ({ props, state }) => {
     const selectedLabels = state.values.map((item) => item.label).join(", ");
-  
+
     const maxLength = textCount;
     // Truncate text if it exceeds 18 characters
     const displayText =
       selectedLabels.length > maxLength ? selectedLabels.slice(0, maxLength) + "..." : selectedLabels;
-  
+
     return (
       <div style={{ padding: "5px", color: "#333" }}>
         {state.values.length > 0 ? displayText : "Select an option"}
       </div>
     );
   };
-  
+
 
 
   const CustomPlaceholder = ({ getValue }) => {
@@ -661,7 +652,7 @@ let Admin_dash = () => {
 
 
 
-    console.log(seee, fineee, third , 'seee, fineee, thirdseee, fineee, third')
+    console.log(seee, 'third')
 
     return
 
@@ -811,7 +802,7 @@ let Admin_dash = () => {
     });
     setAlldrop(result);
 
-    const optionsone = [{ value: "All", label: "All Venue" }];
+    const optionsone = [];
     Object.entries(eventss).forEach(([groupName, groupData]) => {
       Object.keys(groupData).forEach((key) => {
         optionsone.push({ value: key, label: key });
@@ -886,6 +877,7 @@ let Admin_dash = () => {
   };
 
   let newuser = () => {
+
     if (data === "4" || data === "5" || data === "6") {
       return;
     }
@@ -1020,8 +1012,8 @@ let Admin_dash = () => {
         Password: "password",
         Role: data === "1" ? "admin" : data === "2" ? "manager" : "emp",
         name: username,
-        venue: selectedOptions,
-        hub: hubb,
+        venue: selectedOptions.filter(item => item.value !== "All"),
+        hub: hubb.filter(item => item.value !== "All"),
       },
     };
 
@@ -1127,9 +1119,9 @@ let Admin_dash = () => {
 
   const handleChanges = debounce((e, value, byebye) => {
     changeddddd(e, value, byebye);
-  }, 300);
+  }, 10);
 
-  
+
   useEffect(() => {
     const handleResize = () => {
       setTextCount(gettextcount()),
@@ -2142,59 +2134,81 @@ let Admin_dash = () => {
                                     }}
                                   >
 
-<DropdownSelect
-  options={basic}
-  values={value.venue}
-  multi={true}
-  onChange={(val) => changeddddd(val, value, "venue")}
-  placeholder="Select an option"
-  contentRenderer={customContentRenderer}
-  dropdownRenderer={({ props, state, methods }) => (
-    <div
-      style={{
-        maxHeight: "300px",
-      }}
-    >
-      {props.options.map((option) => {
-        const isSelected = state.values.some((val) => val.value === option.value);
+                                    <DropdownSelect
+                                      options={basic}
+                                      values={value.venue}
+                                      multi={true}
+                                      onChange={(val) => {
 
-        return (
-          <div
-            key={option.value}
-            onClick={() => methods.addItem(option)}
-            style={{
-              display: "flex",
-              alignContent: "center",
-              padding: "10px",
-              gap:5,
-              backgroundColor: isSelected ? "#f0f8ff" : "white",
-              color: isSelected ? "#0073e6" : "black",
-              cursor: "pointer",
-              fontSize: fss,
-            }}
-          >
-            {/* Checkbox Toggle */}
-            <div class="switch-containers" style={{ marginRight: 4,marginTop:'-5px' }}>
-            <input checked={isSelected} type="checkbox" id="switch3" />
-            <label class="switch-label" for="switch3"></label>
-          </div>
+                                        console.log(val , 'successsuccesssuccesssuccesssuccess')
+ 
+                                        handleChanges(val, value, "venue");
+                                      }}
+                                      placeholder="Select an option"
+                                      contentRenderer={customContentRenderer}
+                                      dropdownRenderer={({ props, state, methods }) => (
+                                        <div style={{ maxHeight: "300px" , zIndex : 100000 }}>
+                                          {/* First Option (Placeholder) */}
+                                          {/* <div
+                                            key="placeholder-dropdown"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              methods.clearAll(); // Clears all selections
+                                              methods.addItem({ value: "__placeholder__", label: "Select an option" });
+                                            }}
+                                            style={{
+                                              display: "flex",
+                                              alignContent: "center",
+                                              padding: "10px",
+                                              gap: 5,
+                                              backgroundColor: "white",
+                                              color: "black",
+                                              cursor: "pointer",
+                                              fontSize: fss,
+                                            }}
+                                          >
+                                            <span style={{ flexGrow: 1 }}>Select an option</span>
+                                          </div> */}
 
-            {/* Option Label */}
-            <span style={{ flexGrow: 1 }}>{option.label}</span>
-          </div>
-        );
-      })}
-    </div>
-  )}
-  style={{
-    // borderRadius: "8px",
-    // border: "1px solid #ccc",
-    // padding: "10px",
-    // backgroundColor: "#fff",
-    border:"none",
-    fontSize: fss,
-  }}
-/>
+                                          {/* Other Options */}
+                                          {props.options.map((option) => {
+                                            const isSelected = state.values.some((val) => val.value === option.value);
+                                            return (
+                                              <div
+                                                key={option.value + "-dropdown"}
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  methods.addItem(option);
+                                                }}
+                                                style={{
+                                                  display: "flex",
+                                                  alignContent: "center",
+                                                  padding: "10px",
+                                                  gap: 5,
+                                                  backgroundColor: isSelected ? "#f0f8ff" : "white",
+                                                  color: isSelected ? "#0073e6" : "black",
+                                                  cursor: "pointer",
+                                                  fontSize: fss,
+                                                }}
+                                              >
+                                                {/* Checkbox Toggle */}
+                                                <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`}  disabled  />
+                                                  <label class="switch-label" for={`switch-${option.value}`}></label>
+                                                </div>
+                                                {/* Option Label */}
+                                                <span style={{ flexGrow: 1 }}>{option.label}</span>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      )}
+                                      style={{
+                                        border: "none",
+                                        fontSize: fss,
+                                      }}
+                                    />
+
 
 
 
@@ -2235,7 +2249,87 @@ let Admin_dash = () => {
                                     /> */}
                                   </div>
                                   <div style={{ width: "19%", paddingRight: 20 }}>
-                                    <Select
+
+
+                                  <DropdownSelect
+                                       options={output}
+                                      value={value.hub}
+                                      multi={true}
+                                      onChange={(val) => {
+
+                                        console.log(val , 'successsuccesssuccesssuccesssuccess')
+ 
+                                        handleChanges(val, value, "hub");
+                                      }}
+                                      placeholder="Select an option"
+                                      contentRenderer={customContentRenderer}
+                                      dropdownRenderer={({ props, state, methods }) => (
+                                        <div style={{ maxHeight: "300px" , zIndex : 100000 }}>
+                                          {/* First Option (Placeholder) */}
+                                          {/* <div
+                                            key="placeholder-dropdown"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              methods.clearAll(); // Clears all selections
+                                              methods.addItem({ value: "__placeholder__", label: "Select an option" });
+                                            }}
+                                            style={{
+                                              display: "flex",
+                                              alignContent: "center",
+                                              padding: "10px",
+                                              gap: 5,
+                                              backgroundColor: "white",
+                                              color: "black",
+                                              cursor: "pointer",
+                                              fontSize: fss,
+                                            }}
+                                          >
+                                            <span style={{ flexGrow: 1 }}>Select an option</span>
+                                          </div> */}
+
+                                          {/* Other Options */}
+                                          {props.options.map((option) => {
+                                            const isSelected = state.values.some((val) => val.value === option.value);
+                                            return (
+                                              <div
+                                                key={option.value + "-dropdown"}
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  methods.addItem(option);
+                                                }}
+                                                style={{
+                                                  display: "flex",
+                                                  alignContent: "center",
+                                                  padding: "10px",
+                                                  gap: 5,
+                                                  backgroundColor: isSelected ? "#f0f8ff" : "white",
+                                                  color: isSelected ? "#0073e6" : "black",
+                                                  cursor: "pointer",
+                                                  fontSize: fss,
+                                                }}
+                                              >
+                                                {/* Checkbox Toggle */}
+                                                <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`}  disabled  />
+                                                  <label class="switch-label" for={`switch-${option.value}`}></label>
+                                                </div>
+                                                {/* Option Label */}
+                                                <span style={{ flexGrow: 1 }}>{option.label}</span>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      )}
+                                      style={{
+                                        border: "none",
+                                        fontSize: fss,
+                                      }}
+                                    />
+
+
+
+
+                                    {/* <Select
                                       isSearchable={false}
                                       isMulti
                                       className="newoneoneess"
@@ -2292,7 +2386,7 @@ let Admin_dash = () => {
                                         }),
                                       }}
 
-                                    />
+                                    /> */}
                                   </div>
                                   <div style={{ width: "5%", paddingLeft: "1%" }} className="d-flex justify-content-between gap-3 align-items-center ">
                                     <div
@@ -2447,7 +2541,7 @@ let Admin_dash = () => {
                                       fontSize: fs,
                                     }}
                                   >
-                                    <Select
+                                    {/* <Select
                                       isMulti
                                       isSearchable={false}
                                       className="newoneoneess"
@@ -2497,10 +2591,161 @@ let Admin_dash = () => {
                                           zIndex: 1000001, // Ensure dropdown appears above everything
                                         }),
                                       }}
+                                    /> */}
+
+<DropdownSelect
+                                      options={basic}
+                                      values={value.venue}
+                                      multi={true}
+                                      onChange={(val) => {
+
+                                        console.log(val , 'successsuccesssuccesssuccesssuccess')
+ 
+                                        handleChanges(val, value, "venue");
+                                      }}
+                                      placeholder="Select an option"
+                                      contentRenderer={customContentRenderer}
+                                      dropdownRenderer={({ props, state, methods }) => (
+                                        <div style={{ maxHeight: "300px" , zIndex : 100000 }}>
+                                          {/* First Option (Placeholder) */}
+                                          {/* <div
+                                            key="placeholder-dropdown"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              methods.clearAll(); // Clears all selections
+                                              methods.addItem({ value: "__placeholder__", label: "Select an option" });
+                                            }}
+                                            style={{
+                                              display: "flex",
+                                              alignContent: "center",
+                                              padding: "10px",
+                                              gap: 5,
+                                              backgroundColor: "white",
+                                              color: "black",
+                                              cursor: "pointer",
+                                              fontSize: fss,
+                                            }}
+                                          >
+                                            <span style={{ flexGrow: 1 }}>Select an option</span>
+                                          </div> */}
+
+                                          {/* Other Options */}
+                                          {props.options.map((option) => {
+                                            const isSelected = state.values.some((val) => val.value === option.value);
+                                            return (
+                                              <div
+                                                key={option.value + "-dropdown"}
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  methods.addItem(option);
+                                                }}
+                                                style={{
+                                                  display: "flex",
+                                                  alignContent: "center",
+                                                  padding: "10px",
+                                                  gap: 5,
+                                                  backgroundColor: isSelected ? "#f0f8ff" : "white",
+                                                  color: isSelected ? "#0073e6" : "black",
+                                                  cursor: "pointer",
+                                                  fontSize: fss,
+                                                }}
+                                              >
+                                                {/* Checkbox Toggle */}
+                                                <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`}  disabled  />
+                                                  <label class="switch-label" for={`switch-${option.value}`}></label>
+                                                </div>
+                                                {/* Option Label */}
+                                                <span style={{ flexGrow: 1 }}>{option.label}</span>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      )}
+                                      style={{
+                                        border: "none",
+                                        fontSize: fss,
+                                      }}
                                     />
+
                                   </div>
                                   <div style={{ width: "19%", paddingRight: 20 }}>
-                                    <Select
+                                  <DropdownSelect
+                                       options={output}
+                                      value={value.hub}
+                                      multi={true}
+                                      onChange={(val) => {
+
+                                        console.log(val , 'successsuccesssuccesssuccesssuccess')
+ 
+                                        handleChanges(val, value, "hub");
+                                      }}
+                                      placeholder="Select an option"
+                                      contentRenderer={customContentRenderer}
+                                      dropdownRenderer={({ props, state, methods }) => (
+                                        <div style={{ maxHeight: "300px" , zIndex : 100000 }}>
+                                          {/* First Option (Placeholder) */}
+                                          {/* <div
+                                            key="placeholder-dropdown"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              methods.clearAll(); // Clears all selections
+                                              methods.addItem({ value: "__placeholder__", label: "Select an option" });
+                                            }}
+                                            style={{
+                                              display: "flex",
+                                              alignContent: "center",
+                                              padding: "10px",
+                                              gap: 5,
+                                              backgroundColor: "white",
+                                              color: "black",
+                                              cursor: "pointer",
+                                              fontSize: fss,
+                                            }}
+                                          >
+                                            <span style={{ flexGrow: 1 }}>Select an option</span>
+                                          </div> */}
+
+                                          {/* Other Options */}
+                                          {props.options.map((option) => {
+                                            const isSelected = state.values.some((val) => val.value === option.value);
+                                            return (
+                                              <div
+                                                key={option.value + "-dropdown"}
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  methods.addItem(option);
+                                                }}
+                                                style={{
+                                                  display: "flex",
+                                                  alignContent: "center",
+                                                  padding: "10px",
+                                                  gap: 5,
+                                                  backgroundColor: isSelected ? "#f0f8ff" : "white",
+                                                  color: isSelected ? "#0073e6" : "black",
+                                                  cursor: "pointer",
+                                                  fontSize: fss,
+                                                }}
+                                              >
+                                                {/* Checkbox Toggle */}
+                                                <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`}  disabled  />
+                                                  <label class="switch-label" for={`switch-${option.value}`}></label>
+                                                </div>
+                                                {/* Option Label */}
+                                                <span style={{ flexGrow: 1 }}>{option.label}</span>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      )}
+                                      style={{
+                                        border: "none",
+                                        fontSize: fss,
+                                      }}
+                                    />
+
+                                    {/* <Select
                                       isMulti
                                       isSearchable={false}
                                       className="newoneoneess"
@@ -2515,8 +2760,7 @@ let Admin_dash = () => {
                                           handleChanges(e, value, "hub");
                                         }
                                       }} // Prevent selection changes
-                                      // placeholder={value.hub[0].label + "..."}
-                                      placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
+                                      // placeholder={value.hub[0].label + "..."} 
 
                                       components={{
                                         Option: CustomOption,
@@ -2549,7 +2793,7 @@ let Admin_dash = () => {
                                           zIndex: 1000001, // Ensure dropdown appears above everything
                                         }),
                                       }}
-                                    />
+                                    /> */}
                                   </div>
                                   <div style={{ width: '5%', paddingLeft: "1%" }} className="d-flex justify-content-between gap-3 align-items-center ">
                                     <div onClick={() => handleManagerEditClick(value)} style={{ cursor: "pointer" }}>
@@ -2701,7 +2945,83 @@ let Admin_dash = () => {
                                     }}
                                     className="custom-select-container"
                                   >
-                                    <Select
+
+<DropdownSelect
+                                      options={basic}
+                                      values={value.venue}
+                                      multi={true}
+                                      onChange={(val) => {
+
+                                        console.log(val , 'successsuccesssuccesssuccesssuccess')
+ 
+                                        handleChanges(val, value, "venue");
+                                      }}
+                                      placeholder="Select an option"
+                                      contentRenderer={customContentRenderer}
+                                      dropdownRenderer={({ props, state, methods }) => (
+                                        <div style={{ maxHeight: "300px" , zIndex : 100000 }}>
+                                          {/* First Option (Placeholder) */}
+                                          {/* <div
+                                            key="placeholder-dropdown"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              methods.clearAll(); // Clears all selections
+                                              methods.addItem({ value: "__placeholder__", label: "Select an option" });
+                                            }}
+                                            style={{
+                                              display: "flex",
+                                              alignContent: "center",
+                                              padding: "10px",
+                                              gap: 5,
+                                              backgroundColor: "white",
+                                              color: "black",
+                                              cursor: "pointer",
+                                              fontSize: fss,
+                                            }}
+                                          >
+                                            <span style={{ flexGrow: 1 }}>Select an option</span>
+                                          </div> */}
+
+                                          {/* Other Options */}
+                                          {props.options.map((option) => {
+                                            const isSelected = state.values.some((val) => val.value === option.value);
+                                            return (
+                                              <div
+                                                key={option.value + "-dropdown"}
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  methods.addItem(option);
+                                                }}
+                                                style={{
+                                                  display: "flex",
+                                                  alignContent: "center",
+                                                  padding: "10px",
+                                                  gap: 5,
+                                                  backgroundColor: isSelected ? "#f0f8ff" : "white",
+                                                  color: isSelected ? "#0073e6" : "black",
+                                                  cursor: "pointer",
+                                                  fontSize: fss,
+                                                }}
+                                              >
+                                                {/* Checkbox Toggle */}
+                                                <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`}  disabled  />
+                                                  <label class="switch-label" for={`switch-${option.value}`}></label>
+                                                </div>
+                                                {/* Option Label */}
+                                                <span style={{ flexGrow: 1 }}>{option.label}</span>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      )}
+                                      style={{
+                                        border: "none",
+                                        fontSize: fss,
+                                      }}
+                                    />
+                                    
+                                    {/* <Select
                                       isMulti
                                       isSearchable={false}
                                       className="newoneoneess"
@@ -2750,10 +3070,10 @@ let Admin_dash = () => {
                                           zIndex: 1000001, // Ensure dropdown appears above everything
                                         }),
                                       }}
-                                    />
+                                    /> */}
                                   </div>
                                   <div style={{ width: "19%", paddingRight: 20 }}>
-                                    <Select
+                                    {/* <Select
                                       isMulti
                                       isSearchable={false}
                                       className="newoneoneess custom-select-container"
@@ -2803,7 +3123,86 @@ let Admin_dash = () => {
                                           zIndex: 1000001, // Ensure dropdown appears above everything
                                         }),
                                       }}
+                                    /> */}
+
+
+<DropdownSelect
+                                       options={output}
+                                      value={value.hub}
+                                      multi={true}
+                                      onChange={(val) => {
+
+                                        console.log(val , 'successsuccesssuccesssuccesssuccess')
+ 
+                                        handleChanges(val, value, "hub");
+                                      }}
+                                      placeholder="Select an option"
+                                      contentRenderer={customContentRenderer}
+                                      dropdownRenderer={({ props, state, methods }) => (
+                                        <div style={{ maxHeight: "300px" , zIndex : 100000 }}>
+                                          {/* First Option (Placeholder) */}
+                                          {/* <div
+                                            key="placeholder-dropdown"
+                                            onClick={(e) => {
+                                              e.stopPropagation();
+                                              methods.clearAll(); // Clears all selections
+                                              methods.addItem({ value: "__placeholder__", label: "Select an option" });
+                                            }}
+                                            style={{
+                                              display: "flex",
+                                              alignContent: "center",
+                                              padding: "10px",
+                                              gap: 5,
+                                              backgroundColor: "white",
+                                              color: "black",
+                                              cursor: "pointer",
+                                              fontSize: fss,
+                                            }}
+                                          >
+                                            <span style={{ flexGrow: 1 }}>Select an option</span>
+                                          </div> */}
+
+                                          {/* Other Options */}
+                                          {props.options.map((option) => {
+                                            const isSelected = state.values.some((val) => val.value === option.value);
+                                            return (
+                                              <div
+                                                key={option.value + "-dropdown"}
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  methods.addItem(option);
+                                                }}
+                                                style={{
+                                                  display: "flex",
+                                                  alignContent: "center",
+                                                  padding: "10px",
+                                                  gap: 5,
+                                                  backgroundColor: isSelected ? "#f0f8ff" : "white",
+                                                  color: isSelected ? "#0073e6" : "black",
+                                                  cursor: "pointer",
+                                                  fontSize: fss,
+                                                }}
+                                              >
+                                                {/* Checkbox Toggle */}
+                                                <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`}  disabled  />
+                                                  <label class="switch-label" for={`switch-${option.value}`}></label>
+                                                </div>
+                                                {/* Option Label */}
+                                                <span style={{ flexGrow: 1 }}>{option.label}</span>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      )}
+                                      style={{
+                                        border: "none",
+                                        fontSize: fss,
+                                      }}
                                     />
+
+
+
                                   </div>
                                   <div className="d-flex justify-content-between gap-3 align-items-center " style={{ width: "5%", paddingLeft: "1%" }}>
                                     <div
