@@ -276,9 +276,7 @@ useEffect(()=>{
                 </div>
                 : ''
             }
-
-{
-              username?.Role === 'emp' ?
+ 
                 <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }}
                   onClick={() => {
                     navigate('/training')
@@ -292,8 +290,7 @@ useEffect(()=>{
                     </div>
                   </div>
                 </div>
-                : ''
-            }
+               
             <SweetAlert2 {...swalProps} />
           </div>
         </div>
