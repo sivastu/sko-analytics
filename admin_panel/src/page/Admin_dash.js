@@ -443,7 +443,21 @@ let Admin_dash = () => {
   }, []);
 
 
-
+  const customContentRenderer = ({ props, state }) => {
+    const selectedLabels = state.values.map((item) => item.label).join(", ");
+  
+    const maxLength = textCount;
+    // Truncate text if it exceeds 18 characters
+    const displayText =
+      selectedLabels.length > maxLength ? selectedLabels.slice(0, maxLength) + "..." : selectedLabels;
+  
+    return (
+      <div style={{ padding: "5px", color: "#333" }}>
+        {state.values.length > 0 ? displayText : "Select an option"}
+      </div>
+    );
+  };
+  
 
 
   const CustomPlaceholder = ({ getValue }) => {
@@ -1111,11 +1125,11 @@ let Admin_dash = () => {
   );
 
 
-  // const handleChanges = debounce((e, value, byebye) => {
-  //   changeddddd(e, value, byebye);
-  // }, 300);
+  const handleChanges = debounce((e, value, byebye) => {
+    changeddddd(e, value, byebye);
+  }, 300);
 
-
+  
   useEffect(() => {
     const handleResize = () => {
       setTextCount(gettextcount()),
@@ -2128,52 +2142,60 @@ let Admin_dash = () => {
                                     }}
                                   >
 
-                                    <DropdownSelect
-                                      options={basic}
-                                      values={value.venue}
-                                      multi={true}
+<DropdownSelect
+  options={basic}
+  values={value.venue}
+  multi={true}
+  onChange={(val) => changeddddd(val, value, "venue")}
+  placeholder="Select an option"
+  contentRenderer={customContentRenderer}
+  dropdownRenderer={({ props, state, methods }) => (
+    <div
+      style={{
+        maxHeight: "300px",
+      }}
+    >
+      {props.options.map((option) => {
+        const isSelected = state.values.some((val) => val.value === option.value);
 
-                                      
-                                      
-                                      onChange={(val) =>{
- 
-                                        changeddddd(val, value, "venue");
-                                      }}
-                                      placeholder="Select an option"
-                                      style={{
-                                        borderRadius: "8px",
-                                        border: "1px solid #ccc",
-                                        padding: "10px",
-                                        backgroundColor: "#fff",
-                                      }}
-                                      dropdownRenderer={({ props, state, methods }) => (
-                                        <div
-                                          style={{
-                                            backgroundColor: "#f9f9f9",
-                                            padding: "10px",
-                                            border: "1px solid #ddd",
-                                            borderRadius: "5px",
-                                            maxHeight: "200px",
-                                            overflowY: "auto",
-                                          }}
-                                        >
-                                          {props.options.map((option) => (
-                                            <div
-                                              key={option.value}
-                                              style={{
-                                                padding: "8px",
-                                                cursor: "pointer",
-                                                backgroundColor:
-                                                  state.values.includes(option) ? "#ddd" : "transparent",
-                                              }}
-                                              onClick={() => methods.addItem(option)}
-                                            >
-                                              {option.label}
-                                            </div>
-                                          ))}
-                                        </div>
-                                      )}
-                                    />
+        return (
+          <div
+            key={option.value}
+            onClick={() => methods.addItem(option)}
+            style={{
+              display: "flex",
+              alignContent: "center",
+              padding: "10px",
+              gap:5,
+              backgroundColor: isSelected ? "#f0f8ff" : "white",
+              color: isSelected ? "#0073e6" : "black",
+              cursor: "pointer",
+              fontSize: fss,
+            }}
+          >
+            {/* Checkbox Toggle */}
+            <div class="switch-containers" style={{ marginRight: 4,marginTop:'-5px' }}>
+            <input checked={isSelected} type="checkbox" id="switch3" />
+            <label class="switch-label" for="switch3"></label>
+          </div>
+
+            {/* Option Label */}
+            <span style={{ flexGrow: 1 }}>{option.label}</span>
+          </div>
+        );
+      })}
+    </div>
+  )}
+  style={{
+    // borderRadius: "8px",
+    // border: "1px solid #ccc",
+    // padding: "10px",
+    // backgroundColor: "#fff",
+    border:"none",
+    fontSize: fss,
+  }}
+/>
+
 
 
                                     {/* <Select
