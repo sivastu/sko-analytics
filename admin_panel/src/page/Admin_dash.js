@@ -2190,29 +2190,7 @@ let Admin_dash = () => {
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
                                         <div style={{ maxHeight: "300px", zIndex: 100000 }}>
-                                          {/* First Option (Placeholder) */}
-                                          {/* <div
-                                            key="placeholder-dropdown"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              methods.clearAll(); // Clears all selections
-                                              methods.addItem({ value: "__placeholder__", label: "Select an option" });
-                                            }}
-                                            style={{
-                                              display: "flex",
-                                              alignContent: "center",
-                                              padding: "10px",
-                                              gap: 5,
-                                              backgroundColor: "white",
-                                              color: "black",
-                                              cursor: "pointer",
-                                              fontSize: fss,
-                                            }}
-                                          >
-                                            <span style={{ flexGrow: 1 }}>Select an option</span>
-                                          </div> */}
-
-                                          {/* Other Options */}
+                                        
                                           {props.options.map((option) => {
                                             const isSelected = state.values.some((val) => val.value === option.value);
                                             return (
@@ -2232,13 +2210,11 @@ let Admin_dash = () => {
                                                   cursor: "pointer",
                                                   fontSize: fss,
                                                 }}
-                                              >
-                                                {/* Checkbox Toggle */}
+                                              > 
                                                 <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
                                                   <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
                                                   <label class="switch-label" for={`switch-${option.value}`}></label>
-                                                </div>
-                                                {/* Option Label */}
+                                                </div> 
                                                 <span style={{ flexGrow: 1 }}>{option.label}</span>
                                               </div>
                                             );
@@ -2302,65 +2278,76 @@ let Admin_dash = () => {
                                   >
 
 
+<DropdownSelect
+                                     
+                                     options={output}
+                                     values={value.hub}
+                                     multi={true}
+                                     onChange={(val) => {
+                                       handleChanges(val, value, "hub");
+                                     }}
+                                     contentRenderer={customContentRenderer}
+                                     dropdownRenderer={({ props, state, methods }) => (
+                                       <div style={{ maxHeight: "300px", zIndex: 100000 }}>
+                                       
+                                         {props.options.map((option) => {
+                                           const isSelected = state.values.some((val) => val.value === option.value);
+                                           return (
+                                             <div
+                                               key={option.value + "-dropdown"}
+                                               onClick={(e) => {
+                                                 e.stopPropagation();
+                                                 methods.addItem(option);
+                                               }}
+                                               style={{
+                                                 display: "flex",
+                                                 alignContent: "center",
+                                                 padding: "10px",
+                                                 gap: 5,
+                                                 backgroundColor: isSelected ? "#f0f8ff" : "white",
+                                                 color: isSelected ? "#0073e6" : "black",
+                                                 cursor: "pointer",
+                                                 fontSize: fss,
+                                               }}
+                                             > 
+                                               <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
+                                                 <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
+                                                 <label class="switch-label" for={`switch-${option.value}`}></label>
+                                               </div> 
+                                               <span style={{ flexGrow: 1 }}>{option.label}</span>
+                                             </div>
+                                           );
+                                         })}
+                                       </div>
+                                     )}
+                                     style={{
+                                       border: "none",
+                                       fontSize: fss,
+                                     }}
+                                   />
 
 
 
-
-                                    <DropdownSelect
-                                      options={output}
-                                      value={value.hub}
+                                    {/* <DropdownSelect
+                                      options={[{ value: "All", label: "All Hubs" }]}
+                                      value={[{ value: "All", label: "All Hubs" }]}
                                       multi={true}
                                       onChange={(val) => {
-                                        handleChanges(val, value, "hub");
+                                        handleChanges(val, value, "hub"); 
                                       }}
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
                                         <div style={{ maxHeight: "300px", zIndex: 100000 }}>
-                                          {/* First Option (Placeholder) */}
-                                          {/* <div
-                                            key="placeholder-dropdown"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              methods.clearAll(); // Clears all selections
-                                              methods.addItem({ value: "__placeholder__", label: "Select an option" });
-                                            }}
-                                            style={{
-                                              display: "flex",
-                                              alignContent: "center",
-                                              padding: "10px",
-                                              gap: 5,
-                                              backgroundColor: "white",
-                                              color: "black",
-                                              cursor: "pointer",
-                                              fontSize: fss,
-                                            }}
-                                          >
-                                            <span style={{ flexGrow: 1 }}>Select an option</span>
-                                          </div> */}
-
-                                          {/* Other Options */}
+                           
                                           {props.options.map((option) => {
 
-                                            // state.values.some((val) => {
-
-
-                                            //   console.log(val.value, 'val.valueval.valueval.valueval.valueval.value')
-                                            //   console.log(option.value, 'val.valueval.valueval.valueval.valueval.value22222222222222222222222')
-
-
-
-
-                                            // });
-
-
-
-
+                       
                                             const isSelected = state.values.some((val) => val.value === option.value);
                                             console.log(state, 'val.valueval.valueval.valueval.valueval.value22222222222222222222222')
 
                                             return (
                                               <div
-                                                key={option.value}
+                                                key={option.value + "-dropdown"}
                                                 onClick={(e) => {
                                                   e.stopPropagation();
                                                   methods.addItem(option);
@@ -2375,13 +2362,11 @@ let Admin_dash = () => {
                                                   cursor: "pointer",
                                                   fontSize: fss,
                                                 }}
-                                              >
-                                                {/* Checkbox Toggle */}
+                                              > 
                                                 <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
                                                   <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
                                                   <label class="switch-label" for={`switch-${option.value}`}></label>
-                                                </div>
-                                                {/* Option Label */}
+                                                </div> 
                                                 <span style={{ flexGrow: 1 }}>{option.label}</span>
                                               </div>
                                             );
@@ -2392,7 +2377,7 @@ let Admin_dash = () => {
                                         border: "none",
                                         fontSize: fss,
                                       }}
-                                    />
+                                    /> */}
 
 
 
@@ -2668,7 +2653,7 @@ let Admin_dash = () => {
                                     /> */}
 
                                     <DropdownSelect
-                                      options={basic}
+                                      options={basic.filter(item => item.value !== "All")}
                                       values={value.venue}
                                       multi={true}
                                       onChange={(val) => {
@@ -3031,8 +3016,9 @@ let Admin_dash = () => {
                                   >
 
                                     <DropdownSelect
-                                      options={basic}
+                                      options={basic.filter(item => item.value !== "All")}
                                       values={value.venue}
+                                      menuPortalTarget={document.body}
                                       multi={true}
                                       onChange={(val) => {
 
@@ -3043,7 +3029,7 @@ let Admin_dash = () => {
                                       placeholder="Select an option"
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
-                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}>
+                                        <div style={{ maxHeight: "300px", zIndex: 100000  }}>
                                           {/* First Option (Placeholder) */}
                                           {/* <div
                                             key="placeholder-dropdown"
