@@ -2280,7 +2280,7 @@ let Admin_dash = () => {
 
 <DropdownSelect
                                      
-                                     options={output}
+                                     options={output.filter(item => item.value !== "All")}
                                      values={value.hub}
                                      multi={true}
                                      onChange={(val) => {
@@ -2736,15 +2736,17 @@ let Admin_dash = () => {
 
                                     className="finefffff"
                                   >
-                                    <DropdownSelect
-                                      options={output}
-                                      value={value.hub}
+
+
+<DropdownSelect
+                                      options={output.filter(item => item.value !== "All")}
+                                      values={value.hub}
                                       multi={true}
                                       onChange={(val) => {
 
                                         console.log(val, 'successsuccesssuccesssuccesssuccess')
 
-                                        handleChanges(val, value, "hub");
+                                        handleChanges(val, value, "venue");
                                       }}
                                       placeholder="Select an option"
                                       contentRenderer={customContentRenderer}
@@ -2811,6 +2813,8 @@ let Admin_dash = () => {
                                       }}
                                     />
 
+
+                                  
                                     {/* <Select
                                       isMulti
                                       isSearchable={false}
@@ -3202,20 +3206,21 @@ let Admin_dash = () => {
                                     /> */}
 
 
-                                    <DropdownSelect
-                                      options={output}
-                                      value={value.hub}
+<DropdownSelect
+                                      options={output.filter(item => item.value !== "All")}
+                                      values={value.hub}
+                                      menuPortalTarget={document.body}
                                       multi={true}
                                       onChange={(val) => {
 
                                         console.log(val, 'successsuccesssuccesssuccesssuccess')
 
-                                        handleChanges(val, value, "hub");
+                                        handleChanges(val, value, "venue");
                                       }}
                                       placeholder="Select an option"
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
-                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}>
+                                        <div style={{ maxHeight: "300px", zIndex: 100000  }}>
                                           {/* First Option (Placeholder) */}
                                           {/* <div
                                             key="placeholder-dropdown"
@@ -3277,6 +3282,8 @@ let Admin_dash = () => {
                                       }}
                                     />
 
+
+                                   
 
 
                                   </div>
