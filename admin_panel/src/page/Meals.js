@@ -1397,11 +1397,11 @@ let Meals = () => {
 
       let uuuk = extractUniqueNotes(cleanedData, optionsone)
       uuuk.unshift({ label: "All Courses", value: "All" });
-
+      setFulldatafull(uuuk)
       setOldcou(uuuk)
       setSelectedCources(uuuk)
 
-      setFulldatafull(uuuk)
+     
 
 
       const output = [{
@@ -2822,8 +2822,8 @@ let Meals = () => {
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
  
-
-
+    console.log(cources.length , 'cources.lengthcources.lengthcources.lengthcources.length' , cources , 'fffffffff' , selectedCources)
+     
     
     if (vals[1] === null || vals[1] === "null") {
 
@@ -3502,6 +3502,9 @@ let Meals = () => {
 
   function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
 
+
+    
+   
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
 

@@ -609,11 +609,11 @@ let Dockets = () => {
  
        let uuuk = extractUniqueNotes(cleanedData, optionsone)
        uuuk.unshift({ label: "All Courses", value: "All" });
- 
+       setFulldatafull(uuuk)
        setOldcou(uuuk)
        setSelectedCources(uuuk)
  
-       setFulldatafull(uuuk)
+    
  
  
        const output = [{
