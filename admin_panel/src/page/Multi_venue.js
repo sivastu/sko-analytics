@@ -4659,14 +4659,15 @@ let Multi_venue = () => {
         doc.save("Dockets Completion.pdf"); // Save after rendering
         setIsPdfLoad(false)
       },
-      x: 10,
-      y: 20,
-      width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
-      autoPaging: "text",
-      html2canvas: {
-        useCORS: true, // Handle cross-origin images
-      },
+      y: 10,
+           width: 190, // Fit content within page
+           windowWidth: 1000, // Ensure full width capture  
+           margin: 10,
+           
+           autoPaging: "text",
+           html2canvas: {
+             useCORS: true, // Handle cross-origin images
+           },
     }).catch(() => {
       setIsPdfLoad(false);
     });
@@ -7242,7 +7243,7 @@ let Multi_venue = () => {
 
             })()}</p>
 
-            <div className="d-flex gap-5" style={{ marginTop: 20 }}>
+            <div className="d-flex gap-5" style={{ marginTop: 20 , borderBottom: "1px solid #ccc"  }}>
 
               <div style={{ width: "40%" }}>
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
@@ -7277,21 +7278,19 @@ let Multi_venue = () => {
               </div>
 
             </div>
-
-
-            <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 1 }} />
+ 
             {
               editall?.orders?.map((dfgh, index) => {
                 const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
 
                 return (
-                  <div key={index}   >
+                  <div key={index} style={{ borderBottom: "1px solid #ccc" }}  >
                     <div className="d-flex gap-5" >
                       {/* Left Column */}
                       <div style={{ width: "40%" }}>
                         <div className="d-flex  " style={{}}>
                           <p style={{ paddingTop: 15 }}>
-                            <span style={{ fontWeight: "400", color: index === 0 ? 'red' : "#000", marginBlock: "4px" }} >{dfgh?.processtime + ". " || "N/A"} <span
+                            <span style={{ fontWeight: "400", color: index === 0 ? 'red' : "#000", marginBlock: "4px" , fontSize : 14 }} >{dfgh?.processtime + ". " || "N/A"} <span
                               style={{ color: '#000' }} > {dfgh?.date + " " + "[" +
                                 dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span></span>
                           </p>
@@ -7305,7 +7304,7 @@ let Multi_venue = () => {
                         <div style={{ width: "40%", }}>
                           <div className="d-flex  " >
                             <p style={{ paddingTop: 15 }}>
-                              <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
+                              <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" , fontSize : 14  }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
                                 correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                             </p>
 
@@ -7326,7 +7325,7 @@ let Multi_venue = () => {
                           width: "10%",
                         }}
                       >
-                        <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
+                        <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" , fontSize : 14  }}>
 
                           <span>
                             {(() => {
@@ -7368,8 +7367,7 @@ let Multi_venue = () => {
                         </p>
                       </div>
                     </div>
-
-                    <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 1 }} />
+ 
                   </div>
                 );
               })

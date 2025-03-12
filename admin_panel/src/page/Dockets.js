@@ -4365,17 +4365,16 @@ let Dockets = () => {
         doc.save("Dockets Completion Time.pdf"); // Save after rendering
         setIsPdfLoad(false)
       },
-      x: 10,
-      y: 10,
-      width: 182, // A4 width minus margins
-      windowWidth: 785, // Base width for rendering
-      autoPaging: true, // Enable automatic paging
-      margin: [5, 10, 5, 10], // Margins [top, right, bottom, left]
-      html2canvas: {
-        useCORS: true,
-        logging: false,
-        allowTaint: true,
-      }
+
+    y: 10,
+         width: 190, // Fit content within page
+         windowWidth: 1000, // Ensure full width capture  
+         margin: 10,
+         
+         autoPaging: "text",
+         html2canvas: {
+           useCORS: true, // Handle cross-origin images
+         },
     }).catch(() => {
       setIsPdfLoad(false);
     });
@@ -6978,7 +6977,7 @@ let Dockets = () => {
 
 
 
-              <div className="d-flex gap-5" style={{ marginTop: 20 }}>
+              <div className="d-flex gap-5" style={{ marginTop: 20 ,  borderBottom: "1px solid #ccc"  }}>
 
                 <div style={{ width: "40%" }}>
                   <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
@@ -7013,8 +7012,7 @@ let Dockets = () => {
                 </div>
 
               </div>
-
-              <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 1 }} />
+ 
 
  
               {
@@ -7022,13 +7020,13 @@ let Dockets = () => {
                   const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
 
                   return (
-                    <div key={index}   >
+                    <div key={index} style={{ borderBottom: "1px solid #ccc" }}  >
                       <div className="d-flex gap-5" >
                         {/* Left Column */}
                         <div style={{ width: "40%" }}>
                           <div className="d-flex  " style={{}}>
                             <p style={{ paddingTop: 15 }}>
-                              <span style={{ fontWeight: "400", color: index === 0 ? 'red' : "#000", marginBlock: "4px" }} >{dfgh?.processtime + ". " || "N/A"}<span 
+                              <span style={{ fontWeight: "400", color: index === 0 ? 'red' : "#000", fontSize : 15 }} >{dfgh?.processtime + ". " || "N/A"}<span 
                                style={{ color : '#000' }}> {dfgh?.date + " " + "[" +
                                 dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span></span>
                             </p>
@@ -7042,7 +7040,7 @@ let Dockets = () => {
                           <div style={{ width: "40%", }}>
                             <div className="d-flex  " >
                               <p style={{ paddingTop: 15 }}>
-                                <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
+                                <span style={{ fontWeight: "400", color: "#000", fontSize : 15 }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
                                   correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                               </p>
 
@@ -7051,7 +7049,7 @@ let Dockets = () => {
 
                           </div>
                         ) : (
-                          <div style={{ width: "33%" }}></div>
+                          <div style={{ width: "40%" }}></div>
                         )}
 
                         {/* Right Column (Percentage Calculation) */}
@@ -7060,10 +7058,10 @@ let Dockets = () => {
                             justifyContent: "end",
                             alignItems: "center",
                             display: "flex",
-                            width: "10%",
+                            width: "20%",
                           }}
                         >
-                          <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
+                          <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" , fontSize : 15 }}>
 
                             <span>
                               {(() => {
@@ -7105,8 +7103,7 @@ let Dockets = () => {
                           </p>
                         </div>
                       </div>
-
-                      <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 1 }} />
+ 
                     </div>
                   );
                 })

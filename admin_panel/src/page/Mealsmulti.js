@@ -68,7 +68,7 @@ let Mealsmulti = () => {
   const pdfRefred = useRef();
   //edit
   let [editall, setEditall] = useState([])
-  let [editallone, setEditallone] = useState([]) 
+  let [editallone, setEditallone] = useState([])
   let [served, setServed] = useState([])
   let [servedone, setServedone] = useState([])
 
@@ -120,7 +120,7 @@ let Mealsmulti = () => {
 
   let [editallclone, setEditallclone] = useState([])
   let [editalloneclone, setEditalloneclone] = useState([])
- 
+
   const [menuIsOpenone, setMenuIsOpenone] = useState(false);
   const [menuIsOpentwo, setMenuIsOpentwo] = useState(false);
   const [menuIsOpenthree, setMenuIsOpenthree] = useState(false);
@@ -333,359 +333,359 @@ let Mealsmulti = () => {
   let [fulldatafull, setFulldatafull] = useState()
 
   let getone = (snapshots) => {
-  
-  
-      const eventss = snapshots
-  
-      function removeTrainingNotes(obj) {
-        if (Array.isArray(obj)) {
-          // If it's an array, filter out objects with "TRAINING" in the NOTE field
-          return obj.map(item => {
-            if (item.ITEMS) {
-              item.ITEMS = item.ITEMS.filter(item => !item.NOTE.includes("TRAINING"));
-            }
-            return item;
-          });
-        } else if (typeof obj === "object" && obj !== null) {
-          // Recursively call for nested objects
-          for (const key in obj) {
-            obj[key] = removeTrainingNotes(obj[key]);
+
+
+    const eventss = snapshots
+
+    function removeTrainingNotes(obj) {
+      if (Array.isArray(obj)) {
+        // If it's an array, filter out objects with "TRAINING" in the NOTE field
+        return obj.map(item => {
+          if (item.ITEMS) {
+            item.ITEMS = item.ITEMS.filter(item => !item.NOTE.includes("TRAINING"));
           }
-        }
-        return obj;
-      }
-  
-      const cleanedData = removeTrainingNotes(eventss);
-  
-  
-  
-  
-  
-  
-  
-      setBasicall(cleanedData)
-      // const transformData = (data) => {
-      //   const result = {};
-  
-      //   for (const key of Object.keys(data)) {
-      //     const parts = key.split("-");
-      //     const [group, location, subLocation, year] = parts;
-  
-      //     if (!result[group]) result[group] = {};
-      //     if (!result[group][location]) result[group][location] = {};
-      //     if (!result[group][location][subLocation]) result[group][location][subLocation] = new Set();
-  
-      //     result[group][location][subLocation].add(year);
-      //   }
-  
-      //   // Convert Sets to arrays for final output
-      //   const convertSetsToArrays = (obj) => {
-      //     for (const key in obj) {
-      //       if (obj[key] instanceof Set) {
-      //         obj[key] = Array.from(obj[key]);
-      //       } else if (typeof obj[key] === "object") {
-      //         convertSetsToArrays(obj[key]);
-      //       }
-      //     }
-      //   };
-  
-      //   convertSetsToArrays(result);
-      //   return result;
-      // };
-  
-      // const output = transformData(eventss);
-      const result = {};
-      Object.entries(cleanedData).forEach(([groupName, groupData]) => {
-  
-  
-        Object.entries(groupData).forEach(([keyss, valuess]) => {
-          Object.entries(valuess).forEach(([keyssa, valuessa]) => {
-  
-            if (!result[keyss]) {
-              result[keyss] = [];
-            }
-  
-            result[keyss].push({
-              name: keyssa + "-" + keyss
-            });
-  
-          });
+          return item;
         });
-  
+      } else if (typeof obj === "object" && obj !== null) {
+        // Recursively call for nested objects
+        for (const key in obj) {
+          obj[key] = removeTrainingNotes(obj[key]);
+        }
+      }
+      return obj;
+    }
+
+    const cleanedData = removeTrainingNotes(eventss);
+
+
+
+
+
+
+
+    setBasicall(cleanedData)
+    // const transformData = (data) => {
+    //   const result = {};
+
+    //   for (const key of Object.keys(data)) {
+    //     const parts = key.split("-");
+    //     const [group, location, subLocation, year] = parts;
+
+    //     if (!result[group]) result[group] = {};
+    //     if (!result[group][location]) result[group][location] = {};
+    //     if (!result[group][location][subLocation]) result[group][location][subLocation] = new Set();
+
+    //     result[group][location][subLocation].add(year);
+    //   }
+
+    //   // Convert Sets to arrays for final output
+    //   const convertSetsToArrays = (obj) => {
+    //     for (const key in obj) {
+    //       if (obj[key] instanceof Set) {
+    //         obj[key] = Array.from(obj[key]);
+    //       } else if (typeof obj[key] === "object") {
+    //         convertSetsToArrays(obj[key]);
+    //       }
+    //     }
+    //   };
+
+    //   convertSetsToArrays(result);
+    //   return result;
+    // };
+
+    // const output = transformData(eventss);
+    const result = {};
+    Object.entries(cleanedData).forEach(([groupName, groupData]) => {
+
+
+      Object.entries(groupData).forEach(([keyss, valuess]) => {
+        Object.entries(valuess).forEach(([keyssa, valuessa]) => {
+
+          if (!result[keyss]) {
+            result[keyss] = [];
+          }
+
+          result[keyss].push({
+            name: keyssa + "-" + keyss
+          });
+
+        });
       });
-      setAlldrop(result)
-      console.log(result, 'keykeykeykey') // its oblect
-      const optionsone = [{
-        "label": "All Venue",
+
+    });
+    setAlldrop(result)
+    console.log(result, 'keykeykeykey') // its oblect
+    const optionsone = [{
+      "label": "All Venue",
+      "value": "All"
+    }];
+    Object.entries(cleanedData).forEach(([groupName, groupData]) => {
+      Object.keys(groupData).forEach((key) => {
+        optionsone.push({ value: key, label: key });
+      });
+    });
+
+    // Generate `optionss` for `data[0]` (assuming `GreenbankServicesClub` is the first group)
+    // const firstGroup = Object.keys(eventss.GreenbankServicesClub)[0]; // 'GreenbankServicesClub'
+    // const optionsstwo = Object.keys(eventss.GreenbankServicesClub[firstGroup]).map((hub) => ({
+    //   value: hub,
+    //   label: hub,
+    // }));
+
+
+    // console.log("optionss:", optionsstwo);
+
+    let getdata = sessionStorage.getItem('data')
+
+    let decry = decrypt(getdata)
+
+    let parsedatajson = JSON.parse(decry)
+
+
+    const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
+    let realven = [{ label: "All Venues", value: "All" }]
+
+    if (hasAllValue === true) {
+      realven.push(...optionsone);
+      setBasic(optionsone)
+      setOldven(optionsone)
+      setSelectedOptions(optionsone)
+
+      let uuuk = extractUniqueNotes(cleanedData, optionsone)
+      uuuk.unshift({ label: "All Courses", value: "All" });
+      setFulldatafull(uuuk)
+      setOldcou(uuuk)
+      setSelectedCources(uuuk)
+
+
+
+
+      const output = [{
+        "label": "All Hubs",
         "value": "All"
       }];
-      Object.entries(cleanedData).forEach(([groupName, groupData]) => {
-        Object.keys(groupData).forEach((key) => {
-          optionsone.push({ value: key, label: key });
-        });
-      });
-  
-      // Generate `optionss` for `data[0]` (assuming `GreenbankServicesClub` is the first group)
-      // const firstGroup = Object.keys(eventss.GreenbankServicesClub)[0]; // 'GreenbankServicesClub'
-      // const optionsstwo = Object.keys(eventss.GreenbankServicesClub[firstGroup]).map((hub) => ({
-      //   value: hub,
-      //   label: hub,
-      // }));
-  
-  
-      // console.log("optionss:", optionsstwo);
-  
-      let getdata = sessionStorage.getItem('data')
-  
-      let decry = decrypt(getdata)
-  
-      let parsedatajson = JSON.parse(decry)
-  
-  
-      const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-      let realven = [{ label: "All Venues", value: "All" }]
-  
-      if (hasAllValue === true) {
-        realven.push(...optionsone);
-        setBasic(optionsone)
-        setOldven(optionsone)
-        setSelectedOptions(optionsone)
-  
-        let uuuk = extractUniqueNotes(cleanedData, optionsone)
-        uuuk.unshift({ label: "All Courses", value: "All" });
-        setFulldatafull(uuuk)
-        setOldcou(uuuk)
-        setSelectedCources(uuuk)
-  
-       
-  
-  
-        const output = [{
-          "label": "All Hubs",
-          "value": "All"
-        }];
-    
-        // // Iterate through the search array
-        optionsone.forEach(({ value }) => {
-          // Search in the data object
-          Object.entries(result).forEach(([key, items]) => {
-            if (key === value) {
-              // If the key matches, add all items from the group to the output
-              items.forEach(item => {
-                output.push({ value: key + '-' + item.name, label: item.name });
-              });
-            } else {
-              // Search within the group's items
-              items.forEach(item => {
-                if (item.name === value) {
-                  output.push({ value : key + '-' + item.name, label: key });
-                }
-              });
-            }
-          });
-        });
-    
-        setBasicone(output) 
-        setHubb(output)
-    
-    
-        setOldhub(output)
-  
-  
-  
-      } else {
-        realven.push(parsedatajson.venue)
-        setBasic([ ...[{
-          "label": "All Venue",
-          "value": "All"
-        }] , ...parsedatajson.venue ])
-  
-        setOldven([ ...[{
-          "label": "All Venue",
-          "value": "All"
-        }] , ...parsedatajson.venue ])
-  
-        setSelectedOptions([ ...[{
-          "label": "All Venue",
-          "value": "All"
-        }] , ...parsedatajson.venue ])
-  
-        const output = [{
-          "label": "All Hubs",
-          "value": "All"
-        }];
-    
-        // // Iterate through the search array
-        [ ...[{
-          "label": "All Venue",
-          "value": "All"
-        }] , ...parsedatajson.venue ].forEach(({ value }) => {
-          // Search in the data object
-          Object.entries(result).forEach(([key, items]) => {
-            if (key === value) {
-              // If the key matches, add all items from the group to the output
-              items.forEach(item => {
-                output.push({ value: key + '-' + item.name, label: item.name });
-              });
-            } else {
-              // Search within the group's items
-              items.forEach(item => {
-                if (item.name === value) {
-                  output.push({ value : key + '-' + item.name, label: key });
-                }
-              });
-            }
-          });
-        });
-    
-        setBasicone(output) 
-        setHubb(output)
-    
-    
-        setOldhub(output)
-  
-  
-  
-  
-        let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
-        uuuk.unshift({ label: "All Courses", value: "All" });
-        setSelectedCources(uuuk)
-        setOldcou(uuuk)
-        setFulldatafull(uuuk)
-      }
-  
-  
-  
-  
-  
-      const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
-      const optionstakeaway = [
-        ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
-      ].map(value => ({ value, label: value }));
-  
-  
-      console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
-  
-  
-  
-  
-  
-      // const output = [];
-  
-      //   // // Iterate through the search array
-      //   [].forEach(({ value }) => {
-      //     // Search in the data object
-      //     Object.entries(alldrop).forEach(([key, items]) => {
-      //       if (key === value) {
-      //         // If the key matches, add all items from the group to the output
-      //         items.forEach(item => {
-      //           output.push({ value: key + '-' + item.name, label: item.name });
-      //         });
-      //       } else {
-      //         // Search within the group's items
-      //         items.forEach(item => {
-      //           if (item.name === value) {
-      //             output.push({ value: key + '-' + item.name, label: key });
-      //           }
-      //         });
-      //       }
-      //     });
-      //   });
-  
-      //   setBasicone(output)
-  
-  
-  
-  
-  
-      const filteredDataonee = {};
-  
-      console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
-      if (parsedatajson.venue) {
-  
-        const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-  
-        console.log(hasAllValue, 'hasAllValue')
-        if (hasAllValue === true) {
-  
-        } else {
-  
-          parsedatajson.venue.forEach(filter => {
-            const key = filter.value;
-            if (cleanedData[key]) {
-              filteredDataonee[key] = cleanedData[key];
-            }
-          });
-          setBasicall(filteredDataonee)
-        }
-  
-  
-  
-  
-  
-      }
-  
-      if (parsedatajson.hub) {
-  
-        const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
-        console.log(hasAllValue, 'hasAllValue hub')
-  
-        if (hasAllValue === true) {
-  
-        } else {
-          function filterDataByDynamicKeys(keysArray) {
-            const filteredData = {};
-  
-            keysArray.forEach(({ value }) => {
-              const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
-  
-              if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
-                const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
-  
-                // Check if the hub exists
-                if (secondLevelData[hubName]) {
-                  if (!filteredData[topLevelKey]) {
-                    filteredData[topLevelKey] = {};
-                  }
-  
-                  if (!filteredData[topLevelKey][secondTopLevelKey]) {
-                    filteredData[topLevelKey][secondTopLevelKey] = {};
-                  }
-  
-                  filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
-                }
+
+      // // Iterate through the search array
+      optionsone.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(result).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
               }
             });
-  
-            return filteredData;
           }
-  
-          let fina = filterDataByDynamicKeys(parsedatajson.hub)
-  
-          setBasicall(fina)
-        }
-  
-  
-      }
-  
-   
-     
-  
-  
-      
-    
-      // alldat = filteredDataonee
-      const yesterday = [getFormattedDate(1), getFormattedDate(1)];
-      const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
-      setDateRangetwo(eightDaysBefore)
-      setDateRange(yesterday)
-      // filterDataByDate(dateRange, onetime, twotime, basic , hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-  
-      // filterDataByDateonee(dateRange, onetime, twotime, basic ,
-      //   hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-  
-  
+        });
+      });
+
+      setBasicone(output)
+      setHubb(output)
+
+
+      setOldhub(output)
+
+
+
+    } else {
+      realven.push(parsedatajson.venue)
+      setBasic([...[{
+        "label": "All Venue",
+        "value": "All"
+      }], ...parsedatajson.venue])
+
+      setOldven([...[{
+        "label": "All Venue",
+        "value": "All"
+      }], ...parsedatajson.venue])
+
+      setSelectedOptions([...[{
+        "label": "All Venue",
+        "value": "All"
+      }], ...parsedatajson.venue])
+
+      const output = [{
+        "label": "All Hubs",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      [...[{
+        "label": "All Venue",
+        "value": "All"
+      }], ...parsedatajson.venue].forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(result).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasicone(output)
+      setHubb(output)
+
+
+      setOldhub(output)
+
+
+
+
+      let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
+      uuuk.unshift({ label: "All Courses", value: "All" });
+      setSelectedCources(uuuk)
+      setOldcou(uuuk)
+      setFulldatafull(uuuk)
     }
+
+
+
+
+
+    const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
+    const optionstakeaway = [
+      ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
+    ].map(value => ({ value, label: value }));
+
+
+    console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
+
+
+
+
+
+    // const output = [];
+
+    //   // // Iterate through the search array
+    //   [].forEach(({ value }) => {
+    //     // Search in the data object
+    //     Object.entries(alldrop).forEach(([key, items]) => {
+    //       if (key === value) {
+    //         // If the key matches, add all items from the group to the output
+    //         items.forEach(item => {
+    //           output.push({ value: key + '-' + item.name, label: item.name });
+    //         });
+    //       } else {
+    //         // Search within the group's items
+    //         items.forEach(item => {
+    //           if (item.name === value) {
+    //             output.push({ value: key + '-' + item.name, label: key });
+    //           }
+    //         });
+    //       }
+    //     });
+    //   });
+
+    //   setBasicone(output)
+
+
+
+
+
+    const filteredDataonee = {};
+
+    console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
+    if (parsedatajson.venue) {
+
+      const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
+
+      console.log(hasAllValue, 'hasAllValue')
+      if (hasAllValue === true) {
+
+      } else {
+
+        parsedatajson.venue.forEach(filter => {
+          const key = filter.value;
+          if (cleanedData[key]) {
+            filteredDataonee[key] = cleanedData[key];
+          }
+        });
+        setBasicall(filteredDataonee)
+      }
+
+
+
+
+
+    }
+
+    if (parsedatajson.hub) {
+
+      const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
+      console.log(hasAllValue, 'hasAllValue hub')
+
+      if (hasAllValue === true) {
+
+      } else {
+        function filterDataByDynamicKeys(keysArray) {
+          const filteredData = {};
+
+          keysArray.forEach(({ value }) => {
+            const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+
+            if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
+              const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
+
+              // Check if the hub exists
+              if (secondLevelData[hubName]) {
+                if (!filteredData[topLevelKey]) {
+                  filteredData[topLevelKey] = {};
+                }
+
+                if (!filteredData[topLevelKey][secondTopLevelKey]) {
+                  filteredData[topLevelKey][secondTopLevelKey] = {};
+                }
+
+                filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
+              }
+            }
+          });
+
+          return filteredData;
+        }
+
+        let fina = filterDataByDynamicKeys(parsedatajson.hub)
+
+        setBasicall(fina)
+      }
+
+
+    }
+
+
+
+
+
+
+
+    // alldat = filteredDataonee
+    const yesterday = [getFormattedDate(1), getFormattedDate(1)];
+    const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
+    setDateRangetwo(eightDaysBefore)
+    setDateRange(yesterday)
+    // filterDataByDate(dateRange, onetime, twotime, basic , hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+    // filterDataByDateonee(dateRange, onetime, twotime, basic ,
+    //   hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+  }
 
   let getonez = () => {
 
@@ -1319,16 +1319,17 @@ let Mealsmulti = () => {
       let displayText = ''
 
       let hasAllfinbyss = selected.some(option => option.label && option.label.startsWith("All "));
-      
-      if( hasAllfinbyss === true ) {
+
+      if (hasAllfinbyss === true) {
         const allValue = selected.find(option => option.label && option.label.startsWith("All "))?.label || "";
-        displayText = allValue.slice(0, textCount) 
-      }else{
+        displayText = allValue.slice(0, textCount)
+      } else {
         displayText = allLabels.slice(0, textCount) + "..."
       }
-      return <span style={{ color : allLabels === 'Maximum' ? 'red' :  allLabels === 'Minimum' ? 'blue' : ""  ,
-        fontWeight : allLabels === 'Maximum' ? '700' :  allLabels === 'Minimum' ? '700' : ""
-       }} title={allLabels}>{displayText}</span>;
+      return <span style={{
+        color: allLabels === 'Maximum' ? 'red' : allLabels === 'Minimum' ? 'blue' : "",
+        fontWeight: allLabels === 'Maximum' ? '700' : allLabels === 'Minimum' ? '700' : ""
+      }} title={allLabels}>{displayText}</span>;
     }
     return null;
   };
@@ -1346,15 +1347,15 @@ let Mealsmulti = () => {
       let displayText = ''
 
       let hasAllfinbyss = selected.some(option => option.label && option.label.startsWith("All "));
-      
-      if( hasAllfinbyss === true ) {
+
+      if (hasAllfinbyss === true) {
         const allValue = selected.find(option => option.label && option.label.startsWith("All "))?.label || "";
         displayText = allValue
-      }else{
+      } else {
         displayText = allLabels.slice(0, textCount) + "..."
       }
 
-      return <span style={{ color : allLabels === 'Maximum' ? 'red' : 'blue' , fontWeight : '700' }} title={allLabels}>{displayText}</span>;
+      return <span style={{ color: allLabels === 'Maximum' ? 'red' : 'blue', fontWeight: '700' }} title={allLabels}>{displayText}</span>;
     }
     return null;
   };
@@ -1371,7 +1372,7 @@ let Mealsmulti = () => {
 
     setOldven(selected)
 
-    if (hasAllValue === false && hasAllValueold === true  ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
 
       let uuuk = extractUniqueNotes(basicall, [])
@@ -1565,7 +1566,7 @@ let Mealsmulti = () => {
 
     setOldvenfive(selected)
 
-    if (hasAllValue === false && hasAllValueold === true  ) {
+    if (hasAllValue === false && hasAllValueold === true) {
       setSelectedOptionsfive([]);
 
       // filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -1606,7 +1607,7 @@ let Mealsmulti = () => {
 
     if (hasAllValue === true) {
 
-      setSelectedOptionsfive(basic || []); 
+      setSelectedOptionsfive(basic || []);
 
       // filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
@@ -1723,7 +1724,7 @@ let Mealsmulti = () => {
   //.select options hub
 
   const [Hubradio, setHubradio] = useState(true)
- 
+
 
   const [selectedhubOptions, setSelectedhubOptions] = useState(optionshub);
 
@@ -1736,7 +1737,7 @@ let Mealsmulti = () => {
 
     setOldpro(selected)
 
-    if (hasAllValue === false && hasAllValueold === true  ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
 
       setSelectedhubOptions([]);
@@ -1784,7 +1785,7 @@ let Mealsmulti = () => {
 
     setOldhub(selectedss)
 
-    if (hasAllValue === false && hasAllValueold === true  ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
       console.log(selectedss, 'selectedssselectedssselectedss')
 
@@ -1828,7 +1829,7 @@ let Mealsmulti = () => {
 
 
   };
-  
+
   let callfordataonesearch = (one, bitedata) => {
 
 
@@ -2197,7 +2198,7 @@ let Mealsmulti = () => {
 
     setOldhubtwo(selectedss)
 
-    if (hasAllValue === false && hasAllValueold === true    ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
       console.log(selectedss, 'selectedssselectedssselectedss')
 
@@ -2272,7 +2273,7 @@ let Mealsmulti = () => {
 
     setOldcou(selected)
 
-    if (hasAllValue === false && hasAllValueold === true    ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
       setSelectedCources([]);
 
@@ -2319,7 +2320,7 @@ let Mealsmulti = () => {
 
   //select takeaway
   const [takeaway, setTakeaway] = useState(false)
- 
+
   const [selectedTakeaway, setSelectedTakeaway] = useState(optionstakeaway);
   const handleChangeTakeaway = (selected) => {
 
@@ -2328,7 +2329,7 @@ let Mealsmulti = () => {
 
     setOldtak(selected)
 
-    if (hasAllValue === false && hasAllValueold === true   ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
       setSelectedTakeaway([]);
 
@@ -2419,7 +2420,7 @@ let Mealsmulti = () => {
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
 
 
-    console.log(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype , '11111111111111111111111111111111111111111111111111111111')
+    console.log(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype, '11111111111111111111111111111111111111111111111111111111')
 
 
     cources = cources.filter(item => item.value !== "All");
@@ -2794,13 +2795,13 @@ let Mealsmulti = () => {
 
     }
 
-    if (inone != undefined ) {
+    if (inone != undefined) {
       let splitone = inone.split('-')
- 
-    
-      if (splitone.length === 2 ) {
 
-        if (Number(splitone[0]) < Number(splitone[1]) ) {
+
+      if (splitone.length === 2) {
+
+        if (Number(splitone[0]) < Number(splitone[1])) {
 
 
 
@@ -2976,7 +2977,7 @@ let Mealsmulti = () => {
       });
     });
 
- 
+
 
 
     callfordataone(filteredData)
@@ -3063,7 +3064,7 @@ let Mealsmulti = () => {
 
 
 
-    console.log(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype , '222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222')
+    console.log(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, '222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222')
 
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
@@ -3379,39 +3380,39 @@ let Mealsmulti = () => {
 
     }
 
-    if (takeaways.length != 0 && takeaway === true ) {
+    if (takeaways.length != 0 && takeaway === true) {
 
       function filterByNote(data, regex) {
         if (Array.isArray(data)) {
-            return data
-                .map(item => filterByNote(item, regex))
-                .filter(item => item !== null);
+          return data
+            .map(item => filterByNote(item, regex))
+            .filter(item => item !== null);
         } else if (typeof data === 'object' && data !== null) {
-            if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
-                return {
-                    ...data,
-                    ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
-                };
-            } else if (!data.hasOwnProperty('NOTE')) {
-                let filteredObject = {};
-                for (let key in data) {
-                    let filteredValue = filterByNote(data[key], regex);
-                    if (filteredValue !== null) {
-                        filteredObject[key] = filteredValue;
-                    }
-                }
-                return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+          if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+            return {
+              ...data,
+              ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+            };
+          } else if (!data.hasOwnProperty('NOTE')) {
+            let filteredObject = {};
+            for (let key in data) {
+              let filteredValue = filterByNote(data[key], regex);
+              if (filteredValue !== null) {
+                filteredObject[key] = filteredValue;
+              }
             }
+            return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+          }
         }
         return null;
-    } 
-    const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
+      }
+      const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
 
-    // const filteredData = filterByNote(originalData, regex);
-    alldat = filterByNote(alldat, regex);
+      // const filteredData = filterByNote(originalData, regex);
+      alldat = filterByNote(alldat, regex);
 
 
-     
+
       // function filterByNote(filters) {
       //   console.log( JSON.stringify(filters) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
 
@@ -3420,13 +3421,13 @@ let Mealsmulti = () => {
 
       //   const allowedNotes = filters.map(f => f.value); // Extract values from filter array 
       //   const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
-        
+
       //   function traverse(obj) {
       //     if (Array.isArray(obj)) {
-           
+
       //       return obj.map(traverse).filter(entry => entry !== null);
       //     } else if (typeof obj === "object" && obj !== null) {
-            
+
       //       let newObj = {};
       //       let hasMatch = false;
 
@@ -3467,16 +3468,16 @@ let Mealsmulti = () => {
 
       console.log(alldat, 'seven')
 
-    }else{ 
+    } else {
     }
 
-    if (inone != undefined ) {
+    if (inone != undefined) {
       let splitone = inone.split('-')
- 
-    
-      if (splitone.length === 2 ) {
 
-        if (Number(splitone[0]) < Number(splitone[1]) ) {
+
+      if (splitone.length === 2) {
+
+        if (Number(splitone[0]) < Number(splitone[1])) {
 
 
 
@@ -3665,10 +3666,10 @@ let Mealsmulti = () => {
       return Object.keys(obj).length === 0;
     }
 
-    
-      console.log(filteredDatas, 'thousand')
-      callfordataonetwo(filteredDatas)
- 
+
+    console.log(filteredDatas, 'thousand')
+    callfordataonetwo(filteredDatas)
+
 
     let ghi = processTimeData(alldat)
 
@@ -3679,7 +3680,7 @@ let Mealsmulti = () => {
     let timeCounts = kidshort.map(entry => entry.count);
 
     setTwobar(timeCounts)
- 
+
 
 
 
@@ -3978,35 +3979,35 @@ let Mealsmulti = () => {
 
   const handleChangefinedd = (selected) => {
 
-    if (minperday.length === 0) { 
+    if (minperday.length === 0) {
 
     } else {
 
-      if(selected.value === "Minimum") {
+      if (selected.value === "Minimum") {
         setMinperday((prevState) =>
           [...prevState].sort((a, b) => a.count - b.count)
         );
-      }else{
+      } else {
         setMinperday((prevState) =>
           [...prevState].sort((a, b) => b.count - a.count)
         );
-      } 
+      }
     }
 
     if (maxperday.length === 0) {
 
     } else {
 
-      if(selected.value === "Minimum") {
+      if (selected.value === "Minimum") {
         setMaxperday((prevState) =>
           [...prevState].sort((a, b) => a.count - b.count)
         );
-      }else{
+      } else {
         setMaxperday((prevState) =>
           [...prevState].sort((a, b) => b.count - a.count)
         );
-      }  
-     
+      }
+
 
     }
 
@@ -4245,16 +4246,16 @@ let Mealsmulti = () => {
 
     } else {
 
-      if(selected.value === "Minimum") {
+      if (selected.value === "Minimum") {
         setServed((prevState) =>
           [...prevState].sort((a, b) => a.count - b.count)
         );
-      }else{
+      } else {
         setServed((prevState) =>
           [...prevState].sort((a, b) => b.count - a.count)
         );
       }
- 
+
 
     }
 
@@ -4262,17 +4263,17 @@ let Mealsmulti = () => {
 
     } else {
 
-      if(selected.value === "Minimum") {
+      if (selected.value === "Minimum") {
         setServedone((prevState) =>
           [...prevState].sort((a, b) => a.count - b.count)
         );
-      }else{
+      } else {
         setServedone((prevState) =>
           [...prevState].sort((a, b) => b.count - a.count)
         );
       }
 
- 
+
 
 
     }
@@ -4387,10 +4388,11 @@ let Mealsmulti = () => {
         doc.save("Refunded meals.pdf");
         setIsPdfLoad(false);// Save after rendering
       },
-      x: 10,
-      y: 20,
+      y: 10,
       width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
+      windowWidth: 1000, // Ensure full width capture  
+      margin: 10,
+
       autoPaging: "text",
       html2canvas: {
         useCORS: true, // Handle cross-origin images
@@ -4541,13 +4543,13 @@ let Mealsmulti = () => {
     setIsExcelLoad(false)
   };
 
-const getpadd=()=>{
-  if (window.innerWidth >= 1536) return 80; // 2xl
+  const getpadd = () => {
+    if (window.innerWidth >= 1536) return 80; // 2xl
     if (window.innerWidth >= 1280) return 60; // xl
     if (window.innerWidth >= 1024) return 20; // lg
     if (window.innerWidth >= 768) return 0;  // md
     return 0;
-}
+  }
   const getBoxWidth = () => {
     if (window.innerWidth >= 1836) return 800; // 2xl
     if (window.innerWidth >= 1680) return 700; // xl
@@ -4571,20 +4573,19 @@ const getpadd=()=>{
   };
   const [boxWidth, setBoxWidth] = useState(getBoxWidth());
   const [Height, setHeight] = useState(getBoxHeight());
-const[textCount,setTextCount]=useState(gettextcount());
-const[padd,setPadd]=useState(getpadd());
-const[paddOpp,setPaddOpp]=useState(0);
+  const [textCount, setTextCount] = useState(gettextcount());
+  const [padd, setPadd] = useState(getpadd());
+  const [paddOpp, setPaddOpp] = useState(0);
 
   useEffect(() => {
-    const handleResize = () => 
-    {setBoxWidth(getBoxWidth()),setPadd(getpadd()),setPaddOpp(0),setHeight(getBoxHeight()),setTextCount(gettextcount()) };
+    const handleResize = () => { setBoxWidth(getBoxWidth()), setPadd(getpadd()), setPaddOpp(0), setHeight(getBoxHeight()), setTextCount(gettextcount()) };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
 
   return (
-    <div style={{ overflowX: 'hidden',overflowY:'auto' }}>
+    <div style={{ overflowX: 'hidden', overflowY: 'auto' }}>
       <div style={{ scrollbarWidth: 'none' }}>
 
         <div className="" style={{
@@ -4704,17 +4705,17 @@ const[paddOpp,setPaddOpp]=useState(0);
                         setVenueradio(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedOptions([])
-                        }else{
+                        } else {
 
 
 
-                          handleChange([...selectedOptions , ...[{
+                          handleChange([...selectedOptions, ...[{
                             "label": "All Venue",
                             "value": "All"
-                        }]])
-                          console.log(selectedOptions , 'selectedOptions')
+                          }]])
+                          console.log(selectedOptions, 'selectedOptions')
                         }
-          
+
                       }}
                     />
                     <label className="switch-label" htmlFor="switch1"></label>
@@ -4778,13 +4779,13 @@ const[paddOpp,setPaddOpp]=useState(0);
                         setHubbswitch(e.target.checked)
                         if (e.target.checked === false) {
                           // Handle unchecked state if needed
-                        }else{
-                          handleChangehubone([...hubb , ...[{
+                        } else {
+                          handleChangehubone([...hubb, ...[{
                             "label": "All Hub",
                             "value": "All"
-                        }]]) 
+                          }]])
                         }
-          
+
                       }}
                       type="checkbox"
                       id="switch35"
@@ -4858,8 +4859,8 @@ const[paddOpp,setPaddOpp]=useState(0);
                         setVenueradiofivese(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedOptionsfive([])
-                        }else{
-                          handleChangefive([...selectedOptionsfive , ...[{
+                        } else {
+                          handleChangefive([...selectedOptionsfive, ...[{
                             "label": "All Venue",
                             "value": "All"
                           }]])
@@ -4928,8 +4929,8 @@ const[paddOpp,setPaddOpp]=useState(0);
                         if (e.target.checked === false) {
                           // Handle unchecked state if needed
                           setHubbtwo([])
-                        }else{
-                          handleChangehubtwo([...basiconefive , ...[{
+                        } else {
+                          handleChangehubtwo([...basiconefive, ...[{
                             "label": "All Venue",
                             "value": "All"
                           }]])
@@ -5004,11 +5005,11 @@ const[paddOpp,setPaddOpp]=useState(0);
                         setHubradio(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedhubOptions([])
-                        }else{
-                          handleChangehub([...selectedhubOptions , ...[{
+                        } else {
+                          handleChangehub([...selectedhubOptions, ...[{
                             "label": "All stages",
                             "value": "All"
-                        }]])
+                          }]])
                         }
                       }}
                       id="switch2"
@@ -5076,11 +5077,11 @@ const[paddOpp,setPaddOpp]=useState(0);
                         if (e.target.checked === false) {
                           setSelectedCources([])
                           handleChangeCources([])
-                        }else{
-                          handleChangeCources([...selectedCources , ...[{
+                        } else {
+                          handleChangeCources([...selectedCources, ...[{
                             "label": "All courses",
                             "value": "All"
-                        }]])
+                          }]])
                         }
                       }}
                       id="switch4"
@@ -5142,7 +5143,7 @@ const[paddOpp,setPaddOpp]=useState(0);
               {/* Tables/Takeaways Filters */}
               <div className="filter-section" style={{ width: 'calc(20% - 20px)', minWidth: '240px', marginBottom: '15px' }}>
                 <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
-                <div className="custom-inputoness d-flex justify-content-between gap-1 " style={{ width: '100%',paddingBottom:2,paddingTop:2 }}>
+                <div className="custom-inputoness d-flex justify-content-between gap-1 " style={{ width: '100%', paddingBottom: 2, paddingTop: 2 }}>
                   <input
                     onChange={(e) => {
                       setInputvalue(e.target.value)
@@ -5153,10 +5154,10 @@ const[paddOpp,setPaddOpp]=useState(0);
                     }}
                     value={inputvalue}
                     placeholder="0-9999"
-                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B',borderRight:'1px solid #707070', textAlign: 'center',paddingTop:9,paddingBottom:9 }}
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', borderRight: '1px solid #707070', textAlign: 'center', paddingTop: 9, paddingBottom: 9 }}
                     type="text"
                   />
-               
+
                   {/* <p style={{ fontSize: 19, display: 'contents',paddingTop:5 }}>|</p> */}
                   <input
                     onChange={(e) => {
@@ -5168,7 +5169,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                     }}
                     value={inputvaluetwo}
                     placeholder="9999-9999"
-                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center',paddingTop:5 }}
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center', paddingTop: 5 }}
                     type="text"
                   />
                 </div>
@@ -5182,11 +5183,11 @@ const[paddOpp,setPaddOpp]=useState(0);
                         setTakeaway(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedTakeaway([])
-                        }else{
-                          handleChangeTakeaway([...selectedTakeaway , ...[{
+                        } else {
+                          handleChangeTakeaway([...selectedTakeaway, ...[{
                             "label": "All takeaways",
                             "value": "All"
-                        }]])
+                          }]])
                         }
                       }}
                       id="switch5"
@@ -5255,8 +5256,8 @@ const[paddOpp,setPaddOpp]=useState(0);
                   {/* First row */}
                   <div className="row ">
                     {/* Meals received - timeline - positioned at flex-end */}
-                    <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center" style={{ paddingRight: padd,paddingLeft:paddOpp }} >
-                      <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px`}} onClick={() => {
+                    <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center" style={{ paddingRight: padd, paddingLeft: paddOpp }} >
+                      <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                         setMeals(5)
                       }}>
                         <div className="boxs" style={{ cursor: 'pointer' }}>
@@ -5270,8 +5271,8 @@ const[paddOpp,setPaddOpp]=useState(0);
                     </div>
 
                     {/* Edits - positioned at flex-start */}
-                    <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center" style={{ paddingLeft: `${padd}px`,paddingRight:paddOpp }}>
-                      <div className="box" style={{ maxWidth: `${boxWidth}px`,height: `${Height}px` }} onClick={() => {
+                    <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center" style={{ paddingLeft: `${padd}px`, paddingRight: paddOpp }}>
+                      <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                         setMeals(2)
                       }}>
                         <div className="boxs" style={{ cursor: 'pointer' }}>
@@ -5338,8 +5339,8 @@ const[paddOpp,setPaddOpp]=useState(0);
                   {/* Second row */}
                   <div className="row">
                     {/* Served meals - positioned at flex-end */}
-                    <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center" style={{ paddingRight: `${padd}px`,paddingLeft:paddOpp }}>
-                      <div className="box" style={{ maxWidth: `${boxWidth}px`,height: `${Height}px` }} onClick={() => {
+                    <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center" style={{ paddingRight: `${padd}px`, paddingLeft: paddOpp }}>
+                      <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                         setMeals(3)
                       }}>
                         <div className="boxs" style={{ cursor: 'pointer' }}>
@@ -5388,8 +5389,8 @@ const[paddOpp,setPaddOpp]=useState(0);
                     </div>
 
                     {/* Refunded meals - positioned at flex-start */}
-                    <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center " style={{ paddingLeft: `${padd}px`,paddingRight:paddOpp }}>
-                      <div className="box" style={{ maxWidth: `${boxWidth}px`,height: `${Height}px` }} onClick={() => {
+                    <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center " style={{ paddingLeft: `${padd}px`, paddingRight: paddOpp }}>
+                      <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                         setMeals(4)
                       }}>
                         <div className="boxs" style={{ cursor: 'pointer' }}>
@@ -5720,11 +5721,12 @@ const[paddOpp,setPaddOpp]=useState(0);
                             <img
                               src="black_arrow.png"
                               style={{ width: 20, height: 20, cursor: 'pointer' }}
-                              onClick={() => { 
-                                
+                              onClick={() => {
+
                                 setServed(editallclone)
-                                
-                                setMeals(1) }}
+
+                                setMeals(1)
+                              }}
                               alt="Back Arrow"
                               className="img-fluid"
                             />
@@ -5753,7 +5755,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                                   ...base,
                                   border: 'unset',
                                   color: '#707070',
-                                  boxShadow:'none',
+                                  boxShadow: 'none',
                                 })
                               }}
                             />
@@ -5887,13 +5889,13 @@ const[paddOpp,setPaddOpp]=useState(0);
                               <div key={index}>
                                 <div className="row py-2">
                                   <div className="col-md-4 col-sm-12 mb-2 mb-md-0">
-                                    <p className="mb-1" style={{ fontWeight: '700', color: index === 0 ? 'red' :  '#000' }}>{dfgh?.name}</p>
+                                    <p className="mb-1" style={{ fontWeight: '700', color: index === 0 ? 'red' : '#000' }}>{dfgh?.name}</p>
                                     <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}>{dfgh?.count}</p>
                                   </div>
 
                                   {correspondingErv ? (
                                     <div className="col-md-4 col-sm-12 mb-2 mb-md-0 text-md-center">
-                                      <p className="mb-1" style={{ fontWeight: '700', color:  index === 0 ? 'blue' : '#000' }}>{correspondingErv?.name}</p>
+                                      <p className="mb-1" style={{ fontWeight: '700', color: index === 0 ? 'blue' : '#000' }}>{correspondingErv?.name}</p>
                                       <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}>{correspondingErv?.count}</p>
                                     </div>
                                   ) : (
@@ -5901,7 +5903,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                                   )}
 
                                   <div className="col-md-4 col-sm-12 d-flex justify-content-md-end align-items-center">
-                                    <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}> 
+                                    <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}>
                                       <span>
                                         {(() => {
                                           const datd = dfgh?.count || 0;
@@ -5969,7 +5971,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                                 }}
                                 hideSelectedOptions={false} // Show all options even if selected
                                 styles={{
-                                  control: (base) => ({ ...base, border: 'unset', color: '#707070',   boxShadow:'none', }),
+                                  control: (base) => ({ ...base, border: 'unset', color: '#707070', boxShadow: 'none', }),
                                 }}
                               />
 
@@ -6086,7 +6088,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                                         <div style={{ width: '33%', textAlign: 'center' }}>
                                           <div >
 
-                                            <p style={{ fontWeight: '700', color: index ===0 ? 'blue' : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                            <p style={{ fontWeight: '700', color: index === 0 ? 'blue' : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
                                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
                                           </div>
                                         </div>
@@ -6097,7 +6099,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                                       )}
 
                                       <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}> 
+                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
                                           <span>
                                             {(() => {
                                               const datd = dfgh?.count || 0; // Fallback to 0 if no data
@@ -6791,106 +6793,104 @@ const[paddOpp,setPaddOpp]=useState(0);
           })()}</p>
 
 
-<div style={{ marginTop: 20, padding: 10 }} >
+          <div style={{ marginTop: 20, padding: 10 }} >
 
-<div className="d-flex justify-content-between" >
+            <div className="d-flex justify-content-between" style={{ borderBottom: "1px solid #ccc" }} >
 
-  <div >
-    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
-      ggggrt()} </p>
-  </div>
-  <div >
-    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
-
-      ggggrts()
-    } </p>
-  </div>
-  <div >
-    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-    <p style={{ fontWeight: '400', color: '#000',  }}>
-      ( Total ){" "}
-      {(() => {
-        let datd = ggggrt();
-        let datdtwo = ggggrts();
-        let tot = ((datd - datdtwo) / datdtwo) * 100;
-
-        return (
-          <>
-            {tot.toFixed(2) + "%"}{" "} 
-          </>
-        );
-      })()}
-    </p>
-
-
-  </div>
-
-</div>
-<hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
-
-{
-  served?.map((dfgh, index) => {
-    const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
-
-    return (
-      <>
-        <div className="d-flex  mt-3">
-
-          <div style={{ width: '43%' }} className="d-flex">
-            <p style={{ fontWeight: '700', color: index === 0 ? 'red' :  '#000',  }}>{dfgh?.name}</p>
-            <p style={{ fontWeight: '400', color: '#000',  marginLeft : 5 }}>{dfgh?.count}</p>
-          </div>
-
-          {correspondingErv ? (
-            <div style={{ width: '33%', textAlign: 'center' }}>
-              <div className="d-flex" >
-
-                <p style={{ fontWeight: '700', color: index === 0 ? 'blue' :  '#000',  }}>{correspondingErv?.name}</p>
-                <p style={{ fontWeight: '400', color: '#000',  marginLeft : 5 }}>{correspondingErv?.count}</p>
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+                  ggggrt()} </p>
               </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+
+                  ggggrts()
+                } </p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                <p style={{ fontWeight: '400', color: '#000', }}>
+                  ( Total ){" "}
+                  {(() => {
+                    let datd = ggggrt();
+                    let datdtwo = ggggrts();
+                    let tot = ((datd - datdtwo) / datdtwo) * 100;
+
+                    return (
+                      <>
+                        {tot.toFixed(2) + "%"}{" "}
+                      </>
+                    );
+                  })()}
+                </p>
+
+
+              </div>
+
             </div>
-          ) : (
-            <>
-              <div style={{ width: '23%' }} >
-              </div></>
-          )}
 
-          <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex',   width: '23%' }}>
-            <p style={{ fontWeight: '400', color: '#000',  display: 'inline-flex', alignItems: 'center' }}>
-              ( Total ){" "}
-              {(() => {
-                const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-                const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0; // Prevent division by zero
+            {
+              served?.map((dfgh, index) => {
+                const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
 
                 return (
                   <>
-                    {tot.toFixed(2) + "%"}{" "}
-                    <img
-                      src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                      style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
-                      alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
-                    />
+                    <div className="d-flex  mt-3" style={{ borderBottom: "1px solid #ccc" }}>
+
+                      <div style={{ width: '43%' }} className="d-flex">
+                        <p style={{ fontWeight: '700', color: index === 0 ? 'red' : '#000', }}>{dfgh?.name}</p>
+                        <p style={{ fontWeight: '400', color: '#000', marginLeft: 5 }}>{dfgh?.count}</p>
+                      </div>
+
+                      {correspondingErv ? (
+                        <div style={{ width: '33%', textAlign: 'center' }}>
+                          <div className="d-flex" >
+
+                            <p style={{ fontWeight: '700', color: index === 0 ? 'blue' : '#000', }}>{correspondingErv?.name}</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginLeft: 5 }}>{correspondingErv?.count}</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div style={{ width: '23%' }} >
+                          </div></>
+                      )}
+
+                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '23%' }}>
+                        <p style={{ fontWeight: '400', color: '#000', display: 'inline-flex', alignItems: 'center' }}>
+                          ( Total ){" "}
+                          {(() => {
+                            const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                            const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+
+                            const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0; // Prevent division by zero
+
+                            return (
+                              <>
+                                {tot.toFixed(2) + "%"}{" "}
+                                <img
+                                  src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                                  style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
+                                  alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+                                />
+                              </>
+                            );
+                          })()}
+                        </p>
+
+                      </div>
+
+                    </div>
+
                   </>
                 );
-              })()}
-            </p>
+              })
+            }
+
 
           </div>
-
-        </div>
-
-        <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 1 }} />
-      </>
-    );
-  })
-}
-
-
-</div>
         </div >
       </div>
 
@@ -6994,7 +6994,7 @@ const[paddOpp,setPaddOpp]=useState(0);
 
           <div style={{ marginTop: 20, padding: 10 }} >
 
-            <div className="d-flex justify-content-between" >
+            <div className="d-flex justify-content-between" style={{ borderBottom: "1px solid #ccc" }} >
 
               <div >
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
@@ -7031,7 +7031,6 @@ const[paddOpp,setPaddOpp]=useState(0);
 
             </div>
 
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
             <div className="scroll" id="scrrrrol"  >
 
@@ -7044,20 +7043,20 @@ const[paddOpp,setPaddOpp]=useState(0);
 
                   return (
                     <>
-                      <div className="d-flex" style={{}} >
+                      <div className="d-flex" style={{ borderBottom: "1px solid #ccc" }} >
                         {/* Left Section */}
-                        <div style={{ width: '33%' }}>
-                          <p style={{ fontWeight: 700, color: index === 0 ? 'red' :  '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                          <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                        <div style={{ width: '33%' }} className="d-flex">
+                          <p style={{ fontWeight: 700, color: index === 0 ? 'red' : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                          <p style={{ fontWeight: 400, color: '#000', marginLeft : '7px' , marginTop : 4 }}>{dfgh?.count}</p>
                         </div>
 
                         {/* Middle Section */}
                         <div style={{ width: '33%', textAlign: 'center' }}>
                           {correspondingErv ? (
-                            <>
+                            <div className="d-flex">
                               <p style={{ fontWeight: 700, color: index === 0 ? 'blue' : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                              <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                            </>
+                              <p style={{ fontWeight: 400, color: '#000', marginLeft : '7px' , marginTop : 4 }}>{correspondingErv?.count}</p>
+                            </div>
                           ) : null}
                         </div>
 
@@ -7083,7 +7082,6 @@ const[paddOpp,setPaddOpp]=useState(0);
                           </p>
                         </div>
                       </div>
-                      <hr style={{ margin: 0, backgroundColor: 'black', height: 2 }} />
                     </>
 
 

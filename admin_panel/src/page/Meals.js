@@ -4725,10 +4725,11 @@ let Meals = () => {
         doc.save("Refunded meals.pdf");
         setIsPdfLoad(false); // Save after rendering
       },
-      x: 10,
-      y: 20,
+      y: 10,
       width: 190, // Fit content within page
-      windowWidth: 1000, // Ensure full width capture
+      windowWidth: 1000, // Ensure full width capture  
+      margin: 10,
+      
       autoPaging: "text",
       html2canvas: {
         useCORS: true, // Handle cross-origin images
@@ -7021,7 +7022,7 @@ let Meals = () => {
 
           <div style={{ marginTop: 20, padding: 10 }} >
 
-            <div className="d-flex justify-content-between" >
+            <div className="d-flex justify-content-between" style={{ borderBottom: "1px solid #000" }} >
 
               <div >
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
@@ -7055,8 +7056,7 @@ let Meals = () => {
 
               </div>
 
-            </div>
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 2 }} />
+            </div> 
 
             {
               served?.map((dfgh, index) => {
@@ -7064,15 +7064,16 @@ let Meals = () => {
 
                 return (
                   <>
-                    <div className="d-flex  mt-3">
+                   <div className="d-flex mt-3" style={{ alignItems: "center", height: "40px" ,  borderBottom: "1px solid #ccc"  }}>
 
-                      <div style={{ width: '43%' }} className="d-flex">
+
+                      <div style={{ width: '43%' }} className={`d-flex ${ index ===0 ? 'mt-2' : ''}`}>
                         <p style={{ fontWeight: '700', color: index ===0 ? 'red' :  '#000', }}>{dfgh?.name}</p>
                         <p style={{ fontWeight: '400', color: '#000', marginLeft: 5 }}>{dfgh?.count}</p>
                       </div>
 
                       {correspondingErv ? (
-                        <div style={{ width: '33%', textAlign: 'center' }}>
+                        <div style={{ width: '33%', textAlign: 'center' }} className={`  ${ index ===0 ? 'mt-2' : ''}`}>
                           <div className="d-flex" >
 
                             <p style={{ fontWeight: '700', color:  index ===0 ? 'blue' : '#000', }}>{correspondingErv?.name}</p>
@@ -7081,11 +7082,11 @@ let Meals = () => {
                         </div>
                       ) : (
                         <>
-                          <div style={{ width: '23%' }} >
+                          <div style={{ width: '33%' }} >
                           </div></>
                       )}
 
-                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '23%' }}>
+                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '23%' }} className={` ${ index ===0 ? 'mt-2' : ' '}`}>
                         <p style={{ fontWeight: '400', color: '#000', display: 'inline-flex', alignItems: 'center' }}>
                           ( Total ){" "}
                           {(() => {
@@ -7110,8 +7111,7 @@ let Meals = () => {
                       </div>
 
                     </div>
-
-                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 1 }} />
+ 
                   </>
                 );
               })
@@ -7222,7 +7222,7 @@ let Meals = () => {
 
           <div style={{ marginTop: 20, padding: 10 }} >
 
-            <div className="d-flex justify-content-between" >
+            <div className="d-flex justify-content-between" style={{  borderBottom: "1px solid #ccc"  }} >
 
               <div >
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
@@ -7258,8 +7258,7 @@ let Meals = () => {
               </div>
 
             </div>
-
-            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+ 
 
             <div className="scroll" id="scrrrrol"  >
 
@@ -7272,9 +7271,9 @@ let Meals = () => {
 
                   return (
                     <>
-                      <div className="d-flex" >
+                      <div className="d-flex" style={{ borderBottom: "1px solid #ccc" , padding : 4 }} >
                         {/* Left Section */}
-                        <div style={{ width: '33%' }}>
+                        <div style={{ width: '43%' }} className="d-flex ">
                           <p style={{ fontWeight: 700, color: index ===0 ? 'red' : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
                           <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
                         </div>
@@ -7282,15 +7281,15 @@ let Meals = () => {
                         {/* Middle Section */}
                         <div style={{ width: '33%', textAlign: 'center' }}>
                           {correspondingErv ? (
-                            <>
+                            <div className="d-flex ">
                               <p style={{ fontWeight: 700, color: index ===0 ? 'blue' : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
                               <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                            </>
+                            </div>
                           ) : null}
                         </div>
 
                         {/* Right Section */}
-                        <div style={{ width: '33%', display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
+                        <div style={{ width: '23%', display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
                           <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px', display: 'flex', alignItems: 'center' }}>
                             ( Total )
                             {(() => {
@@ -7310,8 +7309,7 @@ let Meals = () => {
                             })()}
                           </p>
                         </div>
-                      </div>
-                      <hr style={{ margin: 0, backgroundColor: 'black', height: 2 }} />
+                      </div> 
                     </>
 
 
