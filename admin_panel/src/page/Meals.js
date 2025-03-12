@@ -1493,9 +1493,10 @@ let Meals = () => {
 
       let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
       uuuk.unshift({ label: "All Courses", value: "All" });
+      setFulldatafull(uuuk)
       setSelectedCources(uuuk)
       setOldcou(uuuk)
-      setFulldatafull(uuuk)
+    
     }
 
 
@@ -2822,8 +2823,8 @@ let Meals = () => {
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
  
-    console.log(cources.length , 'cources.lengthcources.lengthcources.lengthcources.length' , cources , 'fffffffff' , selectedCources)
-     
+    console.log(cources.length , 'cources.lengthcources.lengthcources.lengthcources.length'  )
+    
     
     if (vals[1] === null || vals[1] === "null") {
 
@@ -5336,6 +5337,7 @@ let Meals = () => {
                         setCources(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedCources([])
+                          handleChangeCources([])
                         } else {
                           handleChangeCources([...selectedCources, ...[{ label: "All Courses", value: "All" }]])
                         }

@@ -2007,7 +2007,8 @@ let Dockets = () => {
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
 
-    console.log(JSON.stringify(alltype), 'val2245')
+    console.log(cources , 'courcescourcescourcescources')
+ 
 
     if (vals[1] === null || vals[1] === "null") {
 
@@ -5539,6 +5540,7 @@ let Dockets = () => {
                           setCources(e.target.checked)
                           if (e.target.checked === false) {
                             setSelectedCources([])
+                            handleChangeCources([])
                           } else {
                             handleChangeCources([...selectedCources, ...[{ label: "All Courses", value: "All" }]])
                           }

@@ -5925,6 +5925,7 @@ let Multi_venue = () => {
                         setCources(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedCources([])
+                          handleChangeCources([])
                         } else {
                           handleChangeCources([...fulldatafull, ...[{
                             "label": "All courses",

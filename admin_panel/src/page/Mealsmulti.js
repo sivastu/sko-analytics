@@ -5075,6 +5075,7 @@ const[paddOpp,setPaddOpp]=useState(0);
                         setCources(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedCources([])
+                          handleChangeCources([])
                         }else{
                           handleChangeCources([...selectedCources , ...[{
                             "label": "All courses",
