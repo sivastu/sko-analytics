@@ -7322,7 +7322,7 @@ let Multi_venue = () => {
                           justifyContent: "end",
                           alignItems: "center",
                           display: "flex",
-                          width: "10%",
+                          width: "20%",
                         }}
                       >
                         <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" , fontSize : 14  }}>
