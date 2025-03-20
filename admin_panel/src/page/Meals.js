@@ -96,7 +96,7 @@ let Meals = () => {
   { value: 'R', label: 'On Process' },
   { value: 'H', label: 'On Hold' },
   { value: 'P', label: 'On Pass' },
-  { value: 'S', label: 'Served' },
+  // { value: 'S', label: 'Served' },
   ];
 
   const optionstakeaway = [
@@ -1620,8 +1620,8 @@ let Meals = () => {
     
   
     // alldat = filteredDataonee
-    const yesterday = [getFormattedDate(1), getFormattedDate(1)];
-    const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
+    const yesterday = [getFormattedDate(2), getFormattedDate(2)];
+    const eightDaysBefore = [getFormattedDate(9), getFormattedDate(9)];
     setDateRangetwo(eightDaysBefore)
     setDateRange(yesterday)
     filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -2488,7 +2488,7 @@ let Meals = () => {
 
   //.select options hub
 
-  const [Hubradio, setHubradio] = useState(true)
+  const [Hubradio, setHubradio] = useState(false)
  
 
   const [selectedhubOptions, setSelectedhubOptions] = useState(optionshub);
@@ -2583,7 +2583,7 @@ let Meals = () => {
 
 
   //select cources hub
-  const [Cources, setCources] = useState(true)
+  const [Cources, setCources] = useState(false)
   const optionsCources = [
     { value: 'all', label: 'All venues' },
     { value: 'volvo', label: 'Volvo' },
@@ -2637,7 +2637,7 @@ let Meals = () => {
 
 
   //select takeaway
-  const [takeaway, setTakeaway] = useState(false)
+  const [takeaway, setTakeaway] = useState(true)
 
   const [selectedTakeaway, setSelectedTakeaway] = useState(optionstakeaway);
 
@@ -5135,7 +5135,7 @@ let Meals = () => {
                     onFocus={() => setMenuIsOpen(true)}
                     isDisabled={!venueradio}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${venueradio ? 'hide-first-svg' : ''}`}
                     options={basic}
                     value={selectedOptions}
                     onChange={handleChange} 
@@ -5210,7 +5210,7 @@ let Meals = () => {
                     onFocus={() => setMenuIsOpenone(true)}
                     isDisabled={!hubbswitch}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${hubbswitch ? 'hide-first-svg' : ''}`}
                     options={basicone}
                     value={hubb}
                     onChange={handleChangehubone}
@@ -5285,7 +5285,7 @@ let Meals = () => {
                     onFocus={() => setMenuIsOpentwo(true)}
                     isDisabled={!Hubradio}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${Hubradio ? 'hide-first-svg' : ''}`}
                     options={optionshub}
                     value={selectedhubOptions}
                     onChange={handleChangehub}
@@ -5354,7 +5354,7 @@ let Meals = () => {
                     onFocus={() => setMenuIsOpenthree(true)}
                     isDisabled={!Cources}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${Cources ? 'hide-first-svg' : ''}`}
                     options={fulldatafull}
                     value={selectedCources}
                     onChange={handleChangeCources}
@@ -5413,7 +5413,7 @@ let Meals = () => {
                     }}
                     value={inputvalue}
                     placeholder="0-9999"
-                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B',borderRight:'1px solid #707070', textAlign: 'center',paddingTop:9,paddingBottom:9 }}
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B',borderRight:'1px solid #707070', textAlign: 'center',paddingTop:9 ,paddingBottom:9 }}
                     type="text"
                   />
                   <input
@@ -5424,7 +5424,7 @@ let Meals = () => {
                     }}
                     value={inputvaluetwo}
                     placeholder="9999-9999"
-                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center',paddingTop:5 }}
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center',paddingTop:9 ,paddingBottom:9 }}
                     type="text"
                   />
                 </div>
@@ -5453,7 +5453,7 @@ let Meals = () => {
                     onFocus={() => setMenuIsOpenfour(true)}
                     isDisabled={!takeaway}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${takeaway ? 'hide-first-svg' : ''}`}
                     options={optionstakeaway}
                     value={selectedTakeaway}
                     onChange={handleChangeTakeaway}
@@ -6924,203 +6924,182 @@ let Meals = () => {
         </div >
       </div>
 
-      <div style={{ visibility: 'hidden' }}>
-        <div ref={pdfRefss}  >
+     <div style={{ visibility: 'hidden' }}>
+  <div ref={pdfRefss}>
+    <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -10 }}>Served meals</p>
+    <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }}>
+      {(() => {
+        const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+        const result = selectedOptions
+          .filter(item => item.label !== "All Venue")
+          .map(item => item.label.trim()).join(", ")
+        if (result === "" || result === undefined || result === null) {
+          return 'All Venue'
+        } else {
+          return result
+        }
+      })()}
+    </p>
 
-          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Served meals</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
+    <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }}>Group name</p>
+    <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }}>For the period {(() => {
+      const datefineda = new Date(dateRange[0]);
 
-            const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-            const result = filteredOptions.map(item => item.label).join(", ");
+      const formattedDate = datefineda.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
 
+      return (formattedDate)
+    })()} to {(() => {
+      const datefineda = new Date(dateRange[1]);
 
-            if (result === "" || result === undefined || result === null) {
-              return 'All Venue'
-            } else {
+      const formattedDate = datefineda.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
 
-              return result
+      return (formattedDate)
+    })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+    <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }}>Compared with the period {(() => {
+      const datefineda = new Date(dateRangetwo[0]);
 
-            }
+      const formattedDate = datefineda.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
 
+      return (formattedDate)
+    })()} to {(() => {
+      const datefineda = new Date(dateRangetwo[1]);
 
-          })()}</p>
+      const formattedDate = datefineda.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
 
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >Group name</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
-            const datefineda = new Date(dateRange[0]);
+      return (formattedDate)
+    })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
+    <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }}>Table ranges contains: All</p>
+    <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }}>Stages contains: {(() => {
+      const result = selectedhubOptions.map(item => item.label.trim()).join(","); // Changed from comma+space to just space
 
-            return (formattedDate)
-          })()} to {(() => {
-            const datefineda = new Date(dateRange[1]);
+      if (result === "" || result === undefined || result === null) {
+        return 'All'
+      } else {
+        return result
+      }
+    })()} </p>
+    <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }}>Courses contains: {(() => {
+      const result = selectedCources.map(item => item.label.trim()).join(" "); // Changed from comma+space to just space
 
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
-            const datefineda = new Date(dateRangetwo[0]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} to {(() => {
-            const datefineda = new Date(dateRangetwo[1]);
-
-            const formattedDate = datefineda.toLocaleDateString("en-GB", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric"
-            });
-
-            return (formattedDate)
-          })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains: All</p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} >Stages contains: {(() => {
-
-            const result = selectedhubOptions.map(item => item.label).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
-
-
-          })()} </p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} >Courses contains: {(() => {
-
-            const result = selectedCources.map(item => item.label).join(",");
-
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-
-              return result
-
-            }
+      if (result === "" || result === undefined || result === null) {
+        return 'All'
+      } else {
+        return result
+      }
+    })()}</p>
 
 
-          })()}</p>
+    <div style={{ marginTop: 20, padding: 10 }}>
+      <div className="d-flex" style={{ borderBottom: "1px solid #000" }}>
+        <div style={{ width: '43%' }}>
+          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span style={{fontWeight:'700'}}>{ggggrt()}</span>  </p>
+        </div>
+        <div style={{ width: '34%' }}>
+          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span style={{fontWeight:'700'}}> {ggggrts()}</span> </p>
+        </div>
+        <div style={{ width: '23%' }}>
+          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+          <p style={{ fontWeight: '400', color: '#000', }}>
+            ( Total ){" "}
+            <span style={{fontWeight:'700'}}>
+            {(() => {
+              let datd = ggggrt();
+              let datdtwo = ggggrts();
+              let tot = ((datd - datdtwo) / datdtwo) * 100;
 
-
-          <div style={{ marginTop: 20, padding: 10 }} >
-
-            <div className="d-flex justify-content-between" style={{ borderBottom: "1px solid #000" }} >
-
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
-                  ggggrt()} </p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
-
-                  ggggrts()
-                } </p>
-              </div>
-              <div >
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                <p style={{ fontWeight: '400', color: '#000', }}>
-                  ( Total ){" "}
-                  {(() => {
-                    let datd = ggggrt();
-                    let datdtwo = ggggrts();
-                    let tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                    return (
-                      <>
-                        {tot.toFixed(2) + "%"}{" "}
-                      </>
-                    );
-                  })()}
-                </p>
-
-
-              </div>
-
-            </div> 
-
-            {
-              served?.map((dfgh, index) => {
-                const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
-
-                return (
-                  <>
-                   <div className="d-flex mt-3" style={{ alignItems: "center", height: "40px" ,  borderBottom: "1px solid #ccc"  }}>
-
-
-                      <div style={{ width: '43%' }} className={`d-flex ${ index ===0 ? 'mt-2' : ''}`}>
-                        <p style={{ fontWeight: '700', color: index ===0 ? 'red' :  '#000', }}>{dfgh?.name}</p>
-                        <p style={{ fontWeight: '400', color: '#000', marginLeft: 5 }}>{dfgh?.count}</p>
-                      </div>
-
-                      {correspondingErv ? (
-                        <div style={{ width: '33%', textAlign: 'center' }} className={`  ${ index ===0 ? 'mt-2' : ''}`}>
-                          <div className="d-flex" >
-
-                            <p style={{ fontWeight: '700', color:  index ===0 ? 'blue' : '#000', }}>{correspondingErv?.name}</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginLeft: 5 }}>{correspondingErv?.count}</p>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div style={{ width: '33%' }} >
-                          </div></>
-                      )}
-
-                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '23%' }} className={` ${ index ===0 ? 'mt-2' : ' '}`}>
-                        <p style={{ fontWeight: '400', color: '#000', display: 'inline-flex', alignItems: 'center' }}>
-                          ( Total ){" "}
-                          {(() => {
-                            const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                            const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-                            const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0; // Prevent division by zero
-
-                            return (
-                              <>
-                                {tot.toFixed(2) + "%"}{" "}
-                                <img
-                                  src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                                  style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
-                                  alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
-                                />
-                              </>
-                            );
-                          })()}
-                        </p>
-
-                      </div>
-
-                    </div>
- 
-                  </>
-                );
-              })
-            }
-
-
-          </div>
-        </div >
+              return (
+                <>
+                  {tot.toFixed(2) + "%"}{" "}
+                </>
+              );
+            })()}
+            </span>
+          </p>
+        </div>
       </div>
+
+      {
+        served?.map((dfgh, index) => {
+          const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+
+          return (
+            <>
+              <div className="d-flex mt-3" style={{ alignItems: "center", height: "40px", borderBottom: "1px solid #ccc" }}>
+                <div style={{ width: '43%' }} className={`d-flex ${index === 0 ? 'mt-2' : ''}`}>
+                  <p style={{ fontWeight: '700', color: index === 0 ? 'red' : '#000', }}>{dfgh?.name}</p>
+                  <p style={{ fontWeight: '400', color: '#000', marginLeft: 5 }}>{dfgh?.count}</p>
+                </div>
+
+                {correspondingErv ? (
+                  <div style={{ width: '34%', textAlign: 'center' }} className={`${index === 0 ? 'mt-2' : ''}`}>
+                    <div className="d-flex">
+                      <p style={{ fontWeight: '700', color: index === 0 ? 'blue' : '#000', }}>{correspondingErv?.name}</p>
+                      <p style={{ fontWeight: '400', color: '#000', marginLeft: 5 }}>{correspondingErv?.count}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <div style={{ width: '33%' }}>
+                    </div></>
+                )}
+
+<div style={{ justifyContent: 'start', alignItems: 'center', display: 'flex', width: '23%' }} className={`${index === 0 ? 'mt-2' : ' '}`}>
+  <p style={{ fontWeight: '400', color: '#000', display: 'inline-flex', alignItems: 'center' }}>
+    ( Total ){" "}
+    {(() => {
+      const datd = dfgh?.count || 0;
+      const datdtwo = correspondingErv?.count || 0;
+      const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
+      return (
+        <>
+          <span style={{ verticalAlign: 'middle', display: 'inline-block', width: '60px', textAlign: 'right' }}>
+            {tot.toFixed(2) + "%"}
+          </span>{" "}
+          <img
+            src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+            style={{
+              width: 16,
+              height: 16,
+              cursor: "pointer",
+              marginLeft: 14, 
+              verticalAlign: 'middle',
+              position: 'relative',
+              top: 2, 
+            }}
+            alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+          />
+        </>
+      );
+    })()}
+  </p>
+</div>
+              </div>
+            </>
+          );
+        })
+      }
+    </div>
+  </div>
+</div>
 
 
       <div style={{ visibility: 'hidden' }}>

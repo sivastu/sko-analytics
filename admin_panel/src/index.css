@@ -339,6 +339,7 @@ input[type="checkbox"] {
   font-weight : 400; 
 }
 .asdfps{
+  margin:0;
   display: flex !important;
   justify-content: end !important;
   align-items: end !important;
@@ -438,7 +439,8 @@ input[type="checkbox"]:checked + .switch-label::before {
 .box {
   width: 100%;
   background-color: #fff;
-  padding: 10px;
+  padding-top: 13px;
+  padding:13px 19px 20px 19px;
   border-radius : 7px;
   box-shadow: 0px 8px #b9b9b9;
 }
@@ -449,7 +451,7 @@ input[type="checkbox"]:checked + .switch-label::before {
   justify-content: space-between; /* Push content to the ends */
   height: 100%; /* Ensure it takes the full height of the parent */
   background-color: #fff;
-  padding: 10px;
+  padding: 5px;
   border-radius: 8px;
 }
 
@@ -460,7 +462,7 @@ input[type="checkbox"]:checked + .switch-label::before {
 }
 
 .end-box {  
-  padding: 10px;
+  /* padding: 10px; */
   display: flex;
   justify-content : space-between ;
   border-radius: 4px;
@@ -556,3 +558,7 @@ input[type="checkbox"]:checked + .switch-label::before {
 
 width: 100% !important;
 }
+.hide-first-svg .css-1xc3v61-indicatorContainer:first-of-type svg {
+  display: none !important;
+}
+

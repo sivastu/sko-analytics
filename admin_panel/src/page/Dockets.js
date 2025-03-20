@@ -119,7 +119,7 @@ let Dockets = () => {
   { value: 'R', label: 'On Process' },
   { value: 'H', label: 'On Hold' },
   { value: 'P', label: 'On Pass' },
-  { value: 'S', label: 'Served' },
+  // { value: 'S', label: 'Served' },
   ];
   ///old
   let [oldven, setOldven] = useState([])
@@ -1765,7 +1765,7 @@ let Dockets = () => {
 
   //.select options hub
 
-  const [Hubradio, setHubradio] = useState(true)
+  const [Hubradio, setHubradio] = useState(false)
  
 
   const [selectedhubOptions, setSelectedhubOptions] = useState(optionshub);
@@ -1863,7 +1863,7 @@ let Dockets = () => {
 
 
   //select cources hub
-  const [Cources, setCources] = useState(true)
+  const [Cources, setCources] = useState(false)
   const optionsCources = [
     { value: 'all', label: 'All venues' },
     { value: 'volvo', label: 'Volvo' },
@@ -5339,7 +5339,7 @@ let Dockets = () => {
                       onFocus={() => setMenuIsOpen(true)}
                       isDisabled={!venueradio}
                       isMulti
-                      className="newoneonee"
+                      className={`newoneonee ${venueradio ? 'hide-first-svg' : ''}`}
                       options={basic}
                       value={selectedOptions}
                       onChange={handleChange}
@@ -5411,7 +5411,7 @@ let Dockets = () => {
                       onFocus={() => setMenuIsOpenone(true)}
                       isDisabled={!hubbswitch}
                       isMulti
-                      className="newoneonee"
+                      className={`newoneonee ${hubbswitch ? 'hide-first-svg' : ''}`}
                       options={basicone}
                       value={hubb}
                       onChange={handleChangehubone}
@@ -5486,7 +5486,7 @@ let Dockets = () => {
                       onFocus={() => setMenuIsOpentwo(true)}
                       isDisabled={!Hubradio}
                       isMulti
-                      className="newoneonee"
+                      className={`newoneonee ${Hubradio ? 'hide-first-svg' : ''}`}
                       options={optionshub}
                       value={selectedhubOptions}
                       onChange={handleChangehub}
@@ -5555,7 +5555,7 @@ let Dockets = () => {
                       onFocus={() => setMenuIsOpenthree(true)}
                       isDisabled={!Cources}
                       isMulti
-                      className="newoneonee"
+                      className={`newoneonee ${Cources ? 'hide-first-svg' : ''}`}
                       options={fulldatafull}
                       value={selectedCources}
                       onChange={handleChangeCources}
@@ -5612,7 +5612,7 @@ let Dockets = () => {
                       }}
                       value={inputvalue}
                       placeholder="0-9999"
-                      style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B',borderRight:'1px solid #707070', textAlign: 'center',paddingTop:9,paddingBottom:9 }}
+                      style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B',borderRight:'1px solid #707070', textAlign: 'center',paddingTop:9 ,paddingBottom:9 }}
                       type="text"
                     />
                     <input
@@ -5623,7 +5623,7 @@ let Dockets = () => {
                       }}
                       value={inputvaluetwo}
                       placeholder="9999-9999"
-                      style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center',paddingTop:5 }}
+                      style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center',paddingTop:9 ,paddingBottom:9  }}
                       type="text"
                     />
                   </div>
@@ -5654,7 +5654,7 @@ let Dockets = () => {
                       onFocus={() => setMenuIsOpenfour(true)}
                       isDisabled={!takeaway}
                       isMulti
-                      className="newoneonee"
+                      className={`newoneonee ${takeaway ? 'hide-first-svg' : ''}`}
                       options={optionstakeaway}
                       value={selectedTakeaway}
                       onChange={handleChangeTakeaway}

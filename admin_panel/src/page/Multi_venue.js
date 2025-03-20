@@ -120,7 +120,7 @@ let Multi_venue = () => {
   { value: 'R', label: 'On Process' },
   { value: 'H', label: 'On Hold' },
   { value: 'P', label: 'On Pass' },
-  { value: 'S', label: 'Served' },
+  // { value: 'S', label: 'Served' },
   ];
 
   const optionstakeaway = [
@@ -1972,7 +1972,7 @@ let Multi_venue = () => {
 
   //.select options hub
 
-  const [Hubradio, setHubradio] = useState(true)
+  const [Hubradio, setHubradio] = useState(false)
 
 
   const [selectedhubOptions, setSelectedhubOptions] = useState(optionshub);
@@ -2143,7 +2143,7 @@ let Multi_venue = () => {
 
 
   //select cources hub
-  const [Cources, setCources] = useState(true)
+  const [Cources, setCources] = useState(false)
   const optionsCources = [
     { value: 'all', label: 'All venues' },
     { value: 'volvo', label: 'Volvo' },
@@ -5576,7 +5576,7 @@ let Multi_venue = () => {
                     onFocus={() => setMenuIsOpen(true)}
                     isDisabled={!venueradio}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${venueradio ? 'hide-first-svg' : ''}`}
                     options={basic}
                     value={selectedOptions}
                     onChange={handleChange}
@@ -5649,7 +5649,7 @@ let Multi_venue = () => {
                     onFocus={() => setMenuIsOpenone(true)}
                     isDisabled={!hubbswitch}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${hubbswitch ? 'hide-first-svg' : ''}`}
                     options={basicone}
                     value={hubb}
                     onChange={handleChangehubone}
@@ -5726,7 +5726,7 @@ let Multi_venue = () => {
                     onFocus={() => setMenuIsOpenfive(true)}
                     isDisabled={!venueradiofivese}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${venueradiofivese ? 'hide-first-svg' : ''}`}
                     options={basic}
                     value={selectedOptionsfive}
                     onChange={handleChangefive}
@@ -5798,7 +5798,7 @@ let Multi_venue = () => {
                     onFocus={() => setMenuIsOpensix(true)}
                     isDisabled={!venueradiosix}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${venueradiosix ? 'hide-first-svg' : ''}`}
                     options={basiconefive}
                     value={hubbtwo}
                     onChange={handleChangehubtwo}
@@ -5873,7 +5873,7 @@ let Multi_venue = () => {
                     onFocus={() => setMenuIsOpentwo(true)}
                     isDisabled={!Hubradio}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${Hubradio ? 'hide-first-svg' : ''}`}
                     options={optionshub}
                     value={selectedhubOptions}
                     onChange={handleChangehub}
@@ -5945,7 +5945,7 @@ let Multi_venue = () => {
                     onFocus={() => setMenuIsOpenthree(true)}
                     isDisabled={!Cources}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${Cources ? 'hide-first-svg' : ''}`}
                     options={fulldatafull}
                     value={selectedCources}
                     onChange={handleChangeCources}
@@ -6016,7 +6016,7 @@ let Multi_venue = () => {
                     }}
                     value={inputvaluetwo}
                     placeholder="9999-9999"
-                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center', paddingTop: 5 }}
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center', paddingTop: 9, paddingBottom: 9 }}
                     type="text"
                   />
                 </div>
@@ -6048,7 +6048,7 @@ let Multi_venue = () => {
                     onFocus={() => setMenuIsOpenfour(true)}
                     isDisabled={!takeaway}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${takeaway ? 'hide-first-svg' : ''}`}
                     options={optionstakeaway}
                     value={selectedTakeaway}
                     onChange={handleChangeTakeaway}

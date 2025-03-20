@@ -87,7 +87,7 @@ let Mealsmulti = () => {
   { value: 'R', label: 'On Process' },
   { value: 'H', label: 'On Hold' },
   { value: 'P', label: 'On Pass' },
-  { value: 'S', label: 'Served' },
+  // { value: 'S', label: 'Served' },
   ];
 
   const optionstakeaway = [
@@ -1723,7 +1723,7 @@ let Mealsmulti = () => {
 
   //.select options hub
 
-  const [Hubradio, setHubradio] = useState(true)
+  const [Hubradio, setHubradio] = useState(false)
 
 
   const [selectedhubOptions, setSelectedhubOptions] = useState(optionshub);
@@ -2254,7 +2254,7 @@ let Mealsmulti = () => {
 
 
   //select cources hub
-  const [Cources, setCources] = useState(true)
+  const [Cources, setCources] = useState(false)
   const optionsCources = [
     { value: 'all', label: 'All venues' },
     { value: 'volvo', label: 'Volvo' },
@@ -4727,7 +4727,7 @@ let Mealsmulti = () => {
                     onFocus={() => setMenuIsOpen(true)}
                     isDisabled={!venueradio}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${venueradio ? 'hide-first-svg' : ''}`}
                     options={basic}
                     value={selectedOptions}
                     onChange={handleChange}
@@ -4771,14 +4771,15 @@ let Mealsmulti = () => {
                   />
                 </div>
 
-                <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45, borderRadius: menuIsOpen ? ' 8px 8px 0 0' : '8px', border: menuIsOpen ? '2px solid #707070' : 'none', borderBottom: 'none' }}>
+                <div ref={selectRefone} className="custom-inputoness d-flex justify-content-between mt-3" style={{ width: '100%', height: 45, borderRadius: menuIsOpenone ? ' 8px 8px 0 0' : '8px', border: menuIsOpenone ? '2px solid #707070' : 'none', borderBottom: 'none' }}>
                   <div className="switch-container">
                     <input
                       checked={hubbswitch}
                       onChange={(e) => {
                         setHubbswitch(e.target.checked)
+
                         if (e.target.checked === false) {
-                          // Handle unchecked state if needed
+                          setHubb([])
                         } else {
                           handleChangehubone([...hubb, ...[{
                             "label": "All Hub",
@@ -4786,11 +4787,12 @@ let Mealsmulti = () => {
                           }]])
                         }
 
+
                       }}
                       type="checkbox"
-                      id="switch35"
+                      id="switch3"
                     />
-                    <label className="switch-label" htmlFor="switch35"></label>
+                    <label className="switch-label" htmlFor="switch3"></label>
                   </div>
                   <Select
                     menuIsOpen={menuIsOpenone}
@@ -4799,7 +4801,7 @@ let Mealsmulti = () => {
                     onFocus={() => setMenuIsOpenone(true)}
                     isDisabled={!hubbswitch}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${hubbswitch ? 'hide-first-svg' : ''}`}
                     options={basicone}
                     value={hubb}
                     onChange={handleChangehubone}
@@ -4876,7 +4878,7 @@ let Mealsmulti = () => {
                     onFocus={() => setMenuIsOpenfive(true)}
                     isDisabled={!venueradiofivese}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${venueradiofivese ? 'hide-first-svg' : ''}`}
                     options={basic}
                     value={selectedOptionsfive}
                     onChange={handleChangefive}
@@ -4948,7 +4950,7 @@ let Mealsmulti = () => {
                     onFocus={() => setMenuIsOpensix(true)}
                     isDisabled={!venueradiosix}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${venueradiosix ? 'hide-first-svg' : ''}`}
                     options={basiconefive}
                     value={hubbtwo}
                     onChange={handleChangehubtwo}
@@ -5023,7 +5025,7 @@ let Mealsmulti = () => {
                     onFocus={() => setMenuIsOpentwo(true)}
                     isDisabled={!Hubradio}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${Hubradio ? 'hide-first-svg' : ''}`}
                     options={optionshub}
                     value={selectedhubOptions}
                     onChange={handleChangehub}
@@ -5095,7 +5097,7 @@ let Mealsmulti = () => {
                     onFocus={() => setMenuIsOpenthree(true)}
                     isDisabled={!Cources}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${Cources ? 'hide-first-svg' : ''}`}
                     options={fulldatafull}
                     value={selectedCources}
                     onChange={handleChangeCources}
@@ -5154,7 +5156,7 @@ let Mealsmulti = () => {
                     }}
                     value={inputvalue}
                     placeholder="0-9999"
-                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', borderRight: '1px solid #707070', textAlign: 'center', paddingTop: 9, paddingBottom: 9 }}
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', borderRight: '1px solid #707070', textAlign: 'center', paddingTop: 9 , paddingBottom: 9 }}
                     type="text"
                   />
 
@@ -5169,7 +5171,7 @@ let Mealsmulti = () => {
                     }}
                     value={inputvaluetwo}
                     placeholder="9999-9999"
-                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center', paddingTop: 5 }}
+                    style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center', paddingTop:9,paddingBottom:9  }}
                     type="text"
                   />
                 </div>
@@ -5201,7 +5203,7 @@ let Mealsmulti = () => {
                     onFocus={() => setMenuIsOpenfour(true)}
                     isDisabled={!takeaway}
                     isMulti
-                    className="newoneonee"
+                    className={`newoneonee ${takeaway ? 'hide-first-svg' : ''}`}
                     options={optionstakeaway}
                     value={selectedTakeaway}
                     onChange={handleChangeTakeaway}
@@ -6797,19 +6799,19 @@ let Mealsmulti = () => {
 
             <div className="d-flex justify-content-between" style={{ borderBottom: "1px solid #ccc" }} >
 
-              <div >
+              <div style={{ width: '43%' }} >
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
                 <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
                   ggggrt()} </p>
               </div>
-              <div >
+              <div style={{ width: '33%' }}>
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
                 <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
 
                   ggggrts()
                 } </p>
               </div>
-              <div >
+              <div style={{ width: '24%' }}>
                 <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
                 <p style={{ fontWeight: '400', color: '#000', }}>
                   ( Total ){" "}
@@ -6854,33 +6856,40 @@ let Mealsmulti = () => {
                         </div>
                       ) : (
                         <>
-                          <div style={{ width: '23%' }} >
+                          <div style={{ width: '33%' }} >
                           </div></>
                       )}
 
-                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '23%' }}>
-                        <p style={{ fontWeight: '400', color: '#000', display: 'inline-flex', alignItems: 'center' }}>
-                          ( Total ){" "}
-                          {(() => {
-                            const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                            const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-                            const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0; // Prevent division by zero
-
-                            return (
-                              <>
-                                {tot.toFixed(2) + "%"}{" "}
-                                <img
-                                  src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                                  style={{ width: 16, height: 16, cursor: "pointer", marginLeft: 4 }}
-                                  alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
-                                />
-                              </>
-                            );
-                          })()}
-                        </p>
-
-                      </div>
+<div style={{ justifyContent: 'start', alignItems: 'center', display: 'flex', width: '23%' }} className={`${index === 0 ? 'mt-2' : ' '}`}>
+  <p style={{ fontWeight: '400', color: '#000', display: 'inline-flex', alignItems: 'center' }}>
+    ( Total ){" "}
+    {(() => {
+      const datd = dfgh?.count || 0;
+      const datdtwo = correspondingErv?.count || 0;
+      const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
+      return (
+        <>
+          <span style={{ verticalAlign: 'middle', display: 'inline-block', width: '60px', textAlign: 'right' }}>
+            {tot.toFixed(2) + "%"}
+          </span>{" "}
+          <img
+            src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+            style={{
+              width: 16,
+              height: 16,
+              cursor: "pointer",
+              marginLeft: 14, 
+              verticalAlign: 'middle',
+              position: 'relative',
+              top: 2, 
+            }}
+            alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+          />
+        </>
+      );
+    })()}
+  </p>
+</div>
 
                     </div>
 
