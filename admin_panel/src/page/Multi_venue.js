@@ -2725,7 +2725,7 @@ let Multi_venue = () => {
     // }else{ 
     // }
 
-    if ( inone?.length > 2 && intwo === undefined ) {
+    if ( inone?.length > 2 && intwo === undefined|| intwo === '' ) {
       let splitone = inone.split('-')
 
 
@@ -2778,7 +2778,7 @@ let Multi_venue = () => {
       }
     }
 
-    if (intwo?.length > 2   && inone === undefined   ) {
+    if (intwo?.length > 2   && inone === undefined || intwo === ''  ) {
       let splitone = intwo.split('-')
 
 
@@ -3485,7 +3485,7 @@ let Multi_venue = () => {
     } else {
     }
 
-    if ( inone?.length > 2 && intwo === undefined  ) {
+    if ( inone?.length > 2 && intwo === undefined || intwo === '' ) {
       let splitone = inone.split('-')
 
 
@@ -3538,7 +3538,7 @@ let Multi_venue = () => {
       }
     }
 
-    if (intwo?.length > 2   && inone === undefined   ) {
+    if (intwo?.length > 2   && inone === undefined || intwo === ''  ) {
       let splitone = intwo.split('-')
 
 

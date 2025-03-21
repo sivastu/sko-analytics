@@ -2804,7 +2804,7 @@ let Mealsmulti = () => {
 
     }
 
-    if (inone?.length > 2 && intwo === undefined) {
+    if (inone?.length > 2 && intwo === undefined || intwo === '' ) {
       let splitone = inone.split('-')
 
 
@@ -2857,7 +2857,7 @@ let Mealsmulti = () => {
       }
     }
 
-    if (intwo?.length > 2 && inone === undefined) {
+    if (intwo?.length > 2 && inone === undefined || intwo === '' ) {
       let splitone = intwo.split('-')
 
 
@@ -3542,7 +3542,7 @@ let Mealsmulti = () => {
     } else {
     }
 
-    if (inone?.length > 2 && intwo === undefined) {
+    if (inone?.length > 2 && intwo === undefined || intwo === '' ) {
       let splitone = inone.split('-')
 
 
@@ -3595,7 +3595,7 @@ let Mealsmulti = () => {
       }
     }
 
-    if (intwo?.length > 2 && inone === undefined) {
+    if (intwo?.length > 2 && inone === undefined || intwo === '' ) {
       let splitone = intwo.split('-')
 
 
