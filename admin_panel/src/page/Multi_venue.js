@@ -2309,6 +2309,17 @@ let Multi_venue = () => {
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
 
     let alldat = basicall
+
+    function areObjectsEqual(obj1, obj2) {
+      return JSON.stringify(obj1) === JSON.stringify(obj2);
+    }
+    let checkone = areObjectsEqual(selectedOptionsfive, val21)
+
+    if (checkone === true) {
+      alert('The chosen venue and the compared venue are the same')
+      return
+    }
+
     cources = cources.filter(item => item.value !== "All");
 
 
@@ -2714,7 +2725,7 @@ let Multi_venue = () => {
     // }else{ 
     // }
 
-    if (inone != undefined) {
+    if ( inone?.length > 2 && intwo === undefined ) {
       let splitone = inone.split('-')
 
 
@@ -2757,7 +2768,7 @@ let Multi_venue = () => {
           alldat = twelves
 
 
-          console.log(twelves, 'nine')
+          console.log(twelves, 'nine dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd')
         } else {
 
         }
@@ -2767,14 +2778,13 @@ let Multi_venue = () => {
       }
     }
 
-    if (inone != undefined && intwo != undefined) {
-      let splitone = inone.split('-')
+    if (intwo?.length > 2   && inone === undefined   ) {
+      let splitone = intwo.split('-')
 
-      let splittwo = intwo.split('-')
-      console.log(splitone.length, 'ten    lll', splitone.length)
-      if (splitone.length === 2 && splittwo.length === 2) {
 
-        if (Number(splitone[0]) < Number(splitone[1]) && Number(splittwo[0]) < Number(splittwo[1])) {
+      if (splitone.length === 2) {
+
+        if (Number(splitone[0]) < Number(splitone[1])) {
 
 
 
@@ -2804,14 +2814,14 @@ let Multi_venue = () => {
             return filteredData;
           }
 
-          const ranges = [[Number(splitone[0]), Number(splitone[1])], [Number(splittwo[0]), Number(splittwo[1])]];
+          const ranges = [[Number(splitone[0]), Number(splitone[1])]];
 
           let twelves = filterDataByTableRanges(alldat, ranges)
 
           alldat = twelves
 
 
-          console.log(twelves, 'nine')
+          console.log(twelves, 'nine dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd')
         } else {
 
         }
@@ -2819,6 +2829,69 @@ let Multi_venue = () => {
       } else {
 
       }
+    }
+
+    if (intwo?.length > 2   && inone?.length > 2 ) {
+      let splitone = inone.split('-')
+
+      let splittwo = intwo.split('-')
+ 
+
+
+
+          function filterDataByTableRanges(data, ranges) {
+            const filteredData = {};
+
+            Object.entries(data).forEach(([groupKey, groupData]) => {
+              Object.entries(groupData).forEach(([venueKey, venueData]) => {
+                Object.entries(venueData).forEach(([areaKey, areaData]) => {
+                  Object.entries(areaData).forEach(([dateKey, records]) => {
+                    const filteredRecords = records.filter(record => {
+                      const tableNum = parseInt(record.TABLE, 10);
+                      return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
+                    });
+
+                    if (filteredRecords.length > 0) {
+                      if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                      if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                      if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                      filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                    }
+                  });
+                });
+              });
+            });
+
+            return filteredData;
+          }
+
+          const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+          const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+          let twelves = filterDataByTableRanges(alldat, ranges)
+
+          let twelvesone = filterDataByTableRanges(alldat, rangesone)
+
+          function deepMerge(obj1, obj2) {
+            const result = { ...obj1 };
+          
+            Object.keys(obj2).forEach(key => {
+              if (obj1[key] && typeof obj1[key] === "object" && typeof obj2[key] === "object") {
+                result[key] = deepMerge(obj1[key], obj2[key]);
+              } else {
+                result[key] = obj2[key];
+              }
+            });
+          
+            return result;
+          }
+
+          // let findddddataa = deepMerge(twelves, twelvesone)
+          alldat =  { ...twelves, ...twelvesone }
+
+          console.log(alldat, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+
+ 
     }
 
     if (alltype === undefined || alltype.length === 0) {
@@ -3412,7 +3485,7 @@ let Multi_venue = () => {
     } else {
     }
 
-    if (inone != undefined) {
+    if ( inone?.length > 2 && intwo === undefined  ) {
       let splitone = inone.split('-')
 
 
@@ -3455,7 +3528,7 @@ let Multi_venue = () => {
           alldat = twelves
 
 
-          console.log(twelves, 'nine')
+          console.log(twelves, 'nine dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd')
         } else {
 
         }
@@ -3465,14 +3538,13 @@ let Multi_venue = () => {
       }
     }
 
-    if (inone != undefined && intwo != undefined) {
-      let splitone = inone.split('-')
+    if (intwo?.length > 2   && inone === undefined   ) {
+      let splitone = intwo.split('-')
 
-      let splittwo = intwo.split('-')
-      console.log(splitone.length, 'ten    lll', splitone.length)
-      if (splitone.length === 2 && splittwo.length === 2) {
 
-        if (Number(splitone[0]) < Number(splitone[1]) && Number(splittwo[0]) < Number(splittwo[1])) {
+      if (splitone.length === 2) {
+
+        if (Number(splitone[0]) < Number(splitone[1])) {
 
 
 
@@ -3502,14 +3574,14 @@ let Multi_venue = () => {
             return filteredData;
           }
 
-          const ranges = [[Number(splitone[0]), Number(splitone[1])], [Number(splittwo[0]), Number(splittwo[1])]];
+          const ranges = [[Number(splitone[0]), Number(splitone[1])]];
 
           let twelves = filterDataByTableRanges(alldat, ranges)
 
           alldat = twelves
 
 
-          console.log(twelves, 'nine')
+          console.log(twelves, 'nine dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd')
         } else {
 
         }
@@ -3517,6 +3589,69 @@ let Multi_venue = () => {
       } else {
 
       }
+    }
+
+    if (intwo?.length > 2   && inone?.length > 2 ) {
+      let splitone = inone.split('-')
+
+      let splittwo = intwo.split('-')
+ 
+
+
+
+          function filterDataByTableRanges(data, ranges) {
+            const filteredData = {};
+
+            Object.entries(data).forEach(([groupKey, groupData]) => {
+              Object.entries(groupData).forEach(([venueKey, venueData]) => {
+                Object.entries(venueData).forEach(([areaKey, areaData]) => {
+                  Object.entries(areaData).forEach(([dateKey, records]) => {
+                    const filteredRecords = records.filter(record => {
+                      const tableNum = parseInt(record.TABLE, 10);
+                      return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
+                    });
+
+                    if (filteredRecords.length > 0) {
+                      if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                      if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                      if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                      filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                    }
+                  });
+                });
+              });
+            });
+
+            return filteredData;
+          }
+
+          const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+          const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+          let twelves = filterDataByTableRanges(alldat, ranges)
+
+          let twelvesone = filterDataByTableRanges(alldat, rangesone)
+
+          function deepMerge(obj1, obj2) {
+            const result = { ...obj1 };
+          
+            Object.keys(obj2).forEach(key => {
+              if (obj1[key] && typeof obj1[key] === "object" && typeof obj2[key] === "object") {
+                result[key] = deepMerge(obj1[key], obj2[key]);
+              } else {
+                result[key] = obj2[key];
+              }
+            });
+          
+            return result;
+          }
+
+          // let findddddataa = deepMerge(twelves, twelvesone)
+          alldat =  { ...twelves, ...twelvesone }
+
+          console.log(alldat, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+
+ 
     }
 
     if (alltype === undefined || alltype.length === 0) {
@@ -4623,7 +4758,8 @@ let Multi_venue = () => {
 
     const input = pdfRef.current;
 
-
+    const date = new Date();
+    const formattedDate = date.toISOString().split("T")[0];
 
     // html2canvas(input, { scale: 2 }).then((canvas) => {
     //   const imgData = canvas.toDataURL("image/png");
@@ -4656,7 +4792,7 @@ let Multi_venue = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("Dockets Completion.pdf"); // Save after rendering
+        doc.save(formattedDate + "_-_SKO_report_"+usedname+"_-_Dockets Completion.pdf"); // Save after rendering
         setIsPdfLoad(false)
       },
       y: 10,
@@ -4731,7 +4867,8 @@ let Multi_venue = () => {
 
     const input = pdfRefred.current;
 
-
+    const date = new Date();
+    const formattedDate = date.toISOString().split("T")[0];
 
     // html2canvas(input, { scale: 2 }).then((canvas) => {
     //   const imgData = canvas.toDataURL("image/png");
@@ -4764,7 +4901,7 @@ let Multi_venue = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("Dockets received - timeline.pdf"); // Save after rendering
+        doc.save(formattedDate + "_-_SKO_report_"+usedname+"_-_Dockets received - timeline.pdf"); // Save after rendering
         setIsPdfLoad(false)
       },
       x: 10,
@@ -4817,6 +4954,8 @@ let Multi_venue = () => {
   let refundexportpdf = async () => {
     const input = pdfRefredone.current;
 
+    const date = new Date();
+    const formattedDate = date.toISOString().split("T")[0];
 
 
     // html2canvas(input, { scale: 2 }).then((canvas) => {
@@ -4850,7 +4989,7 @@ let Multi_venue = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("Dockets received - timeline.pdf");
+        doc.save(formattedDate + "_-_SKO_report_"+usedname+"_-_Dockets received - timeline.pdf");
         setIsPdfLoad(false); // Save after rendering
       },
       x: 10,
@@ -6424,7 +6563,7 @@ let Multi_venue = () => {
                                     {correspondingErv ? (
                                       <div style={{ width: "40%" }}>
                                         <div className="d-flex align-items-center">
-                                          <p style={{ fontWeight: "700", color: index === 0 ? 'red' : "#000", width: "60%", marginTop: 15 }}>
+                                          <p style={{ fontWeight: "700", color: index === 0 ? '#CA424E' : "#000", width: "60%", marginTop: 15 }}>
                                             {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{correspondingErv?.date + " " + "[" +
                                               correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                                           </p>
@@ -6814,7 +6953,7 @@ let Multi_venue = () => {
 
                               })()}</p>
 
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >Group name</p>
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >{usedname}</p>
                               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
                                 const datefineda = new Date(dateRange[0]);
 
@@ -7028,7 +7167,7 @@ let Multi_venue = () => {
 
                               })()}</p>
 
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >Group name</p>
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >{usedname }</p>
                               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
                                 const datefineda = new Date(dateRange[0]);
 
@@ -7151,229 +7290,244 @@ let Multi_venue = () => {
 
 
         <div className="d-none" style={{ visibility: 'hidden' }}>
-          <div ref={pdfRef}  >
-
-            <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Dockets Completion Time - From {selectedOptionsfine[0]?.label}to
-              {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
-
-            <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20 }} >Group name</p>
-            <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >For the period {(() => {
-              const datefineda = new Date(dateRange[0]);
-
-              const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric"
-              });
-
-              return (formattedDate)
-            })()} to {(() => {
-              const datefineda = new Date(dateRange[1]);
-
-              const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric"
-              });
-
-              return (formattedDate)
-            })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-            <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} >Compared with the period {(() => {
-              const datefineda = new Date(dateRangetwo[0]);
-
-              const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric"
-              });
-
-              return (formattedDate)
-            })()} to {(() => {
-              const datefineda = new Date(dateRangetwo[1]);
-
-              const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                day: "2-digit",
-                month: "short",
-                year: "numeric"
-              });
-
-              return (formattedDate)
-            })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-
-            <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains:  {(() => {
-
-              const result = selectedOptions.map(item => item.value).join(",");
-
-              if (result === "" || result === undefined || result === null) {
-                return 'All'
-              } else {
-
-                return result
-
-              }
-
-
-            })()}</p>
-            <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
-
-              const result = selectedhubOptions.map(item => item.label).join(",");
-
-              if (result === "" || result === undefined || result === null) {
-                return 'All'
-              } else {
-
-                return result
-
-              }
-
-
-            })()} </p>
-            <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
-
-              const result = selectedCources.map(item => item.label).join(",");
-
-              if (result === "" || result === undefined || result === null) {
-                return 'All'
-              } else {
-
-                return result
-
-              }
-
-
-            })()}</p>
-
-            <div className="d-flex gap-5" style={{ marginTop: 20 , borderBottom: "1px solid #ccc"  }}>
-
-              <div style={{ width: "40%" }}>
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{
-                  editall?.stats?.averageProcessTime || 0}</span></p>
-              </div>
-              <div style={{ width: "40%", display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{editallone?.stats?.averageProcessTime || 0}</span></p>
-              </div>
-              <div style={{ width: "20%", display: 'flex', justifyContent: 'end', alignItems: 'end', flexDirection: 'column' }}>
-                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', textAlign: 'left' }}>Variance</p>
-                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >
-                  {(() => {
-                    let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
-                    let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
-
-                    // Calculate average
-                    let average = Math.round((numOne + numTwo) / 2);
-
-                    return <span >{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }} >{average > 0 ? <img src="up_arw.png"
-                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                      }} className="" alt="Example Image" /> :
-                      <img src="d_arw.png"
-                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                        }} className="" alt="Example Image" />}</span></span>
-
-
-                  })()}</span></p>
-              </div>
-
-            </div>
- 
-            {
-              editall?.orders?.map((dfgh, index) => {
-                const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
-
-                return (
-                  <div key={index} style={{ borderBottom: "1px solid #ccc" }}  >
-                    <div className="d-flex gap-5" >
-                      {/* Left Column */}
-                      <div style={{ width: "40%" }}>
-                        <div className="d-flex  " style={{}}>
-                          <p style={{ paddingTop: 15 }}>
-                            <span style={{ fontWeight: "400", color: index === 0 ? 'red' : "#000", marginBlock: "4px" , fontSize : 14 }} >{dfgh?.processtime + ". " || "N/A"} <span
-                              style={{ color: '#000' }} > {dfgh?.date + " " + "[" +
-                                dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span></span>
-                          </p>
-
-                        </div>
-
-                      </div>
-
-                      {/* Center Column */}
-                      {correspondingErv ? (
-                        <div style={{ width: "40%", }}>
-                          <div className="d-flex  " >
-                            <p style={{ paddingTop: 15 }}>
-                              <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" , fontSize : 14  }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
-                                correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
-                            </p>
-
-
-                          </div>
-
-                        </div>
-                      ) : (
-                        <div style={{ width: "33%" }}></div>
-                      )}
-
-                      {/* Right Column (Percentage Calculation) */}
-                      <div
-                        style={{
-                          justifyContent: "end",
-                          alignItems: "center",
-                          display: "flex",
-                          width: "20%",
-                        }}
-                      >
-                        <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" , fontSize : 14  }}>
-
-                          <span>
-                            {(() => {
-                              const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
-                              const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
-
-                              let percentageChange = 0;
-                              if (processTimeTwo > 0) {
-                                percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
-                              }
-
-                              return (
-                                <span>
-                                  {percentageChange.toFixed(2) + "%"}
-                                  <span
-                                    style={{
-                                      color: percentageChange > 0 ? "green" : "red",
-                                      fontWeight: "700",
-                                    }}
-                                  >
-                                    {percentageChange > 0 ? (
-                                      <img
-                                        src="up_arw.png"
-                                        style={{ width: 16, height: 16, cursor: "pointer" }}
-                                        alt="up arrow"
-                                      />
-                                    ) : (
-                                      <img
-                                        src="d_arw.png"
-                                        style={{ width: 16, height: 16, cursor: "pointer" }}
-                                        alt="down arrow"
-                                      />
-                                    )}
-                                  </span>
-                                </span>
-                              );
-                            })()}
-                          </span>
-                        </p>
-                      </div>
-                    </div>
- 
-                  </div>
-                );
-              })
-            }
-          </div >
-        </div>
+                   <div ref={pdfRef}  >
+       
+                     <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }} className="fonttttttt">Dockets Completion Time - From {selectedOptionsfine[0]?.label} to {selectedOptionsfine[0]?.label === "Minimum" ? " Maximum" : " Minimum"}</p>
+       
+       
+                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}    > {(() => {
+       
+                       const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+                       const result = selectedOptions.map(item => item.label).join(",") // Join without spaces first
+                         .replace(/,/g, ", ");
+       
+       
+                       if (result === "" || result === undefined || result === null) {
+                         return 'All Venue'
+                       } else {
+       
+                         return result
+       
+                       }
+       
+       
+                     })()}</p>
+       
+       
+       
+                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, }} >{usedname}</p>
+                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} className="fonttttttt" >For the period {(() => {
+                       const datefineda = new Date(dateRange[0]);
+       
+                       const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                         day: "2-digit",
+                         month: "short",
+                         year: "numeric"
+                       }).replace(/,/g, "");
+       
+                       return (formattedDate)
+                     })()} to {(() => {
+                       const datefineda = new Date(dateRange[1]);
+       
+                       const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                         day: "2-digit",
+                         month: "short",
+                         year: "numeric"
+                       }).replace(/,/g, "");
+       
+                       return (formattedDate)
+                     })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >Compared with the period {(() => {
+                       const datefineda = new Date(dateRangetwo[0]);
+       
+                       const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                         day: "2-digit",
+                         month: "short",
+                         year: "numeric"
+                       }).replace(/,/g, "");
+       
+                       return (formattedDate)
+                     })()} to {(() => {
+                       const datefineda = new Date(dateRangetwo[1]);
+       
+                       const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                         day: "2-digit",
+                         month: "short",
+                         year: "numeric"
+                       }).replace(/,/g, "");
+       
+                       return (formattedDate)
+                     })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+       
+                     <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, }} className="fonttttttt"  >Table ranges contains: All</p>
+                     <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Stages contains: {(() => {
+       
+                       const result = selectedhubOptions.map(item => item.label).join(",") // Join without spaces first
+                         .replace(/,/g, ", ");
+       
+                       if (result === "" || result === undefined || result === null) {
+                         return 'All'
+                       } else {
+       
+                         return result
+       
+                       }
+       
+       
+                     })()} </p>
+                     <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"   >Courses contains: {(() => {
+       
+                       const result = selectedCources.map(item => item.label).join(",") // Join without spaces first
+                         .replace(/,/g, ", ");
+       
+                       if (result === "" || result === undefined || result === null) {
+                         return 'All'
+                       } else {
+       
+                         return result
+       
+                       }
+       
+       
+                     })()}</p>
+       
+       
+       
+       
+       
+                     <div className="d-flex gap-5" style={{ marginTop: 20, borderBottom: "1px solid #ccc" }}>
+       
+                       <div style={{ width: "40%" }}>
+                         <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                         <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{
+                           editall?.stats?.averageProcessTime || 0}</span></p>
+                       </div>
+                       <div style={{ width: "40%", display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
+                         <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                         <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{editallone?.stats?.averageProcessTime || 0}</span></p>
+                       </div>
+                       <div style={{ width: "20%", display: 'flex', justifyContent: 'end', alignItems: 'end', flexDirection: 'column' }}>
+                         <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', textAlign: 'left' }}>Variance</p>
+                         <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >
+                           {(() => {
+                             let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
+                             let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
+       
+                             // Calculate average
+                             let average = Math.round((numOne + numTwo) / 2);
+       
+                             return <span >{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }} >{average > 0 ? <img src="up_arw.png"
+                               style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+       
+                               }} className="" alt="Example Image" /> :
+                               <img src="d_arw.png"
+                                 style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+       
+                                 }} className="" alt="Example Image" />}</span></span>
+       
+       
+                           })()}</span></p>
+                       </div>
+       
+                     </div>
+       
+       
+       
+                     {
+                       editall?.orders?.map((dfgh, index) => {
+                         const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
+       
+                         return (
+                           <div key={index} style={{ borderBottom: "1px solid #ccc" }}  >
+                             <div className="d-flex gap-5" >
+                               {/* Left Column */}
+                               <div style={{ width: "40%" }}>
+                                 <div className="d-flex  " style={{}}>
+                                   <p style={{ paddingTop: 15 }}>
+                                     <span style={{ fontWeight: "400", color: index === 0 ? 'red' : "#000", fontSize: 15 }} >{dfgh?.processtime + ". " || "N/A"}<span
+                                       style={{ color: '#000' }}> {dfgh?.date + " " + "[" +
+                                         dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span></span>
+                                   </p>
+       
+                                 </div>
+       
+                               </div>
+       
+                               {/* Center Column */}
+                               {correspondingErv ? (
+                                 <div style={{ width: "40%", }}>
+                                   <div className="d-flex  " >
+                                     <p style={{ paddingTop: 15 }}>
+                                       <span style={{ fontWeight: "400", color: "#000", fontSize: 15 }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
+                                         correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
+                                     </p>
+       
+       
+                                   </div>
+       
+                                 </div>
+                               ) : (
+                                 <div style={{ width: "40%" }}></div>
+                               )}
+       
+                               {/* Right Column (Percentage Calculation) */}
+                               <div
+                                 style={{
+                                   justifyContent: "end",
+                                   alignItems: "center",
+                                   display: "flex",
+                                   width: "20%",
+                                 }}
+                               >
+                                 <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px", fontSize: 15 }}>
+       
+                                   <span>
+                                     {(() => {
+                                       const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
+                                       const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
+       
+                                       let percentageChange = 0;
+                                       if (processTimeTwo > 0) {
+                                         percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
+                                       }
+       
+                                       return (
+                                         <span>
+                                           {percentageChange.toFixed(2) + "%"}
+                                           <span
+                                             style={{
+                                               color: percentageChange > 0 ? "green" : "red",
+                                               fontWeight: "700",
+                                             }}
+                                           >
+                                             {percentageChange > 0 ? (
+                                               <img
+                                                 src="up_arw.png"
+                                                 style={{ width: 16, height: 16, cursor: "pointer" }}
+                                                 alt="up arrow"
+                                               />
+                                             ) : (
+                                               <img
+                                                 src="d_arw.png"
+                                                 style={{ width: 16, height: 16, cursor: "pointer" }}
+                                                 alt="down arrow"
+                                               />
+                                             )}
+                                           </span>
+                                         </span>
+                                       );
+                                     })()}
+                                   </span>
+                                 </p>
+                               </div>
+                             </div>
+       
+                           </div>
+                         );
+                       })
+                     }
+                   </div >
+                 </div>
 
 
 

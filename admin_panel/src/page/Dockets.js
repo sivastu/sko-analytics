@@ -119,7 +119,7 @@ let Dockets = () => {
   { value: 'R', label: 'On Process' },
   { value: 'H', label: 'On Hold' },
   { value: 'P', label: 'On Pass' },
-  // { value: 'S', label: 'Served' },
+    // { value: 'S', label: 'Served' },
   ];
   ///old
   let [oldven, setOldven] = useState([])
@@ -489,358 +489,358 @@ let Dockets = () => {
 
 
   let getone = (snapshots) => {
- 
- 
-     const eventss = snapshots
- 
-     function removeTrainingNotes(obj) {
-       if (Array.isArray(obj)) {
-         // If it's an array, filter out objects with "TRAINING" in the NOTE field
-         return obj.map(item => {
-           if (item.ITEMS) {
-             item.ITEMS = item.ITEMS.filter(item => !item.NOTE.includes("TRAINING"));
-           }
-           return item;
-         });
-       } else if (typeof obj === "object" && obj !== null) {
-         // Recursively call for nested objects
-         for (const key in obj) {
-           obj[key] = removeTrainingNotes(obj[key]);
-         }
-       }
-       return obj;
-     }
- 
-     const cleanedData = removeTrainingNotes(eventss);
- 
- 
- 
- 
- 
- 
- 
-     setBasicall(cleanedData)
-     // const transformData = (data) => {
-     //   const result = {};
- 
-     //   for (const key of Object.keys(data)) {
-     //     const parts = key.split("-");
-     //     const [group, location, subLocation, year] = parts;
- 
-     //     if (!result[group]) result[group] = {};
-     //     if (!result[group][location]) result[group][location] = {};
-     //     if (!result[group][location][subLocation]) result[group][location][subLocation] = new Set();
- 
-     //     result[group][location][subLocation].add(year);
-     //   }
- 
-     //   // Convert Sets to arrays for final output
-     //   const convertSetsToArrays = (obj) => {
-     //     for (const key in obj) {
-     //       if (obj[key] instanceof Set) {
-     //         obj[key] = Array.from(obj[key]);
-     //       } else if (typeof obj[key] === "object") {
-     //         convertSetsToArrays(obj[key]);
-     //       }
-     //     }
-     //   };
- 
-     //   convertSetsToArrays(result);
-     //   return result;
-     // };
- 
-     // const output = transformData(eventss);
-     const result = {};
-     Object.entries(cleanedData).forEach(([groupName, groupData]) => {
- 
- 
-       Object.entries(groupData).forEach(([keyss, valuess]) => {
-         Object.entries(valuess).forEach(([keyssa, valuessa]) => {
- 
-           if (!result[keyss]) {
-             result[keyss] = [];
-           }
- 
-           result[keyss].push({
-             name: keyssa + "-" + keyss
-           });
- 
-         });
-       });
- 
-     });
-     setAlldrop(result)
-     console.log(result, 'keykeykeykey') // its oblect
-     const optionsone = [{
-       "label": "All Venue",
-       "value": "All"
-     }];
-     Object.entries(cleanedData).forEach(([groupName, groupData]) => {
-       Object.keys(groupData).forEach((key) => {
-         optionsone.push({ value: key, label: key });
-       });
-     });
- 
-     // Generate `optionss` for `data[0]` (assuming `GreenbankServicesClub` is the first group)
-     // const firstGroup = Object.keys(eventss.GreenbankServicesClub)[0]; // 'GreenbankServicesClub'
-     // const optionsstwo = Object.keys(eventss.GreenbankServicesClub[firstGroup]).map((hub) => ({
-     //   value: hub,
-     //   label: hub,
-     // }));
- 
- 
-     // console.log("optionss:", optionsstwo);
- 
-     let getdata = sessionStorage.getItem('data')
- 
-     let decry = decrypt(getdata)
- 
-     let parsedatajson = JSON.parse(decry)
- 
- 
-     const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-     let realven = [{ label: "All Venues", value: "All" }]
- 
-     if (hasAllValue === true) {
-       realven.push(...optionsone);
-       setBasic(optionsone)
-       setOldven(optionsone)
-       setSelectedOptions(optionsone)
- 
-       let uuuk = extractUniqueNotes(cleanedData, optionsone)
-       uuuk.unshift({ label: "All Courses", value: "All" });
-       setFulldatafull(uuuk)
-       setOldcou(uuuk)
-       setSelectedCources(uuuk)
- 
-    
- 
- 
-       const output = [{
-         "label": "All Hubs",
-         "value": "All"
-       }];
-   
-       // // Iterate through the search array
-       optionsone.forEach(({ value }) => {
-         // Search in the data object
-         Object.entries(result).forEach(([key, items]) => {
-           if (key === value) {
-             // If the key matches, add all items from the group to the output
-             items.forEach(item => {
-               output.push({ value: key + '-' + item.name, label: item.name });
-             });
-           } else {
-             // Search within the group's items
-             items.forEach(item => {
-               if (item.name === value) {
-                 output.push({ value : key + '-' + item.name, label: key });
-               }
-             });
-           }
-         });
-       });
-   
-       setBasicone(output) 
-       setHubb(output)
-   
-   
-       setOldhub(output)
- 
- 
- 
-     } else {
-       realven.push(parsedatajson.venue)
-       setBasic([ ...[{
-         "label": "All Venue",
-         "value": "All"
-       }] , ...parsedatajson.venue ])
- 
-       setOldven([ ...[{
-         "label": "All Venue",
-         "value": "All"
-       }] , ...parsedatajson.venue ])
- 
-       setSelectedOptions([ ...[{
-         "label": "All Venue",
-         "value": "All"
-       }] , ...parsedatajson.venue ])
- 
-       const output = [{
-         "label": "All Hubs",
-         "value": "All"
-       }];
-   
-       // // Iterate through the search array
-       [ ...[{
-         "label": "All Venue",
-         "value": "All"
-       }] , ...parsedatajson.venue ].forEach(({ value }) => {
-         // Search in the data object
-         Object.entries(result).forEach(([key, items]) => {
-           if (key === value) {
-             // If the key matches, add all items from the group to the output
-             items.forEach(item => {
-               output.push({ value: key + '-' + item.name, label: item.name });
-             });
-           } else {
-             // Search within the group's items
-             items.forEach(item => {
-               if (item.name === value) {
-                 output.push({ value : key + '-' + item.name, label: key });
-               }
-             });
-           }
-         });
-       });
-   
-       setBasicone(output) 
-       setHubb(output)
-   
-   
-       setOldhub(output)
- 
- 
- 
- 
-       let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
-       uuuk.unshift({ label: "All Courses", value: "All" });
-       setSelectedCources(uuuk)
-       setOldcou(uuuk)
-       setFulldatafull(uuuk)
-     }
- 
- 
- 
- 
- 
-     const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
-     const optionstakeaway = [
-       ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
-     ].map(value => ({ value, label: value }));
- 
- 
-     console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
- 
- 
- 
- 
- 
-     // const output = [];
- 
-     //   // // Iterate through the search array
-     //   [].forEach(({ value }) => {
-     //     // Search in the data object
-     //     Object.entries(alldrop).forEach(([key, items]) => {
-     //       if (key === value) {
-     //         // If the key matches, add all items from the group to the output
-     //         items.forEach(item => {
-     //           output.push({ value: key + '-' + item.name, label: item.name });
-     //         });
-     //       } else {
-     //         // Search within the group's items
-     //         items.forEach(item => {
-     //           if (item.name === value) {
-     //             output.push({ value: key + '-' + item.name, label: key });
-     //           }
-     //         });
-     //       }
-     //     });
-     //   });
- 
-     //   setBasicone(output)
- 
- 
- 
- 
- 
-     const filteredDataonee = {};
- 
-     console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
-     if (parsedatajson.venue) {
- 
-       const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
- 
-       console.log(hasAllValue, 'hasAllValue')
-       if (hasAllValue === true) {
- 
-       } else {
- 
-         parsedatajson.venue.forEach(filter => {
-           const key = filter.value;
-           if (cleanedData[key]) {
-             filteredDataonee[key] = cleanedData[key];
-           }
-         });
-         setBasicall(filteredDataonee)
-       }
- 
- 
- 
- 
- 
-     }
- 
-     if (parsedatajson.hub) {
- 
-       const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
-       console.log(hasAllValue, 'hasAllValue hub')
- 
-       if (hasAllValue === true) {
- 
-       } else {
-         function filterDataByDynamicKeys(keysArray) {
-           const filteredData = {};
- 
-           keysArray.forEach(({ value }) => {
-             const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
- 
-             if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
-               const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
- 
-               // Check if the hub exists
-               if (secondLevelData[hubName]) {
-                 if (!filteredData[topLevelKey]) {
-                   filteredData[topLevelKey] = {};
-                 }
- 
-                 if (!filteredData[topLevelKey][secondTopLevelKey]) {
-                   filteredData[topLevelKey][secondTopLevelKey] = {};
-                 }
- 
-                 filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
-               }
-             }
-           });
- 
-           return filteredData;
-         }
- 
-         let fina = filterDataByDynamicKeys(parsedatajson.hub)
- 
-         setBasicall(fina)
-       }
- 
- 
-     }
- 
-  
-    
- 
- 
-     
-   
-     // alldat = filteredDataonee
-     const yesterday = [getFormattedDate(1), getFormattedDate(1)];
-     const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
-     setDateRangetwo(eightDaysBefore)
-     setDateRange(yesterday)
-     filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
-     filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
- 
- 
-   }
+
+
+    const eventss = snapshots
+
+    function removeTrainingNotes(obj) {
+      if (Array.isArray(obj)) {
+        // If it's an array, filter out objects with "TRAINING" in the NOTE field
+        return obj.map(item => {
+          if (item.ITEMS) {
+            item.ITEMS = item.ITEMS.filter(item => !item.NOTE.includes("TRAINING"));
+          }
+          return item;
+        });
+      } else if (typeof obj === "object" && obj !== null) {
+        // Recursively call for nested objects
+        for (const key in obj) {
+          obj[key] = removeTrainingNotes(obj[key]);
+        }
+      }
+      return obj;
+    }
+
+    const cleanedData = removeTrainingNotes(eventss);
+
+
+
+
+
+
+
+    setBasicall(cleanedData)
+    // const transformData = (data) => {
+    //   const result = {};
+
+    //   for (const key of Object.keys(data)) {
+    //     const parts = key.split("-");
+    //     const [group, location, subLocation, year] = parts;
+
+    //     if (!result[group]) result[group] = {};
+    //     if (!result[group][location]) result[group][location] = {};
+    //     if (!result[group][location][subLocation]) result[group][location][subLocation] = new Set();
+
+    //     result[group][location][subLocation].add(year);
+    //   }
+
+    //   // Convert Sets to arrays for final output
+    //   const convertSetsToArrays = (obj) => {
+    //     for (const key in obj) {
+    //       if (obj[key] instanceof Set) {
+    //         obj[key] = Array.from(obj[key]);
+    //       } else if (typeof obj[key] === "object") {
+    //         convertSetsToArrays(obj[key]);
+    //       }
+    //     }
+    //   };
+
+    //   convertSetsToArrays(result);
+    //   return result;
+    // };
+
+    // const output = transformData(eventss);
+    const result = {};
+    Object.entries(cleanedData).forEach(([groupName, groupData]) => {
+
+
+      Object.entries(groupData).forEach(([keyss, valuess]) => {
+        Object.entries(valuess).forEach(([keyssa, valuessa]) => {
+
+          if (!result[keyss]) {
+            result[keyss] = [];
+          }
+
+          result[keyss].push({
+            name: keyssa + "-" + keyss
+          });
+
+        });
+      });
+
+    });
+    setAlldrop(result)
+    console.log(result, 'keykeykeykey') // its oblect
+    const optionsone = [{
+      "label": "All Venue",
+      "value": "All"
+    }];
+    Object.entries(cleanedData).forEach(([groupName, groupData]) => {
+      Object.keys(groupData).forEach((key) => {
+        optionsone.push({ value: key, label: key });
+      });
+    });
+
+    // Generate `optionss` for `data[0]` (assuming `GreenbankServicesClub` is the first group)
+    // const firstGroup = Object.keys(eventss.GreenbankServicesClub)[0]; // 'GreenbankServicesClub'
+    // const optionsstwo = Object.keys(eventss.GreenbankServicesClub[firstGroup]).map((hub) => ({
+    //   value: hub,
+    //   label: hub,
+    // }));
+
+
+    // console.log("optionss:", optionsstwo);
+
+    let getdata = sessionStorage.getItem('data')
+
+    let decry = decrypt(getdata)
+
+    let parsedatajson = JSON.parse(decry)
+
+
+    const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
+    let realven = [{ label: "All Venues", value: "All" }]
+
+    if (hasAllValue === true) {
+      realven.push(...optionsone);
+      setBasic(optionsone)
+      setOldven(optionsone)
+      setSelectedOptions(optionsone)
+
+      let uuuk = extractUniqueNotes(cleanedData, optionsone)
+      uuuk.unshift({ label: "All Courses", value: "All" });
+      setFulldatafull(uuuk)
+      setOldcou(uuuk)
+      setSelectedCources(uuuk)
+
+
+
+
+      const output = [{
+        "label": "All Hubs",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      optionsone.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(result).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasicone(output)
+      setHubb(output)
+
+
+      setOldhub(output)
+
+
+
+    } else {
+      realven.push(parsedatajson.venue)
+      setBasic([...[{
+        "label": "All Venue",
+        "value": "All"
+      }], ...parsedatajson.venue])
+
+      setOldven([...[{
+        "label": "All Venue",
+        "value": "All"
+      }], ...parsedatajson.venue])
+
+      setSelectedOptions([...[{
+        "label": "All Venue",
+        "value": "All"
+      }], ...parsedatajson.venue])
+
+      const output = [{
+        "label": "All Hubs",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      [...[{
+        "label": "All Venue",
+        "value": "All"
+      }], ...parsedatajson.venue].forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(result).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasicone(output)
+      setHubb(output)
+
+
+      setOldhub(output)
+
+
+
+
+      let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
+      uuuk.unshift({ label: "All Courses", value: "All" });
+      setSelectedCources(uuuk)
+      setOldcou(uuuk)
+      setFulldatafull(uuuk)
+    }
+
+
+
+
+
+    const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
+    const optionstakeaway = [
+      ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
+    ].map(value => ({ value, label: value }));
+
+
+    console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
+
+
+
+
+
+    // const output = [];
+
+    //   // // Iterate through the search array
+    //   [].forEach(({ value }) => {
+    //     // Search in the data object
+    //     Object.entries(alldrop).forEach(([key, items]) => {
+    //       if (key === value) {
+    //         // If the key matches, add all items from the group to the output
+    //         items.forEach(item => {
+    //           output.push({ value: key + '-' + item.name, label: item.name });
+    //         });
+    //       } else {
+    //         // Search within the group's items
+    //         items.forEach(item => {
+    //           if (item.name === value) {
+    //             output.push({ value: key + '-' + item.name, label: key });
+    //           }
+    //         });
+    //       }
+    //     });
+    //   });
+
+    //   setBasicone(output)
+
+
+
+
+
+    const filteredDataonee = {};
+
+    console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
+    if (parsedatajson.venue) {
+
+      const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
+
+      console.log(hasAllValue, 'hasAllValue')
+      if (hasAllValue === true) {
+
+      } else {
+
+        parsedatajson.venue.forEach(filter => {
+          const key = filter.value;
+          if (cleanedData[key]) {
+            filteredDataonee[key] = cleanedData[key];
+          }
+        });
+        setBasicall(filteredDataonee)
+      }
+
+
+
+
+
+    }
+
+    if (parsedatajson.hub) {
+
+      const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
+      console.log(hasAllValue, 'hasAllValue hub')
+
+      if (hasAllValue === true) {
+
+      } else {
+        function filterDataByDynamicKeys(keysArray) {
+          const filteredData = {};
+
+          keysArray.forEach(({ value }) => {
+            const [topLevelKey, hubName, secondTopLevelKey] = value.split('-');
+
+            if (filteredDataonee[topLevelKey] && filteredDataonee[topLevelKey][secondTopLevelKey]) {
+              const secondLevelData = filteredDataonee[topLevelKey][secondTopLevelKey];
+
+              // Check if the hub exists
+              if (secondLevelData[hubName]) {
+                if (!filteredData[topLevelKey]) {
+                  filteredData[topLevelKey] = {};
+                }
+
+                if (!filteredData[topLevelKey][secondTopLevelKey]) {
+                  filteredData[topLevelKey][secondTopLevelKey] = {};
+                }
+
+                filteredData[topLevelKey][secondTopLevelKey][hubName] = secondLevelData[hubName];
+              }
+            }
+          });
+
+          return filteredData;
+        }
+
+        let fina = filterDataByDynamicKeys(parsedatajson.hub)
+
+        setBasicall(fina)
+      }
+
+
+    }
+
+
+
+
+
+
+
+    // alldat = filteredDataonee
+    const yesterday = [getFormattedDate(1), getFormattedDate(1)];
+    const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
+    setDateRangetwo(eightDaysBefore)
+    setDateRange(yesterday)
+    filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+    filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+
+  }
 
 
   let getonez = () => {
@@ -1493,11 +1493,11 @@ let Dockets = () => {
       let displayText = ''
 
       let hasAllfinbyss = selected.some(option => option.label && option.label.startsWith("All "));
-      
-      if( hasAllfinbyss === true ) {
+
+      if (hasAllfinbyss === true) {
         const allValue = selected.find(option => option.label && option.label.startsWith("All "))?.label || "";
-        displayText = allValue.slice(0, textCount) 
-      }else{
+        displayText = allValue.slice(0, textCount)
+      } else {
         displayText = allLabels.slice(0, textCount) + "..."
       }
 
@@ -1523,7 +1523,7 @@ let Dockets = () => {
 
     setOldven(selected)
 
-    if (hasAllValue === false && hasAllValueold === true ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
       let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
@@ -1703,11 +1703,11 @@ let Dockets = () => {
     //     setFulldata(filteredDatatwo)
 
   };
-
+  let [selserdatare, setSetservedatare] = useState('Maximum')
 
   const handleChangefine = (selected) => {
     console.log(editall, 'selected')
-
+    setSetservedatare(selected.value)
     if (editall.length === 0) {
 
     } else {
@@ -1766,7 +1766,7 @@ let Dockets = () => {
   //.select options hub
 
   const [Hubradio, setHubradio] = useState(false)
- 
+
 
   const [selectedhubOptions, setSelectedhubOptions] = useState(optionshub);
 
@@ -1778,7 +1778,7 @@ let Dockets = () => {
 
     setOldpro(selected)
 
-    if (hasAllValue === false && hasAllValueold === true   ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
 
       setSelectedhubOptions([]);
@@ -1816,7 +1816,7 @@ let Dockets = () => {
 
     setOldhub(selectedss)
 
-    if (hasAllValue === false && hasAllValueold === true  ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
       console.log(selectedss, 'selectedssselectedssselectedss')
 
@@ -1881,7 +1881,7 @@ let Dockets = () => {
 
     setOldcou(selected)
 
-    if (hasAllValue === false && hasAllValueold === true   ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
       setSelectedCources([]);
 
@@ -1926,7 +1926,7 @@ let Dockets = () => {
 
     setOldtak(selected)
 
-    if (hasAllValue === false && hasAllValueold === true   ) {
+    if (hasAllValue === false && hasAllValueold === true) {
 
       setSelectedTakeaway([]);
 
@@ -2004,11 +2004,12 @@ let Dockets = () => {
 
 
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
+
+
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
 
-    console.log(cources , 'courcescourcescourcescources')
- 
+
 
     if (vals[1] === null || vals[1] === "null") {
 
@@ -2319,39 +2320,39 @@ let Dockets = () => {
 
     }
 
-    if (takeaways.length != 0 && takeaway === true ) {
+    if (takeaways.length != 0 && takeaway === true) {
 
       function filterByNote(data, regex) {
         if (Array.isArray(data)) {
-            return data
-                .map(item => filterByNote(item, regex))
-                .filter(item => item !== null);
+          return data
+            .map(item => filterByNote(item, regex))
+            .filter(item => item !== null);
         } else if (typeof data === 'object' && data !== null) {
-            if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
-                return {
-                    ...data,
-                    ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
-                };
-            } else if (!data.hasOwnProperty('NOTE')) {
-                let filteredObject = {};
-                for (let key in data) {
-                    let filteredValue = filterByNote(data[key], regex);
-                    if (filteredValue !== null) {
-                        filteredObject[key] = filteredValue;
-                    }
-                }
-                return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+          if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+            return {
+              ...data,
+              ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+            };
+          } else if (!data.hasOwnProperty('NOTE')) {
+            let filteredObject = {};
+            for (let key in data) {
+              let filteredValue = filterByNote(data[key], regex);
+              if (filteredValue !== null) {
+                filteredObject[key] = filteredValue;
+              }
             }
+            return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+          }
         }
         return null;
-    } 
-    const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
+      }
+      const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
 
-    // const filteredData = filterByNote(originalData, regex);
-    alldat = filterByNote(alldat, regex);
+      // const filteredData = filterByNote(originalData, regex);
+      alldat = filterByNote(alldat, regex);
 
 
-     
+
       // function filterByNote(filters) {
       //   console.log( JSON.stringify(filters) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
 
@@ -2360,13 +2361,13 @@ let Dockets = () => {
 
       //   const allowedNotes = filters.map(f => f.value); // Extract values from filter array 
       //   const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
-        
+
       //   function traverse(obj) {
       //     if (Array.isArray(obj)) {
-           
+
       //       return obj.map(traverse).filter(entry => entry !== null);
       //     } else if (typeof obj === "object" && obj !== null) {
-            
+
       //       let newObj = {};
       //       let hasMatch = false;
 
@@ -2407,10 +2408,10 @@ let Dockets = () => {
 
       console.log(alldat, 'seven')
 
-    }else{ 
+    } else {
     }
 
-    if (inone != undefined) {
+    if (inone?.length > 2 && intwo === undefined) {
       let splitone = inone.split('-')
 
 
@@ -2453,7 +2454,7 @@ let Dockets = () => {
           alldat = twelves
 
 
-          console.log(twelves, 'nine')
+          console.log(twelves, 'nine dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd')
         } else {
 
         }
@@ -2463,14 +2464,13 @@ let Dockets = () => {
       }
     }
 
-    if (inone != undefined && intwo != undefined) {
-      let splitone = inone.split('-')
+    if (intwo?.length > 2 && inone === undefined) {
+      let splitone = intwo.split('-')
 
-      let splittwo = intwo.split('-')
-      console.log(splitone.length, 'ten    lll', splitone.length)
-      if (splitone.length === 2 && splittwo.length === 2) {
 
-        if (Number(splitone[0]) < Number(splitone[1]) && Number(splittwo[0]) < Number(splittwo[1])) {
+      if (splitone.length === 2) {
+
+        if (Number(splitone[0]) < Number(splitone[1])) {
 
 
 
@@ -2500,14 +2500,14 @@ let Dockets = () => {
             return filteredData;
           }
 
-          const ranges = [[Number(splitone[0]), Number(splitone[1])], [Number(splittwo[0]), Number(splittwo[1])]];
+          const ranges = [[Number(splitone[0]), Number(splitone[1])]];
 
           let twelves = filterDataByTableRanges(alldat, ranges)
 
           alldat = twelves
 
 
-          console.log(twelves, 'nine')
+          console.log(twelves, 'nine dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd')
         } else {
 
         }
@@ -2515,6 +2515,69 @@ let Dockets = () => {
       } else {
 
       }
+    }
+
+    if (intwo?.length > 2 && inone?.length > 2) {
+      let splitone = inone.split('-')
+
+      let splittwo = intwo.split('-')
+
+
+
+
+      function filterDataByTableRanges(data, ranges) {
+        const filteredData = {};
+
+        Object.entries(data).forEach(([groupKey, groupData]) => {
+          Object.entries(groupData).forEach(([venueKey, venueData]) => {
+            Object.entries(venueData).forEach(([areaKey, areaData]) => {
+              Object.entries(areaData).forEach(([dateKey, records]) => {
+                const filteredRecords = records.filter(record => {
+                  const tableNum = parseInt(record.TABLE, 10);
+                  return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
+                });
+
+                if (filteredRecords.length > 0) {
+                  if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                  if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                  if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                  filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                }
+              });
+            });
+          });
+        });
+
+        return filteredData;
+      }
+
+      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+      let twelves = filterDataByTableRanges(alldat, ranges)
+
+      let twelvesone = filterDataByTableRanges(alldat, rangesone)
+
+      function deepMerge(obj1, obj2) {
+        const result = { ...obj1 };
+
+        Object.keys(obj2).forEach(key => {
+          if (obj1[key] && typeof obj1[key] === "object" && typeof obj2[key] === "object") {
+            result[key] = deepMerge(obj1[key], obj2[key]);
+          } else {
+            result[key] = obj2[key];
+          }
+        });
+
+        return result;
+      }
+
+      // let findddddataa = deepMerge(twelves, twelvesone)
+      alldat = { ...twelves, ...twelvesone }
+
+      console.log(alldat, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+
+
     }
 
     if (alltype === undefined || alltype.length === 0) {
@@ -3017,39 +3080,39 @@ let Dockets = () => {
 
     }
 
-    if (takeaways.length != 0 && takeaway === true ) {
+    if (takeaways.length != 0 && takeaway === true) {
 
       function filterByNote(data, regex) {
         if (Array.isArray(data)) {
-            return data
-                .map(item => filterByNote(item, regex))
-                .filter(item => item !== null);
+          return data
+            .map(item => filterByNote(item, regex))
+            .filter(item => item !== null);
         } else if (typeof data === 'object' && data !== null) {
-            if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
-                return {
-                    ...data,
-                    ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
-                };
-            } else if (!data.hasOwnProperty('NOTE')) {
-                let filteredObject = {};
-                for (let key in data) {
-                    let filteredValue = filterByNote(data[key], regex);
-                    if (filteredValue !== null) {
-                        filteredObject[key] = filteredValue;
-                    }
-                }
-                return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+          if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+            return {
+              ...data,
+              ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+            };
+          } else if (!data.hasOwnProperty('NOTE')) {
+            let filteredObject = {};
+            for (let key in data) {
+              let filteredValue = filterByNote(data[key], regex);
+              if (filteredValue !== null) {
+                filteredObject[key] = filteredValue;
+              }
             }
+            return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+          }
         }
         return null;
-    } 
-    const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
+      }
+      const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
 
-    // const filteredData = filterByNote(originalData, regex);
-    alldat = filterByNote(alldat, regex);
+      // const filteredData = filterByNote(originalData, regex);
+      alldat = filterByNote(alldat, regex);
 
 
-     
+
       // function filterByNote(filters) {
       //   console.log( JSON.stringify(filters) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
 
@@ -3058,13 +3121,13 @@ let Dockets = () => {
 
       //   const allowedNotes = filters.map(f => f.value); // Extract values from filter array 
       //   const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
-        
+
       //   function traverse(obj) {
       //     if (Array.isArray(obj)) {
-           
+
       //       return obj.map(traverse).filter(entry => entry !== null);
       //     } else if (typeof obj === "object" && obj !== null) {
-            
+
       //       let newObj = {};
       //       let hasMatch = false;
 
@@ -3105,9 +3168,9 @@ let Dockets = () => {
 
       console.log(alldat, 'seven')
 
-    }else{ 
+    } else {
     }
-    if (inone != undefined) {
+    if (inone?.length > 2 && intwo === undefined) {
       let splitone = inone.split('-')
 
 
@@ -3150,7 +3213,7 @@ let Dockets = () => {
           alldat = twelves
 
 
-          console.log(twelves, 'nine')
+          console.log(twelves, 'nine dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd')
         } else {
 
         }
@@ -3160,14 +3223,13 @@ let Dockets = () => {
       }
     }
 
-    if (inone != undefined && intwo != undefined) {
-      let splitone = inone.split('-')
+    if (intwo?.length > 2 && inone === undefined) {
+      let splitone = intwo.split('-')
 
-      let splittwo = intwo.split('-')
-      console.log(splitone.length, 'ten    lll', splitone.length)
-      if (splitone.length === 2 && splittwo.length === 2) {
 
-        if (Number(splitone[0]) < Number(splitone[1]) && Number(splittwo[0]) < Number(splittwo[1])) {
+      if (splitone.length === 2) {
+
+        if (Number(splitone[0]) < Number(splitone[1])) {
 
 
 
@@ -3197,14 +3259,14 @@ let Dockets = () => {
             return filteredData;
           }
 
-          const ranges = [[Number(splitone[0]), Number(splitone[1])], [Number(splittwo[0]), Number(splittwo[1])]];
+          const ranges = [[Number(splitone[0]), Number(splitone[1])]];
 
           let twelves = filterDataByTableRanges(alldat, ranges)
 
           alldat = twelves
 
 
-          console.log(twelves, 'nine')
+          console.log(twelves, 'nine dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd')
         } else {
 
         }
@@ -3212,6 +3274,69 @@ let Dockets = () => {
       } else {
 
       }
+    }
+
+    if (intwo?.length > 2 && inone?.length > 2) {
+      let splitone = inone.split('-')
+
+      let splittwo = intwo.split('-')
+
+
+
+
+      function filterDataByTableRanges(data, ranges) {
+        const filteredData = {};
+
+        Object.entries(data).forEach(([groupKey, groupData]) => {
+          Object.entries(groupData).forEach(([venueKey, venueData]) => {
+            Object.entries(venueData).forEach(([areaKey, areaData]) => {
+              Object.entries(areaData).forEach(([dateKey, records]) => {
+                const filteredRecords = records.filter(record => {
+                  const tableNum = parseInt(record.TABLE, 10);
+                  return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
+                });
+
+                if (filteredRecords.length > 0) {
+                  if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                  if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                  if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                  filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                }
+              });
+            });
+          });
+        });
+
+        return filteredData;
+      }
+
+      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+      let twelves = filterDataByTableRanges(alldat, ranges)
+
+      let twelvesone = filterDataByTableRanges(alldat, rangesone)
+
+      function deepMerge(obj1, obj2) {
+        const result = { ...obj1 };
+
+        Object.keys(obj2).forEach(key => {
+          if (obj1[key] && typeof obj1[key] === "object" && typeof obj2[key] === "object") {
+            result[key] = deepMerge(obj1[key], obj2[key]);
+          } else {
+            result[key] = obj2[key];
+          }
+        });
+
+        return result;
+      }
+
+      // let findddddataa = deepMerge(twelves, twelvesone)
+      alldat = { ...twelves, ...twelvesone }
+
+      console.log(alldat, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+
+
     }
 
     if (alltype === undefined || alltype.length === 0) {
@@ -3837,8 +3962,8 @@ let Dockets = () => {
   let callfordataonesearch = (one, bitedata) => {
 
 
-    console.log(one, bitedata , 'one, bitedata')
- 
+    console.log(one, bitedata, 'one, bitedata')
+
 
     function processData(data) {
       let result = [];
@@ -3869,7 +3994,7 @@ let Dockets = () => {
 
 
 
-            if ( isMatch ) {
+            if (isMatch) {
 
               processTimes.push(processTime);
 
@@ -3968,7 +4093,7 @@ let Dockets = () => {
 
 
 
-            if ( isMatch ) {
+            if (isMatch) {
               processTimes.push(processTime);
 
               result.push({
@@ -4330,6 +4455,9 @@ let Dockets = () => {
     const input = pdfRef.current;
 
 
+    console.log(usedname, 'dgklhbndkgnbkn knkndkgnbkndkn kodkbk ndklnkln klndkk')
+
+
 
     // html2canvas(input, { scale: 2 }).then((canvas) => {
     //   const imgData = canvas.toDataURL("image/png");
@@ -4360,21 +4488,24 @@ let Dockets = () => {
       format: "a4",
     });
 
+    const date = new Date();
+    const formattedDate = date.toISOString().split("T")[0];
+
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("Dockets Completion Time.pdf"); // Save after rendering
+        doc.save(formattedDate + "_-_SKO_report_" + usedname + "_-_Dockets Completion Time.pdf"); // Save after rendering
         setIsPdfLoad(false)
       },
 
-    y: 10,
-         width: 190, // Fit content within page
-         windowWidth: 1000, // Ensure full width capture  
-         margin: 10,
-         
-         autoPaging: "text",
-         html2canvas: {
-           useCORS: true, // Handle cross-origin images
-         },
+      y: 10,
+      width: 190, // Fit content within page
+      windowWidth: 1000, // Ensure full width capture  
+      margin: 10,
+
+      autoPaging: "text",
+      html2canvas: {
+        useCORS: true, // Handle cross-origin images
+      },
     }).catch(() => {
       setIsPdfLoad(false);
     });
@@ -4461,6 +4592,9 @@ let Dockets = () => {
 
     // });
 
+    const date = new Date();
+    const formattedDate = date.toISOString().split("T")[0];
+
     const doc = new jsPDF({
       orientation: "p",
       unit: "mm",
@@ -4469,7 +4603,7 @@ let Dockets = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("Dockets received - timeline.pdf"); // Save after rendering
+        doc.save(formattedDate + "_-_SKO_report_" + usedname + "_-_Dockets received - timeline.pdf"); // Save after rendering
         setIsPdfLoad(false)
       },
       x: 10,
@@ -4553,9 +4687,12 @@ let Dockets = () => {
       format: "a4",
     });
 
+    const date = new Date();
+    const formattedDate = date.toISOString().split("T")[0];
+
     await doc.html(input, {
       callback: function (doc) {
-        doc.save("Dockets received - timeline.pdf");
+        doc.save(formattedDate + "_-_SKO_report_" + usedname + "_-Dockets received - timeline.pdf");
         setIsPdfLoad(false);// Save after rendering
       },
       x: 10,
@@ -5603,7 +5740,7 @@ let Dockets = () => {
                 {/* Tables/Takeaways Filters */}
                 <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
                   <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
-                  <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%',paddingBottom:2,paddingTop:2 }}>
+                  <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%', paddingBottom: 2, paddingTop: 2 }}>
                     <input
                       onChange={(e) => {
                         setInputvalue(e.target.value)
@@ -5612,7 +5749,7 @@ let Dockets = () => {
                       }}
                       value={inputvalue}
                       placeholder="0-9999"
-                      style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B',borderRight:'1px solid #707070', textAlign: 'center',paddingTop:9 ,paddingBottom:9 }}
+                      style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', borderRight: '1px solid #707070', textAlign: 'center', paddingTop: 9, paddingBottom: 9 }}
                       type="text"
                     />
                     <input
@@ -5623,14 +5760,16 @@ let Dockets = () => {
                       }}
                       value={inputvaluetwo}
                       placeholder="9999-9999"
-                      style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center',paddingTop:9 ,paddingBottom:9  }}
+                      style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center', paddingTop: 9, paddingBottom: 9 }}
                       type="text"
                     />
                   </div>
 
                   <div ref={selectReffour} className="custom-inputoness d-flex justify-content-between mt-3"
-                   style={{ width: '100%', height: 45, borderRadius: menuIsOpenfour ? ' 8px 8px 0 0' : '8px', 
-                   border: menuIsOpenfour ? '2px solid #707070' : 'none', borderBottom: 'none' }}>
+                    style={{
+                      width: '100%', height: 45, borderRadius: menuIsOpenfour ? ' 8px 8px 0 0' : '8px',
+                      border: menuIsOpenfour ? '2px solid #707070' : 'none', borderBottom: 'none'
+                    }}>
                     <div className="switch-container">
                       <input
                         type="checkbox"
@@ -5892,12 +6031,13 @@ let Dockets = () => {
                               <img
                                 src="black_arrow.png"
                                 style={{ width: 20, height: 20, cursor: 'pointer' }}
-                                onClick={() => { 
-                                  
+                                onClick={() => {
+
                                   filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-                                  setMeals(1) }}
+                                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                                  setMeals(1)
+                                }}
                                 alt="Back Arrow"
                               />
                               <p style={{ color: '#1A1A1B', fontWeight: 600, fontSize: 20, marginLeft: 10, marginBottom: 0 }}>
@@ -6125,7 +6265,7 @@ let Dockets = () => {
                                       {correspondingErv ? (
                                         <div style={{ width: "40%", }}>
                                           <div className="d-flex align-items-center  " >
-                                            <p style={{ fontWeight: "700", color: index === 0 ? 'red' : "#000", width: "60%", marginTop: 15 }}>
+                                            <p style={{ fontWeight: "700", color: index === 0 ? '#CA424E' : "#000", width: "60%", marginTop: 15 }}>
                                               {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
                                                 correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                                             </p>
@@ -6517,7 +6657,7 @@ let Dockets = () => {
                             </div>
 
 
-                            <div style={{ visibility: 'hidden' , position : 'absolute' }}>
+                            <div style={{ visibility: 'hidden', position: 'absolute' }}>
                               <div ref={pdfRefredone}  >
 
                                 <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
@@ -6540,7 +6680,7 @@ let Dockets = () => {
 
                                 })()}</p>
 
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >Group name</p>
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >{usedname}</p>
                                 <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
                                   const datefineda = new Date(dateRange[0]);
 
@@ -6731,7 +6871,7 @@ let Dockets = () => {
                             </div>
 
 
-                            <div style={{ visibility: 'hidden' , position : 'absolute' }}>
+                            <div style={{ visibility: 'hidden', position: 'absolute' }}>
                               <div ref={pdfRefred}  >
 
                                 <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
@@ -6754,7 +6894,7 @@ let Dockets = () => {
 
                                 })()}</p>
 
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >Group name</p>
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >{groupName}</p>
                                 <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
                                   const datefineda = new Date(dateRange[0]);
 
@@ -6879,13 +7019,14 @@ let Dockets = () => {
           <div className="d-none" style={{ visibility: 'hidden' }}>
             <div ref={pdfRef}  >
 
-              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets Completion Time - From {selectedOptionsfine[0]?.label}to
-                {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
+              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }} className="fonttttttt">Dockets Completion Time - From {selectedOptionsfine[0]?.label} to {selectedOptionsfine[0]?.label === "Minimum" ? " Maximum" : " Minimum"}</p>
 
-              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
+
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}    > {(() => {
 
                 const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-                const result = filteredOptions.map(item => item.label).join(", ");
+                const result = selectedOptions.map(item => item.label).join(",") // Join without spaces first
+                  .replace(/,/g, ", ");
 
 
                 if (result === "" || result === undefined || result === null) {
@@ -6899,15 +7040,17 @@ let Dockets = () => {
 
               })()}</p>
 
-              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >Group name</p>
-              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
+
+
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, }} >{usedname}</p>
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} className="fonttttttt" >For the period {(() => {
                 const datefineda = new Date(dateRange[0]);
 
                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
                   day: "2-digit",
                   month: "short",
                   year: "numeric"
-                });
+                }).replace(/,/g, "");
 
                 return (formattedDate)
               })()} to {(() => {
@@ -6917,18 +7060,18 @@ let Dockets = () => {
                   day: "2-digit",
                   month: "short",
                   year: "numeric"
-                });
+                }).replace(/,/g, "");
 
                 return (formattedDate)
               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >Compared with the period {(() => {
                 const datefineda = new Date(dateRangetwo[0]);
 
                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
                   day: "2-digit",
                   month: "short",
                   year: "numeric"
-                });
+                }).replace(/,/g, "");
 
                 return (formattedDate)
               })()} to {(() => {
@@ -6938,15 +7081,16 @@ let Dockets = () => {
                   day: "2-digit",
                   month: "short",
                   year: "numeric"
-                });
+                }).replace(/,/g, "");
 
                 return (formattedDate)
               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, wordSpacing: -5 }} >Table ranges contains: All</p>
-              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} >Stages contains: {(() => {
+              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, }} className="fonttttttt"  >Table ranges contains: All</p>
+              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Stages contains: {(() => {
 
-                const result = selectedhubOptions.map(item => item.label).join(",");
+                const result = selectedhubOptions.map(item => item.label).join(",") // Join without spaces first
+                  .replace(/,/g, ", ");
 
                 if (result === "" || result === undefined || result === null) {
                   return 'All'
@@ -6958,9 +7102,10 @@ let Dockets = () => {
 
 
               })()} </p>
-              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} >Courses contains: {(() => {
+              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"   >Courses contains: {(() => {
 
-                const result = selectedCources.map(item => item.label).join(",");
+                const result = selectedCources.map(item => item.label).join(",") // Join without spaces first
+                  .replace(/,/g, ", ");
 
                 if (result === "" || result === undefined || result === null) {
                   return 'All'
@@ -6977,7 +7122,7 @@ let Dockets = () => {
 
 
 
-              <div className="d-flex gap-5" style={{ marginTop: 20 ,  borderBottom: "1px solid #ccc"  }}>
+              <div className="d-flex gap-5" style={{ marginTop: 20, borderBottom: "1px solid #ccc" }}>
 
                 <div style={{ width: "40%" }}>
                   <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
@@ -7012,9 +7157,9 @@ let Dockets = () => {
                 </div>
 
               </div>
- 
 
- 
+
+
               {
                 editall?.orders?.map((dfgh, index) => {
                   const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
@@ -7026,9 +7171,9 @@ let Dockets = () => {
                         <div style={{ width: "40%" }}>
                           <div className="d-flex  " style={{}}>
                             <p style={{ paddingTop: 15 }}>
-                              <span style={{ fontWeight: "400", color: index === 0 ? 'red' : "#000", fontSize : 15 }} >{dfgh?.processtime + ". " || "N/A"}<span 
-                               style={{ color : '#000' }}> {dfgh?.date + " " + "[" +
-                                dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span></span>
+                              <span style={{ fontWeight: "400", color: index === 0 ? 'red' : "#000", fontSize: 15 }} >{dfgh?.processtime + ". " || "N/A"}<span
+                                style={{ color: '#000' }}> {dfgh?.date + " " + "[" +
+                                  dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span></span>
                             </p>
 
                           </div>
@@ -7040,7 +7185,7 @@ let Dockets = () => {
                           <div style={{ width: "40%", }}>
                             <div className="d-flex  " >
                               <p style={{ paddingTop: 15 }}>
-                                <span style={{ fontWeight: "400", color: "#000", fontSize : 15 }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
+                                <span style={{ fontWeight: "400", color: "#000", fontSize: 15 }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
                                   correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                               </p>
 
@@ -7061,7 +7206,7 @@ let Dockets = () => {
                             width: "20%",
                           }}
                         >
-                          <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" , fontSize : 15 }}>
+                          <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px", fontSize: 15 }}>
 
                             <span>
                               {(() => {
@@ -7103,7 +7248,7 @@ let Dockets = () => {
                           </p>
                         </div>
                       </div>
- 
+
                     </div>
                   );
                 })

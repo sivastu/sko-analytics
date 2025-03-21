@@ -1,6 +1,15 @@
 .App {
   text-align: center;
 }
+.fonttttttt {
+  white-space: normal !important;
+  font-family: Arial !important;
+  word-spacing: 4px !important;
+}
+.fontttttttd{
+  white-space: normal !important;
+  font-family: Arial !important;
+}
 body{
   overflow: hidden;
   font-family: "Poppins" !important;
