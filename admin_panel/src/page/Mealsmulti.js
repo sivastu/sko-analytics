@@ -62,6 +62,7 @@ let Mealsmulti = () => {
   let [hubb, setHubb] = useState([])
   let [hubbswitch, setHubbswitch] = useState(true)
   let [basiconefive, setBasiconefive] = useState([])
+  let [prevVenueradiofivese, setPrevVenueradiofivese] = useState(false);
   //parse meals
   let [meals, setMeals] = useState(1)
   let [oldvenfive, setOldvenfive] = useState([])
@@ -137,31 +138,40 @@ let Mealsmulti = () => {
   const { state } = useContext(DataContext);
 
   // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (selectRef.current && !selectRef.current.contains(event.target)) {
-        setMenuIsOpen(false);
-      }
-
-      if (selectRefone.current && !selectRefone.current.contains(event.target)) {
-        setMenuIsOpenone(false);
-      }
-      if (selectReftwo.current && !selectReftwo.current.contains(event.target)) {
-        setMenuIsOpentwo(false);
-      }
-      if (selectRefthree.current && !selectRefthree.current.contains(event.target)) {
-        setMenuIsOpenthree(false);
-      }
-      if (selectReffour.current && !selectReffour.current.contains(event.target)) {
-        setMenuIsOpenfour(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (selectRef.current && !selectRef.current.contains(event.target)) {
+          setMenuIsOpen(false);
+        }
+  
+        if (selectRefone.current && !selectRefone.current.contains(event.target)) {
+          setMenuIsOpenone(false);
+        }
+        if (selectReftwo.current && !selectReftwo.current.contains(event.target)) {
+          setMenuIsOpentwo(false);
+        }
+        if (selectRefthree.current && !selectRefthree.current.contains(event.target)) {
+          setMenuIsOpenthree(false);
+        }
+        if (selectReffour.current && !selectReffour.current.contains(event.target)) {
+          setMenuIsOpenfour(false);
+        }
+  
+  
+        if (selectReffive.current && !selectReffive.current.contains(event.target)) {
+          setMenuIsOpenfive(false);
+        }
+        if (selectRefsix.current && !selectRefsix.current.contains(event.target)) {
+          setMenuIsOpensix(false);
+        }
+  
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
 
 
   let [basicfine, setBasicfine] = useState([{
@@ -1455,14 +1465,15 @@ let Mealsmulti = () => {
   };
 
   const handleChangefive = (selected, toggleState = null) => {
+ 
     const hasAllValue = selected.some((item) => item.value === "All");
     const hasAllValueOld = oldvenfive.some((item) => item.value === "All");
-  
+
     // Check for overlap with selectedOptions
     const selectedValues = selected.map((opt) => opt.value);
     const chosenValues = selectedOptions.map((opt) => opt.value);
     const hasOverlap = selectedValues.some((val) => chosenValues.includes(val));
-  
+
     if (hasOverlap) {
       // Show alert and reset selection
       Swal.fire({
@@ -1471,27 +1482,31 @@ let Mealsmulti = () => {
         text: "You cannot select the same venues in both Chosen and Compare with sections.",
         confirmButtonText: "OK",
       }).then(() => {
-        setSelectedOptionsfive(oldvenfive); // Reset to previous valid state
-        setOldvenfive(oldvenfive);
+        // setSelectedOptionsfive(oldvenfive); // Reset to previous valid state
+        // setOldvenfive(oldvenfive);
         if (toggleState !== null) {
           // Revert toggle state if this was triggered by the toggle
-          setVenueradiofivese(prevVenueradiofivese);
+          // setVenueradiofivese(prevVenueradiofivese);
         }
       });
-      return;
+      console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
+
+      return
     }
-  
+
+
+    console.log('bccccccccccccccccccccccccccccccccccccccccccccccccccccccc')
     // If no overlap, update the previous toggle state and proceed
-    if (toggleState !== null) {
-      setPrevVenueradiofivese(venueradiofivese); // Store previous state before updating
-      setVenueradiofivese(toggleState); // Update to new toggle state
-    }
+    // if (toggleState !== null) {
+    //   setPrevVenueradiofivese(venueradiofivese); // Store previous state before updating
+    //   setVenueradiofivese(toggleState); // Update to new toggle state
+    // }
     setOldvenfive(selected);
-  
+
     if (hasAllValue === false && hasAllValueOld === true) {
       setSelectedOptionsfive([]);
       filterDataByDateonee(dateRange, onetime, twotime, [], hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-  
+
       const output = [];
       [].forEach(({ value }) => {
         Object.entries(alldrop).forEach(([key, items]) => {
@@ -1507,11 +1522,11 @@ let Mealsmulti = () => {
       setBasiconefive(output);
       return;
     }
-  
+
     if (hasAllValue === true) {
       setSelectedOptionsfive(basic || []);
       filterDataByDateonee(dateRange, onetime, twotime, basic, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-  
+
       const output = [{ label: "All Hub", value: "All" }];
       basic.forEach(({ value }) => {
         Object.entries(alldrop).forEach(([key, items]) => {
@@ -1528,7 +1543,7 @@ let Mealsmulti = () => {
     } else {
       setSelectedOptionsfive(selected || []);
       filterDataByDateonee(dateRange, onetime, twotime, selected, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-  
+
       const output = [{ label: "All Hub", value: "All" }];
       selected.forEach(({ value }) => {
         Object.entries(alldrop).forEach(([key, items]) => {
@@ -2256,7 +2271,7 @@ let Mealsmulti = () => {
     //   return
     // }
     console.log(selectedOptionsfive, val21, 'courcescourcescourcescources kdnkghb dkgnbklnkrdfnbkndlk dknbkndknklbndkn kndknklbklnd kln ndklnfklxbn kldnklnbkl dnklfxnkdnkl nvkl')
- 
+
 
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
@@ -2630,7 +2645,7 @@ let Mealsmulti = () => {
 
     }
 
-    if (inone?.length > 2 && intwo === undefined || intwo === '' ) {
+    if (inone?.length > 2 && intwo === undefined || intwo === '') {
       let splitone = inone.split('-')
 
 
@@ -2683,7 +2698,7 @@ let Mealsmulti = () => {
       }
     }
 
-    if (intwo?.length > 2 && inone === undefined || intwo === '' ) {
+    if (intwo?.length > 2 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -3368,7 +3383,7 @@ let Mealsmulti = () => {
     } else {
     }
 
-    if (inone?.length > 2 && intwo === undefined || intwo === '' ) {
+    if (inone?.length > 2 && intwo === undefined || intwo === '') {
       let splitone = inone.split('-')
 
 
@@ -3421,7 +3436,7 @@ let Mealsmulti = () => {
       }
     }
 
-    if (intwo?.length > 2 && inone === undefined || intwo === '' ) {
+    if (intwo?.length > 2 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -3935,7 +3950,7 @@ let Mealsmulti = () => {
 
   }
 
-  let [ selserdatare ,  setSetservedatare] = useState('Maximum')
+  let [selserdatare, setSetservedatare] = useState('Maximum')
   const handleChangefinedd = (selected) => {
     setSetservedatare(selected.value)
     if (minperday.length === 0) {
@@ -4146,7 +4161,7 @@ let Mealsmulti = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save(formattedDate + "_-_SKO_report_"+usedname+"_-_Edits.pdf");
+        doc.save(formattedDate + "_-_SKO_report_" + usedname + "_-_Edits.pdf");
         setIsPdfLoad(false) // Save after rendering
       },
       x: 10,
@@ -4196,7 +4211,7 @@ let Mealsmulti = () => {
 
   }
 
-let [ selserdata ,  setSetservedata] = useState('Maximum')
+  let [selserdata, setSetservedata] = useState('Maximum')
   const handleChangefine = (selected) => {
     console.log(served, 'selected')
 
@@ -4259,7 +4274,7 @@ let [ selserdata ,  setSetservedata] = useState('Maximum')
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save(formattedDate + "_-_SKO_report_"+usedname+"_-_Served meals.pdf");
+        doc.save(formattedDate + "_-_SKO_report_" + usedname + "_-_Served meals.pdf");
         setIsPdfLoad(false)// Save after rendering
       },
       y: 10,
@@ -4314,7 +4329,7 @@ let [ selserdata ,  setSetservedata] = useState('Maximum')
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save(formattedDate + "_-_SKO_report_"+usedname+"_-_Meals received - timeline.pdf");
+        doc.save(formattedDate + "_-_SKO_report_" + usedname + "_-_Meals received - timeline.pdf");
         setIsPdfLoad(false)// Save after rendering
       },
       x: 10,
@@ -4348,7 +4363,7 @@ let [ selserdata ,  setSetservedata] = useState('Maximum')
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save(formattedDate + "_-_SKO_report_"+usedname+"_-_Refunded meals.pdf");
+        doc.save(formattedDate + "_-_SKO_report_" + usedname + "_-_Refunded meals.pdf");
         setIsPdfLoad(false);// Save after rendering
       },
       y: 10,
@@ -4665,6 +4680,45 @@ let [ selserdata ,  setSetservedata] = useState('Maximum')
                       id="switch1"
                       checked={venueradio}
                       onChange={(e) => {
+
+                        if (e.target.checked === false) {
+                          setVenueradio(e.target.checked)
+                          setSelectedOptions([])
+                          return
+                        }
+
+
+                        const hasAllValue = [...selectedOptions, ...[{
+                          "label": "All Venue",
+                          "value": "All"
+                        }]].some((item) => item.value === "All");
+                          const hasAllValueOld = oldven.some((item) => item.value === "All");
+
+                          // Check for overlap with selectedOptionsfive
+                          const selectedValues = [...selectedOptions, ...[{
+                            "label": "All Venue",
+                            "value": "All"
+                          }]].map((opt) => opt.value);
+                          const compareValues = selectedOptionsfive.map((opt) => opt.value);
+                          const hasOverlap = selectedValues.some((val) => compareValues.includes(val));
+
+                          if (hasOverlap) {
+                            // Show alert and reset selection
+                            Swal.fire({
+                              icon: "warning",
+                              title: "Invalid Selection",
+                              text: "You cannot select the same venues in both Chosen and Compare with sections.",
+                              confirmButtonText: "OK",
+                            }).then(() => {
+                              // setSelectedOptions(oldven); // Reset to previous valid state
+                              // setOldven(oldven);
+                            });
+                            return;
+                          }
+
+
+
+
                         setVenueradio(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedOptions([])
@@ -4810,7 +4864,7 @@ let [ selserdata ,  setSetservedata] = useState('Maximum')
               </div>
 
               {/* Compare with date range */}
-              <div className="filter-section" style={{ width: 'calc(20% - 20px)', minWidth: '240px', marginBottom: '15px' }}>
+              <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
                 <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
                   Compare with:<span style={{ fontWeight: '400' }}> Custom</span>
                 </p>
@@ -4821,10 +4875,59 @@ let [ selserdata ,  setSetservedata] = useState('Maximum')
                       id="switch13"
                       checked={venueradiofivese}
                       onChange={(e) => {
+
+
+
+ 
+                        if (e.target.checked === false) {
+                          setVenueradiofivese(e.target.checked)
+                          setSelectedOptionsfive([])
+
+                          return
+                        }
+
+
+
+                        const hasAllValue = [...selectedOptionsfive, ...[{
+                          "label": "All Venue",
+                          "value": "All"
+                        }]].some((item) => item.value === "All");
+                        const hasAllValueOld = oldvenfive.some((item) => item.value === "All");
+
+                        // Check for overlap with selectedOptions
+                        const selectedValues = [...selectedOptionsfive, ...[{
+                          "label": "All Venue",
+                          "value": "All"
+                        }]].map((opt) => opt.value);
+                        const chosenValues = selectedOptions.map((opt) => opt.value);
+                        const hasOverlap = selectedValues.some((val) => chosenValues.includes(val));
+
+                        if (hasOverlap) {
+                          // Show alert and reset selection
+                          Swal.fire({
+                            icon: "warning",
+                            title: "Invalid Selection",
+                            text: "You cannot select the same venues in both Chosen and Compare with sections.",
+                            confirmButtonText: "OK",
+                          }).then(() => {
+                             
+                            
+                          });
+                          return;
+                        }
+
+
                         setVenueradiofivese(e.target.checked)
                         if (e.target.checked === false) {
                           setSelectedOptionsfive([])
                         } else {
+
+                          
+
+
+                       
+
+
                           handleChangefive([...selectedOptionsfive, ...[{
                             "label": "All Venue",
                             "value": "All"
@@ -4867,8 +4970,8 @@ let [ selserdata ,  setSetservedata] = useState('Maximum')
                         backgroundColor: '#fff',
                         fontSize: 15,
                         color: '#1A1A1B',
-                        outline: 'none',
-                        boxShadow: state.isFocused ? 'none' : 'none',
+                        outline: 'none', // ✅ Removes default browser outline
+                        boxShadow: state.isFocused ? 'none' : 'none', // ✅ Prevents blue glow on focus
                         border: 'none'
                       }),
                       menu: (base) => ({
@@ -4892,11 +4995,11 @@ let [ selserdata ,  setSetservedata] = useState('Maximum')
                       onChange={(e) => {
                         setVenueradiosix(e.target.checked)
                         if (e.target.checked === false) {
-                          // Handle unchecked state if needed
+                          // Reset logic if needed
                           setHubbtwo([])
                         } else {
                           handleChangehubtwo([...basiconefive, ...[{
-                            "label": "All Venue",
+                            "label": "All Hubs",
                             "value": "All"
                           }]])
                         }
@@ -5854,7 +5957,7 @@ let [ selserdata ,  setSetservedata] = useState('Maximum')
                               <div key={index}>
                                 <div className="row py-2">
                                   <div className="col-md-4 col-sm-12 mb-2 mb-md-0">
-                                    <p className="mb-1" style={{ fontWeight: '700', color: index === 0 && selserdata === 'Minimum'  ? "#CA424E" : '#000', }}>{dfgh?.name}</p>
+                                    <p className="mb-1" style={{ fontWeight: '700', color: index === 0 && selserdata === 'Minimum' ? "#CA424E" : '#000', }}>{dfgh?.name}</p>
                                     <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}>{dfgh?.count}</p>
                                   </div>
 
@@ -6045,7 +6148,7 @@ let [ selserdata ,  setSetservedata] = useState('Maximum')
                                     <div className="d-flex  ">
 
                                       <div style={{ width: '33%' }}>
-                                        <p style={{ fontWeight: '700', color: index === 0  && selserdatare === 'Minimum'  ? "#316AAF" : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                                        <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Minimum' ? "#316AAF" : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
                                         <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
                                       </div>
 
@@ -6053,7 +6156,7 @@ let [ selserdata ,  setSetservedata] = useState('Maximum')
                                         <div style={{ width: '33%', textAlign: 'center' }}>
                                           <div >
 
-                                            <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Maximum'  ? "#CA424E" : '#000' , marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                            <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Maximum' ? "#CA424E" : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
                                             <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
                                           </div>
                                         </div>
@@ -6357,717 +6460,717 @@ let [ selserdata ,  setSetservedata] = useState('Maximum')
       </div>
 
 
-       <div style={{ visibility: 'hidden' }}>
-             <div ref={pdfRef}  >
-     
-               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Edits</p>
-               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,   }} className="fonttttttt"  >{(() => {
-     
-                 const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-                 const result = filteredOptions.map(item => item.label).join(",") // Join without spaces first
-                 .replace(/,/g, ", ");
-     
-     
-                 if (result === "" || result === undefined || result === null) {
-                   return 'All Venue'
-                 } else {
-     
-                   return result
-     
-                 }
-     
-     
-               })()}</p>
-     
-               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20,  }} >{usedname}</p>
-               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,   }} className="fonttttttt" >For the period {(() => {
-                 const datefineda = new Date(dateRange[0]);
-     
-                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                   day: "2-digit",
-                   month: "short",
-                   year: "numeric"
-                 }).replace(/,/g, "");
-     
-     
-                 return (formattedDate)
-               })()} to {(() => {
-                 const datefineda = new Date(dateRange[1]);
-     
-                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                   day: "2-digit",
-                   month: "short",
-                   year: "numeric"
-                 }).replace(/,/g, "");
-     
-     
-                 return (formattedDate)
-               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,  }} className="fonttttttt" >Compared with the period {(() => {
-                 const datefineda = new Date(dateRangetwo[0]);
-                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                   day: "2-digit",
-                   month: "short",
-                   year: "numeric"
-                 }).replace(/,/g, "");
-     
-     
-                 return (formattedDate)
-               })()} to {(() => {
-                 const datefineda = new Date(dateRangetwo[1]);
-     
-                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                   day: "2-digit",
-                   month: "short",
-                   year: "numeric"
-                 }).replace(/,/g, "");
-     
-                 return (formattedDate)
-               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-     
-     
-     
-               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} className="fonttttttt" >Table ranges contains: All</p>
-               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }}  className="fonttttttt" >Stages contains: {(() => {
-     
-                 const result = selectedhubOptions.map(item => item.label).join(",") // Join without spaces first
-                 .replace(/,/g, ", ");
-     
-                 if (result === "" || result === undefined || result === null) {
-                   return 'All'
-                 } else {
-     
-                   return result
-     
-                 }
-     
-     
-               })()} </p>
-               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} className="fonttttttt" >Courses contains: {(() => {
-     
-                 const result = selectedCources.map(item => item.label).join(",") // Join without spaces first
-                 .replace(/,/g, ", ");
-     
-                 if (result === "" || result === undefined || result === null) {
-                   return 'All'
-                 } else {
-     
-                   return result
-     
-                 }
-     
-     
-               })()}</p>
-     
-     
-               <div style={{ marginTop: 20, padding: 10 }} >
-                 <div className="d-flex justify-content-between" >
-     
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-                       editall?.edited?.length
-                       + editall?.deleted?.length
-                       + editall?.moved?.length}</span></p>
-                   </div>
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
-     
-                       editallone?.edited?.length
-                       + editallone?.deleted?.length
-                       + editallone?.moved?.length
-                     }</span></p>
-                   </div>
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                       {(() => {
-                         let datd = editallone?.edited?.length
-                           + editallone?.deleted?.length
-                           + editallone?.moved?.length
-     
-                         let datdtwo = editall?.edited?.length
-                           + editall?.deleted?.length
-                           + editall?.moved?.length
-     
-                         let tot = ((datdtwo - datd) / datd) * 100
-     
-                         return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                           style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-     
-                           }} className="" alt="Example Image" /> :
-                           <img src="d_arw.png"
-                             style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-     
-                             }} className="" alt="Example Image" />}</span></span>
-     
-     
-                         console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                       })()}</span></p>
-                   </div>
-     
-                 </div>
-     
-                 <hr style={{ margin: '0px 0px', backgroundColor: 'black' }} />
-     
-                 <div className="d-flex justify-content-between" >
-     
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.moved?.length}</p>
-                   </div>
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}  </p>
-                   </div>
-                   <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                       {(() => {
-                         let datd = editallone?.moved?.length
-     
-                         let datdtwo = editall?.moved?.length
-     
-                         let tot = ((datdtwo - datd) / datd) * 100
-     
-                         return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                           style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-     
-                           }} className="" alt="Example Image" /> :
-                           <img src="d_arw.png"
-                             style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-     
-                             }} className="" alt="Example Image" />}</span></span>
-     
-     
-                         console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                       })()}</span></p>
-                   </div>
-     
-                 </div>
-     
-                 <hr style={{ margin: '0px 0px', backgroundColor: 'black', }} />
-     
-                 <div className="d-flex justify-content-between" >
-     
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.edited?.length}</p>
-                   </div>
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}  </p>
-                   </div>
-                   <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                       {(() => {
-                         let datd = editallone?.edited?.length
-     
-                         let datdtwo = editall?.edited?.length
-     
-                         let tot = ((datdtwo - datd) / datd) * 100
-     
-                         return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                           style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-     
-                           }} className="" alt="Example Image" /> :
-                           <img src="d_arw.png"
-                             style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-     
-                             }} className="" alt="Example Image" />}</span></span>
-     
-     
-                         console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                       })()}</span></p>
-                   </div>
-     
-                 </div>
-     
-                 <hr style={{ margin: '0px 0px', backgroundColor: 'black', }} />
-     
-                 <div className="d-flex justify-content-between" >
-     
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.deleted?.length}</p>
-                   </div>
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.deleted?.length}  </p>
-                   </div>
-                   <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                       {(() => {
-                         let datd = editallone?.deleted?.length
-     
-                         let datdtwo = editall?.deleted?.length
-     
-                         let tot = ((datdtwo - datd) / datd) * 100
-     
-                         return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                           style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-     
-                           }} className="" alt="Example Image" /> :
-                           <img src="d_arw.png"
-                             style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-     
-                             }} className="" alt="Example Image" />}</span></span>
-     
-     
-                         console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                       })()}</span></p>
-                   </div>
-     
-                 </div>
-     
-                 <hr style={{ margin: '0px 0px', backgroundColor: 'black', }} />
-     
-     
-                 <div className="d-flex justify-content-between" >
-     
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.tableMoved?.length}</p>
-                   </div>
-                   <div >
-                     <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.tableMoved?.length}  </p>
-                   </div>
-                   <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
-                     <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
-                       {(() => {
-                         let datd = editallone?.tableMoved?.length
-     
-                         let datdtwo = editall?.tableMoved?.length
-     
-                         let tot = ((datdtwo - datd) / datd) * 100
-     
-                         console.log(tot, 'nan')
-     
-                         return <span >{isNaN(tot) ? "+000.00" : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
-                           style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-     
-                           }} className="" alt="Example Image" /> :
-                           <img src="d_arw.png"
-                             style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-     
-                             }} className="" alt="Example Image" />}</span></span>
-     
-     
-                         console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
-                       })()}</span></p>
-                   </div>
-     
-                 </div>
-     
-                 <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-     
-     
-               </div>
-             </div >
-           </div>
+      <div style={{ visibility: 'hidden' }}>
+        <div ref={pdfRef}  >
 
-    
-          <div style={{ visibility: 'hidden' }}>
-            <div ref={pdfRefss}>
-              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -10 }}>Served meals</p>
-              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt">
-                {(() => {
-                  const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-                  const result = selectedOptions
-                    .filter(item => item.label !== "All Venue")
-                    .map(item => item.label.trim()).join(",") // Join without spaces first
-                    .replace(/,/g, ", ");
-                  if (result === "" || result === undefined || result === null) {
-                    return 'All Venue'
-                  } else {
-                    return result
-                  }
-                })()}
-              </p>
-    
-              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, }}>{usedname}</p>
-              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >For the period {(() => {
-                const datefineda = new Date(dateRange[0]);
-    
-                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric"
-                }).replace(/,/g, "");
-    
-                return (formattedDate)
-              })()} to {(() => {
-                const datefineda = new Date(dateRange[1]);
-    
-                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric"
-                }).replace(/,/g, "");
-    
-                return (formattedDate)
-              })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >Compared with the period {(() => {
-                const datefineda = new Date(dateRangetwo[0]);
-    
-                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric"
-                }).replace(/,/g, "");
-    
-                return (formattedDate)
-              })()} to {(() => {
-                const datefineda = new Date(dateRangetwo[1]);
-    
-                const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric"
-                }).replace(/,/g, "");
-    
-                return (formattedDate)
-              })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-    
-              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} className="fonttttttt"  >Table ranges contains: All</p>
-              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Stages contains: {(() => {
-                const result = selectedhubOptions.map(item => item.label.trim()).join(",") // Join without spaces first
-                  .replace(/,/g, ", "); // Changed from comma+space to just space
-    
-                if (result === "" || result === undefined || result === null) {
-                  return 'All'
-                } else {
-                  return result
-                }
-              })()} </p>
-              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Courses contains: {(() => {
-                const result = selectedCources.map(item => item.label.trim()).join(",") // Join without spaces first
-                  .replace(/,/g, ", "); // Changed from comma+space to just space
-    
-                if (result === "" || result === undefined || result === null) {
-                  return 'All'
-                } else {
-                  return result
-                }
-              })()}</p>
-    
-    
-              <div style={{ marginTop: 20, padding: 10 }}>
-                <div className="d-flex" style={{ borderBottom: "1px solid #000" }}>
-                  <div style={{ width: '43%' }}>
-                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                    <div style={{ display: 'flex', flexDirection: 'row' }} >
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )   </p><p style={{ fontWeight: '700', marginTop: 8 }}>{ggggrt()}</p>
-    
-                    </div>
-                  </div>
-                  <div style={{ width: '34%' }}>
-                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-    
-                    <div style={{ display: 'flex', flexDirection: 'row' }} >
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) </p><p style={{ fontWeight: '700', marginTop: 8 }}> {ggggrts()}</p>
-                    </div>
-    
-    
-                  </div>
-                  <div style={{ width: '23%' }}>
-                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-    
-    
-    
-    
-                    <div style={{ display: 'flex', flexDirection: 'row' }} >
-                      <p style={{ fontWeight: '400', color: '#000', }}>
-                        ( Total ){" "}
-    
-                      </p><p style={{ fontWeight: '700' }}>
-                        {(() => {
-                          let datd = ggggrt();
-                          let datdtwo = ggggrts();
-                          let tot = ((datd - datdtwo) / datdtwo) * 100;
-    
-                          return (
-                            <>
-                              {tot.toFixed(2) + "%"}{" "}
-                            </>
-                          );
-                        })()}
-                      </p>
-                    </div>
-    
-    
-                  </div>
+          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Edits</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >{(() => {
+
+            const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+            const result = filteredOptions.map(item => item.label).join(",") // Join without spaces first
+              .replace(/,/g, ", ");
+
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All Venue'
+            } else {
+
+              return result
+
+            }
+
+
+          })()}</p>
+
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, }} >{usedname}</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt" >For the period {(() => {
+            const datefineda = new Date(dateRange[0]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRange[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+
+            return (formattedDate)
+          })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt" >Compared with the period {(() => {
+            const datefineda = new Date(dateRangetwo[0]);
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRangetwo[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+            return (formattedDate)
+          })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+
+
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} className="fonttttttt" >Table ranges contains: All</p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} className="fonttttttt" >Stages contains: {(() => {
+
+            const result = selectedhubOptions.map(item => item.label).join(",") // Join without spaces first
+              .replace(/,/g, ", ");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()} </p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} className="fonttttttt" >Courses contains: {(() => {
+
+            const result = selectedCources.map(item => item.label).join(",") // Join without spaces first
+              .replace(/,/g, ", ");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()}</p>
+
+
+          <div style={{ marginTop: 20, padding: 10 }} >
+            <div className="d-flex justify-content-between" >
+
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+                  editall?.edited?.length
+                  + editall?.deleted?.length
+                  + editall?.moved?.length}</span></p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >{
+
+                  editallone?.edited?.length
+                  + editallone?.deleted?.length
+                  + editallone?.moved?.length
+                }</span></p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                  {(() => {
+                    let datd = editallone?.edited?.length
+                      + editallone?.deleted?.length
+                      + editallone?.moved?.length
+
+                    let datdtwo = editall?.edited?.length
+                      + editall?.deleted?.length
+                      + editall?.moved?.length
+
+                    let tot = ((datdtwo - datd) / datd) * 100
+
+                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                      }} className="" alt="Example Image" /> :
+                      <img src="d_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" />}</span></span>
+
+
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                  })()}</span></p>
+              </div>
+
+            </div>
+
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black' }} />
+
+            <div className="d-flex justify-content-between" >
+
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.moved?.length}</p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}  </p>
+              </div>
+              <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                  {(() => {
+                    let datd = editallone?.moved?.length
+
+                    let datdtwo = editall?.moved?.length
+
+                    let tot = ((datdtwo - datd) / datd) * 100
+
+                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                      }} className="" alt="Example Image" /> :
+                      <img src="d_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" />}</span></span>
+
+
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                  })()}</span></p>
+              </div>
+
+            </div>
+
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black', }} />
+
+            <div className="d-flex justify-content-between" >
+
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.edited?.length}</p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}  </p>
+              </div>
+              <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                  {(() => {
+                    let datd = editallone?.edited?.length
+
+                    let datdtwo = editall?.edited?.length
+
+                    let tot = ((datdtwo - datd) / datd) * 100
+
+                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                      }} className="" alt="Example Image" /> :
+                      <img src="d_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" />}</span></span>
+
+
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                  })()}</span></p>
+              </div>
+
+            </div>
+
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black', }} />
+
+            <div className="d-flex justify-content-between" >
+
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.deleted?.length}</p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Deleted</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.deleted?.length}  </p>
+              </div>
+              <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                  {(() => {
+                    let datd = editallone?.deleted?.length
+
+                    let datdtwo = editall?.deleted?.length
+
+                    let tot = ((datdtwo - datd) / datd) * 100
+
+                    return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                      }} className="" alt="Example Image" /> :
+                      <img src="d_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" />}</span></span>
+
+
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                  })()}</span></p>
+              </div>
+
+            </div>
+
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black', }} />
+
+
+            <div className="d-flex justify-content-between" >
+
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.tableMoved?.length}</p>
+              </div>
+              <div >
+                <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Table moved</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.tableMoved?.length}  </p>
+              </div>
+              <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span >
+                  {(() => {
+                    let datd = editallone?.tableMoved?.length
+
+                    let datdtwo = editall?.tableMoved?.length
+
+                    let tot = ((datdtwo - datd) / datd) * 100
+
+                    console.log(tot, 'nan')
+
+                    return <span >{isNaN(tot) ? "+000.00" : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
+                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                      }} className="" alt="Example Image" /> :
+                      <img src="d_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" />}</span></span>
+
+
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                  })()}</span></p>
+              </div>
+
+            </div>
+
+            <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+
+
+          </div>
+        </div >
+      </div>
+
+
+      <div style={{ visibility: 'hidden' }}>
+        <div ref={pdfRefss}>
+          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -10 }}>Served meals</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt">
+            {(() => {
+              const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+              const result = selectedOptions
+                .filter(item => item.label !== "All Venue")
+                .map(item => item.label.trim()).join(",") // Join without spaces first
+                .replace(/,/g, ", ");
+              if (result === "" || result === undefined || result === null) {
+                return 'All Venue'
+              } else {
+                return result
+              }
+            })()}
+          </p>
+
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, }}>{usedname}</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >For the period {(() => {
+            const datefineda = new Date(dateRange[0]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRange[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+            return (formattedDate)
+          })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >Compared with the period {(() => {
+            const datefineda = new Date(dateRangetwo[0]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRangetwo[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+            return (formattedDate)
+          })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} className="fonttttttt"  >Table ranges contains: All</p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Stages contains: {(() => {
+            const result = selectedhubOptions.map(item => item.label.trim()).join(",") // Join without spaces first
+              .replace(/,/g, ", "); // Changed from comma+space to just space
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+              return result
+            }
+          })()} </p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Courses contains: {(() => {
+            const result = selectedCources.map(item => item.label.trim()).join(",") // Join without spaces first
+              .replace(/,/g, ", "); // Changed from comma+space to just space
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+              return result
+            }
+          })()}</p>
+
+
+          <div style={{ marginTop: 20, padding: 10 }}>
+            <div className="d-flex" style={{ borderBottom: "1px solid #000" }}>
+              <div style={{ width: '43%' }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                <div style={{ display: 'flex', flexDirection: 'row' }} >
+                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )   </p><p style={{ fontWeight: '700', marginTop: 8 }}>{ggggrt()}</p>
+
                 </div>
-    
-                {
-                  served?.map((dfgh, index) => {
-                    const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
-    
-                    return (
-                      <>
-                        <div className="d-flex mt-3" style={{ alignItems: "center", height: "40px", borderBottom: "1px solid #ccc" }}>
-                          <div style={{ width: '43%' }} className={`d-flex ${index === 0 ? 'mt-2' : ''}`}>
-                            <p style={{ fontWeight: '700', color: index === 0 && selserdata === 'Minimum' ? "#CA424E" : '#000', }}>{dfgh?.name}</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginLeft: 5 }}>{dfgh?.count}</p>
-                          </div>
-    
-                          {correspondingErv ? (
-                            <div style={{ width: '34%', textAlign: 'center' }} className={`${index === 0 ? 'mt-2' : ''}`}>
-                              <div className="d-flex">
-                                <p style={{ fontWeight: '700', color: index === 0 && selserdata === 'Maximum' ? "#316AAF" : '#000', }}>{correspondingErv?.name}</p>
-                                <p style={{ fontWeight: '400', color: '#000', marginLeft: 5 }}>{correspondingErv?.count}</p>
-                              </div>
-                            </div>
-                          ) : (
-                            <>
-                              <div style={{ width: '33%' }}>
-                              </div></>
-                          )}
-    
-                          <div style={{ justifyContent: 'start', alignItems: 'center', display: 'flex', width: '23%' }} className={`${index === 0 ? 'mt-2' : ' '}`}>
-                            <p style={{ fontWeight: '400', color: '#000', display: 'inline-flex', alignItems: 'center' }}>
-                              ( Total ){" "}
-                              {(() => {
-                                const datd = dfgh?.count || 0;
-                                const datdtwo = correspondingErv?.count || 0;
-                                const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
-                                return (
-                                  <>
-                                    <span style={{ verticalAlign: 'middle', display: 'inline-block', width: '60px', textAlign: 'right' }}>
-                                      {tot.toFixed(2) + "%"}
-                                    </span>{" "}
-                                    <img
-                                      src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                                      style={{
-                                        width: 16,
-                                        height: 16,
-                                        marginLeft: 14,
-                                        verticalAlign: 'middle',
-                                      }}
-                                      alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
-                                    />
-                                  </>
-                                );
-                              })()}
-                            </p>
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })
-                }
+              </div>
+              <div style={{ width: '34%' }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+
+                <div style={{ display: 'flex', flexDirection: 'row' }} >
+                  <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) </p><p style={{ fontWeight: '700', marginTop: 8 }}> {ggggrts()}</p>
+                </div>
+
+
+              </div>
+              <div style={{ width: '23%' }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+
+
+
+
+                <div style={{ display: 'flex', flexDirection: 'row' }} >
+                  <p style={{ fontWeight: '400', color: '#000', }}>
+                    ( Total ){" "}
+
+                  </p><p style={{ fontWeight: '700' }}>
+                    {(() => {
+                      let datd = ggggrt();
+                      let datdtwo = ggggrts();
+                      let tot = ((datd - datdtwo) / datdtwo) * 100;
+
+                      return (
+                        <>
+                          {tot.toFixed(2) + "%"}{" "}
+                        </>
+                      );
+                    })()}
+                  </p>
+                </div>
+
+
               </div>
             </div>
+
+            {
+              served?.map((dfgh, index) => {
+                const correspondingErv = servedone?.[index]; // Get the corresponding item in the `ervedone` array
+
+                return (
+                  <>
+                    <div className="d-flex mt-3" style={{ alignItems: "center", height: "40px", borderBottom: "1px solid #ccc" }}>
+                      <div style={{ width: '43%' }} className={`d-flex ${index === 0 ? 'mt-2' : ''}`}>
+                        <p style={{ fontWeight: '700', color: index === 0 && selserdata === 'Minimum' ? "#CA424E" : '#000', }}>{dfgh?.name}</p>
+                        <p style={{ fontWeight: '400', color: '#000', marginLeft: 5 }}>{dfgh?.count}</p>
+                      </div>
+
+                      {correspondingErv ? (
+                        <div style={{ width: '34%', textAlign: 'center' }} className={`${index === 0 ? 'mt-2' : ''}`}>
+                          <div className="d-flex">
+                            <p style={{ fontWeight: '700', color: index === 0 && selserdata === 'Maximum' ? "#316AAF" : '#000', }}>{correspondingErv?.name}</p>
+                            <p style={{ fontWeight: '400', color: '#000', marginLeft: 5 }}>{correspondingErv?.count}</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <div style={{ width: '33%' }}>
+                          </div></>
+                      )}
+
+                      <div style={{ justifyContent: 'start', alignItems: 'center', display: 'flex', width: '23%' }} className={`${index === 0 ? 'mt-2' : ' '}`}>
+                        <p style={{ fontWeight: '400', color: '#000', display: 'inline-flex', alignItems: 'center' }}>
+                          ( Total ){" "}
+                          {(() => {
+                            const datd = dfgh?.count || 0;
+                            const datdtwo = correspondingErv?.count || 0;
+                            const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
+                            return (
+                              <>
+                                <span style={{ verticalAlign: 'middle', display: 'inline-block', width: '60px', textAlign: 'right' }}>
+                                  {tot.toFixed(2) + "%"}
+                                </span>{" "}
+                                <img
+                                  src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                                  style={{
+                                    width: 16,
+                                    height: 16,
+                                    marginLeft: 14,
+                                    verticalAlign: 'middle',
+                                  }}
+                                  alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
+                                />
+                              </>
+                            );
+                          })()}
+                        </p>
+                      </div>
+                    </div>
+                  </>
+                );
+              })
+            }
           </div>
+        </div>
+      </div>
 
 
-       <div style={{ visibility: 'hidden' }}>
-              <div ref={pdfRefsss}  >
-      
-                <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}  className="fonttttttt"  >Refunded meals</p>
-      
-                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}  className="fonttttttt"   >{(() => {
-      
-                  const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-                  const result = filteredOptions.map(item => item.label).join(",") // Join without spaces first
-                  .replace(/,/g, ", ");
-      
-      
-                  if (result === "" || result === undefined || result === null) {
-                    return 'All Venue'
-                  } else {
-      
-                    return result
-      
-                  }
-      
-      
-                })()}</p>
-      
-                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20,   }} >{usedname}</p>
-                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,  }}  className="fonttttttt"  >For the period {(() => {
-                  const datefineda = new Date(dateRange[0]);
-      
-                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
-                  }).replace(/,/g, "");
-      
-                  return (formattedDate)
-                })()} to {(() => {
-                  const datefineda = new Date(dateRange[1]);
-      
-                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
-                  }).replace(/,/g, "");
-      
-                  return (formattedDate)
-                })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,   }}  className="fonttttttt"  >Compared with the period {(() => {
-                  const datefineda = new Date(dateRangetwo[0]);
-      
-                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
-                  }).replace(/,/g, "");
-      
-                  return (formattedDate)
-                })()} to {(() => {
-                  const datefineda = new Date(dateRangetwo[1]);
-      
-                  const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric"
-                  }).replace(/,/g, "");
-      
-                  return (formattedDate)
-                })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-      
-                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20,   }}  className="fonttttttt"  >Table ranges contains: All</p>
-                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20,   }}  className="fonttttttt"  >Stages contains: {(() => {
-      
-                  const result = selectedhubOptions.map(item => item.label).join(",") // Join without spaces first
-                  .replace(/,/g, ", ");
-      
-                  if (result === "" || result === undefined || result === null) {
-                    return 'All'
-                  } else {
-      
-                    return result
-      
-                  }
-      
-      
-                })()} </p>
-                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20,   }}  className="fonttttttt"  >Courses contains: {(() => {
-      
-                  const result = selectedCources.map(item => item.label).join(",") // Join without spaces first
-                  .replace(/,/g, ", ");
-      
-                  if (result === "" || result === undefined || result === null) {
-                    return 'All'
-                  } else {
-      
-                    return result
-      
-                  }
-      
-      
-                })()}</p>
-      
-      
-                <div style={{ marginTop: 20, padding: 10 }} >
-      
-                  <div className="d-flex " style={{  borderBottom: "1px solid #ccc"  }} >
-      
-                    <div  style={{ width: '43%' }}>
-                      <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
-                        ggggrtsg()} </p>
-                    </div>
-                    <div  style={{ width: '33%' }}>
-                      <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span style={{ marginTop : -6 }}>{
-      
-                        ggggrtsgg()
-                      } </span></p>
-                    </div>
-                    <div  style={{ width: '23%', justifyContent: 'end',  }}>
-                      <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                        ( Total )
-                        {(() => {
-                          let datd = ggggrtsg();
-                          let datdtwo = ggggrtsgg();
-                          let tot = ((datd - datdtwo) / datdtwo) * 100;
-      
-                          console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot);
-      
-                          return (
-                            <>
-                              {isNaN(tot) ? 0 : tot.toFixed(2) + "%"}
-                            </>
-                          );
-                        })()}
-                      </p>
-      
-                    </div>
-      
-                  </div>
-       
-      
-                  <div className="scroll" id="scrrrrol"  >
-      
-      
-      
-                    {
-                      minperday?.map((dfgh, index) => {
-      
-                        const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
-      
-                        return (
-                          <>
-                            <div className="d-flex" style={{ borderBottom: "1px solid #ccc" , padding : 4 }} >
-                              {/* Left Section */}
-                              <div style={{ width: '43%' }} className="d-flex "> 
-                                <p style={{ fontWeight: 700, color: index === 0 && selserdatare === 'Minimum'  ? "#CA424E" : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                                <p style={{ fontWeight: 400, color: '#000', marginBlock: '4px' }}>{dfgh?.count}</p>
-                              </div>
-      
-                              {/* Middle Section */}
-                              <div style={{ width: '33%',  }}>
-                                {correspondingErv ? (
-                                  <div className="d-flex ">
-                                    <p style={{ fontWeight: 700, color: index === 0 && selserdatare === 'Maximum' ? "#316AAF" : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                    <p style={{ fontWeight: 400, color: '#000', marginBlock: '4px' }}>{correspondingErv?.count}</p>
-                                  </div>
-                                ) : null}
-                              </div>
-      
-                              {/* Right Section */}
-                              <div style={{ width: '23%', display: 'd-flex', justifyContent: 'end',  }}>
-                                <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px',}}>
-                                  ( Total )
-                                  {(() => {
-                                    const datd = dfgh?.count || 0;
-                                    const datdtwo = correspondingErv?.count || 0;
-                                    const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
-                                    return (
-                                      <>
-                                        {tot.toFixed(2)}%
-                                        <img
-                                          src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                                          style={{ width: 16, height: 16, cursor: 'pointer', marginLeft: 5, verticalAlign: 'middle' }}
-                                          alt={tot > 0 ? "up arrow" : "down arrow"}
-                                        />
-                                      </>
-                                    );
-                                  })()}
-                                </p>
-                              </div>
-                            </div> 
-                          </>
-      
-      
-                        );
-                      })
-                    }
-      
-      
-                  </div>
-      
-      
-      
-      
-                </div>
-              </div >
+      <div style={{ visibility: 'hidden' }}>
+        <div ref={pdfRefsss}  >
+
+          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }} className="fonttttttt"  >Refunded meals</p>
+
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"   >{(() => {
+
+            const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+            const result = filteredOptions.map(item => item.label).join(",") // Join without spaces first
+              .replace(/,/g, ", ");
+
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All Venue'
+            } else {
+
+              return result
+
+            }
+
+
+          })()}</p>
+
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, }} >{usedname}</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >For the period {(() => {
+            const datefineda = new Date(dateRange[0]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRange[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+            return (formattedDate)
+          })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >Compared with the period {(() => {
+            const datefineda = new Date(dateRangetwo[0]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRangetwo[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+            return (formattedDate)
+          })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, }} className="fonttttttt"  >Table ranges contains: All</p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Stages contains: {(() => {
+
+            const result = selectedhubOptions.map(item => item.label).join(",") // Join without spaces first
+              .replace(/,/g, ", ");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()} </p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Courses contains: {(() => {
+
+            const result = selectedCources.map(item => item.label).join(",") // Join without spaces first
+              .replace(/,/g, ", ");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()}</p>
+
+
+          <div style={{ marginTop: 20, padding: 10 }} >
+
+            <div className="d-flex " style={{ borderBottom: "1px solid #ccc" }} >
+
+              <div style={{ width: '43%' }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+                  ggggrtsg()} </p>
+              </div>
+              <div style={{ width: '33%' }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span style={{ marginTop: -6 }}>{
+
+                  ggggrtsgg()
+                } </span></p>
+              </div>
+              <div style={{ width: '23%', justifyContent: 'end', }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                  ( Total )
+                  {(() => {
+                    let datd = ggggrtsg();
+                    let datdtwo = ggggrtsgg();
+                    let tot = ((datd - datdtwo) / datdtwo) * 100;
+
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot);
+
+                    return (
+                      <>
+                        {isNaN(tot) ? 0 : tot.toFixed(2) + "%"}
+                      </>
+                    );
+                  })()}
+                </p>
+
+              </div>
+
             </div>
+
+
+            <div className="scroll" id="scrrrrol"  >
+
+
+
+              {
+                minperday?.map((dfgh, index) => {
+
+                  const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
+
+                  return (
+                    <>
+                      <div className="d-flex" style={{ borderBottom: "1px solid #ccc", padding: 4 }} >
+                        {/* Left Section */}
+                        <div style={{ width: '43%' }} className="d-flex ">
+                          <p style={{ fontWeight: 700, color: index === 0 && selserdatare === 'Minimum' ? "#CA424E" : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                          <p style={{ fontWeight: 400, color: '#000', marginBlock: '4px' }}>{dfgh?.count}</p>
+                        </div>
+
+                        {/* Middle Section */}
+                        <div style={{ width: '33%', }}>
+                          {correspondingErv ? (
+                            <div className="d-flex ">
+                              <p style={{ fontWeight: 700, color: index === 0 && selserdatare === 'Maximum' ? "#316AAF" : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                              <p style={{ fontWeight: 400, color: '#000', marginBlock: '4px' }}>{correspondingErv?.count}</p>
+                            </div>
+                          ) : null}
+                        </div>
+
+                        {/* Right Section */}
+                        <div style={{ width: '23%', display: 'd-flex', justifyContent: 'end', }}>
+                          <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px', }}>
+                            ( Total )
+                            {(() => {
+                              const datd = dfgh?.count || 0;
+                              const datdtwo = correspondingErv?.count || 0;
+                              const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
+                              return (
+                                <>
+                                  {tot.toFixed(2)}%
+                                  <img
+                                    src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                                    style={{ width: 16, height: 16, cursor: 'pointer', marginLeft: 5, verticalAlign: 'middle' }}
+                                    alt={tot > 0 ? "up arrow" : "down arrow"}
+                                  />
+                                </>
+                              );
+                            })()}
+                          </p>
+                        </div>
+                      </div>
+                    </>
+
+
+                  );
+                })
+              }
+
+
+            </div>
+
+
+
+
+          </div>
+        </div >
+      </div>
 
     </div>
   );
