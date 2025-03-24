@@ -151,7 +151,7 @@ let Multi_venue = () => {
   let [cval1, setcval1] = useState()
   let [cval2, setcval2] = useState()
 
-
+  let [prevVenueradiofivese, setPrevVenueradiofivese] = useState(false);
 
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
@@ -1537,7 +1537,7 @@ let Multi_venue = () => {
       }
 
       return <span style={{
-        color: allLabels === 'Maximum' ? 'red' : allLabels === 'Minimum' ? 'blue' : "",
+        color: allLabels === 'Maximum' ? '#CA424E' : allLabels === 'Minimum' ? '#316AAF' : "",
         fontWeight: allLabels === 'Maximum' ? '700' : allLabels === 'Minimum' ? '700' : ""
       }} title={allLabels}>{displayText}</span>;
     }
@@ -1554,363 +1554,186 @@ let Multi_venue = () => {
 
 
   const handleChange = (selected) => {
+    const hasAllValue = selected.some((item) => item.value === "All");
+    const hasAllValueOld = oldven.some((item) => item.value === "All");
 
-    console.log(JSON.stringify(fulldatatwo), 'selected')
-    const hasAllValue = selected.some(item => item.value === "All");
-    const hasAllValueold = oldven.some(item => item.value === "All");
+    // Check for overlap with selectedOptionsfive
+    const selectedValues = selected.map((opt) => opt.value);
+    const compareValues = selectedOptionsfive.map((opt) => opt.value);
+    const hasOverlap = selectedValues.some((val) => compareValues.includes(val));
 
+    if (hasOverlap) {
+      // Show alert and reset selection
+      Swal.fire({
+        icon: "warning",
+        title: "Invalid Selection",
+        text: "You cannot select the same venues in both Chosen and Compare with sections.",
+        confirmButtonText: "OK",
+      }).then(() => {
+        setSelectedOptions(oldven); // Reset to previous valid state
+        setOldven(oldven);
+      });
+      return;
+    }
 
-    setOldven(selected)
+    setOldven(selected);
 
-    if (hasAllValue === false && hasAllValueold === true) {
-
-      let uuuk = extractUniqueNotes(basicall, [])
+    if (hasAllValue === false && hasAllValueOld === true) {
+      let uuuk = extractUniqueNotes(basicall, []);
       uuuk.unshift({ label: "All Courses", value: "All" });
-
-      setFulldatafull(uuuk)
-
+      setFulldatafull(uuuk);
       setSelectedOptions([]);
-
-      filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRange, onetime  , twotime  , selectedOptionsfive , 
-      //   hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
 
       const output = [];
-
-      // // Iterate through the search array
       [].forEach(({ value }) => {
-        // Search in the data object
         Object.entries(alldrop).forEach(([key, items]) => {
           if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
+            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
           } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
+            items.forEach((item) => {
+              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
             });
           }
         });
       });
-
-      setBasicone(output)
-
-      return
+      setBasicone(output);
+      return;
     }
 
-
-
     if (hasAllValue === true) {
-
-      let uuuk = extractUniqueNotes(basicall, basic)
+      let uuuk = extractUniqueNotes(basicall, basic);
       uuuk.unshift({ label: "All Courses", value: "All" });
-
-      setFulldatafull(uuuk)
-
-
+      setFulldatafull(uuuk);
       setSelectedOptions(basic || []);
+      filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
 
-      filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      const output = [{
-        "label": "All Hub",
-        "value": "All"
-      }];
-
-      // // Iterate through the search array
+      const output = [{ label: "All Hub", value: "All" }];
       basic.forEach(({ value }) => {
-        // Search in the data object
         Object.entries(alldrop).forEach(([key, items]) => {
           if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
+            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
           } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
+            items.forEach((item) => {
+              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
             });
           }
         });
       });
-
-      setBasicone(output)
-
-
+      setBasicone(output);
     } else {
-
-      let lengthss = selected.length
-      let lengthssone = basic.length
-
-      // if (lengthss === lengthssone - 1) {
-      //   setSelectedOptions( []);
-
-      //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      //   const output = [];
-
-      //   // // Iterate through the search array
-      //   [].forEach(({ value }) => {
-      //     // Search in the data object
-      //     Object.entries(alldrop).forEach(([key, items]) => {
-      //       if (key === value) {
-      //         // If the key matches, add all items from the group to the output
-      //         items.forEach(item => {
-      //           output.push({ value: key + '-' + item.name, label: item.name });
-      //         });
-      //       } else {
-      //         // Search within the group's items
-      //         items.forEach(item => {
-      //           if (item.name === value) {
-      //             output.push({ value: key + '-' + item.name, label: key });
-      //           }
-      //         });
-      //       }
-      //     });
-      //   });
-
-      //   setBasicone(output)
-
-      //   return
-      // }
-
-
-      let uuuk = extractUniqueNotes(basicall, selected)
+      let uuuk = extractUniqueNotes(basicall, selected);
       uuuk.unshift({ label: "All Courses", value: "All" });
-
-      setFulldatafull(uuuk)
-
+      setFulldatafull(uuuk);
       setSelectedOptions(selected || []);
+      filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
 
-      filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      const output = [{
-        "label": "All Hub",
-        "value": "All"
-      }];
-
-      // // Iterate through the search array
+      const output = [{ label: "All Hub", value: "All" }];
       selected.forEach(({ value }) => {
-        // Search in the data object
         Object.entries(alldrop).forEach(([key, items]) => {
           if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
+            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
           } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
+            items.forEach((item) => {
+              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
             });
           }
         });
       });
-
-      setBasicone(output)
+      setBasicone(output);
     }
-
-
-    // const validVenues = selected.map(item => item.value);
-
-    //     // Filter the data
-    //     const filteredData = Object.fromEntries(
-    //       Object.entries(fulldatatwo).filter(([key, value]) => validVenues.includes(value.venue))
-    //     );
-    //     callfordata(filteredData , fulldata )
-
-    //     setFulldatatwo(filteredData) 
-
-
-    //     const filteredDatatwo = Object.fromEntries(
-    //       Object.entries(fulldata).filter(([key, value]) => validVenues.includes(value.venue))
-    //     );
-
-    //     callfordata(filteredData , filteredDatatwo )
-    //     setFulldata(filteredDatatwo)
-
   };
 
-  const handleChangefive = (selected) => {
-
-    console.log(JSON.stringify(fulldatatwo), 'selected')
-    const hasAllValue = selected.some(item => item.value === "All");
-    const hasAllValueold = oldvenfive.some(item => item.value === "All");
-
-
-    setOldvenfive(selected)
-
-    if (hasAllValue === false && hasAllValueold === true) {
+  const handleChangefive = (selected, toggleState = null) => {
+    const hasAllValue = selected.some((item) => item.value === "All");
+    const hasAllValueOld = oldvenfive.some((item) => item.value === "All");
+  
+    // Check for overlap with selectedOptions
+    const selectedValues = selected.map((opt) => opt.value);
+    const chosenValues = selectedOptions.map((opt) => opt.value);
+    const hasOverlap = selectedValues.some((val) => chosenValues.includes(val));
+  
+    if (hasOverlap) {
+      // Show alert and reset selection
+      Swal.fire({
+        icon: "warning",
+        title: "Invalid Selection",
+        text: "You cannot select the same venues in both Chosen and Compare with sections.",
+        confirmButtonText: "OK",
+      }).then(() => {
+        setSelectedOptionsfive(oldvenfive); // Reset to previous valid state
+        setOldvenfive(oldvenfive);
+        if (toggleState !== null) {
+          // Revert toggle state if this was triggered by the toggle
+          setVenueradiofivese(prevVenueradiofivese);
+        }
+      });
+      return;
+    }
+  
+    // If no overlap, update the previous toggle state and proceed
+    if (toggleState !== null) {
+      setPrevVenueradiofivese(venueradiofivese); // Store previous state before updating
+      setVenueradiofivese(toggleState); // Update to new toggle state
+    }
+    setOldvenfive(selected);
+  
+    if (hasAllValue === false && hasAllValueOld === true) {
       setSelectedOptionsfive([]);
-
-      // filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      filterDataByDateonee(dateRange, onetime, twotime, [],
-        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
+      filterDataByDateonee(dateRange, onetime, twotime, [], hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
+  
       const output = [];
-
-      // // Iterate through the search array
       [].forEach(({ value }) => {
-        // Search in the data object
         Object.entries(alldrop).forEach(([key, items]) => {
           if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
+            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
           } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
+            items.forEach((item) => {
+              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
             });
           }
         });
       });
-
-      setBasiconefive(output)
-
-      return
+      setBasiconefive(output);
+      return;
     }
-
-
-
+  
     if (hasAllValue === true) {
-
       setSelectedOptionsfive(basic || []);
-
-      // filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-      filterDataByDateonee(dateRange, onetime, twotime, basic,
-        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-      const output = [{
-        "label": "All Hub",
-        "value": "All"
-      }];
-
-      // // Iterate through the search array
+      filterDataByDateonee(dateRange, onetime, twotime, basic, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
+  
+      const output = [{ label: "All Hub", value: "All" }];
       basic.forEach(({ value }) => {
-        // Search in the data object
         Object.entries(alldrop).forEach(([key, items]) => {
           if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
+            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
           } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
+            items.forEach((item) => {
+              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
             });
           }
         });
       });
-
-      setBasiconefive(output)
-
-
+      setBasiconefive(output);
     } else {
-
-      let lengthss = selected.length
-      let lengthssone = basic.length
-
-      // if (lengthss === lengthssone - 1) {
-      //   setSelectedOptions( []);
-
-      //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      //   const output = [];
-
-      //   // // Iterate through the search array
-      //   [].forEach(({ value }) => {
-      //     // Search in the data object
-      //     Object.entries(alldrop).forEach(([key, items]) => {
-      //       if (key === value) {
-      //         // If the key matches, add all items from the group to the output
-      //         items.forEach(item => {
-      //           output.push({ value: key + '-' + item.name, label: item.name });
-      //         });
-      //       } else {
-      //         // Search within the group's items
-      //         items.forEach(item => {
-      //           if (item.name === value) {
-      //             output.push({ value: key + '-' + item.name, label: key });
-      //           }
-      //         });
-      //       }
-      //     });
-      //   });
-
-      //   setBasicone(output)
-
-      //   return
-      // }
-
       setSelectedOptionsfive(selected || []);
-
-      // filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-      filterDataByDateonee(dateRange, onetime, twotime, selected,
-        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-      const output = [{
-        "label": "All Hub",
-        "value": "All"
-      }];
-
-      // // Iterate through the search array
+      filterDataByDateonee(dateRange, onetime, twotime, selected, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
+  
+      const output = [{ label: "All Hub", value: "All" }];
       selected.forEach(({ value }) => {
-        // Search in the data object
         Object.entries(alldrop).forEach(([key, items]) => {
           if (key === value) {
-            // If the key matches, add all items from the group to the output
-            items.forEach(item => {
-              output.push({ value: key + '-' + item.name, label: item.name });
-            });
+            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
           } else {
-            // Search within the group's items
-            items.forEach(item => {
-              if (item.name === value) {
-                output.push({ value: key + '-' + item.name, label: key });
-              }
+            items.forEach((item) => {
+              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
             });
           }
         });
       });
-
-      setBasiconefive(output)
+      setBasiconefive(output);
     }
-
-
   };
-
 
   const handleChangefine = (selected) => {
     console.log(editall, 'selected')
@@ -2315,10 +2138,10 @@ let Multi_venue = () => {
     }
     let checkone = areObjectsEqual(selectedOptionsfive, val21)
 
-    if (checkone === true) {
-      alert('The chosen venue and the compared venue are the same')
-      return
-    }
+    // if (checkone === true) {
+    //   alert('The chosen venue and the compared venue are the same')
+    //   return
+    // }
 
     cources = cources.filter(item => item.value !== "All");
 
@@ -5845,14 +5668,16 @@ let Multi_venue = () => {
                       id="switch13"
                       checked={venueradiofivese}
                       onChange={(e) => {
-                        setVenueradiofivese(e.target.checked)
-                        if (e.target.checked === false) {
-                          setSelectedOptionsfive([])
+                        const newToggleState = e.target.checked;
+                        setPrevVenueradiofivese(venueradiofivese); // Save current state before changing
+                        setVenueradiofivese(newToggleState); // Optimistically update toggle state
+                        if (newToggleState === false) {
+                          setSelectedOptionsfive([]);
                         } else {
-                          handleChangefive([...selectedOptionsfive, ...[{
-                            "label": "All Venues",
-                            "value": "All"
-                          }]])
+                          handleChangefive(
+                            [...selectedOptionsfive, { label: "All Venues", value: "All" }],
+                            true // Pass toggle state
+                          );
                         }
                       }}
                     />
@@ -6933,7 +6758,7 @@ let Multi_venue = () => {
                           <div style={{ visibility: 'hidden' , position : 'absolute' }}>
                             <div ref={pdfRefredone}  >
 
-                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
+                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }} className="fonttttttt">Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
                                 {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
 
                               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
@@ -7148,7 +6973,7 @@ let Multi_venue = () => {
                           <div style={{ visibility: 'hidden' , position : 'absolute' }}>
                             <div ref={pdfRefred}  >
 
-                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
+                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }} className="fonttttttt">Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
                                 {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
                               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
 
@@ -7295,7 +7120,7 @@ let Multi_venue = () => {
                      <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }} className="fonttttttt">Dockets Completion Time - From {selectedOptionsfine[0]?.label} to {selectedOptionsfine[0]?.label === "Minimum" ? " Maximum" : " Minimum"}</p>
        
        
-                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}    > {(() => {
+                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}   className="fonttttttt" > {(() => {
        
                        const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
                        const result = selectedOptions.map(item => item.label).join(",") // Join without spaces first

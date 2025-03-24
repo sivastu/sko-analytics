@@ -2273,13 +2273,40 @@ let Meals = () => {
       }
 
       return <span style={{
-        color: allLabels === 'Maximum' ? 'red' : allLabels === 'Minimum' ? 'blue' : "",
+        color: allLabels === 'Maximum' ? '#316AAF' : allLabels === 'Minimum' ? '#CA424E' : "",
         fontWeight: allLabels === 'Maximum' ? '700' : allLabels === 'Minimum' ? '700' : ""
       }} title={allLabels}>{displayText}</span>;
     }
     return null;
   };
+  const CustomPlaceholders = ({ children, getValue }) => {
+    const selected = getValue();
+    if (selected.length) {
+      const allLabels = selected
+        .filter(option => option.label && !option.label.startsWith("All ")) // Ensure label exists
+        .map(option => option.label)
+        .join(", ");
 
+      // Limit to single line with ellipsis
+      const maxLength = 10; // Adjust as needed
+      let displayText = ''
+
+      let hasAllfinbyss = selected.some(option => option.label && option.label.startsWith("All "));
+
+      if (hasAllfinbyss === true) {
+        const allValue = selected.find(option => option.label && option.label.startsWith("All "))?.label || "";
+        displayText = allValue.slice(0, textCount)
+      } else {
+        displayText = allLabels.slice(0, textCount) + "..."
+      }
+
+      return <span style={{
+        color: allLabels === 'Maximum' ? '#CA424E' : allLabels === 'Minimum' ? '#316AAF' : "",
+        fontWeight: allLabels === 'Maximum' ? '700' : allLabels === 'Minimum' ? '700' : ""
+      }} title={allLabels}>{displayText}</span>;
+    }
+    return null;
+  };
   const [selectedOptions, setSelectedOptions] = useState([]);
 
 
@@ -6406,7 +6433,7 @@ let Meals = () => {
                                     const selectedValues = props.getValue();
                                     return (
                                       <components.ValueContainer {...props}>
-                                        {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                                        {selectedValues.length > 0 ? <CustomPlaceholders {...props} /> : children}
                                       </components.ValueContainer>
                                     );
                                   },
@@ -6532,13 +6559,13 @@ let Meals = () => {
                                 <React.Fragment key={index} >
                                   <div className="d-flex">
                                     <div style={{ width: '33%' }}>
-                                      <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Minimum' ? "#CA424E" : '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.name}</p>
+                                      <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Minimum' ? "#316AAF" : '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.name}</p>
                                       <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.count}</p>
                                     </div>
 
                                     {correspondingErv ? (
                                       <div style={{ width: '33%', textAlign: 'center' }}>
-                                        <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Maximum' ? "#316AAF" : '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.name}</p>
+                                        <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Maximum' ? "#CA424E" : '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.name}</p>
                                         <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.count}</p>
                                       </div>
                                     ) : (
@@ -7128,19 +7155,19 @@ let Meals = () => {
       <div style={{ visibility: 'hidden' }}>
         <div ref={pdfRefss}>
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -10 }}>Served meals</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}>
-            {(() => {
-              const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-              const result = selectedOptions
-                .filter(item => item.label !== "All Venue")
-                .map(item => item.label.trim()).join(",") // Join without spaces first
-                .replace(/,/g, ", ");
-              if (result === "" || result === undefined || result === null) {
-                return 'All Venue'
-              } else {
-                return result
-              }
-            })()}
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt" >
+          {(() => {
+        const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+        const result = selectedOptions
+          .filter(item => item.label !== "All Venue")
+          .map(item => item.label.trim())
+          .join(", "); // Join with comma and space directly
+        if (result === "" || result === undefined || result === null) {
+          return 'All Venue';
+        } else {
+          return result;
+        }
+      })()}
           </p>
 
           <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, }}>{usedname}</p>
@@ -7188,7 +7215,8 @@ let Meals = () => {
           })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
           <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} className="fonttttttt"  >Table ranges contains: All</p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Stages contains: {(() => {
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Stages contains: 
+          {(() => {
             const result = selectedhubOptions.map(item => item.label.trim()).join(",") // Join without spaces first
               .replace(/,/g, ", "); // Changed from comma+space to just space
 

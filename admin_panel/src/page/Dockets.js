@@ -1502,7 +1502,7 @@ let Dockets = () => {
       }
 
       return <span style={{
-        color: allLabels === 'Maximum' ? 'red' : allLabels === 'Minimum' ? 'blue' : "",
+        color: allLabels === 'Maximum' ? '#CA424E' : allLabels === 'Minimum' ? '#316AAF' : "",
         fontWeight: allLabels === 'Maximum' ? '700' : allLabels === 'Minimum' ? '700' : ""
       }} title={allLabels}>{displayText}</span>;
     }
@@ -6020,350 +6020,316 @@ let Dockets = () => {
 
                 : meals === 2 ?
 
-                  <div className="changeone" style={{ marginTop: 80 }} >
-                    <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }} >
+            <div className="changeone" style={{ marginTop: 80 }}>
+  <div className="changetwo" style={{ width: '100%', backgroundColor: '#fff', borderRadius: 7, height: 'auto', padding: 20 }}>
+    <div className="row">
+      {/* Left side - Title and Select */}
+      <div className="col-md-6 mb-0 mb-md-0">
+        <div className="d-flex flex-lg-row flex-md-column align-items-md-start align-items-lg-center">
+          <div className="d-flex align-items-center">
+            <img
+              src="black_arrow.png"
+              style={{ width: 20, height: 20, cursor: 'pointer' }}
+              onClick={() => {
+                filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
+                filterDataByDateonee(dateRangetwo, onetime, twotime, selectedOptionsfive, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
+                setMeals(1);
+              }}
+              alt="Back Arrow"
+            />
+            <p style={{ color: '#1A1A1B', fontWeight: 600, fontSize: 20, marginLeft: 10, marginBottom: 0 }}>
+              Dockets completion time
+            </p>
+          </div>
 
-                      <div className="row">
-                        {/* Left side - Title and Select */}
-                        <div className="col-md-6 mb-0 mb-md-0">
-                          <div className="d-flex flex-lg-row flex-md-column align-items-md-start align-items-lg-center">
-                            <div className="d-flex align-items-center">
-                              <img
-                                src="black_arrow.png"
-                                style={{ width: 20, height: 20, cursor: 'pointer' }}
-                                onClick={() => {
+          <div className="custom-inputonessfine mt-lg-0 mt-md-3 pt-lg-1 pt-md-2 mx-3">
+            <Select
+              className="newoneonee"
+              options={basicfine}
+              value={selectedOptionsfine}
+              onChange={handleChangefine}
+              placeholder="Select options..."
+              components={{
+                Option: CustomOptionfinal,
+                MultiValue: () => null,
+                ValueContainer: ({ children, ...props }) => {
+                  const selectedValues = props.getValue();
+                  return (
+                    <components.ValueContainer {...props}>
+                      {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
+                    </components.ValueContainer>
+                  );
+                },
+              }}
+              hideSelectedOptions={false}
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  border: 'unset',
+                  color: '#707070',
+                  minWidth: '180px',
+                  maxWidth: '100%'
+                }),
+              }}
+            />
+          </div>
+        </div>
+      </div>
 
-                                  filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      {/* Right side - Search and Menu */}
+      <div className="col-md-6">
+        <div className="d-flex flex-column flex-sm-row justify-content-md-end align-items-sm-center">
+          <div className="custom-inputoness mb-2 mb-sm-0" style={{
+            maxWidth: '250px',
+            width: '100%',
+            height: 45,
+            border: '1px solid rgb(203 203 203)'
+          }}>
+            <div className="input-group">
+              <input
+                onChange={(e) => {
+                  searchvalue(e.target.value);
+                }}
+                type="text"
+                className="form-control"
+                placeholder="Docket Search..."
+                style={{
+                  border: "none",
+                  boxShadow: "none",
+                  paddingRight: "45px",
+                }}
+              />
+              <span
+                className="input-group-text"
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  position: "absolute",
+                  right: 10,
+                  top: '50%',
+                  transform: 'translateY(-50%)'
+                }}
+              >
+                🔍
+              </span>
+            </div>
+          </div>
 
-                                  filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-                                  setMeals(1)
-                                }}
-                                alt="Back Arrow"
-                              />
-                              <p style={{ color: '#1A1A1B', fontWeight: 600, fontSize: 20, marginLeft: 10, marginBottom: 0 }}>
-                                Dockets completion time
-                              </p>
-                            </div>
+          <div className="position-relative mx-3">
+            <img
+              src="threedot.png"
+              ref={toggleButtonRef}
+              style={{ width: 5, height: 20, cursor: 'pointer' }}
+              onClick={handleToggleDiv}
+              className=""
+              alt="Menu"
+            />
 
-                            <div className="custom-inputonessfine mt-lg-0 mt-md-3 pt-lg-1  pt-md-2 mx-3">
-                              <Select
-                                className="newoneonee"
-                                options={basicfine}
-                                value={selectedOptionsfine}
-                                onChange={handleChangefine}
-                                placeholder="Select options..."
-                                components={{
-                                  Option: CustomOptionfinal,
-                                  MultiValue: () => null,
-                                  ValueContainer: ({ children, ...props }) => {
-                                    const selectedValues = props.getValue();
-                                    return (
-                                      <components.ValueContainer {...props}>
-                                        {selectedValues.length > 0 ? <CustomPlaceholder {...props} /> : children}
-                                      </components.ValueContainer>
-                                    );
-                                  },
-                                }}
-                                hideSelectedOptions={false}
-                                styles={{
-                                  control: (base) => ({
-                                    ...base,
-                                    border: 'unset',
-                                    color: '#707070',
-                                    minWidth: '180px',
-                                    maxWidth: '100%'
-                                  }),
-                                }}
-                              />
-                            </div>
-                          </div>
-                        </div>
+            {showDiv && (
+              <div
+                ref={dropdownRef}
+                style={{
+                  width: 200,
+                  padding: '10px',
+                  backgroundColor: '#f8f9fa',
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+                  position: 'absolute',
+                  right: 0,
+                  zIndex: 1000
+                }}
+              >
+                <p style={{ color: '#707070' }}>Export as</p>
+                <hr />
+                <p
+                  style={{
+                    color: '#000',
+                    cursor: isPdfLoad ? 'not-allowed' : 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}
+                  onClick={() => {
+                    if (!isPdfLoad) {
+                      setIsPdfLoad(true);
+                      console.log(JSON.stringify(selectedOptions), 'dateRange');
+                      editexportpdf();
+                    }
+                  }}
+                >
+                  PDF
+                  {isPdfLoad && <span className="loader"></span>}
+                </p>
+                <p
+                  style={{
+                    color: '#000',
+                    cursor: isExcelLoad ? 'not-allowed' : 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}
+                  onClick={() => {
+                    if (!isPdfLoad) {
+                      setIsExcelLoad(true);
+                      downloadDocketseditExcel();
+                    }
+                  }}
+                >
+                  Excel sheet
+                  {isExcelLoad && <span className="loader"></span>}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <div style={{ marginTop: 50, padding: 20 }}>
+      <div className="d-flex gap-5">
+        <div style={{ width: "40%" }}>
+          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span>{editall?.stats?.averageProcessTime || 0}</span></p>
+        </div>
+        <div style={{ width: "40%", display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
+          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span>{editallone?.stats?.averageProcessTime || 0}</span></p>
+        </div>
+        <div style={{ width: "20%", display: 'flex', justifyContent: 'end', alignItems: 'end', flexDirection: 'column' }}>
+          <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span>
+            {(() => {
+              let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
+              let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
+              let average = Math.round((numOne + numTwo) / 2);
+              return <span>{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }}>{average > 0 ?
+                <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => { }} className="" alt="Example Image" /> :
+                <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => { }} className="" alt="Example Image" />}</span></span>
+            })()}
+          </span></p>
+        </div>
+      </div>
 
-                        {/* Right side - Search and Menu */}
-                        <div className="col-md-6">
-                          <div className="d-flex flex-column flex-sm-row justify-content-md-end align-items-sm-center">
-                            <div className="custom-inputoness mb-2 mb-sm-0" style={{
-                              maxWidth: '250px',
-                              width: '100%',
-                              height: 45,
-                              border: '1px solid rgb(203 203 203)'
-                            }}>
-                              <div className="input-group">
-                                <input
-                                  onChange={(e) => {
-                                    searchvalue(e.target.value)
-                                  }}
-                                  type="text"
-                                  className="form-control"
-                                  placeholder="Docket Search..."
-                                  style={{
-                                    border: "none",
-                                    boxShadow: "none",
-                                    paddingRight: "45px",
-                                  }}
-                                />
-                                <span
-                                  className="input-group-text"
-                                  style={{
-                                    background: "none",
-                                    border: "none",
-                                    cursor: "pointer",
-                                    position: "absolute",
-                                    right: 10,
-                                    top: '50%',
-                                    transform: 'translateY(-50%)'
-                                  }}
-                                >
-                                  🔍
-                                </span>
-                              </div>
-                            </div>
+      <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
-                            <div className="position-relative  mx-3 ">
-                              <img
-                                src="threedot.png"
-                                ref={toggleButtonRef}
-                                style={{ width: 5, height: 20, cursor: 'pointer' }}
-                                onClick={handleToggleDiv}
-                                className=""
-                                alt="Menu"
-                              />
+      <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 350, overflowY: 'auto' }}>
+        <div>
+          {
+            editall?.orders?.map((dfgh, index) => {
+              const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `editallone`
 
-                              {showDiv && (
-                                <div
-                                  ref={dropdownRef}
-                                  style={{
-                                    width: 200,
-                                    padding: '10px',
-                                    backgroundColor: '#f8f9fa',
-                                    border: '1px solid #ccc',
-                                    borderRadius: '4px',
-                                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                                    position: 'absolute',
-                                    right: 0,
-                                    zIndex: 1000
-                                  }}
-                                >
-                                  <p style={{ color: '#707070' }}>Export as</p>
-                                  <hr />
-                                  <p
-                                    style={{
-                                      color: '#000',
-                                      cursor: isPdfLoad ? 'not-allowed' : 'pointer',
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      gap: '8px'
-                                    }}
-                                    onClick={() => {
-                                      if (!isPdfLoad) {
-                                        setIsPdfLoad(true);  // Prevent click when loading
-                                        console.log(JSON.stringify(selectedOptions), 'dateRange');
-                                        editexportpdf();
-                                      }
-                                    }}
-                                  >
-                                    PDF
-                                    {isPdfLoad && <span className="loader"></span>} {/* Loader icon */}
+              // Compare processtime at the 0th index only
+              let isChosenRangeMax = false;
+              let isComparingRangeMin = false;
 
-                                  </p>
-                                  <p
-                                    style={{
-                                      color: '#000',
-                                      cursor: isExcelLoad ? 'not-allowed' : 'pointer',
-                                      display: 'flex',
-                                      alignItems: 'center',
-                                      gap: '8px'
-                                    }}
-                                    onClick={() => {
-                                      if (!isPdfLoad) {
-                                        setIsExcelLoad(true);  // Prevent click when loading
-                                        downloadDocketseditExcel()
-                                      }
-                                    }}
-                                  >
-                                    Excel sheet
-                                    {isExcelLoad && <span className="loader"></span>} {/* Loader icon */}
+              if (index === 0) {
+                const processTimeOne = parseInt(editall?.orders?.[0]?.processtime) || 0; // Chosen range at 0th index
+                const processTimeTwo = parseInt(editallone?.orders?.[0]?.processtime) || 0; // Comparing range at 0th index
 
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </div>
+                isChosenRangeMax = processTimeOne > processTimeTwo; // True if Chosen range is maximum
+                isComparingRangeMin = processTimeTwo < processTimeOne; // True if Comparing range is minimum
+              }
+
+              return (
+                <div key={index}>
+                  <div className="d-flex gap-5">
+                    {/* Left Column (Chosen Range) */}
+                    <div style={{ width: "40%" }}>
+                      <div className="d-flex align-items-center">
+                        <p style={{ fontWeight: "700", color: index === 0 && isChosenRangeMax ? "#CA424E" : "#000", width: "60%", marginTop: 15 }}>
+                          {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{dfgh?.date + " " + "[" +
+                            dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
+                        </p>
+                        <img
+                          onClick={() => { openModal(dfgh, correspondingErv) }}
+                          src="arrows.png"
+                          style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10 }}
+                          alt="up arrow"
+                        />
                       </div>
-
-                      <div style={{ marginTop: 50, padding: 20 }} >
-                        <div className="d-flex gap-5" >
-
-                          <div style={{ width: "40%" }}>
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{
-                              editall?.stats?.averageProcessTime || 0}</span></p>
-                          </div>
-                          <div style={{ width: "40%", display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{editallone?.stats?.averageProcessTime || 0}</span></p>
-                          </div>
-                          <div style={{ width: "20%", display: 'flex', justifyContent: 'end', alignItems: 'end', flexDirection: 'column' }}>
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', textAlign: 'left' }}>Variance</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >
-                              {(() => {
-                                let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
-                                let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
-
-                                // Calculate average
-                                let average = Math.round((numOne + numTwo) / 2);
-
-                                return <span >{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }} >{average > 0 ? <img src="up_arw.png"
-                                  style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                  }} className="" alt="Example Image" /> :
-                                  <img src="d_arw.png"
-                                    style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-
-                                    }} className="" alt="Example Image" />}</span></span>
-
-
-                              })()}</span></p>
-                          </div>
-
-                        </div>
-
-                        <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-
-                        <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 350, overflowY: 'auto' }} >
-
-                          <div  >
-
-                            {
-                              editall?.orders?.map((dfgh, index) => {
-                                const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
-
-                                return (
-                                  <div key={index}>
-                                    <div className="d-flex gap-5">
-                                      {/* Left Column */}
-                                      <div style={{ width: "40%" }}>
-                                        <div className="d-flex align-items-center " style={{}}>
-                                          <p style={{ fontWeight: "700", color: "#000", width: "60%", marginTop: 15 }}>
-                                            {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{dfgh?.date + " " + "[" +
-                                              dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
-                                          </p>
-
-                                          <img
-                                            onClick={() => { openModal(dfgh, correspondingErv) }}
-                                            src="arrows.png"
-                                            style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10, }}
-                                            alt="up arrow"
-                                          />
-                                        </div>
-
-                                      </div>
-
-                                      {/* Center Column */}
-                                      {correspondingErv ? (
-                                        <div style={{ width: "40%", }}>
-                                          <div className="d-flex align-items-center  " >
-                                            <p style={{ fontWeight: "700", color: index === 0 ? '#CA424E' : "#000", width: "60%", marginTop: 15 }}>
-                                              {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }} >{correspondingErv?.date + " " + "[" +
-                                                correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
-                                            </p>
-
-
-                                            <img
-                                              onClick={() => { openModal(dfgh, correspondingErv) }}
-                                              src="arrows.png"
-                                              style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10 }}
-                                              alt="up arrow"
-                                            />
-                                          </div>
-
-                                        </div>
-                                      ) : (
-                                        <div style={{ width: "40%" }}></div>
-                                      )}
-
-                                      {/* Right Column (Percentage Calculation) */}
-                                      <div
-                                        style={{
-                                          justifyContent: "end",
-                                          alignItems: "end",
-                                          display: "flex",
-                                          width: "20%",
-                                        }}
-                                      >
-                                        <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
-
-                                          <span>
-                                            {(() => {
-                                              const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
-                                              const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
-
-                                              let percentageChange = 0;
-                                              if (processTimeTwo > 0) {
-                                                percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
-                                              }
-
-                                              return (
-                                                <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
-                                                  {percentageChange.toFixed(2) + "%"}
-                                                  <span
-                                                    style={{
-                                                      color: percentageChange > 0 ? "green" : "red",
-                                                      fontWeight: "700",
-                                                    }}
-                                                  >
-                                                    {percentageChange > 0 ? (
-                                                      <img
-                                                        src="up_arw.png"
-                                                        style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                        alt="up arrow"
-                                                      />
-                                                    ) : (
-                                                      <img
-                                                        src="d_arw.png"
-                                                        style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                        alt="down arrow"
-                                                      />
-                                                    )}
-                                                  </span>
-                                                </span>
-                                              );
-                                            })()}
-                                          </span>
-                                        </p>
-                                      </div>
-                                    </div>
-
-                                    <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
-                                  </div>
-                                );
-                              })
-                            }
-                          </div >
-
-
-
-
-
-                        </div>
-
-
-
-
-                      </div>
-
-
-
-
-
-
                     </div>
 
+                    {/* Center Column (Comparing Range) */}
+                    {correspondingErv ? (
+                      <div style={{ width: "40%" }}>
+                        <div className="d-flex align-items-center">
+                          <p style={{ fontWeight: "700", color: index === 0 && isComparingRangeMin ? "#316AAF" : "#000", width: "60%", marginTop: 15 }}>
+                            {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{correspondingErv?.date + " " + "[" +
+                              correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
+                          </p>
+                          <img
+                            onClick={() => { openModal(dfgh, correspondingErv) }}
+                            src="arrows.png"
+                            style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10 }}
+                            alt="up arrow"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div style={{ width: "40%" }}></div>
+                    )}
 
-
+                    {/* Right Column (Percentage Calculation) */}
+                    <div
+                      style={{
+                        justifyContent: "end",
+                        alignItems: "center",
+                        display: "flex",
+                        width: "20%",
+                      }}
+                    >
+                      <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px" }}>
+                        <span>
+                          {(() => {
+                            const processTimeOne = parseInt(dfgh?.processtime) || 0;
+                            const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
+                            let percentageChange = 0;
+                            if (processTimeTwo > 0) {
+                              percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
+                            }
+                            return (
+                              <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>
+                                {percentageChange.toFixed(2) + "%"}
+                                <span
+                                  style={{
+                                    color: percentageChange > 0 ? "green" : "red",
+                                    fontWeight: "700",
+                                  }}
+                                >
+                                  {percentageChange > 0 ? (
+                                    <img
+                                      src="up_arw.png"
+                                      style={{ width: 16, height: 16, cursor: "pointer" }}
+                                      alt="up arrow"
+                                    />
+                                  ) : (
+                                    <img
+                                      src="d_arw.png"
+                                      style={{ width: 16, height: 16, cursor: "pointer" }}
+                                      alt="down arrow"
+                                    />
+                                  )}
+                                </span>
+                              </span>
+                            );
+                          })()}
+                        </span>
+                      </p>
+                    </div>
                   </div>
+
+                  <hr style={{ margin: "0px 0px", backgroundColor: "black", height: 3 }} />
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
                   : meals === 3 ?
                     <div className="changeone" style={{ marginTop: 100 }} >
@@ -6663,7 +6629,7 @@ let Dockets = () => {
                                 <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
                                   {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
 
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt" >{(() => {
 
                                   const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
                                   const result = filteredOptions.map(item => item.label).join(", ");
@@ -6877,7 +6843,7 @@ let Dockets = () => {
                                 <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
                                   {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
 
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt" >{(() => {
 
                                   const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
                                   const result = filteredOptions.map(item => item.label).join(", ");
@@ -7022,7 +6988,7 @@ let Dockets = () => {
               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }} className="fonttttttt">Dockets Completion Time - From {selectedOptionsfine[0]?.label} to {selectedOptionsfine[0]?.label === "Minimum" ? " Maximum" : " Minimum"}</p>
 
 
-              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}    > {(() => {
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}   className="fonttttttt" > {(() => {
 
                 const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
                 const result = selectedOptions.map(item => item.label).join(",") // Join without spaces first
