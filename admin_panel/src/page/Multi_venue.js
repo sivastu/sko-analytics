@@ -2573,6 +2573,10 @@ function removeMatchingValues(arr1, arr2) {
 
     let alldat = basicall
 
+    if(val21.length === 0){
+      alldat = []
+    }
+
     function areObjectsEqual(obj1, obj2) {
       return JSON.stringify(obj1) === JSON.stringify(obj2);
     }
@@ -3345,7 +3349,9 @@ function removeMatchingValues(arr1, arr2) {
     cources = cources.filter(item => item.value !== "All");
 
     let alldat = basicall
-
+    if(val21.length === 0){
+      alldat = []
+    }
     console.log(JSON.stringify(alltype), 'val2245')
 
     if (vals[1] === null || vals[1] === "null") {

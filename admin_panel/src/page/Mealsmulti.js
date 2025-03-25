@@ -1479,7 +1479,7 @@ function removeMatchingValues(arr1, arr2) {
       return
     }
     if(hasAllValue === true && hasAllValueold === false){
-
+      console.log(selected , 'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
       if(selectedOptionsfive.length === 0){
         selected = basic
       }else{
@@ -1487,7 +1487,7 @@ function removeMatchingValues(arr1, arr2) {
       }
 
 
-      console.log(selected , 'ggggggggggggggggggggggggggggggggggggggggggggggggg')
+     
 
       
       let uuuk = extractUniqueNotes(basicall, selected)
@@ -1538,7 +1538,7 @@ function removeMatchingValues(arr1, arr2) {
     
 
     if (hasAllValue === true) {
-
+      console.log(selected , 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv')
       let vvvv = areArraysEqual(selectedOptionsfive, selected)
 
 
@@ -1603,7 +1603,7 @@ function removeMatchingValues(arr1, arr2) {
 
 
     } else {
-
+      console.log(selected , 'pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp')
       let vvvv = areArraysEqual(selectedOptionsfive, selected)
 
 
@@ -2698,6 +2698,12 @@ function removeMatchingValues(arr1, arr2) {
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
 
 
+
+
+    console.log(val21 , 'valsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsv gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
+
+
+
     function areObjectsEqual(obj1, obj2) {
       return JSON.stringify(obj1) === JSON.stringify(obj2);
     }
@@ -2712,6 +2718,11 @@ function removeMatchingValues(arr1, arr2) {
 
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
+
+
+    if(val21.length === 0){
+      alldat = []
+    }
 
     console.log(JSON.stringify(alltype), 'val2245')
 
@@ -3417,6 +3428,11 @@ function removeMatchingValues(arr1, arr2) {
 
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
+
+
+    if(val21.length === 0){
+      alldat = []
+    }
 
     console.log(JSON.stringify(alltype), 'val2245')
 
