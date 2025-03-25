@@ -465,7 +465,7 @@ let Mealsmulti = () => {
       uuuk.unshift({ label: "All Courses", value: "All" });
       setFulldatafull(uuuk)
       setOldcou(uuuk)
-      setSelectedCources(uuuk)
+      // setSelectedCources(uuuk)
 
 
 
@@ -559,7 +559,7 @@ let Mealsmulti = () => {
 
       let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
       uuuk.unshift({ label: "All Courses", value: "All" });
-      setSelectedCources(uuuk)
+      // setSelectedCources(uuuk)
       setOldcou(uuuk)
       setFulldatafull(uuuk)
     }

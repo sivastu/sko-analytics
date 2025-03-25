@@ -1399,7 +1399,7 @@ let Meals = () => {
       uuuk.unshift({ label: "All Courses", value: "All" });
       setFulldatafull(uuuk)
       setOldcou(uuuk)
-      setSelectedCources(uuuk)
+      // setSelectedCources(uuuk)
 
 
 
@@ -1494,7 +1494,7 @@ let Meals = () => {
       let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
       uuuk.unshift({ label: "All Courses", value: "All" });
       setFulldatafull(uuuk)
-      setSelectedCources(uuuk)
+      // setSelectedCources(uuuk)
       setOldcou(uuuk)
 
     }
@@ -2620,7 +2620,7 @@ let Meals = () => {
     { value: 'audi', label: 'Audi' },
   ];
 
-  const [selectedCources, setSelectedCources] = useState([]);
+  const [selectedCources, setSelectedCources] = useState([]); 
 
   const handleChangeCources = (selected) => {
     setMenuIsOpenthree(true)
