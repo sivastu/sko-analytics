@@ -1373,129 +1373,595 @@ let Mealsmulti = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
 
+  function areArraysEqual (arr1, arr2) {
+
+    console.log(arr1 , arr2 , 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
+    return arr1.some(obj1 => arr2.some(obj2 => obj1.value === obj2.value));
+}
+
+
+function removeMatchingValues(arr1, arr2) {
+  if (!Array.isArray(arr1) || !Array.isArray(arr2)) return [];
+
+  // Extract values from arr2 for quick lookup
+  const valuesSet = new Set(arr2.map(obj => obj.value));
+
+  // Filter arr1 to exclude objects with matching values in arr2
+  return arr1.filter(obj => !valuesSet.has(obj.value));
+}
+
+
+  
   const handleChange = (selected) => {
-    const hasAllValue = selected.some((item) => item.value === "All");
-    const selectedValues = selected.map((opt) => opt.value).filter((val) => val !== "All"); // Exclude "All" from overlap check
-    const compareValues = selectedOptionsfive.map((opt) => opt.value).filter((val) => val !== "All");
-    const hasSpecificOverlap = selectedValues.some((val) => compareValues.includes(val));
-  
-    // Only block if specific venues overlap and neither section has "All"
-    if (hasSpecificOverlap && !hasAllValue && !selectedOptionsfive.some((item) => item.value === "All")) {
-      Swal.fire({
-        icon: "warning",
-        title: "Invalid Selection",
-        text: "You cannot select the same specific venues in both Chosen and Compare with sections.",
-        confirmButtonText: "OK",
-      });
-      return; // Prevent the update, keeping the current state
-    }
-  
-    // Proceed with updating state if no invalid overlap
-    setOldven(selected); // Track previous selection
-    setSelectedOptions(selected || []);
-  
-    if (hasAllValue) {
-      let uuuk = extractUniqueNotes(basicall, basic);
+
+
+    // let vvvv = areArraysEqual(selectedOptionsfive, selected)
+
+    // console.log(vvvv , 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa' , selected)
+    // if(vvvv === true){
+
+
+    //   Swal.fire({
+    //     icon: "warning",
+    //     title: "Invalid Selection",
+    //     text: "You cannot select the same venues in both Chosen and Compare with sections.",
+    //     confirmButtonText: "OK",
+    //   })
+
+    //   return
+
+
+    // }
+
+    // if(vvvv === true){
+    //   return
+    // }
+
+ 
+
+
+ 
+ 
+
+    console.log(JSON.stringify(fulldatatwo), 'selected')
+    const hasAllValue = selected.some(item => item.value === "All");
+
+   
+    const hasAllValueold = oldven.some(item => item.value === "All");
+
+    
+
+
+    setOldven(selected)
+
+    if (hasAllValue === false && hasAllValueold === true) {
+
+
+      let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
-      setFulldatafull(uuuk);
-      filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-  
-      const output = [{ label: "All Hub", value: "All" }];
-      basic.forEach(({ value }) => {
+
+      setFulldatafull(uuuk)
+
+
+      setSelectedOptions([]);
+
+      filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRange, onetime  , twotime  , selectedOptionsfive , 
+      //   hubbtwo , selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      const output = [];
+
+      // // Iterate through the search array
+      [].forEach(({ value }) => {
+        // Search in the data object
         Object.entries(alldrop).forEach(([key, items]) => {
           if (key === value) {
-            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
           } else {
-            items.forEach((item) => {
-              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
             });
           }
         });
       });
-      setBasicone(output); // Update Chosen hubs
-    } else {
-      let uuuk = extractUniqueNotes(basicall, selected);
+
+      setBasicone(output)
+
+      return
+    }
+    if(hasAllValue === true && hasAllValueold === false){
+
+      if(selectedOptionsfive.length === 0){
+        selected = basic
+      }else{
+        selected = removeMatchingValues(basic , selectedOptionsfive)
+      }
+
+
+      console.log(selected , 'ggggggggggggggggggggggggggggggggggggggggggggggggg')
+
+      
+      let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
-      setFulldatafull(uuuk);
-      filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-  
-      const output = [{ label: "All Hub", value: "All" }];
+
+      setFulldatafull(uuuk)
+
+      setSelectedOptions(selected || []);
+
+      filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      const output = [{
+        "label": "All Hub",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
       selected.forEach(({ value }) => {
+        // Search in the data object
         Object.entries(alldrop).forEach(([key, items]) => {
           if (key === value) {
-            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
           } else {
-            items.forEach((item) => {
-              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
             });
           }
         });
       });
-      setBasicone(output); // Update Chosen hubs
+
+      setBasicone(output)
+
+
+
+
+      return
+
     }
+
+    
+
+    if (hasAllValue === true) {
+
+      let vvvv = areArraysEqual(selectedOptionsfive, selected)
+
+
+      if(vvvv === true) {
+
+        Swal.fire({
+          icon: "warning",
+          title: "Invalid Selection",
+          text: "You cannot select the same venues in both Chosen and Compare with sections.",
+          confirmButtonText: "OK",
+        })
+
+
+
+        return
+      }
+
+      console.log(selected , 'let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)')
+
+      if(hasAllValue === true && selected.length === 1 ){
+        selected = removeMatchingValues(basic , selectedOptionsfive)
+      }
+      
+
+      let uuuk = extractUniqueNotes(basicall, selected)
+      uuuk.unshift({ label: "All Courses", value: "All" });
+
+      setFulldatafull(uuuk)
+
+      setSelectedOptions(selected || []);
+
+      filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      const output = [{
+        "label": "All Hub",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      selected.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasicone(output)
+
+
+    } else {
+
+      let lengthss = selected.length
+      let lengthssone = selected.length
+
+      // if (lengthss === lengthssone - 1) {
+      //   setSelectedOptions( []);
+
+      //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      //   const output = [];
+
+      //   // // Iterate through the search array
+      //   [].forEach(({ value }) => {
+      //     // Search in the data object
+      //     Object.entries(alldrop).forEach(([key, items]) => {
+      //       if (key === value) {
+      //         // If the key matches, add all items from the group to the output
+      //         items.forEach(item => {
+      //           output.push({ value: key + '-' + item.name, label: item.name });
+      //         });
+      //       } else {
+      //         // Search within the group's items
+      //         items.forEach(item => {
+      //           if (item.name === value) {
+      //             output.push({ value: key + '-' + item.name, label: key });
+      //           }
+      //         });
+      //       }
+      //     });
+      //   });
+
+      //   setBasicone(output)
+
+      //   return
+      // }
+      let uuuk = extractUniqueNotes(basicall, selected)
+      uuuk.unshift({ label: "All Courses", value: "All" });
+
+      setFulldatafull(uuuk)
+      setSelectedOptions(selected || []);
+
+      filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      const output = [{
+        "label": "All Hub",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      selected.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasicone(output)
+    }
+
+
+    // const validVenues = selected.map(item => item.value);
+
+    //     // Filter the data
+    //     const filteredData = Object.fromEntries(
+    //       Object.entries(fulldatatwo).filter(([key, value]) => validVenues.includes(value.venue))
+    //     );
+    //     callfordata(filteredData , fulldata )
+
+    //     setFulldatatwo(filteredData) 
+
+
+    //     const filteredDatatwo = Object.fromEntries(
+    //       Object.entries(fulldata).filter(([key, value]) => validVenues.includes(value.venue))
+    //     );
+
+    //     callfordata(filteredData , filteredDatatwo )
+    //     setFulldata(filteredDatatwo)
+
   };
 
-  const handleChangefive = (selected, toggleState = null) => {
-    const hasAllValue = selected.some((item) => item.value === "All");
-    const selectedValues = selected.map((opt) => opt.value).filter((val) => val !== "All");
-    const chosenValues = selectedOptions.map((opt) => opt.value).filter((val) => val !== "All");
-    const hasSpecificOverlap = selectedValues.some((val) => chosenValues.includes(val));
-  
-    // Only block if specific venues overlap and neither section has "All"
-    if (hasSpecificOverlap && !hasAllValue && !selectedOptions.some((item) => item.value === "All")) {
-      Swal.fire({
-        icon: "warning",
-        title: "Invalid Selection",
-        text: "You cannot select the same specific venues in both Chosen and Compare with sections.",
-        confirmButtonText: "OK",
-      });
-      return; // Prevent the update, keeping the current state
-    }
-  
-    // Proceed with updating state if no invalid overlap
-    if (toggleState !== null) {
-      setPrevVenueradiofivese(venueradiofivese); // Store previous toggle state
-      setVenueradiofivese(toggleState); // Update toggle state for Compare with
-    } else {
-      setVenueradiofivese(hasAllValue); // Sync toggle with "All" selection if from dropdown
-    }
-    setOldvenfive(selected); // Track previous selection
-    setSelectedOptionsfive(selected || []);
-  
-    if (hasAllValue) {
-      filterDataByDateonee(dateRange, onetime, twotime, basic, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-  
-      const output = [{ label: "All Hub", value: "All" }];
-      basic.forEach(({ value }) => {
+
+
+ 
+  const handleChangefive = (selected) => {
+
+
+// let vvvv = areArraysEqual(selectedOptions, selected)
+
+
+//     if(vvvv === true){
+//       Swal.fire({
+//         icon: "warning",
+//         title: "Invalid Selection",
+//         text: "You cannot select the same venues in both Chosen and Compare with sections.",
+//         confirmButtonText: "OK",
+//       })
+//       return
+
+      
+//     }
+
+//     if(vvvv === true){
+//       return
+//     }
+
+
+
+    console.log(JSON.stringify(fulldatatwo), 'selected')
+    const hasAllValue = selected.some(item => item.value === "All");
+    const hasAllValueold = oldvenfive.some(item => item.value === "All");
+
+
+
+
+
+    setOldvenfive(selected)
+
+    if (hasAllValue === false && hasAllValueold === true) {
+      setSelectedOptionsfive([]);
+
+      // filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRange, onetime, twotime, [],
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      const output = [];
+
+      // // Iterate through the search array
+      [].forEach(({ value }) => {
+        // Search in the data object
         Object.entries(alldrop).forEach(([key, items]) => {
           if (key === value) {
-            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
           } else {
-            items.forEach((item) => {
-              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
             });
           }
         });
       });
-      setBasiconefive(output); // Update Compare with hubs only
-    } else {
-      filterDataByDateonee(dateRange, onetime, twotime, selected, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-  
-      const output = [{ label: "All Hub", value: "All" }];
+
+      setBasiconefive(output)
+
+      return
+    }
+
+
+    if (hasAllValue === true && hasAllValueold === false) {
+
+
+      if(selectedOptions.length === 0){
+        selected = basic
+      }else{
+        selected = removeMatchingValues(basic , selectedOptions)
+      }
+
+
+      setSelectedOptionsfive(selected || []);
+
+      // filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime, twotime, selected,
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      const output = [{
+        "label": "All Hub",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
       selected.forEach(({ value }) => {
+        // Search in the data object
         Object.entries(alldrop).forEach(([key, items]) => {
           if (key === value) {
-            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
           } else {
-            items.forEach((item) => {
-              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
             });
           }
         });
       });
-      setBasiconefive(output); // Update Compare with hubs only
+
+      setBasiconefive(output)
+
+ return
     }
+
+
+
+
+    if (hasAllValue === true) {
+
+
+      let vvvv = areArraysEqual(selectedOptions, selected)
+
+
+      if(vvvv === true) {
+
+        Swal.fire({
+          icon: "warning",
+          title: "Invalid Selection",
+          text: "You cannot select the same venues in both Chosen and Compare with sections.",
+          confirmButtonText: "OK",
+        })
+
+
+
+        return
+      }
+ 
+      if(hasAllValue === true && selected.length === 1 ){
+        selected = removeMatchingValues(basic , selectedOptions)
+      }
+
+
+
+      setSelectedOptionsfive(selected || []);
+
+      // filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime, twotime, selected,
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      const output = [{
+        "label": "All Hub",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      selected.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasiconefive(output)
+
+
+    } else {
+
+      let lengthss = selected.length
+      let lengthssone = basic.length
+
+      // if (lengthss === lengthssone - 1) {
+      //   setSelectedOptions( []);
+
+      //   filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      //   filterDataByDateonee(dateRangetwo, threetime, fourtime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      //   const output = [];
+
+      //   // // Iterate through the search array
+      //   [].forEach(({ value }) => {
+      //     // Search in the data object
+      //     Object.entries(alldrop).forEach(([key, items]) => {
+      //       if (key === value) {
+      //         // If the key matches, add all items from the group to the output
+      //         items.forEach(item => {
+      //           output.push({ value: key + '-' + item.name, label: item.name });
+      //         });
+      //       } else {
+      //         // Search within the group's items
+      //         items.forEach(item => {
+      //           if (item.name === value) {
+      //             output.push({ value: key + '-' + item.name, label: key });
+      //           }
+      //         });
+      //       }
+      //     });
+      //   });
+
+      //   setBasicone(output)
+
+      //   return
+      // }
+
+      setSelectedOptionsfive(selected || []);
+
+      // filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRange, onetime, twotime, selected,
+        hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      const output = [{
+        "label": "All Hub",
+        "value": "All"
+      }];
+
+      // // Iterate through the search array
+      selected.forEach(({ value }) => {
+        // Search in the data object
+        Object.entries(alldrop).forEach(([key, items]) => {
+          if (key === value) {
+            // If the key matches, add all items from the group to the output
+            items.forEach(item => {
+              output.push({ value: key + '-' + item.name, label: item.name });
+            });
+          } else {
+            // Search within the group's items
+            items.forEach(item => {
+              if (item.name === value) {
+                output.push({ value: key + '-' + item.name, label: key });
+              }
+            });
+          }
+        });
+      });
+
+      setBasiconefive(output)
+    }
+
+
   };
+
 
 
 
