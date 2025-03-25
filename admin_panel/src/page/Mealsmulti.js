@@ -1423,7 +1423,7 @@ function removeMatchingValues(arr1, arr2) {
  
  
 
-    console.log(JSON.stringify(fulldatatwo), 'selected')
+    // console.log(JSON.stringify(fulldatatwo), 'selected')
     const hasAllValue = selected.some(item => item.value === "All");
 
    
@@ -1436,7 +1436,7 @@ function removeMatchingValues(arr1, arr2) {
 
     if (hasAllValue === false && hasAllValueold === true) {
 
-
+      console.log(hasAllValue, 'selected fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')
       let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
 
@@ -1604,6 +1604,23 @@ function removeMatchingValues(arr1, arr2) {
 
     } else {
 
+      let vvvv = areArraysEqual(selectedOptionsfive, selected)
+
+
+      if(vvvv === true) {
+
+        Swal.fire({
+          icon: "warning",
+          title: "Invalid Selection",
+          text: "You cannot select the same venues in both Chosen and Compare with sections.",
+          confirmButtonText: "OK",
+        })
+
+
+
+        return
+      }
+      console.log(hasAllValue, 'selected ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt')
       let lengthss = selected.length
       let lengthssone = selected.length
 
@@ -1886,6 +1903,23 @@ function removeMatchingValues(arr1, arr2) {
 
 
     } else {
+
+      let vvvv = areArraysEqual(selectedOptions, selected)
+
+
+      if(vvvv === true) {
+
+        Swal.fire({
+          icon: "warning",
+          title: "Invalid Selection",
+          text: "You cannot select the same venues in both Chosen and Compare with sections.",
+          confirmButtonText: "OK",
+        })
+
+
+
+        return
+      }
 
       let lengthss = selected.length
       let lengthssone = basic.length
