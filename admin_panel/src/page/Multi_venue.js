@@ -1555,59 +1555,29 @@ let Multi_venue = () => {
 
   const handleChange = (selected) => {
     const hasAllValue = selected.some((item) => item.value === "All");
-    const hasAllValueOld = oldven.some((item) => item.value === "All");
-
-    // Check for overlap with selectedOptionsfive
-    const selectedValues = selected.map((opt) => opt.value);
-    const compareValues = selectedOptionsfive.map((opt) => opt.value);
+    const selectedValues = selected.map((opt) => opt.value).filter((val) => val !== "All"); // Exclude "All" from overlap check
+    const compareValues = selectedOptionsfive.map((opt) => opt.value).filter((val) => val !== "All");
     const hasOverlap = selectedValues.some((val) => compareValues.includes(val));
-
+  
     if (hasOverlap) {
-      // Show alert and reset selection
       Swal.fire({
         icon: "warning",
         title: "Invalid Selection",
-        text: "You cannot select the same venues in both Chosen and Compare with sections.",
+        text: "You cannot select the same specific venues in both Chosen and Compare with sections.",
         confirmButtonText: "OK",
-      }).then(() => {
-        setSelectedOptions(oldven); // Reset to previous valid state
-        setOldven(oldven);
       });
-      return;
+      return; // Prevent the update, keeping the current state
     }
-
-    setOldven(selected);
-
-    if (hasAllValue === false && hasAllValueOld === true) {
-      let uuuk = extractUniqueNotes(basicall, []);
-      uuuk.unshift({ label: "All Courses", value: "All" });
-      setFulldatafull(uuuk);
-      setSelectedOptions([]);
-      filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-
-      const output = [];
-      [].forEach(({ value }) => {
-        Object.entries(alldrop).forEach(([key, items]) => {
-          if (key === value) {
-            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
-          } else {
-            items.forEach((item) => {
-              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
-            });
-          }
-        });
-      });
-      setBasicone(output);
-      return;
-    }
-
-    if (hasAllValue === true) {
+  
+    // Proceed with updating state if no overlap
+    setSelectedOptions(selected || []);
+  
+    if (hasAllValue) {
       let uuuk = extractUniqueNotes(basicall, basic);
       uuuk.unshift({ label: "All Courses", value: "All" });
       setFulldatafull(uuuk);
-      setSelectedOptions(basic || []);
       filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-
+  
       const output = [{ label: "All Hub", value: "All" }];
       basic.forEach(({ value }) => {
         Object.entries(alldrop).forEach(([key, items]) => {
@@ -1625,9 +1595,8 @@ let Multi_venue = () => {
       let uuuk = extractUniqueNotes(basicall, selected);
       uuuk.unshift({ label: "All Courses", value: "All" });
       setFulldatafull(uuuk);
-      setSelectedOptions(selected || []);
       filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-
+  
       const output = [{ label: "All Hub", value: "All" }];
       selected.forEach(({ value }) => {
         Object.entries(alldrop).forEach(([key, items]) => {
@@ -1646,60 +1615,27 @@ let Multi_venue = () => {
 
   const handleChangefive = (selected, toggleState = null) => {
     const hasAllValue = selected.some((item) => item.value === "All");
-    const hasAllValueOld = oldvenfive.some((item) => item.value === "All");
-  
-    // Check for overlap with selectedOptions
-    const selectedValues = selected.map((opt) => opt.value);
-    const chosenValues = selectedOptions.map((opt) => opt.value);
+    const selectedValues = selected.map((opt) => opt.value).filter((val) => val !== "All");
+    const chosenValues = selectedOptions.map((opt) => opt.value).filter((val) => val !== "All");
     const hasOverlap = selectedValues.some((val) => chosenValues.includes(val));
   
     if (hasOverlap) {
-      // Show alert and reset selection
       Swal.fire({
         icon: "warning",
         title: "Invalid Selection",
-        text: "You cannot select the same venues in both Chosen and Compare with sections.",
+        text: "You cannot select the same specific venues in both Chosen and Compare with sections.",
         confirmButtonText: "OK",
-      }).then(() => {
-        setSelectedOptionsfive(oldvenfive); // Reset to previous valid state
-        setOldvenfive(oldvenfive);
-        if (toggleState !== null) {
-          // Revert toggle state if this was triggered by the toggle
-          setVenueradiofivese(prevVenueradiofivese);
-        }
       });
-      return;
+      return; // Prevent the update, keeping the current state
     }
   
-    // If no overlap, update the previous toggle state and proceed
+    // Proceed with updating state if no overlap
     if (toggleState !== null) {
-      setPrevVenueradiofivese(venueradiofivese); // Store previous state before updating
-      setVenueradiofivese(toggleState); // Update to new toggle state
+      setVenueradiofivese(toggleState); // Update toggle state
     }
-    setOldvenfive(selected);
+    setSelectedOptionsfive(selected || []);
   
-    if (hasAllValue === false && hasAllValueOld === true) {
-      setSelectedOptionsfive([]);
-      filterDataByDateonee(dateRange, onetime, twotime, [], hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-  
-      const output = [];
-      [].forEach(({ value }) => {
-        Object.entries(alldrop).forEach(([key, items]) => {
-          if (key === value) {
-            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
-          } else {
-            items.forEach((item) => {
-              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
-            });
-          }
-        });
-      });
-      setBasiconefive(output);
-      return;
-    }
-  
-    if (hasAllValue === true) {
-      setSelectedOptionsfive(basic || []);
+    if (hasAllValue) {
       filterDataByDateonee(dateRange, onetime, twotime, basic, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
   
       const output = [{ label: "All Hub", value: "All" }];
@@ -1716,7 +1652,6 @@ let Multi_venue = () => {
       });
       setBasiconefive(output);
     } else {
-      setSelectedOptionsfive(selected || []);
       filterDataByDateonee(dateRange, onetime, twotime, selected, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
   
       const output = [{ label: "All Hub", value: "All" }];

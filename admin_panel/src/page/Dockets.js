@@ -329,8 +329,9 @@ let Dockets = () => {
 
   let [onebar, setOneBar] = useState([])
   let [twobar, setTwobar] = useState([])
+  let [hubbtwo, setHubbtwo] = useState([])
   let [optionbar, setOption] = useState([])
-
+  const [selectedOptionsfive, setSelectedOptionsfive] = useState([]);
   let [onebarone, setOneBarone] = useState([])
   let [twobarone, setTwobarone] = useState([])
   let [optionbarone, setOptionone] = useState([])
@@ -4692,7 +4693,7 @@ let Dockets = () => {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save(formattedDate + "_-_SKO_report_" + usedname + "_-Dockets received - timeline.pdf");
+        doc.save(formattedDate + "_-_SKO_report_" + usedname + "_-Average Completion - timeline.pdf");
         setIsPdfLoad(false);// Save after rendering
       },
       x: 10,
@@ -6626,13 +6627,13 @@ let Dockets = () => {
                             <div style={{ visibility: 'hidden', position: 'absolute' }}>
                               <div ref={pdfRefredone}  >
 
-                                <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
-                                  {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
+                                <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Average Completion - timeline - From {selectedOptionsfine[0]?.label} to <span> </span>
+                                  {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p> 
 
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt" >{(() => {
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fontttttttdd" >{(() => {
 
                                   const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-                                  const result = filteredOptions.map(item => item.label).join(", ");
+                                  const result = filteredOptions.map(item => item.label.trim()).join(", ");
 
 
                                   if (result === "" || result === undefined || result === null) {
@@ -6647,14 +6648,14 @@ let Dockets = () => {
                                 })()}</p>
 
                                 <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >{usedname}</p>
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt" >For the period {(() => {
                                   const datefineda = new Date(dateRange[0]);
 
                                   const formattedDate = datefineda.toLocaleDateString("en-GB", {
                                     day: "2-digit",
                                     month: "short",
                                     year: "numeric"
-                                  });
+                                  }).replace(/,/g,"");
 
                                   return (formattedDate)
                                 })()} to {(() => {
@@ -6664,18 +6665,18 @@ let Dockets = () => {
                                     day: "2-digit",
                                     month: "short",
                                     year: "numeric"
-                                  });
+                                  }).replace(/,/g,"");
 
                                   return (formattedDate)
                                 })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,}} className="fonttttttt" >Compared with the period {(() => {
                                   const datefineda = new Date(dateRangetwo[0]);
 
                                   const formattedDate = datefineda.toLocaleDateString("en-GB", {
                                     day: "2-digit",
                                     month: "short",
                                     year: "numeric"
-                                  });
+                                  }).replace(/,/g,"");
 
                                   return (formattedDate)
                                 })()} to {(() => {
@@ -6685,15 +6686,15 @@ let Dockets = () => {
                                     day: "2-digit",
                                     month: "short",
                                     year: "numeric"
-                                  });
+                                  }).replace(/,/g,"");
 
                                   return (formattedDate)
                                 })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
                                 <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, wordSpacing: -5 }} >Table ranges contains: All</p>
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} className="fonttttttt"  >Stages contains: {(() => {
 
-                                  const result = selectedhubOptions.map(item => item.label).join(",");
+                                  const result = selectedhubOptions.map(item => item.label.trim()).join(", ");
 
                                   if (result === "" || result === undefined || result === null) {
                                     return 'All'
@@ -6705,9 +6706,9 @@ let Dockets = () => {
 
 
                                 })()} </p>
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} >Courses contains: {(() => {
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} className="fonttttttt"  >Courses contains: {(() => {
 
-                                  const result = selectedCources.map(item => item.label).join(",");
+                                  const result = selectedCources.map(item => item.label.trim()).join(", ");
 
                                   if (result === "" || result === undefined || result === null) {
                                     return 'All'
@@ -6840,13 +6841,13 @@ let Dockets = () => {
                             <div style={{ visibility: 'hidden', position: 'absolute' }}>
                               <div ref={pdfRefred}  >
 
-                                <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
+                                <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Dockets received - timeline - From {selectedOptionsfine[0]?.label} to <span> </span>
                                   {selectedOptionsfine[0]?.label === "Minimum" ? "Maximum" : "Minimum"}</p>
 
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt" >{(() => {
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, padding:0 }} className="fontttttttdd" >{(() => {
 
                                   const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-                                  const result = filteredOptions.map(item => item.label).join(", ");
+                                  const result = filteredOptions.map(item => item.label.trim()).join(", ");
 
 
                                   if (result === "" || result === undefined || result === null) {
@@ -6860,15 +6861,15 @@ let Dockets = () => {
 
                                 })()}</p>
 
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >{groupName}</p>
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >{usedname}</p>
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} className="fonttttttt"  >For the period {(() => {
                                   const datefineda = new Date(dateRange[0]);
 
                                   const formattedDate = datefineda.toLocaleDateString("en-GB", {
                                     day: "2-digit",
                                     month: "short",
                                     year: "numeric"
-                                  });
+                                  }).replace(/,/g, "");
 
                                   return (formattedDate)
                                 })()} to {(() => {
@@ -6878,18 +6879,18 @@ let Dockets = () => {
                                     day: "2-digit",
                                     month: "short",
                                     year: "numeric"
-                                  });
+                                  }).replace(/,/g, "");
 
                                   return (formattedDate)
                                 })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
+                                <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} className="fonttttttt"  >Compared with the period {(() => {
                                   const datefineda = new Date(dateRangetwo[0]);
 
                                   const formattedDate = datefineda.toLocaleDateString("en-GB", {
                                     day: "2-digit",
                                     month: "short",
                                     year: "numeric"
-                                  });
+                                  }).replace(/,/g, "");
 
                                   return (formattedDate)
                                 })()} to {(() => {
@@ -6899,15 +6900,15 @@ let Dockets = () => {
                                     day: "2-digit",
                                     month: "short",
                                     year: "numeric"
-                                  });
+                                  }).replace(/,/g, "");
 
                                   return (formattedDate)
                                 })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
                                 <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, wordSpacing: -5 }} >Table ranges contains: All</p>
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} className="fonttttttt"  >Stages contains: {(() => {
 
-                                  const result = selectedhubOptions.map(item => item.label).join(",");
+                                  const result = selectedhubOptions.map(item => item.label.trim()).join(", ");
 
                                   if (result === "" || result === undefined || result === null) {
                                     return 'All'
@@ -6919,9 +6920,9 @@ let Dockets = () => {
 
 
                                 })()} </p>
-                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} >Courses contains: {(() => {
+                                <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -2 }} className="fonttttttt" >Courses contains: {(() => {
 
-                                  const result = selectedCources.map(item => item.label).join(",");
+                                  const result = selectedCources.map(item => item.label.trim()).join(", ");
 
                                   if (result === "" || result === undefined || result === null) {
                                     return 'All'
@@ -6988,11 +6989,10 @@ let Dockets = () => {
               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }} className="fonttttttt">Dockets Completion Time - From {selectedOptionsfine[0]?.label} to {selectedOptionsfine[0]?.label === "Minimum" ? " Maximum" : " Minimum"}</p>
 
 
-              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}   className="fonttttttt" > {(() => {
+              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}   className="fontttttttdd" > {(() => {
 
                 const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-                const result = selectedOptions.map(item => item.label).join(",") // Join without spaces first
-                  .replace(/,/g, ", ");
+                const result = selectedOptions.map(item => item.label.trim()).join(", ") // Join without spaces first
 
 
                 if (result === "" || result === undefined || result === null) {

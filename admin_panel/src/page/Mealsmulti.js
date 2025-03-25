@@ -1375,59 +1375,31 @@ let Mealsmulti = () => {
 
   const handleChange = (selected) => {
     const hasAllValue = selected.some((item) => item.value === "All");
-    const hasAllValueOld = oldven.some((item) => item.value === "All");
-
-    // Check for overlap with selectedOptionsfive
-    const selectedValues = selected.map((opt) => opt.value);
-    const compareValues = selectedOptionsfive.map((opt) => opt.value);
-    const hasOverlap = selectedValues.some((val) => compareValues.includes(val));
-
-    if (hasOverlap) {
-      // Show alert and reset selection
+    const selectedValues = selected.map((opt) => opt.value).filter((val) => val !== "All"); // Exclude "All" from overlap check
+    const compareValues = selectedOptionsfive.map((opt) => opt.value).filter((val) => val !== "All");
+    const hasSpecificOverlap = selectedValues.some((val) => compareValues.includes(val));
+  
+    // Only block if specific venues overlap and neither section has "All"
+    if (hasSpecificOverlap && !hasAllValue && !selectedOptionsfive.some((item) => item.value === "All")) {
       Swal.fire({
         icon: "warning",
         title: "Invalid Selection",
-        text: "You cannot select the same venues in both Chosen and Compare with sections.",
+        text: "You cannot select the same specific venues in both Chosen and Compare with sections.",
         confirmButtonText: "OK",
-      }).then(() => {
-        setSelectedOptions(oldven); // Reset to previous valid state
-        setOldven(oldven);
       });
-      return;
+      return; // Prevent the update, keeping the current state
     }
-
-    setOldven(selected);
-
-    if (hasAllValue === false && hasAllValueOld === true) {
-      let uuuk = extractUniqueNotes(basicall, []);
-      uuuk.unshift({ label: "All Courses", value: "All" });
-      setFulldatafull(uuuk);
-      setSelectedOptions([]);
-      filterDataByDate(dateRange, onetime, twotime, [], hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-
-      const output = [];
-      [].forEach(({ value }) => {
-        Object.entries(alldrop).forEach(([key, items]) => {
-          if (key === value) {
-            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
-          } else {
-            items.forEach((item) => {
-              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
-            });
-          }
-        });
-      });
-      setBasicone(output);
-      return;
-    }
-
-    if (hasAllValue === true) {
+  
+    // Proceed with updating state if no invalid overlap
+    setOldven(selected); // Track previous selection
+    setSelectedOptions(selected || []);
+  
+    if (hasAllValue) {
       let uuuk = extractUniqueNotes(basicall, basic);
       uuuk.unshift({ label: "All Courses", value: "All" });
       setFulldatafull(uuuk);
-      setSelectedOptions(basic || []);
       filterDataByDate(dateRange, onetime, twotime, basic, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-
+  
       const output = [{ label: "All Hub", value: "All" }];
       basic.forEach(({ value }) => {
         Object.entries(alldrop).forEach(([key, items]) => {
@@ -1440,14 +1412,13 @@ let Mealsmulti = () => {
           }
         });
       });
-      setBasicone(output);
+      setBasicone(output); // Update Chosen hubs
     } else {
       let uuuk = extractUniqueNotes(basicall, selected);
       uuuk.unshift({ label: "All Courses", value: "All" });
       setFulldatafull(uuuk);
-      setSelectedOptions(selected || []);
       filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-
+  
       const output = [{ label: "All Hub", value: "All" }];
       selected.forEach(({ value }) => {
         Object.entries(alldrop).forEach(([key, items]) => {
@@ -1460,73 +1431,40 @@ let Mealsmulti = () => {
           }
         });
       });
-      setBasicone(output);
+      setBasicone(output); // Update Chosen hubs
     }
   };
 
   const handleChangefive = (selected, toggleState = null) => {
- 
     const hasAllValue = selected.some((item) => item.value === "All");
-    const hasAllValueOld = oldvenfive.some((item) => item.value === "All");
-
-    // Check for overlap with selectedOptions
-    const selectedValues = selected.map((opt) => opt.value);
-    const chosenValues = selectedOptions.map((opt) => opt.value);
-    const hasOverlap = selectedValues.some((val) => chosenValues.includes(val));
-
-    if (hasOverlap) {
-      // Show alert and reset selection
+    const selectedValues = selected.map((opt) => opt.value).filter((val) => val !== "All");
+    const chosenValues = selectedOptions.map((opt) => opt.value).filter((val) => val !== "All");
+    const hasSpecificOverlap = selectedValues.some((val) => chosenValues.includes(val));
+  
+    // Only block if specific venues overlap and neither section has "All"
+    if (hasSpecificOverlap && !hasAllValue && !selectedOptions.some((item) => item.value === "All")) {
       Swal.fire({
         icon: "warning",
         title: "Invalid Selection",
-        text: "You cannot select the same venues in both Chosen and Compare with sections.",
+        text: "You cannot select the same specific venues in both Chosen and Compare with sections.",
         confirmButtonText: "OK",
-      }).then(() => {
-        // setSelectedOptionsfive(oldvenfive); // Reset to previous valid state
-        // setOldvenfive(oldvenfive);
-        if (toggleState !== null) {
-          // Revert toggle state if this was triggered by the toggle
-          // setVenueradiofivese(prevVenueradiofivese);
-        }
       });
-      console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
-
-      return
+      return; // Prevent the update, keeping the current state
     }
-
-
-    console.log('bccccccccccccccccccccccccccccccccccccccccccccccccccccccc')
-    // If no overlap, update the previous toggle state and proceed
-    // if (toggleState !== null) {
-    //   setPrevVenueradiofivese(venueradiofivese); // Store previous state before updating
-    //   setVenueradiofivese(toggleState); // Update to new toggle state
-    // }
-    setOldvenfive(selected);
-
-    if (hasAllValue === false && hasAllValueOld === true) {
-      setSelectedOptionsfive([]);
-      filterDataByDateonee(dateRange, onetime, twotime, [], hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-
-      const output = [];
-      [].forEach(({ value }) => {
-        Object.entries(alldrop).forEach(([key, items]) => {
-          if (key === value) {
-            items.forEach((item) => output.push({ value: key + '-' + item.name, label: item.name }));
-          } else {
-            items.forEach((item) => {
-              if (item.name === value) output.push({ value: key + '-' + item.name, label: key });
-            });
-          }
-        });
-      });
-      setBasiconefive(output);
-      return;
+  
+    // Proceed with updating state if no invalid overlap
+    if (toggleState !== null) {
+      setPrevVenueradiofivese(venueradiofivese); // Store previous toggle state
+      setVenueradiofivese(toggleState); // Update toggle state for Compare with
+    } else {
+      setVenueradiofivese(hasAllValue); // Sync toggle with "All" selection if from dropdown
     }
-
-    if (hasAllValue === true) {
-      setSelectedOptionsfive(basic || []);
+    setOldvenfive(selected); // Track previous selection
+    setSelectedOptionsfive(selected || []);
+  
+    if (hasAllValue) {
       filterDataByDateonee(dateRange, onetime, twotime, basic, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-
+  
       const output = [{ label: "All Hub", value: "All" }];
       basic.forEach(({ value }) => {
         Object.entries(alldrop).forEach(([key, items]) => {
@@ -1539,11 +1477,10 @@ let Mealsmulti = () => {
           }
         });
       });
-      setBasiconefive(output);
+      setBasiconefive(output); // Update Compare with hubs only
     } else {
-      setSelectedOptionsfive(selected || []);
       filterDataByDateonee(dateRange, onetime, twotime, selected, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-
+  
       const output = [{ label: "All Hub", value: "All" }];
       selected.forEach(({ value }) => {
         Object.entries(alldrop).forEach(([key, items]) => {
@@ -1556,7 +1493,7 @@ let Mealsmulti = () => {
           }
         });
       });
-      setBasiconefive(output);
+      setBasiconefive(output); // Update Compare with hubs only
     }
   };
 
@@ -6325,12 +6262,12 @@ let Mealsmulti = () => {
                           <div style={{ visibility: 'hidden' }}>
                             <div ref={pdfRefred}  >
 
-                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }}>Meals received - timeline
+                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000' }} className="fonttttttt">Meals received -  timeline
                               </p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt" >{(() => {
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fontttttttdd" >{(() => {
 
                                 const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-                                const result = filteredOptions.map(item => item.label).join(", ");
+                                const result = filteredOptions.map(item => item.label.trim()).join(", ");
 
 
                                 if (result === "" || result === undefined || result === null) {
@@ -6345,14 +6282,14 @@ let Mealsmulti = () => {
                               })()}</p>
 
                               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >{usedname}</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt"  >For the period {(() => {
                                 const datefineda = new Date(dateRange[0]);
 
                                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
                                   day: "2-digit",
                                   month: "short",
                                   year: "numeric"
-                                });
+                                }).replace(/,/g,"")
 
                                 return (formattedDate)
                               })()} to {(() => {
@@ -6362,18 +6299,18 @@ let Mealsmulti = () => {
                                   day: "2-digit",
                                   month: "short",
                                   year: "numeric"
-                                });
+                                }).replace(/,/g,"")
 
                                 return (formattedDate)
                               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt"  >Compared with the period {(() => {
                                 const datefineda = new Date(dateRangetwo[0]);
 
                                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
                                   day: "2-digit",
                                   month: "short",
                                   year: "numeric"
-                                });
+                                }).replace(/,/g,"")
 
                                 return (formattedDate)
                               })()} to {(() => {
@@ -6383,15 +6320,15 @@ let Mealsmulti = () => {
                                   day: "2-digit",
                                   month: "short",
                                   year: "numeric"
-                                });
+                                }).replace(/,/g,"")
 
                                 return (formattedDate)
                               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, wordSpacing: -5 }} >Table ranges contains: All</p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} >Stages contains: {(() => {
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, wordSpacing: -5 }}  className="fonttttttt" >Table ranges contains: All</p>
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt"  >Stages contains: {(() => {
 
-                                const result = selectedhubOptions.map(item => item.label).join(",");
+                                const result = selectedhubOptions.map(item => item.label.trim()).join(", ");
 
                                 if (result === "" || result === undefined || result === null) {
                                   return 'All'
@@ -6403,9 +6340,9 @@ let Mealsmulti = () => {
 
 
                               })()} </p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} >Courses contains: {(() => {
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }}  className="fonttttttt"  >Courses contains: {(() => {
 
-                                const result = selectedCources.map(item => item.label).join(",");
+                                const result = selectedCources.map(item => item.label).join(", ");
 
                                 if (result === "" || result === undefined || result === null) {
                                   return 'All'
@@ -6464,11 +6401,11 @@ let Mealsmulti = () => {
         <div ref={pdfRef}  >
 
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Edits</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >{(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,padding:0 }} className="fontttttttdd"  >{(() => {
 
             const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-            const result = filteredOptions.map(item => item.label).join(",") // Join without spaces first
-              .replace(/,/g, ", ");
+            const result = filteredOptions.map(item => item.label.trim()).join(", ") // Join without spaces first
+  
 
 
             if (result === "" || result === undefined || result === null) {
@@ -6774,7 +6711,7 @@ let Mealsmulti = () => {
       <div style={{ visibility: 'hidden' }}>
         <div ref={pdfRefss}>
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -10 }}>Served meals</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt">
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fontttttttdd">
             {(() => {
               const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
               const result = selectedOptions
@@ -6970,7 +6907,7 @@ let Mealsmulti = () => {
 
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }} className="fonttttttt"  >Refunded meals</p>
 
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"   >{(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, padding:0}} className="fontttttttdd"    >{(() => {
 
             const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
             const result = filteredOptions.map(item => item.label).join(",") // Join without spaces first

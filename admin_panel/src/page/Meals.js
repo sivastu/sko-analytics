@@ -6619,7 +6619,7 @@ let Meals = () => {
                             <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Meals received - timeline</p>
                           </div>
 
-                          <div >
+                          <div className="position-relative">
                             <img src="threedot.png" ref={toggleButtonRefsss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
 
                             {showDivsss && (
@@ -6627,14 +6627,14 @@ let Meals = () => {
                                 ref={dropdownRefsss}
                                 style={{
                                   width: 200,
-                                  margin: '0px',
                                   padding: '10px',
                                   backgroundColor: '#f8f9fa',
                                   border: '1px solid #ccc',
                                   borderRadius: '4px',
                                   boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
                                   position: 'absolute',
-                                  right: '3%'
+                                  right: 0,
+                                  zIndex: 1000
                                 }}
                               >
                                 <p style={{ color: '#707070' }}>Export as</p>
@@ -6706,13 +6706,13 @@ let Meals = () => {
                           <div style={{ visibility: 'hidden' }}>
                             <div ref={pdfRefred}  >
 
-                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Meals received - timeline
+                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}  className="fonttttttt" >Meals received - timeline
                               </p>
 
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >{(() => {
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fontttttttdd">{(() => {
 
                                 const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-                                const result = filteredOptions.map(item => item.label).join(", ");
+                                const result = filteredOptions.map(item => item.label.trim()).join(", ");
 
 
                                 if (result === "" || result === undefined || result === null) {
@@ -6727,7 +6727,7 @@ let Meals = () => {
                               })()}</p>
 
                               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >{usedname}</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }}   className="fonttttttt" >For the period {(() => {
                                 const datefineda = new Date(dateRange[0]);
 
                                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6748,7 +6748,7 @@ let Meals = () => {
 
                                 return (formattedDate)
                               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >Compared with the period {(() => {
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }}  className="fonttttttt" >Compared with the period {(() => {
                                 const datefineda = new Date(dateRangetwo[0]);
 
                                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6770,10 +6770,10 @@ let Meals = () => {
                                 return (formattedDate)
                               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} >Table ranges contains: All</p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Stages contains: {(() => {
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }}  className="fonttttttt" >Table ranges contains: All</p>
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }}  className="fonttttttt"  >Stages contains: {(() => {
 
-                                const result = selectedhubOptions.map(item => item.label).join(",");
+                                const result = selectedhubOptions.map(item => item.label.trim()).join(", ");
 
                                 if (result === "" || result === undefined || result === null) {
                                   return 'All'
@@ -6785,9 +6785,9 @@ let Meals = () => {
 
 
                               })()} </p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} >Courses contains: {(() => {
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }}  className="fonttttttt" >Courses contains: {(() => {
 
-                                const result = selectedCources.map(item => item.label).join(",");
+                                const result = selectedCources.map(item => item.label.trim()).join(", ");
 
                                 if (result === "" || result === undefined || result === null) {
                                   return 'All'
@@ -6846,11 +6846,10 @@ let Meals = () => {
         <div ref={pdfRef}  >
 
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Edits</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}   >{(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}  className="fontttttttdd"  >{(() => {
 
             const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-            const result = filteredOptions.map(item => item.label).join(",") // Join without spaces first
-              .replace(/,/g, ", ");
+            const result = filteredOptions.map(item => item.label).join(", ") // Join without spaces first
 
 
             if (result === "" || result === undefined || result === null) {
@@ -7155,13 +7154,13 @@ let Meals = () => {
       <div style={{ visibility: 'hidden' }}>
         <div ref={pdfRefss}>
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -10 }}>Served meals</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt" >
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,padding:0 }} className="fontttttttdd"   >
           {(() => {
         const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
         const result = selectedOptions
           .filter(item => item.label !== "All Venue")
           .map(item => item.label.trim())
-          .join(", "); // Join with comma and space directly
+          .join(", ")
         if (result === "" || result === undefined || result === null) {
           return 'All Venue';
         } else {
@@ -7169,7 +7168,20 @@ let Meals = () => {
         }
       })()}
           </p>
-
+{console.log(
+    (() => {
+      const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+      const result = selectedOptions
+        .filter(item => item.label !== "All Venue")
+        .map(item => item.label.trim())
+        .join(", ")
+      if (result === "" || result === undefined || result === null) {
+        return 'All Venue';
+      } else {
+        return result;
+      }
+    })()
+)}
           <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, }}>{usedname}</p>
           <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >For the period {(() => {
             const datefineda = new Date(dateRange[0]);
@@ -7353,7 +7365,7 @@ let Meals = () => {
            
                      <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}  className="fonttttttt"  >Refunded meals</p>
            
-                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}  className="fonttttttt"   >{(() => {
+                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,padding:0 }}  className="fontttttttdd"   >{(() => {
            
                        const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
                        const result = filteredOptions.map(item => item.label).join(",") // Join without spaces first
