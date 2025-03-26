@@ -1278,6 +1278,7 @@ let Meals = () => {
 
   let getone = (snapshots) => {
 
+    console.log(snapshots , 'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
 
     const eventss = snapshots
 
@@ -1307,7 +1308,7 @@ let Meals = () => {
 
 
 
-    setBasicall(cleanedData)
+    // setBasicall(cleanedData)
     // const transformData = (data) => {
     //   const result = {};
 
@@ -1338,7 +1339,7 @@ let Meals = () => {
     // };
 
     // const output = transformData(eventss);
-    const result = {};
+    const result = {};  
     Object.entries(cleanedData).forEach(([groupName, groupData]) => {
 
 
@@ -1570,6 +1571,10 @@ let Meals = () => {
 
     }
 
+    console.log(parsedatajson , 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv')
+
+
+
     if (parsedatajson.hub) {
 
       const hasAllValue = parsedatajson.hub.some(item => item.value === "All");
@@ -1606,8 +1611,9 @@ let Meals = () => {
         }
 
         let fina = filterDataByDynamicKeys(parsedatajson.hub)
+        console.log(fina , 'ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
 
-        setBasicall(fina)
+        // setBasicall(fina)
       }
 
 
@@ -2855,7 +2861,9 @@ let Meals = () => {
 
     console.log(inone, typeof (intwo), 'cources.lengthcources.lengthcources.lengthcources.length')
 
-
+    if(val21.length === 0){
+      alldat = []
+    }
     if (vals[1] === null || vals[1] === "null") {
 
     } else {
@@ -3657,7 +3665,9 @@ let Meals = () => {
     let alldat = basicall
 
     console.log(JSON.stringify(alltype), 'val2245')
-
+    if(val21.length === 0){
+      alldat = []
+    }
     if (vals[1] === null || vals[1] === "null") {
 
     } else {
@@ -4657,20 +4667,9 @@ let Meals = () => {
 
 
   let checkkkk = () => {
+  
 
-    const yesterday = [getFormattedDate(1), getFormattedDate(1)];
-    const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
-
-
-    //one
-    console.log(yesterday, '1')
-    console.log(eightDaysBefore, '2')
-
-    console.log(JSON.stringify(yesterday), '3')
-    console.log(JSON.stringify(eightDaysBefore), '4')
-
-    console.log(dateRange, '5')
-    console.log(JSON.stringify(dateRange), '6')
+    console.log(basicall , '5') 
   }
 
 

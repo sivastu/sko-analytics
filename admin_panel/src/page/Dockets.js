@@ -2011,7 +2011,9 @@ let Dockets = () => {
     let alldat = basicall
 
 
-
+    if(val21.length === 0){
+      alldat = []
+    }
     if (vals[1] === null || vals[1] === "null") {
 
     } else {
@@ -2771,7 +2773,9 @@ let Dockets = () => {
     let alldat = basicall
 
     console.log(JSON.stringify(alltype), 'val2245')
-
+    if(val21.length === 0){
+      alldat = []
+    }
     if (vals[1] === null || vals[1] === "null") {
 
     } else {
