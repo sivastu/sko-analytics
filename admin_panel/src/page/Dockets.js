@@ -715,15 +715,6 @@ let Dockets = () => {
 
 
 
-    const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
-    const optionstakeaway = [
-      ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
-    ].map(value => ({ value, label: value }));
-
-
-    console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
-
-
 
 
 
@@ -755,32 +746,38 @@ let Dockets = () => {
 
 
 
-    const filteredDataonee = {};
+    console.log( cleanedData , ' zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
 
-    console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
+
+
+
+
+    let filteredDataonee = {}; // Change const to let
+
     if (parsedatajson.venue) {
-
       const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-
-      console.log(hasAllValue, 'hasAllValue')
-      if (hasAllValue === true) {
-
-      } else {
-
-        parsedatajson.venue.forEach(filter => {
-          const key = filter.value;
-          if (cleanedData[key]) {
-            filteredDataonee[key] = cleanedData[key];
+    
+      if (!hasAllValue) { // No need to check if === true
+        const filterKeys = new Set(parsedatajson.venue.map(item => item.value));
+    
+        filteredDataonee = Object.entries(cleanedData).reduce((acc, [key, subObj]) => {
+          const filteredSubObj = Object.fromEntries(
+            Object.entries(subObj).filter(([subKey]) => filterKeys.has(subKey))
+          );
+    
+          if (Object.keys(filteredSubObj).length) {
+            acc[key] = filteredSubObj;
           }
-        });
-        setBasicall(filteredDataonee)
+    
+          return acc;
+        }, {});
+    
+        setBasicall(filteredDataonee);
       }
-
-
-
-
-
     }
+
+
+    console.log( filteredDataonee , ' zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
 
     if (parsedatajson.hub) {
 
@@ -819,7 +816,7 @@ let Dockets = () => {
 
         let fina = filterDataByDynamicKeys(parsedatajson.hub)
 
-        setBasicall(fina)
+        // setBasicall(fina)
       }
 
 
@@ -4317,16 +4314,8 @@ let Dockets = () => {
 
   let checkkkk = () => {
 
-    //one
-    console.log(editall, '1')
-    console.log(served, '2')
-    console.log(minperday, '3')
 
-    //two
-    console.log(editallone, '4')
-    console.log(servedone, '5')
-    console.log(maxperday, '6')
-
+    console.log(basicall, '5')
   }
 
 
@@ -5327,7 +5316,7 @@ let Dockets = () => {
               <div className="d-flex flex-wrap justify-content-around pt-4 gap-4  hide-scrollbar">
                 {/* Date Range 1 */}
                 <div className="filter-container" style={{ width: 'calc(20% - 20px)', minWidth: '240px' }}>
-                  <p onClick={() => { checkkkk() }} style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
+                  <p  onClick={() => { checkkkk() }} style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>
                     Chosen range:<span style={{ fontWeight: '400' }}> Custom</span>
                   </p>
                   <div style={{ width: '100%' }}>

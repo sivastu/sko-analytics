@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useContext } from "react";
 import Header from "../component/Header";
 import axios from "axios";
 import { Base_url } from "../config";
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 
 import ReactDOM from "react-dom";
 import ReactPaginate from "react-paginate";
@@ -1278,8 +1278,6 @@ let Meals = () => {
 
   let getone = (snapshots) => {
 
-    console.log(snapshots , 'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
-
     const eventss = snapshots
 
     function removeTrainingNotes(obj) {
@@ -1305,41 +1303,7 @@ let Meals = () => {
 
 
 
-
-
-
-    // setBasicall(cleanedData)
-    // const transformData = (data) => {
-    //   const result = {};
-
-    //   for (const key of Object.keys(data)) {
-    //     const parts = key.split("-");
-    //     const [group, location, subLocation, year] = parts;
-
-    //     if (!result[group]) result[group] = {};
-    //     if (!result[group][location]) result[group][location] = {};
-    //     if (!result[group][location][subLocation]) result[group][location][subLocation] = new Set();
-
-    //     result[group][location][subLocation].add(year);
-    //   }
-
-    //   // Convert Sets to arrays for final output
-    //   const convertSetsToArrays = (obj) => {
-    //     for (const key in obj) {
-    //       if (obj[key] instanceof Set) {
-    //         obj[key] = Array.from(obj[key]);
-    //       } else if (typeof obj[key] === "object") {
-    //         convertSetsToArrays(obj[key]);
-    //       }
-    //     }
-    //   };
-
-    //   convertSetsToArrays(result);
-    //   return result;
-    // };
-
-    // const output = transformData(eventss);
-    const result = {};  
+    const result = {};
     Object.entries(cleanedData).forEach(([groupName, groupData]) => {
 
 
@@ -1493,85 +1457,46 @@ let Meals = () => {
 
 
       let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
+
+
       uuuk.unshift({ label: "All Courses", value: "All" });
       setFulldatafull(uuuk)
-      // setSelectedCources(uuuk)
       setOldcou(uuuk)
 
     }
 
 
 
+    let filteredDataonee = {}; // Change const to let
 
-
-    const kitchen2Data = cleanedData["ZushiGroup"]["ZushiBarangaroo"].Kitchen["2025-01-20"];
-    const optionstakeaway = [
-      ...new Set(kitchen2Data.map(item => item.NOTE)) // Extract unique values from the NOTE field
-    ].map(value => ({ value, label: value }));
-
-
-    console.log(optionstakeaway, 'kitchen2Datakitchen2Datakitchen2Data')
-
-
-
-
-
-    // const output = [];
-
-    //   // // Iterate through the search array
-    //   [].forEach(({ value }) => {
-    //     // Search in the data object
-    //     Object.entries(alldrop).forEach(([key, items]) => {
-    //       if (key === value) {
-    //         // If the key matches, add all items from the group to the output
-    //         items.forEach(item => {
-    //           output.push({ value: key + '-' + item.name, label: item.name });
-    //         });
-    //       } else {
-    //         // Search within the group's items
-    //         items.forEach(item => {
-    //           if (item.name === value) {
-    //             output.push({ value: key + '-' + item.name, label: key });
-    //           }
-    //         });
-    //       }
-    //     });
-    //   });
-
-    //   setBasicone(output)
-
-
-
-
-
-    const filteredDataonee = {};
-
-    console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
     if (parsedatajson.venue) {
-
       const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-
-      console.log(hasAllValue, 'hasAllValue')
-      if (hasAllValue === true) {
-
-      } else {
-
-        parsedatajson.venue.forEach(filter => {
-          const key = filter.value;
-          if (cleanedData[key]) {
-            filteredDataonee[key] = cleanedData[key];
+    
+      if (!hasAllValue) { // No need to check if === true
+        const filterKeys = new Set(parsedatajson.venue.map(item => item.value));
+    
+        filteredDataonee = Object.entries(cleanedData).reduce((acc, [key, subObj]) => {
+          const filteredSubObj = Object.fromEntries(
+            Object.entries(subObj).filter(([subKey]) => filterKeys.has(subKey))
+          );
+    
+          if (Object.keys(filteredSubObj).length) {
+            acc[key] = filteredSubObj;
           }
-        });
-        setBasicall(filteredDataonee)
+    
+          return acc;
+        }, {});
+    
+        setBasicall(filteredDataonee);
       }
-
-
-
-
-
     }
+    console.log(filteredDataonee, 'wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww', cleanedData)
 
-    console.log(parsedatajson , 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv')
+
+
+
+
+    console.log(JSON.stringify(parsedatajson), 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv')
 
 
 
@@ -1611,7 +1536,7 @@ let Meals = () => {
         }
 
         let fina = filterDataByDynamicKeys(parsedatajson.hub)
-        console.log(fina , 'ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
+        console.log(fina, 'ggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
 
         // setBasicall(fina)
       }
@@ -1622,10 +1547,6 @@ let Meals = () => {
 
 
 
-
-
-
-    // alldat = filteredDataonee
     const yesterday = [getFormattedDate(2), getFormattedDate(2)];
     const eightDaysBefore = [getFormattedDate(9), getFormattedDate(9)];
     setDateRangetwo(eightDaysBefore)
@@ -2626,7 +2547,7 @@ let Meals = () => {
     { value: 'audi', label: 'Audi' },
   ];
 
-  const [selectedCources, setSelectedCources] = useState([]); 
+  const [selectedCources, setSelectedCources] = useState([]);
 
   const handleChangeCources = (selected) => {
     setMenuIsOpenthree(true)
@@ -2861,7 +2782,7 @@ let Meals = () => {
 
     console.log(inone, typeof (intwo), 'cources.lengthcources.lengthcources.lengthcources.length')
 
-    if(val21.length === 0){
+    if (val21.length === 0) {
       alldat = []
     }
     if (vals[1] === null || vals[1] === "null") {
@@ -3665,7 +3586,7 @@ let Meals = () => {
     let alldat = basicall
 
     console.log(JSON.stringify(alltype), 'val2245')
-    if(val21.length === 0){
+    if (val21.length === 0) {
       alldat = []
     }
     if (vals[1] === null || vals[1] === "null") {
@@ -4121,7 +4042,7 @@ let Meals = () => {
       }
     }
 
-    if (intwo?.length > 2 && inone === undefined || intwo === '' ) {
+    if (intwo?.length > 2 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -4667,9 +4588,9 @@ let Meals = () => {
 
 
   let checkkkk = () => {
-  
 
-    console.log(basicall , '5') 
+
+    console.log(basicall, '5')
   }
 
 
@@ -6705,7 +6626,7 @@ let Meals = () => {
                           <div style={{ visibility: 'hidden' }}>
                             <div ref={pdfRefred}  >
 
-                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}  className="fonttttttt" >Meals received - timeline
+                              <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }} className="fonttttttt" >Meals received - timeline
                               </p>
 
                               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fontttttttdd">{(() => {
@@ -6726,7 +6647,7 @@ let Meals = () => {
                               })()}</p>
 
                               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >{usedname}</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }}   className="fonttttttt" >For the period {(() => {
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt" >For the period {(() => {
                                 const datefineda = new Date(dateRange[0]);
 
                                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6747,7 +6668,7 @@ let Meals = () => {
 
                                 return (formattedDate)
                               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }}  className="fonttttttt" >Compared with the period {(() => {
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt" >Compared with the period {(() => {
                                 const datefineda = new Date(dateRangetwo[0]);
 
                                 const formattedDate = datefineda.toLocaleDateString("en-GB", {
@@ -6769,8 +6690,8 @@ let Meals = () => {
                                 return (formattedDate)
                               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }}  className="fonttttttt" >Table ranges contains: All</p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }}  className="fonttttttt"  >Stages contains: {(() => {
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} className="fonttttttt" >Table ranges contains: All</p>
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} className="fonttttttt"  >Stages contains: {(() => {
 
                                 const result = selectedhubOptions.map(item => item.label.trim()).join(", ");
 
@@ -6784,7 +6705,7 @@ let Meals = () => {
 
 
                               })()} </p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }}  className="fonttttttt" >Courses contains: {(() => {
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20 }} className="fonttttttt" >Courses contains: {(() => {
 
                                 const result = selectedCources.map(item => item.label.trim()).join(", ");
 
@@ -6845,7 +6766,7 @@ let Meals = () => {
         <div ref={pdfRef}  >
 
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Edits</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}  className="fontttttttdd"  >{(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fontttttttdd"  >{(() => {
 
             const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
             const result = filteredOptions.map(item => item.label).join(", ") // Join without spaces first
@@ -7153,34 +7074,34 @@ let Meals = () => {
       <div style={{ visibility: 'hidden' }}>
         <div ref={pdfRefss}>
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -10 }}>Served meals</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,padding:0 }} className="fontttttttdd"   >
-          {(() => {
-        const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-        const result = selectedOptions
-          .filter(item => item.label !== "All Venue")
-          .map(item => item.label.trim())
-          .join(", ")
-        if (result === "" || result === undefined || result === null) {
-          return 'All Venue';
-        } else {
-          return result;
-        }
-      })()}
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, padding: 0 }} className="fontttttttdd"   >
+            {(() => {
+              const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+              const result = selectedOptions
+                .filter(item => item.label !== "All Venue")
+                .map(item => item.label.trim())
+                .join(", ")
+              if (result === "" || result === undefined || result === null) {
+                return 'All Venue';
+              } else {
+                return result;
+              }
+            })()}
           </p>
-{console.log(
-    (() => {
-      const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-      const result = selectedOptions
-        .filter(item => item.label !== "All Venue")
-        .map(item => item.label.trim())
-        .join(", ")
-      if (result === "" || result === undefined || result === null) {
-        return 'All Venue';
-      } else {
-        return result;
-      }
-    })()
-)}
+          {console.log(
+            (() => {
+              const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+              const result = selectedOptions
+                .filter(item => item.label !== "All Venue")
+                .map(item => item.label.trim())
+                .join(", ")
+              if (result === "" || result === undefined || result === null) {
+                return 'All Venue';
+              } else {
+                return result;
+              }
+            })()
+          )}
           <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, }}>{usedname}</p>
           <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >For the period {(() => {
             const datefineda = new Date(dateRange[0]);
@@ -7226,17 +7147,17 @@ let Meals = () => {
           })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
           <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20 }} className="fonttttttt"  >Table ranges contains: All</p>
-          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Stages contains: 
-          {(() => {
-            const result = selectedhubOptions.map(item => item.label.trim()).join(",") // Join without spaces first
-              .replace(/,/g, ", "); // Changed from comma+space to just space
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Stages contains:
+            {(() => {
+              const result = selectedhubOptions.map(item => item.label.trim()).join(",") // Join without spaces first
+                .replace(/,/g, ", "); // Changed from comma+space to just space
 
-            if (result === "" || result === undefined || result === null) {
-              return 'All'
-            } else {
-              return result
-            }
-          })()} </p>
+              if (result === "" || result === undefined || result === null) {
+                return 'All'
+              } else {
+                return result
+              }
+            })()} </p>
           <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Courses contains: {(() => {
             const result = selectedCources.map(item => item.label.trim()).join(",") // Join without spaces first
               .replace(/,/g, ", "); // Changed from comma+space to just space
@@ -7358,213 +7279,213 @@ let Meals = () => {
       </div>
 
 
-     
-            <div style={{ visibility: 'hidden' }}>
-                   <div ref={pdfRefsss}  >
-           
-                     <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}  className="fonttttttt"  >Refunded meals</p>
-           
-                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,padding:0 }}  className="fontttttttdd"   >{(() => {
-           
-                       const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-                       const result = filteredOptions.map(item => item.label).join(",") // Join without spaces first
-                       .replace(/,/g, ", ");
-           
-           
-                       if (result === "" || result === undefined || result === null) {
-                         return 'All Venue'
-                       } else {
-           
-                         return result
-           
-                       }
-           
-           
-                     })()}</p>
-           
-                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20,   }} >{usedname}</p>
-                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,  }}  className="fonttttttt"  >For the period {(() => {
-                       const datefineda = new Date(dateRange[0]);
-           
-                       const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                         day: "2-digit",
-                         month: "short",
-                         year: "numeric"
-                       }).replace(/,/g, "");
-           
-                       return (formattedDate)
-                     })()} to {(() => {
-                       const datefineda = new Date(dateRange[1]);
-           
-                       const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                         day: "2-digit",
-                         month: "short",
-                         year: "numeric"
-                       }).replace(/,/g, "");
-           
-                       return (formattedDate)
-                     })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,   }}  className="fonttttttt"  >Compared with the period {(() => {
-                       const datefineda = new Date(dateRangetwo[0]);
-           
-                       const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                         day: "2-digit",
-                         month: "short",
-                         year: "numeric"
-                       }).replace(/,/g, "");
-           
-                       return (formattedDate)
-                     })()} to {(() => {
-                       const datefineda = new Date(dateRangetwo[1]);
-           
-                       const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                         day: "2-digit",
-                         month: "short",
-                         year: "numeric"
-                       }).replace(/,/g, "");
-           
-                       return (formattedDate)
-                     })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-           
-                     <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20,   }}  className="fonttttttt"  >Table ranges contains: All</p>
-                     <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20,   }}  className="fonttttttt"  >Stages contains: {(() => {
-           
-                       const result = selectedhubOptions.map(item => item.label).join(",") // Join without spaces first
-                       .replace(/,/g, ", ");
-           
-                       if (result === "" || result === undefined || result === null) {
-                         return 'All'
-                       } else {
-           
-                         return result
-           
-                       }
-           
-           
-                     })()} </p>
-                     <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20,   }}  className="fonttttttt"  >Courses contains: {(() => {
-           
-                       const result = selectedCources.map(item => item.label).join(",") // Join without spaces first
-                       .replace(/,/g, ", ");
-           
-                       if (result === "" || result === undefined || result === null) {
-                         return 'All'
-                       } else {
-           
-                         return result
-           
-                       }
-           
-           
-                     })()}</p>
-           
-           
-                     <div style={{ marginTop: 20, padding: 10 }} >
-           
-                       <div className="d-flex " style={{  borderBottom: "1px solid #ccc"  }} >
-           
-                         <div  style={{ width: '43%' }}>
-                           <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
-                             ggggrtsg()} </p>
-                         </div>
-                         <div  style={{ width: '33%' }}>
-                           <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span style={{ marginTop : -6 }}>{
-           
-                             ggggrtsgg()
-                           } </span></p>
-                         </div>
-                         <div  style={{ width: '23%', justifyContent: 'end',  }}>
-                           <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                             ( Total )
-                             {(() => {
-                               let datd = ggggrtsg();
-                               let datdtwo = ggggrtsgg();
-                               let tot = ((datd - datdtwo) / datdtwo) * 100;
-           
-                               console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot);
-           
-                               return (
-                                 <>
-                                   {isNaN(tot) ? 0 : tot.toFixed(2) + "%"}
-                                 </>
-                               );
-                             })()}
-                           </p>
-           
-                         </div>
-           
-                       </div>
-            
-           
-                       <div className="scroll" id="scrrrrol"  >
-           
-           
-           
-                         {
-                           minperday?.map((dfgh, index) => {
-           
-                             const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
-           
-                             return (
-                               <>
-                                 <div className="d-flex" style={{ borderBottom: "1px solid #ccc" , padding : 4 }} >
-                                   {/* Left Section */}
-                                   <div style={{ width: '43%' }} className="d-flex "> 
-                                     <p style={{ fontWeight: 700, color: index === 0 && selserdatare === 'Minimum'  ? "#CA424E" : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                                     <p style={{ fontWeight: 400, color: '#000', marginBlock: '4px' }}>{dfgh?.count}</p>
-                                   </div>
-           
-                                   {/* Middle Section */}
-                                   <div style={{ width: '33%',  }}>
-                                     {correspondingErv ? (
-                                       <div className="d-flex ">
-                                         <p style={{ fontWeight: 700, color: index === 0 && selserdatare === 'Maximum' ? "#316AAF" : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                         <p style={{ fontWeight: 400, color: '#000', marginBlock: '4px' }}>{correspondingErv?.count}</p>
-                                       </div>
-                                     ) : null}
-                                   </div>
-           
-                                   {/* Right Section */}
-                                   <div style={{ width: '23%', display: 'd-flex', justifyContent: 'end',  }}>
-                                     <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px',}}>
-                                       ( Total )
-                                       {(() => {
-                                         const datd = dfgh?.count || 0;
-                                         const datdtwo = correspondingErv?.count || 0;
-                                         const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
-                                         return (
-                                           <>
-                                             {tot.toFixed(2)}%
-                                             <img
-                                               src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                                               style={{ width: 16, height: 16, cursor: 'pointer', marginLeft: 5, verticalAlign: 'middle' }}
-                                               alt={tot > 0 ? "up arrow" : "down arrow"}
-                                             />
-                                           </>
-                                         );
-                                       })()}
-                                     </p>
-                                   </div>
-                                 </div> 
-                               </>
-           
-           
-                             );
-                           })
-                         }
-           
-           
-                       </div>
-           
-           
-           
-           
-                     </div>
-                   </div >
-                 </div>
+
+      <div style={{ visibility: 'hidden' }}>
+        <div ref={pdfRefsss}  >
+
+          <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }} className="fonttttttt"  >Refunded meals</p>
+
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, padding: 0 }} className="fontttttttdd"   >{(() => {
+
+            const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+            const result = filteredOptions.map(item => item.label).join(",") // Join without spaces first
+              .replace(/,/g, ", ");
+
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All Venue'
+            } else {
+
+              return result
+
+            }
+
+
+          })()}</p>
+
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, }} >{usedname}</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >For the period {(() => {
+            const datefineda = new Date(dateRange[0]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRange[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+            return (formattedDate)
+          })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >Compared with the period {(() => {
+            const datefineda = new Date(dateRangetwo[0]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+            return (formattedDate)
+          })()} to {(() => {
+            const datefineda = new Date(dateRangetwo[1]);
+
+            const formattedDate = datefineda.toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric"
+            }).replace(/,/g, "");
+
+            return (formattedDate)
+          })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, }} className="fonttttttt"  >Table ranges contains: All</p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Stages contains: {(() => {
+
+            const result = selectedhubOptions.map(item => item.label).join(",") // Join without spaces first
+              .replace(/,/g, ", ");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()} </p>
+          <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Courses contains: {(() => {
+
+            const result = selectedCources.map(item => item.label).join(",") // Join without spaces first
+              .replace(/,/g, ", ");
+
+            if (result === "" || result === undefined || result === null) {
+              return 'All'
+            } else {
+
+              return result
+
+            }
+
+
+          })()}</p>
+
+
+          <div style={{ marginTop: 20, padding: 10 }} >
+
+            <div className="d-flex " style={{ borderBottom: "1px solid #ccc" }} >
+
+              <div style={{ width: '43%' }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total )  {
+                  ggggrtsg()} </p>
+              </div>
+              <div style={{ width: '33%' }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>( Total ) <span style={{ marginTop: -6 }}>{
+
+                  ggggrtsgg()
+                } </span></p>
+              </div>
+              <div style={{ width: '23%', justifyContent: 'end', }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                  ( Total )
+                  {(() => {
+                    let datd = ggggrtsg();
+                    let datdtwo = ggggrtsgg();
+                    let tot = ((datd - datdtwo) / datdtwo) * 100;
+
+                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot);
+
+                    return (
+                      <>
+                        {isNaN(tot) ? 0 : tot.toFixed(2) + "%"}
+                      </>
+                    );
+                  })()}
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <div className="scroll" id="scrrrrol"  >
+
+
+
+              {
+                minperday?.map((dfgh, index) => {
+
+                  const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
+
+                  return (
+                    <>
+                      <div className="d-flex" style={{ borderBottom: "1px solid #ccc", padding: 4 }} >
+                        {/* Left Section */}
+                        <div style={{ width: '43%' }} className="d-flex ">
+                          <p style={{ fontWeight: 700, color: index === 0 && selserdatare === 'Minimum' ? "#CA424E" : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                          <p style={{ fontWeight: 400, color: '#000', marginBlock: '4px' }}>{dfgh?.count}</p>
+                        </div>
+
+                        {/* Middle Section */}
+                        <div style={{ width: '33%', }}>
+                          {correspondingErv ? (
+                            <div className="d-flex ">
+                              <p style={{ fontWeight: 700, color: index === 0 && selserdatare === 'Maximum' ? "#316AAF" : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                              <p style={{ fontWeight: 400, color: '#000', marginBlock: '4px' }}>{correspondingErv?.count}</p>
+                            </div>
+                          ) : null}
+                        </div>
+
+                        {/* Right Section */}
+                        <div style={{ width: '23%', display: 'd-flex', justifyContent: 'end', }}>
+                          <p style={{ fontWeight: 400, color: '#000', marginBlock: '7px', }}>
+                            ( Total )
+                            {(() => {
+                              const datd = dfgh?.count || 0;
+                              const datdtwo = correspondingErv?.count || 0;
+                              const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
+                              return (
+                                <>
+                                  {tot.toFixed(2)}%
+                                  <img
+                                    src={tot > 0 ? "up_arw.png" : "d_arw.png"}
+                                    style={{ width: 16, height: 16, cursor: 'pointer', marginLeft: 5, verticalAlign: 'middle' }}
+                                    alt={tot > 0 ? "up arrow" : "down arrow"}
+                                  />
+                                </>
+                              );
+                            })()}
+                          </p>
+                        </div>
+                      </div>
+                    </>
+
+
+                  );
+                })
+              }
+
+
+            </div>
+
+
+
+
+          </div>
+        </div >
+      </div>
 
     </div>
   );

@@ -834,10 +834,10 @@ let Admin_dash = () => {
 
     const optionsone = [{ value: "All", label: "All Venues" }];
     Object.entries(eventss).forEach(([groupName, groupData]) => {
-      optionsone.push({ value: groupName, label: groupName });
+     
 
       Object.keys(groupData).forEach((key) => {
-        
+        optionsone.push({ value: key, label: key });
       });
     });
 

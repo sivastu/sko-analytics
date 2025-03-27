@@ -608,31 +608,28 @@ let Mealsmulti = () => {
 
 
 
-    const filteredDataonee = {};
+    let filteredDataonee = {}; // Change const to let
 
-    console.log(JSON.stringify(parsedatajson), 'mydatamydatamydatamydatamydatamydatamydata')
     if (parsedatajson.venue) {
-
       const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-
-      console.log(hasAllValue, 'hasAllValue')
-      if (hasAllValue === true) {
-
-      } else {
-
-        parsedatajson.venue.forEach(filter => {
-          const key = filter.value;
-          if (cleanedData[key]) {
-            filteredDataonee[key] = cleanedData[key];
+    
+      if (!hasAllValue) { // No need to check if === true
+        const filterKeys = new Set(parsedatajson.venue.map(item => item.value));
+    
+        filteredDataonee = Object.entries(cleanedData).reduce((acc, [key, subObj]) => {
+          const filteredSubObj = Object.fromEntries(
+            Object.entries(subObj).filter(([subKey]) => filterKeys.has(subKey))
+          );
+    
+          if (Object.keys(filteredSubObj).length) {
+            acc[key] = filteredSubObj;
           }
-        });
-        setBasicall(filteredDataonee)
+    
+          return acc;
+        }, {});
+    
+        setBasicall(filteredDataonee);
       }
-
-
-
-
-
     }
 
     if (parsedatajson.hub) {
@@ -672,7 +669,7 @@ let Mealsmulti = () => {
 
         let fina = filterDataByDynamicKeys(parsedatajson.hub)
 
-        setBasicall(fina)
+        // setBasicall(fina)
       }
 
 
