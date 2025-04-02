@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext , useRef } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import Header from "../component/Header";
 import axios from "axios";
 import { Base_url } from "../config";
@@ -78,6 +78,8 @@ let Admin_dash = () => {
   let [username, setUsername] = useState();
   let [email, setEmail] = useState();
 
+  let [password, setPassword] = useState();
+
   const [rotation, setRotation] = useState(0);
 
   let [editname, setEditname] = useState();
@@ -114,26 +116,26 @@ let Admin_dash = () => {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [menuIsOpenone, setMenuIsOpenone] = useState(false);
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-          if (selectRef.current && !selectRef.current.contains(event.target)) {
-            setMenuIsOpen(false);
-          } 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setMenuIsOpen(false);
+      }
 
 
-          if (selectRefone.current && !selectRefone.current.contains(event.target)) {
-            setMenuIsOpenone(false);
-          }
+      if (selectRefone.current && !selectRefone.current.contains(event.target)) {
+        setMenuIsOpenone(false);
+      }
 
 
-        };
-    
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-          document.removeEventListener("mousedown", handleClickOutside);
-        };
-      }, []);
-  
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
 
 
@@ -772,6 +774,11 @@ let Admin_dash = () => {
 
     let parsedatajson = JSON.parse(decry);
     let name = getName(parsedatajson);
+
+    console.log(parsedatajson, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+    
+
+   
     setUsedname(name);
     setBasicall(parsedatajson);
     const db = getDatabase(app);
@@ -832,19 +839,75 @@ let Admin_dash = () => {
     });
     setAlldrop(result);
 
-    const optionsone = [{ value: "All", label: "All Venues" }];
-    Object.entries(eventss).forEach(([groupName, groupData]) => {
+
+
+
+    let getdata = sessionStorage.getItem("data");
+    let decry = decrypt(getdata);
+    let parsedatajson = JSON.parse(decry); 
+    
+    if(parsedatajson?.Role === 'manager'){
+      setData('2')
+    }
+
+    if(parsedatajson?.Role  === 'superadmin'){
+      setData('7')
+    }
+    console.log(parsedatajson , 'namenamenamenamenamenamenamenamenamenamename')
+ 
+    let filteredDataonee = {}; // Change const to let
+
+    if (parsedatajson.venue) {
+      // const hasAllValue = parsedatajson.venue.some(item => item.label === "All");
+    
+      // if (hasAllValue) { // No need to check if === true
+        const filterKeys = new Set(parsedatajson.venue.map(item => item.label));
+    
+        filteredDataonee = Object.entries(eventss).reduce((acc, [key, subObj]) => {
+          const filteredSubObj = Object.fromEntries(
+            Object.entries(subObj).filter(([subKey]) => filterKeys.has(subKey))
+          );
+    
+          if (Object.keys(filteredSubObj).length) {
+            acc[key] = filteredSubObj;
+          }
+    
+          return acc;
+        }, {});
+
+        const optionsone = [{ value: "All", label: "All Venues" }];
+        Object.entries(filteredDataonee).forEach(([groupName, groupData]) => {
+    
+    
+          Object.keys(groupData).forEach((key) => {
+            optionsone.push({ value: key, label: key });
+          });
+        });
+
+
+        setBasic(optionsone);
+        console.log(optionsone , 'filteredDataoneefilteredDataoneefilteredDataoneefilteredDataonee')
      
+      // }else{
+      //   const optionsone = [{ value: "All", label: "All Venues" }];
+      //   Object.entries(eventss).forEach(([groupName, groupData]) => {
+    
+    
+      //     Object.keys(groupData).forEach((key) => {
+      //       optionsone.push({ value: key, label: key });
+      //     });
+      //   });
+    
+      //   console.log("options:", optionsone);
+      //   // console.log("optionss:", optionsstwo);
+    
+      //   setBasic(optionsone);
+      // }
+    }
 
-      Object.keys(groupData).forEach((key) => {
-        optionsone.push({ value: key, label: key });
-      });
-    });
 
-    console.log("options:", optionsone);
-    // console.log("optionss:", optionsstwo);
 
-    setBasic(optionsone);
+    
 
   };
 
@@ -910,6 +973,8 @@ let Admin_dash = () => {
 
   let newuser = () => {
 
+    console.log(data, 'superadmin1superadmin1superadmin1')
+
     if (data === "4" || data === "5" || data === "6") {
       return;
     }
@@ -935,6 +1000,20 @@ let Admin_dash = () => {
       setSwalProps({
         show: true,
         title: "Enter Valid Username",
+        text: " ",
+        icon: "error",
+        didClose: () => {
+          console.log("Swal closed");
+          setSwalProps({ show: false });
+        },
+      });
+      return;
+    }
+
+    if (password === undefined || password === "" || password === null) {
+      setSwalProps({
+        show: true,
+        title: "Enter Valid Password",
         text: " ",
         icon: "error",
         didClose: () => {
@@ -1041,11 +1120,11 @@ let Admin_dash = () => {
     let newData = {
       [email.replace(/\.com$/, "").replace(/[.#$/\[\]]/g, "")]: {
         Email: email,
-        Password: "password",
-        Role: data === "1" ? "admin" : data === "2" ? "manager" : "emp",
+        Role: data === "1" ? "admin" : data === "2" ? "manager" : data === "7" ? "superadmin" : "emp",
         name: username,
         venue: selectedOptions.filter(item => item.value !== "All"),
         hub: hubb.filter(item => item.value !== "All"),
+        Password : password
       },
     };
 
@@ -1283,7 +1362,9 @@ let Admin_dash = () => {
               style={{ width: 30, height: 30 }}
               alt="Settings Icon"
             />
-            <p className="mb-0 ms-2 fs-4  fw-bold" style={{ color: "#1A1A1B" }}>
+            <p onClick={()=>{
+              console.log(mydata , 'mydata')
+            }} className="mb-0 ms-2 fs-4  fw-bold" style={{ color: "#1A1A1B" }}>
               SETTINGS
             </p>
 
@@ -1575,7 +1656,7 @@ let Admin_dash = () => {
         )}
 
         <div className="d-flex " style={{ height: "60%", marginTop: 50 }}>
-          <div className=" d-lg-block d-none">
+          <div className=" d-lg-block d-none" style={{ width: '15%' }}>
             <div>
               <Nav.Link
                 onClick={() => {
@@ -1614,80 +1695,146 @@ let Admin_dash = () => {
                 />
                 <span className="font-size" style={{ marginTop: openDropdown === false ? -10 : -10 }}> Users</span>
               </Nav.Link>
+
+
+
               {openDropdown && (
                 <div className="ms-lg-3 ms-md-0">
+
+
+                  {
+                    mydata?.Role === 'superadmin' ?
+                      <div
+                        onClick={() => {
+                          setData("7");
+                          setUsername("");
+                          setEmail("");
+                          setSelectedOptions([]);
+                          setSelectedOptions([]);
+                        }}
+                        style={{
+                          marginTop: 30,
+                          borderRadius: 10,
+                          border:
+                            data === "7"
+                              ? "3px solid #316AAF"
+                              : "3px solid #ECF1F4",
+                          marginLeft: -33,
+                          height: 58,
+                          padding: 10,
+                          width: boxWidth,
+                          cursor: "pointer",
+                        }}
+                      >
+                        <p
+                          className="font-size"
+                          style={{
+                            color: "#1A1A1B",
+                            fontWeight: 400,
+                            marginTop: 5,
+                            margin: 0, // Removes default margin
+                            marginLeft: ml,
+                          }}
+                        >
+                          Super Admin
+                        </p>
+                      </div>
+
+                      :
+                      ''
+                  }
+
+
+                  {
+                    mydata?.Role === 'superadmin' || mydata?.Role === 'admin' ?
+                      <div
+                        onClick={() => {
+                          setData("1");
+                          setUsername("");
+                          setEmail("");
+                          setSelectedOptions([]);
+                          setSelectedOptions([]);
+                        }}
+                        style={{
+                          marginTop: 30,
+                          borderRadius: 10,
+                          border:
+                            data === "1"
+                              ? "3px solid #316AAF"
+                              : "3px solid #ECF1F4",
+                          marginLeft: -33,
+                          height: 58,
+                          padding: 10,
+                          width: boxWidth,
+                          cursor: "pointer",
+                        }}
+                      >
+                        <p
+                          className="font-size"
+                          style={{
+                            color: "#1A1A1B",
+                            fontWeight: 400,
+                            marginTop: 5,
+                            margin: 0, // Removes default margin
+                            marginLeft: ml,
+                          }}
+                        >
+                          Admin
+                        </p>
+                      </div>
+
+                      :
+                      ''
+                  }
+
+
+                  {
+                    mydata?.Role === 'superadmin' || mydata?.Role === 'admin' || mydata?.Role === 'manager' ?
+                    
                   <div
-                    onClick={() => {
-                      setData("1");
-                      setUsername("");
-                      setEmail("");
-                      setSelectedOptions([]);
-                      setSelectedOptions([]);
-                    }}
+                  onClick={() => {
+                    setData("2");
+
+                    setUsername("");
+                    setEmail("");
+                    setSelectedOptions([]);
+                    setSelectedOptions([]);
+                  }}
+                  style={{
+                    marginTop: 30,
+                    borderRadius: 10,
+                    border:
+                      data === "2"
+                        ? "3px solid #316AAF"
+                        : "3px solid #ECF1F4",
+                    marginLeft: -33,
+                    height: 58,
+                    padding: 10,
+                    width: boxWidth,
+                    cursor: "pointer",
+                  }}
+                >
+                  <p
+                    className="font-size"
                     style={{
-                      marginTop: 30,
-                      borderRadius: 10,
-                      border:
-                        data === "1"
-                          ? "3px solid #316AAF"
-                          : "3px solid #ECF1F4",
-                      marginLeft: -33,
-                      height: 58,
-                      padding: 10,
-                      width: boxWidth,
-                      cursor: "pointer",
+                      color: "#1A1A1B",
+                      fontWeight: 400,
+                      marginTop: 5,
+                      margin: 0, // Removes default margin
+                      marginLeft: ml,
                     }}
                   >
-                    <p
-                      className="font-size"
-                      style={{
-                        color: "#1A1A1B",
-                        fontWeight: 400,
-                        marginTop: 5,
-                        margin: 0, // Removes default margin
-                        marginLeft: ml,
-                      }}
-                    >
-                      Admin
-                    </p>
-                  </div>
+                    Managers
+                  </p>
+                </div>
 
-                  <div
-                    onClick={() => {
-                      setData("2");
+                :''
 
-                      setUsername("");
-                      setEmail("");
-                      setSelectedOptions([]);
-                      setSelectedOptions([]);
-                    }}
-                    style={{
-                      marginTop: 30,
-                      borderRadius: 10,
-                      border:
-                        data === "2"
-                          ? "3px solid #316AAF"
-                          : "3px solid #ECF1F4",
-                      marginLeft: -33,
-                      height: 58,
-                      padding: 10,
-                      width: boxWidth,
-                      cursor: "pointer",
-                    }}
-                  >
-                    <p
-                      className="font-size"
-                      style={{
-                        color: "#1A1A1B",
-                        fontWeight: 400,
-                        marginTop: 5,
-                        margin: 0, // Removes default margin
-                        marginLeft: ml,
-                      }}
-                    >
-                      Managers
-                    </p>
-                  </div>
+                  }
+
+
+
+ 
                   <div
                     onClick={() => {
                       setData("3");
@@ -1826,7 +1973,7 @@ let Admin_dash = () => {
             </div>
           </div>
 
-          {data === "1" || data === "2" || data === "3" ? (
+          {data === "1" || data === "2" || data === "3" || data === "7" ? (
             <>
               <div className="custom-padding " style={{ width: '100%' }}>
                 <div
@@ -1853,6 +2000,7 @@ let Admin_dash = () => {
                       {[
                         "Name",
                         "Email",
+                        "Password" ,
                         "Last sign-in",
                         "Venue permission",
                         "Hub permission",
@@ -1861,7 +2009,7 @@ let Admin_dash = () => {
                         <div
                           key={index}
                           style={{
-                            width: index === 5 ? "5%" : "19%", // "Action" column gets smaller width
+                            width: index === 6 ? "6%" : "16%", // "Action" column gets smaller width
                           }}
                           className={index >= 4 ? "px-md-2 px-lg-0" : ""}
                         >
@@ -1887,7 +2035,7 @@ let Admin_dash = () => {
                         backgroundColor: "#FCFCFC",
                       }}
                     >
-                      <div style={{ width: "19%" }} className="d-flex">
+                      <div style={{ width: "16%" }} className="d-flex">
                         <img src="lolp.png" className="nerrrimg" alt="Example Image" />
                         <input
                           onChange={(e) => {
@@ -1907,7 +2055,7 @@ let Admin_dash = () => {
                         />
                       </div>
 
-                      <div style={{ width: "19%" }} className="d-flex">
+                      <div style={{ width: "16%" }} className="d-flex">
                         <input
                           type="text"
                           onChange={(e) => {
@@ -1926,15 +2074,36 @@ let Admin_dash = () => {
                         />
                       </div>
 
-                      <div className="ms-md-3 ms-lg-0" style={{ width: "19%" }}>
+                      <div style={{ width: "16%" }} className="d-flex">
+                        <input
+                          type="text"
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                            // checkuserddd();
+                          }}
+                          value={password}
+                          className="form-control"
+                          placeholder="Enter Password"
+                          style={{
+                            fontSize: fs,
+                            border: "none",
+                            boxShadow: "none",
+                            marginLeft: -14,
+                          }}
+                        />
+                      </div>
+
+                      <div className="ms-md-3 ms-lg-0" style={{ width: "16%" }}>
                         <p style={{ color: "#1A1A1B", fontWeight: "400" }}>-</p>
                       </div>
-                      <div  ref={selectRef}   style={{ width: "19%", paddingRight: 20 }}>
-                        <Select
-                           menuIsOpen={menuIsOpen}
-                           onMenuOpen={() => setMenuIsOpen(true)}
-                           onMenuClose={() => setMenuIsOpen(false)}
-                           onFocus={() => setMenuIsOpen(true)}
+                      <div ref={selectRef} style={{ width: "16%", paddingRight: 20 }}>
+                        {
+                          data != "3" ?
+                          <Select
+                          menuIsOpen={menuIsOpen}
+                          onMenuOpen={() => setMenuIsOpen(true)}
+                          onMenuClose={() => setMenuIsOpen(false)}
+                          onFocus={() => setMenuIsOpen(true)}
                           isMulti
                           className="newoneonees"
                           options={basic}
@@ -1968,14 +2137,23 @@ let Admin_dash = () => {
                             }),
                           }}
                         />
+
+                        :''
+
+                        }
+                       
                       </div>
 
-                      <div ref={selectRefone} style={{ width: "19%", paddingRight: 20 }}>
-                        <Select
-                         menuIsOpen={menuIsOpenone}
-                         onMenuOpen={() => setMenuIsOpenone(true)}
-                         onMenuClose={() => setMenuIsOpenone(false)}
-                         onFocus={() => setMenuIsOpenone(true)}
+                      <div ref={selectRefone} style={{ width: "16%", paddingRight: 20 }}>
+
+                        {
+                          data != "3" ?
+
+                          <Select
+                          menuIsOpen={menuIsOpenone}
+                          onMenuOpen={() => setMenuIsOpenone(true)}
+                          onMenuClose={() => setMenuIsOpenone(false)}
+                          onFocus={() => setMenuIsOpenone(true)}
 
                           isMulti
                           className="newoneonees"
@@ -2009,6 +2187,13 @@ let Admin_dash = () => {
                             }),
                           }}
                         />
+
+                        :""
+                        }
+                       
+                      </div>
+                      <div className="ms-md-3 ms-lg-0" style={{ width: "6%" }}>
+                        <p style={{ color: "#1A1A1B", fontWeight: "400" }}></p>
                       </div>
                     </div>
                     <hr
@@ -2070,7 +2255,7 @@ let Admin_dash = () => {
                                     height: 60
                                   }}
                                 >
-                                  <div style={{ width: "19%", display: "flex", alignItems: "center" }}>
+                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
                                     <div
                                       style={{
                                         display: "flex",
@@ -2103,7 +2288,7 @@ let Admin_dash = () => {
                                     </div>
                                   </div>
 
-                                  <div style={{ width: "19%", display: "flex", alignItems: "center" }}>
+                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
                                     <div
                                       style={{
                                         display: "flex",
@@ -2131,9 +2316,36 @@ let Admin_dash = () => {
                                       </p>
                                     </div>
                                   </div>
+                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center", // Centers items vertically
+                                        overflow: "hidden", // Prevents content from overflowing
+                                        whiteSpace: "nowrap", // Keeps text in a single line
+                                      }}
+                                    >
 
+                                      <p
+                                        style={{
+                                          color: "#707070",
+                                          fontWeight: "400",
+                                          fontSize: fs,
+                                          margin: 0, // Remove default margin
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis", // Adds "..." for overflowed text
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width
+                                          marginLeft: 7, marginRight: 7
+                                        }}
+                                      >
+                                        {"*".repeat(value.Password.length)}
+                                      </p>
+                                    </div>
+                                  </div>
 
-                                  <div style={{ width: "19%", display: "flex", alignItems: "center" }}>
+                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
                                     <div
                                       style={{
                                         display: "flex",
@@ -2168,7 +2380,7 @@ let Admin_dash = () => {
 
                                   <div
                                     style={{
-                                      width: `19%`,
+                                      width: `16%`,
                                       paddingRight: 20,
                                       color: "#1A1A1B",
                                       fontSize: fs,
@@ -2182,8 +2394,8 @@ let Admin_dash = () => {
 
 
                                     <DropdownSelect
-                                     
-                                      options={basic.filter(item => item.value !== "All")}
+
+                                      options={basic?.filter(item => item.value !== "All")}
                                       values={value.venue}
                                       multi={true}
                                       onChange={(val) => {
@@ -2192,7 +2404,7 @@ let Admin_dash = () => {
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
                                         <div style={{ maxHeight: "300px", zIndex: 100000 }}>
-                                        
+
                                           {props.options.map((option) => {
                                             const isSelected = state.values.some((val) => val.value === option.value);
                                             return (
@@ -2212,11 +2424,11 @@ let Admin_dash = () => {
                                                   cursor: "pointer",
                                                   fontSize: fss,
                                                 }}
-                                              > 
+                                              >
                                                 <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
                                                   <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
                                                   <label class="switch-label" for={`switch-${option.value}`}></label>
-                                                </div> 
+                                                </div>
                                                 <span style={{ flexGrow: 1 }}>{option.label}</span>
                                               </div>
                                             );
@@ -2272,7 +2484,7 @@ let Admin_dash = () => {
                                     /> */}
                                   </div>
                                   <div style={{
-                                    width: "19%", paddingRight: 20,
+                                    width: "16%", paddingRight: 20,
                                     display: "flex",
                                     alignItems: 'center'
                                   }}
@@ -2280,53 +2492,53 @@ let Admin_dash = () => {
                                   >
 
 
-<DropdownSelect
-                                     
-                                     options={output.filter(item => item.value !== "All")}
-                                     values={value.hub}
-                                     multi={true}
-                                     onChange={(val) => {
-                                       handleChanges(val, value, "hub");
-                                     }}
-                                     contentRenderer={customContentRenderer}
-                                     dropdownRenderer={({ props, state, methods }) => (
-                                       <div style={{ maxHeight: "300px", zIndex: 100000 }}>
-                                       
-                                         {props.options.map((option) => {
-                                           const isSelected = state.values.some((val) => val.value === option.value);
-                                           return (
-                                             <div
-                                               key={option.value + "-dropdown"}
-                                               onClick={(e) => {
-                                                 e.stopPropagation();
-                                                 methods.addItem(option);
-                                               }}
-                                               style={{
-                                                 display: "flex",
-                                                 alignContent: "center",
-                                                 padding: "10px",
-                                                 gap: 5,
-                                                 backgroundColor: isSelected ? "#f0f8ff" : "white",
-                                                 color: isSelected ? "#0073e6" : "black",
-                                                 cursor: "pointer",
-                                                 fontSize: fss,
-                                               }}
-                                             > 
-                                               <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
-                                                 <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
-                                                 <label class="switch-label" for={`switch-${option.value}`}></label>
-                                               </div> 
-                                               <span style={{ flexGrow: 1 }}>{option.label}</span>
-                                             </div>
-                                           );
-                                         })}
-                                       </div>
-                                     )}
-                                     style={{
-                                       border: "none",
-                                       fontSize: fss,
-                                     }}
-                                   />
+                                    <DropdownSelect
+
+                                      options={output.filter(item => item.value !== "All")}
+                                      values={value.hub}
+                                      multi={true}
+                                      onChange={(val) => {
+                                        handleChanges(val, value, "hub");
+                                      }}
+                                      contentRenderer={customContentRenderer}
+                                      dropdownRenderer={({ props, state, methods }) => (
+                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}>
+
+                                          {props.options.map((option) => {
+                                            const isSelected = state.values.some((val) => val.value === option.value);
+                                            return (
+                                              <div
+                                                key={option.value + "-dropdown"}
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  methods.addItem(option);
+                                                }}
+                                                style={{
+                                                  display: "flex",
+                                                  alignContent: "center",
+                                                  padding: "10px",
+                                                  gap: 5,
+                                                  backgroundColor: isSelected ? "#f0f8ff" : "white",
+                                                  color: isSelected ? "#0073e6" : "black",
+                                                  cursor: "pointer",
+                                                  fontSize: fss,
+                                                }}
+                                              >
+                                                <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
+                                                  <label class="switch-label" for={`switch-${option.value}`}></label>
+                                                </div>
+                                                <span style={{ flexGrow: 1 }}>{option.label}</span>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      )}
+                                      style={{
+                                        border: "none",
+                                        fontSize: fss,
+                                      }}
+                                    />
 
 
 
@@ -2443,7 +2655,490 @@ let Admin_dash = () => {
 
                                     /> */}
                                   </div>
-                                  <div style={{ width: "5%", paddingLeft: "1%" }} className="d-flex justify-content-between gap-3 align-items-center ">
+                                  <div style={{ width: "6%", paddingLeft: "1%" }} className="d-flex justify-content-between gap-3 align-items-center ">
+                                    <div
+                                      onClick={() => handleAdminEditClick(value)} // Edit button
+                                      style={{ cursor: "pointer" }}
+                                    >
+                                      <FaEdit />
+                                    </div>
+                                    <div
+                                      onClick={() => handleDeleteAdminClick(value)} // Delete button
+                                      style={{ color: "red", cursor: "pointer", marginTop: 5 }}
+                                    >
+                                      <FaRegTrashCan />
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <hr
+                                  style={{
+                                    margin: "0px 0px",
+                                    backgroundColor: "#9F9F9F",
+                                    height: 1,
+                                  }}
+                                />
+                              </>
+                            );
+                          })}
+                      </>
+                    ) : data === "7" ? (
+                      <>
+                        {Object.entries(user)
+                          .filter(([_, value]) => value.Role === "superadmin") // Filter only admins
+                          .map(([key, value]) => {
+
+
+
+                            const output = [];
+
+
+                            if (Array.isArray(value.venue)) {
+                              value.venue.forEach(({ value }) => {
+                                // Search in the data object
+                                Object.entries(alldrop).forEach(([key, items]) => {
+                                  if (key === value) {
+                                    // If the key matches, add all items from the group to the output
+                                    items.forEach(item => {
+                                      output.push({ value: key + '-' + item.name, label: item.name });
+                                    });
+                                  } else {
+                                    // Search within the group's items
+                                    items.forEach(item => {
+                                      if (item.name === value) {
+                                        output.push({ value: key + '-' + item.name, label: key });
+                                      }
+                                    });
+                                  }
+                                });
+                              });
+                            } else {
+                              console.error("value.venue is not an array or is undefined:", value.venue);
+                            }
+
+                            // const modifiedData = value.venue.map(item => ({   
+                            //   label: item.label,
+                            //   value: item.value.split("-")[0] // Extracts only the first part before "-"
+                            // }));
+
+                            return (
+                              <>
+                                <div
+                                  className="d-flex"
+                                  style={{
+                                    padding: 20,
+                                    backgroundColor: "#ECF1F4",
+                                    height: 60
+                                  }}
+                                >
+                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center", // Centers items vertically
+                                        overflow: "hidden", // Prevents content from overflowing
+                                        whiteSpace: "nowrap", // Keeps text in a single line
+                                      }}
+                                    >
+                                      <img
+                                        src="lolp.png"
+                                        alt="Example Image"
+                                        style={{ height: "auto", verticalAlign: "middle", maxWidth: "100%" }}
+                                      />
+                                      <p
+                                        style={{
+                                          color: "#316AAF",
+                                          fontWeight: "400",
+                                          fontSize: fs,
+                                          margin: 0, // Remove default margin
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis", // Adds "..." for overflowed text
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width
+                                          marginLeft: 7, marginRight: 7
+                                        }}
+                                      >
+                                        {value.name}
+                                      </p>
+                                    </div>
+                                  </div>
+
+
+
+
+                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center", // Centers items vertically
+                                        overflow: "hidden", // Prevents content from overflowing
+                                        whiteSpace: "nowrap", // Keeps text in a single line
+                                      }}
+                                    >
+
+                                      <p
+                                        style={{
+                                          color: "#707070",
+                                          fontWeight: "400",
+                                          fontSize: fs,
+                                          margin: 0, // Remove default margin
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis", // Adds "..." for overflowed text
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width
+                                          marginLeft: 7, marginRight: 7
+                                        }}
+                                      >
+                                        {"*".repeat(value.Password.length)}
+                                      </p>
+                                    </div>
+                                  </div>
+
+
+                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center", // Centers items vertically
+                                        overflow: "hidden", // Prevents content from overflowing
+                                        whiteSpace: "nowrap", // Keeps text in a single line
+                                      }}
+                                    >
+
+                                      <p
+                                        style={{
+                                          color: "#707070",
+                                          fontWeight: "400",
+                                          fontSize: fs,
+                                          margin: 0, // Remove default margin
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis", // Adds "..." for overflowed text
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width
+                                          marginLeft: 7, marginRight: 7
+                                        }}
+                                      >
+                                        {value.Email}
+                                      </p>
+                                    </div>
+                                  </div>
+
+
+
+                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center", // Centers items vertically
+                                        overflow: "hidden", // Prevents content from overflowing
+                                        whiteSpace: "nowrap", // Keeps text in a single line
+                                      }}
+                                    >
+
+                                      <p
+                                        style={{
+                                          color: "#707070",
+                                          fontWeight: "400",
+                                          fontSize: fs,
+                                          margin: 0, // Remove default margin
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis", // Adds "..." for overflowed text
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width
+                                          marginLeft: 7, marginRight: 7
+                                        }}
+                                      >
+                                        {value?.date ? formatReadableDate(value?.date) : '-'}
+                                      </p>
+                                    </div>
+                                  </div>
+
+
+
+
+
+                                  <div
+                                    style={{
+                                      width: `16%`,
+                                      paddingRight: 20,
+                                      color: "#1A1A1B",
+                                      fontSize: fs,
+                                      display: "flex",
+                                      alignItems: 'center'
+                                    }}
+
+                                    className="finefffff"
+                                  >
+
+
+
+                                    <DropdownSelect
+
+                                      options={basic?.filter(item => item.value !== "All")}
+                                      values={value.venue}
+                                      multi={true}
+                                      onChange={(val) => {
+                                        handleChanges(val, value, "venue");
+                                      }}
+                                      contentRenderer={customContentRenderer}
+                                      dropdownRenderer={({ props, state, methods }) => (
+                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}>
+
+                                          {props.options.map((option) => {
+                                            const isSelected = state.values.some((val) => val.value === option.value);
+                                            return (
+                                              <div
+                                                key={option.value + "-dropdown"}
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  methods.addItem(option);
+                                                }}
+                                                style={{
+                                                  display: "flex",
+                                                  alignContent: "center",
+                                                  padding: "10px",
+                                                  gap: 5,
+                                                  backgroundColor: isSelected ? "#f0f8ff" : "white",
+                                                  color: isSelected ? "#0073e6" : "black",
+                                                  cursor: "pointer",
+                                                  fontSize: fss,
+                                                }}
+                                              >
+                                                <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
+                                                  <label class="switch-label" for={`switch-${option.value}`}></label>
+                                                </div>
+                                                <span style={{ flexGrow: 1 }}>{option.label}</span>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      )}
+                                      style={{
+                                        border: "none",
+                                        fontSize: fss,
+                                      }}
+                                    />
+
+
+
+
+
+
+
+                                    {/* <Select
+                                      isSearchable={false}
+                                      isMulti
+                                      className="newoneoneess"
+                                      menuPortalTarget={document.body}
+                                      options={basic}
+                                      value={value.venue}
+                                      onChange={(e, { action }) => {
+
+                                        console.log(action)
+                                        if (action === "select-option" || action === "remove-value" || action === "clear" || action === "deselect-option") { 
+                                          handleChanges(e, value, "venue");
+                                        }
+
+
+                                      }} // Prevent selection changes
+                                      // placeholder={value.venue[0].label + "..."}
+                                      placeholder={value.venue?.length ? value.venue[0].label + "..." : "Select Venue"} 
+                                      closeMenuOnSelect={false}
+                                      hideSelectedOptions={false} 
+                                      styles={{
+                                        control: (base) => ({
+                                          ...base,
+                                          border: "unset",
+                                          marginTop: -8,
+                                          color: "#1A1A1B",
+                                          fontSize: fss,
+                                        }),
+                                        menu: (base) => ({
+                                          ...base,
+                                          zIndex: 1000001,
+
+                                        }),
+                                      }}
+                                    /> */}
+                                  </div>
+                                  <div style={{
+                                    width: "16%", paddingRight: 20,
+                                    display: "flex",
+                                    alignItems: 'center'
+                                  }}
+                                    className="finefffff"
+                                  >
+
+
+                                    <DropdownSelect
+
+                                      options={output.filter(item => item.value !== "All")}
+                                      values={value.hub}
+                                      multi={true}
+                                      onChange={(val) => {
+                                        handleChanges(val, value, "hub");
+                                      }}
+                                      contentRenderer={customContentRenderer}
+                                      dropdownRenderer={({ props, state, methods }) => (
+                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}>
+
+                                          {props.options.map((option) => {
+                                            const isSelected = state.values.some((val) => val.value === option.value);
+                                            return (
+                                              <div
+                                                key={option.value + "-dropdown"}
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  methods.addItem(option);
+                                                }}
+                                                style={{
+                                                  display: "flex",
+                                                  alignContent: "center",
+                                                  padding: "10px",
+                                                  gap: 5,
+                                                  backgroundColor: isSelected ? "#f0f8ff" : "white",
+                                                  color: isSelected ? "#0073e6" : "black",
+                                                  cursor: "pointer",
+                                                  fontSize: fss,
+                                                }}
+                                              >
+                                                <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
+                                                  <label class="switch-label" for={`switch-${option.value}`}></label>
+                                                </div>
+                                                <span style={{ flexGrow: 1 }}>{option.label}</span>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      )}
+                                      style={{
+                                        border: "none",
+                                        fontSize: fss,
+                                      }}
+                                    />
+
+
+
+                                    {/* <DropdownSelect
+                                      options={[{ value: "All", label: "All Hubs" }]}
+                                      value={[{ value: "All", label: "All Hubs" }]}
+                                      multi={true}
+                                      onChange={(val) => {
+                                        handleChanges(val, value, "hub"); 
+                                      }}
+                                      contentRenderer={customContentRenderer}
+                                      dropdownRenderer={({ props, state, methods }) => (
+                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}>
+                           
+                                          {props.options.map((option) => {
+
+                       
+                                            const isSelected = state.values.some((val) => val.value === option.value);
+                                            console.log(state, 'val.valueval.valueval.valueval.valueval.value22222222222222222222222')
+
+                                            return (
+                                              <div
+                                                key={option.value + "-dropdown"}
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  methods.addItem(option);
+                                                }}
+                                                style={{
+                                                  display: "flex",
+                                                  alignContent: "center",
+                                                  padding: "10px",
+                                                  gap: 5,
+                                                  backgroundColor: isSelected ? "#f0f8ff" : "white",
+                                                  color: isSelected ? "#0073e6" : "black",
+                                                  cursor: "pointer",
+                                                  fontSize: fss,
+                                                }}
+                                              > 
+                                                <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
+                                                  <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
+                                                  <label class="switch-label" for={`switch-${option.value}`}></label>
+                                                </div> 
+                                                <span style={{ flexGrow: 1 }}>{option.label}</span>
+                                              </div>
+                                            );
+                                          })}
+                                        </div>
+                                      )}
+                                      style={{
+                                        border: "none",
+                                        fontSize: fss,
+                                      }}
+                                    /> */}
+
+
+
+
+                                    {/* <Select
+                                      isSearchable={false}
+                                      isMulti
+                                      className="newoneoneess"
+                                      menuPortalTarget={document.body}
+                                      options={output}
+                                      value={value.hub} // Shows selected values
+                                      onChange={(e, { action }) => {
+                                        console.log('kkkkkkkkkkkkkkkk', value)
+
+                                        if (action === "select-option" || action === "remove-value" || action === "clear" || action === "deselect-option") {
+
+
+                                          handleChanges(e, value, "hub");
+                                        }
+
+
+
+
+                                      }} // Prevent selection changes
+                                      // placeholder={value.hub[0].label + "..."}
+                                      placeholder={value.hub?.length ? value.hub[0].label + "..." : "Select Hub"}
+                                      // components={{
+                                      //   Option: CustomOption,
+                                      //   MultiValue: () => null, // Hides default tags
+                                      //   ValueContainer: ({
+                                      //     children,
+                                      //     ...props
+                                      //   }) => {
+                                      //     const selectedValues = props.getValue();
+                                      //     return (
+                                      //       <components.ValueContainer {...props}>
+                                      //         {selectedValues.length > 0 ? (
+                                      //           <CustomPlaceholder {...props} />
+                                      //         ) : (
+                                      //           children
+                                      //         )}
+                                      //       </components.ValueContainer>
+                                      //     );
+                                      //   },
+                                      // }}
+                                      closeMenuOnSelect={false} // Keep dropdown open for further selection
+                                      hideSelectedOptions={false} // Show all options even if selected 
+                                      styles={{
+                                        control: (base) => ({
+                                          ...base,
+                                          border: "unset",
+                                          marginTop: -8,
+                                          color: "#1A1A1B",
+                                          fontSize: fss,
+                                        }),
+                                        menu: (base) => ({
+                                          ...base,
+                                          zIndex: 1000001, // Ensure dropdown appears above everything
+                                        }),
+                                      }}
+
+                                    /> */}
+                                  </div>
+                                  <div style={{ width: "6%", paddingLeft: "1%" }} className="d-flex justify-content-between gap-3 align-items-center ">
                                     <div
                                       onClick={() => handleAdminEditClick(value)} // Edit button
                                       style={{ cursor: "pointer" }}
@@ -2515,7 +3210,7 @@ let Admin_dash = () => {
                                     backgroundColor: "#ECF1F4",
                                   }}
                                 >
-                                  <div style={{ width: "19%", display: "flex", alignItems: "center" }}>
+                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
                                     <div
                                       style={{
                                         display: "flex",
@@ -2552,7 +3247,7 @@ let Admin_dash = () => {
 
                                   <div
                                     style={{
-                                      width: "19%",
+                                      width: "16%",
                                       display: "flex",
                                       alignItems: "center", // Centers the p vertically
                                       height: "100%", // Ensures the div has a height
@@ -2577,7 +3272,36 @@ let Admin_dash = () => {
                                     </p>
                                   </div>
 
-                                  <div style={{ width: "19%" }}>
+                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center", // Centers items vertically
+                                        overflow: "hidden", // Prevents content from overflowing
+                                        whiteSpace: "nowrap", // Keeps text in a single line
+                                      }}
+                                    >
+
+                                      <p
+                                        style={{
+                                          color: "#707070",
+                                          fontWeight: "400",
+                                          fontSize: fs,
+                                          margin: 0, // Remove default margin
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis", // Adds "..." for overflowed text
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width
+                                          marginLeft: 7, marginRight: 7
+                                        }}
+                                      >
+                                        {"*".repeat(value.Password.length)}
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  <div style={{ width: "16%" }}>
                                     <p
                                       style={{
                                         color: "rgb(112, 112, 112)",
@@ -2591,7 +3315,7 @@ let Admin_dash = () => {
                                   </div>
                                   <div
                                     style={{
-                                      width: "19%",
+                                      width: "16%",
                                       paddingRight: 20,
                                       color: "#1A1A1B",
                                       fontSize: fs,
@@ -2655,7 +3379,7 @@ let Admin_dash = () => {
                                     /> */}
 
                                     <DropdownSelect
-                                      options={basic.filter(item => item.value !== "All")}
+                                      options={basic?.filter(item => item.value !== "All")}
                                       values={value.venue}
                                       multi={true}
                                       onChange={(val) => {
@@ -2731,7 +3455,7 @@ let Admin_dash = () => {
 
                                   </div>
                                   <div style={{
-                                    width: "19%", paddingRight: 20,
+                                    width: "16%", paddingRight: 20,
                                     display: "flex",
                                     alignItems: 'center'
                                   }}
@@ -2740,7 +3464,7 @@ let Admin_dash = () => {
                                   >
 
 
-<DropdownSelect
+                                    <DropdownSelect
                                       options={output.filter(item => item.value !== "All")}
                                       values={value.hub}
                                       multi={true}
@@ -2816,7 +3540,7 @@ let Admin_dash = () => {
                                     />
 
 
-                                  
+
                                     {/* <Select
                                       isMulti
                                       isSearchable={false}
@@ -2867,7 +3591,7 @@ let Admin_dash = () => {
                                       }}
                                     /> */}
                                   </div>
-                                  <div style={{ width: '5%', paddingLeft: "1%" }} className="d-flex justify-content-between gap-3 align-items-center ">
+                                  <div style={{ width: '6%', paddingLeft: "1%" }} className="d-flex justify-content-between gap-3 align-items-center ">
                                     <div onClick={() => handleManagerEditClick(value)} style={{ cursor: "pointer" }}>
                                       <FaEdit />
                                     </div>
@@ -2936,7 +3660,7 @@ let Admin_dash = () => {
                                     backgroundColor: "#ECF1F4",
                                   }}
                                 >
-                                  <div style={{ width: "19%", display: "flex", alignItems: "center" }}>
+                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
                                     <div
                                       style={{
                                         display: "flex",
@@ -2973,7 +3697,7 @@ let Admin_dash = () => {
 
                                   <div
                                     style={{
-                                      width: "19%",
+                                      width: "16%",
                                       display: "flex",
                                       alignItems: "center", // Centers the p vertically
                                       height: "100%", // Ensures the div has a height
@@ -2998,7 +3722,36 @@ let Admin_dash = () => {
                                     </p>
                                   </div>
 
-                                  <div style={{ width: "19%" }}>
+                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center", // Centers items vertically
+                                        overflow: "hidden", // Prevents content from overflowing
+                                        whiteSpace: "nowrap", // Keeps text in a single line
+                                      }}
+                                    >
+
+                                      <p
+                                        style={{
+                                          color: "#707070",
+                                          fontWeight: "400",
+                                          fontSize: fs,
+                                          margin: 0, // Remove default margin
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis", // Adds "..." for overflowed text
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width
+                                          marginLeft: 7, marginRight: 7
+                                        }}
+                                      >
+                                        {"*".repeat(value.Password.length)}
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  <div style={{ width: "16%" }}>
                                     <p
                                       style={{
                                         color: "rgb(112, 112, 112)",
@@ -3011,7 +3764,7 @@ let Admin_dash = () => {
                                   </div>
                                   <div
                                     style={{
-                                      width: "19%",
+                                      width: "16%",
                                       paddingRight: 20,
                                       color: "#1A1A1B",
                                       display: "flex",
@@ -3021,8 +3774,8 @@ let Admin_dash = () => {
                                     className="custom-select-container finefffff"
                                   >
 
-                                    <DropdownSelect
-                                      options={basic.filter(item => item.value !== "All")}
+                                    {/* <DropdownSelect
+                                      options={basic?.filter(item => item.value !== "All")}
                                       values={value.venue}
                                       menuPortalTarget={document.body}
                                       multi={true}
@@ -3035,30 +3788,7 @@ let Admin_dash = () => {
                                       placeholder="Select an option"
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
-                                        <div style={{ maxHeight: "300px", zIndex: 100000  }}>
-                                          {/* First Option (Placeholder) */}
-                                          {/* <div
-                                            key="placeholder-dropdown"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              methods.clearAll(); // Clears all selections
-                                              methods.addItem({ value: "__placeholder__", label: "Select an option" });
-                                            }}
-                                            style={{
-                                              display: "flex",
-                                              alignContent: "center",
-                                              padding: "10px",
-                                              gap: 5,
-                                              backgroundColor: "white",
-                                              color: "black",
-                                              cursor: "pointer",
-                                              fontSize: fss,
-                                            }}
-                                          >
-                                            <span style={{ flexGrow: 1 }}>Select an option</span>
-                                          </div> */}
-
-                                          {/* Other Options */}
+                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}> 
                                           {props.options.map((option) => {
                                             const isSelected = state.values.some((val) => val.value === option.value);
                                             return (
@@ -3078,13 +3808,11 @@ let Admin_dash = () => {
                                                   cursor: "pointer",
                                                   fontSize: fss,
                                                 }}
-                                              >
-                                                {/* Checkbox Toggle */}
+                                              > 
                                                 <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
                                                   <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
                                                   <label class="switch-label" for={`switch-${option.value}`}></label>
-                                                </div>
-                                                {/* Option Label */}
+                                                </div> 
                                                 <span style={{ flexGrow: 1 }}>{option.label}</span>
                                               </div>
                                             );
@@ -3095,7 +3823,7 @@ let Admin_dash = () => {
                                         border: "none",
                                         fontSize: fss,
                                       }}
-                                    />
+                                    /> */}
 
                                     {/* <Select
                                       isMulti
@@ -3149,7 +3877,7 @@ let Admin_dash = () => {
                                     /> */}
                                   </div>
                                   <div style={{
-                                    width: "19%", paddingRight: 20,
+                                    width: "16%", paddingRight: 20,
                                     display: "flex",
                                     alignItems: 'center'
                                   }}
@@ -3208,7 +3936,7 @@ let Admin_dash = () => {
                                     /> */}
 
 
-<DropdownSelect
+                                    {/* <DropdownSelect
                                       options={output.filter(item => item.value !== "All")}
                                       values={value.hub}
                                       menuPortalTarget={document.body}
@@ -3222,30 +3950,7 @@ let Admin_dash = () => {
                                       placeholder="Select an option"
                                       contentRenderer={customContentRenderer}
                                       dropdownRenderer={({ props, state, methods }) => (
-                                        <div style={{ maxHeight: "300px", zIndex: 100000  }}>
-                                          {/* First Option (Placeholder) */}
-                                          {/* <div
-                                            key="placeholder-dropdown"
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              methods.clearAll(); // Clears all selections
-                                              methods.addItem({ value: "__placeholder__", label: "Select an option" });
-                                            }}
-                                            style={{
-                                              display: "flex",
-                                              alignContent: "center",
-                                              padding: "10px",
-                                              gap: 5,
-                                              backgroundColor: "white",
-                                              color: "black",
-                                              cursor: "pointer",
-                                              fontSize: fss,
-                                            }}
-                                          >
-                                            <span style={{ flexGrow: 1 }}>Select an option</span>
-                                          </div> */}
-
-                                          {/* Other Options */}
+                                        <div style={{ maxHeight: "300px", zIndex: 100000 }}> 
                                           {props.options.map((option) => {
                                             const isSelected = state.values.some((val) => val.value === option.value);
                                             return (
@@ -3265,13 +3970,11 @@ let Admin_dash = () => {
                                                   cursor: "pointer",
                                                   fontSize: fss,
                                                 }}
-                                              >
-                                                {/* Checkbox Toggle */}
+                                              > 
                                                 <div class="switch-containers" style={{ marginRight: 4, marginTop: "-5px" }}>
                                                   <input checked={isSelected} type="checkbox" id={`switch-${option.value}`} disabled />
                                                   <label class="switch-label" for={`switch-${option.value}`}></label>
-                                                </div>
-                                                {/* Option Label */}
+                                                </div> 
                                                 <span style={{ flexGrow: 1 }}>{option.label}</span>
                                               </div>
                                             );
@@ -3282,14 +3985,14 @@ let Admin_dash = () => {
                                         border: "none",
                                         fontSize: fss,
                                       }}
-                                    />
+                                    /> */}
 
 
-                                   
+
 
 
                                   </div>
-                                  <div className="d-flex justify-content-between gap-3 align-items-center " style={{ width: "5%", paddingLeft: "1%" }}>
+                                  <div className="d-flex justify-content-between gap-3 align-items-center " style={{ width: "6%", paddingLeft: "1%" }}>
                                     <div
                                       onClick={() => handleEmployeeEditClick(value)} // Edit button
                                       style={{ cursor: "pointer" }}
@@ -3474,7 +4177,7 @@ let Admin_dash = () => {
 
 
         </div>
-        {data === "1" || data === "2" || data === "3" || data == "4" ? (
+        {data === "1" || data === "2" || data === "3" || data == "4" || data == "7" ? (
           <div
             style={{
               display: "flex",

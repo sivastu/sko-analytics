@@ -227,7 +227,7 @@ useEffect(()=>{
             alignItems: "center", justifyContent: "center", backgroundColor: "#313233", flexDirection: 'column', gap: '4%', display: 'flex'
           }} >
             {
-              username?.Role === 'admin' || username?.Role === 'manager' ?
+              username?.Role === 'admin' || username?.Role === 'manager' || username?.Role === 'superadmin'  ?
                 <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }} onClick={() => {
                   function getNames(data) {
                     if (!data.venue || data.venue.length === 0) {
@@ -260,7 +260,7 @@ useEffect(()=>{
                 : ''
             }
             {
-              username?.Role === 'admin' ?
+              username?.Role === 'admin' || username?.Role === 'superadmin' || username?.Role === 'manager' ?
                 <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }}
                   onClick={() => {
                     navigate('/dashboard')
