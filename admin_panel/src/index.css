@@ -481,7 +481,7 @@ input[type="checkbox"]:checked + .switch-label::before {
       padding-right: 50px !important;
     }
     .font-size{
-      font-size: 21px; 
+      font-size: 20px; 
     }
     .img-com{
       height:60px;

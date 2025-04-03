@@ -227,7 +227,7 @@ useEffect(()=>{
             alignItems: "center", justifyContent: "center", backgroundColor: "#313233", flexDirection: 'column', gap: '4%', display: 'flex'
           }} >
             {
-              username?.Role === 'admin' || username?.Role === 'manager' || username?.Role === 'superadmin'  ?
+              username?.Role === 'admin' || username?.Role === 'manager'    ?
                 <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }} onClick={() => {
                   function getNames(data) {
                     if (!data.venue || data.venue.length === 0) {
@@ -276,20 +276,27 @@ useEffect(()=>{
                 </div>
                 : ''
             }
+
+            {
+               username?.Role === 'admin' || username?.Role === 'manager' || username?.Role === 'emp'    ?
+
+               <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }}
+               onClick={() => {
+                 navigate('/training')
+               }} >
+               <div className="row" style={{ padding: 30 }} >
+                 <div className="col-6 d-flex justify-content-center align-items-center ">
+                   <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginTop: 20, marginLeft: 8 }}>Training <br />videos</p>
+                 </div>
+                 <div className="col-6">
+                   <img src="starr.png" style={{ width: 95, height: 90, margin: 'auto', display: 'block' }} alt="Example Image" />
+                 </div>
+               </div>
+             </div> 
+             : ''
+            }
  
-                <div style={{ width: 500, height: 150, backgroundColor: "#F3F3F3", borderRadius: 7, cursor: 'pointer' }}
-                  onClick={() => {
-                    navigate('/training')
-                  }} >
-                  <div className="row" style={{ padding: 30 }} >
-                    <div className="col-6 d-flex justify-content-center align-items-center ">
-                      <p style={{ fontSize: 30, fontWeight: '400', color: "#1A1A1B", lineHeight: '29px', marginTop: 20, marginLeft: 8 }}>Training <br />videos</p>
-                    </div>
-                    <div className="col-6">
-                      <img src="starr.png" style={{ width: 95, height: 90, margin: 'auto', display: 'block' }} alt="Example Image" />
-                    </div>
-                  </div>
-                </div>
+              
                
             <SweetAlert2 {...swalProps} />
           </div>

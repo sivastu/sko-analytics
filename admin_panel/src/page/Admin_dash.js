@@ -691,17 +691,56 @@ let Admin_dash = () => {
     console.log(emailKey);
 
     if (third === "venue") {
-      const db = getDatabase(app);
-      const userRef = ref(db, `user/${emailKey}/venue`);
 
-      set(userRef, seee) // Using `update` to modify only the `hub` field
-        .then(() => {
-          console.log(`Hub updated successfully for ${email}!`);
-          loginCheck();
-        })
-        .catch((error) => {
-          console.error(`Error updating hub for ${email}:`, error);
+      if (data === '7') {
+        const db = getDatabase(app);
+        const userRef = ref(db, `user/${emailKey}/venue`);
+        const userRefs = ref(db, `user/${emailKey}/group`);
+
+        const optionsone = [];
+
+
+
+
+        Object.entries(state?.data).forEach(([groupName, groupData]) => {
+
+          const hasval = seee.some(item => item.label === groupName);
+
+          if (hasval) {
+            Object.keys(groupData).forEach((key) => {
+              optionsone.push({ value: key, label: key });
+            });
+          }
         });
+
+
+        set(userRef, optionsone) // Using `update` to modify only the `hub` field
+          .then(() => {
+
+            set(userRefs, seee) // Using `update` to modify only the `hub` field
+              .then(() => {
+                console.log(`Hub updated successfully for ${email}!`);
+
+                loginCheck();
+              })
+          })
+          .catch((error) => {
+            console.error(`Error updating hub for ${email}:`, error);
+          });
+      } else {
+        const db = getDatabase(app);
+        const userRef = ref(db, `user/${emailKey}/venue`);
+
+        set(userRef, seee) // Using `update` to modify only the `hub` field
+          .then(() => {
+            console.log(`Hub updated successfully for ${email}!`);
+            loginCheck();
+          })
+          .catch((error) => {
+            console.error(`Error updating hub for ${email}:`, error);
+          });
+      }
+
     } else {
 
       console.log(seee, fineee, third, 'seee, fineee, third')
@@ -776,9 +815,9 @@ let Admin_dash = () => {
     let name = getName(parsedatajson);
 
     console.log(parsedatajson, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
-    
 
-   
+
+
     setUsedname(name);
     setBasicall(parsedatajson);
     const db = getDatabase(app);
@@ -844,41 +883,75 @@ let Admin_dash = () => {
 
     let getdata = sessionStorage.getItem("data");
     let decry = decrypt(getdata);
-    let parsedatajson = JSON.parse(decry); 
-    
-    if(parsedatajson?.Role === 'manager'){
+    let parsedatajson = JSON.parse(decry);
+
+    if (parsedatajson?.Role === 'manager') {
       setData('2')
     }
 
-    if(parsedatajson?.Role  === 'superadmin'){
+    if (parsedatajson?.Role === 'superadmin') {
       setData('7')
     }
-    console.log(parsedatajson , 'namenamenamenamenamenamenamenamenamenamename')
- 
-    let filteredDataonee = {}; // Change const to let
+    console.log(parsedatajson, 'namenamenamenamenamenamenamenamenamenamename')
+    if (parsedatajson?.Role === 'superadmin') {
+      let filteredDataonee = {}; // Change const to let
 
-    if (parsedatajson.venue) {
       // const hasAllValue = parsedatajson.venue.some(item => item.label === "All");
-    
+
       // if (hasAllValue) { // No need to check if === true
+      // const filterKeys = new Set(parsedatajson.group.map(item => item.label));
+
+      // filteredDataonee = Object.entries(eventss).reduce((acc, [key, subObj]) => {
+      //   const filteredSubObj = Object.fromEntries(
+      //     Object.entries(subObj).filter(([subKey]) => filterKeys.has(subKey))
+      //   );
+
+      //   if (Object.keys(filteredSubObj).length) {
+      //     acc[key] = filteredSubObj;
+      //   }
+
+      //   return acc;
+      // }, {});
+
+      const optionsone = [];
+      Object.entries(eventss).forEach(([groupName, groupData]) => {
+
+        optionsone.push({ value: groupName, label: groupName });
+        // Object.keys(groupData).forEach((key) => {
+
+        // });
+      });
+
+
+      setBasic(optionsone);
+      console.log(optionsone, 'filteredDataoneefilteredDataoneefilteredDataoneefilteredDataonee')
+
+
+    } else {
+      let filteredDataonee = {}; // Change const to let
+
+      if (parsedatajson.venue) {
+        // const hasAllValue = parsedatajson.venue.some(item => item.label === "All");
+
+        // if (hasAllValue) { // No need to check if === true
         const filterKeys = new Set(parsedatajson.venue.map(item => item.label));
-    
+
         filteredDataonee = Object.entries(eventss).reduce((acc, [key, subObj]) => {
           const filteredSubObj = Object.fromEntries(
             Object.entries(subObj).filter(([subKey]) => filterKeys.has(subKey))
           );
-    
+
           if (Object.keys(filteredSubObj).length) {
             acc[key] = filteredSubObj;
           }
-    
+
           return acc;
         }, {});
 
         const optionsone = [{ value: "All", label: "All Venues" }];
         Object.entries(filteredDataonee).forEach(([groupName, groupData]) => {
-    
-    
+
+
           Object.keys(groupData).forEach((key) => {
             optionsone.push({ value: key, label: key });
           });
@@ -886,28 +959,30 @@ let Admin_dash = () => {
 
 
         setBasic(optionsone);
-        console.log(optionsone , 'filteredDataoneefilteredDataoneefilteredDataoneefilteredDataonee')
-     
-      // }else{
-      //   const optionsone = [{ value: "All", label: "All Venues" }];
-      //   Object.entries(eventss).forEach(([groupName, groupData]) => {
-    
-    
-      //     Object.keys(groupData).forEach((key) => {
-      //       optionsone.push({ value: key, label: key });
-      //     });
-      //   });
-    
-      //   console.log("options:", optionsone);
-      //   // console.log("optionss:", optionsstwo);
-    
-      //   setBasic(optionsone);
-      // }
+        console.log(optionsone, 'filteredDataoneefilteredDataoneefilteredDataoneefilteredDataonee')
+
+        // }else{
+        //   const optionsone = [{ value: "All", label: "All Venues" }];
+        //   Object.entries(eventss).forEach(([groupName, groupData]) => {
+
+
+        //     Object.keys(groupData).forEach((key) => {
+        //       optionsone.push({ value: key, label: key });
+        //     });
+        //   });
+
+        //   console.log("options:", optionsone);
+        //   // console.log("optionss:", optionsstwo);
+
+        //   setBasic(optionsone);
+        // }
+      }
+
     }
 
 
 
-    
+
 
   };
 
@@ -1072,7 +1147,7 @@ let Admin_dash = () => {
       return;
     }
 
-    if (hubb.length === 0) {
+    if (hubb.length === 0 && data != "7") {
       setSwalProps({
         show: true,
         title: "Select Hubs",
@@ -1106,6 +1181,36 @@ let Admin_dash = () => {
       return;
     }
 
+
+    const optionsone = [];
+
+
+    if (data === "7") {
+
+
+      Object.entries(state?.data).forEach(([groupName, groupData]) => {
+
+        const hasval = selectedOptions.some(item => item.label === groupName);
+
+        if (hasval) {
+          Object.keys(groupData).forEach((key) => {
+            optionsone.push({ value: key, label: key });
+          });
+        }
+
+
+
+      });
+
+    }
+
+
+
+
+    console.log(optionsone, 'optionsoneoptionsoneoptionsoneoptionsone')
+
+
+
     // setSwalProps({
     //   show: true,
     //   title: 'Invalid password',
@@ -1120,11 +1225,12 @@ let Admin_dash = () => {
     let newData = {
       [email.replace(/\.com$/, "").replace(/[.#$/\[\]]/g, "")]: {
         Email: email,
-        Role: data === "1" ? "admin" : data === "2" ? "manager" : data === "7" ? "superadmin" : "emp",
+        Role: data === "1" ? "admin" : data === "2" ? "manager" : data === "7" ? "admin" : "emp",
         name: username,
-        venue: selectedOptions.filter(item => item.value !== "All"),
+        venue: data === "7" ? optionsone : selectedOptions.filter(item => item.value !== "All"),
         hub: hubb.filter(item => item.value !== "All"),
-        Password : password
+        Password: password,
+        group: selectedOptions.filter(item => item.value !== "All"),
       },
     };
 
@@ -1362,8 +1468,8 @@ let Admin_dash = () => {
               style={{ width: 30, height: 30 }}
               alt="Settings Icon"
             />
-            <p onClick={()=>{
-              console.log(mydata , 'mydata')
+            <p onClick={() => {
+              console.log(mydata, 'mydata')
             }} className="mb-0 ms-2 fs-4  fw-bold" style={{ color: "#1A1A1B" }}>
               SETTINGS
             </p>
@@ -1746,7 +1852,7 @@ let Admin_dash = () => {
 
 
                   {
-                    mydata?.Role === 'superadmin' || mydata?.Role === 'admin' ?
+                    mydata?.Role === 'admin' ?
                       <div
                         onClick={() => {
                           setData("1");
@@ -1789,88 +1895,93 @@ let Admin_dash = () => {
 
 
                   {
-                    mydata?.Role === 'superadmin' || mydata?.Role === 'admin' || mydata?.Role === 'manager' ?
-                    
-                  <div
-                  onClick={() => {
-                    setData("2");
+                    mydata?.Role === 'admin' || mydata?.Role === 'manager' ?
 
-                    setUsername("");
-                    setEmail("");
-                    setSelectedOptions([]);
-                    setSelectedOptions([]);
-                  }}
-                  style={{
-                    marginTop: 30,
-                    borderRadius: 10,
-                    border:
-                      data === "2"
-                        ? "3px solid #316AAF"
-                        : "3px solid #ECF1F4",
-                    marginLeft: -33,
-                    height: 58,
-                    padding: 10,
-                    width: boxWidth,
-                    cursor: "pointer",
-                  }}
-                >
-                  <p
-                    className="font-size"
-                    style={{
-                      color: "#1A1A1B",
-                      fontWeight: 400,
-                      marginTop: 5,
-                      margin: 0, // Removes default margin
-                      marginLeft: ml,
-                    }}
-                  >
-                    Managers
-                  </p>
-                </div>
+                      <div
+                        onClick={() => {
+                          setData("2");
 
-                :''
+                          setUsername("");
+                          setEmail("");
+                          setSelectedOptions([]);
+                          setSelectedOptions([]);
+                        }}
+                        style={{
+                          marginTop: 30,
+                          borderRadius: 10,
+                          border:
+                            data === "2"
+                              ? "3px solid #316AAF"
+                              : "3px solid #ECF1F4",
+                          marginLeft: -33,
+                          height: 58,
+                          padding: 10,
+                          width: boxWidth,
+                          cursor: "pointer",
+                        }}
+                      >
+                        <p
+                          className="font-size"
+                          style={{
+                            color: "#1A1A1B",
+                            fontWeight: 400,
+                            marginTop: 5,
+                            margin: 0, // Removes default margin
+                            marginLeft: ml,
+                          }}
+                        >
+                          Managers
+                        </p>
+                      </div>
+
+                      : ''
 
                   }
 
 
+                  {
+                    mydata?.Role === 'admin' || mydata?.Role === 'manager' ?
+                      <div
+                        onClick={() => {
+                          setData("3");
 
- 
-                  <div
-                    onClick={() => {
-                      setData("3");
+                          setUsername("");
+                          setEmail("");
+                          setSelectedOptions([]);
+                          setSelectedOptions([]);
+                        }}
+                        style={{
+                          marginTop: 30,
+                          borderRadius: 10,
+                          border:
+                            data === "3"
+                              ? "3px solid #316AAF"
+                              : "3px solid #ECF1F4",
+                          marginLeft: -33,
+                          height: 58,
+                          padding: 10,
+                          width: boxWidth,
+                          cursor: "pointer",
+                        }}
+                      >
+                        <p
+                          className="font-size"
+                          style={{
+                            color: "#1A1A1B",
+                            fontWeight: 400,
+                            marginTop: 5,
+                            margin: 0, // Removes default margin
+                            marginLeft: ml,
+                          }}
+                        >
+                          Employees
+                        </p>
+                      </div>
+                      : ''
 
-                      setUsername("");
-                      setEmail("");
-                      setSelectedOptions([]);
-                      setSelectedOptions([]);
-                    }}
-                    style={{
-                      marginTop: 30,
-                      borderRadius: 10,
-                      border:
-                        data === "3"
-                          ? "3px solid #316AAF"
-                          : "3px solid #ECF1F4",
-                      marginLeft: -33,
-                      height: 58,
-                      padding: 10,
-                      width: boxWidth,
-                      cursor: "pointer",
-                    }}
-                  >
-                    <p
-                      className="font-size"
-                      style={{
-                        color: "#1A1A1B",
-                        fontWeight: 400,
-                        marginTop: 5,
-                        margin: 0, // Removes default margin
-                        marginLeft: ml,
-                      }}
-                    >
-                      Employees
-                    </p>
-                  </div>
+                  }
+
+
 
                   <div
                     onClick={() => {
@@ -2000,7 +2111,7 @@ let Admin_dash = () => {
                       {[
                         "Name",
                         "Email",
-                        "Password" ,
+                        "Password",
                         "Last sign-in",
                         "Venue permission",
                         "Hub permission",
@@ -2021,7 +2132,9 @@ let Admin_dash = () => {
                               whiteSpace: header === "Venue permission" ? "nowrap" : "normal",
                             }}
                           >
-                            {header}
+                            {mydata?.Role === 'superadmin' && header === "Venue permission" ? 'Group permission' :
+                              mydata?.Role === 'superadmin' && header === "Hub permission" ? '' :
+                                header}
                           </p>
                         </div>
                       ))}
@@ -2099,98 +2212,98 @@ let Admin_dash = () => {
                       <div ref={selectRef} style={{ width: "16%", paddingRight: 20 }}>
                         {
                           data != "3" ?
-                          <Select
-                          menuIsOpen={menuIsOpen}
-                          onMenuOpen={() => setMenuIsOpen(true)}
-                          onMenuClose={() => setMenuIsOpen(false)}
-                          onFocus={() => setMenuIsOpen(true)}
-                          isMulti
-                          className="newoneonees"
-                          options={basic}
-                          value={selectedOptions}
-                          onChange={handleChange}
-                          components={{
-                            Option: CustomOption,
-                            MultiValue: () => null,
+                            <Select
+                              menuIsOpen={menuIsOpen}
+                              onMenuOpen={() => setMenuIsOpen(true)}
+                              onMenuClose={() => setMenuIsOpen(false)}
+                              onFocus={() => setMenuIsOpen(true)}
+                              isMulti
+                              className="newoneonees"
+                              options={basic}
+                              value={selectedOptions}
+                              onChange={handleChange}
+                              components={{
+                                Option: CustomOption,
+                                MultiValue: () => null,
 
-                            ValueContainer: ({ children, ...props }) => {
-                              const selectedValues = props.getValue();
-                              return (
-                                <components.ValueContainer {...props} >
-                                  {selectedValues.length > 0 ? (
-                                    <CustomPlaceholder {...props} />
-                                  ) : (
-                                    children
-                                  )}
-                                </components.ValueContainer>
-                              );
-                            },
-                          }}
-                          closeMenuOnSelect={false}
-                          hideSelectedOptions={false}
-                          styles={{
-                            control: (base) => ({
-                              ...base,
-                              color: "#1A1A1B",
-                              marginTop: -8,
-                              fontSize: fss,
-                            }),
-                          }}
-                        />
+                                ValueContainer: ({ children, ...props }) => {
+                                  const selectedValues = props.getValue();
+                                  return (
+                                    <components.ValueContainer {...props} >
+                                      {selectedValues.length > 0 ? (
+                                        <CustomPlaceholder {...props} />
+                                      ) : (
+                                        children
+                                      )}
+                                    </components.ValueContainer>
+                                  );
+                                },
+                              }}
+                              closeMenuOnSelect={false}
+                              hideSelectedOptions={false}
+                              styles={{
+                                control: (base) => ({
+                                  ...base,
+                                  color: "#1A1A1B",
+                                  marginTop: -8,
+                                  fontSize: fss,
+                                }),
+                              }}
+                            />
 
-                        :''
+                            : ''
 
                         }
-                       
+
                       </div>
 
                       <div ref={selectRefone} style={{ width: "16%", paddingRight: 20 }}>
 
                         {
-                          data != "3" ?
+                          data != "3" && data != "7" ?
 
-                          <Select
-                          menuIsOpen={menuIsOpenone}
-                          onMenuOpen={() => setMenuIsOpenone(true)}
-                          onMenuClose={() => setMenuIsOpenone(false)}
-                          onFocus={() => setMenuIsOpenone(true)}
+                            <Select
+                              menuIsOpen={menuIsOpenone}
+                              onMenuOpen={() => setMenuIsOpenone(true)}
+                              onMenuClose={() => setMenuIsOpenone(false)}
+                              onFocus={() => setMenuIsOpenone(true)}
 
-                          isMulti
-                          className="newoneonees"
-                          options={basicone}
-                          value={hubb}
-                          onChange={handleChangehubone}
-                          components={{
-                            Option: CustomOption,
-                            MultiValue: () => null,
-                            ValueContainer: ({ children, ...props }) => {
-                              const selectedValues = props.getValue();
-                              return (
-                                <components.ValueContainer {...props}>
-                                  {selectedValues.length > 0 ? (
-                                    <CustomPlaceholder {...props} />
-                                  ) : (
-                                    children
-                                  )}
-                                </components.ValueContainer>
-                              );
-                            },
-                          }}
-                          closeMenuOnSelect={false}
-                          hideSelectedOptions={false}
-                          styles={{
-                            control: (base) => ({
-                              ...base,
-                              color: "#1A1A1B",
-                              marginTop: -8,
-                              fontSize: fss,
-                            }),
-                          }}
-                        />
+                              isMulti
+                              className="newoneonees"
+                              options={basicone}
+                              value={hubb}
+                              onChange={handleChangehubone}
+                              components={{
+                                Option: CustomOption,
+                                MultiValue: () => null,
+                                ValueContainer: ({ children, ...props }) => {
+                                  const selectedValues = props.getValue();
+                                  return (
+                                    <components.ValueContainer {...props}>
+                                      {selectedValues.length > 0 ? (
+                                        <CustomPlaceholder {...props} />
+                                      ) : (
+                                        children
+                                      )}
+                                    </components.ValueContainer>
+                                  );
+                                },
+                              }}
+                              closeMenuOnSelect={false}
+                              hideSelectedOptions={false}
+                              styles={{
+                                control: (base) => ({
+                                  ...base,
+                                  color: "#1A1A1B",
+                                  marginTop: -8,
+                                  fontSize: fss,
+                                }),
+                              }}
+                            />
 
-                        :""
+                            : ""
                         }
-                       
+
                       </div>
                       <div className="ms-md-3 ms-lg-0" style={{ width: "6%" }}>
                         <p style={{ color: "#1A1A1B", fontWeight: "400" }}></p>
@@ -2316,12 +2429,11 @@ let Admin_dash = () => {
                                       </p>
                                     </div>
                                   </div>
-                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
+                                  <div style={{ width: "16%", display: "flex", alignItems: "flex-start" }}>
                                     <div
                                       style={{
                                         display: "flex",
                                         flexDirection: "row",
-                                        alignItems: "center", // Centers items vertically
                                         overflow: "hidden", // Prevents content from overflowing
                                         whiteSpace: "nowrap", // Keeps text in a single line
                                       }}
@@ -2336,8 +2448,7 @@ let Admin_dash = () => {
                                           overflow: "hidden",
                                           whiteSpace: "nowrap",
                                           textOverflow: "ellipsis", // Adds "..." for overflowed text
-                                          maxWidth: "100%", // Ensures it doesn't exceed container width
-                                          marginLeft: 7, marginRight: 7
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width 
                                         }}
                                       >
                                         {"*".repeat(value.Password.length)}
@@ -2396,7 +2507,7 @@ let Admin_dash = () => {
                                     <DropdownSelect
 
                                       options={basic?.filter(item => item.value !== "All")}
-                                      values={value.venue}
+                                      values={mydata?.Role === "superadmin" ? value?.group || [] : value.venue}
                                       multi={true}
                                       onChange={(val) => {
                                         handleChanges(val, value, "venue");
@@ -2685,7 +2796,7 @@ let Admin_dash = () => {
                     ) : data === "7" ? (
                       <>
                         {Object.entries(user)
-                          .filter(([_, value]) => value.Role === "superadmin") // Filter only admins
+                          .filter(([_, value]) => value.Role === "admin") // Filter only admins
                           .map(([key, value]) => {
 
 
@@ -2767,34 +2878,7 @@ let Admin_dash = () => {
 
 
 
-                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        alignItems: "center", // Centers items vertically
-                                        overflow: "hidden", // Prevents content from overflowing
-                                        whiteSpace: "nowrap", // Keeps text in a single line
-                                      }}
-                                    >
 
-                                      <p
-                                        style={{
-                                          color: "#707070",
-                                          fontWeight: "400",
-                                          fontSize: fs,
-                                          margin: 0, // Remove default margin
-                                          overflow: "hidden",
-                                          whiteSpace: "nowrap",
-                                          textOverflow: "ellipsis", // Adds "..." for overflowed text
-                                          maxWidth: "100%", // Ensures it doesn't exceed container width
-                                          marginLeft: 7, marginRight: 7
-                                        }}
-                                      >
-                                        {"*".repeat(value.Password.length)}
-                                      </p>
-                                    </div>
-                                  </div>
 
 
                                   <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
@@ -2826,7 +2910,34 @@ let Admin_dash = () => {
                                     </div>
                                   </div>
 
+                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
+                                    <div
+                                      style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center", // Centers items vertically
+                                        overflow: "hidden", // Prevents content from overflowing
+                                        whiteSpace: "nowrap", // Keeps text in a single line
+                                      }}
+                                    >
 
+                                      <p
+                                        style={{
+                                          color: "#707070",
+                                          fontWeight: "400",
+                                          fontSize: fs,
+                                          margin: 0, // Remove default margin
+                                          overflow: "hidden",
+                                          whiteSpace: "nowrap",
+                                          textOverflow: "ellipsis", // Adds "..." for overflowed text
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width
+                                          marginLeft: 7, marginRight: 7
+                                        }}
+                                      >
+                                        {"*".repeat(value.Password.length)}
+                                      </p>
+                                    </div>
+                                  </div>
 
                                   <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
                                     <div
@@ -2879,7 +2990,7 @@ let Admin_dash = () => {
                                     <DropdownSelect
 
                                       options={basic?.filter(item => item.value !== "All")}
-                                      values={value.venue}
+                                      values={value.group}
                                       multi={true}
                                       onChange={(val) => {
                                         handleChanges(val, value, "venue");
@@ -2975,7 +3086,7 @@ let Admin_dash = () => {
                                   >
 
 
-                                    <DropdownSelect
+                                    {/* <DropdownSelect
 
                                       options={output.filter(item => item.value !== "All")}
                                       values={value.hub}
@@ -3021,7 +3132,7 @@ let Admin_dash = () => {
                                         border: "none",
                                         fontSize: fss,
                                       }}
-                                    />
+                                    /> */}
 
 
 
@@ -3235,7 +3346,7 @@ let Admin_dash = () => {
                                           whiteSpace: "nowrap",
                                           textOverflow: "ellipsis", // Adds "..." for overflowed text
                                           maxWidth: "100%", // Ensures it doesn't exceed container width
-                                          marginLeft: 7, marginRight: 7
+                                          marginLeft: 0
                                         }}
                                       >
                                         {value.name}
@@ -3272,12 +3383,11 @@ let Admin_dash = () => {
                                     </p>
                                   </div>
 
-                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
+                                  <div style={{ width: "16%", display: "flex", alignItems: "flex-start" }}>
                                     <div
                                       style={{
                                         display: "flex",
                                         flexDirection: "row",
-                                        alignItems: "center", // Centers items vertically
                                         overflow: "hidden", // Prevents content from overflowing
                                         whiteSpace: "nowrap", // Keeps text in a single line
                                       }}
@@ -3292,8 +3402,7 @@ let Admin_dash = () => {
                                           overflow: "hidden",
                                           whiteSpace: "nowrap",
                                           textOverflow: "ellipsis", // Adds "..." for overflowed text
-                                          maxWidth: "100%", // Ensures it doesn't exceed container width
-                                          marginLeft: 7, marginRight: 7
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width 
                                         }}
                                       >
                                         {"*".repeat(value.Password.length)}
@@ -3680,12 +3789,12 @@ let Admin_dash = () => {
                                           color: "#316AAF",
                                           fontWeight: "400",
                                           fontSize: fs,
+                                          marginLeft: 3,
                                           margin: 0, // Remove default margin
                                           overflow: "hidden",
                                           whiteSpace: "nowrap",
                                           textOverflow: "ellipsis", // Adds "..." for overflowed text
-                                          maxWidth: "100%", // Ensures it doesn't exceed container width
-                                          marginLeft: 7, marginRight: 7
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width 
                                         }}
                                       >
                                         {value.name}
@@ -3722,12 +3831,11 @@ let Admin_dash = () => {
                                     </p>
                                   </div>
 
-                                  <div style={{ width: "16%", display: "flex", alignItems: "center" }}>
+                                  <div style={{ width: "16%", display: "flex", alignItems: "flex-start" }}>
                                     <div
                                       style={{
                                         display: "flex",
                                         flexDirection: "row",
-                                        alignItems: "center", // Centers items vertically
                                         overflow: "hidden", // Prevents content from overflowing
                                         whiteSpace: "nowrap", // Keeps text in a single line
                                       }}
@@ -3742,15 +3850,13 @@ let Admin_dash = () => {
                                           overflow: "hidden",
                                           whiteSpace: "nowrap",
                                           textOverflow: "ellipsis", // Adds "..." for overflowed text
-                                          maxWidth: "100%", // Ensures it doesn't exceed container width
-                                          marginLeft: 7, marginRight: 7
+                                          maxWidth: "100%", // Ensures it doesn't exceed container width 
                                         }}
                                       >
                                         {"*".repeat(value.Password.length)}
                                       </p>
                                     </div>
                                   </div>
-
                                   <div style={{ width: "16%" }}>
                                     <p
                                       style={{
@@ -4102,7 +4208,7 @@ let Admin_dash = () => {
                   {[
                     { label: "Full Name", value: editname, setValue: setEditname, disabled: editnamebool, setDisabled: setEditnamebool, type: "text", icon: true },
                     { label: "Email", value: editemail, setValue: setEditemail, disabled: true, icon: false },
-                    { label: "Password", value: editpass, setValue: setEditpass, type: editpassbool ? "text" : "password", toggle: setEditpassbool, isPassword: true },
+                    { label: "Password", value: editpass, setValue: setEditpass, type: editpassbool ? "text" : "text", toggle: setEditpassbool, isPassword: true },
                   ].map((item, index) => (
                     <React.Fragment key={index}>
                       <div
@@ -4124,16 +4230,16 @@ let Admin_dash = () => {
                               setButtoncolor(true);
                             }}
                             className="form-control"
-                            placeholder="Search..."
+                            placeholder="Enter Password"
                             style={{
-                              border: "none",
+                              border: editpassbool === false && item.label === "Password" ? "1px solid #000" : "none",
                               boxShadow: "none",
                               width: "100%",
                               height: 40,
                               backgroundColor: "#ECF1F4",
                               marginTop: -9,
                             }}
-                            disabled={item.disabled}
+                            disabled={  editpassbool === true && item.label === "Password" ? true : item.disabled }
                             type={item.type || "text"}
                             id="switch3"
                           />
@@ -4146,7 +4252,7 @@ let Admin_dash = () => {
                               alt="Edit"
                             />
                           )}
-                          {item.isPassword && (
+                          {/* {item.isPassword && (
                             <label className="round-checkbox">
                               <input
                                 checked={editpassbool}
@@ -4154,6 +4260,15 @@ let Admin_dash = () => {
                                 type="checkbox"
                               />
                               {editpassbool ? <FiEye /> : <FiEyeOff />}
+                            </label>
+                          )} */}
+
+
+                          {item.isPassword && (
+                            <label className="round-checkbox" style={{ marginLeft : 10 }}>
+                               <div  onClick={(e) => setEditpassbool(!editpassbool)} style={{ backgroundColor : 'rgb(49, 106, 175)' ,   borderRadius : 8 , padding : 5 ,}} >
+                                <p style={{ marginBottom : 0 , color : '#fff' , fontSize : 12 }}>Edit</p>
+                               </div>
                             </label>
                           )}
                         </div>

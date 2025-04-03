@@ -1480,7 +1480,7 @@ let Meals = () => {
             Object.entries(subObj).filter(([subKey]) => filterKeys.has(subKey))
           );
     
-          if (Object.keys(filteredSubObj).length) {
+          if (Object.keys(filteredSubObj).length) { 
             acc[key] = filteredSubObj;
           }
     
