@@ -650,19 +650,33 @@ let Admin_dash = () => {
 
   let [usedname, setUsedname] = useState("");
   function getName(data) {
-    if (!data.venue || data.venue.length === 0) {
-      return data.name; // Default to name if venue is missing or empty
-    }
 
-    const hasAll = data.venue.some((v) => v.value === "All");
+    console.log(data?.venue , 'state.datastate.data')
 
-    if (hasAll && data.venue.length > 1) {
-      return data.name;
-    } else if (data.venue.length === 1 && !hasAll) {
-      return data.venue[0].value;
-    }
 
-    return data.name;
+    // if (!data.venue || data.venue.length === 0) {
+    //   return data.name; // Default to name if venue is missing or empty
+    // }
+
+    // const hasAll = data.venue.some(v => v.value === "All");
+
+    // if (hasAll && data.venue.length > 1) {
+    //   return data.name;
+    // } else if (data.venue.length === 1 && !hasAll) {
+    //   return data.venue[0].value;
+    // }
+
+    const matchedGroupName = Object.entries(state.data).find(([groupName, groupData]) => {
+      return Object.keys(groupData).some(key =>
+        data?.venue.some(item => item.label === key)
+      );
+    })?.[0]; // Safely get groupName from matched pair
+    
+    console.log('Matched group name:', matchedGroupName);
+    
+    return matchedGroupName
+
+
   }
 
 
@@ -1243,6 +1257,7 @@ let Admin_dash = () => {
     update(dateQuerys, newData)
       .then(() => {
         setUsername("");
+        setPassword('')
         setEmail("");
         setHubb([]);
         setSelectedOptions([]);
@@ -1431,7 +1446,7 @@ let Admin_dash = () => {
                 marginTop: -3,
               }}
             >
-              {usedname}
+              { mydata?.Role === 'superadmin' ? 'Sko web app' : usedname }
             </p>
           </div>
 
@@ -1541,6 +1556,7 @@ let Admin_dash = () => {
                 onClick={() => {
                   setData("1");
                   setUsername("");
+                  setPassword('')
                   setEmail("");
                   setSelectedOptions([]);
                   setSelectedOptions([]);
@@ -1578,6 +1594,7 @@ let Admin_dash = () => {
                   setData("2");
 
                   setUsername("");
+                  setPassword('')
                   setEmail("");
                   setSelectedOptions([]);
                   setSelectedOptions([]);
@@ -1615,6 +1632,7 @@ let Admin_dash = () => {
                   setData("3");
 
                   setUsername("");
+                  setPassword('')
                   setEmail("");
                   setSelectedOptions([]);
                   setSelectedOptions([]);
@@ -1652,6 +1670,7 @@ let Admin_dash = () => {
                   setData("4");
 
                   setUsername("");
+                  setPassword('')
                   setEmail("");
                   setSelectedOptions([]);
                   setSelectedOptions([]);
@@ -1700,6 +1719,7 @@ let Admin_dash = () => {
                   setData("5");
 
                   setUsername("");
+                  setPassword('')
                   setEmail("");
                   setSelectedOptions([]);
                   setSelectedOptions([]);
@@ -1814,6 +1834,7 @@ let Admin_dash = () => {
                         onClick={() => {
                           setData("7");
                           setUsername("");
+                          setPassword('')
                           setEmail("");
                           setSelectedOptions([]);
                           setSelectedOptions([]);
@@ -1857,6 +1878,7 @@ let Admin_dash = () => {
                         onClick={() => {
                           setData("1");
                           setUsername("");
+                          setPassword('')
                           setEmail("");
                           setSelectedOptions([]);
                           setSelectedOptions([]);
@@ -1902,6 +1924,7 @@ let Admin_dash = () => {
                           setData("2");
 
                           setUsername("");
+                          setPassword('')
                           setEmail("");
                           setSelectedOptions([]);
                           setSelectedOptions([]);
@@ -1946,6 +1969,7 @@ let Admin_dash = () => {
                           setData("3");
 
                           setUsername("");
+                          setPassword('')
                           setEmail("");
                           setSelectedOptions([]);
                           setSelectedOptions([]);
@@ -1988,6 +2012,7 @@ let Admin_dash = () => {
                       setData("4");
 
                       setUsername("");
+                      setPassword('')
                       setEmail("");
                       setSelectedOptions([]);
                       setSelectedOptions([]);
@@ -2037,6 +2062,7 @@ let Admin_dash = () => {
                       setData("5");
 
                       setUsername("");
+                      setPassword('')
                       setEmail("");
                       setSelectedOptions([]);
                       setSelectedOptions([]);
@@ -4773,6 +4799,27 @@ let Admin_dash = () => {
                     })
                   }
                   disabled
+                  style={{
+                    width: "100%",
+                    padding: 8,
+                    border: "1px solid #ccc",
+                    borderRadius: 4,
+                  }}
+                />
+              </div>
+
+              <div style={{ marginBottom: 15 }}>
+                <label style={{ display: "block", marginBottom: 5 }}>Password:</label>
+                <input
+                  type="text"
+                  name="Password"
+                  value={selectedAdmin?.Password || ""}
+                  onChange={(e) =>
+                    setSelectedAdmin({
+                      ...selectedAdmin,
+                      Password: e.target.value,
+                    })
+                  } 
                   style={{
                     width: "100%",
                     padding: 8,

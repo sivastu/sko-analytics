@@ -28,19 +28,33 @@ let SinglrandMulti = () => {
 
   let [usedname, setUsedname] = useState('')
   function getName(data) {
-    if (!data.venue || data.venue.length === 0) {
-      return data.name; // Default to name if venue is missing or empty
-    }
 
-    const hasAll = data.venue.some(v => v.value === "All");
+    console.log(data?.venue , 'state.datastate.data')
 
-    if (hasAll && data.venue.length > 1) {
-      return data.name;
-    } else if (data.venue.length === 1 && !hasAll) {
-      return data.venue[0].value;
-    }
 
-    return data.name;
+    // if (!data.venue || data.venue.length === 0) {
+    //   return data.name; // Default to name if venue is missing or empty
+    // }
+
+    // const hasAll = data.venue.some(v => v.value === "All");
+
+    // if (hasAll && data.venue.length > 1) {
+    //   return data.name;
+    // } else if (data.venue.length === 1 && !hasAll) {
+    //   return data.venue[0].value;
+    // }
+
+    const matchedGroupName = Object.entries(state.data).find(([groupName, groupData]) => {
+      return Object.keys(groupData).some(key =>
+        data?.venue.some(item => item.label === key)
+      );
+    })?.[0]; // Safely get groupName from matched pair
+    
+    console.log('Matched group name:', matchedGroupName);
+    
+    return matchedGroupName
+
+
   }
 
 
