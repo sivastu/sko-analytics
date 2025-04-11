@@ -360,7 +360,19 @@ let Dockets = () => {
 
 
 
-
+  function addMinutes(timeStr, minutesToAdd) {
+    let [hours, minutes] = timeStr.split('.').map(Number);
+  
+    // Convert to total minutes
+    let totalMinutes = hours * 60 + minutes + minutesToAdd;
+  
+    // Convert back to hours and minutes
+    let newHours = Math.floor(totalMinutes / 60);
+    let newMinutes = totalMinutes % 60;
+  
+    // Format as needed (e.g., "5.19")
+    return `${newHours}.${newMinutes.toString().padStart(2, '0')}`;
+  }
 
   const optionshshs = {
     responsive: true,
@@ -368,6 +380,15 @@ let Dockets = () => {
     plugins: {
       legend: { position: 'top' },
       title: { display: false, text: 'X-Axis Scrollable Bar Chart' },
+      tooltip: {
+        callbacks: {
+          title: function (tooltipItems) {
+            const item = tooltipItems[0];
+            // This is usually the x-axis label
+            return `${item.label} . ${addMinutes(item.label, 9)}`;
+          }, 
+        },
+      },
     },
     scales: {
       x: {
@@ -2017,6 +2038,9 @@ let Dockets = () => {
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
 
 
+    console.log(time, time2 , 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
+
+
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
 
@@ -2667,21 +2691,62 @@ let Dockets = () => {
     });
     setFilterdataone(filteredData)
 
+
+
+    function generateTimeSlots(start, end) {
+      const result = [];
+    
+      // Parse the start and end into hours and minutes
+      let [startHour, startMin] = start.split(':').map(Number);
+      let [endHour, endMin] = end.split(':').map(Number);
+    
+      // Convert everything to minutes for easier looping
+      let startTotalMin = startHour * 60 + startMin;
+      let endTotalMin = endHour * 60 + endMin;
+    
+      // Loop through in 10-minute increments
+      for (let t = startTotalMin; t <= endTotalMin; t += 10) {
+        let h = Math.floor(t / 60);
+        let m = t % 60;
+        let formatted = `${h}.${m.toString().padStart(2, '0')}`;
+        result.push(formatted);
+      }
+    
+      return result;
+    }
+
+
+
+
     callfordataone(filteredData)
-    let ghi = processTimeData(alldat)
+    // let ghi = processTimeData(alldat)
+
+    let ghi = processTimeDatafgh(alldat , generateTimeSlots(time , time2))
     let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
     // Extract values into separate arrays
-    let timeLabels = kidshort.map(entry => entry.time);
+    // let timeLabels = kidshort.map(entry => entry.time);
+    let timeLabels = generateTimeSlots(time , time2)
     let timeCounts = kidshort.map(entry => entry.count);
+
+
+    console.log(JSON.stringify(timeCounts), 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+    
+    console.log(JSON.stringify(alldat), 'cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc')
+
 
     setOption(timeLabels)
     setOneBar(timeCounts)
 
-    let ghione = processTimeDatatwo(alldat)
+    let ghione = processTimeDatafghtwo(alldat , generateTimeSlots(time , time2) )
     let kidshortone = ghione.sort((a, b) => a.time.localeCompare(b.time));
+
+    console.log(ghione, 'ghionetttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt')
     // Extract values into separate arrays
-    let timeLabelsone = kidshortone.map(entry => entry.time);
+    let timeLabelsone = generateTimeSlots(time , time2)
     let timeCountsone = kidshortone.map(entry => entry.count);
+
+
+
 
     setOptionone(timeLabelsone)
     setOneBarone(timeCountsone)
@@ -2692,11 +2757,65 @@ let Dockets = () => {
   }
 
 
+  function processTimeDatafgh(data , timeSlots) { 
+    const timeCounts = {};
+    timeSlots.forEach(slot => timeCounts[slot] = 0); // Init all counts to 0
+  
+    function extractTime(stamp) {
+      const match = stamp.match(/\d{4}(R0|H0|P0|S0)/);
+      if (match) {
+        const hh = match[0].slice(0, 2);
+        const mm = match[0].slice(2, 4);
+        return `${hh}:${mm}`;
+      }
+      return null;
+    }
+  
+    function isInRange(extracted, slot) {
+      const [exH, exM] = extracted.split(':').map(Number);
+      const extractedMinutes = exH * 60 + exM;
+  
+      const [slotH, slotM] = slot.split('.').map(Number);
+      const slotStart = slotH * 60 + slotM;
+      const slotEnd = slotStart + 9;
+  
+      return extractedMinutes >= slotStart && extractedMinutes <= slotEnd;
+    }
+  
+    for (let group in data) {
+      for (let location in data[group]) {
+        for (let section in data[group][location]) {
+          for (let date in data[group][location][section]) {
+            data[group][location][section][date].forEach(order => {
+              const extractedTime = extractTime(order.STAMP);
+              if (extractedTime) {
+                for (const slot of timeSlots) {
+                  if (isInRange(extractedTime, slot)) {
+                    timeCounts[slot]++;
+                    break; // Only increment the first matching slot
+                  }
+                }
+              }
+            });
+          }
+        }
+      }
+    }
+  
+    return timeSlots.map(time => ({
+      time,
+      count: timeCounts[time]
+    }));
+  }
+   
+  
+
+
   function processTimeData(data) {
     let timeCounts = {};
 
     function extractTime(stamp) {
-      let match = stamp.match(/\d{4}(R0|H0|P0|S0)/);
+      let match = stamp.match(/\d{4}(R0|H0|P0|S0)/);  
       if (match) {
         return match[0].slice(0, 2) + ":" + match[0].slice(2, 4); // Convert to HH:MM
       }
@@ -2715,23 +2834,100 @@ let Dockets = () => {
           for (let date in data[group][location][section]) {
             data[group][location][section][date].forEach(order => {
               let stamps = order.STAMP.split(" "); // Split STAMP string
-              stamps.forEach(stamp => {
-                let extractedTime = extractTime(stamp);
+               
+                let extractedTime = extractTime(order.STAMP);
+ 
+
+
                 if (extractedTime) {
                   let interval = roundToInterval(extractedTime);
                   timeCounts[interval] = (timeCounts[interval] || 0) + 1;
-                }
-              });
+                } 
             });
           }
         }
       }
     }
-
+    console.log(timeCounts, 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
     return Object.keys(timeCounts)
       .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
       .map(time => ({ time, count: timeCounts[time] })).slice(1);
   }
+
+  function processTimeDatafghtwo(data, timeSlots) {
+    const timeSums = {};
+    const timeCounts = {};
+  
+    timeSlots.forEach(slot => {
+      timeSums[slot] = 0;   // total of diffs
+      timeCounts[slot] = 0; // count of entries
+    });
+  
+    function extractTime(stamp, type) {
+      const regex = new RegExp(`(\\d{4})${type}`);
+      const match = stamp.match(regex);
+      if (match) {
+        const hh = match[1].slice(0, 2);
+        const mm = match[1].slice(2, 4);
+        return `${hh}:${mm}`;
+      }
+      return null;
+    }
+  
+    function isInRange(extracted, slot) {
+      const [exH, exM] = extracted.split(':').map(Number);
+      const extractedMinutes = exH * 60 + exM;
+  
+      const [slotH, slotM] = slot.split('.').map(Number);
+      const slotStart = slotH * 60 + slotM;
+      const slotEnd = slotStart + 9;
+  
+      return extractedMinutes >= slotStart && extractedMinutes <= slotEnd;
+    }
+  
+    function getMinuteDiff(start, end) {
+      if (start === end) return 1;
+      const [startH, startM] = start.split(':').map(Number);
+      const [endH, endM] = end.split(':').map(Number);
+      return (endH * 60 + endM) - (startH * 60 + startM);
+    }
+  
+    for (let group in data) {
+      for (let location in data[group]) {
+        for (let section in data[group][location]) {
+          for (let date in data[group][location][section]) {
+            data[group][location][section][date].forEach(order => {
+              const r0Time = extractTime(order.STAMP, 'R0');
+              const s0Time = extractTime(order.STAMP, 'S0');
+  
+              if (r0Time && s0Time) {
+                const diff = getMinuteDiff(r0Time, s0Time);
+  
+                for (const slot of timeSlots) {
+                  if (isInRange(s0Time, slot)) {
+                    timeSums[slot] += diff;
+                    timeCounts[slot] += 1;
+                    break;
+                  }
+                }
+              }
+            });
+          }
+        }
+      }
+    }
+  
+    return timeSlots.map(slot => ({
+      time: slot,
+      count: timeCounts[slot] > 0 ? Math.round(timeSums[slot] / timeCounts[slot]) : 0
+    }));
+  }
+  
+ 
+   
+   
+  
+  
 
   function processTimeDatatwo(data) {
     let timeCounts = {};
@@ -2769,6 +2965,9 @@ let Dockets = () => {
         }
       }
     }
+
+
+    
 
     return Object.keys(timeCounts)
       .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
@@ -3450,16 +3649,44 @@ let Dockets = () => {
 
     }
 
-    let ghi = processTimeData(alldat)
+    function generateTimeSlots(start, end) {
+      const result = [];
+    
+      // Parse the start and end into hours and minutes
+      let [startHour, startMin] = start.split(':').map(Number);
+      let [endHour, endMin] = end.split(':').map(Number);
+    
+      // Convert everything to minutes for easier looping
+      let startTotalMin = startHour * 60 + startMin;
+      let endTotalMin = endHour * 60 + endMin;
+    
+      // Loop through in 10-minute increments
+      for (let t = startTotalMin; t <= endTotalMin; t += 10) {
+        let h = Math.floor(t / 60);
+        let m = t % 60;
+        let formatted = `${h}.${m.toString().padStart(2, '0')}`;
+        result.push(formatted);
+      }
+    
+      return result;
+    }
+
+    let ghi = processTimeDatafgh(alldat , generateTimeSlots(time , time2))
 
     let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
 
     // Extract values into separate arrays
     let timeLabels = kidshort.map(entry => entry.time);
     let timeCounts = kidshort.map(entry => entry.count);
+
+
+
+
     setTwobar(timeCounts)
 
-    let ghitwo = processTimeDatatwo(alldat)
+    let ghitwo = processTimeDatafghtwo(alldat , generateTimeSlots(time , time2))
+
+    console.log(ghitwo , 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
 
     let kidshorttwo = ghitwo.sort((a, b) => a.time.localeCompare(b.time));
 
@@ -6612,7 +6839,7 @@ let Dockets = () => {
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                               {/* Left Scroll Button */}
                               <button onClick={scrollLeftfine} style={buttonStyle}>⬅</button>
-                              <p className="gggjgjjg"># of new dockets</p>
+                              <p className="gggjgjjg">Average waiting time</p>
                               {/* Scrollable Chart Container */}
                               <div ref={chartContainerReffine} className="kiy" style={{
                                 width: '100%', overflowX: 'auto',
@@ -6831,11 +7058,14 @@ let Dockets = () => {
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                               {/* Left Scroll Button */}
                               <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
-                              <p className="gggjgjjg">Average waiting time</p>
+                              <p className="gggjgjjg"># of new dockets</p>
                               {/* Scrollable Chart Container */}
                               <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                 <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
+                                  
                                   <Bar data={datafine} options={optionshshs} id="docChart-capture" />
+
+
                                 </div>
                               </div>
 

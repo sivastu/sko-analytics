@@ -82,7 +82,7 @@ let Multi_venue = () => {
 
   let [basiconefive, setBasiconefive] = useState([])
   let [basiconesix, setBasiconesix] = useState([])
- 
+
   let [basicfine, setBasicfine] = useState([{
     "value": "Maximum",
     "label": "Maximum"
@@ -120,7 +120,7 @@ let Multi_venue = () => {
   { value: 'R', label: 'On Process' },
   { value: 'H', label: 'On Hold' },
   { value: 'P', label: 'On Pass' },
-  // { value: 'S', label: 'Served' },
+    // { value: 'S', label: 'Served' },
   ];
 
   const optionstakeaway = [
@@ -311,7 +311,7 @@ let Multi_venue = () => {
   let [usedname, setUsedname] = useState('')
   function getName(data) {
 
-    console.log(data?.venue , 'state.datastate.data')
+    console.log(data?.venue, 'state.datastate.data')
 
 
     // if (!data.venue || data.venue.length === 0) {
@@ -331,9 +331,9 @@ let Multi_venue = () => {
         data?.venue.some(item => item.label === key)
       );
     })?.[0]; // Safely get groupName from matched pair
-    
+
     console.log('Matched group name:', matchedGroupName);
-    
+
     return matchedGroupName
 
 
@@ -392,7 +392,19 @@ let Multi_venue = () => {
 
 
 
-
+  function addMinutes(timeStr, minutesToAdd) {
+    let [hours, minutes] = timeStr.split('.').map(Number);
+  
+    // Convert to total minutes
+    let totalMinutes = hours * 60 + minutes + minutesToAdd;
+  
+    // Convert back to hours and minutes
+    let newHours = Math.floor(totalMinutes / 60);
+    let newMinutes = totalMinutes % 60;
+  
+    // Format as needed (e.g., "5.19")
+    return `${newHours}.${newMinutes.toString().padStart(2, '0')}`;
+  }
 
   const optionshshs = {
     responsive: true,
@@ -400,6 +412,15 @@ let Multi_venue = () => {
     plugins: {
       legend: { position: 'top' },
       title: { display: false, text: 'X-Axis Scrollable Bar Chart' },
+      tooltip: {
+        callbacks: {
+          title: function (tooltipItems) {
+            const item = tooltipItems[0];
+            // This is usually the x-axis label
+            return `${item.label} . ${addMinutes(item.label, 9)}`;
+          },
+        },
+      },
     },
     scales: {
       x: {
@@ -658,7 +679,7 @@ let Multi_venue = () => {
       setOldcou(uuuk)
       // setSelectedCources(uuuk)
 
-    
+
 
 
       const output = [{
@@ -803,22 +824,22 @@ let Multi_venue = () => {
 
     if (parsedatajson.venue) {
       const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-    
+
       if (!hasAllValue) { // No need to check if === true
         const filterKeys = new Set(parsedatajson.venue.map(item => item.value));
-    
+
         filteredDataonee = Object.entries(cleanedData).reduce((acc, [key, subObj]) => {
           const filteredSubObj = Object.fromEntries(
             Object.entries(subObj).filter(([subKey]) => filterKeys.has(subKey))
           );
-    
+
           if (Object.keys(filteredSubObj).length) {
             acc[key] = filteredSubObj;
           }
-    
+
           return acc;
         }, {});
-    
+
         setBasicall(filteredDataonee);
       }
     }
@@ -964,22 +985,22 @@ let Multi_venue = () => {
   let [fulldatatwo, setFulldatatwo] = useState()
 
 
-  function areArraysEqual (arr1, arr2) {
+  function areArraysEqual(arr1, arr2) {
 
-    console.log(arr1 , arr2 , 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
+    console.log(arr1, arr2, 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
     return arr1.some(obj1 => arr2.some(obj2 => obj1.value === obj2.value));
-}
+  }
 
 
-function removeMatchingValues(arr1, arr2) {
-  if (!Array.isArray(arr1) || !Array.isArray(arr2)) return [];
+  function removeMatchingValues(arr1, arr2) {
+    if (!Array.isArray(arr1) || !Array.isArray(arr2)) return [];
 
-  // Extract values from arr2 for quick lookup
-  const valuesSet = new Set(arr2.map(obj => obj.value));
+    // Extract values from arr2 for quick lookup
+    const valuesSet = new Set(arr2.map(obj => obj.value));
 
-  // Filter arr1 to exclude objects with matching values in arr2
-  return arr1.filter(obj => !valuesSet.has(obj.value));
-}
+    // Filter arr1 to exclude objects with matching values in arr2
+    return arr1.filter(obj => !valuesSet.has(obj.value));
+  }
 
   let updates = (num, val) => {
 
@@ -1605,19 +1626,19 @@ function removeMatchingValues(arr1, arr2) {
     //   return
     // }
 
- 
 
 
- 
- 
+
+
+
 
     // console.log(JSON.stringify(fulldatatwo), 'selected')
     const hasAllValue = selected.some(item => item.value === "All");
 
-   
+
     const hasAllValueold = oldven.some(item => item.value === "All");
 
-    
+
 
 
     setOldven(selected)
@@ -1666,18 +1687,18 @@ function removeMatchingValues(arr1, arr2) {
 
       return
     }
-    if(hasAllValue === true && hasAllValueold === false){
+    if (hasAllValue === true && hasAllValueold === false) {
 
-      if(selectedOptionsfive.length === 0){
+      if (selectedOptionsfive.length === 0) {
         selected = basic
-      }else{
-        selected = removeMatchingValues(basic , selectedOptionsfive)
+      } else {
+        selected = removeMatchingValues(basic, selectedOptionsfive)
       }
 
 
-      console.log(selected , 'ggggggggggggggggggggggggggggggggggggggggggggggggg')
+      console.log(selected, 'ggggggggggggggggggggggggggggggggggggggggggggggggg')
 
-      
+
       let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
@@ -1723,14 +1744,14 @@ function removeMatchingValues(arr1, arr2) {
 
     }
 
-    
+
 
     if (hasAllValue === true) {
 
       let vvvv = areArraysEqual(selectedOptionsfive, selected)
 
 
-      if(vvvv === true) {
+      if (vvvv === true) {
 
         Swal.fire({
           icon: "warning",
@@ -1744,12 +1765,12 @@ function removeMatchingValues(arr1, arr2) {
         return
       }
 
-      console.log(selected , 'let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)')
+      console.log(selected, 'let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)')
 
-      if(hasAllValue === true && selected.length === 1 ){
-        selected = removeMatchingValues(basic , selectedOptionsfive)
+      if (hasAllValue === true && selected.length === 1) {
+        selected = removeMatchingValues(basic, selectedOptionsfive)
       }
-      
+
 
       let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
@@ -1795,7 +1816,7 @@ function removeMatchingValues(arr1, arr2) {
       let vvvv = areArraysEqual(selectedOptionsfive, selected)
 
 
-      if(vvvv === true) {
+      if (vvvv === true) {
 
         Swal.fire({
           icon: "warning",
@@ -1906,28 +1927,28 @@ function removeMatchingValues(arr1, arr2) {
 
 
 
- 
+
   const handleChangefive = (selected) => {
 
 
-// let vvvv = areArraysEqual(selectedOptions, selected)
+    // let vvvv = areArraysEqual(selectedOptions, selected)
 
 
-//     if(vvvv === true){
-//       Swal.fire({
-//         icon: "warning",
-//         title: "Invalid Selection",
-//         text: "You cannot select the same venues in both Chosen and Compare with sections.",
-//         confirmButtonText: "OK",
-//       })
-//       return
+    //     if(vvvv === true){
+    //       Swal.fire({
+    //         icon: "warning",
+    //         title: "Invalid Selection",
+    //         text: "You cannot select the same venues in both Chosen and Compare with sections.",
+    //         confirmButtonText: "OK",
+    //       })
+    //       return
 
-      
-//     }
 
-//     if(vvvv === true){
-//       return
-//     }
+    //     }
+
+    //     if(vvvv === true){
+    //       return
+    //     }
 
 
 
@@ -1982,10 +2003,10 @@ function removeMatchingValues(arr1, arr2) {
     if (hasAllValue === true && hasAllValueold === false) {
 
 
-      if(selectedOptions.length === 0){
+      if (selectedOptions.length === 0) {
         selected = basic
-      }else{
-        selected = removeMatchingValues(basic , selectedOptions)
+      } else {
+        selected = removeMatchingValues(basic, selectedOptions)
       }
 
 
@@ -2023,7 +2044,7 @@ function removeMatchingValues(arr1, arr2) {
 
       setBasiconefive(output)
 
- return
+      return
     }
 
 
@@ -2035,7 +2056,7 @@ function removeMatchingValues(arr1, arr2) {
       let vvvv = areArraysEqual(selectedOptions, selected)
 
 
-      if(vvvv === true) {
+      if (vvvv === true) {
 
         Swal.fire({
           icon: "warning",
@@ -2048,9 +2069,9 @@ function removeMatchingValues(arr1, arr2) {
 
         return
       }
- 
-      if(hasAllValue === true && selected.length === 1 ){
-        selected = removeMatchingValues(basic , selectedOptions)
+
+      if (hasAllValue === true && selected.length === 1) {
+        selected = removeMatchingValues(basic, selectedOptions)
       }
 
 
@@ -2095,7 +2116,7 @@ function removeMatchingValues(arr1, arr2) {
       let vvvv = areArraysEqual(selectedOptions, selected)
 
 
-      if(vvvv === true) {
+      if (vvvv === true) {
 
         Swal.fire({
           icon: "warning",
@@ -2184,7 +2205,7 @@ function removeMatchingValues(arr1, arr2) {
 
   };
 
-  
+
 
   const handleChangefine = (selected) => {
     console.log(editall, 'selected')
@@ -2579,12 +2600,134 @@ function removeMatchingValues(arr1, arr2) {
   }
 
 
+  function processTimeDatafgh(data, timeSlots) {
+    const timeCounts = {};
+    timeSlots.forEach(slot => timeCounts[slot] = 0); // Init all counts to 0
+
+    function extractTime(stamp) {
+      const match = stamp.match(/\d{4}(R0|H0|P0|S0)/);
+      if (match) {
+        const hh = match[0].slice(0, 2);
+        const mm = match[0].slice(2, 4);
+        return `${hh}:${mm}`;
+      }
+      return null;
+    }
+
+    function isInRange(extracted, slot) {
+      const [exH, exM] = extracted.split(':').map(Number);
+      const extractedMinutes = exH * 60 + exM;
+
+      const [slotH, slotM] = slot.split('.').map(Number);
+      const slotStart = slotH * 60 + slotM;
+      const slotEnd = slotStart + 9;
+
+      return extractedMinutes >= slotStart && extractedMinutes <= slotEnd;
+    }
+
+    for (let group in data) {
+      for (let location in data[group]) {
+        for (let section in data[group][location]) {
+          for (let date in data[group][location][section]) {
+            data[group][location][section][date].forEach(order => {
+              const extractedTime = extractTime(order.STAMP);
+              if (extractedTime) {
+                for (const slot of timeSlots) {
+                  if (isInRange(extractedTime, slot)) {
+                    timeCounts[slot]++;
+                    break; // Only increment the first matching slot
+                  }
+                }
+              }
+            });
+          }
+        }
+      }
+    }
+
+    return timeSlots.map(time => ({
+      time,
+      count: timeCounts[time]
+    }));
+  }
+
+
+  function processTimeDatafghtwo(data, timeSlots) {
+    const timeSums = {};
+    const timeCounts = {};
+
+    timeSlots.forEach(slot => {
+      timeSums[slot] = 0;   // total of diffs
+      timeCounts[slot] = 0; // count of entries
+    });
+
+    function extractTime(stamp, type) {
+      const regex = new RegExp(`(\\d{4})${type}`);
+      const match = stamp.match(regex);
+      if (match) {
+        const hh = match[1].slice(0, 2);
+        const mm = match[1].slice(2, 4);
+        return `${hh}:${mm}`;
+      }
+      return null;
+    }
+
+    function isInRange(extracted, slot) {
+      const [exH, exM] = extracted.split(':').map(Number);
+      const extractedMinutes = exH * 60 + exM;
+
+      const [slotH, slotM] = slot.split('.').map(Number);
+      const slotStart = slotH * 60 + slotM;
+      const slotEnd = slotStart + 9;
+
+      return extractedMinutes >= slotStart && extractedMinutes <= slotEnd;
+    }
+
+    function getMinuteDiff(start, end) {
+      if (start === end) return 1;
+      const [startH, startM] = start.split(':').map(Number);
+      const [endH, endM] = end.split(':').map(Number);
+      return (endH * 60 + endM) - (startH * 60 + startM);
+    }
+
+    for (let group in data) {
+      for (let location in data[group]) {
+        for (let section in data[group][location]) {
+          for (let date in data[group][location][section]) {
+            data[group][location][section][date].forEach(order => {
+              const r0Time = extractTime(order.STAMP, 'R0');
+              const s0Time = extractTime(order.STAMP, 'S0');
+
+              if (r0Time && s0Time) {
+                const diff = getMinuteDiff(r0Time, s0Time);
+
+                for (const slot of timeSlots) {
+                  if (isInRange(s0Time, slot)) {
+                    timeSums[slot] += diff;
+                    timeCounts[slot] += 1;
+                    break;
+                  }
+                }
+              }
+            });
+          }
+        }
+      }
+    }
+
+    return timeSlots.map(slot => ({
+      time: slot,
+      count: timeCounts[slot] > 0 ? Math.round(timeSums[slot] / timeCounts[slot]) : 0
+    }));
+  }
+
+
 
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
 
     let alldat = basicall
 
-    if(val21.length === 0){
+    if (val21.length === 0) {
       alldat = []
     }
 
@@ -3003,7 +3146,7 @@ function removeMatchingValues(arr1, arr2) {
     // }else{ 
     // }
 
-    if ( inone?.length > 2 && intwo === undefined|| intwo === '' ) {
+    if (inone?.length > 2 && intwo === undefined || intwo === '') {
       let splitone = inone.split('-')
 
 
@@ -3056,7 +3199,7 @@ function removeMatchingValues(arr1, arr2) {
       }
     }
 
-    if (intwo?.length > 2   && inone === undefined || intwo === ''  ) {
+    if (intwo?.length > 2 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -3109,67 +3252,67 @@ function removeMatchingValues(arr1, arr2) {
       }
     }
 
-    if (intwo?.length > 2   && inone?.length > 2 ) {
+    if (intwo?.length > 2 && inone?.length > 2) {
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
- 
 
 
 
-          function filterDataByTableRanges(data, ranges) {
-            const filteredData = {};
 
-            Object.entries(data).forEach(([groupKey, groupData]) => {
-              Object.entries(groupData).forEach(([venueKey, venueData]) => {
-                Object.entries(venueData).forEach(([areaKey, areaData]) => {
-                  Object.entries(areaData).forEach(([dateKey, records]) => {
-                    const filteredRecords = records.filter(record => {
-                      const tableNum = parseInt(record.TABLE, 10);
-                      return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
-                    });
+      function filterDataByTableRanges(data, ranges) {
+        const filteredData = {};
 
-                    if (filteredRecords.length > 0) {
-                      if (!filteredData[groupKey]) filteredData[groupKey] = {};
-                      if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
-                      if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
-                      filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
-                    }
-                  });
+        Object.entries(data).forEach(([groupKey, groupData]) => {
+          Object.entries(groupData).forEach(([venueKey, venueData]) => {
+            Object.entries(venueData).forEach(([areaKey, areaData]) => {
+              Object.entries(areaData).forEach(([dateKey, records]) => {
+                const filteredRecords = records.filter(record => {
+                  const tableNum = parseInt(record.TABLE, 10);
+                  return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
                 });
+
+                if (filteredRecords.length > 0) {
+                  if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                  if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                  if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                  filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                }
               });
             });
+          });
+        });
 
-            return filteredData;
+        return filteredData;
+      }
+
+      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+      let twelves = filterDataByTableRanges(alldat, ranges)
+
+      let twelvesone = filterDataByTableRanges(alldat, rangesone)
+
+      function deepMerge(obj1, obj2) {
+        const result = { ...obj1 };
+
+        Object.keys(obj2).forEach(key => {
+          if (obj1[key] && typeof obj1[key] === "object" && typeof obj2[key] === "object") {
+            result[key] = deepMerge(obj1[key], obj2[key]);
+          } else {
+            result[key] = obj2[key];
           }
+        });
 
-          const ranges = [[Number(splitone[0]), Number(splitone[1])]];
-          const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+        return result;
+      }
 
-          let twelves = filterDataByTableRanges(alldat, ranges)
+      // let findddddataa = deepMerge(twelves, twelvesone)
+      alldat = { ...twelves, ...twelvesone }
 
-          let twelvesone = filterDataByTableRanges(alldat, rangesone)
+      console.log(alldat, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
 
-          function deepMerge(obj1, obj2) {
-            const result = { ...obj1 };
-          
-            Object.keys(obj2).forEach(key => {
-              if (obj1[key] && typeof obj1[key] === "object" && typeof obj2[key] === "object") {
-                result[key] = deepMerge(obj1[key], obj2[key]);
-              } else {
-                result[key] = obj2[key];
-              }
-            });
-          
-            return result;
-          }
 
-          // let findddddataa = deepMerge(twelves, twelvesone)
-          alldat =  { ...twelves, ...twelvesone }
-
-          console.log(alldat, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
-
- 
     }
 
     if (alltype === undefined || alltype.length === 0) {
@@ -3244,22 +3387,47 @@ function removeMatchingValues(arr1, arr2) {
         });
       });
     });
+
+
+    function generateTimeSlots(start, end) {
+      const result = [];
+
+      // Parse the start and end into hours and minutes
+      let [startHour, startMin] = start.split(':').map(Number);
+      let [endHour, endMin] = end.split(':').map(Number);
+
+      // Convert everything to minutes for easier looping
+      let startTotalMin = startHour * 60 + startMin;
+      let endTotalMin = endHour * 60 + endMin;
+
+      // Loop through in 10-minute increments
+      for (let t = startTotalMin; t <= endTotalMin; t += 10) {
+        let h = Math.floor(t / 60);
+        let m = t % 60;
+        let formatted = `${h}.${m.toString().padStart(2, '0')}`;
+        result.push(formatted);
+      }
+
+      return result;
+    }
+
+
     setFilterdataone(filteredData)
 
     callfordataone(filteredData)
-    let ghi = processTimeData(alldat)
+    let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
     let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
     // Extract values into separate arrays
-    let timeLabels = kidshort.map(entry => entry.time);
+    let timeLabels = generateTimeSlots(time, time2)
     let timeCounts = kidshort.map(entry => entry.count);
 
     setOption(timeLabels)
     setOneBar(timeCounts)
 
-    let ghione = processTimeDatatwo(alldat)
+    let ghione = processTimeDatafghtwo(alldat, generateTimeSlots(time, time2))
     let kidshortone = ghione.sort((a, b) => a.time.localeCompare(b.time));
     // Extract values into separate arrays
-    let timeLabelsone = kidshortone.map(entry => entry.time);
+    let timeLabelsone = generateTimeSlots(time, time2)
     let timeCountsone = kidshortone.map(entry => entry.count);
 
     setOptionone(timeLabelsone)
@@ -3360,7 +3528,7 @@ function removeMatchingValues(arr1, arr2) {
     cources = cources.filter(item => item.value !== "All");
 
     let alldat = basicall
-    if(val21.length === 0){
+    if (val21.length === 0) {
       alldat = []
     }
     console.log(JSON.stringify(alltype), 'val2245')
@@ -3765,7 +3933,7 @@ function removeMatchingValues(arr1, arr2) {
     } else {
     }
 
-    if ( inone?.length > 2 && intwo === undefined || intwo === '' ) {
+    if (inone?.length > 2 && intwo === undefined || intwo === '') {
       let splitone = inone.split('-')
 
 
@@ -3818,7 +3986,7 @@ function removeMatchingValues(arr1, arr2) {
       }
     }
 
-    if (intwo?.length > 2   && inone === undefined || intwo === ''  ) {
+    if (intwo?.length > 2 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -3871,67 +4039,67 @@ function removeMatchingValues(arr1, arr2) {
       }
     }
 
-    if (intwo?.length > 2   && inone?.length > 2 ) {
+    if (intwo?.length > 2 && inone?.length > 2) {
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
- 
 
 
 
-          function filterDataByTableRanges(data, ranges) {
-            const filteredData = {};
 
-            Object.entries(data).forEach(([groupKey, groupData]) => {
-              Object.entries(groupData).forEach(([venueKey, venueData]) => {
-                Object.entries(venueData).forEach(([areaKey, areaData]) => {
-                  Object.entries(areaData).forEach(([dateKey, records]) => {
-                    const filteredRecords = records.filter(record => {
-                      const tableNum = parseInt(record.TABLE, 10);
-                      return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
-                    });
+      function filterDataByTableRanges(data, ranges) {
+        const filteredData = {};
 
-                    if (filteredRecords.length > 0) {
-                      if (!filteredData[groupKey]) filteredData[groupKey] = {};
-                      if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
-                      if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
-                      filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
-                    }
-                  });
+        Object.entries(data).forEach(([groupKey, groupData]) => {
+          Object.entries(groupData).forEach(([venueKey, venueData]) => {
+            Object.entries(venueData).forEach(([areaKey, areaData]) => {
+              Object.entries(areaData).forEach(([dateKey, records]) => {
+                const filteredRecords = records.filter(record => {
+                  const tableNum = parseInt(record.TABLE, 10);
+                  return ranges.some(([min, max]) => tableNum >= min && tableNum <= max);
                 });
+
+                if (filteredRecords.length > 0) {
+                  if (!filteredData[groupKey]) filteredData[groupKey] = {};
+                  if (!filteredData[groupKey][venueKey]) filteredData[groupKey][venueKey] = {};
+                  if (!filteredData[groupKey][venueKey][areaKey]) filteredData[groupKey][venueKey][areaKey] = {};
+                  filteredData[groupKey][venueKey][areaKey][dateKey] = filteredRecords;
+                }
               });
             });
+          });
+        });
 
-            return filteredData;
+        return filteredData;
+      }
+
+      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+      let twelves = filterDataByTableRanges(alldat, ranges)
+
+      let twelvesone = filterDataByTableRanges(alldat, rangesone)
+
+      function deepMerge(obj1, obj2) {
+        const result = { ...obj1 };
+
+        Object.keys(obj2).forEach(key => {
+          if (obj1[key] && typeof obj1[key] === "object" && typeof obj2[key] === "object") {
+            result[key] = deepMerge(obj1[key], obj2[key]);
+          } else {
+            result[key] = obj2[key];
           }
+        });
 
-          const ranges = [[Number(splitone[0]), Number(splitone[1])]];
-          const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+        return result;
+      }
 
-          let twelves = filterDataByTableRanges(alldat, ranges)
+      // let findddddataa = deepMerge(twelves, twelvesone)
+      alldat = { ...twelves, ...twelvesone }
 
-          let twelvesone = filterDataByTableRanges(alldat, rangesone)
+      console.log(alldat, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
 
-          function deepMerge(obj1, obj2) {
-            const result = { ...obj1 };
-          
-            Object.keys(obj2).forEach(key => {
-              if (obj1[key] && typeof obj1[key] === "object" && typeof obj2[key] === "object") {
-                result[key] = deepMerge(obj1[key], obj2[key]);
-              } else {
-                result[key] = obj2[key];
-              }
-            });
-          
-            return result;
-          }
 
-          // let findddddataa = deepMerge(twelves, twelvesone)
-          alldat =  { ...twelves, ...twelvesone }
-
-          console.log(alldat, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
-
- 
     }
 
     if (alltype === undefined || alltype.length === 0) {
@@ -3982,9 +4150,27 @@ function removeMatchingValues(arr1, arr2) {
       console.log(resultss, 'tenten')
     }
 
+    function generateTimeSlots(start, end) {
+      const result = [];
 
-    console.log(JSON.stringify(alldat), 'elevenn')
+      // Parse the start and end into hours and minutes
+      let [startHour, startMin] = start.split(':').map(Number);
+      let [endHour, endMin] = end.split(':').map(Number);
 
+      // Convert everything to minutes for easier looping
+      let startTotalMin = startHour * 60 + startMin;
+      let endTotalMin = endHour * 60 + endMin;
+
+      // Loop through in 10-minute increments
+      for (let t = startTotalMin; t <= endTotalMin; t += 10) {
+        let h = Math.floor(t / 60);
+        let m = t % 60;
+        let formatted = `${h}.${m.toString().padStart(2, '0')}`;
+        result.push(formatted);
+      }
+
+      return result;
+    }
 
 
     const filteredData = {};
@@ -4015,14 +4201,10 @@ function removeMatchingValues(arr1, arr2) {
 
     setFilterdatatwo(filteredData)
 
-
-    console.log(filteredData, 'eight')
-
-
     callfordataonetwo(filteredData)
 
 
-    let ghi = processTimeData(alldat)
+    let ghi = processTimeDatafgh(alldat , generateTimeSlots(time , time2))
 
     let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
 
@@ -4031,7 +4213,7 @@ function removeMatchingValues(arr1, arr2) {
     let timeCounts = kidshort.map(entry => entry.count);
     setTwobar(timeCounts)
 
-    let ghitwo = processTimeDatatwo(alldat)
+    let ghitwo = processTimeDatafghtwo(alldat , generateTimeSlots(time , time2))
 
     let kidshorttwo = ghitwo.sort((a, b) => a.time.localeCompare(b.time));
 
@@ -5072,18 +5254,18 @@ function removeMatchingValues(arr1, arr2) {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save(formattedDate + "_-_SKO_report_"+usedname+"_-_Dockets Completion.pdf"); // Save after rendering
+        doc.save(formattedDate + "_-_SKO_report_" + usedname + "_-_Dockets Completion.pdf"); // Save after rendering
         setIsPdfLoad(false)
       },
       y: 10,
-           width: 190, // Fit content within page
-           windowWidth: 1000, // Ensure full width capture  
-           margin: 10,
-           
-           autoPaging: "text",
-           html2canvas: {
-             useCORS: true, // Handle cross-origin images
-           },
+      width: 190, // Fit content within page
+      windowWidth: 1000, // Ensure full width capture  
+      margin: 10,
+
+      autoPaging: "text",
+      html2canvas: {
+        useCORS: true, // Handle cross-origin images
+      },
     }).catch(() => {
       setIsPdfLoad(false);
     });
@@ -5181,7 +5363,7 @@ function removeMatchingValues(arr1, arr2) {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save(formattedDate + "_-_SKO_report_"+usedname+"_-_Dockets received - timeline.pdf"); // Save after rendering
+        doc.save(formattedDate + "_-_SKO_report_" + usedname + "_-_Dockets received - timeline.pdf"); // Save after rendering
         setIsPdfLoad(false)
       },
       x: 10,
@@ -5269,7 +5451,7 @@ function removeMatchingValues(arr1, arr2) {
 
     await doc.html(input, {
       callback: function (doc) {
-        doc.save(formattedDate + "_-_SKO_report_"+usedname+"_-_Dockets received - timeline.pdf");
+        doc.save(formattedDate + "_-_SKO_report_" + usedname + "_-_Dockets received - timeline.pdf");
         setIsPdfLoad(false); // Save after rendering
       },
       x: 10,
@@ -7212,7 +7394,7 @@ function removeMatchingValues(arr1, arr2) {
                           </div>
 
 
-                          <div style={{ visibility: 'hidden' , position : 'absolute' }}>
+                          <div style={{ visibility: 'hidden', position: 'absolute' }}>
                             <div ref={pdfRefredone}  >
 
                               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }} className="fonttttttt">Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
@@ -7427,7 +7609,7 @@ function removeMatchingValues(arr1, arr2) {
                           </div>
 
 
-                          <div style={{ visibility: 'hidden' , position : 'absolute' }}>
+                          <div style={{ visibility: 'hidden', position: 'absolute' }}>
                             <div ref={pdfRefred}  >
 
                               <p style={{ fontWeight: '700', fontSize: 25, color: '#000', wordSpacing: -5 }} className="fonttttttt">Dockets received - timeline - From {selectedOptionsfine[0]?.label}to
@@ -7449,7 +7631,7 @@ function removeMatchingValues(arr1, arr2) {
 
                               })()}</p>
 
-                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >{usedname }</p>
+                              <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, wordSpacing: -5 }} >{usedname}</p>
                               <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, wordSpacing: -5 }} >For the period {(() => {
                                 const datefineda = new Date(dateRange[0]);
 
@@ -7572,244 +7754,244 @@ function removeMatchingValues(arr1, arr2) {
 
 
         <div className="d-none" style={{ visibility: 'hidden' }}>
-                   <div ref={pdfRef}  >
-       
-                     <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }} className="fonttttttt">Dockets Completion Time - From {selectedOptionsfine[0]?.label} to {selectedOptionsfine[0]?.label === "Minimum" ? " Maximum" : " Minimum"}</p>
-       
-       
-                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }}   className="fonttttttt" > {(() => {
-       
-                       const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
-                       const result = selectedOptions.map(item => item.label).join(",") // Join without spaces first
-                         .replace(/,/g, ", ");
-       
-       
-                       if (result === "" || result === undefined || result === null) {
-                         return 'All Venue'
-                       } else {
-       
-                         return result
-       
-                       }
-       
-       
-                     })()}</p>
-       
-       
-       
-                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, }} >{usedname}</p>
-                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} className="fonttttttt" >For the period {(() => {
-                       const datefineda = new Date(dateRange[0]);
-       
-                       const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                         day: "2-digit",
-                         month: "short",
-                         year: "numeric"
-                       }).replace(/,/g, "");
-       
-                       return (formattedDate)
-                     })()} to {(() => {
-                       const datefineda = new Date(dateRange[1]);
-       
-                       const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                         day: "2-digit",
-                         month: "short",
-                         year: "numeric"
-                       }).replace(/,/g, "");
-       
-                       return (formattedDate)
-                     })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
-                     <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >Compared with the period {(() => {
-                       const datefineda = new Date(dateRangetwo[0]);
-       
-                       const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                         day: "2-digit",
-                         month: "short",
-                         year: "numeric"
-                       }).replace(/,/g, "");
-       
-                       return (formattedDate)
-                     })()} to {(() => {
-                       const datefineda = new Date(dateRangetwo[1]);
-       
-                       const formattedDate = datefineda.toLocaleDateString("en-GB", {
-                         day: "2-digit",
-                         month: "short",
-                         year: "numeric"
-                       }).replace(/,/g, "");
-       
-                       return (formattedDate)
-                     })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
-       
-                     <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, }} className="fonttttttt"  >Table ranges contains: All</p>
-                     <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Stages contains: {(() => {
-       
-                       const result = selectedhubOptions.map(item => item.label).join(",") // Join without spaces first
-                         .replace(/,/g, ", ");
-       
-                       if (result === "" || result === undefined || result === null) {
-                         return 'All'
-                       } else {
-       
-                         return result
-       
-                       }
-       
-       
-                     })()} </p>
-                     <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"   >Courses contains: {(() => {
-       
-                       const result = selectedCources.map(item => item.label).join(",") // Join without spaces first
-                         .replace(/,/g, ", ");
-       
-                       if (result === "" || result === undefined || result === null) {
-                         return 'All'
-                       } else {
-       
-                         return result
-       
-                       }
-       
-       
-                     })()}</p>
-       
-       
-       
-       
-       
-                     <div className="d-flex gap-5" style={{ marginTop: 20, borderBottom: "1px solid #ccc" }}>
-       
-                       <div style={{ width: "40%" }}>
-                         <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                         <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{
-                           editall?.stats?.averageProcessTime || 0}</span></p>
-                       </div>
-                       <div style={{ width: "40%", display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
-                         <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                         <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{editallone?.stats?.averageProcessTime || 0}</span></p>
-                       </div>
-                       <div style={{ width: "20%", display: 'flex', justifyContent: 'end', alignItems: 'end', flexDirection: 'column' }}>
-                         <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', textAlign: 'left' }}>Variance</p>
-                         <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >
-                           {(() => {
-                             let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
-                             let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
-       
-                             // Calculate average
-                             let average = Math.round((numOne + numTwo) / 2);
-       
-                             return <span >{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }} >{average > 0 ? <img src="up_arw.png"
-                               style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-       
-                               }} className="" alt="Example Image" /> :
-                               <img src="d_arw.png"
-                                 style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
-       
-                                 }} className="" alt="Example Image" />}</span></span>
-       
-       
-                           })()}</span></p>
-                       </div>
-       
-                     </div>
-       
-       
-       
-                     {
-                       editall?.orders?.map((dfgh, index) => {
-                         const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
-       
-                         return (
-                           <div key={index} style={{ borderBottom: "1px solid #ccc" }}  >
-                             <div className="d-flex gap-5" >
-                               {/* Left Column */}
-                               <div style={{ width: "40%" }}>
-                                 <div className="d-flex  " style={{}}>
-                                   <p style={{ paddingTop: 15 }}>
-                                     <span style={{ fontWeight: "400", color: index === 0 ? 'red' : "#000", fontSize: 15 }} >{dfgh?.processtime + ". " || "N/A"}<span
-                                       style={{ color: '#000' }}> {dfgh?.date + " " + "[" +
-                                         dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span></span>
-                                   </p>
-       
-                                 </div>
-       
-                               </div>
-       
-                               {/* Center Column */}
-                               {correspondingErv ? (
-                                 <div style={{ width: "40%", }}>
-                                   <div className="d-flex  " >
-                                     <p style={{ paddingTop: 15 }}>
-                                       <span style={{ fontWeight: "400", color: "#000", fontSize: 15 }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
-                                         correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
-                                     </p>
-       
-       
-                                   </div>
-       
-                                 </div>
-                               ) : (
-                                 <div style={{ width: "40%" }}></div>
-                               )}
-       
-                               {/* Right Column (Percentage Calculation) */}
-                               <div
-                                 style={{
-                                   justifyContent: "end",
-                                   alignItems: "center",
-                                   display: "flex",
-                                   width: "20%",
-                                 }}
-                               >
-                                 <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px", fontSize: 15 }}>
-       
-                                   <span>
-                                     {(() => {
-                                       const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
-                                       const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
-       
-                                       let percentageChange = 0;
-                                       if (processTimeTwo > 0) {
-                                         percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
-                                       }
-       
-                                       return (
-                                         <span>
-                                           {percentageChange.toFixed(2) + "%"}
-                                           <span
-                                             style={{
-                                               color: percentageChange > 0 ? "green" : "red",
-                                               fontWeight: "700",
-                                             }}
-                                           >
-                                             {percentageChange > 0 ? (
-                                               <img
-                                                 src="up_arw.png"
-                                                 style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                 alt="up arrow"
-                                               />
-                                             ) : (
-                                               <img
-                                                 src="d_arw.png"
-                                                 style={{ width: 16, height: 16, cursor: "pointer" }}
-                                                 alt="down arrow"
-                                               />
-                                             )}
-                                           </span>
-                                         </span>
-                                       );
-                                     })()}
-                                   </span>
-                                 </p>
-                               </div>
-                             </div>
-       
-                           </div>
-                         );
-                       })
-                     }
-                   </div >
-                 </div>
+          <div ref={pdfRef}  >
+
+            <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }} className="fonttttttt">Dockets Completion Time - From {selectedOptionsfine[0]?.label} to {selectedOptionsfine[0]?.label === "Minimum" ? " Maximum" : " Minimum"}</p>
+
+
+            <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt" > {(() => {
+
+              const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
+              const result = selectedOptions.map(item => item.label).join(",") // Join without spaces first
+                .replace(/,/g, ", ");
+
+
+              if (result === "" || result === undefined || result === null) {
+                return 'All Venue'
+              } else {
+
+                return result
+
+              }
+
+
+            })()}</p>
+
+
+
+            <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: 20, }} >{usedname}</p>
+            <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20 }} className="fonttttttt" >For the period {(() => {
+              const datefineda = new Date(dateRange[0]);
+
+              const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+              }).replace(/,/g, "");
+
+              return (formattedDate)
+            })()} to {(() => {
+              const datefineda = new Date(dateRange[1]);
+
+              const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+              }).replace(/,/g, "");
+
+              return (formattedDate)
+            })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
+            <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, }} className="fonttttttt"  >Compared with the period {(() => {
+              const datefineda = new Date(dateRangetwo[0]);
+
+              const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+              }).replace(/,/g, "");
+
+              return (formattedDate)
+            })()} to {(() => {
+              const datefineda = new Date(dateRangetwo[1]);
+
+              const formattedDate = datefineda.toLocaleDateString("en-GB", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+              }).replace(/,/g, "");
+
+              return (formattedDate)
+            })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
+
+            <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, }} className="fonttttttt"  >Table ranges contains: All</p>
+            <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"  >Stages contains: {(() => {
+
+              const result = selectedhubOptions.map(item => item.label).join(",") // Join without spaces first
+                .replace(/,/g, ", ");
+
+              if (result === "" || result === undefined || result === null) {
+                return 'All'
+              } else {
+
+                return result
+
+              }
+
+
+            })()} </p>
+            <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, }} className="fonttttttt"   >Courses contains: {(() => {
+
+              const result = selectedCources.map(item => item.label).join(",") // Join without spaces first
+                .replace(/,/g, ", ");
+
+              if (result === "" || result === undefined || result === null) {
+                return 'All'
+              } else {
+
+                return result
+
+              }
+
+
+            })()}</p>
+
+
+
+
+
+            <div className="d-flex gap-5" style={{ marginTop: 20, borderBottom: "1px solid #ccc" }}>
+
+              <div style={{ width: "40%" }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{
+                  editall?.stats?.averageProcessTime || 0}</span></p>
+              </div>
+              <div style={{ width: "40%", display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >{editallone?.stats?.averageProcessTime || 0}</span></p>
+              </div>
+              <div style={{ width: "20%", display: 'flex', justifyContent: 'end', alignItems: 'end', flexDirection: 'column' }}>
+                <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', textAlign: 'left' }}>Variance</p>
+                <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span >
+                  {(() => {
+                    let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
+                    let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
+
+                    // Calculate average
+                    let average = Math.round((numOne + numTwo) / 2);
+
+                    return <span >{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }} >{average > 0 ? <img src="up_arw.png"
+                      style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                      }} className="" alt="Example Image" /> :
+                      <img src="d_arw.png"
+                        style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
+
+                        }} className="" alt="Example Image" />}</span></span>
+
+
+                  })()}</span></p>
+              </div>
+
+            </div>
+
+
+
+            {
+              editall?.orders?.map((dfgh, index) => {
+                const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
+
+                return (
+                  <div key={index} style={{ borderBottom: "1px solid #ccc" }}  >
+                    <div className="d-flex gap-5" >
+                      {/* Left Column */}
+                      <div style={{ width: "40%" }}>
+                        <div className="d-flex  " style={{}}>
+                          <p style={{ paddingTop: 15 }}>
+                            <span style={{ fontWeight: "400", color: index === 0 ? 'red' : "#000", fontSize: 15 }} >{dfgh?.processtime + ". " || "N/A"}<span
+                              style={{ color: '#000' }}> {dfgh?.date + " " + "[" +
+                                dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span></span>
+                          </p>
+
+                        </div>
+
+                      </div>
+
+                      {/* Center Column */}
+                      {correspondingErv ? (
+                        <div style={{ width: "40%", }}>
+                          <div className="d-flex  " >
+                            <p style={{ paddingTop: 15 }}>
+                              <span style={{ fontWeight: "400", color: "#000", fontSize: 15 }} > {correspondingErv?.processtime + ". " || "N/A"} {correspondingErv?.date + " " + "[" +
+                                correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
+                            </p>
+
+
+                          </div>
+
+                        </div>
+                      ) : (
+                        <div style={{ width: "40%" }}></div>
+                      )}
+
+                      {/* Right Column (Percentage Calculation) */}
+                      <div
+                        style={{
+                          justifyContent: "end",
+                          alignItems: "center",
+                          display: "flex",
+                          width: "20%",
+                        }}
+                      >
+                        <p style={{ fontWeight: "500", color: "#000", marginBlock: "7px", fontSize: 15 }}>
+
+                          <span>
+                            {(() => {
+                              const processTimeOne = parseInt(dfgh?.processtime) || 0; // Extract number from '38min'
+                              const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
+
+                              let percentageChange = 0;
+                              if (processTimeTwo > 0) {
+                                percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
+                              }
+
+                              return (
+                                <span>
+                                  {percentageChange.toFixed(2) + "%"}
+                                  <span
+                                    style={{
+                                      color: percentageChange > 0 ? "green" : "red",
+                                      fontWeight: "700",
+                                    }}
+                                  >
+                                    {percentageChange > 0 ? (
+                                      <img
+                                        src="up_arw.png"
+                                        style={{ width: 16, height: 16, cursor: "pointer" }}
+                                        alt="up arrow"
+                                      />
+                                    ) : (
+                                      <img
+                                        src="d_arw.png"
+                                        style={{ width: 16, height: 16, cursor: "pointer" }}
+                                        alt="down arrow"
+                                      />
+                                    )}
+                                  </span>
+                                </span>
+                              );
+                            })()}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+
+                  </div>
+                );
+              })
+            }
+          </div >
+        </div>
 
 
 

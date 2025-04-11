@@ -301,23 +301,23 @@ const[send,setSend]=useState(false);
 
 
             if (foundUser.Role === 'admin') {
-
-              let funnnderr = getName(foundUser)
-              if (funnnderr === true) {
-                navigate("/admin", { state: { userdata: foundUser } });
-              } else {
-                navigate("/admin", { state: { userdata: foundUser } });
-              }
+ 
+                navigate("/admin", { state: { userdata: foundUser } }); 
             } else if (foundUser.Role === 'emp') {
               navigate("/admin", { state: { userdata: foundUser } });
               // navigate("/training");
             } else {
-              let funnnderr = getName(foundUser)
-              if (funnnderr === true) {
+
+              if(foundUser.Role === 'superadmin'){
                 navigate("/admin", { state: { userdata: foundUser } });
-              } else {
-                navigate("/admin", { state: { userdata: foundUser } });
+                return
               }
+              // let funnnderr = getName(foundUser)
+              // if (funnnderr === true) {
+              //   navigate("/admin", { state: { userdata: foundUser } });
+              // } else {
+              //   navigate("/admin", { state: { userdata: foundUser } });
+              // }
 
             }
           } else {
