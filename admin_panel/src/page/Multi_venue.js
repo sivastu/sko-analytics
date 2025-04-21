@@ -78,7 +78,7 @@ let Multi_venue = () => {
 
   let [basicall, setBasicall] = useState()
   let [basic, setBasic] = useState()
-  let [basicone, setBasicone] = useState([])
+  let [basicone, setBasicone] = useState([]) 
 
   let [basiconefive, setBasiconefive] = useState([])
   let [basiconesix, setBasiconesix] = useState([])
@@ -110,7 +110,7 @@ let Multi_venue = () => {
   let [stampval, setStampval] = useState([])
   //refund meals
   let [minperday, setMinperday] = useState([])
-  let [maxperday, setMaxperday] = useState([])
+  let [maxperday, setMaxperday] = useState([]) 
 
 
   const optionshub = [{
@@ -278,9 +278,9 @@ let Multi_venue = () => {
     let finedata = filterItemsByNote(finebyme.order)
 
 
-    let Stampdata = findFirstOccurrences(finebyme?.order?.STAMP)
-    console.log(Stampdata, 'kk')
-    setStampval(Stampdata)
+    // let Stampdata = findFirstOccurrences(finebyme?.order?.STAMP)
+    // console.log(Stampdata, 'kk')
+    setStampval(finebyme?.order?.STAMP)
 
     setIsOpen(true);
     setcval1(finebyme)
@@ -452,6 +452,35 @@ let Multi_venue = () => {
       },
     ],
   };
+
+  function parseRemarks(data) {
+    const lines = [];
+  
+    // Check for 'Refunuded' (add 'Refunded' if found)
+    if (data.includes("Refunuded")) {
+      lines.push("Refunded");
+    }
+  
+    // Extract values after "!" (excluding ones like !(C4hot))
+    const exclamations = data.match(/!\w[^$!]*/g);
+    if (exclamations) {
+      exclamations.forEach(entry => {
+        const cleaned = entry.trim().replace(/^!/, "");
+        if (!cleaned.startsWith("(")) {
+          lines.push(cleaned);
+        }
+      });
+    }
+  
+    // Extract values like (C4hot) or (C1starter)
+    const categoryMatch = data.match(/\(C\d+(.*?)\)/);
+    if (categoryMatch && categoryMatch[1]) {
+      lines.push(categoryMatch[1]);
+    }
+  
+    return lines;
+  }
+
   const OrderDisplay = ({ orders = {} }) => {
     if (!orders || Object.keys(orders).length === 0) {
       return <p style={{ textAlign: 'center', color: 'red' }}>No orders available</p>;
@@ -469,14 +498,14 @@ let Multi_venue = () => {
               Course: {course === "empty" ? '' : course}
             </p>
             <p style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}>
-              Time: R: {stampval[0]?.time} . | P: {stampval[1]?.time}. | H: {stampval[2]?.time}.
+            Time: {  findFirstOccurrenceByStatus(stampval , 'R' , key )} . |  {findFirstOccurrenceByStatus(stampval , 'P' , key )}. | {findFirstOccurrenceByStatus(stampval , 'H' , key )}.
             </p>
 
-            <div style={{ marginTop: 10 }}>
+            <div style={{ marginTop: 10 }}> 
               {items?.map((kai, index) => (
                 <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
                   <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>Item {index + 1}: {kai?.ITEM}</p>
-                  <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>Note: {kai?.NOTE || "No Note"}</p>
+                  <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>Note: {parseRemarks(kai?.NOTE)}</p>
                   <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
                     Edited: {["2", "12", "22", "32"].includes(kai?.STATUS) ? 'Yes' : "No"} |
                     Moved: {["3", "13", "23", "33"].includes(kai?.STATUS) ? 'Yes' : "No"} |
@@ -2318,6 +2347,40 @@ let Multi_venue = () => {
 
 
   };
+
+
+  function timeDifferencebug(startTime, endTime) {
+
+    console.log(endTime)
+
+    if (!endTime) {
+      return
+    }
+
+
+    // Extract the "S" event using regex
+    const match = endTime?.match(/\b(\d{4})S\d\b/);
+
+    if (match) {
+      const time = match[1]; // Extract the 4-digit time (e.g., "1500")
+      const formattedTime = `${time.slice(0, 2)}:${time.slice(2)}`; // Convert to HH:mm
+
+      // console.log(formattedTime); // Output: "15:00"
+
+
+
+      const [startHour, startMinute] = startTime.split(":").map(Number);
+      const [endHour, endMinute] = formattedTime.split(":").map(Number);
+
+      let diffHours = endHour - startHour;
+      let diffMinutes = endMinute - startMinute;
+
+       
+      return diffMinutes;
+    }
+
+
+  }
 
 
   const handleChangehubone = (selectedss) => {
@@ -4288,8 +4351,8 @@ let Multi_venue = () => {
 
             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-
+            // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
 
             if (processTime < 2) {
 
@@ -4521,8 +4584,8 @@ let Multi_venue = () => {
             // Calculate processing time
             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-
+            // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
             console.log(processTime, 'processTime  processTime ')
 
             // if( )
@@ -4753,8 +4816,8 @@ let Multi_venue = () => {
 
             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-
+            // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
             const regex = new RegExp(bitedata, "i"); // "i" makes it case-insensitive
             const isMatch = regex.test(order.DOCKETID);
 
@@ -4825,6 +4888,22 @@ let Multi_venue = () => {
 
   }
 
+
+  function findFirstOccurrenceByStatus(stampData, statusLetter, statusIndex) {
+    const [, ...actions] = stampData.split(" ");
+    const targetSuffix = `${statusLetter}${statusIndex}`;
+  
+    for (let action of actions) {
+      if (action.endsWith(targetSuffix)) {
+        const time = action.substring(0, 4);
+        return `${statusLetter}${':'} ${" "} ${time.substring(0, 2)}:${time.substring(2, 4)}`;
+      }
+    }
+  
+    // If not found, you can return null or a message
+    return null;
+  }
+
   let callfordataonetwosearch = (two, bitedata) => {
 
 
@@ -4849,8 +4928,8 @@ let Multi_venue = () => {
 
             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-
+            // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
 
             console.log(processTime, 'processTimeprocessTimeprocessTimeprocessTime')
             const regex = new RegExp(bitedata, "i"); // "i" makes it case-insensitive
@@ -7379,7 +7458,7 @@ let Multi_venue = () => {
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             {/* Left Scroll Button */}
                             <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
-                            <p className="gggjgjjg"># of new dockets</p>
+                            <p className="gggjgjjg">Average waiting time</p>
                             {/* Scrollable Chart Container */}
                             <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                               <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
@@ -7596,7 +7675,7 @@ let Multi_venue = () => {
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             {/* Left Scroll Button */}
                             <button onClick={scrollLeftfine} style={buttonStyle}>⬅</button>
-                            <p className="gggjgjjg">Average waiting time</p>
+                            <p className="gggjgjjg"># of new dockets</p>
                             {/* Scrollable Chart Container */}
                             <div ref={finefine} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                               <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
