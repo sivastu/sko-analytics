@@ -3410,18 +3410,57 @@ function removeMatchingValues(arr1, arr2) {
             data[group][location][section][date].forEach(order => {
               let stamps = order.STAMP.split(" "); // Split STAMP string
               stamps.forEach(stamp => {
-                let extractedTime = extractTime(stamp);
-                if (extractedTime) {
-                  let interval = roundToInterval(extractedTime);
-                  timeCounts[interval] = (timeCounts[interval] || 0) + order.ITEMS.length;
+                const hasRParen = stamp.includes("R0");
+                console.log(hasRParen , 'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
+
+                if(hasRParen){
+                  let extractedTime = extractTime(stamp);
+
+                  console.log(extractedTime , 'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
+  
+  
+                  if (extractedTime) {
+                    let interval = roundToInterval(extractedTime);
+
+                    timeCounts[interval] = (timeCounts[interval] || 0) + order.ITEMS.length;
+
+                    console.log(timeCounts[interval] , 'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
+
+  
+                  }
                 }
+
+               
               });
             });
           }
         }
       }
-    }
+    } 
 
+    if (Object.keys(timeCounts).length === 1) {
+      const key = Object.keys(timeCounts)[0];
+      const value = timeCounts[key];
+    
+      const [hourStr, minStr] = key.split('.');
+      let hour = parseInt(hourStr, 10);
+      let min = parseInt(minStr, 10);
+    
+      min -= 10;
+      if (min < 0) {
+        min += 60;
+        hour -= 1;
+      }
+    
+      const newKey = `${hour}.${min.toString().padStart(2, '0')}`;
+      timeCounts[newKey] = value;
+    }
+    
+    console.log(timeCounts);
+    
+
+    console.log(timeCounts, 'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
+    //  timeCounts = {13.10: 24, 13.20: 21,}
     // Convert to final array format
     return Object.keys(timeCounts)
       .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
