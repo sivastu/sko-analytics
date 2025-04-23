@@ -19,7 +19,7 @@ let Multivenues = () => {
  const { state } = useContext(DataContext);
 
   useEffect(() => {
-    loginCheck(state?.user)
+    loginCheck(state?.user) 
   }, []) 
 
 

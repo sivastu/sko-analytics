@@ -6085,18 +6085,18 @@ function removeMatchingValues(arr1, arr2) {
 
                         <div >
                           <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.moved?.length}</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.edited?.length}</p>
                         </div>
                         <div >
                           <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}  </p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}  </p>
                         </div>
                         <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}> <span >
                             {(() => {
-                              let datd = editallone?.moved?.length
+                              let datd = editallone?.edited?.length
 
-                              let datdtwo = editall?.moved?.length
+                              let datdtwo = editall?.edited?.length
 
                               let tot = ((datdtwo - datd) / datd) * 100
 
@@ -6122,18 +6122,18 @@ function removeMatchingValues(arr1, arr2) {
 
                         <div >
                           <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.edited?.length}</p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editall?.moved?.length}</p>
                         </div>
                         <div >
                           <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Moved</p>
-                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.edited?.length}  </p>
+                          <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{editallone?.moved?.length}  </p>
                         </div>
                         <div style={{ justifyContent: 'center', alignItems: 'center', display: 'flex' }} >
                           <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}> <span >
                             {(() => {
-                              let datd = editallone?.edited?.length
+                              let datd = editallone?.moved?.length
 
-                              let datdtwo = editall?.edited?.length
+                              let datdtwo = editall?.moved?.length
 
                               let tot = ((datdtwo - datd) / datd) * 100
 
