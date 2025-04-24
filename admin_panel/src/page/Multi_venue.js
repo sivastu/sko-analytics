@@ -68,9 +68,9 @@ const customStyles = {
 // Make sure to bind modal to your appElement (https://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement('#root');
 
+ 
 
-
-let Multi_venue = () => {
+let Multi_venue = () => { 
   let [data, setData] = useState();
   const [dateRange, setDateRange] = useState([null, null]); // [startDate, endDate]
   const [startDate, endDate] = dateRange;
@@ -486,22 +486,24 @@ let Multi_venue = () => {
       return <p style={{ textAlign: 'center', color: 'red' }}>No orders available</p>;
     }
 
-
+    
 
     let stamp = cval1?.order?.STAMP
 
     return (
       <div>
-        {Object.entries(orders).map(([course, items]) => (
+        {Object.entries(orders).map(([course, items] , key) => (
           <div key={course} style={{ marginBottom: 20 }}>
             <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>
               Course: {course === "empty" ? '' : course}
             </p>
-            <p style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}>
-            Time: {  findFirstOccurrenceByStatus(stampval , 'R' , key )} . |  {findFirstOccurrenceByStatus(stampval , 'P' , key )}. | {findFirstOccurrenceByStatus(stampval , 'H' , key )}.
+            <p onClick={()=>{
+              console.log(orders , 'stampvalstampvalstampval')
+            }} style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}>
+              Time:  {  findFirstOccurrenceByStatus(stampval , 'R' , key )} . | {findFirstOccurrenceByStatus(stampval , 'P' , key )}. | {findFirstOccurrenceByStatus(stampval , 'H' , key )}.
             </p>
 
-            <div style={{ marginTop: 10 }}> 
+            <div style={{ marginTop: 10 }}>
               {items?.map((kai, index) => (
                 <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
                   <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>Item {index + 1}: {kai?.ITEM}</p>
@@ -4560,235 +4562,94 @@ let Multi_venue = () => {
   }
 
   let callfordataonetwo = (two) => {
-
-
-    function processData(data) {
-      let result = [];
-      let processTimes = [];
-
-      Object.entries(data).forEach(([dateKey, orders]) => {
-        orders.forEach(order => {
-          const date = dateKey.split(") ")[1]; // Extract the date from the key
-          const stampParts = order.STAMP.split(" ");
-          const extractedDate = stampParts[0].substring(0, 8); // Get the first 8 characters for the date
-          const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
-
-          const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-          if (timeEntries.length >= 2) {
-            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
-            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
-
-            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
-            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
-
-            // Calculate processing time
-            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
-            console.log(processTime, 'processTime  processTime ')
-
-            // if( )
-            if (processTime < 2) {
-              processTimes.push(processTime);
-
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
-            } else {
-              processTimes.push(processTime);
-
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
-            }
-
-
-          }
-        });
-      });
-
-      // Sort orders by process time (high to low)
-      result.sort((a, b) => b.processtime - a.processtime);
-
-      // Convert process time back to string format for display
-      result = result.map(order => ({
-        ...order,
-        processtime: `${order.processtime}min`
-      }));
-
-      // Calculate average, min, and max processing time
-      if (processTimes.length > 0) {
-        const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
-        const averageTime = Math.round(totalTime / processTimes.length);
-        const minTime = Math.min(...processTimes);
-        const maxTime = Math.max(...processTimes);
-
-        return {
-          orders: result,
-          stats: {
-            averageProcessTime: `${averageTime}min`,
-            minProcessTime: `${minTime}min`,
-            maxProcessTime: `${maxTime}min`
-          }
-        };
-      }
-
-      return { orders: result, stats: null };
-    }
-
-
-    let newalldata = processData(two)
-
-    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
-    setEditallone(newalldata)
-
-    // const categorizeItems = (datasssssss) => {
-    //   const edited = ["2", "12", "22", "32"];
-    //   const moved = ["3", "13", "23", "33"];
-    //   const deleted = ["4", "24"];
-
-    //   const result = {
-    //     edited: [],
-    //     moved: [],
-    //     deleted: [],
-    //     served: [],
-    //     tableMoved: []
-    //   };
-
-    //   for (const [date, entries] of Object.entries(datasssssss)) {
-
-
-    //     entries.forEach(entry => {
-
-
-    //       if (entry.NOTE && entry.NOTE.includes("$ND$")) {
-    //         result.tableMoved.push(entry);
-    //       }
-
-
-    //       entry.ITEMS.forEach(item => {
-    //         if (edited.includes(item.STATUS)) {
-    //           result.edited.push(item);
-    //         } else if (moved.includes(item.STATUS)) {
-    //           result.moved.push(item);
-    //         } else if (deleted.includes(item.STATUS)) {
-    //           result.deleted.push(item);
-    //         } else if (parseInt(item.STATUS) > 20) {
-    //           result.served.push(item);
-    //         }
-    //       });
-    //     });
-
-    //   }
-
-    //   return result;
-    // };
-
-    // // let editttsone = categorizeItems(one)
-    // let editttstwo = categorizeItems(two)
-
-    // // console.log(editttsone, 'editttsoneeditttsone')
-
-
-    // // setEditall(editttsone)
-    // setEditallone(editttstwo)
-
-    // const processItems = (data) => {
-    //   const dishCounts = {};
-
-    //   // Iterate through the data to collect and process dishes
-    //   for (const [date, entries] of Object.entries(data)) {
-
-
-
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Remove "Sp\\" prefix if present
-    //         const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
-
-    //         // If dish is already counted, increment its count and append data
-    //         if (dishCounts[cleanItemName]) {
-    //           dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
-    //           dishCounts[cleanItemName].data.push(item);
-    //         } else {
-    //           // If not, initialize a new entry for the dish
-    //           dishCounts[cleanItemName] = {
-    //             count: parseInt(item.QUANTITY, 10),
-    //             name: cleanItemName,
-    //             data: [item],
-    //           };
-    //         }
-    //       });
-    //     });
-    //   }
-
-    //   // Convert the dishCounts object to an array
-    //   return Object.values(dishCounts).sort((a, b) => b.count - a.count);
-    // };
-
-
-    // // let minnscount = processItems(one)
-    // let maxnscount = processItems(two)
-    // // setServed(minnscount)
-    // setServedone(maxnscount)
-
-    // const processRefundedItems = (data) => {
-    //   const results = [];
-
-    //   // Iterate through each date's data
-    //   for (const [date, entries] of Object.entries(data)) {
-    //     let refundedItems = [];
-
-
-
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Check if "Refunded" exists in the ITEM field
-    //         if (item.NOTE.includes("Refunded")) {
-    //           refundedItems.push(item);
-    //         }
-    //       });
-    //     });
-
-    //     if (refundedItems.length > 0) {
-    //       // Calculate the total quantity for refunded items
-    //       const totalQuantity = refundedItems.reduce(
-    //         (sum, item) => sum + parseInt(item.QUANTITY, 10),
-    //         0
-    //       );
-
-    //       results.push({
-    //         date,
-    //         count: totalQuantity,
-    //         name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
-    //         data: refundedItems,
-    //       });
-    //     }
-    //   }
-
-    //   return results;
-    // };
-
-    // // let refundcount = processRefundedItems(one)
-    // let refundcounttwo = processRefundedItems(two)
-    // // setMinperday(refundcount)
-    // setMaxperday(refundcounttwo)
-
-
-
-
-  }
+ 
+     function processData(data) {
+       let result = [];
+       let processTimes = [];
+ 
+  
+ 
+       Object.entries(data).forEach(([dateKey, orders]) => {
+         orders.forEach(order => {
+           const date = dateKey.split(") ")[1]; // Extract the date from the key
+           const stampParts = order.STAMP.split(" ");
+           const extractedDate = stampParts[0].substring(0, 8); // Get the first 8 characters for the date
+           const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
+ 
+           const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
+           if (timeEntries.length >= 2) {
+             const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
+             const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
+ 
+             const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
+             const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
+ 
+             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+             // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+             let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+ 
+                
+ 
+             if (processTime < 2) { 
+  
+             } else {
+               processTimes.push(processTime);
+ 
+               result.push({
+                 date: formattedDate,
+                 processtime: processTime, // Store as a number for sorting
+                 table: `T${order.TABLE}`,
+                 starttime: `@${startTimeFormatted}`,
+                 staff: order.STAFF,
+                 order: order
+               });
+             }
+ 
+ 
+ 
+             // Calculate processing time
+ 
+           }
+         });
+       });
+ 
+       // Sort orders by process time (high to low)
+       result.sort((a, b) => b.processtime - a.processtime);
+ 
+       // Convert process time back to string format for display
+       result = result.map(order => ({
+         ...order,
+         processtime: `${order.processtime}min`
+       }));
+ 
+       // Calculate average, min, and max processing time
+       if (processTimes.length > 0) {
+         const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
+         const averageTime = Math.round(totalTime / processTimes.length);
+         const minTime = Math.min(...processTimes);
+         const maxTime = Math.max(...processTimes);
+ 
+         return {
+           orders: result,
+           stats: {
+             averageProcessTime: `${averageTime}min`,
+             minProcessTime: `${minTime}min`,
+             maxProcessTime: `${maxTime}min`
+           }
+         };
+       }
+ 
+       return { orders: result, stats: null };
+     }
+ 
+ 
+     let newalldata = processData(two)
+ 
+     console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
+     setEditallone(newalldata)
+  
+   }
 
 
   let callfordataonesearch = (one, bitedata) => {
@@ -7080,7 +6941,47 @@ let Multi_venue = () => {
                         <div>
                           {
                             editall?.orders?.map((dfgh, index) => {
+
+
+                              if(index > 100 ){
+                                return
+                              }
+
+
+
+
+
                               const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `two`
+
+
+                              let val4 = 0
+
+                              if(index === 0){
+                                if(selectedOptionsfine?.label === "Maximum"){
+                                  const number1 =  dfgh?.processtime && /\d+/.test(dfgh?.processtime) ? Number(dfgh?.processtime.match(/\d+/)[0]) : 0  
+                                  const number2 =  correspondingErv?.processtime && /\d+/.test(correspondingErv?.processtime) ? Number(correspondingErv?.processtime.match(/\d+/)[0]) : 0  
+
+                                  if(number1 > number2){
+                                    val4 = 1
+                                  }else if (number1 === number2){
+                                    val4 = 6
+                                  }else{
+                                    val4 = 2
+                                  }
+                                }else{
+                                  const number1 =  dfgh?.processtime && /\d+/.test(dfgh?.processtime) ? Number(dfgh?.processtime.match(/\d+/)[0]) : 0  
+                                  const number2 =  correspondingErv?.processtime && /\d+/.test(correspondingErv?.processtime) ? Number(correspondingErv?.processtime.match(/\d+/)[0]) : 0  
+
+
+                                  if(number1 < number2){
+                                    val4 = 3
+                                  }else if (number1 === number2){ 
+                                    val4 = 7
+                                  }else{
+                                    val4 = 4
+                                  }
+                                }
+                              }
 
                               return (
                                 <div key={index}>
@@ -7088,10 +6989,12 @@ let Multi_venue = () => {
                                     {/* Left Column */}
                                     <div style={{ width: "40%" }}>
                                       <div className="d-flex align-items-center" style={{}}>
-                                        <p style={{ fontWeight: "700", color: "#000", width: "60%", marginTop: 15 }}>
-                                          {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{dfgh?.date + " " + "[" +
-                                            dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
-                                        </p>
+                                      <p onClick={()=>{
+                                            console.log(val4, 'val4' , selectedOptionsfine.label)
+                                          }} style={{ fontWeight: "700", color: val4 === 1 || val4 === 6  ? "#CA424E" :  val4 === 3 || val4 === 7 ? "#316AAF" : "#000", width: "60%", marginTop: 15 }}>
+                                            {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{dfgh?.date + " " + "[" +
+                                              dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff} </span>
+                                          </p>
 
                                         <img
                                           onClick={() => { openModal(dfgh, correspondingErv) }}
@@ -7106,10 +7009,10 @@ let Multi_venue = () => {
                                     {correspondingErv ? (
                                       <div style={{ width: "40%" }}>
                                         <div className="d-flex align-items-center">
-                                          <p style={{ fontWeight: "700", color: index === 0 ? '#CA424E' : "#000", width: "60%", marginTop: 15 }}>
-                                            {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{correspondingErv?.date + " " + "[" +
-                                              correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
-                                          </p>
+                                        <p style={{ fontWeight: "700", color: val4 === 2 || val4 === 6   ? "#CA424E" :  val4 === 4 || val4 === 7 ? "#316AAF" :  "#000", width: "60%", marginTop: 15 }}>
+                                              {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{correspondingErv?.date + " " + "[" +
+                                                correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
+                                            </p>
 
                                           <img
                                             onClick={() => { openModal(dfgh, correspondingErv) }}

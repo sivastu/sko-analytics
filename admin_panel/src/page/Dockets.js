@@ -1219,6 +1219,9 @@ let Dockets = () => {
 
   const handleChangefine = (selected) => {
     console.log(editall, 'selected')
+
+    console.log(editallone, 'selected')
+ 
     setSetservedatare(selected.value)
     if (editall.length === 0) {
  
@@ -3211,10 +3214,12 @@ let Dockets = () => {
         ...order,
         processtime: `${order.processtime}min`
       }));
-
+      console.log(processTimes, 'newalldatanewalldatanewalldatanewalldata bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
       // Calculate average, min, and max processing time
       if (processTimes.length > 0) {
-        const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
+        const totalTime = processTimes.reduce((sum, time) => {
+          return sum + (typeof time === 'number' ? time : 0);
+        }, 0);
         const averageTime = Math.round(totalTime / processTimes.length);
         const minTime = Math.min(...processTimes);
         const maxTime = Math.max(...processTimes);
@@ -3235,162 +3240,19 @@ let Dockets = () => {
 
     let newalldata = processData(one)
 
-    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
+    
     setEditall(newalldata)
-
-    // console.log( JSON.stringify( alltype) , 'oneone') 
-
-    // if(alltype.length === 0 ){
-
-    // }else{
-
-    // }
-
-
-    // const categorizeItems = (datasssssss) => {
-    //   const edited = ["2", "12", "22", "32"];
-    //   const moved = ["3", "13", "23", "33"];
-    //   const deleted = ["4", "24"];
-
-    //   const result = {
-    //     edited: [],
-    //     moved: [],
-    //     deleted: [],
-    //     served: [],
-    //     tableMoved: []
-    //   };
-
-    //   for (const [date, entries] of Object.entries(datasssssss)) {
-
-
-    //     entries.forEach(entry => {
-
-
-    //       if (entry.NOTE && entry.NOTE.includes("$ND$")) {
-    //         result.tableMoved.push(entry);
-    //       }
-
-
-    //       entry.ITEMS.forEach(item => {
-    //         if (edited.includes(item.STATUS)) {
-    //           result.edited.push(item);
-    //         } else if (moved.includes(item.STATUS)) {
-    //           result.moved.push(item);
-    //         } else if (deleted.includes(item.STATUS)) {
-    //           result.deleted.push(item);
-    //         } else if (parseInt(item.STATUS) > 20) {
-    //           result.served.push(item);
-    //         }
-    //       });
-    //     });
-
-    //   }
-
-    //   return result;
-    // };
-
-    // let editttsone = categorizeItems(one)
-    // // let editttstwo = categorizeItems(two)
-
-    // console.log(editttsone, 'editttsoneeditttsone')
-
-
-    // setEditall(editttsone)
-    // // setEditallone(editttstwo)
-
-    // const processItems = (data) => {
-    //   const dishCounts = {};
-
-    //   // Iterate through the data to collect and process dishes
-    //   for (const [date, entries] of Object.entries(data)) {
-
-
-
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Remove "Sp\\" prefix if present
-    //         const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
-
-    //         // If dish is already counted, increment its count and append data
-    //         if (dishCounts[cleanItemName]) {
-    //           dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
-    //           dishCounts[cleanItemName].data.push(item);
-    //         } else {
-    //           // If not, initialize a new entry for the dish
-    //           dishCounts[cleanItemName] = {
-    //             count: parseInt(item.QUANTITY, 10),
-    //             name: cleanItemName,
-    //             data: [item],
-    //           };
-    //         }
-    //       });
-    //     });
-    //   }
-
-    //   // Convert the dishCounts object to an array
-    //   return Object.values(dishCounts).sort((a, b) => b.count - a.count);
-    // };
-
-
-    // let minnscount = processItems(one)
-    // // let maxnscount = processItems(two)
-    // setServed(minnscount)
-    // // setServedone(maxnscount)
-
-    // const processRefundedItems = (data) => {
-    //   const results = [];
-
-    //   // Iterate through each date's data
-    //   for (const [date, entries] of Object.entries(data)) {
-    //     let refundedItems = [];
-
-
-
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Check if "Refunded" exists in the ITEM field
-    //         if (item?.NOTE?.includes("Refunded")) {
-    //           refundedItems.push(item);
-    //         }
-    //       });
-    //     });
-
-    //     if (refundedItems.length > 0) {
-    //       // Calculate the total quantity for refunded items
-    //       const totalQuantity = refundedItems.reduce(
-    //         (sum, item) => sum + parseInt(item.QUANTITY, 10),
-    //         0
-    //       );
-
-    //       results.push({
-    //         date,
-    //         count: totalQuantity,
-    //         name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
-    //         data: refundedItems,
-    //       });
-    //     }
-    //   }
-
-    //   return results;
-    // };
-
-    // let refundcount = processRefundedItems(one)
-    // // let refundcounttwo = processRefundedItems(two)
-    // setMinperday(refundcount)
-    // console.log(refundcount ,'refundcountrefundcountrefundcount')
-    // // setMaxperday(refundcounttwo)
-
-
-
+ 
 
   }
 
   let callfordataonetwo = (two) => {
 
-
     function processData(data) {
       let result = [];
       let processTimes = [];
+
+ 
 
       Object.entries(data).forEach(([dateKey, orders]) => {
         orders.forEach(order => {
@@ -3407,26 +3269,15 @@ let Dockets = () => {
             const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
             const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
 
-            // Calculate processing time
             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
             // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
             let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
 
-            console.log(processTime, 'processTime  processTime ')
+               
 
-            // if( )
-            if (processTime < 2) {
-              processTimes.push(processTime);
-
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
+            if (processTime < 2) { 
+ 
             } else {
               processTimes.push(processTime);
 
@@ -3440,6 +3291,9 @@ let Dockets = () => {
               });
             }
 
+
+
+            // Calculate processing time
 
           }
         });
@@ -3515,9 +3369,7 @@ let Dockets = () => {
             let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
             const regex = new RegExp(bitedata, "i"); // "i" makes it case-insensitive
             const isMatch = regex.test(order.DOCKETID);
-
-
-            console.log(processTime , 'mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm')
+ 
 
             if (isMatch) {
 
@@ -5574,6 +5426,10 @@ let Dockets = () => {
                           <div>
                             {
                               editall?.orders?.map((dfgh, index) => {
+
+                                if(index > 100 ){
+                                  return
+                                }
                                 const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `editallone`
 
                                 // Compare processtime at the 0th index only
@@ -5609,15 +5465,48 @@ let Dockets = () => {
                                 //   // console.log("No 'S' event found");
                                 // }
 
+                                let val4 = 0
+
+                                if(index === 0){
+                                  if(selectedOptionsfine?.label === "Maximum"){
+                                    const number1 =  dfgh?.processtime && /\d+/.test(dfgh?.processtime) ? Number(dfgh?.processtime.match(/\d+/)[0]) : 0  
+                                    const number2 =  correspondingErv?.processtime && /\d+/.test(correspondingErv?.processtime) ? Number(correspondingErv?.processtime.match(/\d+/)[0]) : 0  
+
+                                    if(number1 > number2){
+                                      val4 = 1
+                                    }else if (number1 === number2){
+                                      val4 = 6
+                                    }else{
+                                      val4 = 2
+                                    }
+                                  }else{
+                                    const number1 =  dfgh?.processtime && /\d+/.test(dfgh?.processtime) ? Number(dfgh?.processtime.match(/\d+/)[0]) : 0  
+                                    const number2 =  correspondingErv?.processtime && /\d+/.test(correspondingErv?.processtime) ? Number(correspondingErv?.processtime.match(/\d+/)[0]) : 0  
+
+
+                                    if(number1 < number2){
+                                      val4 = 3
+                                    }else if (number1 === number2){ 
+                                      val4 = 7
+                                    }else{
+                                      val4 = 4
+                                    }
+                                  }
+                                }
+
+
+
                                 return (
                                   <div key={index}>
                                     <div className="d-flex gap-5">
                                       {/* Left Column (Chosen Range) */}
                                       <div style={{ width: "40%" }}>
                                         <div className="d-flex align-items-center"> 
-                                          <p style={{ fontWeight: "700", color: index === 0 && isChosenRangeMax ? "#CA424E" : "#000", width: "60%", marginTop: 15 }}>
+                                          <p onClick={()=>{
+                                            console.log(val4, 'val4' , selectedOptionsfine.label)
+                                          }} style={{ fontWeight: "700", color: val4 === 1 || val4 === 6  ? "#CA424E" :  val4 === 3 || val4 === 7 ? "#316AAF" : "#000", width: "60%", marginTop: 15 }}>
                                             {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{dfgh?.date + " " + "[" +
-                                              dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff}</span>
+                                              dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff} </span>
                                           </p>
                                           <img
                                             onClick={() => { openModal(dfgh, correspondingErv) }}
@@ -5632,7 +5521,7 @@ let Dockets = () => {
                                       {correspondingErv ? (
                                         <div style={{ width: "40%" }}>
                                           <div className="d-flex align-items-center">
-                                            <p style={{ fontWeight: "700", color: index === 0 && isComparingRangeMin ? "#316AAF" : "#000", width: "60%", marginTop: 15 }}>
+                                            <p style={{ fontWeight: "700", color: val4 === 2 || val4 === 6   ? "#CA424E" :  val4 === 4 || val4 === 7 ? "#316AAF" :  "#000", width: "60%", marginTop: 15 }}>
                                               {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{correspondingErv?.date + " " + "[" +
                                                 correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                                             </p>

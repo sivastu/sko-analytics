@@ -3411,21 +3411,16 @@ function removeMatchingValues(arr1, arr2) {
               let stamps = order.STAMP.split(" "); // Split STAMP string
               stamps.forEach(stamp => {
                 const hasRParen = stamp.includes("R0");
-                console.log(hasRParen , 'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
-
+              
                 if(hasRParen){
                   let extractedTime = extractTime(stamp);
-
-                  console.log(extractedTime , 'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
-  
+ 
   
                   if (extractedTime) {
                     let interval = roundToInterval(extractedTime);
 
                     timeCounts[interval] = (timeCounts[interval] || 0) + order.ITEMS.length;
-
-                    console.log(timeCounts[interval] , 'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
-
+ 
   
                   }
                 }
