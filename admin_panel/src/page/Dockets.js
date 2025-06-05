@@ -229,9 +229,6 @@ let Dockets = () => {
   function openModal(finebyme, finebyme2) {
     console.log(JSON.stringify(finebyme), 'finebymefinebyme')
 
-    console.log(JSON.stringify(finebyme2), 'finebyme2finebyme2finebyme2finebyme2finebyme2')
-
-
     function filterItemsByNote(order) {
       const groupedItems = {};
 
@@ -264,6 +261,45 @@ let Dockets = () => {
 
     setIsOpen(true);
     setcval1(finebyme)
+    setcval2(finedata)
+
+
+  }
+
+   function openModals(finebyme, finebyme2) { 
+
+    function filterItemsByNote(order) {
+      const groupedItems = {};
+
+      order.ITEMS.forEach(item => {
+        let note = (item.NOTE || "").toString().trim(); // Ensure it's always a string
+
+        if (!note) {
+          note = "empty"; // If NOTE is empty, assign "empty"
+        } else if (note.startsWith("(") && note.includes(")")) {
+          const match = note.match(/\([A-Z]\d+([a-zA-Z]+)\)/); // Extracts text after letter and number inside ()
+          if (match) {
+            note = match[1]; // Extract only the category name
+          }
+        }
+
+        if (!groupedItems[note]) {
+          groupedItems[note] = [];
+        }
+
+        groupedItems[note].push(item);
+      });
+
+      return groupedItems;
+    }
+    let finedata = filterItemsByNote(finebyme2.order)
+
+
+    // let Stampdata = findFirstOccurrences(finebyme?.order?.STAMP) 
+    setStampval(finebyme2?.order?.STAMP)
+
+    setIsOpen(true);
+    setcval1(finebyme2)
     setcval2(finedata)
 
 
@@ -1513,7 +1549,7 @@ let Dockets = () => {
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
 
 
-    console.log(JSON.stringify(alltype), 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj zzzzzzzzzzzzzzzzzz')
+    console.log(takeaways, 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj zzzzzzzzzzzzzzzzzz')
 
 
     cources = cources.filter(item => item.value !== "All");
@@ -1834,34 +1870,88 @@ let Dockets = () => {
 
     if (takeaways.length != 0 && takeaway === true) {
 
-      function filterByNote(data, regex) {
-        if (Array.isArray(data)) {
-          return data
-            .map(item => filterByNote(item, regex))
-            .filter(item => item !== null);
-        } else if (typeof data === 'object' && data !== null) {
-          if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
-            return {
-              ...data,
-              ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
-            };
-          } else if (!data.hasOwnProperty('NOTE')) {
-            let filteredObject = {};
-            for (let key in data) {
-              let filteredValue = filterByNote(data[key], regex);
-              if (filteredValue !== null) {
-                filteredObject[key] = filteredValue;
+
+      function filterByNoted(data, filterNotes) {
+        let filteredData = {};
+
+        for (let group in data) {
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let filteredOrders = data[group][location][section][date]
+                  .filter(order => {
+                    return order.NOTE && filterNotes.test(order.NOTE);
+                  });
+
+                if (filteredOrders.length > 0) {
+                  if (!filteredData[group]) filteredData[group] = {};
+                  if (!filteredData[group][location]) filteredData[group][location] = {};
+                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                  filteredData[group][location][section][date] = filteredOrders;
+                }
               }
             }
-            return Object.keys(filteredObject).length > 0 ? filteredObject : null;
           }
         }
-        return null;
-      }
-      const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
 
-      // const filteredData = filterByNote(originalData, regex);
-      alldat = filterByNote(alldat, regex);
+        return filteredData;
+      }
+
+      const filteredTakeaways = takeaways.filter(t => t.value.toLowerCase() !== 'all');
+
+      const keywordVariants = {
+        "Takeaways": ["takeaways", "takeaway", "take-away", "take away", "Take Away", "Take away", "Take-Away", "Take-away", "Takeaways"],
+        "Deliveries": ["deliveries", "delivery", "Delivery", "Deliveries"],
+        "Pick-ups": ["Pick up", "Pickup", "Pick-ups", "Pick Up", "Pick-up", "pick-up", "Pick-ups"]
+      };
+
+
+      const selectedValues = takeaways.map(t => t.value).filter(val => val !== 'All');
+
+      // Step 2: Get all matching keyword variants for selected values
+      const keywordsToSearch = selectedValues.flatMap(val => keywordVariants[val] || []);
+
+      // Step 3: Build regex (escaped properly)
+      const regex = new RegExp(`\\b(${keywordsToSearch.map(escapeRegExp).join('|')})\\b`, 'i');
+
+      function escapeRegExp(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+
+
+      console.log(regex, 'seven seven seven')
+      alldat = filterByNoted(alldat, regex);
+
+
+
+      // function filterByNote(data, regex) {
+      //   if (Array.isArray(data)) {
+      //     return data
+      //       .map(item => filterByNote(item, regex))
+      //       .filter(item => item !== null);
+      //   } else if (typeof data === 'object' && data !== null) {
+      //     if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+      //       return {
+      //         ...data,
+      //         ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+      //       };
+      //     } else if (!data.hasOwnProperty('NOTE')) {
+      //       let filteredObject = {};
+      //       for (let key in data) {
+      //         let filteredValue = filterByNote(data[key], regex);
+      //         if (filteredValue !== null) {
+      //           filteredObject[key] = filteredValue;
+      //         }
+      //       }
+      //       return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+      //     }
+      //   }
+      //   return null;
+      // }
+      // const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
+      // console.log(regex, 'seven seven seven')
+      // // const filteredData = filterByNote(originalData, regex);
+      // alldat = filterByNote(alldat, regex);
 
 
 
@@ -1923,7 +2013,10 @@ let Dockets = () => {
     } else {
     }
 
-    if (inone?.length > 2 && intwo === undefined || intwo === '') {
+    if (inone?.length > 1 && intwo === undefined || intwo === '') {
+
+      console.log(inone, intwo, '11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111')
+
       let splitone = inone.split('-')
 
 
@@ -1976,7 +2069,10 @@ let Dockets = () => {
       }
     }
 
-    if (intwo?.length > 2 && inone === undefined || intwo === '') {
+    if (intwo?.length > 1 && inone === undefined || intwo === '') {
+
+      console.log(inone, intwo, '222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222')
+
       let splitone = intwo.split('-')
 
 
@@ -2029,15 +2125,20 @@ let Dockets = () => {
       }
     }
 
-    if (intwo?.length > 2 && inone?.length > 2) {
+    if (intwo?.length >= 1 && inone?.length >= 1) {
+      console.log(inone, intwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
 
 
-
+      console.log(splitone, splittwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
 
       function filterDataByTableRanges(data, ranges) {
+
+        if (ranges.length === 0) {
+          return []
+        }
         const filteredData = {};
 
         Object.entries(data).forEach(([groupKey, groupData]) => {
@@ -2063,8 +2164,14 @@ let Dockets = () => {
         return filteredData;
       }
 
-      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+      let ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      let rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+
+      if (splitone.length === 1 && splittwo.length === 1) {
+        ranges = [[Number(splitone[0]), Number(splittwo[0])]];
+        rangesone = [];
+      }
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
@@ -2196,13 +2303,22 @@ let Dockets = () => {
     callfordataone(filteredData, alltype)
     // let ghi = processTimeData(alldat)
 
+
+
+
     let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
     let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
+
+    console.log(ghi, 'ghi') 
+    console.log(kidshort, 'kidshort')
+
     // Extract values into separate arrays
     // let timeLabels = kidshort.map(entry => entry.time);
     let timeLabels = generateTimeSlots(time, time2)
     let timeCounts = kidshort.map(entry => entry.count);
 
+    console.log(timeLabels, 'timeLabels') 
+    console.log(timeCounts, 'timeCounts')
 
 
     setOption(timeLabels)
@@ -2211,16 +2327,21 @@ let Dockets = () => {
     let ghione = processTimeDatafghtwo(alldat, generateTimeSlots(time, time2))
     let kidshortone = ghione.sort((a, b) => a.time.localeCompare(b.time));
 
+    console.log(ghione, 'ghione') 
+    console.log(kidshortone, 'kidshortone')
+
     // Extract values into separate arrays
     let timeLabelsone = generateTimeSlots(time, time2)
     let timeCountsone = kidshortone.map(entry => entry.count);
 
 
+    console.log(timeLabelsone, 'timeLabelsone') 
+    console.log(timeCountsone, 'timeCountsone')
 
 
     setOptionone(timeLabelsone)
     setOneBarone(timeCountsone)
-    console.log(JSON.stringify(ghione), 'thousand', ghione)
+
 
 
 
@@ -2678,34 +2799,88 @@ let Dockets = () => {
 
     if (takeaways.length != 0 && takeaway === true) {
 
-      function filterByNote(data, regex) {
-        if (Array.isArray(data)) {
-          return data
-            .map(item => filterByNote(item, regex))
-            .filter(item => item !== null);
-        } else if (typeof data === 'object' && data !== null) {
-          if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
-            return {
-              ...data,
-              ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
-            };
-          } else if (!data.hasOwnProperty('NOTE')) {
-            let filteredObject = {};
-            for (let key in data) {
-              let filteredValue = filterByNote(data[key], regex);
-              if (filteredValue !== null) {
-                filteredObject[key] = filteredValue;
+
+      function filterByNoted(data, filterNotes) {
+        let filteredData = {};
+
+        for (let group in data) {
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let filteredOrders = data[group][location][section][date]
+                  .filter(order => {
+                    return order.NOTE && filterNotes.test(order.NOTE);
+                  });
+
+                if (filteredOrders.length > 0) {
+                  if (!filteredData[group]) filteredData[group] = {};
+                  if (!filteredData[group][location]) filteredData[group][location] = {};
+                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                  filteredData[group][location][section][date] = filteredOrders;
+                }
               }
             }
-            return Object.keys(filteredObject).length > 0 ? filteredObject : null;
           }
         }
-        return null;
-      }
-      const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
 
-      // const filteredData = filterByNote(originalData, regex);
-      alldat = filterByNote(alldat, regex);
+        return filteredData;
+      }
+
+      const filteredTakeaways = takeaways.filter(t => t.value.toLowerCase() !== 'all');
+
+      const keywordVariants = {
+        "Takeaways": ["takeaways", "takeaway", "take-away", "take away", "Take Away", "Take away", "Take-Away", "Take-away", "Takeaways"],
+        "Deliveries": ["deliveries", "delivery", "Delivery", "Deliveries"],
+        "Pick-ups": ["Pick up", "Pickup", "Pick-ups", "Pick Up", "Pick-up", "pick-up", "Pick-ups"]
+      };
+
+
+      const selectedValues = takeaways.map(t => t.value).filter(val => val !== 'All');
+
+      // Step 2: Get all matching keyword variants for selected values
+      const keywordsToSearch = selectedValues.flatMap(val => keywordVariants[val] || []);
+
+      // Step 3: Build regex (escaped properly)
+      const regex = new RegExp(`\\b(${keywordsToSearch.map(escapeRegExp).join('|')})\\b`, 'i');
+
+      function escapeRegExp(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+
+
+      console.log(regex, 'seven seven seven')
+      alldat = filterByNoted(alldat, regex);
+
+
+
+      // function filterByNote(data, regex) {
+      //   if (Array.isArray(data)) {
+      //     return data
+      //       .map(item => filterByNote(item, regex))
+      //       .filter(item => item !== null);
+      //   } else if (typeof data === 'object' && data !== null) {
+      //     if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+      //       return {
+      //         ...data,
+      //         ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+      //       };
+      //     } else if (!data.hasOwnProperty('NOTE')) {
+      //       let filteredObject = {};
+      //       for (let key in data) {
+      //         let filteredValue = filterByNote(data[key], regex);
+      //         if (filteredValue !== null) {
+      //           filteredObject[key] = filteredValue;
+      //         }
+      //       }
+      //       return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+      //     }
+      //   }
+      //   return null;
+      // }
+      // const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
+      // console.log(regex, 'seven seven seven')
+      // // const filteredData = filterByNote(originalData, regex);
+      // alldat = filterByNote(alldat, regex);
 
 
 
@@ -2766,7 +2941,7 @@ let Dockets = () => {
 
     } else {
     }
-    if (inone?.length > 2 && intwo === undefined || intwo === '') {
+    if (inone?.length > 1 && intwo === undefined || intwo === '') {
       let splitone = inone.split('-')
 
 
@@ -2819,7 +2994,7 @@ let Dockets = () => {
       }
     }
 
-    if (intwo?.length > 2 && inone === undefined || intwo === '') {
+    if (intwo?.length > 1 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -2872,15 +3047,20 @@ let Dockets = () => {
       }
     }
 
-    if (intwo?.length > 2 && inone?.length > 2) {
+    if (intwo?.length >= 1 && inone?.length >= 1) {
+      console.log(inone, intwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
 
 
-
+      console.log(splitone, splittwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
 
       function filterDataByTableRanges(data, ranges) {
+
+        if (ranges.length === 0) {
+          return []
+        }
         const filteredData = {};
 
         Object.entries(data).forEach(([groupKey, groupData]) => {
@@ -2906,8 +3086,14 @@ let Dockets = () => {
         return filteredData;
       }
 
-      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+      let ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      let rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+
+      if (splitone.length === 1 && splittwo.length === 1) {
+        ranges = [[Number(splitone[0]), Number(splittwo[0])]];
+        rangesone = [];
+      }
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
@@ -3293,7 +3479,6 @@ let Dockets = () => {
             // console.log(passtime, 'passtime')
             // console.log(valuesPresent, 'valuesPresent')
 
-            console.log(processTime, 'processTime')
 
 
             // let processTime = calculateTotalMinutes(order?.STAMP)
@@ -3394,13 +3579,6 @@ let Dockets = () => {
             if (valuesPresent.includes("P")) processTime += Number(passtime);
             if (valuesPresent.includes("H")) processTime += Number(holdd);
 
-
-            console.log(processess, 'processess')
-            console.log(holdd, 'holdd')
-            console.log(passtime, 'passtime')
-            console.log(valuesPresent, 'valuesPresent')
-
-            console.log(processTime, 'processTime')
 
 
 
@@ -4936,6 +5114,7 @@ let Dockets = () => {
                     <div className="switch-container">
                       <input
                         type="checkbox"
+                        disabled={meals === 5 || meals === 4 ? true : false } 
                         checked={Hubradio}
                         onChange={(e) => {
                           setHubradio(e.target.checked)
@@ -5018,6 +5197,7 @@ let Dockets = () => {
                           }
                         }}
                         id="switch4"
+                        disabled={ meals === 4 ? true : false } 
                       />
                       <label className="switch-label" htmlFor="switch4"></label>
                     </div>
@@ -5083,6 +5263,7 @@ let Dockets = () => {
                         filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
                         filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
                       }}
+                      disabled={meals === 5 || meals === 4 ? true : false }
                       value={inputvalue}
                       placeholder="0-9999"
                       style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', borderRight: '1px solid #707070', textAlign: 'center', paddingTop: 9, paddingBottom: 9 }}
@@ -5094,6 +5275,7 @@ let Dockets = () => {
                         filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                         filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                       }}
+                      disabled={meals === 5 || meals === 4 ? true : false }
                       value={inputvaluetwo}
                       placeholder="9999-9999"
                       style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center', paddingTop: 9, paddingBottom: 9 }}
@@ -5189,11 +5371,13 @@ let Dockets = () => {
                       <div className='col-lg-6 col-md-12  d-flex justify-content-center' style={{ margin: 'auto' }} >
                         <div class="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                           setMeals(2)
+
+                          handleChangefine(selectedOptionsfine)
                         }}>
                           <div class="boxs" style={{ cursor: 'pointer' }}>
                             <div className="d-flex justify-content-between" >
                               <div >
-                                <p className='asdfp' style={{ marginBottom: 0, color: '#1A1A1B', fontWeight: 600 }}>Dockets completion time</p>
+                                <p className='asdfp' style={{ marginBottom: 0, color: '#1A1A1B', fontWeight: 600 }}>Dockets completion time</p> 
                                 <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
                               </div>
                               <div >
@@ -5240,11 +5424,13 @@ let Dockets = () => {
                     </div>
 
                     <div className="w-100 ">
-                      <div className='row mt-5 ' >
+                      <div className='row mt-5 ' >  
 
                         <div className='col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center' style={{ paddingRight: `${padd}px`, paddingLeft: paddOpp }} >
                           <div class="box " style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                             setMeals(5)
+
+                            
                           }} >
                             <div class="boxs" style={{ cursor: 'pointer' }}>
                               <p className='asdfp' style={{ color: '#1A1A1B', fontWeight: 600 }}>Dockets received - timeline</p>
@@ -5369,7 +5555,7 @@ let Dockets = () => {
                                 onClick={() => {
                                   filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
                                   filterDataByDateonee(dateRangetwo, onetime, twotime, selectedOptionsfive, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-                                  setMeals(1);
+                                  setMeals(1); 
                                 }}
                                 alt="Back Arrow"
                               />
@@ -5379,6 +5565,7 @@ let Dockets = () => {
                             </div>
 
                             <div className="custom-inputonessfine mt-lg-0 mt-md-3 pt-lg-1 pt-md-2 mx-3">
+                              
                               <Select
                                 className="newoneonee"
                                 options={basicfine}
@@ -5654,7 +5841,7 @@ let Dockets = () => {
                                                 correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                                             </p>
                                             <img
-                                              onClick={() => { openModal(dfgh, correspondingErv) }}
+                                              onClick={() => { openModals(dfgh, correspondingErv) }}
                                               src="arrows.png"
                                               style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10 }}
                                               alt="up arrow"
@@ -6149,10 +6336,10 @@ let Dockets = () => {
                               <p style={{ color: '#1A1A1B', fontWeight: 600, fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Dockets received - timeline</p>
                             </div>
 
-                            <div className="position-relative" >
+                            <div className="position-relative" > 
                               <img src="threedot.png" ref={toggleButtonRefsss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
 
-                              {showDivsss && (
+                              {showDivsss && ( 
                                 <div
                                   ref={dropdownRefsss}
                                   style={{

@@ -91,10 +91,10 @@ let Mealsmulti = () => {
     // { value: 'S', label: 'Served' },
   ];
 
-  const optionstakeaway = [
+ const optionstakeaway = [
     { value: 'All', label: 'All takeaways' },
-    { value: 'TAKEAWAY', label: 'Takeaways' },
-    { value: 'DELIVERY', label: 'Deliveries' },
+    { value: 'Takeaways', label: 'Takeaways' },
+    { value: 'Deliveries', label: 'Deliveries' },
     { value: 'Pick-ups', label: 'Pick-ups' },
   ];
 
@@ -138,40 +138,40 @@ let Mealsmulti = () => {
   const { state } = useContext(DataContext);
 
   // Close menu when clicking outside
-    useEffect(() => {
-      const handleClickOutside = (event) => {
-        if (selectRef.current && !selectRef.current.contains(event.target)) {
-          setMenuIsOpen(false);
-        }
-  
-        if (selectRefone.current && !selectRefone.current.contains(event.target)) {
-          setMenuIsOpenone(false);
-        }
-        if (selectReftwo.current && !selectReftwo.current.contains(event.target)) {
-          setMenuIsOpentwo(false);
-        }
-        if (selectRefthree.current && !selectRefthree.current.contains(event.target)) {
-          setMenuIsOpenthree(false);
-        }
-        if (selectReffour.current && !selectReffour.current.contains(event.target)) {
-          setMenuIsOpenfour(false);
-        }
-  
-  
-        if (selectReffive.current && !selectReffive.current.contains(event.target)) {
-          setMenuIsOpenfive(false);
-        }
-        if (selectRefsix.current && !selectRefsix.current.contains(event.target)) {
-          setMenuIsOpensix(false);
-        }
-  
-      };
-  
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, []);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (selectRef.current && !selectRef.current.contains(event.target)) {
+        setMenuIsOpen(false);
+      }
+
+      if (selectRefone.current && !selectRefone.current.contains(event.target)) {
+        setMenuIsOpenone(false);
+      }
+      if (selectReftwo.current && !selectReftwo.current.contains(event.target)) {
+        setMenuIsOpentwo(false);
+      }
+      if (selectRefthree.current && !selectRefthree.current.contains(event.target)) {
+        setMenuIsOpenthree(false);
+      }
+      if (selectReffour.current && !selectReffour.current.contains(event.target)) {
+        setMenuIsOpenfour(false);
+      }
+
+
+      if (selectReffive.current && !selectReffive.current.contains(event.target)) {
+        setMenuIsOpenfive(false);
+      }
+      if (selectRefsix.current && !selectRefsix.current.contains(event.target)) {
+        setMenuIsOpensix(false);
+      }
+
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
 
   let [basicfine, setBasicfine] = useState([{
@@ -245,7 +245,7 @@ let Mealsmulti = () => {
   let [usedname, setUsedname] = useState('')
   function getName(data) {
 
-    console.log(data?.venue , 'state.datastate.data')
+    console.log(data?.venue, 'state.datastate.data')
 
 
     // if (!data.venue || data.venue.length === 0) {
@@ -265,9 +265,9 @@ let Mealsmulti = () => {
         data?.venue.some(item => item.label === key)
       );
     })?.[0]; // Safely get groupName from matched pair
-    
+
     console.log('Matched group name:', matchedGroupName);
-    
+
     return matchedGroupName
 
 
@@ -626,22 +626,22 @@ let Mealsmulti = () => {
 
     if (parsedatajson.venue) {
       const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-    
+
       if (!hasAllValue) { // No need to check if === true
         const filterKeys = new Set(parsedatajson.venue.map(item => item.value));
-    
+
         filteredDataonee = Object.entries(cleanedData).reduce((acc, [key, subObj]) => {
           const filteredSubObj = Object.fromEntries(
             Object.entries(subObj).filter(([subKey]) => filterKeys.has(subKey))
           );
-    
+
           if (Object.keys(filteredSubObj).length) {
             acc[key] = filteredSubObj;
           }
-    
+
           return acc;
         }, {});
-    
+
         setBasicall(filteredDataonee);
       }
     }
@@ -1384,25 +1384,25 @@ let Mealsmulti = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
 
-  function areArraysEqual (arr1, arr2) {
+  function areArraysEqual(arr1, arr2) {
 
-    console.log(arr1 , arr2 , 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
+    console.log(arr1, arr2, 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
     return arr1.some(obj1 => arr2.some(obj2 => obj1.value === obj2.value));
-}
+  }
 
 
-function removeMatchingValues(arr1, arr2) {
-  if (!Array.isArray(arr1) || !Array.isArray(arr2)) return [];
+  function removeMatchingValues(arr1, arr2) {
+    if (!Array.isArray(arr1) || !Array.isArray(arr2)) return [];
 
-  // Extract values from arr2 for quick lookup
-  const valuesSet = new Set(arr2.map(obj => obj.value));
+    // Extract values from arr2 for quick lookup
+    const valuesSet = new Set(arr2.map(obj => obj.value));
 
-  // Filter arr1 to exclude objects with matching values in arr2
-  return arr1.filter(obj => !valuesSet.has(obj.value));
-}
+    // Filter arr1 to exclude objects with matching values in arr2
+    return arr1.filter(obj => !valuesSet.has(obj.value));
+  }
 
 
-  
+
   const handleChange = (selected) => {
 
 
@@ -1428,19 +1428,19 @@ function removeMatchingValues(arr1, arr2) {
     //   return
     // }
 
- 
 
 
- 
- 
+
+
+
 
     // console.log(JSON.stringify(fulldatatwo), 'selected')
     const hasAllValue = selected.some(item => item.value === "All");
 
-   
+
     const hasAllValueold = oldven.some(item => item.value === "All");
 
-    
+
 
 
     setOldven(selected)
@@ -1489,18 +1489,18 @@ function removeMatchingValues(arr1, arr2) {
 
       return
     }
-    if(hasAllValue === true && hasAllValueold === false){
-      console.log(selected , 'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
-      if(selectedOptionsfive.length === 0){
+    if (hasAllValue === true && hasAllValueold === false) {
+      console.log(selected, 'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
+      if (selectedOptionsfive.length === 0) {
         selected = basic
-      }else{
-        selected = removeMatchingValues(basic , selectedOptionsfive)
+      } else {
+        selected = removeMatchingValues(basic, selectedOptionsfive)
       }
 
 
-     
 
-      
+
+
       let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
@@ -1546,14 +1546,14 @@ function removeMatchingValues(arr1, arr2) {
 
     }
 
-    
+
 
     if (hasAllValue === true) {
-      console.log(selected , 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv')
+      console.log(selected, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv')
       let vvvv = areArraysEqual(selectedOptionsfive, selected)
 
 
-      if(vvvv === true) {
+      if (vvvv === true) {
 
         Swal.fire({
           icon: "warning",
@@ -1567,12 +1567,12 @@ function removeMatchingValues(arr1, arr2) {
         return
       }
 
-      console.log(selected , 'let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)')
+      console.log(selected, 'let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)')
 
-      if(hasAllValue === true && selected.length === 1 ){
-        selected = removeMatchingValues(basic , selectedOptionsfive)
+      if (hasAllValue === true && selected.length === 1) {
+        selected = removeMatchingValues(basic, selectedOptionsfive)
       }
-      
+
 
       let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
@@ -1614,11 +1614,11 @@ function removeMatchingValues(arr1, arr2) {
 
 
     } else {
-      console.log(selected , 'pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp')
+      console.log(selected, 'pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp')
       let vvvv = areArraysEqual(selectedOptionsfive, selected)
 
 
-      if(vvvv === true) {
+      if (vvvv === true) {
 
         Swal.fire({
           icon: "warning",
@@ -1729,28 +1729,28 @@ function removeMatchingValues(arr1, arr2) {
 
 
 
- 
+
   const handleChangefive = (selected) => {
 
 
-// let vvvv = areArraysEqual(selectedOptions, selected)
+    // let vvvv = areArraysEqual(selectedOptions, selected)
 
 
-//     if(vvvv === true){
-//       Swal.fire({
-//         icon: "warning",
-//         title: "Invalid Selection",
-//         text: "You cannot select the same venues in both Chosen and Compare with sections.",
-//         confirmButtonText: "OK",
-//       })
-//       return
+    //     if(vvvv === true){
+    //       Swal.fire({
+    //         icon: "warning",
+    //         title: "Invalid Selection",
+    //         text: "You cannot select the same venues in both Chosen and Compare with sections.",
+    //         confirmButtonText: "OK",
+    //       })
+    //       return
 
-      
-//     }
 
-//     if(vvvv === true){
-//       return
-//     }
+    //     }
+
+    //     if(vvvv === true){
+    //       return
+    //     }
 
 
 
@@ -1805,10 +1805,10 @@ function removeMatchingValues(arr1, arr2) {
     if (hasAllValue === true && hasAllValueold === false) {
 
 
-      if(selectedOptions.length === 0){
+      if (selectedOptions.length === 0) {
         selected = basic
-      }else{
-        selected = removeMatchingValues(basic , selectedOptions)
+      } else {
+        selected = removeMatchingValues(basic, selectedOptions)
       }
 
 
@@ -1846,7 +1846,7 @@ function removeMatchingValues(arr1, arr2) {
 
       setBasiconefive(output)
 
- return
+      return
     }
 
 
@@ -1858,7 +1858,7 @@ function removeMatchingValues(arr1, arr2) {
       let vvvv = areArraysEqual(selectedOptions, selected)
 
 
-      if(vvvv === true) {
+      if (vvvv === true) {
 
         Swal.fire({
           icon: "warning",
@@ -1871,9 +1871,9 @@ function removeMatchingValues(arr1, arr2) {
 
         return
       }
- 
-      if(hasAllValue === true && selected.length === 1 ){
-        selected = removeMatchingValues(basic , selectedOptions)
+
+      if (hasAllValue === true && selected.length === 1) {
+        selected = removeMatchingValues(basic, selectedOptions)
       }
 
 
@@ -1918,7 +1918,7 @@ function removeMatchingValues(arr1, arr2) {
       let vvvv = areArraysEqual(selectedOptions, selected)
 
 
-      if(vvvv === true) {
+      if (vvvv === true) {
 
         Swal.fire({
           icon: "warning",
@@ -2706,12 +2706,12 @@ function removeMatchingValues(arr1, arr2) {
 
 
 
-  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
+  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
 
 
 
 
-    console.log(val21 , 'valsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsv gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
+    console.log(val21, 'valsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsv gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
 
 
 
@@ -2731,7 +2731,7 @@ function removeMatchingValues(arr1, arr2) {
     let alldat = basicall
 
 
-    if(val21.length === 0){
+    if (val21.length === 0) {
       alldat = []
     }
 
@@ -3056,55 +3056,152 @@ function removeMatchingValues(arr1, arr2) {
 
     }
 
-    if (takeaway.length != 0) {
+    if (takeaways.length != 0 && takeaway === true) {
 
-      function filterByNote(filters) {
-        const allowedNotes = filters.map(f => f.value); // Extract values from filter array
-        const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
 
-        function traverse(obj) {
-          if (Array.isArray(obj)) {
-            return obj.map(traverse).filter(entry => entry !== null);
-          } else if (typeof obj === "object" && obj !== null) {
-            let newObj = {};
-            let hasMatch = false;
+      function filterByNoted(data, filterNotes) {
+        let filteredData = {};
 
-            for (let key in obj) {
-              if (key === "NOTE" && typeof obj[key] === "string" && regex.test(obj[key])) {
-                hasMatch = true;
-              } else {
-                let value = traverse(obj[key]);
-                if (value && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0)) {
-                  newObj[key] = value;
-                  hasMatch = true;
+        for (let group in data) {
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let filteredOrders = data[group][location][section][date]
+                  .filter(order => {
+                    return order.NOTE && filterNotes.test(order.NOTE);
+                  });
+
+                if (filteredOrders.length > 0) {
+                  if (!filteredData[group]) filteredData[group] = {};
+                  if (!filteredData[group][location]) filteredData[group][location] = {};
+                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                  filteredData[group][location][section][date] = filteredOrders;
                 }
               }
             }
-
-            return hasMatch ? newObj : null;
           }
-          return obj;
         }
 
-        let result = {};
-        Object.keys(alldat).forEach(key => {
-          let filtered = traverse(alldat[key]);
-          if (filtered && Object.keys(filtered).length > 0) {
-            result[key] = filtered;
-          }
-        });
+        return filteredData;
+      }
 
-        return result;
+      const filteredTakeaways = takeaways.filter(t => t.value.toLowerCase() !== 'all');
+
+      const keywordVariants = {
+        "Takeaways": ["takeaways", "takeaway", "take-away", "take away", "Take Away", "Take away", "Take-Away", "Take-away", "Takeaways"],
+        "Deliveries": ["deliveries", "delivery", "Delivery", "Deliveries"],
+        "Pick-ups": ["Pick up", "Pickup", "Pick-ups", "Pick Up", "Pick-up", "pick-up", "Pick-ups"]
+      };
+
+
+      const selectedValues = takeaways.map(t => t.value).filter(val => val !== 'All');
+
+      // Step 2: Get all matching keyword variants for selected values
+      const keywordsToSearch = selectedValues.flatMap(val => keywordVariants[val] || []);
+
+      // Step 3: Build regex (escaped properly)
+      const regex = new RegExp(`\\b(${keywordsToSearch.map(escapeRegExp).join('|')})\\b`, 'i');
+
+      function escapeRegExp(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       }
 
 
-      alldat = filterByNote(takeaway)
+      console.log(regex, 'seven seven seven')
+      alldat = filterByNoted(alldat, regex);
+
+
+
+      // function filterByNote(data, regex) {
+      //   if (Array.isArray(data)) {
+      //     return data
+      //       .map(item => filterByNote(item, regex))
+      //       .filter(item => item !== null);
+      //   } else if (typeof data === 'object' && data !== null) {
+      //     if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+      //       return {
+      //         ...data,
+      //         ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+      //       };
+      //     } else if (!data.hasOwnProperty('NOTE')) {
+      //       let filteredObject = {};
+      //       for (let key in data) {
+      //         let filteredValue = filterByNote(data[key], regex);
+      //         if (filteredValue !== null) {
+      //           filteredObject[key] = filteredValue;
+      //         }
+      //       }
+      //       return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+      //     }
+      //   }
+      //   return null;
+      // }
+      // const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
+      // console.log(regex, 'seven seven seven')
+      // // const filteredData = filterByNote(originalData, regex);
+      // alldat = filterByNote(alldat, regex);
+
+
+
+      // function filterByNote(filters) {
+      //   console.log( JSON.stringify(filters) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
+
+      //   console.log( JSON.stringify(alldat) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
+
+
+      //   const allowedNotes = filters.map(f => f.value); // Extract values from filter array 
+      //   const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
+
+      //   function traverse(obj) {
+      //     if (Array.isArray(obj)) {
+
+      //       return obj.map(traverse).filter(entry => entry !== null);
+      //     } else if (typeof obj === "object" && obj !== null) {
+
+      //       let newObj = {};
+      //       let hasMatch = false;
+
+      //       for (let key in obj) { 
+      //         if (key === "NOTE" && typeof obj[key] === "string" && regex.test(obj[key])) {
+      //           hasMatch = true;
+      //         } else {
+      //           let value = traverse(obj[key]);
+      //           if (value && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0)) {
+      //             newObj[key] = value;
+      //             hasMatch = true;
+      //           }
+      //         }
+      //       }
+
+      //       return hasMatch ? newObj : null;
+      //     }
+      //     return obj;
+      //   }
+
+
+
+      //   let result = {};
+      //   Object.keys(alldat).forEach(key => {
+      //     console.log(alldat , '')
+
+      //     let filtered = traverse(alldat[key]);
+      //     if (filtered && Object.keys(filtered).length > 0) {
+      //       result[key] = filtered;
+      //     }
+      //   });
+
+      //   return result;
+      // }
+
+
+      // alldat = filterByNote(takeaway)
 
       console.log(alldat, 'seven')
 
+    } else {
     }
 
-    if (inone?.length > 2 && intwo === undefined || intwo === '') {
+    if (inone?.length > 1 && intwo === undefined || intwo === '') {
       let splitone = inone.split('-')
 
 
@@ -3157,7 +3254,7 @@ function removeMatchingValues(arr1, arr2) {
       }
     }
 
-    if (intwo?.length > 2 && inone === undefined || intwo === '') {
+    if (intwo?.length > 1 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -3210,7 +3307,7 @@ function removeMatchingValues(arr1, arr2) {
       }
     }
 
-    if (intwo?.length > 2 && inone?.length > 2) {
+    if (intwo?.length >= 1 && inone?.length >= 1) {
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
@@ -3219,6 +3316,12 @@ function removeMatchingValues(arr1, arr2) {
 
 
       function filterDataByTableRanges(data, ranges) {
+
+        if (ranges.length === 0) {
+          return []
+        }
+
+
         const filteredData = {};
 
         Object.entries(data).forEach(([groupKey, groupData]) => {
@@ -3244,8 +3347,14 @@ function removeMatchingValues(arr1, arr2) {
         return filteredData;
       }
 
-      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+      let ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      let rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+       if( splitone.length === 1 && splittwo.length === 1) {
+        ranges = [[Number(splitone[0]), Number(splittwo[0])]];
+        rangesone = [];
+      }
+
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
@@ -3411,48 +3520,48 @@ function removeMatchingValues(arr1, arr2) {
               let stamps = order.STAMP.split(" "); // Split STAMP string
               stamps.forEach(stamp => {
                 const hasRParen = stamp.includes("R0");
-              
-                if(hasRParen){
+
+                if (hasRParen) {
                   let extractedTime = extractTime(stamp);
- 
-  
+
+
                   if (extractedTime) {
                     let interval = roundToInterval(extractedTime);
 
                     timeCounts[interval] = (timeCounts[interval] || 0) + order.ITEMS.length;
- 
-  
+
+
                   }
                 }
 
-               
+
               });
             });
           }
         }
       }
-    } 
+    }
 
     if (Object.keys(timeCounts).length === 1) {
       const key = Object.keys(timeCounts)[0];
       const value = timeCounts[key];
-    
+
       const [hourStr, minStr] = key.split('.');
       let hour = parseInt(hourStr, 10);
       let min = parseInt(minStr, 10);
-    
+
       min -= 10;
       if (min < 0) {
         min += 60;
         hour -= 1;
       }
-    
+
       const newKey = `${hour}.${min.toString().padStart(2, '0')}`;
       timeCounts[newKey] = value;
     }
-    
+
     console.log(timeCounts);
-    
+
 
     console.log(timeCounts, 'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
     //  timeCounts = {13.10: 24, 13.20: 21,}
@@ -3475,7 +3584,7 @@ function removeMatchingValues(arr1, arr2) {
     let alldat = basicall
 
 
-    if(val21.length === 0){
+    if (val21.length === 0) {
       alldat = []
     }
 
@@ -3790,36 +3899,90 @@ function removeMatchingValues(arr1, arr2) {
 
     }
 
-    if (takeaways.length != 0 && takeaway === true) {
+   if (takeaways.length != 0 && takeaway === true) {
 
-      function filterByNote(data, regex) {
-        if (Array.isArray(data)) {
-          return data
-            .map(item => filterByNote(item, regex))
-            .filter(item => item !== null);
-        } else if (typeof data === 'object' && data !== null) {
-          if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
-            return {
-              ...data,
-              ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
-            };
-          } else if (!data.hasOwnProperty('NOTE')) {
-            let filteredObject = {};
-            for (let key in data) {
-              let filteredValue = filterByNote(data[key], regex);
-              if (filteredValue !== null) {
-                filteredObject[key] = filteredValue;
+
+      function filterByNoted(data, filterNotes) {
+        let filteredData = {};
+
+        for (let group in data) {
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let filteredOrders = data[group][location][section][date]
+                  .filter(order => {
+                    return order.NOTE && filterNotes.test(order.NOTE);
+                  });
+
+                if (filteredOrders.length > 0) {
+                  if (!filteredData[group]) filteredData[group] = {};
+                  if (!filteredData[group][location]) filteredData[group][location] = {};
+                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                  filteredData[group][location][section][date] = filteredOrders;
+                }
               }
             }
-            return Object.keys(filteredObject).length > 0 ? filteredObject : null;
           }
         }
-        return null;
-      }
-      const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
 
-      // const filteredData = filterByNote(originalData, regex);
-      alldat = filterByNote(alldat, regex);
+        return filteredData;
+      }
+
+      const filteredTakeaways = takeaways.filter(t => t.value.toLowerCase() !== 'all');
+
+      const keywordVariants = {
+        "Takeaways": ["takeaways", "takeaway", "take-away", "take away", "Take Away", "Take away", "Take-Away", "Take-away", "Takeaways"],
+        "Deliveries": ["deliveries", "delivery", "Delivery", "Deliveries"],
+        "Pick-ups": ["Pick up", "Pickup", "Pick-ups", "Pick Up", "Pick-up", "pick-up", "Pick-ups"]
+      };
+
+
+      const selectedValues = takeaways.map(t => t.value).filter(val => val !== 'All');
+
+      // Step 2: Get all matching keyword variants for selected values
+      const keywordsToSearch = selectedValues.flatMap(val => keywordVariants[val] || []);
+
+      // Step 3: Build regex (escaped properly)
+      const regex = new RegExp(`\\b(${keywordsToSearch.map(escapeRegExp).join('|')})\\b`, 'i');
+
+      function escapeRegExp(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+
+
+      console.log(regex, 'seven seven seven')
+      alldat = filterByNoted(alldat, regex);
+
+
+
+      // function filterByNote(data, regex) {
+      //   if (Array.isArray(data)) {
+      //     return data
+      //       .map(item => filterByNote(item, regex))
+      //       .filter(item => item !== null);
+      //   } else if (typeof data === 'object' && data !== null) {
+      //     if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+      //       return {
+      //         ...data,
+      //         ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+      //       };
+      //     } else if (!data.hasOwnProperty('NOTE')) {
+      //       let filteredObject = {};
+      //       for (let key in data) {
+      //         let filteredValue = filterByNote(data[key], regex);
+      //         if (filteredValue !== null) {
+      //           filteredObject[key] = filteredValue;
+      //         }
+      //       }
+      //       return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+      //     }
+      //   }
+      //   return null;
+      // }
+      // const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
+      // console.log(regex, 'seven seven seven')
+      // // const filteredData = filterByNote(originalData, regex);
+      // alldat = filterByNote(alldat, regex);
 
 
 
@@ -3885,7 +4048,7 @@ function removeMatchingValues(arr1, arr2) {
       let splitone = inone.split('-')
 
 
-      if (splitone.length === 2) {
+      if (splitone.length === 1) {
 
         if (Number(splitone[0]) < Number(splitone[1])) {
 
@@ -3917,6 +4080,7 @@ function removeMatchingValues(arr1, arr2) {
             return filteredData;
           }
 
+
           const ranges = [[Number(splitone[0]), Number(splitone[1])]];
 
           let twelves = filterDataByTableRanges(alldat, ranges)
@@ -3934,7 +4098,7 @@ function removeMatchingValues(arr1, arr2) {
       }
     }
 
-    if (intwo?.length > 2 && inone === undefined || intwo === '') {
+    if (intwo?.length > 1 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -3987,7 +4151,7 @@ function removeMatchingValues(arr1, arr2) {
       }
     }
 
-    if (intwo?.length > 2 && inone?.length > 2) {
+    if (intwo?.length >= 1 && inone?.length >= 1) {
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
@@ -3996,6 +4160,12 @@ function removeMatchingValues(arr1, arr2) {
 
 
       function filterDataByTableRanges(data, ranges) {
+
+        if (ranges.length === 0) {
+          return []
+        }
+
+
         const filteredData = {};
 
         Object.entries(data).forEach(([groupKey, groupData]) => {
@@ -4021,8 +4191,14 @@ function removeMatchingValues(arr1, arr2) {
         return filteredData;
       }
 
-      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+      let ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      let rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+      if (splitone.length === 1 && splittwo.length === 1) {
+        ranges = [[Number(splitone[0]), Number(splittwo[0])]];
+        rangesone = [];
+      }
+
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
@@ -4758,6 +4934,52 @@ function removeMatchingValues(arr1, arr2) {
   };
 
 
+   const handleChangefines = (selected) => {
+    console.log(served, 'selected')
+ 
+
+    if (served.length === 0) {
+
+    } else {
+
+      if (selected === "Minimum") {
+        setServed((prevState) =>
+          [...prevState].sort((a, b) => a.count - b.count)
+        );
+      } else {
+        setServed((prevState) =>
+          [...prevState].sort((a, b) => b.count - a.count)
+        );
+      }
+
+
+    }
+
+    if (servedone.length === 0) {
+
+    } else {
+
+      if (selected === "Minimum") {
+        setServedone((prevState) =>
+          [...prevState].sort((a, b) => a.count - b.count)
+        );
+      } else {
+        setServedone((prevState) =>
+          [...prevState].sort((a, b) => b.count - a.count)
+        );
+      }
+
+
+
+
+    }
+
+
+    // setSelectedOptionsfine(selected || []);
+
+
+  };
+
   let mealexportpdf = async () => {
     const input = pdfRefss.current;
 
@@ -5190,29 +5412,29 @@ function removeMatchingValues(arr1, arr2) {
                           "label": "All Venue",
                           "value": "All"
                         }]].some((item) => item.value === "All");
-                          const hasAllValueOld = oldven.some((item) => item.value === "All");
+                        const hasAllValueOld = oldven.some((item) => item.value === "All");
 
-                          // Check for overlap with selectedOptionsfive
-                          const selectedValues = [...selectedOptions, ...[{
-                            "label": "All Venue",
-                            "value": "All"
-                          }]].map((opt) => opt.value);
-                          const compareValues = selectedOptionsfive.map((opt) => opt.value);
-                          const hasOverlap = selectedValues.some((val) => compareValues.includes(val));
+                        // Check for overlap with selectedOptionsfive
+                        const selectedValues = [...selectedOptions, ...[{
+                          "label": "All Venue",
+                          "value": "All"
+                        }]].map((opt) => opt.value);
+                        const compareValues = selectedOptionsfive.map((opt) => opt.value);
+                        const hasOverlap = selectedValues.some((val) => compareValues.includes(val));
 
-                          if (hasOverlap) {
-                            // Show alert and reset selection
-                            Swal.fire({
-                              icon: "warning",
-                              title: "Invalid Selection",
-                              text: "You cannot select the same venues in both Chosen and Compare with sections.",
-                              confirmButtonText: "OK",
-                            }).then(() => {
-                              // setSelectedOptions(oldven); // Reset to previous valid state
-                              // setOldven(oldven);
-                            });
-                            return;
-                          }
+                        if (hasOverlap) {
+                          // Show alert and reset selection
+                          Swal.fire({
+                            icon: "warning",
+                            title: "Invalid Selection",
+                            text: "You cannot select the same venues in both Chosen and Compare with sections.",
+                            confirmButtonText: "OK",
+                          }).then(() => {
+                            // setSelectedOptions(oldven); // Reset to previous valid state
+                            // setOldven(oldven);
+                          });
+                          return;
+                        }
 
 
 
@@ -5376,7 +5598,7 @@ function removeMatchingValues(arr1, arr2) {
 
 
 
- 
+
                         if (e.target.checked === false) {
                           setVenueradiofivese(e.target.checked)
                           setSelectedOptionsfive([])
@@ -5408,8 +5630,8 @@ function removeMatchingValues(arr1, arr2) {
                             text: "You cannot select the same venues in both Chosen and Compare with sections.",
                             confirmButtonText: "OK",
                           }).then(() => {
-                             
-                            
+
+
                           });
                           return;
                         }
@@ -5420,10 +5642,10 @@ function removeMatchingValues(arr1, arr2) {
                           setSelectedOptionsfive([])
                         } else {
 
-                          
 
 
-                       
+
+
 
 
                           handleChangefive([...selectedOptionsfive, ...[{
@@ -5840,6 +6062,8 @@ function removeMatchingValues(arr1, arr2) {
                     <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center" style={{ paddingLeft: `${padd}px`, paddingRight: paddOpp }}>
                       <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                         setMeals(2)
+
+                        handleChangefines(selserdata)
                       }}>
                         <div className="boxs" style={{ cursor: 'pointer' }}>
                           <div className="d-flex justify-content-between">
@@ -6850,7 +7074,7 @@ function removeMatchingValues(arr1, arr2) {
                                   day: "2-digit",
                                   month: "short",
                                   year: "numeric"
-                                }).replace(/,/g,"")
+                                }).replace(/,/g, "")
 
                                 return (formattedDate)
                               })()} to {(() => {
@@ -6860,7 +7084,7 @@ function removeMatchingValues(arr1, arr2) {
                                   day: "2-digit",
                                   month: "short",
                                   year: "numeric"
-                                }).replace(/,/g,"")
+                                }).replace(/,/g, "")
 
                                 return (formattedDate)
                               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
@@ -6871,7 +7095,7 @@ function removeMatchingValues(arr1, arr2) {
                                   day: "2-digit",
                                   month: "short",
                                   year: "numeric"
-                                }).replace(/,/g,"")
+                                }).replace(/,/g, "")
 
                                 return (formattedDate)
                               })()} to {(() => {
@@ -6881,12 +7105,12 @@ function removeMatchingValues(arr1, arr2) {
                                   day: "2-digit",
                                   month: "short",
                                   year: "numeric"
-                                }).replace(/,/g,"")
+                                }).replace(/,/g, "")
 
                                 return (formattedDate)
                               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, wordSpacing: -5 }}  className="fonttttttt" >Table ranges contains: All</p>
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, wordSpacing: -5 }} className="fonttttttt" >Table ranges contains: All</p>
                               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt"  >Stages contains: {(() => {
 
                                 const result = selectedhubOptions.map(item => item.label.trim()).join(", ");
@@ -6901,7 +7125,7 @@ function removeMatchingValues(arr1, arr2) {
 
 
                               })()} </p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }}  className="fonttttttt"  >Courses contains: {(() => {
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt"  >Courses contains: {(() => {
 
                                 const result = selectedCources.map(item => item.label).join(", ");
 
@@ -6962,11 +7186,11 @@ function removeMatchingValues(arr1, arr2) {
         <div ref={pdfRef}  >
 
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Edits</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,padding:0 }} className="fontttttttdd"  >{(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, padding: 0 }} className="fontttttttdd"  >{(() => {
 
             const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
             const result = filteredOptions.map(item => item.label.trim()).join(", ") // Join without spaces first
-  
+
 
 
             if (result === "" || result === undefined || result === null) {
@@ -7468,7 +7692,7 @@ function removeMatchingValues(arr1, arr2) {
 
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }} className="fonttttttt"  >Refunded meals</p>
 
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, padding:0}} className="fontttttttdd"    >{(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, padding: 0 }} className="fontttttttdd"    >{(() => {
 
             const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
             const result = filteredOptions.map(item => item.label).join(",") // Join without spaces first

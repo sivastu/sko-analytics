@@ -123,10 +123,10 @@ let Multi_venue = () => {
     // { value: 'S', label: 'Served' },
   ];
 
-  const optionstakeaway = [
+   const optionstakeaway = [
     { value: 'All', label: 'All takeaways' },
-    { value: 'TAKEAWAY', label: 'Takeaways' },
-    { value: 'DELIVERY', label: 'Deliveries' },
+    { value: 'Takeaways', label: 'Takeaways' },
+    { value: 'Deliveries', label: 'Deliveries' },
     { value: 'Pick-ups', label: 'Pick-ups' },
   ];
   ///old
@@ -2792,7 +2792,7 @@ let Multi_venue = () => {
 
     let alldat = basicall
 
-    if (val21.length === 0) {
+    if (val21.length === 0) { 
       alldat = []
     }
 
@@ -2975,6 +2975,151 @@ let Multi_venue = () => {
 
       console.log(filteredData, 'four')
 
+    }
+
+    if (takeaways.length != 0 && takeaway === true) {
+
+
+      function filterByNoted(data, filterNotes) {
+        let filteredData = {};
+
+        for (let group in data) {
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let filteredOrders = data[group][location][section][date]
+                  .filter(order => {
+                    return order.NOTE && filterNotes.test(order.NOTE);
+                  });
+
+                if (filteredOrders.length > 0) {
+                  if (!filteredData[group]) filteredData[group] = {};
+                  if (!filteredData[group][location]) filteredData[group][location] = {};
+                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                  filteredData[group][location][section][date] = filteredOrders;
+                }
+              }
+            }
+          }
+        }
+
+        return filteredData;
+      }
+
+      const filteredTakeaways = takeaways.filter(t => t.value.toLowerCase() !== 'all');
+
+      const keywordVariants = {
+        "Takeaways": ["takeaways", "takeaway", "take-away", "take away", "Take Away", "Take away", "Take-Away", "Take-away", "Takeaways"],
+        "Deliveries": ["deliveries", "delivery", "Delivery", "Deliveries"],
+        "Pick-ups": ["Pick up", "Pickup", "Pick-ups", "Pick Up", "Pick-up", "pick-up", "Pick-ups"]
+      };
+
+
+      const selectedValues = takeaways.map(t => t.value).filter(val => val !== 'All');
+
+      // Step 2: Get all matching keyword variants for selected values
+      const keywordsToSearch = selectedValues.flatMap(val => keywordVariants[val] || []);
+
+      // Step 3: Build regex (escaped properly)
+      const regex = new RegExp(`\\b(${keywordsToSearch.map(escapeRegExp).join('|')})\\b`, 'i');
+
+      function escapeRegExp(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+
+
+      console.log(regex, 'seven seven seven')
+      alldat = filterByNoted(alldat, regex);
+
+
+
+      // function filterByNote(data, regex) {
+      //   if (Array.isArray(data)) {
+      //     return data
+      //       .map(item => filterByNote(item, regex))
+      //       .filter(item => item !== null);
+      //   } else if (typeof data === 'object' && data !== null) {
+      //     if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+      //       return {
+      //         ...data,
+      //         ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+      //       };
+      //     } else if (!data.hasOwnProperty('NOTE')) {
+      //       let filteredObject = {};
+      //       for (let key in data) {
+      //         let filteredValue = filterByNote(data[key], regex);
+      //         if (filteredValue !== null) {
+      //           filteredObject[key] = filteredValue;
+      //         }
+      //       }
+      //       return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+      //     }
+      //   }
+      //   return null;
+      // }
+      // const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
+      // console.log(regex, 'seven seven seven')
+      // // const filteredData = filterByNote(originalData, regex);
+      // alldat = filterByNote(alldat, regex);
+
+
+
+      // function filterByNote(filters) {
+      //   console.log( JSON.stringify(filters) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
+
+      //   console.log( JSON.stringify(alldat) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
+
+
+      //   const allowedNotes = filters.map(f => f.value); // Extract values from filter array 
+      //   const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
+
+      //   function traverse(obj) {
+      //     if (Array.isArray(obj)) {
+
+      //       return obj.map(traverse).filter(entry => entry !== null);
+      //     } else if (typeof obj === "object" && obj !== null) {
+
+      //       let newObj = {};
+      //       let hasMatch = false;
+
+      //       for (let key in obj) { 
+      //         if (key === "NOTE" && typeof obj[key] === "string" && regex.test(obj[key])) {
+      //           hasMatch = true;
+      //         } else {
+      //           let value = traverse(obj[key]);
+      //           if (value && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0)) {
+      //             newObj[key] = value;
+      //             hasMatch = true;
+      //           }
+      //         }
+      //       }
+
+      //       return hasMatch ? newObj : null;
+      //     }
+      //     return obj;
+      //   }
+
+
+
+      //   let result = {};
+      //   Object.keys(alldat).forEach(key => {
+      //     console.log(alldat , '')
+
+      //     let filtered = traverse(alldat[key]);
+      //     if (filtered && Object.keys(filtered).length > 0) {
+      //       result[key] = filtered;
+      //     }
+      //   });
+
+      //   return result;
+      // }
+
+
+      // alldat = filterByNote(takeaway)
+
+      console.log(alldat, 'seven')
+
+    } else {
     }
 
     if (val22.length === 0 || val22 === "") {
@@ -3211,7 +3356,7 @@ let Multi_venue = () => {
     // }else{ 
     // }
 
-    if (inone?.length > 2 && intwo === undefined || intwo === '') {
+    if (inone?.length > 1 && intwo === undefined || intwo === '') {
       let splitone = inone.split('-')
 
 
@@ -3264,7 +3409,7 @@ let Multi_venue = () => {
       }
     }
 
-    if (intwo?.length > 2 && inone === undefined || intwo === '') {
+    if (intwo?.length > 1 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -3317,15 +3462,20 @@ let Multi_venue = () => {
       }
     }
 
-    if (intwo?.length > 2 && inone?.length > 2) {
+      if (intwo?.length >= 1 && inone?.length >= 1) {
+      console.log(inone, intwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
 
 
-
+      console.log(splitone, splittwo , '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
 
       function filterDataByTableRanges(data, ranges) {
+
+        if(ranges.length === 0){  
+          return []
+        }
         const filteredData = {};
 
         Object.entries(data).forEach(([groupKey, groupData]) => {
@@ -3351,8 +3501,14 @@ let Multi_venue = () => {
         return filteredData;
       }
 
-      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+      let ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      let rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+
+      if( splitone.length === 1 && splittwo.length === 1) {
+        ranges = [[Number(splitone[0]), Number(splittwo[0])]];
+        rangesone = [];
+      }
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
@@ -3379,7 +3535,6 @@ let Multi_venue = () => {
 
 
     }
-
     if (alltype === undefined || alltype.length === 0) {
 
     } else {
@@ -3479,7 +3634,7 @@ let Multi_venue = () => {
 
     setFilterdataone(filteredData)
 
-    callfordataone(filteredData)
+    callfordataone(filteredData , alltype)
     let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
     let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
     // Extract values into separate arrays
@@ -3907,36 +4062,90 @@ let Multi_venue = () => {
 
     }
 
-    if (takeaways.length != 0 && takeaway === true) {
+   if (takeaways.length != 0 && takeaway === true) {
 
-      function filterByNote(data, regex) {
-        if (Array.isArray(data)) {
-          return data
-            .map(item => filterByNote(item, regex))
-            .filter(item => item !== null);
-        } else if (typeof data === 'object' && data !== null) {
-          if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
-            return {
-              ...data,
-              ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
-            };
-          } else if (!data.hasOwnProperty('NOTE')) {
-            let filteredObject = {};
-            for (let key in data) {
-              let filteredValue = filterByNote(data[key], regex);
-              if (filteredValue !== null) {
-                filteredObject[key] = filteredValue;
+
+      function filterByNoted(data, filterNotes) {
+        let filteredData = {};
+
+        for (let group in data) {
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let filteredOrders = data[group][location][section][date]
+                  .filter(order => {
+                    return order.NOTE && filterNotes.test(order.NOTE);
+                  });
+
+                if (filteredOrders.length > 0) {
+                  if (!filteredData[group]) filteredData[group] = {};
+                  if (!filteredData[group][location]) filteredData[group][location] = {};
+                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                  filteredData[group][location][section][date] = filteredOrders;
+                }
               }
             }
-            return Object.keys(filteredObject).length > 0 ? filteredObject : null;
           }
         }
-        return null;
-      }
-      const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
 
-      // const filteredData = filterByNote(originalData, regex);
-      alldat = filterByNote(alldat, regex);
+        return filteredData;
+      }
+
+      const filteredTakeaways = takeaways.filter(t => t.value.toLowerCase() !== 'all');
+
+      const keywordVariants = {
+        "Takeaways": ["takeaways", "takeaway", "take-away", "take away", "Take Away", "Take away", "Take-Away", "Take-away", "Takeaways"],
+        "Deliveries": ["deliveries", "delivery", "Delivery", "Deliveries"],
+        "Pick-ups": ["Pick up", "Pickup", "Pick-ups", "Pick Up", "Pick-up", "pick-up", "Pick-ups"]
+      };
+
+
+      const selectedValues = takeaways.map(t => t.value).filter(val => val !== 'All');
+
+      // Step 2: Get all matching keyword variants for selected values
+      const keywordsToSearch = selectedValues.flatMap(val => keywordVariants[val] || []);
+
+      // Step 3: Build regex (escaped properly)
+      const regex = new RegExp(`\\b(${keywordsToSearch.map(escapeRegExp).join('|')})\\b`, 'i');
+
+      function escapeRegExp(str) {
+        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      }
+
+
+      console.log(regex, 'seven seven seven')
+      alldat = filterByNoted(alldat, regex);
+
+
+
+      // function filterByNote(data, regex) {
+      //   if (Array.isArray(data)) {
+      //     return data
+      //       .map(item => filterByNote(item, regex))
+      //       .filter(item => item !== null);
+      //   } else if (typeof data === 'object' && data !== null) {
+      //     if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+      //       return {
+      //         ...data,
+      //         ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+      //       };
+      //     } else if (!data.hasOwnProperty('NOTE')) {
+      //       let filteredObject = {};
+      //       for (let key in data) {
+      //         let filteredValue = filterByNote(data[key], regex);
+      //         if (filteredValue !== null) {
+      //           filteredObject[key] = filteredValue;
+      //         }
+      //       }
+      //       return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+      //     }
+      //   }
+      //   return null;
+      // }
+      // const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
+      // console.log(regex, 'seven seven seven')
+      // // const filteredData = filterByNote(originalData, regex);
+      // alldat = filterByNote(alldat, regex);
 
 
 
@@ -3998,7 +4207,7 @@ let Multi_venue = () => {
     } else {
     }
 
-    if (inone?.length > 2 && intwo === undefined || intwo === '') {
+    if (inone?.length > 1 && intwo === undefined || intwo === '') {
       let splitone = inone.split('-')
 
 
@@ -4051,7 +4260,7 @@ let Multi_venue = () => {
       }
     }
 
-    if (intwo?.length > 2 && inone === undefined || intwo === '') {
+    if (intwo?.length > 1 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -4104,15 +4313,20 @@ let Multi_venue = () => {
       }
     }
 
-    if (intwo?.length > 2 && inone?.length > 2) {
+      if (intwo?.length >= 1 && inone?.length >= 1) {
+      console.log(inone, intwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
 
 
-
+      console.log(splitone, splittwo , '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
 
       function filterDataByTableRanges(data, ranges) {
+
+        if(ranges.length === 0){  
+          return []
+        }
         const filteredData = {};
 
         Object.entries(data).forEach(([groupKey, groupData]) => {
@@ -4138,8 +4352,14 @@ let Multi_venue = () => {
         return filteredData;
       }
 
-      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+      let ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      let rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+
+      if( splitone.length === 1 && splittwo.length === 1) {
+        ranges = [[Number(splitone[0]), Number(splittwo[0])]];
+        rangesone = [];
+      }
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
@@ -4329,7 +4549,101 @@ let Multi_venue = () => {
 
   }
 
-  let callfordataone = (one) => {
+
+   function calculateTotalMinutes(STAMP) {
+    const parts = STAMP.split(' ').slice(1); // Remove date part
+    const pairs = {};
+    let total = 0;
+
+    parts.forEach(part => {
+      const time = part.slice(0, 4);
+      const type = part[4];
+      const index = part.slice(5);
+
+      if (!pairs[index]) pairs[index] = {};
+      if (type === 'R') {
+        pairs[index].start = time;
+      } else if (type === 'P') {
+        pairs[index].end = time;
+      }
+    });
+
+    Object.values(pairs).forEach(({ start, end }) => {
+      if (!start || !end) return;
+
+      const startH = parseInt(start.slice(0, 2));
+      const startM = parseInt(start.slice(2, 4));
+      const endH = parseInt(end.slice(0, 2));
+      const endM = parseInt(end.slice(2, 4));
+
+      const startTotal = startH * 60 + startM;
+      const endTotal = endH * 60 + endM;
+      const diff = endTotal - startTotal;
+
+      total += diff === 0 ? 0.5 : diff;
+    });
+
+    return total;
+  }
+
+
+
+  function calculateTotalWithHold(STAMP) {
+    const segments = STAMP.split(" ");
+    let totalMinutes = 0;
+
+    for (let i = 0; i < segments.length; i++) {
+      if (segments[i].includes("H")) {
+        const current = segments[i];
+        const next = segments[i + 1];
+
+        if (next) {
+          const currentTime = parseInt(current.slice(0, 4)); // e.g., 1919
+          const nextTime = parseInt(next.slice(0, 4));       // e.g., 1924
+
+          if (currentTime === nextTime) {
+            totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
+          } else {
+            totalMinutes += (nextTime - currentTime); // normal minute diff
+          }
+        }
+      }
+    }
+
+    return totalMinutes;
+  }
+
+
+  function calculateIdleTimes(STAMP) {
+    const segments = STAMP.split(" ");
+    let totalMinutes = 0;
+
+    for (let i = 0; i < segments.length; i++) {
+      if (segments[i].includes("P")) {
+        const current = segments[i];
+        const next = segments[i + 1];
+
+        if (next) {
+          const currentTime = parseInt(current.slice(0, 4)); // e.g., 1919
+          const nextTime = parseInt(next.slice(0, 4));       // e.g., 1924
+
+          if (currentTime === nextTime) {
+            totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
+          } else {
+            totalMinutes += (nextTime - currentTime); // normal minute diff
+          }
+        }
+      }
+    }
+
+    return totalMinutes;
+  }
+
+
+
+
+
+  let callfordataone = (one , allt ) => {
 
     function processData(data) {
       let result = [];
@@ -4353,7 +4667,25 @@ let Multi_venue = () => {
             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
             // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+            // let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+
+             let valuesPresent = allt.map(item => item.value);
+
+
+            let processTime = 0;
+
+
+
+            let processess = calculateTotalMinutes(order?.STAMP)
+            let holdd = calculateTotalWithHold(order?.STAMP)
+            let passtime = calculateIdleTimes(order?.STAMP)
+
+
+            if (valuesPresent.includes("R")) processTime += Number(processess);
+            if (valuesPresent.includes("P")) processTime += Number(passtime);
+            if (valuesPresent.includes("H")) processTime += Number(holdd);
+
+
 
             if (processTime < 2) {
 
@@ -4406,7 +4738,7 @@ let Multi_venue = () => {
 
   }
 
-  let callfordataonetwo = (two) => {
+  let callfordataonetwo = (two , allt ) => {
  
      function processData(data) {
        let result = [];
@@ -4432,7 +4764,23 @@ let Multi_venue = () => {
              const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
              const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
              // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-             let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+            //  let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+
+            let valuesPresent = allt.map(item => item.value);
+
+
+            let processTime = 0;
+
+
+
+            let processess = calculateTotalMinutes(order?.STAMP)
+            let holdd = calculateTotalWithHold(order?.STAMP)
+            let passtime = calculateIdleTimes(order?.STAMP)
+
+
+            if (valuesPresent.includes("R")) processTime += Number(processess);
+            if (valuesPresent.includes("P")) processTime += Number(passtime);
+            if (valuesPresent.includes("H")) processTime += Number(holdd);
  
                 
  
