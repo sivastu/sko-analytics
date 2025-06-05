@@ -213,14 +213,14 @@ let Dockets = () => {
   function findFirstOccurrenceByStatus(stampData, statusLetter, statusIndex) {
     const [, ...actions] = stampData.split(" ");
     const targetSuffix = `${statusLetter}${statusIndex}`;
-  
+
     for (let action of actions) {
       if (action.endsWith(targetSuffix)) {
         const time = action.substring(0, 4);
         return `${statusLetter}${':'} ${" "} ${time.substring(0, 2)}:${time.substring(2, 4)}`;
       }
     }
-  
+
     // If not found, you can return null or a message
     return null;
   }
@@ -290,7 +290,7 @@ let Dockets = () => {
 
   let [usedname, setUsedname] = useState('')
   function getName(data) {
- 
+
     const matchedGroupName = Object.entries(state.data).find(([groupName, groupData]) => {
       return Object.keys(groupData).some(key =>
         data?.venue.some(item => item.label === key)
@@ -424,12 +424,12 @@ let Dockets = () => {
 
   function parseRemarks(data) {
     const lines = [];
-  
+
     // Check for 'Refunuded' (add 'Refunded' if found)
     if (data.includes("Refunuded")) {
       lines.push("Refunded");
     }
-  
+
     // Extract values after "!" (excluding ones like !(C4hot))
     const exclamations = data.match(/!\w[^$!]*/g);
     if (exclamations) {
@@ -440,13 +440,13 @@ let Dockets = () => {
         }
       });
     }
-  
+
     // Extract values like (C4hot) or (C1starter)
     const categoryMatch = data.match(/\(C\d+(.*?)\)/);
     if (categoryMatch && categoryMatch[1]) {
       lines.push(categoryMatch[1]);
     }
-  
+
     return lines;
   }
 
@@ -456,21 +456,21 @@ let Dockets = () => {
       return <p style={{ textAlign: 'center', color: 'red' }}>No orders available</p>;
     }
 
-    
+
 
     let stamp = cval1?.order?.STAMP
 
     return (
       <div>
-        {Object.entries(orders).map(([course, items] , key) => (
+        {Object.entries(orders).map(([course, items], key) => (
           <div key={course} style={{ marginBottom: 20 }}>
             <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>
               Course: {course === "empty" ? '' : course}
             </p>
-            <p onClick={()=>{
-              console.log(orders , 'stampvalstampvalstampval')
+            <p onClick={() => {
+              console.log(orders, 'stampvalstampvalstampval')
             }} style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}>
-              Time:  {  findFirstOccurrenceByStatus(stampval , 'R' , key )} . | {findFirstOccurrenceByStatus(stampval , 'P' , key )}. | {findFirstOccurrenceByStatus(stampval , 'H' , key )}.
+              Time:  {findFirstOccurrenceByStatus(stampval, 'R', key)} . | {findFirstOccurrenceByStatus(stampval, 'P', key)}. | {findFirstOccurrenceByStatus(stampval, 'H', key)}.
             </p>
 
             <div style={{ marginTop: 10 }}>
@@ -907,7 +907,7 @@ let Dockets = () => {
 
   }
 
- 
+
 
   const [time, setTime] = useState('12:00');
 
@@ -989,7 +989,7 @@ let Dockets = () => {
       </div>
     );
   };
- 
+
 
   const CustomPlaceholder = ({ children, getValue }) => {
     const selected = getValue();
@@ -1221,10 +1221,10 @@ let Dockets = () => {
     console.log(editall, 'selected')
 
     console.log(editallone, 'selected')
- 
+
     setSetservedatare(selected.value)
     if (editall.length === 0) {
- 
+
     } else {
 
 
@@ -1496,7 +1496,7 @@ let Dockets = () => {
     return kkki
   }
 
- 
+
 
   let ggggrts = () => {
     let kkki = 0
@@ -1513,7 +1513,7 @@ let Dockets = () => {
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
 
 
-    console.log(time, time2, 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
+    console.log(JSON.stringify(alltype), 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj zzzzzzzzzzzzzzzzzz')
 
 
     cources = cources.filter(item => item.value !== "All");
@@ -2193,7 +2193,7 @@ let Dockets = () => {
 
 
 
-    callfordataone(filteredData) 
+    callfordataone(filteredData, alltype)
     // let ghi = processTimeData(alldat)
 
     let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
@@ -2280,7 +2280,7 @@ let Dockets = () => {
 
 
 
- 
+
 
   function processTimeDatafghtwo(data, timeSlots) {
     const timeSums = {};
@@ -2355,7 +2355,7 @@ let Dockets = () => {
 
 
 
- 
+
 
 
   function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
@@ -3027,7 +3027,7 @@ let Dockets = () => {
 
     } else {
 
-      callfordataonetwo(filteredData)
+      callfordataonetwo(filteredData, alltype)
 
     }
 
@@ -3145,21 +3145,111 @@ let Dockets = () => {
       let diffHours = endHour - startHour;
       let diffMinutes = endMinute - startMinute;
 
-       
+
       return diffMinutes;
     }
 
 
   }
 
-  let callfordataone = (one) => {
+  function calculateTotalMinutes(STAMP) {
+    const parts = STAMP.split(' ').slice(1); // Remove date part
+    const pairs = {};
+    let total = 0;
 
+    parts.forEach(part => {
+      const time = part.slice(0, 4);
+      const type = part[4];
+      const index = part.slice(5);
+
+      if (!pairs[index]) pairs[index] = {};
+      if (type === 'R') {
+        pairs[index].start = time;
+      } else if (type === 'P') {
+        pairs[index].end = time;
+      }
+    });
+
+    Object.values(pairs).forEach(({ start, end }) => {
+      if (!start || !end) return;
+
+      const startH = parseInt(start.slice(0, 2));
+      const startM = parseInt(start.slice(2, 4));
+      const endH = parseInt(end.slice(0, 2));
+      const endM = parseInt(end.slice(2, 4));
+
+      const startTotal = startH * 60 + startM;
+      const endTotal = endH * 60 + endM;
+      const diff = endTotal - startTotal;
+
+      total += diff === 0 ? 0.5 : diff;
+    });
+
+    return total;
+  }
+
+
+
+  function calculateTotalWithHold(STAMP) {
+    const segments = STAMP.split(" ");
+    let totalMinutes = 0;
+
+    for (let i = 0; i < segments.length; i++) {
+      if (segments[i].includes("H")) {
+        const current = segments[i];
+        const next = segments[i + 1];
+
+        if (next) {
+          const currentTime = parseInt(current.slice(0, 4)); // e.g., 1919
+          const nextTime = parseInt(next.slice(0, 4));       // e.g., 1924
+
+          if (currentTime === nextTime) {
+            totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
+          } else {
+            totalMinutes += (nextTime - currentTime); // normal minute diff
+          }
+        }
+      }
+    }
+
+    return totalMinutes;
+  }
+
+
+  function calculateIdleTimes(STAMP) {
+    const segments = STAMP.split(" ");
+    let totalMinutes = 0;
+
+    for (let i = 0; i < segments.length; i++) {
+      if (segments[i].includes("P")) {
+        const current = segments[i];
+        const next = segments[i + 1];
+
+        if (next) {
+          const currentTime = parseInt(current.slice(0, 4)); // e.g., 1919
+          const nextTime = parseInt(next.slice(0, 4));       // e.g., 1924
+
+          if (currentTime === nextTime) {
+            totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
+          } else {
+            totalMinutes += (nextTime - currentTime); // normal minute diff
+          }
+        }
+      }
+    }
+
+    return totalMinutes;
+  }
+
+
+
+
+
+  let callfordataone = (one, allt) => {
 
     function processData(data) {
       let result = [];
       let processTimes = [];
-
- 
 
       Object.entries(data).forEach(([dateKey, orders]) => {
         orders.forEach(order => {
@@ -3179,12 +3269,37 @@ let Dockets = () => {
             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
             // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+            // let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
 
-               
+            let valuesPresent = allt.map(item => item.value);
 
-            if (processTime < 2) { 
- 
+
+            let processTime = 0;
+
+
+
+            let processess = calculateTotalMinutes(order?.STAMP)
+            let holdd = calculateTotalWithHold(order?.STAMP)
+            let passtime = calculateIdleTimes(order?.STAMP)
+
+
+            if (valuesPresent.includes("R")) processTime += Number(processess);
+            if (valuesPresent.includes("P")) processTime += Number(passtime);
+            if (valuesPresent.includes("H")) processTime += Number(holdd);
+
+
+            // console.log(processess, 'processess')
+            // console.log(holdd, 'holdd')
+            // console.log(passtime, 'passtime')
+            // console.log(valuesPresent, 'valuesPresent')
+
+            console.log(processTime, 'processTime')
+
+
+            // let processTime = calculateTotalMinutes(order?.STAMP)
+
+            if (processTime < 2) {
+
             } else {
               processTimes.push(processTime);
 
@@ -3197,15 +3312,9 @@ let Dockets = () => {
                 order: order
               });
             }
-
-
-
-            // Calculate processing time
-
           }
         });
       });
-
       // Sort orders by process time (high to low)
       result.sort((a, b) => b.processtime - a.processtime);
 
@@ -3214,8 +3323,6 @@ let Dockets = () => {
         ...order,
         processtime: `${order.processtime}min`
       }));
-      console.log(processTimes, 'newalldatanewalldatanewalldatanewalldata bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
-      // Calculate average, min, and max processing time
       if (processTimes.length > 0) {
         const totalTime = processTimes.reduce((sum, time) => {
           return sum + (typeof time === 'number' ? time : 0);
@@ -3236,23 +3343,18 @@ let Dockets = () => {
 
       return { orders: result, stats: null };
     }
-
-
     let newalldata = processData(one)
 
-    
     setEditall(newalldata)
- 
-
   }
 
-  let callfordataonetwo = (two) => {
+  let callfordataonetwo = (two, allt) => {
 
     function processData(data) {
       let result = [];
       let processTimes = [];
 
- 
+
 
       Object.entries(data).forEach(([dateKey, orders]) => {
         orders.forEach(order => {
@@ -3272,12 +3374,38 @@ let Dockets = () => {
             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
             // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+            // let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
 
-               
+            // let processTime = calculateTotalMinutes(order?.STAMP)
 
-            if (processTime < 2) { 
- 
+            let valuesPresent = allt.map(item => item.value);
+
+
+            let processTime = 0;
+
+
+
+            let processess = calculateTotalMinutes(order?.STAMP)
+            let holdd = calculateTotalWithHold(order?.STAMP)
+            let passtime = calculateIdleTimes(order?.STAMP)
+
+
+            if (valuesPresent.includes("R")) processTime += Number(processess);
+            if (valuesPresent.includes("P")) processTime += Number(passtime);
+            if (valuesPresent.includes("H")) processTime += Number(holdd);
+
+
+            console.log(processess, 'processess')
+            console.log(holdd, 'holdd')
+            console.log(passtime, 'passtime')
+            console.log(valuesPresent, 'valuesPresent')
+
+            console.log(processTime, 'processTime')
+
+
+
+            if (processTime < 2) {
+
             } else {
               processTimes.push(processTime);
 
@@ -3333,7 +3461,7 @@ let Dockets = () => {
 
     console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
     setEditallone(newalldata)
- 
+
   }
 
 
@@ -3366,10 +3494,10 @@ let Dockets = () => {
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
             // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
-            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+            let processTime = timeDifferencebug(startTimeFormatted, order?.STAMP)
             const regex = new RegExp(bitedata, "i"); // "i" makes it case-insensitive
             const isMatch = regex.test(order.DOCKETID);
- 
+
 
             if (isMatch) {
 
@@ -3461,7 +3589,7 @@ let Dockets = () => {
             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
             // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+            let processTime = timeDifferencebug(startTimeFormatted, order?.STAMP)
 
 
             console.log(processTime, 'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
@@ -3529,13 +3657,13 @@ let Dockets = () => {
 
     console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
     setEditallone(newalldata)
- 
+
 
   }
 
 
-  
- 
+
+
 
   let checkkkk = () => {
 
@@ -3671,7 +3799,7 @@ let Dockets = () => {
 
   let editexportpdf = async () => {
 
-    const input = pdfRef.current; 
+    const input = pdfRef.current;
 
 
 
@@ -4449,7 +4577,7 @@ let Dockets = () => {
     return timeValue >= startTime && timeValue < endTime;
   };
 
-   
+
 
   const getpadd = () => {
     if (window.innerWidth >= 1536) return 80; // 2xl
@@ -4492,12 +4620,12 @@ let Dockets = () => {
   }, []);
 
   return (
-    <div className="hide-scrollbar" style={{ scrollbarWidth: 'none' }}> 
+    <div className="hide-scrollbar" style={{ scrollbarWidth: 'none' }}>
 
       <div style={{ scrollbarWidth: 'none' }}>
 
         <div className="" style={{
-          height: 52, background: "linear-gradient(#316AAF , #9ac6fc )", 
+          height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
         }} >
           <div className="row justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', height: 52 }}>
 
@@ -4706,7 +4834,7 @@ let Dockets = () => {
                       hideSelectedOptions={false}
                       styles={{
                         control: (base, state) => ({
-                          ...base, 
+                          ...base,
                           backgroundColor: '#fff',
                           fontSize: 15,
                           color: '#1A1A1B',
@@ -5427,14 +5555,14 @@ let Dockets = () => {
                             {
                               editall?.orders?.map((dfgh, index) => {
 
-                                if(index > 100 ){
+                                if (index > 100) {
                                   return
                                 }
                                 const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `editallone`
 
                                 // Compare processtime at the 0th index only
                                 let isChosenRangeMax = false;
-                                let isComparingRangeMin = false; 
+                                let isComparingRangeMin = false;
 
                                 if (index === 0) {
                                   const processTimeOne = parseInt(editall?.orders?.[0]?.processtime) || 0; // Chosen range at 0th index
@@ -5467,28 +5595,28 @@ let Dockets = () => {
 
                                 let val4 = 0
 
-                                if(index === 0){
-                                  if(selectedOptionsfine?.label === "Maximum"){
-                                    const number1 =  dfgh?.processtime && /\d+/.test(dfgh?.processtime) ? Number(dfgh?.processtime.match(/\d+/)[0]) : 0  
-                                    const number2 =  correspondingErv?.processtime && /\d+/.test(correspondingErv?.processtime) ? Number(correspondingErv?.processtime.match(/\d+/)[0]) : 0  
+                                if (index === 0) {
+                                  if (selectedOptionsfine?.label === "Maximum") {
+                                    const number1 = dfgh?.processtime && /\d+/.test(dfgh?.processtime) ? Number(dfgh?.processtime.match(/\d+/)[0]) : 0
+                                    const number2 = correspondingErv?.processtime && /\d+/.test(correspondingErv?.processtime) ? Number(correspondingErv?.processtime.match(/\d+/)[0]) : 0
 
-                                    if(number1 > number2){
+                                    if (number1 > number2) {
                                       val4 = 1
-                                    }else if (number1 === number2){
+                                    } else if (number1 === number2) {
                                       val4 = 6
-                                    }else{
+                                    } else {
                                       val4 = 2
                                     }
-                                  }else{
-                                    const number1 =  dfgh?.processtime && /\d+/.test(dfgh?.processtime) ? Number(dfgh?.processtime.match(/\d+/)[0]) : 0  
-                                    const number2 =  correspondingErv?.processtime && /\d+/.test(correspondingErv?.processtime) ? Number(correspondingErv?.processtime.match(/\d+/)[0]) : 0  
+                                  } else {
+                                    const number1 = dfgh?.processtime && /\d+/.test(dfgh?.processtime) ? Number(dfgh?.processtime.match(/\d+/)[0]) : 0
+                                    const number2 = correspondingErv?.processtime && /\d+/.test(correspondingErv?.processtime) ? Number(correspondingErv?.processtime.match(/\d+/)[0]) : 0
 
 
-                                    if(number1 < number2){
+                                    if (number1 < number2) {
                                       val4 = 3
-                                    }else if (number1 === number2){ 
+                                    } else if (number1 === number2) {
                                       val4 = 7
-                                    }else{
+                                    } else {
                                       val4 = 4
                                     }
                                   }
@@ -5501,10 +5629,10 @@ let Dockets = () => {
                                     <div className="d-flex gap-5">
                                       {/* Left Column (Chosen Range) */}
                                       <div style={{ width: "40%" }}>
-                                        <div className="d-flex align-items-center"> 
-                                          <p onClick={()=>{
-                                            console.log(val4, 'val4' , selectedOptionsfine.label)
-                                          }} style={{ fontWeight: "700", color: val4 === 1 || val4 === 6  ? "#CA424E" :  val4 === 3 || val4 === 7 ? "#316AAF" : "#000", width: "60%", marginTop: 15 }}>
+                                        <div className="d-flex align-items-center">
+                                          <p onClick={() => {
+                                            console.log(val4, 'val4', selectedOptionsfine.label)
+                                          }} style={{ fontWeight: "700", color: val4 === 1 || val4 === 6 ? "#CA424E" : val4 === 3 || val4 === 7 ? "#316AAF" : "#000", width: "60%", marginTop: 15 }}>
                                             {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{dfgh?.date + " " + "[" +
                                               dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff} </span>
                                           </p>
@@ -5521,7 +5649,7 @@ let Dockets = () => {
                                       {correspondingErv ? (
                                         <div style={{ width: "40%" }}>
                                           <div className="d-flex align-items-center">
-                                            <p style={{ fontWeight: "700", color: val4 === 2 || val4 === 6   ? "#CA424E" :  val4 === 4 || val4 === 7 ? "#316AAF" :  "#000", width: "60%", marginTop: 15 }}>
+                                            <p style={{ fontWeight: "700", color: val4 === 2 || val4 === 6 ? "#CA424E" : val4 === 4 || val4 === 7 ? "#316AAF" : "#000", width: "60%", marginTop: 15 }}>
                                               {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{correspondingErv?.date + " " + "[" +
                                                 correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                                             </p>
@@ -6518,7 +6646,7 @@ let Dockets = () => {
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time served: {(() => {
                 const datass = cval1?.order?.STAMP;
 
- 
+
 
                 if (!datass) {
                   return
@@ -6537,7 +6665,7 @@ let Dockets = () => {
 
 
               })()}</p>
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Completion time: {timeDifference(cval1?.starttime.replace('@', ''), cval1?.order?.STAMP)}</p> 
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Completion time: {timeDifference(cval1?.starttime.replace('@', ''), cval1?.order?.STAMP)}</p>
 
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Docket #: {cval1?.order?.DOCKETID}</p>
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Table #: {cval1?.order?.TABLE}</p>

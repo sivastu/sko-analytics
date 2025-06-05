@@ -4331,7 +4331,6 @@ let Multi_venue = () => {
 
   let callfordataone = (one) => {
 
-
     function processData(data) {
       let result = [];
       let processTimes = [];
@@ -4370,25 +4369,17 @@ let Multi_venue = () => {
                 order: order
               });
             }
-
-
-
-            // Calculate processing time
-
           }
         });
       });
 
-      // Sort orders by process time (high to low)
       result.sort((a, b) => b.processtime - a.processtime);
 
-      // Convert process time back to string format for display
       result = result.map(order => ({
         ...order,
         processtime: `${order.processtime}min`
       }));
 
-      // Calculate average, min, and max processing time
       if (processTimes.length > 0) {
         const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
         const averageTime = Math.round(totalTime / processTimes.length);
@@ -4404,160 +4395,14 @@ let Multi_venue = () => {
           }
         };
       }
-
       return { orders: result, stats: null };
     }
 
 
     let newalldata = processData(one)
-
     console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
+
     setEditall(newalldata)
-
-    // console.log( JSON.stringify( alltype) , 'oneone') 
-
-    // if(alltype.length === 0 ){
-
-    // }else{
-
-    // }
-
-
-    // const categorizeItems = (datasssssss) => {
-    //   const edited = ["2", "12", "22", "32"];
-    //   const moved = ["3", "13", "23", "33"];
-    //   const deleted = ["4", "24"];
-
-    //   const result = {
-    //     edited: [],
-    //     moved: [],
-    //     deleted: [],
-    //     served: [],
-    //     tableMoved: []
-    //   };
-
-    //   for (const [date, entries] of Object.entries(datasssssss)) {
-
-
-    //     entries.forEach(entry => {
-
-
-    //       if (entry.NOTE && entry.NOTE.includes("$ND$")) {
-    //         result.tableMoved.push(entry);
-    //       }
-
-
-    //       entry.ITEMS.forEach(item => {
-    //         if (edited.includes(item.STATUS)) {
-    //           result.edited.push(item);
-    //         } else if (moved.includes(item.STATUS)) {
-    //           result.moved.push(item);
-    //         } else if (deleted.includes(item.STATUS)) {
-    //           result.deleted.push(item);
-    //         } else if (parseInt(item.STATUS) > 20) {
-    //           result.served.push(item);
-    //         }
-    //       });
-    //     });
-
-    //   }
-
-    //   return result;
-    // };
-
-    // let editttsone = categorizeItems(one)
-    // // let editttstwo = categorizeItems(two)
-
-    // console.log(editttsone, 'editttsoneeditttsone')
-
-
-    // setEditall(editttsone)
-    // // setEditallone(editttstwo)
-
-    // const processItems = (data) => {
-    //   const dishCounts = {};
-
-    //   // Iterate through the data to collect and process dishes
-    //   for (const [date, entries] of Object.entries(data)) {
-
-
-
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Remove "Sp\\" prefix if present
-    //         const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
-
-    //         // If dish is already counted, increment its count and append data
-    //         if (dishCounts[cleanItemName]) {
-    //           dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
-    //           dishCounts[cleanItemName].data.push(item);
-    //         } else {
-    //           // If not, initialize a new entry for the dish
-    //           dishCounts[cleanItemName] = {
-    //             count: parseInt(item.QUANTITY, 10),
-    //             name: cleanItemName,
-    //             data: [item],
-    //           };
-    //         }
-    //       });
-    //     });
-    //   }
-
-    //   // Convert the dishCounts object to an array
-    //   return Object.values(dishCounts).sort((a, b) => b.count - a.count);
-    // };
-
-
-    // let minnscount = processItems(one)
-    // // let maxnscount = processItems(two)
-    // setServed(minnscount)
-    // // setServedone(maxnscount)
-
-    // const processRefundedItems = (data) => {
-    //   const results = [];
-
-    //   // Iterate through each date's data
-    //   for (const [date, entries] of Object.entries(data)) {
-    //     let refundedItems = [];
-
-
-
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Check if "Refunded" exists in the ITEM field
-    //         if (item?.NOTE?.includes("Refunded")) {
-    //           refundedItems.push(item);
-    //         }
-    //       });
-    //     });
-
-    //     if (refundedItems.length > 0) {
-    //       // Calculate the total quantity for refunded items
-    //       const totalQuantity = refundedItems.reduce(
-    //         (sum, item) => sum + parseInt(item.QUANTITY, 10),
-    //         0
-    //       );
-
-    //       results.push({
-    //         date,
-    //         count: totalQuantity,
-    //         name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
-    //         data: refundedItems,
-    //       });
-    //     }
-    //   }
-
-    //   return results;
-    // };
-
-    // let refundcount = processRefundedItems(one)
-    // // let refundcounttwo = processRefundedItems(two)
-    // setMinperday(refundcount)
-    // console.log(refundcount ,'refundcountrefundcountrefundcount')
-    // // setMaxperday(refundcounttwo)
-
-
-
 
   }
 
