@@ -266,7 +266,7 @@ let Dockets = () => {
 
   }
 
-   function openModals(finebyme, finebyme2) { 
+  function openModals(finebyme, finebyme2) {
 
     function filterItemsByNote(order) {
       const groupedItems = {};
@@ -382,6 +382,8 @@ let Dockets = () => {
   let [onebarone, setOneBarone] = useState([])
   let [twobarone, setTwobarone] = useState([])
   let [optionbarone, setOptionone] = useState([])
+
+
   const getFormattedDate = (daysBefore) => {
     const date = new Date();
     date.setDate(date.getDate() - daysBefore);
@@ -503,11 +505,16 @@ let Dockets = () => {
             <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>
               Course: {course === "empty" ? '' : course}
             </p>
-            <p onClick={() => {
-              console.log(orders, 'stampvalstampvalstampval')
-            }} style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}>
-              Time:  {findFirstOccurrenceByStatus(stampval, 'R', key)} . | {findFirstOccurrenceByStatus(stampval, 'P', key)}. | {findFirstOccurrenceByStatus(stampval, 'H', key)}.
-            </p>
+            {
+              key === 0 ? <p onClick={() => {
+                console.log(orders, 'stampvalstampvalstampval')
+              }} style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}>
+                Time:  {getStartTime(courseIndexMaps, selectedCources, cval1?.order?.STAMP)}  End Time : {getEndTime(courseIndexMaps, selectedCources, cval1?.order?.STAMP)}
+              </p>
+
+                : ""
+            }
+
 
             <div style={{ marginTop: 10 }}>
               {items?.map((kai, index) => (
@@ -713,8 +720,16 @@ let Dockets = () => {
 
       let uuuk = extractUniqueNotes(cleanedData, optionsone)
       uuuk.unshift({ label: "All Courses", value: "All" });
-      setFulldatafull(uuuk)
-      setOldcou(uuuk)
+      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
+      setOldcou([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
       // setSelectedCources(uuuk)
 
 
@@ -810,8 +825,16 @@ let Dockets = () => {
       let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
       uuuk.unshift({ label: "All Courses", value: "All" });
       // setSelectedCources(uuuk)
-      setOldcou(uuuk)
-      setFulldatafull(uuuk)
+      setOldcou([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
+      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
     }
 
 
@@ -1076,7 +1099,11 @@ let Dockets = () => {
       let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-      setFulldatafull(uuuk)
+      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
 
       setSelectedOptions([]);
 
@@ -1118,7 +1145,11 @@ let Dockets = () => {
       let uuuk = extractUniqueNotes(basicall, basic)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-      setFulldatafull(uuuk)
+      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
 
 
       setSelectedOptions(basic || []);
@@ -1196,7 +1227,11 @@ let Dockets = () => {
       let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-      setFulldatafull(uuuk)
+      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
       setSelectedOptions(selected || []);
 
       filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -1430,6 +1465,8 @@ let Dockets = () => {
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldcou.some(item => item.value === "All");
 
+
+
     setOldcou(selected)
 
     if (hasAllValue === false && hasAllValueold === true) {
@@ -1453,6 +1490,13 @@ let Dockets = () => {
 
 
     } else {
+
+
+
+
+
+
+
       setSelectedCources(selected || []);
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -1817,56 +1861,56 @@ let Dockets = () => {
 
     }
 
-    if (cources.length != 0) {
+    // if (cources.length != 0) {
 
 
-      function filterByNoted(data, filterNotes) {
-        let filteredData = {};
+    //   function filterByNoted(data, filterNotes) {
+    //     let filteredData = {};
 
-        // Extract only values from the filter list
-        const validNotes = filterNotes.map(item => item.value);
+    //     // Extract only values from the filter list
+    //     const validNotes = filterNotes.map(item => item.value);
 
-        for (let group in data) {
-          for (let location in data[group]) {
-            for (let section in data[group][location]) {
-              for (let date in data[group][location][section]) {
-                let filteredOrders = data[group][location][section][date].map(order => {
-                  let filteredItems = order.ITEMS.filter(item => {
-                    if (!item.NOTE) return false; // Ignore empty or undefined NOTE
+    //     for (let group in data) {
+    //       for (let location in data[group]) {
+    //         for (let section in data[group][location]) {
+    //           for (let date in data[group][location][section]) {
+    //             let filteredOrders = data[group][location][section][date].map(order => {
+    //               let filteredItems = order.ITEMS.filter(item => {
+    //                 if (!item.NOTE) return false; // Ignore empty or undefined NOTE
 
-                    // Extract the word after (C<number>)
-                    const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                    if (match && match[1]) {
-                      return validNotes.includes(match[1]); // Keep only if in validNotes
-                    }
-                    return false;
-                  });
+    //                 // Extract the word after (C<number>)
+    //                 const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+    //                 if (match && match[1]) {
+    //                   return validNotes.includes(match[1]); // Keep only if in validNotes
+    //                 }
+    //                 return false;
+    //               });
 
-                  return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
-                }).filter(order => order !== null);
+    //               return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
+    //             }).filter(order => order !== null);
 
-                if (filteredOrders.length > 0) {
-                  if (!filteredData[group]) filteredData[group] = {};
-                  if (!filteredData[group][location]) filteredData[group][location] = {};
-                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                  filteredData[group][location][section][date] = filteredOrders;
-                }
-              }
-            }
-          }
-        }
+    //             if (filteredOrders.length > 0) {
+    //               if (!filteredData[group]) filteredData[group] = {};
+    //               if (!filteredData[group][location]) filteredData[group][location] = {};
+    //               if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+    //               filteredData[group][location][section][date] = filteredOrders;
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
 
-        return filteredData;
-      }
-
-
-      alldat = filterByNoted(alldat, cources)
-
-      console.log(alldat, 'six')
+    //     return filteredData;
+    //   }
 
 
+    //   alldat = filterByNoted(alldat, cources)
 
-    }
+    //   console.log(alldat, 'six')
+
+
+
+    // }
 
     if (takeaways.length != 0 && takeaway === true) {
 
@@ -2299,17 +2343,21 @@ let Dockets = () => {
 
 
 
+    console.log(filteredData, 'filteredData', alltype, 'llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll ooooooooooooooooooo')
 
-    callfordataone(filteredData, alltype)
+
+
+
+    callfordataone(filteredData, alltype, cources)
     // let ghi = processTimeData(alldat)
 
 
 
 
-    let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
+    let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2), cources)
     let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
 
-    console.log(ghi, 'ghi') 
+    console.log(ghi, 'ghi')
     console.log(kidshort, 'kidshort')
 
     // Extract values into separate arrays
@@ -2317,7 +2365,7 @@ let Dockets = () => {
     let timeLabels = generateTimeSlots(time, time2)
     let timeCounts = kidshort.map(entry => entry.count);
 
-    console.log(timeLabels, 'timeLabels') 
+    console.log(timeLabels, 'timeLabels')
     console.log(timeCounts, 'timeCounts')
 
 
@@ -2327,7 +2375,7 @@ let Dockets = () => {
     let ghione = processTimeDatafghtwo(alldat, generateTimeSlots(time, time2))
     let kidshortone = ghione.sort((a, b) => a.time.localeCompare(b.time));
 
-    console.log(ghione, 'ghione') 
+    console.log(ghione, 'ghione')
     console.log(kidshortone, 'kidshortone')
 
     // Extract values into separate arrays
@@ -2335,7 +2383,7 @@ let Dockets = () => {
     let timeCountsone = kidshortone.map(entry => entry.count);
 
 
-    console.log(timeLabelsone, 'timeLabelsone') 
+    console.log(timeLabelsone, 'timeLabelsone')
     console.log(timeCountsone, 'timeCountsone')
 
 
@@ -2346,11 +2394,20 @@ let Dockets = () => {
 
 
   }
+  const courseIndexMaps = {
+    main: 3,
+    starter: 0,
+    sushi: 1,
+    hot: 2,
+    dessert: 4,
+  };
 
 
-  function processTimeDatafgh(data, timeSlots) {
+  function processTimeDatafgh(data, timeSlots, selectedCourses) {
+
+    console.log(data, timeSlots, selectedCourses, 'data, timeSlots, selectedCourses')
     const timeCounts = {};
-    timeSlots.forEach(slot => timeCounts[slot] = 0); // Init all counts to 0
+    timeSlots.forEach(slot => (timeCounts[slot] = 0));
 
     function extractTime(stamp) {
       const match = stamp.match(/\d{4}(R0|H0|P0|S0)/);
@@ -2373,6 +2430,14 @@ let Dockets = () => {
       return extractedMinutes >= slotStart && extractedMinutes <= slotEnd;
     }
 
+    // ✅ Treat empty selection or "All Courses" as selecting all courses
+    const selectedValues = (selectedCourses || []).map(c => c.value);
+    const isAllCourses = selectedValues.includes("All") || selectedValues.length === 0;
+
+    const selectedIndexes = isAllCourses
+      ? null
+      : selectedValues.map(val => courseIndexMaps[val]);
+
     for (let group in data) {
       for (let location in data[group]) {
         for (let section in data[group][location]) {
@@ -2382,8 +2447,24 @@ let Dockets = () => {
               if (extractedTime) {
                 for (const slot of timeSlots) {
                   if (isInRange(extractedTime, slot)) {
-                    timeCounts[slot]++;
-                    break; // Only increment the first matching slot
+                    let totalQty = 0;
+
+                    if (Array.isArray(order.ITEMS)) {
+                      for (const item of order.ITEMS) {
+                        const courseIndex = Number(item.COURSE);
+                        const qty = Number(item.QUANTITY) || 0;
+
+
+                        if (isAllCourses || selectedIndexes.includes(courseIndex)) {
+
+                          console.log(item, 'selectedIndexesselectedIndexesselectedIndexes')
+                          totalQty += qty;
+                        }
+                      }
+                    }
+
+                    timeCounts[slot] += totalQty;
+                    break; // Only count first matching slot
                   }
                 }
               }
@@ -2395,9 +2476,69 @@ let Dockets = () => {
 
     return timeSlots.map(time => ({
       time,
-      count: timeCounts[time]
+      count: timeCounts[time],
     }));
   }
+
+
+
+
+
+  // function processTimeDatafgh(data, timeSlots) {
+
+  //   console.log(data , timeSlots, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333 66666666666666666666666666666')
+
+
+
+  //   const timeCounts = {}; 
+  //   timeSlots.forEach(slot => timeCounts[slot] = 0); // Init all counts to 0
+
+  //   function extractTime(stamp) {
+  //     const match = stamp.match(/\d{4}(R0|H0|P0|S0)/);
+  //     if (match) {
+  //       const hh = match[0].slice(0, 2);
+  //       const mm = match[0].slice(2, 4);
+  //       return `${hh}:${mm}`;
+  //     }
+  //     return null;
+  //   }
+
+  //   function isInRange(extracted, slot) {
+  //     const [exH, exM] = extracted.split(':').map(Number);
+  //     const extractedMinutes = exH * 60 + exM;
+
+  //     const [slotH, slotM] = slot.split('.').map(Number);
+  //     const slotStart = slotH * 60 + slotM;
+  //     const slotEnd = slotStart + 9;
+
+  //     return extractedMinutes >= slotStart && extractedMinutes <= slotEnd;
+  //   }
+
+  //   for (let group in data) {
+  //     for (let location in data[group]) {
+  //       for (let section in data[group][location]) {
+  //         for (let date in data[group][location][section]) {
+  //           data[group][location][section][date].forEach(order => {
+  //             const extractedTime = extractTime(order.STAMP);
+  //             if (extractedTime) {
+  //               for (const slot of timeSlots) {
+  //                 if (isInRange(extractedTime, slot)) {
+  //                   timeCounts[slot]++;
+  //                   break; // Only increment the first matching slot
+  //                 }
+  //               }
+  //             }
+  //           });
+  //         }
+  //       }
+  //     }
+  //   }
+
+  //   return timeSlots.map(time => ({
+  //     time,
+  //     count: timeCounts[time]
+  //   }));
+  // }
 
 
 
@@ -2746,56 +2887,56 @@ let Dockets = () => {
 
     }
 
-    if (cources.length != 0) {
+    // if (cources.length != 0) {
 
 
-      function filterByNoted(data, filterNotes) {
-        let filteredData = {};
+    //   function filterByNoted(data, filterNotes) {
+    //     let filteredData = {};
 
-        // Extract only values from the filter list
-        const validNotes = filterNotes.map(item => item.value);
+    //     // Extract only values from the filter list
+    //     const validNotes = filterNotes.map(item => item.value);
 
-        for (let group in data) {
-          for (let location in data[group]) {
-            for (let section in data[group][location]) {
-              for (let date in data[group][location][section]) {
-                let filteredOrders = data[group][location][section][date].map(order => {
-                  let filteredItems = order.ITEMS.filter(item => {
-                    if (!item.NOTE) return false; // Ignore empty or undefined NOTE
+    //     for (let group in data) {
+    //       for (let location in data[group]) {
+    //         for (let section in data[group][location]) {
+    //           for (let date in data[group][location][section]) {
+    //             let filteredOrders = data[group][location][section][date].map(order => {
+    //               let filteredItems = order.ITEMS.filter(item => {
+    //                 if (!item.NOTE) return false; // Ignore empty or undefined NOTE
 
-                    // Extract the word after (C<number>)
-                    const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                    if (match && match[1]) {
-                      return validNotes.includes(match[1]); // Keep only if in validNotes
-                    }
-                    return false;
-                  });
+    //                 // Extract the word after (C<number>)
+    //                 const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+    //                 if (match && match[1]) {
+    //                   return validNotes.includes(match[1]); // Keep only if in validNotes
+    //                 }
+    //                 return false;
+    //               });
 
-                  return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
-                }).filter(order => order !== null);
+    //               return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
+    //             }).filter(order => order !== null);
 
-                if (filteredOrders.length > 0) {
-                  if (!filteredData[group]) filteredData[group] = {};
-                  if (!filteredData[group][location]) filteredData[group][location] = {};
-                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                  filteredData[group][location][section][date] = filteredOrders;
-                }
-              }
-            }
-          }
-        }
+    //             if (filteredOrders.length > 0) {
+    //               if (!filteredData[group]) filteredData[group] = {};
+    //               if (!filteredData[group][location]) filteredData[group][location] = {};
+    //               if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+    //               filteredData[group][location][section][date] = filteredOrders;
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
 
-        return filteredData;
-      }
-
-
-      alldat = filterByNoted(alldat, cources)
-
-      console.log(alldat, 'six')
+    //     return filteredData;
+    //   }
 
 
+    //   alldat = filterByNoted(alldat, cources)
 
-    }
+    //   console.log(alldat, 'six')
+
+
+
+    // }
 
     if (takeaways.length != 0 && takeaway === true) {
 
@@ -3048,13 +3189,12 @@ let Dockets = () => {
     }
 
     if (intwo?.length >= 1 && inone?.length >= 1) {
-      console.log(inone, intwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
+
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
 
 
-      console.log(splitone, splittwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
 
       function filterDataByTableRanges(data, ranges) {
 
@@ -3213,7 +3353,7 @@ let Dockets = () => {
 
     } else {
 
-      callfordataonetwo(filteredData, alltype)
+      callfordataonetwo(filteredData, alltype, cources)
 
     }
 
@@ -3239,7 +3379,7 @@ let Dockets = () => {
       return result;
     }
 
-    let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
+    let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2), cources)
 
     let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
 
@@ -3431,7 +3571,10 @@ let Dockets = () => {
 
 
 
-  let callfordataone = (one, allt) => {
+  let callfordataone = (one, allt, cos) => {
+
+
+    console.log(one, allt, cos, 'one, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cos')
 
     function processData(data) {
       let result = [];
@@ -3445,59 +3588,112 @@ let Dockets = () => {
           const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
 
           const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-          if (timeEntries.length >= 2) {
-            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
-            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
 
-            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
-            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
-
-            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            // let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
-
-            let valuesPresent = allt.map(item => item.value);
+          console.log(timeEntries, 'processTimeprocessTimeprocessTimeprocessTimeprocessTimeprocessTimeprocessTimeprocessTime')
 
 
-            let processTime = 0;
+          const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1 
+
+          const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
+
+          // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+          // let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+
+          let valuesPresent = allt.map(item => item.value);
 
 
-
-            let processess = calculateTotalMinutes(order?.STAMP)
-            let holdd = calculateTotalWithHold(order?.STAMP)
-            let passtime = calculateIdleTimes(order?.STAMP)
-
-
-            if (valuesPresent.includes("R")) processTime += Number(processess);
-            if (valuesPresent.includes("P")) processTime += Number(passtime);
-            if (valuesPresent.includes("H")) processTime += Number(holdd);
-
-
-            // console.log(processess, 'processess')
-            // console.log(holdd, 'holdd')
-            // console.log(passtime, 'passtime')
-            // console.log(valuesPresent, 'valuesPresent')
+          let processTime = 0;
 
 
 
-            // let processTime = calculateTotalMinutes(order?.STAMP)
+          let processess = calculateTotalMinutes(order?.STAMP)
+          let holdd = calculateTotalWithHold(order?.STAMP)
+          let passtime = calculateIdleTimes(order?.STAMP)
 
-            if (processTime < 2) {
 
-            } else {
-              processTimes.push(processTime);
+          if (valuesPresent.includes("R")) processTime += Number(processess);
+          if (valuesPresent.includes("P")) processTime += Number(passtime);
+          if (valuesPresent.includes("H")) processTime += Number(holdd);
 
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
+
+          // console.log(processess, 'processess')
+          // console.log(holdd, 'holdd')
+          // console.log(passtime, 'passtime')
+          // console.log(valuesPresent, 'valuesPresent')
+
+          function calculateCourseDuration(selected, time_stamp) {
+            if (selected.some(c => c.value === 'All')) return 0;
+
+            const parts = time_stamp.split(' ');
+            const entries = parts.slice(1); // skip the first part (date)
+            const courseMap = {};
+
+            for (let i = 0; i < entries.length - 1; i++) {
+              const cur = entries[i];
+              const next = entries[i + 1];
+
+              const matchR = cur.match(/^(\d{2})(\d{2})R(\d)$/); // e.g., 12:06 R0
+              const matchP = next.match(/^(\d{2})(\d{2})P(\d)$/); // e.g., 12:14 P0
+
+              if (matchR && matchP && matchR[3] === matchP[3]) {
+                const index = matchR[3];
+                const startMin = parseInt(matchR[1]) * 60 + parseInt(matchR[2]); // HH*60 + mm
+                const endMin = parseInt(matchP[1]) * 60 + parseInt(matchP[2]);
+                courseMap[index] = endMin - startMin;
+              }
             }
+
+            const courseIndexMap = {
+              main: 3,
+              starter: 0,
+              sushi: 1,
+              hot: 2,
+              dessert: 4,
+            };
+
+            let total = 0;
+
+            for (const course of selected) {
+              const idx = courseIndexMap[course.value];
+              if (courseMap[idx] == null) return 0; // If any duration is missing, return 0
+              total += courseMap[idx];
+            }
+
+            return total;
           }
+
+
+
+          if (cos.length != 0) {
+
+            processTime = calculateCourseDuration(cos, order?.STAMP)
+
+
+
+
+          }
+
+
+
+
+
+
+
+
+
+          // let processTime = calculateTotalMinutes(order?.STAMP)
+
+          processTimes.push(processTime);
+
+          result.push({
+            date: formattedDate,
+            processtime: processTime, // Store as a number for sorting
+            table: `T${order.TABLE}`,
+            starttime: `@${startTimeFormatted}`,
+            staff: order.STAFF,
+            order: order
+          });
+
         });
       });
       // Sort orders by process time (high to low)
@@ -3533,7 +3729,7 @@ let Dockets = () => {
     setEditall(newalldata)
   }
 
-  let callfordataonetwo = (two, allt) => {
+  let callfordataonetwo = (two, allt, cos) => {
 
     function processData(data) {
       let result = [];
@@ -3549,59 +3745,107 @@ let Dockets = () => {
           const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
 
           const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-          if (timeEntries.length >= 2) {
-            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
-            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
 
-            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
-            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
+          const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
+          const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
 
-            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            // let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+          const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
+          const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
 
-            // let processTime = calculateTotalMinutes(order?.STAMP)
+          const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+          const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+          // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+          // let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
 
-            let valuesPresent = allt.map(item => item.value);
+          // let processTime = calculateTotalMinutes(order?.STAMP)
 
-
-            let processTime = 0;
+          let valuesPresent = allt.map(item => item.value);
 
 
-
-            let processess = calculateTotalMinutes(order?.STAMP)
-            let holdd = calculateTotalWithHold(order?.STAMP)
-            let passtime = calculateIdleTimes(order?.STAMP)
-
-
-            if (valuesPresent.includes("R")) processTime += Number(processess);
-            if (valuesPresent.includes("P")) processTime += Number(passtime);
-            if (valuesPresent.includes("H")) processTime += Number(holdd);
+          let processTime = 0;
 
 
 
+          let processess = calculateTotalMinutes(order?.STAMP)
+          let holdd = calculateTotalWithHold(order?.STAMP)
+          let passtime = calculateIdleTimes(order?.STAMP)
 
-            if (processTime < 2) {
 
-            } else {
-              processTimes.push(processTime);
+          if (valuesPresent.includes("R")) processTime += Number(processess);
+          if (valuesPresent.includes("P")) processTime += Number(passtime);
+          if (valuesPresent.includes("H")) processTime += Number(holdd);
 
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
+
+          function calculateCourseDuration(selected, time_stamp) {
+            if (selected.some(c => c.value === 'All')) return 0;
+
+            const parts = time_stamp.split(' ');
+            const entries = parts.slice(1); // skip the first part (date)
+            const courseMap = {};
+
+            for (let i = 0; i < entries.length - 1; i++) {
+              const cur = entries[i];
+              const next = entries[i + 1];
+
+              const matchR = cur.match(/^(\d{2})(\d{2})R(\d)$/); // e.g., 12:06 R0
+              const matchP = next.match(/^(\d{2})(\d{2})P(\d)$/); // e.g., 12:14 P0
+
+              if (matchR && matchP && matchR[3] === matchP[3]) {
+                const index = matchR[3];
+                const startMin = parseInt(matchR[1]) * 60 + parseInt(matchR[2]); // HH*60 + mm
+                const endMin = parseInt(matchP[1]) * 60 + parseInt(matchP[2]);
+                courseMap[index] = endMin - startMin;
+              }
             }
 
+            const courseIndexMap = {
+              main: 3,
+              starter: 0,
+              sushi: 1,
+              hot: 2,
+              dessert: 4,
+            };
+
+            let total = 0;
+
+            for (const course of selected) {
+              const idx = courseIndexMap[course.value];
+              if (courseMap[idx] == null) return 0; // If any duration is missing, return 0
+              total += courseMap[idx];
+            }
+
+            return total;
+          }
 
 
-            // Calculate processing time
+
+          if (cos.length != 0) {
+
+            processTime = calculateCourseDuration(cos, order?.STAMP)
+
+
+
 
           }
+
+
+
+
+
+          processTimes.push(processTime);
+
+          result.push({
+            date: formattedDate,
+            processtime: processTime, // Store as a number for sorting
+            table: `T${order.TABLE}`,
+            starttime: `@${startTimeFormatted}`,
+            staff: order.STAFF,
+            order: order
+          });
+
+          // Calculate processing time
+
+
         });
       });
 
@@ -4797,6 +5041,66 @@ let Dockets = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
+  function getStartTime(courseIndexMap, cource, stamp) {
+
+    if (!stamp) {
+      return '00:00';
+    }
+
+    console.log(courseIndexMap, cource, stamp, 'courseIndexMap, cource, stamp getStartTimegetStartTimegetStartTimegetStartTimegetStartTimegetStartTimegetStartTime')
+    const parts = stamp.split(' ');
+    const timeTags = parts.slice(1); // Skip date
+    const selectedValues = cource.map(c => c.value);
+    const isAll = selectedValues.includes('All') || selectedValues.length === 0;
+
+    const selectedIndexes = isAll
+      ? null
+      : selectedValues.map(v => courseIndexMap[v]);
+
+    for (let tag of timeTags) {
+      const match = tag.match(/^(\d{2})(\d{2})R(\d)$/);
+      if (match) {
+        const [, hh, mm, idx] = match;
+        if (isAll || selectedIndexes.includes(Number(idx))) {
+          return `${hh}:${mm}`;
+        }
+      }
+    }
+
+    return null;
+  }
+
+
+  function getEndTime(courseIndexMap, cource, stamp) {
+
+    if (!stamp) {
+      return '00:00';
+    }
+    const parts = stamp.split(' ');
+    const timeTags = parts.slice(1);
+    const selectedValues = cource.map(c => c.value);
+    const isAll = selectedValues.includes('All') || selectedValues.length === 0;
+
+    const selectedIndexes = isAll
+      ? null
+      : selectedValues.map(v => courseIndexMap[v]);
+
+    for (let tag of timeTags) {
+      const match = tag.match(/^(\d{2})(\d{2})P(\d)$/);
+      if (match) {
+        const [, hh, mm, idx] = match;
+        if (isAll || selectedIndexes.includes(Number(idx))) {
+          return `${hh}:${mm}`;
+        }
+      }
+    }
+
+    return null;
+  }
+
+
+
   return (
     <div className="hide-scrollbar" style={{ scrollbarWidth: 'none' }}>
 
@@ -5114,7 +5418,7 @@ let Dockets = () => {
                     <div className="switch-container">
                       <input
                         type="checkbox"
-                        disabled={meals === 5 || meals === 4 ? true : false } 
+                        disabled={meals === 5 || meals === 4 ? true : false}
                         checked={Hubradio}
                         onChange={(e) => {
                           setHubradio(e.target.checked)
@@ -5197,7 +5501,7 @@ let Dockets = () => {
                           }
                         }}
                         id="switch4"
-                        disabled={ meals === 4 ? true : false } 
+                        disabled={meals === 4 ? true : false}
                       />
                       <label className="switch-label" htmlFor="switch4"></label>
                     </div>
@@ -5263,7 +5567,7 @@ let Dockets = () => {
                         filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
                         filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
                       }}
-                      disabled={meals === 5 || meals === 4 ? true : false }
+                      disabled={meals === 5 || meals === 4 ? true : false}
                       value={inputvalue}
                       placeholder="0-9999"
                       style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', borderRight: '1px solid #707070', textAlign: 'center', paddingTop: 9, paddingBottom: 9 }}
@@ -5275,7 +5579,7 @@ let Dockets = () => {
                         filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                         filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                       }}
-                      disabled={meals === 5 || meals === 4 ? true : false }
+                      disabled={meals === 5 || meals === 4 ? true : false}
                       value={inputvaluetwo}
                       placeholder="9999-9999"
                       style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center', paddingTop: 9, paddingBottom: 9 }}
@@ -5377,7 +5681,7 @@ let Dockets = () => {
                           <div class="boxs" style={{ cursor: 'pointer' }}>
                             <div className="d-flex justify-content-between" >
                               <div >
-                                <p className='asdfp' style={{ marginBottom: 0, color: '#1A1A1B', fontWeight: 600 }}>Dockets completion time</p> 
+                                <p className='asdfp' style={{ marginBottom: 0, color: '#1A1A1B', fontWeight: 600 }}>Dockets completion time</p>
                                 <p className='asdfp' style={{ color: "#707070", fontSize: 16, fontWeight: '400' }} >(Average)</p>
                               </div>
                               <div >
@@ -5424,13 +5728,13 @@ let Dockets = () => {
                     </div>
 
                     <div className="w-100 ">
-                      <div className='row mt-5 ' >  
+                      <div className='row mt-5 ' >
 
                         <div className='col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center' style={{ paddingRight: `${padd}px`, paddingLeft: paddOpp }} >
                           <div class="box " style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                             setMeals(5)
 
-                            
+
                           }} >
                             <div class="boxs" style={{ cursor: 'pointer' }}>
                               <p className='asdfp' style={{ color: '#1A1A1B', fontWeight: 600 }}>Dockets received - timeline</p>
@@ -5555,7 +5859,7 @@ let Dockets = () => {
                                 onClick={() => {
                                   filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
                                   filterDataByDateonee(dateRangetwo, onetime, twotime, selectedOptionsfive, hubbtwo, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions);
-                                  setMeals(1); 
+                                  setMeals(1);
                                 }}
                                 alt="Back Arrow"
                               />
@@ -5565,7 +5869,7 @@ let Dockets = () => {
                             </div>
 
                             <div className="custom-inputonessfine mt-lg-0 mt-md-3 pt-lg-1 pt-md-2 mx-3">
-                              
+
                               <Select
                                 className="newoneonee"
                                 options={basicfine}
@@ -5740,14 +6044,13 @@ let Dockets = () => {
                         <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 350, overflowY: 'auto' }}>
                           <div>
                             {
-                              editall?.orders?.map((dfgh, index) => {
+                              editall?.orders?.map((dfgh, index) => { 
 
                                 if (index > 100) {
                                   return
                                 }
                                 const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `editallone`
-
-                                // Compare processtime at the 0th index only
+ 
                                 let isChosenRangeMax = false;
                                 let isComparingRangeMin = false;
 
@@ -5761,24 +6064,7 @@ let Dockets = () => {
 
                                 let prootimrr = 0
 
-
-                                // const datass = dfgh?.order?.STAMP;
-
-                                // if (!datass) {
-                                //   return
-                                // }
-                                // // Extract the "S" event using regex
-                                // const match = datass.match(/\b(\d{4})S\d\b/);
-
-                                // if (match) {
-                                //   const time = match[1]; // Extract the 4-digit time (e.g., "1500")
-                                //   console.log(time , 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
-                                //   const formattedTime = `${time.slice(0, 2)}:${time.slice(2)}`; // Convert to HH:mm
-                                //   return (formattedTime)
-                                //   // console.log(formattedTime); // Output: "15:00"
-                                // } else {
-                                //   // console.log("No 'S' event found");
-                                // }
+ 
 
                                 let val4 = 0
 
@@ -5819,7 +6105,10 @@ let Dockets = () => {
                                         <div className="d-flex align-items-center">
                                           <p onClick={() => {
                                             console.log(val4, 'val4', selectedOptionsfine.label)
-                                          }} style={{ fontWeight: "700", color: val4 === 1 || val4 === 6 ? "#CA424E" : val4 === 3 || val4 === 7 ? "#316AAF" : "#000", width: "60%", marginTop: 15 }}>
+                                          }} style={{
+                                            fontWeight: "700", color: val4 === 1 || val4 === 6 ? "#CA424E" :
+                                              val4 === 3 || val4 === 7 ? "#316AAF" : "#000", width: "60%", marginTop: 15
+                                          }}>
                                             {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{dfgh?.date + " " + "[" +
                                               dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff} </span>
                                           </p>
@@ -6336,10 +6625,10 @@ let Dockets = () => {
                               <p style={{ color: '#1A1A1B', fontWeight: 600, fontSize: 20, marginTop: 0, marginLeft: 10, marginTop: -6 }}>Dockets received - timeline</p>
                             </div>
 
-                            <div className="position-relative" > 
+                            <div className="position-relative" >
                               <img src="threedot.png" ref={toggleButtonRefsss} style={{ width: 5, height: 20, cursor: 'pointer' }} onClick={handleToggleDivsss} className="" alt="Example Image" />
 
-                              {showDivsss && ( 
+                              {showDivsss && (
                                 <div
                                   ref={dropdownRefsss}
                                   style={{
@@ -6827,31 +7116,11 @@ let Dockets = () => {
           <div className="row" >
             <div className="col-4" style={{ overflow: 'hidden' }} >
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Date: {cval1?.date}</p>
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time created: {(() => {
-              })()} {cval1?.starttime.replace('@', '')}</p>
+              <p onClick={() => {
+                console.log(cval1, 'cval1cval1cval1')
+              }} style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time created: {getStartTime(courseIndexMaps, selectedCources, cval1?.order?.STAMP)}</p>
 
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time served: {(() => {
-                const datass = cval1?.order?.STAMP;
-
-
-
-                if (!datass) {
-                  return
-                }
-                // Extract the "S" event using regex
-                const match = datass.match(/\b(\d{4})S\d\b/);
-
-                if (match) {
-                  const time = match[1]; // Extract the 4-digit time (e.g., "1500")
-                  const formattedTime = `${time.slice(0, 2)}:${time.slice(2)}`; // Convert to HH:mm
-                  return (formattedTime)
-                  // console.log(formattedTime); // Output: "15:00"
-                } else {
-                  // console.log("No 'S' event found");
-                }
-
-
-              })()}</p>
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time served: {getEndTime(courseIndexMaps, selectedCources, cval1?.order?.STAMP)}</p>
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Completion time: {timeDifference(cval1?.starttime.replace('@', ''), cval1?.order?.STAMP)}</p>
 
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Docket #: {cval1?.order?.DOCKETID}</p>

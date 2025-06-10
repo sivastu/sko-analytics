@@ -91,7 +91,7 @@ let Mealsmulti = () => {
     // { value: 'S', label: 'Served' },
   ];
 
- const optionstakeaway = [
+  const optionstakeaway = [
     { value: 'All', label: 'All takeaways' },
     { value: 'Takeaways', label: 'Takeaways' },
     { value: 'Deliveries', label: 'Deliveries' },
@@ -3350,7 +3350,7 @@ let Mealsmulti = () => {
       let ranges = [[Number(splitone[0]), Number(splitone[1])]];
       let rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
 
-       if( splitone.length === 1 && splittwo.length === 1) {
+      if (splitone.length === 1 && splittwo.length === 1) {
         ranges = [[Number(splitone[0]), Number(splittwo[0])]];
         rangesone = [];
       }
@@ -3899,7 +3899,7 @@ let Mealsmulti = () => {
 
     }
 
-   if (takeaways.length != 0 && takeaway === true) {
+    if (takeaways.length != 0 && takeaway === true) {
 
 
       function filterByNoted(data, filterNotes) {
@@ -4934,9 +4934,9 @@ let Mealsmulti = () => {
   };
 
 
-   const handleChangefines = (selected) => {
+  const handleChangefines = (selected) => {
     console.log(served, 'selected')
- 
+
 
     if (served.length === 0) {
 
@@ -6673,41 +6673,55 @@ let Mealsmulti = () => {
                         {/* Table section */}
                         <div className="scroll" id="scrrrrol" style={{ height: 400, overflowY: 'auto' }}>
                           {served?.map((dfgh, index) => {
-                            const correspondingErv = servedone?.[index];
+                            // Find corresponding item by matching name
+                            const correspondingErv = servedone?.find(item => item?.name === dfgh?.name);
 
                             return (
-                              <div key={index}>
-                                <div className="row py-2">
-                                  <div className="col-md-4 col-sm-12 mb-2 mb-md-0">
-                                    <p className="mb-1" style={{ fontWeight: '700', color: index === 0 && selserdata === 'Minimum' ? "#CA424E" : '#000', }}>{dfgh?.name}</p>
-                                    <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}>{dfgh?.count}</p>
+                              <React.Fragment key={index}>
+                                <div className="d-flex">
+                                  <div style={{ width: '33%' }}>
+                                    <p style={{ fontWeight: '700', color: index === 0 && selserdata === 'Minimum' ? "#CA424E" : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
                                   </div>
 
                                   {correspondingErv ? (
-                                    <div className="col-md-4 col-sm-12 mb-2 mb-md-0 text-md-center">
-                                      <p className="mb-1" style={{ fontWeight: '700', color: index === 0 && selserdata === 'Maximum' ? "#316AAF" : '#000', }}>{correspondingErv?.name}</p>
-                                      <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}>{correspondingErv?.count}</p>
+                                    <div style={{ width: '33%', textAlign: 'center' }}>
+                                      <p style={{ fontWeight: '700', color: index === 0 && selserdata === 'Maximum' ? "#316AAF" : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
                                     </div>
                                   ) : (
-                                    <div className="col-md-4 col-sm-12 mb-2 mb-md-0"></div>
+                                    <div style={{ width: '33%', textAlign: 'center' }}>
+                                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>-</p>
+                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>-</p>
+                                    </div>
                                   )}
 
-                                  <div className="col-md-4 col-sm-12 d-flex justify-content-md-end align-items-center">
-                                    <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}>
+                                  <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%' }}>
+                                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
                                       <span>
                                         {(() => {
                                           const datd = dfgh?.count || 0;
                                           const datdtwo = correspondingErv?.count || 0;
-                                          const tot = datdtwo === 0 ? 0 : ((datd - datdtwo) / datdtwo) * 100;
+
+                                          // If no corresponding item found or count is 0, show no percentage
+                                          if (!correspondingErv || datdtwo === 0) {
+                                            return (
+                                              <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>
+                                                -
+                                              </span>
+                                            );
+                                          }
+
+                                          const tot = ((datd - datdtwo) / datdtwo) * 100;
 
                                           return (
-                                            <span style={{ fontWeight: '700', color: '#000' }}>
-                                              {tot.toFixed(2) + "%"}
+                                            <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>
+                                              {isNaN(tot) ? "+000.00%" : tot.toFixed(2) + "%"}
                                               <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
                                                 {tot > 0 ? (
-                                                  <img src="up_arw.png" style={{ width: 16, height: 16 }} alt="Up Arrow" className="img-fluid" />
+                                                  <img src="up_arw.png" style={{ width: 16, height: 16 }} alt="Up Arrow" />
                                                 ) : (
-                                                  <img src="d_arw.png" style={{ width: 16, height: 16 }} alt="Down Arrow" className="img-fluid" />
+                                                  <img src="d_arw.png" style={{ width: 16, height: 16 }} alt="Down Arrow" />
                                                 )}
                                               </span>
                                             </span>
@@ -6718,7 +6732,7 @@ let Mealsmulti = () => {
                                   </div>
                                 </div>
                                 <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                              </div>
+                              </React.Fragment>
                             );
                           })}
                         </div>
@@ -6861,75 +6875,69 @@ let Mealsmulti = () => {
 
 
 
-                            {
-                              minperday?.map((dfgh, index) => {
-                                const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
+                            {minperday?.map((dfgh, index) => {
+                              // Find corresponding item by matching name
+                              const correspondingErv = maxperday?.find(item => item?.name === dfgh?.name);
 
-                                return (
-                                  <>
-                                    <div className="d-flex  ">
-
-                                      <div style={{ width: '33%' }}>
-                                        <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Minimum' ? "#316AAF" : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
-                                      </div>
-
-                                      {correspondingErv ? (
-                                        <div style={{ width: '33%', textAlign: 'center' }}>
-                                          <div >
-
-                                            <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Maximum' ? "#CA424E" : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
-                                          </div>
-                                        </div>
-                                      ) : (
-                                        <>
-                                          <div style={{ width: '33%' }} >
-                                          </div></>
-                                      )}
-
-                                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
-                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
-                                          <span>
-                                            {(() => {
-                                              const datd = dfgh?.count || 0; // Fallback to 0 if no data
-                                              const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
-
-
-                                              const tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                                              return (
-                                                <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>
-                                                  {tot.toFixed(2) + "%"}
-                                                  <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                                    {tot > 0 ? (
-                                                      <img
-                                                        src="up_arw.png"
-                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                        alt="up arrow"
-                                                      />
-                                                    ) : (
-                                                      <img
-                                                        src="d_arw.png"
-                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
-                                                        alt="down arrow"
-                                                      />
-                                                    )}
-                                                  </span>
-                                                </span>
-                                              );
-                                            })()}
-                                          </span>
-                                        </p>
-                                      </div>
-
+                              return (
+                                <React.Fragment key={index}>
+                                  <div className="d-flex">
+                                    <div style={{ width: '33%' }}>
+                                      <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Minimum' ? "#316AAF" : '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.name}</p>
+                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.count}</p>
                                     </div>
 
-                                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                                  </>
-                                );
-                              })
-                            }
+                                    {correspondingErv ? (
+                                      <div style={{ width: '33%', textAlign: 'center' }}>
+                                        <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Maximum' ? "#CA424E" : '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.name}</p>
+                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.count}</p>
+                                      </div>
+                                    ) : (
+                                      <div style={{ width: '33%', textAlign: 'center' }}>
+                                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>-</p>
+                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>-</p>
+                                      </div>
+                                    )}
+
+                                    <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%' }}>
+                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                                        <span>
+                                          {(() => {
+                                            const datd = dfgh?.count || 0;
+                                            const datdtwo = correspondingErv?.count || 0;
+
+                                            // If no corresponding item found or count is 0, show no percentage
+                                            if (!correspondingErv || datdtwo === 0) {
+                                              return (
+                                                <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                                                  -
+                                                </span>
+                                              );
+                                            }
+
+                                            const tot = ((datd - datdtwo) / datdtwo) * 100;
+
+                                            return (
+                                              <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                                                {isNaN(tot) ? "0%" : tot.toFixed(2) + "%"}
+                                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                                  {isNaN(tot) || tot === 0 ? '' : tot > 0 ? (
+                                                    <img src="up_arw.png" style={{ width: 16, height: 16 }} alt="Up Arrow" />
+                                                  ) : (
+                                                    <img src="d_arw.png" style={{ width: 16, height: 16 }} alt="Down Arrow" />
+                                                  )}
+                                                </span>
+                                              </span>
+                                            );
+                                          })()}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                                </React.Fragment>
+                              );
+                            })}
 
 
                           </div>

@@ -99,7 +99,7 @@ let Meals = () => {
     // { value: 'S', label: 'Served' },
   ];
 
- const optionstakeaway = [
+  const optionstakeaway = [
     { value: 'All', label: 'All takeaways' },
     { value: 'Takeaways', label: 'Takeaways' },
     { value: 'Deliveries', label: 'Deliveries' },
@@ -212,7 +212,7 @@ let Meals = () => {
       .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
       .map(time => ({ time, count: timeCounts[time] })).slice(1);
   }
-  
+
   let callfordataonesearch = (one, bitedata) => {
 
 
@@ -577,7 +577,7 @@ let Meals = () => {
   let [usedname, setUsedname] = useState('')
   function getName(data) {
 
-    console.log(data?.venue , 'state.datastate.data')
+    console.log(data?.venue, 'state.datastate.data')
 
 
     // if (!data.venue || data.venue.length === 0) {
@@ -597,9 +597,9 @@ let Meals = () => {
         data?.venue.some(item => item.label === key)
       );
     })?.[0]; // Safely get groupName from matched pair
-    
+
     console.log('Matched group name:', matchedGroupName);
-    
+
     return matchedGroupName
 
 
@@ -917,22 +917,22 @@ let Meals = () => {
 
     if (parsedatajson.venue) {
       const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-    
+
       if (!hasAllValue) { // No need to check if === true
         const filterKeys = new Set(parsedatajson.venue.map(item => item.value));
-    
+
         filteredDataonee = Object.entries(cleanedData).reduce((acc, [key, subObj]) => {
           const filteredSubObj = Object.fromEntries(
             Object.entries(subObj).filter(([subKey]) => filterKeys.has(subKey))
           );
-    
-          if (Object.keys(filteredSubObj).length) { 
+
+          if (Object.keys(filteredSubObj).length) {
             acc[key] = filteredSubObj;
           }
-    
+
           return acc;
         }, {});
-    
+
         setBasicall(filteredDataonee);
       }
     }
@@ -2226,7 +2226,7 @@ let Meals = () => {
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
 
-    console.log(takeaways , 'cources.lengthcources.lengthcources.lengthcources.length')
+    console.log(takeaways, 'cources.lengthcources.lengthcources.lengthcources.length')
 
     if (val21.length === 0) {
       alldat = []
@@ -2646,56 +2646,56 @@ let Meals = () => {
     }
 
 
-    if (cources.length != 0) {
+    // if (cources.length != 0) {
 
 
-      function filterByNoted(data, filterNotes) {
-        let filteredData = {};
+    //   function filterByNoted(data, filterNotes) {
+    //     let filteredData = {};
 
-        // Extract only values from the filter list
-        const validNotes = filterNotes.map(item => item.value);
+    //     // Extract only values from the filter list
+    //     const validNotes = filterNotes.map(item => item.value);
 
-        for (let group in data) {
-          for (let location in data[group]) {
-            for (let section in data[group][location]) {
-              for (let date in data[group][location][section]) {
-                let filteredOrders = data[group][location][section][date].map(order => {
-                  let filteredItems = order.ITEMS.filter(item => {
-                    if (!item.NOTE) return false; // Ignore empty or undefined NOTE
+    //     for (let group in data) {
+    //       for (let location in data[group]) {
+    //         for (let section in data[group][location]) {
+    //           for (let date in data[group][location][section]) {
+    //             let filteredOrders = data[group][location][section][date].map(order => {
+    //               let filteredItems = order.ITEMS.filter(item => {
+    //                 if (!item.NOTE) return false; // Ignore empty or undefined NOTE
 
-                    // Extract the word after (C<number>)
-                    const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-                    if (match && match[1]) {
-                      return validNotes.includes(match[1]); // Keep only if in validNotes
-                    }
-                    return false;
-                  });
+    //                 // Extract the word after (C<number>)
+    //                 const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+    //                 if (match && match[1]) {
+    //                   return validNotes.includes(match[1]); // Keep only if in validNotes
+    //                 }
+    //                 return false;
+    //               });
 
-                  return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
-                }).filter(order => order !== null);
+    //               return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
+    //             }).filter(order => order !== null);
 
-                if (filteredOrders.length > 0) {
-                  if (!filteredData[group]) filteredData[group] = {};
-                  if (!filteredData[group][location]) filteredData[group][location] = {};
-                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                  filteredData[group][location][section][date] = filteredOrders;
-                }
-              }
-            }
-          }
-        }
+    //             if (filteredOrders.length > 0) {
+    //               if (!filteredData[group]) filteredData[group] = {};
+    //               if (!filteredData[group][location]) filteredData[group][location] = {};
+    //               if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+    //               filteredData[group][location][section][date] = filteredOrders;
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
 
-        return filteredData;
-      }
-
-
-      alldat = filterByNoted(alldat, cources)
-
-      console.log(alldat, 'six')
+    //     return filteredData;
+    //   }
 
 
+    //   alldat = filterByNoted(alldat, cources)
 
-    }
+    //   console.log(alldat, 'six')
+
+
+
+    // }
 
     // if (takeaways.length != 0 && takeaway === true ) {
 
@@ -2895,18 +2895,18 @@ let Meals = () => {
       }
     }
 
-     if (intwo?.length >= 1 && inone?.length >= 1) {
+    if (intwo?.length >= 1 && inone?.length >= 1) {
       console.log(inone, intwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
 
 
-      console.log(splitone, splittwo , '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
+      console.log(splitone, splittwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
 
       function filterDataByTableRanges(data, ranges) {
 
-        if(ranges.length === 0){  
+        if (ranges.length === 0) {
           return []
         }
         const filteredData = {};
@@ -2938,7 +2938,7 @@ let Meals = () => {
       let rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
 
 
-      if( splitone.length === 1 && splittwo.length === 1) {
+      if (splitone.length === 1 && splittwo.length === 1) {
         ranges = [[Number(splitone[0]), Number(splittwo[0])]];
         rangesone = [];
       }
@@ -3074,7 +3074,7 @@ let Meals = () => {
       console.log(resultss, 'tenten')
     }
 
- 
+
     const filteredData = {};
 
     Object.entries(alldat).forEach(([groupKey, groupData]) => {
@@ -3105,7 +3105,7 @@ let Meals = () => {
     callfordataone(filteredData)
 
     let ghi = processTimeData(alldat)
-  
+
 
     let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
 
@@ -3114,8 +3114,8 @@ let Meals = () => {
     let timeCounts = kidshort.map(entry => entry.count);
 
 
-    console.log( timeCounts , 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv' )
-    
+    console.log(timeCounts, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv')
+
     setOption(timeLabels)
     setOneBar(timeCounts)
 
@@ -3164,49 +3164,49 @@ let Meals = () => {
               let stamps = order.STAMP.split(" "); // Split STAMP string
               stamps.forEach(stamp => {
                 const hasRParen = stamp.includes("R0");
-                
-                if(hasRParen){
+
+                if (hasRParen) {
                   let extractedTime = extractTime(stamp);
 
-                 
+
                   if (extractedTime) {
                     let interval = roundToInterval(extractedTime);
 
                     timeCounts[interval] = (timeCounts[interval] || 0) + order.ITEMS.length;
 
-                    
-  
+
+
                   }
                 }
 
-               
+
               });
             });
           }
         }
       }
-    } 
+    }
 
     if (Object.keys(timeCounts).length === 1) {
       const key = Object.keys(timeCounts)[0];
       const value = timeCounts[key];
-    
+
       const [hourStr, minStr] = key.split('.');
       let hour = parseInt(hourStr, 10);
       let min = parseInt(minStr, 10);
-    
+
       min -= 10;
       if (min < 0) {
         min += 60;
         hour -= 1;
       }
-    
+
       const newKey = `${hour}.${min.toString().padStart(2, '0')}`;
       timeCounts[newKey] = value;
     }
-    
+
     console.log(timeCounts);
-    
+
 
     console.log(timeCounts, 'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
     //  timeCounts = {13.10: 24, 13.20: 21,}
@@ -3538,7 +3538,7 @@ let Meals = () => {
 
     }
 
-   if (takeaways.length != 0 && takeaway === true) {
+    if (takeaways.length != 0 && takeaway === true) {
 
 
       function filterByNoted(data, filterNotes) {
@@ -3880,18 +3880,18 @@ let Meals = () => {
       }
     }
 
-     if (intwo?.length >= 1 && inone?.length >= 1) {
+    if (intwo?.length >= 1 && inone?.length >= 1) {
       console.log(inone, intwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
 
 
-      console.log(splitone, splittwo , '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
+      console.log(splitone, splittwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
 
       function filterDataByTableRanges(data, ranges) {
 
-        if(ranges.length === 0){  
+        if (ranges.length === 0) {
           return []
         }
         const filteredData = {};
@@ -3923,7 +3923,7 @@ let Meals = () => {
       let rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
 
 
-      if( splitone.length === 1 && splittwo.length === 1) {
+      if (splitone.length === 1 && splittwo.length === 1) {
         ranges = [[Number(splitone[0]), Number(splittwo[0])]];
         rangesone = [];
       }
@@ -4764,7 +4764,7 @@ let Meals = () => {
     // **Add Table Data with alternating colors and borders**
     optionbar.forEach((time, index) => {
 
-      console.log( time , onebar , 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv' )
+      console.log(time, onebar, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv')
       const dataRow = worksheet.addRow([time, onebar[index] ?? "-", twobar[index] ?? "-"]);
 
       // Apply alternating row styles and borders
@@ -5739,7 +5739,7 @@ let Meals = () => {
 
                       <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
-                      {/* Edited section */} 
+                      {/* Edited section */}
                       <div className="row py-2">
                         <div className="col-lg-4 col-md-4 col-sm-12">
                           <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>Edited</p>
@@ -6068,7 +6068,8 @@ let Meals = () => {
                         {/* Table section */}
                         <div className="scroll" id="scrrrrol" style={{ height: 400, overflowY: 'auto' }}>
                           {served?.map((dfgh, index) => {
-                            const correspondingErv = servedone?.[index];
+                            // Find corresponding item by matching name
+                            const correspondingErv = servedone?.find(item => item?.name === dfgh?.name);
 
                             return (
                               <React.Fragment key={index}>
@@ -6084,7 +6085,10 @@ let Meals = () => {
                                       <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
                                     </div>
                                   ) : (
-                                    <div style={{ width: '33%' }}></div>
+                                    <div style={{ width: '33%', textAlign: 'center' }}>
+                                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>-</p>
+                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>-</p>
+                                    </div>
                                   )}
 
                                   <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%' }}>
@@ -6093,10 +6097,20 @@ let Meals = () => {
                                         {(() => {
                                           const datd = dfgh?.count || 0;
                                           const datdtwo = correspondingErv?.count || 0;
-                                          const tot = datdtwo === 0 ? 0 : ((datd - datdtwo) / datdtwo) * 100;
+
+                                          // If no corresponding item found or count is 0, show no percentage
+                                          if (!correspondingErv || datdtwo === 0) {
+                                            return (
+                                              <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>
+                                                -
+                                              </span>
+                                            );
+                                          }
+
+                                          const tot = ((datd - datdtwo) / datdtwo) * 100;
 
                                           return (
-                                            <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }} >
+                                            <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>
                                               {isNaN(tot) ? "+000.00%" : tot.toFixed(2) + "%"}
                                               <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
                                                 {tot > 0 ? (
@@ -6271,10 +6285,11 @@ let Meals = () => {
 
                           <div className="scroll" id="scrrrrol" style={{ height: 420, overflowY: 'auto' }}>
                             {minperday?.map((dfgh, index) => {
-                              const correspondingErv = maxperday?.[index];
+                              // Find corresponding item by matching name
+                              const correspondingErv = maxperday?.find(item => item?.name === dfgh?.name);
 
                               return (
-                                <React.Fragment key={index} >
+                                <React.Fragment key={index}>
                                   <div className="d-flex">
                                     <div style={{ width: '33%' }}>
                                       <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Minimum' ? "#316AAF" : '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.name}</p>
@@ -6287,7 +6302,10 @@ let Meals = () => {
                                         <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.count}</p>
                                       </div>
                                     ) : (
-                                      <div style={{ width: '33%' }}></div>
+                                      <div style={{ width: '33%', textAlign: 'center' }}>
+                                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>-</p>
+                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>-</p>
+                                      </div>
                                     )}
 
                                     <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%' }}>
@@ -6296,13 +6314,23 @@ let Meals = () => {
                                           {(() => {
                                             const datd = dfgh?.count || 0;
                                             const datdtwo = correspondingErv?.count || 0;
-                                            const tot = datdtwo === 0 ? 0 : ((datd - datdtwo) / datdtwo) * 100;
+
+                                            // If no corresponding item found or count is 0, show no percentage
+                                            if (!correspondingErv || datdtwo === 0) {
+                                              return (
+                                                <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                                                  -
+                                                </span>
+                                              );
+                                            }
+
+                                            const tot = ((datd - datdtwo) / datdtwo) * 100;
 
                                             return (
                                               <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
                                                 {isNaN(tot) ? "0%" : tot.toFixed(2) + "%"}
                                                 <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                                  {isNaN(tot) ? '' : tot > 0 ? (
+                                                  {isNaN(tot) || tot === 0 ? '' : tot > 0 ? (
                                                     <img src="up_arw.png" style={{ width: 16, height: 16 }} alt="Up Arrow" />
                                                   ) : (
                                                     <img src="d_arw.png" style={{ width: 16, height: 16 }} alt="Down Arrow" />
