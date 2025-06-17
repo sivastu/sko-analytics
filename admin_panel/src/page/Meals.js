@@ -1070,22 +1070,32 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
  setDateRangetwo(eightDaysBefore_with)
   setDateRange(eightDaysBefore_range)
 
+  setTimeout(() => {
+    console.log('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM')
+  filterDataByDate(eightDaysBefore_range, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , filteredDataonee )
 
-    filterDataByDate(eightDaysBefore_range, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+    filterDataByDateonee(eightDaysBefore_with, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , filteredDataonee)
+}, 1000);
 
-    filterDataByDateonee(eightDaysBefore_with, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+    
 
 
     }else{  
 
 
-       setDateRangetwo(eightDaysBefore)
+    setDateRangetwo(eightDaysBefore)
     setDateRange(yesterday)
 
+    setTimeout(() => {
+      console.log('RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR')
+        filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , filteredDataonee )
 
-    filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+        filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions ,filteredDataonee )
+      }, 1000);
 
-    filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+    
 
     }
 
@@ -2314,11 +2324,17 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
   };
 
 
-  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
+  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype , filteredDataoneess) { 
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
 
-    console.log(inone, typeof (intwo), 'cources.lengthcources.lengthcources.lengthcources.length')
+    if(basicall === undefined ) {
+        alldat= filteredDataoneess
+    }
+
+    console.log(val21 , val22 , 'cources.lengthcources.lengthcources.lengthcources.length')
+
+    console.log(alldat, 'alldat KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK')
 
     if (val21.length === 0) {
       alldat = []
@@ -2468,7 +2484,10 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
       console.log(alldddd, 'three')
     }
 
-    if (val21.length != 0) {
+    const hasAll = val21?.some(item => item.value === "All"); // returns true
+
+    if(hasAll === false){
+if (val21.length != 0) {
 
       const filteredData = {};
 
@@ -2497,6 +2516,8 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
       console.log(filteredData, 'four')
 
     }
+    }
+    
 
     if (val22.length === 0 || val22 === "") {
 
@@ -3157,13 +3178,17 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
   }
 
 
-  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
+  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype , filteredDataoneess ) {
 
 
 
 
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
+
+    if(basicall === undefined ) {
+        alldat= filteredDataoneess
+    }
 
     console.log(JSON.stringify(alltype), 'val2245')
     if (val21.length === 0) {
@@ -3314,7 +3339,10 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
       console.log(alldddd, 'three')
     }
 
-    if (val21.length != 0) {
+        const hasAll = val21?.some(item => item.value === "All"); // returns true
+
+    if (hasAll === false ) {
+ if (val21.length != 0) {
       const filteredData = {};
 
       val21.forEach(filter => {
@@ -3334,6 +3362,8 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
       console.log(filteredData, 'four')
 
     }
+    }
+   
 
     if (val22.length === 0 || val22 === "") {
 

@@ -453,33 +453,49 @@ let Multi_venue = () => {
     ],
   };
 
-  function parseRemarks(data) {
-    const lines = [];
+  // function parseRemarks(data) {
+  //   const lines = [];
   
-    // Check for 'Refunuded' (add 'Refunded' if found)
-    if (data.includes("Refunuded")) {
-      lines.push("Refunded");
-    }
+  //   // Check for 'Refunuded' (add 'Refunded' if found)
+  //   if (data.includes("Refunuded")) {
+  //     lines.push("Refunded");
+  //   }
   
-    // Extract values after "!" (excluding ones like !(C4hot))
-    const exclamations = data.match(/!\w[^$!]*/g);
-    if (exclamations) {
-      exclamations.forEach(entry => {
-        const cleaned = entry.trim().replace(/^!/, "");
-        if (!cleaned.startsWith("(")) {
-          lines.push(cleaned);
-        }
-      });
-    }
+  //   // Extract values after "!" (excluding ones like !(C4hot))
+  //   const exclamations = data.match(/!\w[^$!]*/g);
+  //   if (exclamations) {
+  //     exclamations.forEach(entry => {
+  //       const cleaned = entry.trim().replace(/^!/, "");
+  //       if (!cleaned.startsWith("(")) {
+  //         lines.push(cleaned);
+  //       }
+  //     });
+  //   }
   
-    // Extract values like (C4hot) or (C1starter)
-    const categoryMatch = data.match(/\(C\d+(.*?)\)/);
-    if (categoryMatch && categoryMatch[1]) {
-      lines.push(categoryMatch[1]);
-    }
+  //   // Extract values like (C4hot) or (C1starter)
+  //   const categoryMatch = data.match(/\(C\d+(.*?)\)/);
+  //   if (categoryMatch && categoryMatch[1]) {
+  //     lines.push(categoryMatch[1]);
+  //   }
   
-    return lines;
-  }
+  //   return lines;
+  // }
+
+  function parseRemarks(note) {
+  if (!note || note.trim() === "") return "";
+
+  // Match pattern like: (C4hot) !White Rice$O$
+  const match = note.match(/\)(?:\s*!?)?([^$]*)\$O\$/);
+
+  if (!match) return "";
+
+  let result = match[1].trim();
+
+  // If result is 'undefined' or empty string, return ""
+  if (!result || result.toLowerCase() === "undefined") return "";
+
+  return result;
+}
 
   const OrderDisplay = ({ orders = {} }) => {
     if (!orders || Object.keys(orders).length === 0) {
@@ -508,11 +524,17 @@ let Multi_venue = () => {
                 <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
                   <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>Item {index + 1}: {kai?.ITEM}</p>
                   <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>Note: {parseRemarks(kai?.NOTE)}</p>
-                  <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
-                    Edited: {["2", "12", "22", "32"].includes(kai?.STATUS) ? 'Yes' : "No"} |
-                    Moved: {["3", "13", "23", "33"].includes(kai?.STATUS) ? 'Yes' : "No"} |
-                    Deleted: {["4", "24"].includes(kai?.STATUS) ? 'Yes' : "No"}
-                  </p>
+                   <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+  {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
+  {["2", "12", "22", "32"].includes(kai?.STATUS) &&
+    (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
+
+  {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
+  {["3", "13", "23", "33"].includes(kai?.STATUS) &&
+    ["4", "24"].includes(kai?.STATUS) && " | "}
+
+  {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
+</p>
                 </div>
               ))}
             </div>

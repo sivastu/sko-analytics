@@ -422,33 +422,49 @@ let Dockets = () => {
 
 
 
-  function parseRemarks(data) {
-    const lines = [];
+  // function parseRemarks(data) {
+  //   const lines = [];
   
-    // Check for 'Refunuded' (add 'Refunded' if found)
-    if (data.includes("Refunuded")) {
-      lines.push("Refunded");
-    }
+  //   // Check for 'Refunuded' (add 'Refunded' if found)
+  //   if (data.includes("Refunuded")) {
+  //     lines.push("Refunded");
+  //   }
   
-    // Extract values after "!" (excluding ones like !(C4hot))
-    const exclamations = data.match(/!\w[^$!]*/g);
-    if (exclamations) {
-      exclamations.forEach(entry => {
-        const cleaned = entry.trim().replace(/^!/, "");
-        if (!cleaned.startsWith("(")) {
-          lines.push(cleaned);
-        }
-      });
-    }
+  //   // Extract values after "!" (excluding ones like !(C4hot))
+  //   const exclamations = data.match(/!\w[^$!]*/g);
+  //   if (exclamations) {
+  //     exclamations.forEach(entry => {
+  //       const cleaned = entry.trim().replace(/^!/, "");
+  //       if (!cleaned.startsWith("(")) {
+  //         lines.push(cleaned);
+  //       }
+  //     });
+  //   }
   
-    // Extract values like (C4hot) or (C1starter)
-    const categoryMatch = data.match(/\(C\d+(.*?)\)/);
-    if (categoryMatch && categoryMatch[1]) {
-      lines.push(categoryMatch[1]);
-    }
+  //   // Extract values like (C4hot) or (C1starter)
+  //   const categoryMatch = data.match(/\(C\d+(.*?)\)/);
+  //   if (categoryMatch && categoryMatch[1]) {
+  //     lines.push(categoryMatch[1]);
+  //   }
   
-    return lines;
-  }
+  //   return lines;
+  // }
+
+  function parseRemarks(note) {
+  if (!note || note.trim() === "") return "";
+
+  // Match pattern like: (C4hot) !White Rice$O$
+  const match = note.match(/\)(?:\s*!?)?([^$]*)\$O\$/);
+
+  if (!match) return "";
+
+  let result = match[1].trim();
+
+  // If result is 'undefined' or empty string, return ""
+  if (!result || result.toLowerCase() === "undefined") return "";
+
+  return result;
+}
 
 
   const OrderDisplay = ({ orders = {} }) => {
@@ -479,10 +495,16 @@ let Dockets = () => {
                   <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>Item {index + 1}: {kai?.ITEM}</p>
                   <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>Note: {parseRemarks(kai?.NOTE)}</p>
                   <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
-                    Edited: {["2", "12", "22", "32"].includes(kai?.STATUS) ? 'Yes' : "No"} |
-                    Moved: {["3", "13", "23", "33"].includes(kai?.STATUS) ? 'Yes' : "No"} |
-                    Deleted: {["4", "24"].includes(kai?.STATUS) ? 'Yes' : "No"}
-                  </p>
+  {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
+  {["2", "12", "22", "32"].includes(kai?.STATUS) &&
+    (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
+
+  {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
+  {["3", "13", "23", "33"].includes(kai?.STATUS) &&
+    ["4", "24"].includes(kai?.STATUS) && " | "}
+
+  {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
+</p>
                 </div>
               ))}
             </div>
@@ -970,18 +992,18 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
   setDateRange(eightDaysBefore_range)
 
   
-    filterDataByDate(eightDaysBefore_range, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+    filterDataByDate(eightDaysBefore_range, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , filteredDataonee)
 
-    filterDataByDateonee(eightDaysBefore_with, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+    filterDataByDateonee(eightDaysBefore_with, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , filteredDataonee )
 
 
     }else{  
 
 setDateRangetwo(eightDaysBefore)
     setDateRange(yesterday)
-    filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+    filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , filteredDataonee )
 
-    filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+    filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , filteredDataonee)
 
     }
 
@@ -1597,7 +1619,7 @@ setDateRangetwo(eightDaysBefore)
 
 
 
-  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
+  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, filteredDataoneess) {
 
 
     console.log(time, time2, 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
@@ -1605,7 +1627,9 @@ setDateRangetwo(eightDaysBefore)
 
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
-
+  if(basicall === undefined ) {
+        alldat= filteredDataoneess
+    }
 
     if (val21.length === 0) {
       alldat = []
@@ -1755,26 +1779,33 @@ setDateRangetwo(eightDaysBefore)
       console.log(alldddd, 'three')
     }
 
-    if (val21.length != 0) {
-      const filteredData = {};
 
-      val21.forEach(filter => {
-        const key = filter.value;
-        for (const mainKey in alldat) {
-          if (alldat[mainKey][key]) {
-            if (!filteredData[mainKey]) {
-              filteredData[mainKey] = {}; // Initialize if not exists
-            }
-            filteredData[mainKey][key] = alldat[mainKey][key];
+    const hasAll = val21?.some(item => item.value === "All"); // returns true
+
+    if(hasAll === false){
+      if (val21.length != 0) {
+            const filteredData = {};
+
+            val21.forEach(filter => {
+              const key = filter.value;
+              for (const mainKey in alldat) {
+                if (alldat[mainKey][key]) {
+                  if (!filteredData[mainKey]) {
+                    filteredData[mainKey] = {}; // Initialize if not exists
+                  }
+                  filteredData[mainKey][key] = alldat[mainKey][key];
+                }
+              }
+            });
+
+            alldat = filteredData
+
+            console.log(filteredData, 'four')
+
           }
-        }
-      });
-
-      alldat = filteredData
-
-      console.log(filteredData, 'four')
-
     }
+
+    
 
     if (val22.length === 0 || val22 === "") {
 
@@ -2309,7 +2340,7 @@ setDateRangetwo(eightDaysBefore)
     setOneBarone(timeCountsone)
     console.log(JSON.stringify(ghione), 'thousand', ghione)
 
-
+handleChangefine(selectedOptionsfine)
 
   }
 
@@ -2445,10 +2476,14 @@ setDateRangetwo(eightDaysBefore)
  
 
 
-  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
+  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype , filteredDataoneess) {
 
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
+
+      if(basicall === undefined ) {
+        alldat= filteredDataoneess
+    }
 
     console.log(JSON.stringify(alltype), 'val2245')
     if (val21.length === 0) {
@@ -2599,7 +2634,11 @@ setDateRangetwo(eightDaysBefore)
       console.log(alldddd, 'three')
     }
 
-    if (val21.length != 0) {
+
+    const hasAll = val21?.some(item => item.value === "All"); // returns true
+
+    if(hasAll === false ){
+ if (val21.length != 0) {
       const filteredData = {};
 
       val21.forEach(filter => {
@@ -2619,6 +2658,9 @@ setDateRangetwo(eightDaysBefore)
       console.log(filteredData, 'four')
 
     }
+    }
+
+   
 
     if (val22.length === 0 || val22 === "") {
 
@@ -3165,7 +3207,7 @@ setDateRangetwo(eightDaysBefore)
 
     setTwobarone(timeCountstwo)
 
-
+handleChangefine(selectedOptionsfine)
   }
 
 
@@ -5554,7 +5596,8 @@ setDateRangetwo(eightDaysBefore)
 
  
 
-                                let val4 = 0
+                                let val4 = 'black'
+                                let val7 = 'black'
 
                                 if (index === 0) {
                                   if (selectedOptionsfine?.label === "Maximum") {
@@ -5562,11 +5605,14 @@ setDateRangetwo(eightDaysBefore)
                                     const number2 = correspondingErv?.processtime && /\d+/.test(correspondingErv?.processtime) ? Number(correspondingErv?.processtime.match(/\d+/)[0]) : 0
 
                                     if (number1 > number2) {
-                                      val4 = 1
+                                      val4 = '#CA424E'
+                                      val7 = "black"
                                     } else if (number1 === number2) {
-                                      val4 = 6
+                                      val4 = '#CA424E'
+                                      val7 = '#CA424E'
                                     } else {
-                                      val4 = 2
+                                      val4 = 'black'
+                                      val7 = "#CA424E"
                                     }
                                   } else {
                                     const number1 = dfgh?.processtime && /\d+/.test(dfgh?.processtime) ? Number(dfgh?.processtime.match(/\d+/)[0]) : 0
@@ -5574,11 +5620,14 @@ setDateRangetwo(eightDaysBefore)
 
 
                                     if (number1 < number2) {
-                                      val4 = 3
+                                      val4 = '#316AAF'
+                                      val7 = "black"
                                     } else if (number1 === number2) {
-                                      val4 = 7
+                                      val4 = '#316AAF'
+                                      val7 = '#316AAF'
                                     } else {
-                                      val4 = 4
+                                      val4 = 'black'
+                                      val7 = "#316AAF"
                                     }
                                   }
                                 }
@@ -5594,8 +5643,7 @@ setDateRangetwo(eightDaysBefore)
                                           <p onClick={() => {
                                             console.log(val4, 'val4', selectedOptionsfine.label)
                                           }} style={{
-                                            fontWeight: "700", color: val4 === 1 || val4 === 6 ? "#CA424E" :
-                                              val4 === 3 || val4 === 7 ? "#316AAF" : "#000", width: "60%", marginTop: 15
+                                            fontWeight: "700", color: val4  , width: "60%", marginTop: 15
                                           }}>
                                             {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{dfgh?.date + " " + "[" +
                                               dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff} </span>
@@ -5613,12 +5661,12 @@ setDateRangetwo(eightDaysBefore)
                                       {correspondingErv ? (
                                         <div style={{ width: "40%" }}>
                                           <div className="d-flex align-items-center">
-                                            <p style={{ fontWeight: "700", color: val4 === 2 || val4 === 6 ? "#CA424E" : val4 === 4 || val4 === 7 ? "#316AAF" : "#000", width: "60%", marginTop: 15 }}>
+                                            <p style={{ fontWeight: "700", color: val7 , width: "60%", marginTop: 15 }}>
                                               {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{correspondingErv?.date + " " + "[" +
                                                 correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                                             </p>
                                             <img
-                                              onClick={() => { openModals(dfgh, correspondingErv) }}
+                                              onClick={() => { openModal(correspondingErv, dfgh) }}
                                               src="arrows.png"
                                               style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10 }}
                                               alt="up arrow"
