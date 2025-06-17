@@ -93,8 +93,8 @@ let Mealsmulti = () => {
 
   const optionstakeaway = [
     { value: 'All', label: 'All takeaways' },
-    { value: 'Takeaways', label: 'Takeaways' },
-    { value: 'Deliveries', label: 'Deliveries' },
+    { value: 'TAKEAWAY', label: 'Takeaways' },
+    { value: 'DELIVERY', label: 'Deliveries' },
     { value: 'Pick-ups', label: 'Pick-ups' },
   ];
 
@@ -138,40 +138,40 @@ let Mealsmulti = () => {
   const { state } = useContext(DataContext);
 
   // Close menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (selectRef.current && !selectRef.current.contains(event.target)) {
-        setMenuIsOpen(false);
-      }
-
-      if (selectRefone.current && !selectRefone.current.contains(event.target)) {
-        setMenuIsOpenone(false);
-      }
-      if (selectReftwo.current && !selectReftwo.current.contains(event.target)) {
-        setMenuIsOpentwo(false);
-      }
-      if (selectRefthree.current && !selectRefthree.current.contains(event.target)) {
-        setMenuIsOpenthree(false);
-      }
-      if (selectReffour.current && !selectReffour.current.contains(event.target)) {
-        setMenuIsOpenfour(false);
-      }
-
-
-      if (selectReffive.current && !selectReffive.current.contains(event.target)) {
-        setMenuIsOpenfive(false);
-      }
-      if (selectRefsix.current && !selectRefsix.current.contains(event.target)) {
-        setMenuIsOpensix(false);
-      }
-
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (selectRef.current && !selectRef.current.contains(event.target)) {
+          setMenuIsOpen(false);
+        }
+  
+        if (selectRefone.current && !selectRefone.current.contains(event.target)) {
+          setMenuIsOpenone(false);
+        }
+        if (selectReftwo.current && !selectReftwo.current.contains(event.target)) {
+          setMenuIsOpentwo(false);
+        }
+        if (selectRefthree.current && !selectRefthree.current.contains(event.target)) {
+          setMenuIsOpenthree(false);
+        }
+        if (selectReffour.current && !selectReffour.current.contains(event.target)) {
+          setMenuIsOpenfour(false);
+        }
+  
+  
+        if (selectReffive.current && !selectReffive.current.contains(event.target)) {
+          setMenuIsOpenfive(false);
+        }
+        if (selectRefsix.current && !selectRefsix.current.contains(event.target)) {
+          setMenuIsOpensix(false);
+        }
+  
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, []);
 
 
   let [basicfine, setBasicfine] = useState([{
@@ -245,7 +245,7 @@ let Mealsmulti = () => {
   let [usedname, setUsedname] = useState('')
   function getName(data) {
 
-    console.log(data?.venue, 'state.datastate.data')
+    console.log(data?.venue , 'state.datastate.data')
 
 
     // if (!data.venue || data.venue.length === 0) {
@@ -265,9 +265,9 @@ let Mealsmulti = () => {
         data?.venue.some(item => item.label === key)
       );
     })?.[0]; // Safely get groupName from matched pair
-
+    
     console.log('Matched group name:', matchedGroupName);
-
+    
     return matchedGroupName
 
 
@@ -626,22 +626,22 @@ let Mealsmulti = () => {
 
     if (parsedatajson.venue) {
       const hasAllValue = parsedatajson.venue.some(item => item.value === "All");
-
+    
       if (!hasAllValue) { // No need to check if === true
         const filterKeys = new Set(parsedatajson.venue.map(item => item.value));
-
+    
         filteredDataonee = Object.entries(cleanedData).reduce((acc, [key, subObj]) => {
           const filteredSubObj = Object.fromEntries(
             Object.entries(subObj).filter(([subKey]) => filterKeys.has(subKey))
           );
-
+    
           if (Object.keys(filteredSubObj).length) {
             acc[key] = filteredSubObj;
           }
-
+    
           return acc;
         }, {});
-
+    
         setBasicall(filteredDataonee);
       }
     }
@@ -1384,25 +1384,25 @@ let Mealsmulti = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
 
-  function areArraysEqual(arr1, arr2) {
+  function areArraysEqual (arr1, arr2) {
 
-    console.log(arr1, arr2, 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
+    console.log(arr1 , arr2 , 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
     return arr1.some(obj1 => arr2.some(obj2 => obj1.value === obj2.value));
-  }
+}
 
 
-  function removeMatchingValues(arr1, arr2) {
-    if (!Array.isArray(arr1) || !Array.isArray(arr2)) return [];
+function removeMatchingValues(arr1, arr2) {
+  if (!Array.isArray(arr1) || !Array.isArray(arr2)) return [];
 
-    // Extract values from arr2 for quick lookup
-    const valuesSet = new Set(arr2.map(obj => obj.value));
+  // Extract values from arr2 for quick lookup
+  const valuesSet = new Set(arr2.map(obj => obj.value));
 
-    // Filter arr1 to exclude objects with matching values in arr2
-    return arr1.filter(obj => !valuesSet.has(obj.value));
-  }
+  // Filter arr1 to exclude objects with matching values in arr2
+  return arr1.filter(obj => !valuesSet.has(obj.value));
+}
 
 
-
+  
   const handleChange = (selected) => {
 
 
@@ -1428,19 +1428,19 @@ let Mealsmulti = () => {
     //   return
     // }
 
+ 
 
 
-
-
-
+ 
+ 
 
     // console.log(JSON.stringify(fulldatatwo), 'selected')
     const hasAllValue = selected.some(item => item.value === "All");
 
-
+   
     const hasAllValueold = oldven.some(item => item.value === "All");
 
-
+    
 
 
     setOldven(selected)
@@ -1489,18 +1489,18 @@ let Mealsmulti = () => {
 
       return
     }
-    if (hasAllValue === true && hasAllValueold === false) {
-      console.log(selected, 'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
-      if (selectedOptionsfive.length === 0) {
+    if(hasAllValue === true && hasAllValueold === false){
+      console.log(selected , 'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
+      if(selectedOptionsfive.length === 0){
         selected = basic
-      } else {
-        selected = removeMatchingValues(basic, selectedOptionsfive)
+      }else{
+        selected = removeMatchingValues(basic , selectedOptionsfive)
       }
 
 
+     
 
-
-
+      
       let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
@@ -1546,14 +1546,14 @@ let Mealsmulti = () => {
 
     }
 
-
+    
 
     if (hasAllValue === true) {
-      console.log(selected, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv')
+      console.log(selected , 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv')
       let vvvv = areArraysEqual(selectedOptionsfive, selected)
 
 
-      if (vvvv === true) {
+      if(vvvv === true) {
 
         Swal.fire({
           icon: "warning",
@@ -1567,12 +1567,12 @@ let Mealsmulti = () => {
         return
       }
 
-      console.log(selected, 'let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)')
+      console.log(selected , 'let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)let vvvv = areArraysEqual(selectedOptionsfive, selected)')
 
-      if (hasAllValue === true && selected.length === 1) {
-        selected = removeMatchingValues(basic, selectedOptionsfive)
+      if(hasAllValue === true && selected.length === 1 ){
+        selected = removeMatchingValues(basic , selectedOptionsfive)
       }
-
+      
 
       let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
@@ -1614,11 +1614,11 @@ let Mealsmulti = () => {
 
 
     } else {
-      console.log(selected, 'pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp')
+      console.log(selected , 'pppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppppp')
       let vvvv = areArraysEqual(selectedOptionsfive, selected)
 
 
-      if (vvvv === true) {
+      if(vvvv === true) {
 
         Swal.fire({
           icon: "warning",
@@ -1729,28 +1729,28 @@ let Mealsmulti = () => {
 
 
 
-
+ 
   const handleChangefive = (selected) => {
 
 
-    // let vvvv = areArraysEqual(selectedOptions, selected)
+// let vvvv = areArraysEqual(selectedOptions, selected)
 
 
-    //     if(vvvv === true){
-    //       Swal.fire({
-    //         icon: "warning",
-    //         title: "Invalid Selection",
-    //         text: "You cannot select the same venues in both Chosen and Compare with sections.",
-    //         confirmButtonText: "OK",
-    //       })
-    //       return
+//     if(vvvv === true){
+//       Swal.fire({
+//         icon: "warning",
+//         title: "Invalid Selection",
+//         text: "You cannot select the same venues in both Chosen and Compare with sections.",
+//         confirmButtonText: "OK",
+//       })
+//       return
 
+      
+//     }
 
-    //     }
-
-    //     if(vvvv === true){
-    //       return
-    //     }
+//     if(vvvv === true){
+//       return
+//     }
 
 
 
@@ -1805,10 +1805,10 @@ let Mealsmulti = () => {
     if (hasAllValue === true && hasAllValueold === false) {
 
 
-      if (selectedOptions.length === 0) {
+      if(selectedOptions.length === 0){
         selected = basic
-      } else {
-        selected = removeMatchingValues(basic, selectedOptions)
+      }else{
+        selected = removeMatchingValues(basic , selectedOptions)
       }
 
 
@@ -1846,7 +1846,7 @@ let Mealsmulti = () => {
 
       setBasiconefive(output)
 
-      return
+ return
     }
 
 
@@ -1858,7 +1858,7 @@ let Mealsmulti = () => {
       let vvvv = areArraysEqual(selectedOptions, selected)
 
 
-      if (vvvv === true) {
+      if(vvvv === true) {
 
         Swal.fire({
           icon: "warning",
@@ -1871,9 +1871,9 @@ let Mealsmulti = () => {
 
         return
       }
-
-      if (hasAllValue === true && selected.length === 1) {
-        selected = removeMatchingValues(basic, selectedOptions)
+ 
+      if(hasAllValue === true && selected.length === 1 ){
+        selected = removeMatchingValues(basic , selectedOptions)
       }
 
 
@@ -1918,7 +1918,7 @@ let Mealsmulti = () => {
       let vvvv = areArraysEqual(selectedOptions, selected)
 
 
-      if (vvvv === true) {
+      if(vvvv === true) {
 
         Swal.fire({
           icon: "warning",
@@ -2706,12 +2706,12 @@ let Mealsmulti = () => {
 
 
 
-  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
+  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaway, inone, intwo, alltype) {
 
 
 
 
-    console.log(val21, 'valsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsv gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
+    console.log(val21 , 'valsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsv gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
 
 
 
@@ -2731,7 +2731,7 @@ let Mealsmulti = () => {
     let alldat = basicall
 
 
-    if (val21.length === 0) {
+    if(val21.length === 0){
       alldat = []
     }
 
@@ -3056,152 +3056,55 @@ let Mealsmulti = () => {
 
     }
 
-    if (takeaways.length != 0 && takeaway === true) {
+    if (takeaway.length != 0) {
 
+      function filterByNote(filters) {
+        const allowedNotes = filters.map(f => f.value); // Extract values from filter array
+        const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
 
-      function filterByNoted(data, filterNotes) {
-        let filteredData = {};
+        function traverse(obj) {
+          if (Array.isArray(obj)) {
+            return obj.map(traverse).filter(entry => entry !== null);
+          } else if (typeof obj === "object" && obj !== null) {
+            let newObj = {};
+            let hasMatch = false;
 
-        for (let group in data) {
-          for (let location in data[group]) {
-            for (let section in data[group][location]) {
-              for (let date in data[group][location][section]) {
-                let filteredOrders = data[group][location][section][date]
-                  .filter(order => {
-                    return order.NOTE && filterNotes.test(order.NOTE);
-                  });
-
-                if (filteredOrders.length > 0) {
-                  if (!filteredData[group]) filteredData[group] = {};
-                  if (!filteredData[group][location]) filteredData[group][location] = {};
-                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                  filteredData[group][location][section][date] = filteredOrders;
+            for (let key in obj) {
+              if (key === "NOTE" && typeof obj[key] === "string" && regex.test(obj[key])) {
+                hasMatch = true;
+              } else {
+                let value = traverse(obj[key]);
+                if (value && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0)) {
+                  newObj[key] = value;
+                  hasMatch = true;
                 }
               }
             }
+
+            return hasMatch ? newObj : null;
           }
+          return obj;
         }
 
-        return filteredData;
-      }
+        let result = {};
+        Object.keys(alldat).forEach(key => {
+          let filtered = traverse(alldat[key]);
+          if (filtered && Object.keys(filtered).length > 0) {
+            result[key] = filtered;
+          }
+        });
 
-      const filteredTakeaways = takeaways.filter(t => t.value.toLowerCase() !== 'all');
-
-      const keywordVariants = {
-        "Takeaways": ["takeaways", "takeaway", "take-away", "take away", "Take Away", "Take away", "Take-Away", "Take-away", "Takeaways"],
-        "Deliveries": ["deliveries", "delivery", "Delivery", "Deliveries"],
-        "Pick-ups": ["Pick up", "Pickup", "Pick-ups", "Pick Up", "Pick-up", "pick-up", "Pick-ups"]
-      };
-
-
-      const selectedValues = takeaways.map(t => t.value).filter(val => val !== 'All');
-
-      // Step 2: Get all matching keyword variants for selected values
-      const keywordsToSearch = selectedValues.flatMap(val => keywordVariants[val] || []);
-
-      // Step 3: Build regex (escaped properly)
-      const regex = new RegExp(`\\b(${keywordsToSearch.map(escapeRegExp).join('|')})\\b`, 'i');
-
-      function escapeRegExp(str) {
-        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return result;
       }
 
 
-      console.log(regex, 'seven seven seven')
-      alldat = filterByNoted(alldat, regex);
-
-
-
-      // function filterByNote(data, regex) {
-      //   if (Array.isArray(data)) {
-      //     return data
-      //       .map(item => filterByNote(item, regex))
-      //       .filter(item => item !== null);
-      //   } else if (typeof data === 'object' && data !== null) {
-      //     if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
-      //       return {
-      //         ...data,
-      //         ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
-      //       };
-      //     } else if (!data.hasOwnProperty('NOTE')) {
-      //       let filteredObject = {};
-      //       for (let key in data) {
-      //         let filteredValue = filterByNote(data[key], regex);
-      //         if (filteredValue !== null) {
-      //           filteredObject[key] = filteredValue;
-      //         }
-      //       }
-      //       return Object.keys(filteredObject).length > 0 ? filteredObject : null;
-      //     }
-      //   }
-      //   return null;
-      // }
-      // const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
-      // console.log(regex, 'seven seven seven')
-      // // const filteredData = filterByNote(originalData, regex);
-      // alldat = filterByNote(alldat, regex);
-
-
-
-      // function filterByNote(filters) {
-      //   console.log( JSON.stringify(filters) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
-
-      //   console.log( JSON.stringify(alldat) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
-
-
-      //   const allowedNotes = filters.map(f => f.value); // Extract values from filter array 
-      //   const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
-
-      //   function traverse(obj) {
-      //     if (Array.isArray(obj)) {
-
-      //       return obj.map(traverse).filter(entry => entry !== null);
-      //     } else if (typeof obj === "object" && obj !== null) {
-
-      //       let newObj = {};
-      //       let hasMatch = false;
-
-      //       for (let key in obj) { 
-      //         if (key === "NOTE" && typeof obj[key] === "string" && regex.test(obj[key])) {
-      //           hasMatch = true;
-      //         } else {
-      //           let value = traverse(obj[key]);
-      //           if (value && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0)) {
-      //             newObj[key] = value;
-      //             hasMatch = true;
-      //           }
-      //         }
-      //       }
-
-      //       return hasMatch ? newObj : null;
-      //     }
-      //     return obj;
-      //   }
-
-
-
-      //   let result = {};
-      //   Object.keys(alldat).forEach(key => {
-      //     console.log(alldat , '')
-
-      //     let filtered = traverse(alldat[key]);
-      //     if (filtered && Object.keys(filtered).length > 0) {
-      //       result[key] = filtered;
-      //     }
-      //   });
-
-      //   return result;
-      // }
-
-
-      // alldat = filterByNote(takeaway)
+      alldat = filterByNote(takeaway)
 
       console.log(alldat, 'seven')
 
-    } else {
     }
 
-    if (inone?.length > 1 && intwo === undefined || intwo === '') {
+    if (inone?.length > 2 && intwo === undefined || intwo === '') {
       let splitone = inone.split('-')
 
 
@@ -3254,7 +3157,7 @@ let Mealsmulti = () => {
       }
     }
 
-    if (intwo?.length > 1 && inone === undefined || intwo === '') {
+    if (intwo?.length > 2 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -3307,7 +3210,7 @@ let Mealsmulti = () => {
       }
     }
 
-    if (intwo?.length >= 1 && inone?.length >= 1) {
+    if (intwo?.length > 2 && inone?.length > 2) {
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
@@ -3316,12 +3219,6 @@ let Mealsmulti = () => {
 
 
       function filterDataByTableRanges(data, ranges) {
-
-        if (ranges.length === 0) {
-          return []
-        }
-
-
         const filteredData = {};
 
         Object.entries(data).forEach(([groupKey, groupData]) => {
@@ -3347,14 +3244,8 @@ let Mealsmulti = () => {
         return filteredData;
       }
 
-      let ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      let rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
-
-      if (splitone.length === 1 && splittwo.length === 1) {
-        ranges = [[Number(splitone[0]), Number(splittwo[0])]];
-        rangesone = [];
-      }
-
+      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
@@ -3520,48 +3411,48 @@ let Mealsmulti = () => {
               let stamps = order.STAMP.split(" "); // Split STAMP string
               stamps.forEach(stamp => {
                 const hasRParen = stamp.includes("R0");
-
-                if (hasRParen) {
+              
+                if(hasRParen){
                   let extractedTime = extractTime(stamp);
-
-
+ 
+  
                   if (extractedTime) {
                     let interval = roundToInterval(extractedTime);
 
                     timeCounts[interval] = (timeCounts[interval] || 0) + order.ITEMS.length;
-
-
+ 
+  
                   }
                 }
 
-
+               
               });
             });
           }
         }
       }
-    }
+    } 
 
     if (Object.keys(timeCounts).length === 1) {
       const key = Object.keys(timeCounts)[0];
       const value = timeCounts[key];
-
+    
       const [hourStr, minStr] = key.split('.');
       let hour = parseInt(hourStr, 10);
       let min = parseInt(minStr, 10);
-
+    
       min -= 10;
       if (min < 0) {
         min += 60;
         hour -= 1;
       }
-
+    
       const newKey = `${hour}.${min.toString().padStart(2, '0')}`;
       timeCounts[newKey] = value;
     }
-
+    
     console.log(timeCounts);
-
+    
 
     console.log(timeCounts, 'rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr')
     //  timeCounts = {13.10: 24, 13.20: 21,}
@@ -3584,7 +3475,7 @@ let Mealsmulti = () => {
     let alldat = basicall
 
 
-    if (val21.length === 0) {
+    if(val21.length === 0){
       alldat = []
     }
 
@@ -3901,88 +3792,34 @@ let Mealsmulti = () => {
 
     if (takeaways.length != 0 && takeaway === true) {
 
-
-      function filterByNoted(data, filterNotes) {
-        let filteredData = {};
-
-        for (let group in data) {
-          for (let location in data[group]) {
-            for (let section in data[group][location]) {
-              for (let date in data[group][location][section]) {
-                let filteredOrders = data[group][location][section][date]
-                  .filter(order => {
-                    return order.NOTE && filterNotes.test(order.NOTE);
-                  });
-
-                if (filteredOrders.length > 0) {
-                  if (!filteredData[group]) filteredData[group] = {};
-                  if (!filteredData[group][location]) filteredData[group][location] = {};
-                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                  filteredData[group][location][section][date] = filteredOrders;
-                }
+      function filterByNote(data, regex) {
+        if (Array.isArray(data)) {
+          return data
+            .map(item => filterByNote(item, regex))
+            .filter(item => item !== null);
+        } else if (typeof data === 'object' && data !== null) {
+          if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+            return {
+              ...data,
+              ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+            };
+          } else if (!data.hasOwnProperty('NOTE')) {
+            let filteredObject = {};
+            for (let key in data) {
+              let filteredValue = filterByNote(data[key], regex);
+              if (filteredValue !== null) {
+                filteredObject[key] = filteredValue;
               }
             }
+            return Object.keys(filteredObject).length > 0 ? filteredObject : null;
           }
         }
-
-        return filteredData;
+        return null;
       }
+      const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
 
-      const filteredTakeaways = takeaways.filter(t => t.value.toLowerCase() !== 'all');
-
-      const keywordVariants = {
-        "Takeaways": ["takeaways", "takeaway", "take-away", "take away", "Take Away", "Take away", "Take-Away", "Take-away", "Takeaways"],
-        "Deliveries": ["deliveries", "delivery", "Delivery", "Deliveries"],
-        "Pick-ups": ["Pick up", "Pickup", "Pick-ups", "Pick Up", "Pick-up", "pick-up", "Pick-ups"]
-      };
-
-
-      const selectedValues = takeaways.map(t => t.value).filter(val => val !== 'All');
-
-      // Step 2: Get all matching keyword variants for selected values
-      const keywordsToSearch = selectedValues.flatMap(val => keywordVariants[val] || []);
-
-      // Step 3: Build regex (escaped properly)
-      const regex = new RegExp(`\\b(${keywordsToSearch.map(escapeRegExp).join('|')})\\b`, 'i');
-
-      function escapeRegExp(str) {
-        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      }
-
-
-      console.log(regex, 'seven seven seven')
-      alldat = filterByNoted(alldat, regex);
-
-
-
-      // function filterByNote(data, regex) {
-      //   if (Array.isArray(data)) {
-      //     return data
-      //       .map(item => filterByNote(item, regex))
-      //       .filter(item => item !== null);
-      //   } else if (typeof data === 'object' && data !== null) {
-      //     if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
-      //       return {
-      //         ...data,
-      //         ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
-      //       };
-      //     } else if (!data.hasOwnProperty('NOTE')) {
-      //       let filteredObject = {};
-      //       for (let key in data) {
-      //         let filteredValue = filterByNote(data[key], regex);
-      //         if (filteredValue !== null) {
-      //           filteredObject[key] = filteredValue;
-      //         }
-      //       }
-      //       return Object.keys(filteredObject).length > 0 ? filteredObject : null;
-      //     }
-      //   }
-      //   return null;
-      // }
-      // const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
-      // console.log(regex, 'seven seven seven')
-      // // const filteredData = filterByNote(originalData, regex);
-      // alldat = filterByNote(alldat, regex);
+      // const filteredData = filterByNote(originalData, regex);
+      alldat = filterByNote(alldat, regex);
 
 
 
@@ -4048,7 +3885,7 @@ let Mealsmulti = () => {
       let splitone = inone.split('-')
 
 
-      if (splitone.length === 1) {
+      if (splitone.length === 2) {
 
         if (Number(splitone[0]) < Number(splitone[1])) {
 
@@ -4080,7 +3917,6 @@ let Mealsmulti = () => {
             return filteredData;
           }
 
-
           const ranges = [[Number(splitone[0]), Number(splitone[1])]];
 
           let twelves = filterDataByTableRanges(alldat, ranges)
@@ -4098,7 +3934,7 @@ let Mealsmulti = () => {
       }
     }
 
-    if (intwo?.length > 1 && inone === undefined || intwo === '') {
+    if (intwo?.length > 2 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -4151,7 +3987,7 @@ let Mealsmulti = () => {
       }
     }
 
-    if (intwo?.length >= 1 && inone?.length >= 1) {
+    if (intwo?.length > 2 && inone?.length > 2) {
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
@@ -4160,12 +3996,6 @@ let Mealsmulti = () => {
 
 
       function filterDataByTableRanges(data, ranges) {
-
-        if (ranges.length === 0) {
-          return []
-        }
-
-
         const filteredData = {};
 
         Object.entries(data).forEach(([groupKey, groupData]) => {
@@ -4191,14 +4021,8 @@ let Mealsmulti = () => {
         return filteredData;
       }
 
-      let ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      let rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
-
-      if (splitone.length === 1 && splittwo.length === 1) {
-        ranges = [[Number(splitone[0]), Number(splittwo[0])]];
-        rangesone = [];
-      }
-
+      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
@@ -4934,52 +4758,6 @@ let Mealsmulti = () => {
   };
 
 
-  const handleChangefines = (selected) => {
-    console.log(served, 'selected')
-
-
-    if (served.length === 0) {
-
-    } else {
-
-      if (selected === "Minimum") {
-        setServed((prevState) =>
-          [...prevState].sort((a, b) => a.count - b.count)
-        );
-      } else {
-        setServed((prevState) =>
-          [...prevState].sort((a, b) => b.count - a.count)
-        );
-      }
-
-
-    }
-
-    if (servedone.length === 0) {
-
-    } else {
-
-      if (selected === "Minimum") {
-        setServedone((prevState) =>
-          [...prevState].sort((a, b) => a.count - b.count)
-        );
-      } else {
-        setServedone((prevState) =>
-          [...prevState].sort((a, b) => b.count - a.count)
-        );
-      }
-
-
-
-
-    }
-
-
-    // setSelectedOptionsfine(selected || []);
-
-
-  };
-
   let mealexportpdf = async () => {
     const input = pdfRefss.current;
 
@@ -5412,29 +5190,29 @@ let Mealsmulti = () => {
                           "label": "All Venue",
                           "value": "All"
                         }]].some((item) => item.value === "All");
-                        const hasAllValueOld = oldven.some((item) => item.value === "All");
+                          const hasAllValueOld = oldven.some((item) => item.value === "All");
 
-                        // Check for overlap with selectedOptionsfive
-                        const selectedValues = [...selectedOptions, ...[{
-                          "label": "All Venue",
-                          "value": "All"
-                        }]].map((opt) => opt.value);
-                        const compareValues = selectedOptionsfive.map((opt) => opt.value);
-                        const hasOverlap = selectedValues.some((val) => compareValues.includes(val));
+                          // Check for overlap with selectedOptionsfive
+                          const selectedValues = [...selectedOptions, ...[{
+                            "label": "All Venue",
+                            "value": "All"
+                          }]].map((opt) => opt.value);
+                          const compareValues = selectedOptionsfive.map((opt) => opt.value);
+                          const hasOverlap = selectedValues.some((val) => compareValues.includes(val));
 
-                        if (hasOverlap) {
-                          // Show alert and reset selection
-                          Swal.fire({
-                            icon: "warning",
-                            title: "Invalid Selection",
-                            text: "You cannot select the same venues in both Chosen and Compare with sections.",
-                            confirmButtonText: "OK",
-                          }).then(() => {
-                            // setSelectedOptions(oldven); // Reset to previous valid state
-                            // setOldven(oldven);
-                          });
-                          return;
-                        }
+                          if (hasOverlap) {
+                            // Show alert and reset selection
+                            Swal.fire({
+                              icon: "warning",
+                              title: "Invalid Selection",
+                              text: "You cannot select the same venues in both Chosen and Compare with sections.",
+                              confirmButtonText: "OK",
+                            }).then(() => {
+                              // setSelectedOptions(oldven); // Reset to previous valid state
+                              // setOldven(oldven);
+                            });
+                            return;
+                          }
 
 
 
@@ -5598,7 +5376,7 @@ let Mealsmulti = () => {
 
 
 
-
+ 
                         if (e.target.checked === false) {
                           setVenueradiofivese(e.target.checked)
                           setSelectedOptionsfive([])
@@ -5630,8 +5408,8 @@ let Mealsmulti = () => {
                             text: "You cannot select the same venues in both Chosen and Compare with sections.",
                             confirmButtonText: "OK",
                           }).then(() => {
-
-
+                             
+                            
                           });
                           return;
                         }
@@ -5642,10 +5420,10 @@ let Mealsmulti = () => {
                           setSelectedOptionsfive([])
                         } else {
 
+                          
 
 
-
-
+                       
 
 
                           handleChangefive([...selectedOptionsfive, ...[{
@@ -6062,8 +5840,6 @@ let Mealsmulti = () => {
                     <div className="col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-start justify-content-center" style={{ paddingLeft: `${padd}px`, paddingRight: paddOpp }}>
                       <div className="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                         setMeals(2)
-
-                        handleChangefines(selserdata)
                       }}>
                         <div className="boxs" style={{ cursor: 'pointer' }}>
                           <div className="d-flex justify-content-between">
@@ -6673,55 +6449,41 @@ let Mealsmulti = () => {
                         {/* Table section */}
                         <div className="scroll" id="scrrrrol" style={{ height: 400, overflowY: 'auto' }}>
                           {served?.map((dfgh, index) => {
-                            // Find corresponding item by matching name
-                            const correspondingErv = servedone?.find(item => item?.name === dfgh?.name);
+                            const correspondingErv = servedone?.[index];
 
                             return (
-                              <React.Fragment key={index}>
-                                <div className="d-flex">
-                                  <div style={{ width: '33%' }}>
-                                    <p style={{ fontWeight: '700', color: index === 0 && selserdata === 'Minimum' ? "#CA424E" : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
-                                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
+                              <div key={index}>
+                                <div className="row py-2">
+                                  <div className="col-md-4 col-sm-12 mb-2 mb-md-0">
+                                    <p className="mb-1" style={{ fontWeight: '700', color: index === 0 && selserdata === 'Minimum' ? "#CA424E" : '#000', }}>{dfgh?.name}</p>
+                                    <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}>{dfgh?.count}</p>
                                   </div>
 
                                   {correspondingErv ? (
-                                    <div style={{ width: '33%', textAlign: 'center' }}>
-                                      <p style={{ fontWeight: '700', color: index === 0 && selserdata === 'Maximum' ? "#316AAF" : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
-                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                                    <div className="col-md-4 col-sm-12 mb-2 mb-md-0 text-md-center">
+                                      <p className="mb-1" style={{ fontWeight: '700', color: index === 0 && selserdata === 'Maximum' ? "#316AAF" : '#000', }}>{correspondingErv?.name}</p>
+                                      <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}>{correspondingErv?.count}</p>
                                     </div>
                                   ) : (
-                                    <div style={{ width: '33%', textAlign: 'center' }}>
-                                      <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>-</p>
-                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>-</p>
-                                    </div>
+                                    <div className="col-md-4 col-sm-12 mb-2 mb-md-0"></div>
                                   )}
 
-                                  <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%' }}>
-                                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                                  <div className="col-md-4 col-sm-12 d-flex justify-content-md-end align-items-center">
+                                    <p className="mb-1" style={{ fontWeight: '400', color: '#000' }}>
                                       <span>
                                         {(() => {
                                           const datd = dfgh?.count || 0;
                                           const datdtwo = correspondingErv?.count || 0;
-
-                                          // If no corresponding item found or count is 0, show no percentage
-                                          if (!correspondingErv || datdtwo === 0) {
-                                            return (
-                                              <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>
-                                                -
-                                              </span>
-                                            );
-                                          }
-
-                                          const tot = ((datd - datdtwo) / datdtwo) * 100;
+                                          const tot = datdtwo === 0 ? 0 : ((datd - datdtwo) / datdtwo) * 100;
 
                                           return (
-                                            <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>
-                                              {isNaN(tot) ? "+000.00%" : tot.toFixed(2) + "%"}
+                                            <span style={{ fontWeight: '700', color: '#000' }}>
+                                              {tot.toFixed(2) + "%"}
                                               <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
                                                 {tot > 0 ? (
-                                                  <img src="up_arw.png" style={{ width: 16, height: 16 }} alt="Up Arrow" />
+                                                  <img src="up_arw.png" style={{ width: 16, height: 16 }} alt="Up Arrow" className="img-fluid" />
                                                 ) : (
-                                                  <img src="d_arw.png" style={{ width: 16, height: 16 }} alt="Down Arrow" />
+                                                  <img src="d_arw.png" style={{ width: 16, height: 16 }} alt="Down Arrow" className="img-fluid" />
                                                 )}
                                               </span>
                                             </span>
@@ -6732,7 +6494,7 @@ let Mealsmulti = () => {
                                   </div>
                                 </div>
                                 <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                              </React.Fragment>
+                              </div>
                             );
                           })}
                         </div>
@@ -6875,69 +6637,75 @@ let Mealsmulti = () => {
 
 
 
-                            {minperday?.map((dfgh, index) => {
-                              // Find corresponding item by matching name
-                              const correspondingErv = maxperday?.find(item => item?.name === dfgh?.name);
+                            {
+                              minperday?.map((dfgh, index) => {
+                                const correspondingErv = maxperday?.[index]; // Get the corresponding item in the `ervedone` array
 
-                              return (
-                                <React.Fragment key={index}>
-                                  <div className="d-flex">
-                                    <div style={{ width: '33%' }}>
-                                      <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Minimum' ? "#316AAF" : '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.name}</p>
-                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{dfgh?.count}</p>
-                                    </div>
+                                return (
+                                  <>
+                                    <div className="d-flex  ">
 
-                                    {correspondingErv ? (
-                                      <div style={{ width: '33%', textAlign: 'center' }}>
-                                        <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Maximum' ? "#CA424E" : '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.name}</p>
-                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>{correspondingErv?.count}</p>
+                                      <div style={{ width: '33%' }}>
+                                        <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Minimum' ? "#316AAF" : '#000', marginBlock: '4px' }}>{dfgh?.name}</p>
+                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{dfgh?.count}</p>
                                       </div>
-                                    ) : (
-                                      <div style={{ width: '33%', textAlign: 'center' }}>
-                                        <p style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>-</p>
-                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>-</p>
-                                      </div>
-                                    )}
 
-                                    <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%' }}>
-                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
-                                        <span>
-                                          {(() => {
-                                            const datd = dfgh?.count || 0;
-                                            const datdtwo = correspondingErv?.count || 0;
+                                      {correspondingErv ? (
+                                        <div style={{ width: '33%', textAlign: 'center' }}>
+                                          <div >
 
-                                            // If no corresponding item found or count is 0, show no percentage
-                                            if (!correspondingErv || datdtwo === 0) {
+                                            <p style={{ fontWeight: '700', color: index === 0 && selserdatare === 'Maximum' ? "#CA424E" : '#000', marginBlock: '4px' }}>{correspondingErv?.name}</p>
+                                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>{correspondingErv?.count}</p>
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <>
+                                          <div style={{ width: '33%' }} >
+                                          </div></>
+                                      )}
+
+                                      <div style={{ justifyContent: 'end', alignItems: 'center', display: 'flex', width: '33%', }}>
+                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                                          <span>
+                                            {(() => {
+                                              const datd = dfgh?.count || 0; // Fallback to 0 if no data
+                                              const datdtwo = correspondingErv?.count || 0; // Fallback to 0 if no data
+
+
+                                              const tot = ((datd - datdtwo) / datdtwo) * 100;
+
                                               return (
-                                                <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
-                                                  -
+                                                <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>
+                                                  {tot.toFixed(2) + "%"}
+                                                  <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                                    {tot > 0 ? (
+                                                      <img
+                                                        src="up_arw.png"
+                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                                        alt="up arrow"
+                                                      />
+                                                    ) : (
+                                                      <img
+                                                        src="d_arw.png"
+                                                        style={{ width: 16, height: 16, cursor: 'pointer' }}
+                                                        alt="down arrow"
+                                                      />
+                                                    )}
+                                                  </span>
                                                 </span>
                                               );
-                                            }
+                                            })()}
+                                          </span>
+                                        </p>
+                                      </div>
 
-                                            const tot = ((datd - datdtwo) / datdtwo) * 100;
-
-                                            return (
-                                              <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
-                                                {isNaN(tot) ? "0%" : tot.toFixed(2) + "%"}
-                                                <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
-                                                  {isNaN(tot) || tot === 0 ? '' : tot > 0 ? (
-                                                    <img src="up_arw.png" style={{ width: 16, height: 16 }} alt="Up Arrow" />
-                                                  ) : (
-                                                    <img src="d_arw.png" style={{ width: 16, height: 16 }} alt="Down Arrow" />
-                                                  )}
-                                                </span>
-                                              </span>
-                                            );
-                                          })()}
-                                        </span>
-                                      </p>
                                     </div>
-                                  </div>
-                                  <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
-                                </React.Fragment>
-                              );
-                            })}
+
+                                    <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
+                                  </>
+                                );
+                              })
+                            }
 
 
                           </div>
@@ -7082,7 +6850,7 @@ let Mealsmulti = () => {
                                   day: "2-digit",
                                   month: "short",
                                   year: "numeric"
-                                }).replace(/,/g, "")
+                                }).replace(/,/g,"")
 
                                 return (formattedDate)
                               })()} to {(() => {
@@ -7092,7 +6860,7 @@ let Mealsmulti = () => {
                                   day: "2-digit",
                                   month: "short",
                                   year: "numeric"
-                                }).replace(/,/g, "")
+                                }).replace(/,/g,"")
 
                                 return (formattedDate)
                               })()} between {onetime || "00:00"} to {twotime || "24:00"}</p>
@@ -7103,7 +6871,7 @@ let Mealsmulti = () => {
                                   day: "2-digit",
                                   month: "short",
                                   year: "numeric"
-                                }).replace(/,/g, "")
+                                }).replace(/,/g,"")
 
                                 return (formattedDate)
                               })()} to {(() => {
@@ -7113,12 +6881,12 @@ let Mealsmulti = () => {
                                   day: "2-digit",
                                   month: "short",
                                   year: "numeric"
-                                }).replace(/,/g, "")
+                                }).replace(/,/g,"")
 
                                 return (formattedDate)
                               })()} between {threetime || "00:00"} to {fourtime || "24:00"}</p>
 
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, wordSpacing: -5 }} className="fonttttttt" >Table ranges contains: All</p>
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: 20, wordSpacing: -5 }}  className="fonttttttt" >Table ranges contains: All</p>
                               <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt"  >Stages contains: {(() => {
 
                                 const result = selectedhubOptions.map(item => item.label.trim()).join(", ");
@@ -7133,7 +6901,7 @@ let Mealsmulti = () => {
 
 
                               })()} </p>
-                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }} className="fonttttttt"  >Courses contains: {(() => {
+                              <p style={{ fontWeight: '400', fontSize: 15, color: '#000', marginTop: -20, wordSpacing: -5 }}  className="fonttttttt"  >Courses contains: {(() => {
 
                                 const result = selectedCources.map(item => item.label).join(", ");
 
@@ -7194,11 +6962,11 @@ let Mealsmulti = () => {
         <div ref={pdfRef}  >
 
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }}>Edits</p>
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, padding: 0 }} className="fontttttttdd"  >{(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20,padding:0 }} className="fontttttttdd"  >{(() => {
 
             const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
             const result = filteredOptions.map(item => item.label.trim()).join(", ") // Join without spaces first
-
+  
 
 
             if (result === "" || result === undefined || result === null) {
@@ -7700,7 +7468,7 @@ let Mealsmulti = () => {
 
           <p style={{ fontWeight: '700', fontSize: 25, color: '#000', }} className="fonttttttt"  >Refunded meals</p>
 
-          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, padding: 0 }} className="fontttttttdd"    >{(() => {
+          <p style={{ fontWeight: '700', fontSize: 17, color: '#000', marginTop: -20, padding:0}} className="fontttttttdd"    >{(() => {
 
             const filteredOptions = selectedOptions.filter(item => item.label !== "All Venue");
             const result = filteredOptions.map(item => item.label).join(",") // Join without spaces first

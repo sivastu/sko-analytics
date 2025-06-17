@@ -76,7 +76,7 @@ let Multi_venue = () => {
   const [startDate, endDate] = dateRange;
 
 
-  let [basicall, setBasicall] = useState()  
+  let [basicall, setBasicall] = useState()
   let [basic, setBasic] = useState()
   let [basicone, setBasicone] = useState([]) 
 
@@ -123,10 +123,10 @@ let Multi_venue = () => {
     // { value: 'S', label: 'Served' },
   ];
 
-   const optionstakeaway = [
+  const optionstakeaway = [
     { value: 'All', label: 'All takeaways' },
-    { value: 'Takeaways', label: 'Takeaways' },
-    { value: 'Deliveries', label: 'Deliveries' },
+    { value: 'TAKEAWAY', label: 'Takeaways' },
+    { value: 'DELIVERY', label: 'Deliveries' },
     { value: 'Pick-ups', label: 'Pick-ups' },
   ];
   ///old
@@ -150,14 +150,6 @@ let Multi_venue = () => {
   const [modalIsOpen, setIsOpen] = React.useState(false);
   let [cval1, setcval1] = useState()
   let [cval2, setcval2] = useState()
-
-   const courseIndexMaps = {
-    main: 3,
-    starter: 0,
-    sushi: 1,
-    hot: 2,
-    dessert: 4,
-  };
 
   let [prevVenueradiofivese, setPrevVenueradiofivese] = useState(false);
 
@@ -505,15 +497,11 @@ let Multi_venue = () => {
             <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>
               Course: {course === "empty" ? '' : course}
             </p>
-           {
-              key === 0 ? <p onClick={() => {
-              console.log(orders, 'stampvalstampvalstampval')
+            <p onClick={()=>{
+              console.log(orders , 'stampvalstampvalstampval')
             }} style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}>
-              Time:  {getStartTime(courseIndexMaps , selectedCources , cval1?.order?.STAMP)}  End Time : {getEndTime(courseIndexMaps , selectedCources , cval1?.order?.STAMP)}
+              Time:  {  findFirstOccurrenceByStatus(stampval , 'R' , key )} . | {findFirstOccurrenceByStatus(stampval , 'P' , key )}. | {findFirstOccurrenceByStatus(stampval , 'H' , key )}.
             </p>
-
-             : ""
-            }
 
             <div style={{ marginTop: 10 }}>
               {items?.map((kai, index) => (
@@ -2804,7 +2792,7 @@ let Multi_venue = () => {
 
     let alldat = basicall
 
-    if (val21.length === 0) { 
+    if (val21.length === 0) {
       alldat = []
     }
 
@@ -2989,151 +2977,6 @@ let Multi_venue = () => {
 
     }
 
-    if (takeaways.length != 0 && takeaway === true) {
-
-
-      function filterByNoted(data, filterNotes) {
-        let filteredData = {};
-
-        for (let group in data) {
-          for (let location in data[group]) {
-            for (let section in data[group][location]) {
-              for (let date in data[group][location][section]) {
-                let filteredOrders = data[group][location][section][date]
-                  .filter(order => {
-                    return order.NOTE && filterNotes.test(order.NOTE);
-                  });
-
-                if (filteredOrders.length > 0) {
-                  if (!filteredData[group]) filteredData[group] = {};
-                  if (!filteredData[group][location]) filteredData[group][location] = {};
-                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-                  filteredData[group][location][section][date] = filteredOrders;
-                }
-              }
-            }
-          }
-        }
-
-        return filteredData;
-      }
-
-      const filteredTakeaways = takeaways.filter(t => t.value.toLowerCase() !== 'all');
-
-      const keywordVariants = {
-        "Takeaways": ["takeaways", "takeaway", "take-away", "take away", "Take Away", "Take away", "Take-Away", "Take-away", "Takeaways"],
-        "Deliveries": ["deliveries", "delivery", "Delivery", "Deliveries"],
-        "Pick-ups": ["Pick up", "Pickup", "Pick-ups", "Pick Up", "Pick-up", "pick-up", "Pick-ups"]
-      };
-
-
-      const selectedValues = takeaways.map(t => t.value).filter(val => val !== 'All');
-
-      // Step 2: Get all matching keyword variants for selected values
-      const keywordsToSearch = selectedValues.flatMap(val => keywordVariants[val] || []);
-
-      // Step 3: Build regex (escaped properly)
-      const regex = new RegExp(`\\b(${keywordsToSearch.map(escapeRegExp).join('|')})\\b`, 'i');
-
-      function escapeRegExp(str) {
-        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      }
-
-
-      console.log(regex, 'seven seven seven')
-      alldat = filterByNoted(alldat, regex);
-
-
-
-      // function filterByNote(data, regex) {
-      //   if (Array.isArray(data)) {
-      //     return data
-      //       .map(item => filterByNote(item, regex))
-      //       .filter(item => item !== null);
-      //   } else if (typeof data === 'object' && data !== null) {
-      //     if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
-      //       return {
-      //         ...data,
-      //         ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
-      //       };
-      //     } else if (!data.hasOwnProperty('NOTE')) {
-      //       let filteredObject = {};
-      //       for (let key in data) {
-      //         let filteredValue = filterByNote(data[key], regex);
-      //         if (filteredValue !== null) {
-      //           filteredObject[key] = filteredValue;
-      //         }
-      //       }
-      //       return Object.keys(filteredObject).length > 0 ? filteredObject : null;
-      //     }
-      //   }
-      //   return null;
-      // }
-      // const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
-      // console.log(regex, 'seven seven seven')
-      // // const filteredData = filterByNote(originalData, regex);
-      // alldat = filterByNote(alldat, regex);
-
-
-
-      // function filterByNote(filters) {
-      //   console.log( JSON.stringify(filters) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
-
-      //   console.log( JSON.stringify(alldat) , 'JSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringifyJSON.stringify')
-
-
-      //   const allowedNotes = filters.map(f => f.value); // Extract values from filter array 
-      //   const regex = new RegExp(allowedNotes.join("|"), "i"); // Create regex pattern for filtering
-
-      //   function traverse(obj) {
-      //     if (Array.isArray(obj)) {
-
-      //       return obj.map(traverse).filter(entry => entry !== null);
-      //     } else if (typeof obj === "object" && obj !== null) {
-
-      //       let newObj = {};
-      //       let hasMatch = false;
-
-      //       for (let key in obj) { 
-      //         if (key === "NOTE" && typeof obj[key] === "string" && regex.test(obj[key])) {
-      //           hasMatch = true;
-      //         } else {
-      //           let value = traverse(obj[key]);
-      //           if (value && (Array.isArray(value) ? value.length > 0 : Object.keys(value).length > 0)) {
-      //             newObj[key] = value;
-      //             hasMatch = true;
-      //           }
-      //         }
-      //       }
-
-      //       return hasMatch ? newObj : null;
-      //     }
-      //     return obj;
-      //   }
-
-
-
-      //   let result = {};
-      //   Object.keys(alldat).forEach(key => {
-      //     console.log(alldat , '')
-
-      //     let filtered = traverse(alldat[key]);
-      //     if (filtered && Object.keys(filtered).length > 0) {
-      //       result[key] = filtered;
-      //     }
-      //   });
-
-      //   return result;
-      // }
-
-
-      // alldat = filterByNote(takeaway)
-
-      console.log(alldat, 'seven')
-
-    } else {
-    }
-
     if (val22.length === 0 || val22 === "") {
 
 
@@ -3226,56 +3069,56 @@ let Multi_venue = () => {
 
     }
 
-    // if (cources.length != 0) {
+    if (cources.length != 0) {
 
 
-    //   function filterByNoted(data, filterNotes) {
-    //     let filteredData = {};
+      function filterByNoted(data, filterNotes) {
+        let filteredData = {};
 
-    //     // Extract only values from the filter list
-    //     const validNotes = filterNotes.map(item => item.value);
+        // Extract only values from the filter list
+        const validNotes = filterNotes.map(item => item.value);
 
-    //     for (let group in data) {
-    //       for (let location in data[group]) {
-    //         for (let section in data[group][location]) {
-    //           for (let date in data[group][location][section]) {
-    //             let filteredOrders = data[group][location][section][date].map(order => {
-    //               let filteredItems = order.ITEMS.filter(item => {
-    //                 if (!item.NOTE) return false; // Ignore empty or undefined NOTE
+        for (let group in data) {
+          for (let location in data[group]) {
+            for (let section in data[group][location]) {
+              for (let date in data[group][location][section]) {
+                let filteredOrders = data[group][location][section][date].map(order => {
+                  let filteredItems = order.ITEMS.filter(item => {
+                    if (!item.NOTE) return false; // Ignore empty or undefined NOTE
 
-    //                 // Extract the word after (C<number>)
-    //                 const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-    //                 if (match && match[1]) {
-    //                   return validNotes.includes(match[1]); // Keep only if in validNotes
-    //                 }
-    //                 return false;
-    //               });
+                    // Extract the word after (C<number>)
+                    const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                    if (match && match[1]) {
+                      return validNotes.includes(match[1]); // Keep only if in validNotes
+                    }
+                    return false;
+                  });
 
-    //               return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
-    //             }).filter(order => order !== null);
+                  return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
+                }).filter(order => order !== null);
 
-    //             if (filteredOrders.length > 0) {
-    //               if (!filteredData[group]) filteredData[group] = {};
-    //               if (!filteredData[group][location]) filteredData[group][location] = {};
-    //               if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-    //               filteredData[group][location][section][date] = filteredOrders;
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
+                if (filteredOrders.length > 0) {
+                  if (!filteredData[group]) filteredData[group] = {};
+                  if (!filteredData[group][location]) filteredData[group][location] = {};
+                  if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
+                  filteredData[group][location][section][date] = filteredOrders;
+                }
+              }
+            }
+          }
+        }
 
-    //     return filteredData;
-    //   }
-
-
-    //   alldat = filterByNoted(alldat, cources)
-
-    //   console.log(alldat, 'six')
+        return filteredData;
+      }
 
 
+      alldat = filterByNoted(alldat, cources)
 
-    // }
+      console.log(alldat, 'six')
+
+
+
+    }
 
     // if (takeaways.length != 0 && takeaway === true ) {
 
@@ -3368,7 +3211,7 @@ let Multi_venue = () => {
     // }else{ 
     // }
 
-    if (inone?.length > 1 && intwo === undefined || intwo === '') {
+    if (inone?.length > 2 && intwo === undefined || intwo === '') {
       let splitone = inone.split('-')
 
 
@@ -3421,7 +3264,7 @@ let Multi_venue = () => {
       }
     }
 
-    if (intwo?.length > 1 && inone === undefined || intwo === '') {
+    if (intwo?.length > 2 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -3474,20 +3317,15 @@ let Multi_venue = () => {
       }
     }
 
-      if (intwo?.length >= 1 && inone?.length >= 1) {
-      console.log(inone, intwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
+    if (intwo?.length > 2 && inone?.length > 2) {
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
 
 
-      console.log(splitone, splittwo , '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
+
 
       function filterDataByTableRanges(data, ranges) {
-
-        if(ranges.length === 0){  
-          return []
-        }
         const filteredData = {};
 
         Object.entries(data).forEach(([groupKey, groupData]) => {
@@ -3513,14 +3351,8 @@ let Multi_venue = () => {
         return filteredData;
       }
 
-      let ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      let rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
-
-
-      if( splitone.length === 1 && splittwo.length === 1) {
-        ranges = [[Number(splitone[0]), Number(splittwo[0])]];
-        rangesone = [];
-      }
+      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
@@ -3547,6 +3379,7 @@ let Multi_venue = () => {
 
 
     }
+
     if (alltype === undefined || alltype.length === 0) {
 
     } else {
@@ -3646,7 +3479,7 @@ let Multi_venue = () => {
 
     setFilterdataone(filteredData)
 
-    callfordataone(filteredData , alltype , cources)
+    callfordataone(filteredData)
     let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
     let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
     // Extract values into separate arrays
@@ -4023,71 +3856,33 @@ let Multi_venue = () => {
 
     }
 
-    // if (cources.length != 0) {
-
-
-    //   function filterByNoted(data, filterNotes) {
-    //     let filteredData = {};
-
-    //     // Extract only values from the filter list
-    //     const validNotes = filterNotes.map(item => item.value);
-
-    //     for (let group in data) {
-    //       for (let location in data[group]) {
-    //         for (let section in data[group][location]) {
-    //           for (let date in data[group][location][section]) {
-    //             let filteredOrders = data[group][location][section][date].map(order => {
-    //               let filteredItems = order.ITEMS.filter(item => {
-    //                 if (!item.NOTE) return false; // Ignore empty or undefined NOTE
-
-    //                 // Extract the word after (C<number>)
-    //                 const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
-    //                 if (match && match[1]) {
-    //                   return validNotes.includes(match[1]); // Keep only if in validNotes
-    //                 }
-    //                 return false;
-    //               });
-
-    //               return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
-    //             }).filter(order => order !== null);
-
-    //             if (filteredOrders.length > 0) {
-    //               if (!filteredData[group]) filteredData[group] = {};
-    //               if (!filteredData[group][location]) filteredData[group][location] = {};
-    //               if (!filteredData[group][location][section]) filteredData[group][location][section] = {};
-    //               filteredData[group][location][section][date] = filteredOrders;
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-
-    //     return filteredData;
-    //   }
-
-
-    //   alldat = filterByNoted(alldat, cources)
-
-    //   console.log(alldat, 'six')
-
-
-
-    // }
-
-   if (takeaways.length != 0 && takeaway === true) {
+    if (cources.length != 0) {
 
 
       function filterByNoted(data, filterNotes) {
         let filteredData = {};
 
+        // Extract only values from the filter list
+        const validNotes = filterNotes.map(item => item.value);
+
         for (let group in data) {
           for (let location in data[group]) {
             for (let section in data[group][location]) {
               for (let date in data[group][location][section]) {
-                let filteredOrders = data[group][location][section][date]
-                  .filter(order => {
-                    return order.NOTE && filterNotes.test(order.NOTE);
+                let filteredOrders = data[group][location][section][date].map(order => {
+                  let filteredItems = order.ITEMS.filter(item => {
+                    if (!item.NOTE) return false; // Ignore empty or undefined NOTE
+
+                    // Extract the word after (C<number>)
+                    const match = item.NOTE.match(/\(C\d+([a-zA-Z]+)\)/);
+                    if (match && match[1]) {
+                      return validNotes.includes(match[1]); // Keep only if in validNotes
+                    }
+                    return false;
                   });
+
+                  return filteredItems.length > 0 ? { ...order, ITEMS: filteredItems } : null;
+                }).filter(order => order !== null);
 
                 if (filteredOrders.length > 0) {
                   if (!filteredData[group]) filteredData[group] = {};
@@ -4103,61 +3898,45 @@ let Multi_venue = () => {
         return filteredData;
       }
 
-      const filteredTakeaways = takeaways.filter(t => t.value.toLowerCase() !== 'all');
 
-      const keywordVariants = {
-        "Takeaways": ["takeaways", "takeaway", "take-away", "take away", "Take Away", "Take away", "Take-Away", "Take-away", "Takeaways"],
-        "Deliveries": ["deliveries", "delivery", "Delivery", "Deliveries"],
-        "Pick-ups": ["Pick up", "Pickup", "Pick-ups", "Pick Up", "Pick-up", "pick-up", "Pick-ups"]
-      };
+      alldat = filterByNoted(alldat, cources)
+
+      console.log(alldat, 'six')
 
 
-      const selectedValues = takeaways.map(t => t.value).filter(val => val !== 'All');
 
-      // Step 2: Get all matching keyword variants for selected values
-      const keywordsToSearch = selectedValues.flatMap(val => keywordVariants[val] || []);
+    }
 
-      // Step 3: Build regex (escaped properly)
-      const regex = new RegExp(`\\b(${keywordsToSearch.map(escapeRegExp).join('|')})\\b`, 'i');
+    if (takeaways.length != 0 && takeaway === true) {
 
-      function escapeRegExp(str) {
-        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      function filterByNote(data, regex) {
+        if (Array.isArray(data)) {
+          return data
+            .map(item => filterByNote(item, regex))
+            .filter(item => item !== null);
+        } else if (typeof data === 'object' && data !== null) {
+          if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
+            return {
+              ...data,
+              ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
+            };
+          } else if (!data.hasOwnProperty('NOTE')) {
+            let filteredObject = {};
+            for (let key in data) {
+              let filteredValue = filterByNote(data[key], regex);
+              if (filteredValue !== null) {
+                filteredObject[key] = filteredValue;
+              }
+            }
+            return Object.keys(filteredObject).length > 0 ? filteredObject : null;
+          }
+        }
+        return null;
       }
+      const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
 
-
-      console.log(regex, 'seven seven seven')
-      alldat = filterByNoted(alldat, regex);
-
-
-
-      // function filterByNote(data, regex) {
-      //   if (Array.isArray(data)) {
-      //     return data
-      //       .map(item => filterByNote(item, regex))
-      //       .filter(item => item !== null);
-      //   } else if (typeof data === 'object' && data !== null) {
-      //     if (data.hasOwnProperty('NOTE') && regex.test(data.NOTE)) {
-      //       return {
-      //         ...data,
-      //         ITEMS: data.ITEMS ? filterByNote(data.ITEMS, regex) : data.ITEMS
-      //       };
-      //     } else if (!data.hasOwnProperty('NOTE')) {
-      //       let filteredObject = {};
-      //       for (let key in data) {
-      //         let filteredValue = filterByNote(data[key], regex);
-      //         if (filteredValue !== null) {
-      //           filteredObject[key] = filteredValue;
-      //         }
-      //       }
-      //       return Object.keys(filteredObject).length > 0 ? filteredObject : null;
-      //     }
-      //   }
-      //   return null;
-      // }
-      // const regex = new RegExp(takeaways.map(t => t.value).join("|"), "i"); // Adjust regex dynamically 
-      // console.log(regex, 'seven seven seven')
-      // // const filteredData = filterByNote(originalData, regex);
-      // alldat = filterByNote(alldat, regex);
+      // const filteredData = filterByNote(originalData, regex);
+      alldat = filterByNote(alldat, regex);
 
 
 
@@ -4219,7 +3998,7 @@ let Multi_venue = () => {
     } else {
     }
 
-    if (inone?.length > 1 && intwo === undefined || intwo === '') {
+    if (inone?.length > 2 && intwo === undefined || intwo === '') {
       let splitone = inone.split('-')
 
 
@@ -4272,7 +4051,7 @@ let Multi_venue = () => {
       }
     }
 
-    if (intwo?.length > 1 && inone === undefined || intwo === '') {
+    if (intwo?.length > 2 && inone === undefined || intwo === '') {
       let splitone = intwo.split('-')
 
 
@@ -4325,20 +4104,15 @@ let Multi_venue = () => {
       }
     }
 
-      if (intwo?.length >= 1 && inone?.length >= 1) {
-      console.log(inone, intwo, '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
+    if (intwo?.length > 2 && inone?.length > 2) {
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
 
 
-      console.log(splitone, splittwo , '3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333')
+
 
       function filterDataByTableRanges(data, ranges) {
-
-        if(ranges.length === 0){  
-          return []
-        }
         const filteredData = {};
 
         Object.entries(data).forEach(([groupKey, groupData]) => {
@@ -4364,14 +4138,8 @@ let Multi_venue = () => {
         return filteredData;
       }
 
-      let ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      let rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
-
-
-      if( splitone.length === 1 && splittwo.length === 1) {
-        ranges = [[Number(splitone[0]), Number(splittwo[0])]];
-        rangesone = [];
-      }
+      const ranges = [[Number(splitone[0]), Number(splitone[1])]];
+      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
@@ -4498,7 +4266,7 @@ let Multi_venue = () => {
 
     setFilterdatatwo(filteredData)
 
-    callfordataonetwo(filteredData , alltype , cources)
+    callfordataonetwo(filteredData)
 
 
     let ghi = processTimeDatafgh(alldat , generateTimeSlots(time , time2))
@@ -4561,101 +4329,8 @@ let Multi_venue = () => {
 
   }
 
+  let callfordataone = (one) => {
 
-   function calculateTotalMinutes(STAMP) {
-    const parts = STAMP.split(' ').slice(1); // Remove date part
-    const pairs = {};
-    let total = 0;
-
-    parts.forEach(part => {
-      const time = part.slice(0, 4);
-      const type = part[4];
-      const index = part.slice(5);
-
-      if (!pairs[index]) pairs[index] = {};
-      if (type === 'R') {
-        pairs[index].start = time;
-      } else if (type === 'P') {
-        pairs[index].end = time;
-      }
-    });
-
-    Object.values(pairs).forEach(({ start, end }) => {
-      if (!start || !end) return;
-
-      const startH = parseInt(start.slice(0, 2));
-      const startM = parseInt(start.slice(2, 4));
-      const endH = parseInt(end.slice(0, 2));
-      const endM = parseInt(end.slice(2, 4));
-
-      const startTotal = startH * 60 + startM;
-      const endTotal = endH * 60 + endM;
-      const diff = endTotal - startTotal;
-
-      total += diff === 0 ? 0.5 : diff;
-    });
-
-    return total;
-  }
-
-
-
-  function calculateTotalWithHold(STAMP) {
-    const segments = STAMP.split(" ");
-    let totalMinutes = 0;
-
-    for (let i = 0; i < segments.length; i++) {
-      if (segments[i].includes("H")) {
-        const current = segments[i];
-        const next = segments[i + 1];
-
-        if (next) {
-          const currentTime = parseInt(current.slice(0, 4)); // e.g., 1919
-          const nextTime = parseInt(next.slice(0, 4));       // e.g., 1924
-
-          if (currentTime === nextTime) {
-            totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
-          } else {
-            totalMinutes += (nextTime - currentTime); // normal minute diff
-          }
-        }
-      }
-    }
-
-    return totalMinutes;
-  }
-
-
-  function calculateIdleTimes(STAMP) {
-    const segments = STAMP.split(" ");
-    let totalMinutes = 0;
-
-    for (let i = 0; i < segments.length; i++) {
-      if (segments[i].includes("P")) {
-        const current = segments[i];
-        const next = segments[i + 1];
-
-        if (next) {
-          const currentTime = parseInt(current.slice(0, 4)); // e.g., 1919
-          const nextTime = parseInt(next.slice(0, 4));       // e.g., 1924
-
-          if (currentTime === nextTime) {
-            totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
-          } else {
-            totalMinutes += (nextTime - currentTime); // normal minute diff
-          }
-        }
-      }
-    }
-
-    return totalMinutes;
-  }
-
-
-
-
-
-  let callfordataone = (one , allt , cos ) => {
 
     function processData(data) {
       let result = [];
@@ -4669,7 +4344,7 @@ let Multi_venue = () => {
           const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
 
           const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-        
+          if (timeEntries.length >= 2) {
             const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
             const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
 
@@ -4679,79 +4354,11 @@ let Multi_venue = () => {
             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
             // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            // let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
 
-             let valuesPresent = allt.map(item => item.value);
+            if (processTime < 2) {
 
-
-            let processTime = 0;
-
-
-
-            let processess = calculateTotalMinutes(order?.STAMP)
-            let holdd = calculateTotalWithHold(order?.STAMP)
-            let passtime = calculateIdleTimes(order?.STAMP)
-
-
-            if (valuesPresent.includes("R")) processTime += Number(processess);
-            if (valuesPresent.includes("P")) processTime += Number(passtime);
-            if (valuesPresent.includes("H")) processTime += Number(holdd);
-
-
-
-            function calculateCourseDuration(selected, time_stamp) {
-              if (selected.some(c => c.value === 'All')) return 0;
-
-              const parts = time_stamp.split(' ');
-              const entries = parts.slice(1); // skip the first part (date)
-              const courseMap = {};
-
-              for (let i = 0; i < entries.length - 1; i++) {
-                const cur = entries[i];
-                const next = entries[i + 1];
-
-                const matchR = cur.match(/^(\d{2})(\d{2})R(\d)$/); // e.g., 12:06 R0
-                const matchP = next.match(/^(\d{2})(\d{2})P(\d)$/); // e.g., 12:14 P0
-
-                if (matchR && matchP && matchR[3] === matchP[3]) {
-                  const index = matchR[3];
-                  const startMin = parseInt(matchR[1]) * 60 + parseInt(matchR[2]); // HH*60 + mm
-                  const endMin = parseInt(matchP[1]) * 60 + parseInt(matchP[2]);
-                  courseMap[index] = endMin - startMin;
-                }
-              }
-
-              const courseIndexMap = {
-                main: 3, 
-                starter: 0,
-                sushi: 1,
-                hot: 2,
-                dessert: 4,
-              };
-
-              let total = 0;
-
-              for (const course of selected) {
-                const idx = courseIndexMap[course.value];
-                if (courseMap[idx] == null) return 0; // If any duration is missing, return 0
-                total += courseMap[idx];
-              }
-
-              return total;
-            }
-
-
-
-            if (cos.length != 0) {
-
-              processTime = calculateCourseDuration(cos, order?.STAMP)
-
-
-
-
-            }
-
- 
+            } else {
               processTimes.push(processTime);
 
               result.push({
@@ -4761,18 +4368,27 @@ let Multi_venue = () => {
                 starttime: `@${startTimeFormatted}`,
                 staff: order.STAFF,
                 order: order
-              }); 
-          
+              });
+            }
+
+
+
+            // Calculate processing time
+
+          }
         });
       });
 
+      // Sort orders by process time (high to low)
       result.sort((a, b) => b.processtime - a.processtime);
 
+      // Convert process time back to string format for display
       result = result.map(order => ({
         ...order,
         processtime: `${order.processtime}min`
       }));
 
+      // Calculate average, min, and max processing time
       if (processTimes.length > 0) {
         const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
         const averageTime = Math.round(totalTime / processTimes.length);
@@ -4788,18 +4404,164 @@ let Multi_venue = () => {
           }
         };
       }
+
       return { orders: result, stats: null };
     }
 
 
     let newalldata = processData(one)
-    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
 
+    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
     setEditall(newalldata)
+
+    // console.log( JSON.stringify( alltype) , 'oneone') 
+
+    // if(alltype.length === 0 ){
+
+    // }else{
+
+    // }
+
+
+    // const categorizeItems = (datasssssss) => {
+    //   const edited = ["2", "12", "22", "32"];
+    //   const moved = ["3", "13", "23", "33"];
+    //   const deleted = ["4", "24"];
+
+    //   const result = {
+    //     edited: [],
+    //     moved: [],
+    //     deleted: [],
+    //     served: [],
+    //     tableMoved: []
+    //   };
+
+    //   for (const [date, entries] of Object.entries(datasssssss)) {
+
+
+    //     entries.forEach(entry => {
+
+
+    //       if (entry.NOTE && entry.NOTE.includes("$ND$")) {
+    //         result.tableMoved.push(entry);
+    //       }
+
+
+    //       entry.ITEMS.forEach(item => {
+    //         if (edited.includes(item.STATUS)) {
+    //           result.edited.push(item);
+    //         } else if (moved.includes(item.STATUS)) {
+    //           result.moved.push(item);
+    //         } else if (deleted.includes(item.STATUS)) {
+    //           result.deleted.push(item);
+    //         } else if (parseInt(item.STATUS) > 20) {
+    //           result.served.push(item);
+    //         }
+    //       });
+    //     });
+
+    //   }
+
+    //   return result;
+    // };
+
+    // let editttsone = categorizeItems(one)
+    // // let editttstwo = categorizeItems(two)
+
+    // console.log(editttsone, 'editttsoneeditttsone')
+
+
+    // setEditall(editttsone)
+    // // setEditallone(editttstwo)
+
+    // const processItems = (data) => {
+    //   const dishCounts = {};
+
+    //   // Iterate through the data to collect and process dishes
+    //   for (const [date, entries] of Object.entries(data)) {
+
+
+
+    //     entries.forEach(entry => {
+    //       entry.ITEMS.forEach(item => {
+    //         // Remove "Sp\\" prefix if present
+    //         const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
+
+    //         // If dish is already counted, increment its count and append data
+    //         if (dishCounts[cleanItemName]) {
+    //           dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
+    //           dishCounts[cleanItemName].data.push(item);
+    //         } else {
+    //           // If not, initialize a new entry for the dish
+    //           dishCounts[cleanItemName] = {
+    //             count: parseInt(item.QUANTITY, 10),
+    //             name: cleanItemName,
+    //             data: [item],
+    //           };
+    //         }
+    //       });
+    //     });
+    //   }
+
+    //   // Convert the dishCounts object to an array
+    //   return Object.values(dishCounts).sort((a, b) => b.count - a.count);
+    // };
+
+
+    // let minnscount = processItems(one)
+    // // let maxnscount = processItems(two)
+    // setServed(minnscount)
+    // // setServedone(maxnscount)
+
+    // const processRefundedItems = (data) => {
+    //   const results = [];
+
+    //   // Iterate through each date's data
+    //   for (const [date, entries] of Object.entries(data)) {
+    //     let refundedItems = [];
+
+
+
+    //     entries.forEach(entry => {
+    //       entry.ITEMS.forEach(item => {
+    //         // Check if "Refunded" exists in the ITEM field
+    //         if (item?.NOTE?.includes("Refunded")) {
+    //           refundedItems.push(item);
+    //         }
+    //       });
+    //     });
+
+    //     if (refundedItems.length > 0) {
+    //       // Calculate the total quantity for refunded items
+    //       const totalQuantity = refundedItems.reduce(
+    //         (sum, item) => sum + parseInt(item.QUANTITY, 10),
+    //         0
+    //       );
+
+    //       results.push({
+    //         date,
+    //         count: totalQuantity,
+    //         name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
+    //         data: refundedItems,
+    //       });
+    //     }
+    //   }
+
+    //   return results;
+    // };
+
+    // let refundcount = processRefundedItems(one)
+    // // let refundcounttwo = processRefundedItems(two)
+    // setMinperday(refundcount)
+    // console.log(refundcount ,'refundcountrefundcountrefundcount')
+    // // setMaxperday(refundcounttwo)
+
+
+
 
   }
 
-  let callfordataonetwo = (two , allt , cos ) => {
+  let callfordataonetwo = (two) => {
  
      function processData(data) {
        let result = [];
@@ -4815,7 +4577,7 @@ let Multi_venue = () => {
            const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
  
            const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-         
+           if (timeEntries.length >= 2) {
              const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
              const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
  
@@ -4825,79 +4587,13 @@ let Multi_venue = () => {
              const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
              const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
              // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            //  let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
-
-            let valuesPresent = allt.map(item => item.value);
-
-
-            let processTime = 0;
-
-
-
-            let processess = calculateTotalMinutes(order?.STAMP)
-            let holdd = calculateTotalWithHold(order?.STAMP)
-            let passtime = calculateIdleTimes(order?.STAMP)
-
-
-            if (valuesPresent.includes("R")) processTime += Number(processess);
-            if (valuesPresent.includes("P")) processTime += Number(passtime);
-            if (valuesPresent.includes("H")) processTime += Number(holdd);
-
-
-              function calculateCourseDuration(selected, time_stamp) {
-              if (selected.some(c => c.value === 'All')) return 0;
-
-              const parts = time_stamp.split(' ');
-              const entries = parts.slice(1); // skip the first part (date)
-              const courseMap = {};
-
-              for (let i = 0; i < entries.length - 1; i++) {
-                const cur = entries[i];
-                const next = entries[i + 1];
-
-                const matchR = cur.match(/^(\d{2})(\d{2})R(\d)$/); // e.g., 12:06 R0
-                const matchP = next.match(/^(\d{2})(\d{2})P(\d)$/); // e.g., 12:14 P0
-
-                if (matchR && matchP && matchR[3] === matchP[3]) {
-                  const index = matchR[3];
-                  const startMin = parseInt(matchR[1]) * 60 + parseInt(matchR[2]); // HH*60 + mm
-                  const endMin = parseInt(matchP[1]) * 60 + parseInt(matchP[2]);
-                  courseMap[index] = endMin - startMin;
-                }
-              }
-
-              const courseIndexMap = {
-                main: 3, 
-                starter: 0,
-                sushi: 1,
-                hot: 2,
-                dessert: 4,
-              };
-
-              let total = 0;
-
-              for (const course of selected) {
-                const idx = courseIndexMap[course.value];
-                if (courseMap[idx] == null) return 0; // If any duration is missing, return 0
-                total += courseMap[idx];
-              }
-
-              return total;
-            }
-
-
-
-            if (cos.length != 0) {
-
-              processTime = calculateCourseDuration(cos, order?.STAMP)
-
-
-
-
-            }
+             let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
  
                 
+ 
+             if (processTime < 2) { 
   
+             } else {
                processTimes.push(processTime);
  
                result.push({
@@ -4907,12 +4603,14 @@ let Multi_venue = () => {
                  starttime: `@${startTimeFormatted}`,
                  staff: order.STAFF,
                  order: order
-               }); 
+               });
+             }
+ 
  
  
              // Calculate processing time
  
-           
+           }
          });
        });
  
@@ -5709,64 +5407,6 @@ let Multi_venue = () => {
     });
 
   }
-
-
-    function getStartTime(courseIndexMap, cource, stamp) {
-
-    console.log(courseIndexMap, cource, stamp, 'courseIndexMap, cource, stamp getStartTimegetStartTimegetStartTimegetStartTimegetStartTimegetStartTimegetStartTime')
-    if (!stamp) {
-  return '00:00';
-}
-
-  const parts = stamp.split(' ');
-  const timeTags = parts.slice(1); // Skip date
-  const selectedValues = cource.map(c => c.value);
-  const isAll = selectedValues.includes('All') || selectedValues.length === 0;
-
-  const selectedIndexes = isAll
-    ? null
-    : selectedValues.map(v => courseIndexMap[v]);
-
-  for (let tag of timeTags) {
-    const match = tag.match(/^(\d{2})(\d{2})R(\d)$/);
-    if (match) {
-      const [, hh, mm, idx] = match;
-      if (isAll || selectedIndexes.includes(Number(idx))) {
-        return `${hh}:${mm}`;
-      }
-    }
-  }
-
-  return null;
-}
-
-
-function getEndTime(courseIndexMap, cource, stamp) {
-  if (!stamp) {
-  return '00:00';
-}
-  const parts = stamp.split(' ');
-  const timeTags = parts.slice(1);
-  const selectedValues = cource.map(c => c.value);
-  const isAll = selectedValues.includes('All') || selectedValues.length === 0;
-
-  const selectedIndexes = isAll
-    ? null
-    : selectedValues.map(v => courseIndexMap[v]);
-
-  for (let tag of timeTags) {
-    const match = tag.match(/^(\d{2})(\d{2})P(\d)$/);
-    if (match) {
-      const [, hh, mm, idx] = match;
-      if (isAll || selectedIndexes.includes(Number(idx))) {
-        return `${hh}:${mm}`;
-      }
-    }
-  }
-
-  return null;
-}
-
 
 
   // Function 1: downloadDocketsavgExcel with added styling
@@ -8357,9 +7997,29 @@ function getEndTime(courseIndexMap, cource, stamp) {
           <div className="row" >
             <div className="col-4" style={{ overflow: 'hidden' }} >
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Date: {cval1?.date}</p>
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time created: {getStartTime(courseIndexMaps , selectedCources , cval1?.order?.STAMP)}</p>
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time created: {(() => {
+              })()} {cval1?.starttime.replace('@', '')}</p>
 
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time served: { getEndTime(courseIndexMaps , selectedCources , cval1?.order?.STAMP)}</p>
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time served: {(() => {
+                const datass = cval1?.order?.STAMP;
+
+                if (!datass) {
+                  return
+                }
+                // Extract the "S" event using regex
+                const match = datass.match(/\b(\d{4})S\d\b/);
+
+                if (match) {
+                  const time = match[1]; // Extract the 4-digit time (e.g., "1500")
+                  const formattedTime = `${time.slice(0, 2)}:${time.slice(2)}`; // Convert to HH:mm
+                  return (formattedTime)
+                  // console.log(formattedTime); // Output: "15:00"
+                } else {
+                  // console.log("No 'S' event found");
+                }
+
+
+              })()}</p>
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Completion time: {timeDifference(cval1?.starttime.replace('@', ''), cval1?.order?.STAMP)}</p>
 
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Docket #: {cval1?.order?.DOCKETID}</p>
