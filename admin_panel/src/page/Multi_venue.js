@@ -2666,10 +2666,12 @@ setDateRangetwo(eightDaysBefore)
 
   };
   //times
-  let [onetime, setOnetime] = useState('')
-  let [twotime, setTwotime] = useState('')
-  let [threetime, setThreetime] = useState('')
-  let [fourtime, setFourtime] = useState('')
+const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_with_time') || "");
+
+  let [twotime, setTwotime] = useState(() => localStorage.getItem('meals_start_with_time_1') || "");
+  let [threetime, setThreetime] =useState(() => localStorage.getItem('meals_start_with_time_2') || "");
+  let [fourtime, setFourtime] = useState(() => localStorage.getItem('meals_start_with_time_3') || "");
+
 
   //input value
   let [inputvalue, setInputvalue] = useState()
@@ -6104,7 +6106,9 @@ setDateRangetwo(eightDaysBefore)
                       value={onetime}
                       style={{ fontSize: 15, color: '#1A1A1B' }}
                       onChange={(e) => {
-                        setOnetime(e.target.value)
+                         const value = e.target.value;
+                          setOnetime(value);
+                          localStorage.setItem('meals_start_with_time', value);
                         if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
                           return
                         }
@@ -6120,7 +6124,9 @@ setDateRangetwo(eightDaysBefore)
                       style={{ fontSize: 15, color: '#1A1A1B' }}
                       value={twotime}
                       onChange={(e) => {
-                        setTwotime(e.target.value)
+                        const value = e.target.value;
+                        setTwotime(value)
+                        localStorage.setItem('meals_start_with_time_1', value)
                         if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
                           return
                         }

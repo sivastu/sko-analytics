@@ -732,7 +732,7 @@ let Meals = () => {
 
   let [fulldatafull, setFulldatafull] = useState()
 
-  let getone = (snapshots) => {
+  let getone = async (snapshots) => {
 
     const eventss = snapshots
 
@@ -1000,15 +1000,55 @@ let Meals = () => {
 
     }
 
+  //     let [onetime, setOnetime] = useState('')
+  // let [twotime, setTwotime] = useState('')
+  // let [threetime, setThreetime] = useState('')
+  // let [fourtime, setFourtime] = useState('')
+    
+
+   
+
+  let meals_Custom_range_with0 = await localStorage.getItem('meals_start_with_time');
+  let meals_Custom_range_with1 = await localStorage.getItem('meals_start_with_time_1');
+  let meals_Custom_range_with2 = await localStorage.getItem('meals_start_with_time_2');
+  let meals_Custom_range_with3 = await localStorage.getItem('meals_start_with_time_3');
+
+
+
+    
+  
+
+  if(meals_Custom_range_with0 != null){
+    setOnetime(  meals_Custom_range_with0) 
+
+  }
+
+  if(meals_Custom_range_with1 != null){
+    console.log(meals_Custom_range_with2 , 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
+    setTwotime(meals_Custom_range_with1)
+  }
+
+  if(meals_Custom_range_with2 != null){
+      console.log(meals_Custom_range_with1 , 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
+    setThreetime(meals_Custom_range_with2)
+  }
+
+  if(meals_Custom_range_with3 != null){
+      console.log(meals_Custom_range_with0 , 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
+    setFourtime(meals_Custom_range_with3)
+  }
+
+
+
 
 
 
     const yesterday = [getFormattedDate(2), getFormattedDate(2)];
     const eightDaysBefore = [getFormattedDate(9), getFormattedDate(9)];
 
-    let meals_Custom_range_with = localStorage.getItem('meals_start_range');
+    let meals_Custom_range_with =await localStorage.getItem('meals_start_range');
 
-    let meals_Custom_range_range = localStorage.getItem('meals_start_with');
+    let meals_Custom_range_range =  await localStorage.getItem('meals_start_with');
 
 
     if(meals_Custom_range_with != null && meals_Custom_range_range != null  ){
@@ -2135,10 +2175,11 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
   };
 
   //times
-  let [onetime, setOnetime] = useState('')
-  let [twotime, setTwotime] = useState('')
-  let [threetime, setThreetime] = useState('')
-  let [fourtime, setFourtime] = useState('')
+const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_with_time') || "");
+
+  let [twotime, setTwotime] = useState(() => localStorage.getItem('meals_start_with_time_1') || "");
+  let [threetime, setThreetime] =useState(() => localStorage.getItem('meals_start_with_time_2') || "");
+  let [fourtime, setFourtime] = useState(() => localStorage.getItem('meals_start_with_time_3') || "");
 
   //input value
   let [inputvalue, setInputvalue] = useState()
@@ -4129,7 +4170,7 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
   let checkkkk = () => {
 
 
-    console.log(basicall, '5')
+    console.log(onetime, '5')
   }
 
 
@@ -4688,7 +4729,10 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
                       style={{ fontSize: 15, color: '#1A1A1B' }}
                       value={onetime}
                       onChange={(e) => {
-                        setOnetime(e.target.value)
+ 
+                      const value = e.target.value;
+                          setOnetime(value);
+                          localStorage.setItem('meals_start_with_time', value);
                         if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
                           return
                         }
@@ -4701,7 +4745,9 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
                       value={twotime}
                       style={{ fontSize: 15, color: '#1A1A1B' }}
                       onChange={(e) => {
-                        setTwotime(e.target.value)
+                         const value = e.target.value;
+                        setTwotime(value)
+                        localStorage.setItem('meals_start_with_time_1', value)
                         if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
                           return
                         }
@@ -4764,7 +4810,9 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
                       style={{ fontSize: 15, color: '#1A1A1B' }}
                       value={threetime}
                       onChange={(e) => {
-                        setThreetime(e.target.value)
+                        const value = e.target.value;
+                        setThreetime(value)
+                        localStorage.setItem('meals_start_with_time_2', value)
                         if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
                           return
                         }
@@ -4777,7 +4825,9 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
                       style={{ fontSize: 15, color: '#1A1A1B' }}
                       value={fourtime}
                       onChange={(e) => {
-                        setFourtime(e.target.value)
+                        const value = e.target.value;
+                        setFourtime(value)
+                        localStorage.setItem('meals_start_with_time_3',value)
                         if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
                           return
                         }

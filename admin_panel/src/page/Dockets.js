@@ -568,7 +568,7 @@ let Dockets = () => {
   };
 
 
-  let getone = (snapshots) => {
+  let getone = async(snapshots) => {
 
 
     const eventss = snapshots
@@ -901,6 +901,38 @@ let Dockets = () => {
 
     }
 
+
+
+    
+  let meals_Custom_range_with0 = await localStorage.getItem('meals_start_with_time');
+  let meals_Custom_range_with1 = await localStorage.getItem('meals_start_with_time_1');
+  let meals_Custom_range_with2 = await localStorage.getItem('meals_start_with_time_2');
+  let meals_Custom_range_with3 = await localStorage.getItem('meals_start_with_time_3');
+
+
+
+    
+  
+
+  if(meals_Custom_range_with0 != null){
+    setOnetime(  meals_Custom_range_with0) 
+
+  }
+
+  if(meals_Custom_range_with1 != null){
+    console.log(meals_Custom_range_with2 , 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
+    setTwotime(meals_Custom_range_with1)
+  }
+
+  if(meals_Custom_range_with2 != null){
+      console.log(meals_Custom_range_with1 , 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
+    setThreetime(meals_Custom_range_with2)
+  }
+
+  if(meals_Custom_range_with3 != null){
+      console.log(meals_Custom_range_with0 , 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
+    setFourtime(meals_Custom_range_with3)
+  }
 
 
 
@@ -1524,10 +1556,11 @@ setDateRangetwo(eightDaysBefore)
 
   };
   //times
-  let [onetime, setOnetime] = useState('')
-  let [twotime, setTwotime] = useState('')
-  let [threetime, setThreetime] = useState('')
-  let [fourtime, setFourtime] = useState('')
+  const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_with_time') || "");
+
+  let [twotime, setTwotime] = useState(() => localStorage.getItem('meals_start_with_time_1') || "");
+  let [threetime, setThreetime] =useState(() => localStorage.getItem('meals_start_with_time_2') || "");
+  let [fourtime, setFourtime] = useState(() => localStorage.getItem('meals_start_with_time_3') || "");
 
   //input value
   let [inputvalue, setInputvalue] = useState()
@@ -4622,7 +4655,11 @@ setDateRangetwo(eightDaysBefore)
                         value={onetime}
                         style={{ color: '#1A1A1B', fontSize: 15 }}
                         onChange={(e) => {
-                          setOnetime(e.target.value)
+                          const value = e.target.value;
+                          setOnetime(value);
+                          localStorage.setItem('meals_start_with_time', value);
+
+
                           if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
                             return
                           }
@@ -4639,8 +4676,9 @@ setDateRangetwo(eightDaysBefore)
 
                           console.log(onetime , 'DDDDDDDDDDDDDDDDDDD')
 
-
-                          setTwotime(e.target.value)
+ const value = e.target.value;
+                        setTwotime(value)
+                        localStorage.setItem('meals_start_with_time_1', value)
                           if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
                             return
                           }
@@ -4690,7 +4728,9 @@ setDateRangetwo(eightDaysBefore)
                         style={{ color: '#1A1A1B', fontSize: 15 }}
                         value={threetime}
                         onChange={(e) => {
-                          setThreetime(e.target.value)
+                           const value = e.target.value;
+                        setThreetime(value)
+                        localStorage.setItem('meals_start_with_time_2', value)
                           if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
                             return
                           }
@@ -4703,7 +4743,9 @@ setDateRangetwo(eightDaysBefore)
                         style={{ color: '#1A1A1B', fontSize: 15 }}
                         value={fourtime}
                         onChange={(e) => {
-                          setFourtime(e.target.value)
+                          const value = e.target.value;
+                        setFourtime(value)
+                        localStorage.setItem('meals_start_with_time_3',value)
                           if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
                             return
                           }
@@ -5490,16 +5532,15 @@ setDateRangetwo(eightDaysBefore)
                         <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 350, overflowY: 'auto' }}>
                           <div>
                             {
-                              editall?.orders?.map((dfgh, index) => {
+                              editall?.orders?.map((dfgh, index) => { 
 
-                                if(index > 100 ){
+                                if (index > 100) {
                                   return
                                 }
                                 const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `editallone`
-
-                                // Compare processtime at the 0th index only
+ 
                                 let isChosenRangeMax = false;
-                                let isComparingRangeMin = false; 
+                                let isComparingRangeMin = false;
 
                                 if (index === 0) {
                                   const processTimeOne = parseInt(editall?.orders?.[0]?.processtime) || 0; // Chosen range at 0th index
@@ -5511,49 +5552,32 @@ setDateRangetwo(eightDaysBefore)
 
                                 let prootimrr = 0
 
-
-                                // const datass = dfgh?.order?.STAMP;
-
-                                // if (!datass) {
-                                //   return
-                                // }
-                                // // Extract the "S" event using regex
-                                // const match = datass.match(/\b(\d{4})S\d\b/);
-
-                                // if (match) {
-                                //   const time = match[1]; // Extract the 4-digit time (e.g., "1500")
-                                //   console.log(time , 'hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh')
-                                //   const formattedTime = `${time.slice(0, 2)}:${time.slice(2)}`; // Convert to HH:mm
-                                //   return (formattedTime)
-                                //   // console.log(formattedTime); // Output: "15:00"
-                                // } else {
-                                //   // console.log("No 'S' event found");
-                                // }
+ 
 
                                 let val4 = 0
 
-                                if(index === 0){
-                                  if(selectedOptionsfine?.label === "Maximum"){
-                                    const number1 =  dfgh?.processtime && /\d+/.test(dfgh?.processtime) ? Number(dfgh?.processtime.match(/\d+/)[0]) : 0  
-                                    const number2 =  correspondingErv?.processtime && /\d+/.test(correspondingErv?.processtime) ? Number(correspondingErv?.processtime.match(/\d+/)[0]) : 0  
+                                if (index === 0) {
+                                  if (selectedOptionsfine?.label === "Maximum") {
+                                    const number1 = dfgh?.processtime && /\d+/.test(dfgh?.processtime) ? Number(dfgh?.processtime.match(/\d+/)[0]) : 0
+                                    const number2 = correspondingErv?.processtime && /\d+/.test(correspondingErv?.processtime) ? Number(correspondingErv?.processtime.match(/\d+/)[0]) : 0
 
-                                    if(number1 > number2){
+                                    if (number1 > number2) {
                                       val4 = 1
-                                    }else if (number1 === number2){
+                                    } else if (number1 === number2) {
                                       val4 = 6
-                                    }else{
+                                    } else {
                                       val4 = 2
                                     }
-                                  }else{
-                                    const number1 =  dfgh?.processtime && /\d+/.test(dfgh?.processtime) ? Number(dfgh?.processtime.match(/\d+/)[0]) : 0  
-                                    const number2 =  correspondingErv?.processtime && /\d+/.test(correspondingErv?.processtime) ? Number(correspondingErv?.processtime.match(/\d+/)[0]) : 0  
+                                  } else {
+                                    const number1 = dfgh?.processtime && /\d+/.test(dfgh?.processtime) ? Number(dfgh?.processtime.match(/\d+/)[0]) : 0
+                                    const number2 = correspondingErv?.processtime && /\d+/.test(correspondingErv?.processtime) ? Number(correspondingErv?.processtime.match(/\d+/)[0]) : 0
 
 
-                                    if(number1 < number2){
+                                    if (number1 < number2) {
                                       val4 = 3
-                                    }else if (number1 === number2){ 
+                                    } else if (number1 === number2) {
                                       val4 = 7
-                                    }else{
+                                    } else {
                                       val4 = 4
                                     }
                                   }
@@ -5566,10 +5590,13 @@ setDateRangetwo(eightDaysBefore)
                                     <div className="d-flex gap-5">
                                       {/* Left Column (Chosen Range) */}
                                       <div style={{ width: "40%" }}>
-                                        <div className="d-flex align-items-center"> 
-                                          <p onClick={()=>{
-                                            console.log(val4, 'val4' , selectedOptionsfine.label)
-                                          }} style={{ fontWeight: "700", color: val4 === 1 || val4 === 6  ? "#CA424E" :  val4 === 3 || val4 === 7 ? "#316AAF" : "#000", width: "60%", marginTop: 15 }}>
+                                        <div className="d-flex align-items-center">
+                                          <p onClick={() => {
+                                            console.log(val4, 'val4', selectedOptionsfine.label)
+                                          }} style={{
+                                            fontWeight: "700", color: val4 === 1 || val4 === 6 ? "#CA424E" :
+                                              val4 === 3 || val4 === 7 ? "#316AAF" : "#000", width: "60%", marginTop: 15
+                                          }}>
                                             {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{dfgh?.date + " " + "[" +
                                               dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff} </span>
                                           </p>
@@ -5586,12 +5613,12 @@ setDateRangetwo(eightDaysBefore)
                                       {correspondingErv ? (
                                         <div style={{ width: "40%" }}>
                                           <div className="d-flex align-items-center">
-                                            <p style={{ fontWeight: "700", color: val4 === 2 || val4 === 6   ? "#CA424E" :  val4 === 4 || val4 === 7 ? "#316AAF" :  "#000", width: "60%", marginTop: 15 }}>
+                                            <p style={{ fontWeight: "700", color: val4 === 2 || val4 === 6 ? "#CA424E" : val4 === 4 || val4 === 7 ? "#316AAF" : "#000", width: "60%", marginTop: 15 }}>
                                               {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{correspondingErv?.date + " " + "[" +
                                                 correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                                             </p>
                                             <img
-                                              onClick={() => { openModal(dfgh, correspondingErv) }}
+                                              onClick={() => { openModals(dfgh, correspondingErv) }}
                                               src="arrows.png"
                                               style={{ width: 10, height: 14, cursor: "pointer", marginRight: 10 }}
                                               alt="up arrow"
