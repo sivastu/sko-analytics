@@ -585,6 +585,17 @@ let Multi_venue = () => {
     return [...uniqueNotes].map(note => ({ value: note, label: note }));
   }
 
+
+  const getFormattedDatewith = (daysBefore , count) => {
+    const date = new Date(daysBefore); 
+    
+
+    // Ensure time is set to match the expected format
+    date.setUTCHours(18, 30, 0, 0);
+
+    return date; // Return a Date object instead of a string
+  };
+
   let getone = (snapshots) => {
 
 
@@ -927,8 +938,45 @@ let Multi_venue = () => {
     // alldat = filteredDataonee
     const yesterday = [getFormattedDate(1), getFormattedDate(1)];
     const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
-    setDateRangetwo(eightDaysBefore)
-    setDateRange(yesterday)
+    // setDateRangetwo(eightDaysBefore)
+    // setDateRange(yesterday)
+
+
+     let meals_Custom_range_with = localStorage.getItem('meals_start_range');
+
+    let meals_Custom_range_range = localStorage.getItem('meals_start_with');
+
+
+    if(meals_Custom_range_with != null && meals_Custom_range_range != null  ){
+
+       console.log(meals_Custom_range_with , meals_Custom_range_range , 'meals_Custom_range_with_parse GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
+
+let meals_Custom_range_with_parse = JSON.parse(meals_Custom_range_with)
+
+let meals_Custom_range_range_parse = JSON.parse(meals_Custom_range_range)
+
+
+
+ 
+
+let eightDaysBefore_with = [getFormattedDatewith( meals_Custom_range_with_parse[0] , 0), getFormattedDatewith( meals_Custom_range_with_parse[1] , 0 )];
+
+let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_parse[0] , 0), getFormattedDatewith( meals_Custom_range_range_parse[1] , 0 )];
+
+ setDateRangetwo(eightDaysBefore_with)
+  setDateRange(eightDaysBefore_range)
+
+   
+
+
+    }else{  
+
+setDateRangetwo(eightDaysBefore)
+    setDateRange(yesterday) 
+
+    }
+
+
     // filterDataByDate(dateRange, onetime, twotime, basic , hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
     // filterDataByDateonee(dateRange, onetime, twotime, basic ,
@@ -6025,6 +6073,9 @@ let Multi_venue = () => {
                     endDate={endDate}
                     onChange={(update) => {
                       setDateRange(update)
+
+                      localStorage.setItem('meals_start_with', JSON.stringify(update))
+
                       if (update[1] === null || update[1] === "null") {
                       } else {
                         filterDataByDate(update, onetime, twotime, selectedOptions, hubb,
