@@ -5266,6 +5266,9 @@ handleChangefine(selectedOptionsfine)
                         <div className='col-lg-6 col-md-12 mb-4 d-flex justify-content-lg-end justify-content-center' style={{ paddingRight: `${padd}px`, paddingLeft: paddOpp }} >
                           <div class="box " style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                             setMeals(5)
+
+                            filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+                        filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo , selectedhubOptions) 
                           }} >
                             <div class="boxs" style={{ cursor: 'pointer' }}>
                               <p className='asdfp' style={{ color: '#1A1A1B', fontWeight: 600 }}>Dockets received - timeline</p>
