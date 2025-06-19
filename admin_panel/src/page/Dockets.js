@@ -503,6 +503,35 @@ const OrderDisplay = ({ orders = {} }) => {
     return '';
   };
 
+  // Function to render items
+  const renderItems = (items, courseKey) => {
+    return items.map((kai, index) => {
+      console.log(kai?.NOTE, 'kai?.NOTE', courseKey);
+      
+      return (
+        <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
+          <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>
+            Item {kai?.ITEMINDEX || index}: {kai?.ITEM}
+          </p>
+          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+            Note: {parseRemarks(kai?.NOTE)}
+          </p>
+          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+            {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
+            {["2", "12", "22", "32"].includes(kai?.STATUS) &&
+              (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
+
+            {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
+            {["3", "13", "23", "33"].includes(kai?.STATUS) &&
+              ["4", "24"].includes(kai?.STATUS) && " | "}
+
+            {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
+          </p>
+        </div>
+      );
+    });
+  };
+
   // Group items by course
   const groupedByCourse = {};
   
@@ -520,49 +549,118 @@ const OrderDisplay = ({ orders = {} }) => {
   // Sort courses by their numeric key
   const sortedCourses = Object.keys(groupedByCourse).sort((a, b) => Number(a) - Number(b));
 
+  // Calculate continuous item counter
+  let itemCounter = 0;
+
   return (
     <div>
       {sortedCourses.map((courseKey) => {
         const courseName = courseMap[courseKey] || `Course ${courseKey}`;
+        const courseNames = `Course ${courseKey}`;
         const items = groupedByCourse[courseKey];
         
+        // Separate items based on regex match
+        const matchedItems = items?.filter((kai) => {
+          return kai?.NOTE && courseName && 
+                 kai.NOTE.toLowerCase().includes(courseName.toLowerCase());
+        }) || [];
+
+        const failedItems = items?.filter((kai) => {
+          return !kai?.NOTE || !courseName || 
+                 !kai.NOTE.toLowerCase().includes(courseName.toLowerCase());
+        }) || [];
+
         return (
-          <div key={courseKey} style={{ marginBottom: 20 }}>
-            <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>
-              Course: {courseName}
-            </p>
-            <p 
-              onClick={() => {
-                console.log(orders, 'stampvalstampvalstampval');
-              }} 
-              style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}
-            >
-              Time: {findFirstOccurrenceByStatus(stamp, 'R', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'P', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'H', courseKey)}
-            </p>
+          <div key={courseKey}>
+            {/* Render matched items with original course header */}
+            {matchedItems.length > 0 && (
+              <div style={{ marginBottom: 20 }}>
+                <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>
+                  Course: {courseName}
+                </p>
+                <p 
+                  onClick={() => {
+                    console.log(orders, 'stampvalstampvalstampval');
+                  }} 
+                  style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}
+                >
+                  Time: {findFirstOccurrenceByStatus(stamp, 'R', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'P', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'H', courseKey)}
+                </p>
+                <div style={{ marginTop: 10 }}>
+                  {matchedItems.map((kai, index) => {
+                    const currentItemNumber = itemCounter++;
+                    console.log(kai?.NOTE, 'kai?.NOTE', courseKey);
+                    
+                    return (
+                      <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
+                        <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>
+                          Item {currentItemNumber}: {kai?.ITEM}
+                        </p>
+                        <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+                          Note: {parseRemarks(kai?.NOTE)}
+                        </p>
+                        <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+                          {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
+                          {["2", "12", "22", "32"].includes(kai?.STATUS) &&
+                            (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
 
-            <div style={{ marginTop: 10 }}>
-              {items?.map((kai, index) => (
-                <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
-                  <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>
-                    Item {courseKey}: {kai?.ITEM}
-                  </p>
-                  <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
-                    Note: {parseRemarks(kai?.NOTE)}
-                  </p>
-                  <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
-                    {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
-                    {["2", "12", "22", "32"].includes(kai?.STATUS) &&
-                      (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
+                          {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
+                          {["3", "13", "23", "33"].includes(kai?.STATUS) &&
+                            ["4", "24"].includes(kai?.STATUS) && " | "}
 
-                    {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
-                    {["3", "13", "23", "33"].includes(kai?.STATUS) &&
-                      ["4", "24"].includes(kai?.STATUS) && " | "}
-
-                    {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
-                  </p>
+                          {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
+                        </p>
+                      </div>
+                    );
+                  })}
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
+
+            {/* Render failed items with separate COURSE header */}
+            {failedItems.length > 0 && (
+              <div style={{ marginBottom: 20 }}>
+                <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }} >
+                  {courseNames}
+                </p>
+                <p 
+                  onClick={() => {
+                    console.log(orders, 'stampvalstampvalstampval');
+                  }} 
+                  style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}
+                >
+                  Time: {findFirstOccurrenceByStatus(stamp, 'R', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'P', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'H', courseKey)}
+                </p>
+                <div style={{ marginTop: 10 }}>
+                  {failedItems.map((kai, index) => {
+                    const currentItemNumber = itemCounter++;
+                    console.log(kai?.NOTE, 'kai?.NOTE', courseKey);
+                    
+                    return (
+                      <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
+                        <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>
+                          Item {currentItemNumber}: {kai?.ITEM}
+                        </p>
+                        <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+                          Note: {parseRemarks(kai?.NOTE)}
+                        </p>
+                        <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+                          {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
+                          {["2", "12", "22", "32"].includes(kai?.STATUS) &&
+                            (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
+
+                          {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
+                          {["3", "13", "23", "33"].includes(kai?.STATUS) &&
+                            ["4", "24"].includes(kai?.STATUS) && " | "}
+
+                          {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
         );
       })}
