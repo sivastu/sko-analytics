@@ -2638,16 +2638,37 @@ function removeMatchingValues(arr1, arr2) {
 
   const [selectedCources, setSelectedCources] = useState([]);
 
- const handleChangeCources = (selected) => {
+  const handleChangeCources = (selected) => {
 
-    
+
 
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldcou.some(item => item.value === "All");
 
-    console.log(hasAllValue , 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', hasAllValueold , selected )
+    console.log(hasAllValue, 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', hasAllValueold, selected, fulldatafull)
 
-     if (hasAllValue === false && selected.length === 5 ) {
+
+
+
+
+    if (hasAllValue === true) {
+
+      setSelectedCources(fulldatafull);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      setOldcou(selected)
+      return
+    }
+    setOldcou(selected)
+
+
+    if (hasAllValue === false && selected.length === 5 && hasAllValueold === true) {
 
       setSelectedCources([]);
 
@@ -2660,14 +2681,12 @@ function removeMatchingValues(arr1, arr2) {
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
-    } 
-
-    
+    }
 
 
-    if (hasAllValue === true ) {
+    if (hasAllValue === false && selected.length === 5) {
 
-      setSelectedCources(fulldatafull);
+      setSelectedCources(selected);
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
@@ -2678,9 +2697,10 @@ function removeMatchingValues(arr1, arr2) {
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
-    } 
+    }
 
-    setOldcou(selected)
+
+
 
     if (hasAllValue === false && hasAllValueold === true) {
 
@@ -2692,6 +2712,8 @@ function removeMatchingValues(arr1, arr2) {
 
       return
     }
+
+
 
     if (hasAllValue === true) {
 

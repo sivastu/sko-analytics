@@ -2132,14 +2132,35 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
 
  const handleChangeCources = (selected) => {
 
-    
+
 
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldcou.some(item => item.value === "All");
 
-    console.log(hasAllValue , 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', hasAllValueold , selected )
+    console.log(hasAllValue, 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', hasAllValueold, selected, fulldatafull)
 
-     if (hasAllValue === false && selected.length === 5 ) {
+
+
+
+
+    if (hasAllValue === true) {
+
+      setSelectedCources(fulldatafull);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      setOldcou(selected)
+      return
+    }
+    setOldcou(selected)
+
+
+    if (hasAllValue === false && selected.length === 5 && hasAllValueold === true) {
 
       setSelectedCources([]);
 
@@ -2152,14 +2173,12 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
-    } 
-
-    
+    }
 
 
-    if (hasAllValue === true ) {
+    if (hasAllValue === false && selected.length === 5) {
 
-      setSelectedCources(fulldatafull);
+      setSelectedCources(selected);
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
@@ -2170,9 +2189,10 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
-    } 
+    }
 
-    setOldcou(selected)
+
+
 
     if (hasAllValue === false && hasAllValueold === true) {
 
@@ -2184,6 +2204,8 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
 
       return
     }
+
+
 
     if (hasAllValue === true) {
 

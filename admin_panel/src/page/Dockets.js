@@ -214,14 +214,14 @@ let Dockets = () => {
   function findFirstOccurrenceByStatus(stampData, statusLetter, statusIndex) {
     const [, ...actions] = stampData.split(" ");
     const targetSuffix = `${statusLetter}${statusIndex}`;
-  
+
     for (let action of actions) {
       if (action.endsWith(targetSuffix)) {
         const time = action.substring(0, 4);
         return `${statusLetter}${':'} ${" "} ${time.substring(0, 2)}:${time.substring(2, 4)}`;
       }
     }
-  
+
     // If not found, you can return null or a message
     return null;
   }
@@ -291,7 +291,7 @@ let Dockets = () => {
 
   let [usedname, setUsedname] = useState('')
   function getName(data) {
- 
+
     const matchedGroupName = Object.entries(state.data).find(([groupName, groupData]) => {
       return Object.keys(groupData).some(key =>
         data?.venue.some(item => item.label === key)
@@ -425,12 +425,12 @@ let Dockets = () => {
 
   // function parseRemarks(data) {
   //   const lines = [];
-  
+
   //   // Check for 'Refunuded' (add 'Refunded' if found)
   //   if (data.includes("Refunuded")) {
   //     lines.push("Refunded");
   //   }
-  
+
   //   // Extract values after "!" (excluding ones like !(C4hot))
   //   const exclamations = data.match(/!\w[^$!]*/g);
   //   if (exclamations) {
@@ -441,232 +441,232 @@ let Dockets = () => {
   //       }
   //     });
   //   }
-  
+
   //   // Extract values like (C4hot) or (C1starter)
   //   const categoryMatch = data.match(/\(C\d+(.*?)\)/);
   //   if (categoryMatch && categoryMatch[1]) {
   //     lines.push(categoryMatch[1]);
   //   }
-  
+
   //   return lines;
   // }
 
   function parseRemarks(note) {
-  if (!note || note.trim() === "") return "";
+    if (!note || note.trim() === "") return "";
 
-  // Match pattern like: (C4hot) !White Rice$O$
-  const match = note.match(/\)(?:\s*!?)?([^$]*)\$O\$/);
+    // Match pattern like: (C4hot) !White Rice$O$
+    const match = note.match(/\)(?:\s*!?)?([^$]*)\$O\$/);
 
-  if (!match) return "";
+    if (!match) return "";
 
-  let result = match[1].trim();
+    let result = match[1].trim();
 
-  // If result is 'undefined' or empty string, return ""
-  if (!result || result.toLowerCase() === "undefined") return "";
+    // If result is 'undefined' or empty string, return ""
+    if (!result || result.toLowerCase() === "undefined") return "";
 
-  return result;
-}
-const OrderDisplay = ({ orders = {} }) => {
-  if (!orders || Object.keys(orders).length === 0) {
-    return <p style={{ textAlign: 'center', color: 'red' }}>No orders available</p>;
+    return result;
   }
+  const OrderDisplay = ({ orders = {} }) => {
+    if (!orders || Object.keys(orders).length === 0) {
+      return <p style={{ textAlign: 'center', color: 'red' }}>No orders available</p>;
+    }
 
-  // Course mapping
-  const courseMap = {
-    0: 'starter',
-    1: 'sushi',
-    2: 'hot',
-    3: 'main',
-    4: 'dessert'
-  };
+    // Course mapping
+    const courseMap = {
+      0: 'starter',
+      1: 'sushi',
+      2: 'hot',
+      3: 'main',
+      4: 'dessert'
+    };
 
-  // Get stamp from orders (assuming it's available in the data structure)
-  let stamp = cval1?.order?.STAMP || stampval;
+    // Get stamp from orders (assuming it's available in the data structure)
+    let stamp = cval1?.order?.STAMP || stampval;
 
-  // Function to find first occurrence by status and index
-  const findFirstOccurrenceByStatus = (stampString, status, index) => {
-    if (!stampString) return '';
-    
-    const parts = stampString.split(' ').slice(1); // Remove date part
-    
-    for (const part of parts) {
-      if (part.length >= 6) {
-        const time = part.slice(0, 4);
-        const type = part[4];
-        const idx = part.slice(5);
-        
-        if (type === status && idx === index.toString()) {
-          return `${time.slice(0, 2)}:${time.slice(2, 4)}`;
+    // Function to find first occurrence by status and index
+    const findFirstOccurrenceByStatus = (stampString, status, index) => {
+      if (!stampString) return '';
+
+      const parts = stampString.split(' ').slice(1); // Remove date part
+
+      for (const part of parts) {
+        if (part.length >= 6) {
+          const time = part.slice(0, 4);
+          const type = part[4];
+          const idx = part.slice(5);
+
+          if (type === status && idx === index.toString()) {
+            return `${time.slice(0, 2)}:${time.slice(2, 4)}`;
+          }
         }
       }
-    }
-    return '';
-  };
+      return '';
+    };
 
-  // Function to render items
-  const renderItems = (items, courseKey) => {
-    return items.map((kai, index) => {
-      console.log(kai?.NOTE, 'kai?.NOTE', courseKey);
-      
-      return (
-        <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
-          <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>
-            Item {kai?.ITEMINDEX || index}: {kai?.ITEM}
-          </p>
-          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
-            Note: {parseRemarks(kai?.NOTE)}
-          </p>
-          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
-            {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
-            {["2", "12", "22", "32"].includes(kai?.STATUS) &&
-              (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
-
-            {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
-            {["3", "13", "23", "33"].includes(kai?.STATUS) &&
-              ["4", "24"].includes(kai?.STATUS) && " | "}
-
-            {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
-          </p>
-        </div>
-      );
-    });
-  };
-
-  // Group items by course
-  const groupedByCourse = {};
-  
-  // Flatten all items from all orders and group by COURSE
-  Object.values(orders).flat().forEach(item => {
-    const courseKey = item?.COURSE;
-    if (courseKey !== undefined) {
-      if (!groupedByCourse[courseKey]) {
-        groupedByCourse[courseKey] = [];
-      }
-      groupedByCourse[courseKey].push(item);
-    }
-  });
-
-  // Sort courses by their numeric key
-  const sortedCourses = Object.keys(groupedByCourse).sort((a, b) => Number(a) - Number(b));
-
-  // Calculate continuous item counter
-  let itemCounter = 0;
-
-  return (
-    <div>
-      {sortedCourses.map((courseKey) => {
-        const courseName = courseMap[courseKey] || `Course ${courseKey}`;
-        const courseNames = `Course ${courseKey}`;
-        const items = groupedByCourse[courseKey];
-        
-        // Separate items based on regex match
-        const matchedItems = items?.filter((kai) => {
-          return kai?.NOTE && courseName && 
-                 kai.NOTE.toLowerCase().includes(courseName.toLowerCase());
-        }) || [];
-
-        const failedItems = items?.filter((kai) => {
-          return !kai?.NOTE || !courseName || 
-                 !kai.NOTE.toLowerCase().includes(courseName.toLowerCase());
-        }) || [];
+    // Function to render items
+    const renderItems = (items, courseKey) => {
+      return items.map((kai, index) => {
+        console.log(kai?.NOTE, 'kai?.NOTE', courseKey);
 
         return (
-          <div key={courseKey}>
-            {/* Render matched items with original course header */}
-            {matchedItems.length > 0 && (
-              <div style={{ marginBottom: 20 }}>
-                <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>
-                  Course: {courseName}
-                </p>
-                <p 
-                  onClick={() => {
-                    console.log(orders, 'stampvalstampvalstampval');
-                  }} 
-                  style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}
-                >
-                  Time: {findFirstOccurrenceByStatus(stamp, 'R', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'P', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'H', courseKey)}
-                </p>
-                <div style={{ marginTop: 10 }}>
-                  {matchedItems.map((kai, index) => {
-                    const currentItemNumber = itemCounter++;
-                    console.log(kai?.NOTE, 'kai?.NOTE', courseKey);
-                    
-                    return (
-                      <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
-                        <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>
-                          Item {currentItemNumber}: {kai?.ITEM}
-                        </p>
-                        <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
-                          Note: {parseRemarks(kai?.NOTE)}
-                        </p>
-                        <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
-                          {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
-                          {["2", "12", "22", "32"].includes(kai?.STATUS) &&
-                            (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
+          <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
+            <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>
+              Item {kai?.ITEMINDEX || index}: {kai?.ITEM}
+            </p>
+            <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+              Note: {parseRemarks(kai?.NOTE)}
+            </p>
+            <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+              {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
+              {["2", "12", "22", "32"].includes(kai?.STATUS) &&
+                (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
 
-                          {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
-                          {["3", "13", "23", "33"].includes(kai?.STATUS) &&
-                            ["4", "24"].includes(kai?.STATUS) && " | "}
+              {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
+              {["3", "13", "23", "33"].includes(kai?.STATUS) &&
+                ["4", "24"].includes(kai?.STATUS) && " | "}
 
-                          {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* Render failed items with separate COURSE header */}
-            {failedItems.length > 0 && (
-              <div style={{ marginBottom: 20 }}>
-                <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }} >
-                  {courseNames}
-                </p>
-                <p 
-                  onClick={() => {
-                    console.log(orders, 'stampvalstampvalstampval');
-                  }} 
-                  style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}
-                >
-                  Time: {findFirstOccurrenceByStatus(stamp, 'R', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'P', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'H', courseKey)}
-                </p>
-                <div style={{ marginTop: 10 }}>
-                  {failedItems.map((kai, index) => {
-                    const currentItemNumber = itemCounter++;
-                    console.log(kai?.NOTE, 'kai?.NOTE', courseKey);
-                    
-                    return (
-                      <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
-                        <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>
-                          Item {currentItemNumber}: {kai?.ITEM}
-                        </p>
-                        <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
-                          Note: {parseRemarks(kai?.NOTE)}
-                        </p>
-                        <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
-                          {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
-                          {["2", "12", "22", "32"].includes(kai?.STATUS) &&
-                            (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
-
-                          {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
-                          {["3", "13", "23", "33"].includes(kai?.STATUS) &&
-                            ["4", "24"].includes(kai?.STATUS) && " | "}
-
-                          {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+              {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
+            </p>
           </div>
         );
-      })}
-    </div>
-  );
-};
+      });
+    };
+
+    // Group items by course
+    const groupedByCourse = {};
+
+    // Flatten all items from all orders and group by COURSE
+    Object.values(orders).flat().forEach(item => {
+      const courseKey = item?.COURSE;
+      if (courseKey !== undefined) {
+        if (!groupedByCourse[courseKey]) {
+          groupedByCourse[courseKey] = [];
+        }
+        groupedByCourse[courseKey].push(item);
+      }
+    });
+
+    // Sort courses by their numeric key
+    const sortedCourses = Object.keys(groupedByCourse).sort((a, b) => Number(a) - Number(b));
+
+    // Calculate continuous item counter
+    let itemCounter = 0;
+
+    return (
+      <div>
+        {sortedCourses.map((courseKey) => {
+          const courseName = courseMap[courseKey] || `Course ${courseKey}`;
+          const courseNames = `Course ${courseKey}`;
+          const items = groupedByCourse[courseKey];
+
+          // Separate items based on regex match
+          const matchedItems = items?.filter((kai) => {
+            return kai?.NOTE && courseName &&
+              kai.NOTE.toLowerCase().includes(courseName.toLowerCase());
+          }) || [];
+
+          const failedItems = items?.filter((kai) => {
+            return !kai?.NOTE || !courseName ||
+              !kai.NOTE.toLowerCase().includes(courseName.toLowerCase());
+          }) || [];
+
+          return (
+            <div key={courseKey}>
+              {/* Render matched items with original course header */}
+              {matchedItems.length > 0 && (
+                <div style={{ marginBottom: 20 }}>
+                  <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>
+                    Course: {courseName}
+                  </p>
+                  <p
+                    onClick={() => {
+                      console.log(orders, 'stampvalstampvalstampval');
+                    }}
+                    style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}
+                  >
+                    Time: {findFirstOccurrenceByStatus(stamp, 'R', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'P', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'H', courseKey)}
+                  </p>
+                  <div style={{ marginTop: 10 }}>
+                    {matchedItems.map((kai, index) => {
+                      const currentItemNumber = itemCounter++;
+                      console.log(kai?.NOTE, 'kai?.NOTE', courseKey);
+
+                      return (
+                        <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
+                          <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>
+                            Item {currentItemNumber}: {kai?.ITEM}
+                          </p>
+                          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+                            Note: {parseRemarks(kai?.NOTE)}
+                          </p>
+                          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+                            {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
+                            {["2", "12", "22", "32"].includes(kai?.STATUS) &&
+                              (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
+
+                            {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
+                            {["3", "13", "23", "33"].includes(kai?.STATUS) &&
+                              ["4", "24"].includes(kai?.STATUS) && " | "}
+
+                            {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Render failed items with separate COURSE header */}
+              {failedItems.length > 0 && (
+                <div style={{ marginBottom: 20 }}>
+                  <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }} >
+                    {courseNames}
+                  </p>
+                  <p
+                    onClick={() => {
+                      console.log(orders, 'stampvalstampvalstampval');
+                    }}
+                    style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}
+                  >
+                    Time: {findFirstOccurrenceByStatus(stamp, 'R', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'P', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'H', courseKey)}
+                  </p>
+                  <div style={{ marginTop: 10 }}>
+                    {failedItems.map((kai, index) => {
+                      const currentItemNumber = itemCounter++;
+                      console.log(kai?.NOTE, 'kai?.NOTE', courseKey);
+
+                      return (
+                        <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
+                          <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>
+                            Item {currentItemNumber}: {kai?.ITEM}
+                          </p>
+                          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+                            Note: {parseRemarks(kai?.NOTE)}
+                          </p>
+                          <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+                            {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
+                            {["2", "12", "22", "32"].includes(kai?.STATUS) &&
+                              (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
+
+                            {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
+                            {["3", "13", "23", "33"].includes(kai?.STATUS) &&
+                              ["4", "24"].includes(kai?.STATUS) && " | "}
+
+                            {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
 
   const datafineone = {
     labels: optionbarone,
@@ -733,9 +733,9 @@ const OrderDisplay = ({ orders = {} }) => {
 
 
 
-  const getFormattedDatewith = (daysBefore , count) => {
-    const date = new Date(daysBefore); 
-    
+  const getFormattedDatewith = (daysBefore, count) => {
+    const date = new Date(daysBefore);
+
 
     // Ensure time is set to match the expected format
     date.setUTCHours(18, 30, 0, 0);
@@ -744,7 +744,7 @@ const OrderDisplay = ({ orders = {} }) => {
   };
 
 
-  let getone = async(snapshots) => {
+  let getone = async (snapshots) => {
 
 
     const eventss = snapshots
@@ -865,9 +865,9 @@ const OrderDisplay = ({ orders = {} }) => {
 
       let uuuk = extractUniqueNotes(cleanedData, optionsone)
 
-      
+
       uuuk.unshift({ label: "All Courses", value: "All" });
-     setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
       { value: 'sushi', label: 'sushi' },
       { value: 'hot', label: 'hot' },
       { value: 'main', label: 'main' },
@@ -972,7 +972,7 @@ const OrderDisplay = ({ orders = {} }) => {
       let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
       uuuk.unshift({ label: "All Courses", value: "All" });
       // setSelectedCources(uuuk)
-       setOldcou([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      setOldcou([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
       { value: 'sushi', label: 'sushi' },
       { value: 'hot', label: 'hot' },
       { value: 'main', label: 'main' },
@@ -1097,36 +1097,36 @@ const OrderDisplay = ({ orders = {} }) => {
 
 
 
-    
-  let meals_Custom_range_with0 = await localStorage.getItem('meals_start_with_time');
-  let meals_Custom_range_with1 = await localStorage.getItem('meals_start_with_time_1');
-  let meals_Custom_range_with2 = await localStorage.getItem('meals_start_with_time_2');
-  let meals_Custom_range_with3 = await localStorage.getItem('meals_start_with_time_3');
+
+    let meals_Custom_range_with0 = await localStorage.getItem('meals_start_with_time');
+    let meals_Custom_range_with1 = await localStorage.getItem('meals_start_with_time_1');
+    let meals_Custom_range_with2 = await localStorage.getItem('meals_start_with_time_2');
+    let meals_Custom_range_with3 = await localStorage.getItem('meals_start_with_time_3');
 
 
 
-    
-  
 
-  if(meals_Custom_range_with0 != null){
-    setOnetime(  meals_Custom_range_with0) 
 
-  }
 
-  if(meals_Custom_range_with1 != null){
-    console.log(meals_Custom_range_with2 , 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
-    setTwotime(meals_Custom_range_with1)
-  }
+    if (meals_Custom_range_with0 != null) {
+      setOnetime(meals_Custom_range_with0)
 
-  if(meals_Custom_range_with2 != null){
-      console.log(meals_Custom_range_with1 , 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
-    setThreetime(meals_Custom_range_with2)
-  }
+    }
 
-  if(meals_Custom_range_with3 != null){
-      console.log(meals_Custom_range_with0 , 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
-    setFourtime(meals_Custom_range_with3)
-  }
+    if (meals_Custom_range_with1 != null) {
+      console.log(meals_Custom_range_with2, 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
+      setTwotime(meals_Custom_range_with1)
+    }
+
+    if (meals_Custom_range_with2 != null) {
+      console.log(meals_Custom_range_with1, 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
+      setThreetime(meals_Custom_range_with2)
+    }
+
+    if (meals_Custom_range_with3 != null) {
+      console.log(meals_Custom_range_with0, 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
+      setFourtime(meals_Custom_range_with3)
+    }
 
 
 
@@ -1136,46 +1136,46 @@ const OrderDisplay = ({ orders = {} }) => {
     // alldat = filteredDataonee
     const yesterday = [getFormattedDate(1), getFormattedDate(1)];
     const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
-    
 
-    
+
+
     let meals_Custom_range_with = localStorage.getItem('meals_start_range');
 
     let meals_Custom_range_range = localStorage.getItem('meals_start_with');
 
 
-    if(meals_Custom_range_with != null && meals_Custom_range_range != null  ){
+    if (meals_Custom_range_with != null && meals_Custom_range_range != null) {
 
-       console.log(meals_Custom_range_with , meals_Custom_range_range , 'meals_Custom_range_with_parse GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
+      console.log(meals_Custom_range_with, meals_Custom_range_range, 'meals_Custom_range_with_parse GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
 
-let meals_Custom_range_with_parse = JSON.parse(meals_Custom_range_with)
+      let meals_Custom_range_with_parse = JSON.parse(meals_Custom_range_with)
 
-let meals_Custom_range_range_parse = JSON.parse(meals_Custom_range_range)
-
-
-
- 
-
-let eightDaysBefore_with = [getFormattedDatewith( meals_Custom_range_with_parse[0] , 0), getFormattedDatewith( meals_Custom_range_with_parse[1] , 0 )];
-
-let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_parse[0] , 0), getFormattedDatewith( meals_Custom_range_range_parse[1] , 0 )];
-
- setDateRangetwo(eightDaysBefore_with)
-  setDateRange(eightDaysBefore_range)
-
-  
-    filterDataByDate(eightDaysBefore_range, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , filteredDataonee)
-
-    filterDataByDateonee(eightDaysBefore_with, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , filteredDataonee )
+      let meals_Custom_range_range_parse = JSON.parse(meals_Custom_range_range)
 
 
-    }else{  
 
-setDateRangetwo(eightDaysBefore)
-    setDateRange(yesterday)
-    filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , filteredDataonee )
 
-    filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , filteredDataonee)
+
+      let eightDaysBefore_with = [getFormattedDatewith(meals_Custom_range_with_parse[0], 0), getFormattedDatewith(meals_Custom_range_with_parse[1], 0)];
+
+      let eightDaysBefore_range = [getFormattedDatewith(meals_Custom_range_range_parse[0], 0), getFormattedDatewith(meals_Custom_range_range_parse[1], 0)];
+
+      setDateRangetwo(eightDaysBefore_with)
+      setDateRange(eightDaysBefore_range)
+
+
+      filterDataByDate(eightDaysBefore_range, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions, filteredDataonee)
+
+      filterDataByDateonee(eightDaysBefore_with, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions, filteredDataonee)
+
+
+    } else {
+
+      setDateRangetwo(eightDaysBefore)
+      setDateRange(yesterday)
+      filterDataByDate(yesterday, onetime, twotime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions, filteredDataonee)
+
+      filterDataByDateonee(eightDaysBefore, threetime, fourtime, realven, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions, filteredDataonee)
 
     }
 
@@ -1183,12 +1183,12 @@ setDateRangetwo(eightDaysBefore)
 
 
 
-    
-handleChangefine(selserdatare)
+
+    handleChangefine(selserdatare)
 
   }
 
- 
+
 
   const [time, setTime] = useState('12:00');
 
@@ -1270,7 +1270,7 @@ handleChangefine(selserdatare)
       </div>
     );
   };
- 
+
 
   const CustomPlaceholder = ({ children, getValue }) => {
     const selected = getValue();
@@ -1321,7 +1321,7 @@ handleChangefine(selserdatare)
       let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-     setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
       { value: 'sushi', label: 'sushi' },
       { value: 'hot', label: 'hot' },
       { value: 'main', label: 'main' },
@@ -1367,7 +1367,7 @@ handleChangefine(selserdatare)
       let uuuk = extractUniqueNotes(basicall, basic)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-       setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
       { value: 'sushi', label: 'sushi' },
       { value: 'hot', label: 'hot' },
       { value: 'main', label: 'main' },
@@ -1509,11 +1509,11 @@ handleChangefine(selserdatare)
     //     setFulldata(filteredDatatwo)
 
   };
- 
 
-  const handleChangefine = (selected) => { 
+
+  const handleChangefine = (selected) => {
     console.log(editall, 'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW')
-  
+
     setSetservedatare(selected.value)
     if (editall.length === 0) {
 
@@ -1580,8 +1580,8 @@ handleChangefine(selserdatare)
   const handleChangehub = (selected) => {
 
 
-    console.log(selected , 'selectedselectedselectedselectedselected')
- 
+    console.log(selected, 'selectedselectedselectedselectedselected')
+
 
     const hasAllValue = selected.some(item => item.value === "All");
 
@@ -1692,14 +1692,35 @@ handleChangefine(selserdatare)
   const [selectedCources, setSelectedCources] = useState([]);
   const handleChangeCources = (selected) => {
 
-    
+
 
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldcou.some(item => item.value === "All");
 
-    console.log(hasAllValue , 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', hasAllValueold , selected )
+    console.log(hasAllValue, 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', hasAllValueold, selected, fulldatafull)
 
-     if (hasAllValue === false && selected.length === 5 ) {
+
+
+
+
+    if (hasAllValue === true) {
+
+      setSelectedCources(fulldatafull);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      setOldcou(selected)
+      return
+    }
+    setOldcou(selected)
+
+
+    if (hasAllValue === false && selected.length === 5 && hasAllValueold === true) {
 
       setSelectedCources([]);
 
@@ -1712,14 +1733,12 @@ handleChangefine(selserdatare)
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
-    } 
-
-    
+    }
 
 
-    if (hasAllValue === true ) {
+    if (hasAllValue === false && selected.length === 5) {
 
-      setSelectedCources(fulldatafull);
+      setSelectedCources(selected);
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
@@ -1730,9 +1749,10 @@ handleChangefine(selserdatare)
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
-    } 
+    }
 
-    setOldcou(selected)
+
+
 
     if (hasAllValue === false && hasAllValueold === true) {
 
@@ -1744,6 +1764,8 @@ handleChangefine(selserdatare)
 
       return
     }
+
+
 
     if (hasAllValue === true) {
 
@@ -1767,7 +1789,7 @@ handleChangefine(selserdatare)
 
   };
 
- 
+
   //select takeaway
   const [takeaway, setTakeaway] = useState(false)
 
@@ -1811,7 +1833,7 @@ handleChangefine(selserdatare)
   const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_with_time') || "");
 
   let [twotime, setTwotime] = useState(() => localStorage.getItem('meals_start_with_time_1') || "");
-  let [threetime, setThreetime] =useState(() => localStorage.getItem('meals_start_with_time_2') || "");
+  let [threetime, setThreetime] = useState(() => localStorage.getItem('meals_start_with_time_2') || "");
   let [fourtime, setFourtime] = useState(() => localStorage.getItem('meals_start_with_time_3') || "");
 
   //input value
@@ -1835,7 +1857,7 @@ handleChangefine(selserdatare)
     return kkki
   }
 
- 
+
 
   let ggggrts = () => {
     let kkki = 0
@@ -1848,7 +1870,7 @@ handleChangefine(selserdatare)
   }
 
 
-   function calculateTotalMinutes(STAMP) {
+  function calculateTotalMinutes(STAMP) {
     const parts = STAMP.split(' ').slice(1); // Remove date part
     const pairs = {};
     let total = 0;
@@ -1859,7 +1881,7 @@ handleChangefine(selserdatare)
       const index = part.slice(5);
 
       if (!pairs[index]) pairs[index] = {};
-      
+
       // Only set if not already set (keep first occurrence)
       if (type === 'R' && !pairs[index].start) {
         pairs[index].start = time;
@@ -1884,7 +1906,7 @@ handleChangefine(selserdatare)
     });
 
     return total;
-}
+  }
 
 
   function calculateTotalWithHold(STAMP) {
@@ -1943,27 +1965,27 @@ handleChangefine(selserdatare)
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, filteredDataoneess) {
 
 
-    
-    if(alltype.length === 0){
+
+    if (alltype.length === 0) {
       alltype = [{
-    "label": "All Stages",
-    "value": "All"
-  },
-  { value: 'R', label: 'On Process' },
-  { value: 'H', label: 'On Hold' },
-  { value: 'P', label: 'On Pass' },
-    // { value: 'S', label: 'Served' },
-  ]
+        "label": "All Stages",
+        "value": "All"
+      },
+      { value: 'R', label: 'On Process' },
+      { value: 'H', label: 'On Hold' },
+      { value: 'P', label: 'On Pass' },
+        // { value: 'S', label: 'Served' },
+      ]
     }
 
-     
+
 
     cources = cources.filter(item => item.value !== "All");
 
-    console.log(alltype , cources , 'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
+    console.log(alltype, cources, 'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
     let alldat = basicall
-    if(basicall === undefined ) {
-        alldat= filteredDataoneess
+    if (basicall === undefined) {
+      alldat = filteredDataoneess
     }
 
     if (val21.length === 0) {
@@ -2117,30 +2139,30 @@ handleChangefine(selserdatare)
 
     const hasAll = val21?.some(item => item.value === "All"); // returns true
 
-    if(hasAll === false){
+    if (hasAll === false) {
       if (val21.length != 0) {
-            const filteredData = {};
+        const filteredData = {};
 
-            val21.forEach(filter => {
-              const key = filter.value;
-              for (const mainKey in alldat) {
-                if (alldat[mainKey][key]) {
-                  if (!filteredData[mainKey]) {
-                    filteredData[mainKey] = {}; // Initialize if not exists
-                  }
-                  filteredData[mainKey][key] = alldat[mainKey][key];
-                }
+        val21.forEach(filter => {
+          const key = filter.value;
+          for (const mainKey in alldat) {
+            if (alldat[mainKey][key]) {
+              if (!filteredData[mainKey]) {
+                filteredData[mainKey] = {}; // Initialize if not exists
               }
-            });
-
-            alldat = filteredData
-
-            console.log(filteredData, 'four')
-
+              filteredData[mainKey][key] = alldat[mainKey][key];
+            }
           }
+        });
+
+        alldat = filteredData
+
+        console.log(filteredData, 'four')
+
+      }
     }
 
-    
+
 
     if (val22.length === 0 || val22 === "") {
 
@@ -2234,9 +2256,9 @@ handleChangefine(selserdatare)
 
     }
 
-    if(cources.length === 0){
+    if (cources.length === 0) {
 
-    }else  {
+    } else {
 
 
       function filterByNoted(data, filterNotes) {
@@ -2648,7 +2670,7 @@ handleChangefine(selserdatare)
 
 
 
-     callfordataone(filteredData, alltype, cources)
+    callfordataone(filteredData, alltype, cources)
     // let ghi = processTimeData(alldat)
 
     let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
@@ -2735,7 +2757,7 @@ handleChangefine(selserdatare)
 
 
 
- 
+
 
   function processTimeDatafghtwo(data, timeSlots) {
     const timeSums = {};
@@ -2810,28 +2832,28 @@ handleChangefine(selserdatare)
 
 
 
- 
 
 
-  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype , filteredDataoneess) {
+
+  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, filteredDataoneess) {
 
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
 
-      if(basicall === undefined ) {
-        alldat= filteredDataoneess
+    if (basicall === undefined) {
+      alldat = filteredDataoneess
     }
 
-    if(alltype.length === 0){
+    if (alltype.length === 0) {
       alltype = [{
-    "label": "All Stages",
-    "value": "All"
-  },
-  { value: 'R', label: 'On Process' },
-  { value: 'H', label: 'On Hold' },
-  { value: 'P', label: 'On Pass' },
-    // { value: 'S', label: 'Served' },
-  ]
+        "label": "All Stages",
+        "value": "All"
+      },
+      { value: 'R', label: 'On Process' },
+      { value: 'H', label: 'On Hold' },
+      { value: 'P', label: 'On Pass' },
+        // { value: 'S', label: 'Served' },
+      ]
     }
 
     console.log(JSON.stringify(alltype), 'val2245')
@@ -2986,30 +3008,30 @@ handleChangefine(selserdatare)
 
     const hasAll = val21?.some(item => item.value === "All"); // returns true
 
-    if(hasAll === false ){
- if (val21.length != 0) {
-      const filteredData = {};
+    if (hasAll === false) {
+      if (val21.length != 0) {
+        const filteredData = {};
 
-      val21.forEach(filter => {
-        const key = filter.value;
-        for (const mainKey in alldat) {
-          if (alldat[mainKey][key]) {
-            if (!filteredData[mainKey]) {
-              filteredData[mainKey] = {}; // Initialize if not exists
+        val21.forEach(filter => {
+          const key = filter.value;
+          for (const mainKey in alldat) {
+            if (alldat[mainKey][key]) {
+              if (!filteredData[mainKey]) {
+                filteredData[mainKey] = {}; // Initialize if not exists
+              }
+              filteredData[mainKey][key] = alldat[mainKey][key];
             }
-            filteredData[mainKey][key] = alldat[mainKey][key];
           }
-        }
-      });
+        });
 
-      alldat = filteredData
+        alldat = filteredData
 
-      console.log(filteredData, 'four')
+        console.log(filteredData, 'four')
 
+      }
     }
-    }
 
-   
+
 
     if (val22.length === 0 || val22 === "") {
 
@@ -3505,7 +3527,7 @@ handleChangefine(selserdatare)
 
     } else {
 
-       callfordataonetwo(filteredData, alltype, cources)
+      callfordataonetwo(filteredData, alltype, cources)
 
     }
 
@@ -3556,7 +3578,7 @@ handleChangefine(selserdatare)
 
     setTwobarone(timeCountstwo)
 
-handleChangefine(selectedOptionsfine)
+    handleChangefine(selectedOptionsfine)
   }
 
 
@@ -3623,7 +3645,7 @@ handleChangefine(selectedOptionsfine)
       let diffHours = endHour - startHour;
       let diffMinutes = endMinute - startMinute;
 
-       
+
       return diffMinutes;
     }
 
@@ -3632,7 +3654,7 @@ handleChangefine(selectedOptionsfine)
 
   let callfordataone = (one, allt, cos) => {
 
- 
+
     function processData(data) {
       let result = [];
       let processTimes = [];
@@ -3645,7 +3667,7 @@ handleChangefine(selectedOptionsfine)
           const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
 
           const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
- 
+
 
 
           const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1 
@@ -3972,10 +3994,10 @@ handleChangefine(selectedOptionsfine)
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
             // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
-            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+            let processTime = timeDifferencebug(startTimeFormatted, order?.STAMP)
             const regex = new RegExp(bitedata, "i"); // "i" makes it case-insensitive
             const isMatch = regex.test(order.DOCKETID);
- 
+
 
             if (isMatch) {
 
@@ -4067,7 +4089,7 @@ handleChangefine(selectedOptionsfine)
             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
             // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+            let processTime = timeDifferencebug(startTimeFormatted, order?.STAMP)
 
 
             console.log(processTime, 'nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn')
@@ -4135,13 +4157,13 @@ handleChangefine(selectedOptionsfine)
 
     console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
     setEditallone(newalldata)
- 
+
 
   }
 
 
-  
- 
+
+
 
   let checkkkk = () => {
 
@@ -4277,7 +4299,7 @@ handleChangefine(selectedOptionsfine)
 
   let editexportpdf = async () => {
 
-    const input = pdfRef.current; 
+    const input = pdfRef.current;
 
 
 
@@ -5055,7 +5077,7 @@ handleChangefine(selectedOptionsfine)
     return timeValue >= startTime && timeValue < endTime;
   };
 
-   
+
 
   const getpadd = () => {
     if (window.innerWidth >= 1536) return 80; // 2xl
@@ -5098,12 +5120,12 @@ handleChangefine(selectedOptionsfine)
   }, []);
 
   return (
-    <div className="hide-scrollbar" style={{ scrollbarWidth: 'none' }}> 
+    <div className="hide-scrollbar" style={{ scrollbarWidth: 'none' }}>
 
       <div style={{ scrollbarWidth: 'none' }}>
 
         <div className="" style={{
-          height: 52, background: "linear-gradient(#316AAF , #9ac6fc )", 
+          height: 52, background: "linear-gradient(#316AAF , #9ac6fc )",
         }} >
           <div className="row justify-content-between " style={{ paddingLeft: '2%', paddingRight: '2%', height: 52 }}>
 
@@ -5188,16 +5210,16 @@ handleChangefine(selectedOptionsfine)
                       <input
                         className='inputttt'
                         type="time"
-                        value={twotime} 
+                        value={twotime}
                         min={onetime}
                         style={{ color: '#1A1A1B', fontSize: 15 }}
                         onChange={(e) => {
 
-                          console.log(onetime , 'DDDDDDDDDDDDDDDDDDD')
+                          console.log(onetime, 'DDDDDDDDDDDDDDDDDDD')
 
- const value = e.target.value;
-                        setTwotime(value)
-                        localStorage.setItem('meals_start_with_time_1', value)
+                          const value = e.target.value;
+                          setTwotime(value)
+                          localStorage.setItem('meals_start_with_time_1', value)
                           if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
                             return
                           }
@@ -5247,9 +5269,9 @@ handleChangefine(selectedOptionsfine)
                         style={{ color: '#1A1A1B', fontSize: 15 }}
                         value={threetime}
                         onChange={(e) => {
-                           const value = e.target.value;
-                        setThreetime(value)
-                        localStorage.setItem('meals_start_with_time_2', value)
+                          const value = e.target.value;
+                          setThreetime(value)
+                          localStorage.setItem('meals_start_with_time_2', value)
                           if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
                             return
                           }
@@ -5263,8 +5285,8 @@ handleChangefine(selectedOptionsfine)
                         value={fourtime}
                         onChange={(e) => {
                           const value = e.target.value;
-                        setFourtime(value)
-                        localStorage.setItem('meals_start_with_time_3',value)
+                          setFourtime(value)
+                          localStorage.setItem('meals_start_with_time_3', value)
                           if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
                             return
                           }
@@ -5330,7 +5352,7 @@ handleChangefine(selectedOptionsfine)
                       hideSelectedOptions={false}
                       styles={{
                         control: (base, state) => ({
-                          ...base, 
+                          ...base,
                           backgroundColor: '#fff',
                           fontSize: 15,
                           color: '#1A1A1B',
@@ -5510,8 +5532,8 @@ handleChangefine(selectedOptionsfine)
                             setSelectedCources([])
                             handleChangeCources([])
                           } else {
-      
-                            handleChangeCources([...selectedCources, ...[{ label: "All Courses", value: "All" }]]) 
+
+                            handleChangeCources([...selectedCources, ...[{ label: "All Courses", value: "All" }]])
                           }
                         }}
                         id="switch4"
@@ -5746,7 +5768,7 @@ handleChangefine(selectedOptionsfine)
                             setMeals(5)
 
                             filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-                        filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo , selectedhubOptions) 
+                            filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
                           }} >
                             <div class="boxs" style={{ cursor: 'pointer' }}>
                               <p className='asdfp' style={{ color: '#1A1A1B', fontWeight: 600 }}>Dockets received - timeline</p>
@@ -6055,13 +6077,13 @@ handleChangefine(selectedOptionsfine)
                         <div className="scroll pdf-content" id="scrrrrol pdf-content" style={{ height: 350, overflowY: 'auto' }}>
                           <div>
                             {
-                              editall?.orders?.map((dfgh, index) => { 
+                              editall?.orders?.map((dfgh, index) => {
 
                                 if (index > 100) {
                                   return
                                 }
                                 const correspondingErv = editallone?.orders?.[index]; // Get corresponding item from `editallone`
- 
+
                                 let isChosenRangeMax = false;
                                 let isComparingRangeMin = false;
 
@@ -6075,7 +6097,7 @@ handleChangefine(selectedOptionsfine)
 
                                 let prootimrr = 0
 
- 
+
 
                                 let val4 = 'black'
                                 let val7 = 'black'
@@ -6124,7 +6146,7 @@ handleChangefine(selectedOptionsfine)
                                           <p onClick={() => {
                                             console.log(val4, 'val4', selectedOptionsfine.label)
                                           }} style={{
-                                            fontWeight: "700", color: val4  , width: "60%", marginTop: 15
+                                            fontWeight: "700", color: val4, width: "60%", marginTop: 15
                                           }}>
                                             {dfgh?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{dfgh?.date + " " + "[" +
                                               dfgh?.table + "]" + " " + dfgh?.starttime + " " + dfgh?.staff} </span>
@@ -6142,7 +6164,7 @@ handleChangefine(selectedOptionsfine)
                                       {correspondingErv ? (
                                         <div style={{ width: "40%" }}>
                                           <div className="d-flex align-items-center">
-                                            <p style={{ fontWeight: "700", color: val7 , width: "60%", marginTop: 15 }}>
+                                            <p style={{ fontWeight: "700", color: val7, width: "60%", marginTop: 15 }}>
                                               {correspondingErv?.processtime + ". " || "N/A"} <span style={{ fontWeight: "400", color: "#000", marginBlock: "4px" }}>{correspondingErv?.date + " " + "[" +
                                                 correspondingErv?.table + "]" + " " + correspondingErv?.starttime + " " + correspondingErv?.staff} </span>
                                             </p>
@@ -7139,7 +7161,7 @@ handleChangefine(selectedOptionsfine)
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Time served: {(() => {
                 const datass = cval1?.order?.STAMP;
 
- 
+
 
                 if (!datass) {
                   return
@@ -7158,7 +7180,7 @@ handleChangefine(selectedOptionsfine)
 
 
               })()}</p>
-              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Completion time: {timeDifference(cval1?.starttime.replace('@', ''), cval1?.order?.STAMP)}</p> 
+              <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Completion time: {timeDifference(cval1?.starttime.replace('@', ''), cval1?.order?.STAMP)}</p>
 
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Docket #: {cval1?.order?.DOCKETID}</p>
               <p style={{ fontWeight: '600', fontSize: 15, marginBottom: 30 }} >Table #: {cval1?.order?.TABLE}</p>
