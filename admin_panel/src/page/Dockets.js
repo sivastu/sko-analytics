@@ -73,6 +73,7 @@ let Dockets = () => {
   let [data, setData] = useState();
   const [dateRange, setDateRange] = useState([null, null]); // [startDate, endDate]
   const [startDate, endDate] = dateRange;
+  let [selserdatare, setSetservedatare] = useState('Maximum')
 
 
   let [basicall, setBasicall] = useState()
@@ -1012,7 +1013,7 @@ setDateRangetwo(eightDaysBefore)
 
 
     
-
+handleChangefine(selserdatare)
 
   }
 
@@ -1324,13 +1325,11 @@ setDateRangetwo(eightDaysBefore)
     //     setFulldata(filteredDatatwo)
 
   };
-  let [selserdatare, setSetservedatare] = useState('Maximum')
+ 
 
-  const handleChangefine = (selected) => {
-    console.log(editall, 'selected')
-
-    console.log(editallone, 'selected')
-
+  const handleChangefine = (selected) => { 
+    console.log(editall, 'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW')
+  
     setSetservedatare(selected.value)
     if (editall.length === 0) {
 
@@ -1537,7 +1536,7 @@ setDateRangetwo(eightDaysBefore)
 
   };
 
-
+ 
   //select takeaway
   const [takeaway, setTakeaway] = useState(false)
 
@@ -1615,6 +1614,96 @@ setDateRangetwo(eightDaysBefore)
     })
 
     return kkki
+  }
+
+
+   function calculateTotalMinutes(STAMP) {
+    const parts = STAMP.split(' ').slice(1); // Remove date part
+    const pairs = {};
+    let total = 0;
+
+    parts.forEach(part => {
+      const time = part.slice(0, 4);
+      const type = part[4];
+      const index = part.slice(5);
+
+      if (!pairs[index]) pairs[index] = {};
+      if (type === 'R') {
+        pairs[index].start = time;
+      } else if (type === 'P') {
+        pairs[index].end = time;
+      }
+    });
+
+    Object.values(pairs).forEach(({ start, end }) => {
+      if (!start || !end) return;
+
+      const startH = parseInt(start.slice(0, 2));
+      const startM = parseInt(start.slice(2, 4));
+      const endH = parseInt(end.slice(0, 2));
+      const endM = parseInt(end.slice(2, 4));
+
+      const startTotal = startH * 60 + startM;
+      const endTotal = endH * 60 + endM;
+      const diff = endTotal - startTotal;
+
+      // total += diff === 0 ? 0.5 : diff;
+      total += diff === 0 ? 0 : diff;
+    });
+
+    return total;
+  }
+
+
+  function calculateTotalWithHold(STAMP) {
+    const segments = STAMP.split(" ");
+    let totalMinutes = 0;
+
+    for (let i = 0; i < segments.length; i++) {
+      if (segments[i].includes("H")) {
+        const current = segments[i];
+        const next = segments[i + 1];
+
+        if (next) {
+          const currentTime = parseInt(current.slice(0, 4)); // e.g., 1919
+          const nextTime = parseInt(next.slice(0, 4));       // e.g., 1924
+
+          if (currentTime === nextTime) {
+            // totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
+          } else {
+            totalMinutes += (nextTime - currentTime); // normal minute diff
+          }
+        }
+      }
+    }
+
+    return totalMinutes;
+  }
+
+
+  function calculateIdleTimes(STAMP) {
+    const segments = STAMP.split(" ");
+    let totalMinutes = 0;
+
+    for (let i = 0; i < segments.length; i++) {
+      if (segments[i].includes("P")) {
+        const current = segments[i];
+        const next = segments[i + 1];
+
+        if (next) {
+          const currentTime = parseInt(current.slice(0, 4)); // e.g., 1919
+          const nextTime = parseInt(next.slice(0, 4));       // e.g., 1924
+
+          if (currentTime === nextTime) {
+            // totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
+          } else {
+            totalMinutes += (nextTime - currentTime); // normal minute diff
+          }
+        }
+      }
+    }
+
+    return totalMinutes;
   }
 
 
@@ -2311,7 +2400,7 @@ setDateRangetwo(eightDaysBefore)
 
 
 
-    callfordataone(filteredData) 
+     callfordataone(filteredData, alltype, cources)
     // let ghi = processTimeData(alldat)
 
     let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
@@ -3156,7 +3245,7 @@ handleChangefine(selectedOptionsfine)
 
     } else {
 
-      callfordataonetwo(filteredData)
+       callfordataonetwo(filteredData, alltype, cources)
 
     }
 
@@ -3281,14 +3370,14 @@ handleChangefine(selectedOptionsfine)
 
   }
 
-  let callfordataone = (one) => {
+  let callfordataone = (one, allt, cos) => {
 
+
+    console.log(one, allt, cos, 'one, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cos')
 
     function processData(data) {
       let result = [];
       let processTimes = [];
-
- 
 
       Object.entries(data).forEach(([dateKey, orders]) => {
         orders.forEach(order => {
@@ -3298,43 +3387,114 @@ handleChangefine(selectedOptionsfine)
           const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
 
           const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-          if (timeEntries.length >= 2) {
-            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
-            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
 
-            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
-            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
+          console.log(timeEntries, 'processTimeprocessTimeprocessTimeprocessTimeprocessTimeprocessTimeprocessTimeprocessTime')
 
-            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
 
-               
+          const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1 
 
-            if (processTime < 2) { 
- 
-            } else {
-              processTimes.push(processTime);
+          const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
 
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
+          // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+          // let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+
+          let valuesPresent = allt.map(item => item.value);
+
+
+          let processTime = 0;
+
+
+
+          let processess = calculateTotalMinutes(order?.STAMP)
+          let holdd = calculateTotalWithHold(order?.STAMP)
+          let passtime = calculateIdleTimes(order?.STAMP)
+
+
+          if (valuesPresent.includes("R")) processTime += Number(processess);
+          if (valuesPresent.includes("P")) processTime += Number(passtime);
+          if (valuesPresent.includes("H")) processTime += Number(holdd);
+
+
+          // console.log(processess, 'processess')
+          // console.log(holdd, 'holdd')
+          // console.log(passtime, 'passtime')
+          // console.log(valuesPresent, 'valuesPresent')
+
+          function calculateCourseDuration(selected, time_stamp) {
+            if (selected.some(c => c.value === 'All')) return 0;
+
+            const parts = time_stamp.split(' ');
+            const entries = parts.slice(1); // skip the first part (date)
+            const courseMap = {};
+
+            for (let i = 0; i < entries.length - 1; i++) {
+              const cur = entries[i];
+              const next = entries[i + 1];
+
+              const matchR = cur.match(/^(\d{2})(\d{2})R(\d)$/); // e.g., 12:06 R0
+              const matchP = next.match(/^(\d{2})(\d{2})P(\d)$/); // e.g., 12:14 P0
+
+              if (matchR && matchP && matchR[3] === matchP[3]) {
+                const index = matchR[3];
+                const startMin = parseInt(matchR[1]) * 60 + parseInt(matchR[2]); // HH*60 + mm
+                const endMin = parseInt(matchP[1]) * 60 + parseInt(matchP[2]);
+                courseMap[index] = endMin - startMin;
+              }
             }
 
+            const courseIndexMap = {
+              main: 3,
+              starter: 0,
+              sushi: 1,
+              hot: 2,
+              dessert: 4,
+            };
+
+            let total = 0;
+
+            for (const course of selected) {
+              const idx = courseIndexMap[course.value];
+              if (courseMap[idx] == null) return 0; // If any duration is missing, return 0
+              total += courseMap[idx];
+            }
+
+            return total;
+          }
 
 
-            // Calculate processing time
+
+          if (cos.length != 0) {
+
+            processTime = calculateCourseDuration(cos, order?.STAMP)
+
+
+
 
           }
+
+
+
+
+
+
+
+
+
+          // let processTime = calculateTotalMinutes(order?.STAMP)
+
+          processTimes.push(processTime);
+
+          result.push({
+            date: formattedDate,
+            processtime: processTime, // Store as a number for sorting
+            table: `T${order.TABLE}`,
+            starttime: `@${startTimeFormatted}`,
+            staff: order.STAFF,
+            order: order
+          });
+
         });
       });
-
       // Sort orders by process time (high to low)
       result.sort((a, b) => b.processtime - a.processtime);
 
@@ -3343,8 +3503,6 @@ handleChangefine(selectedOptionsfine)
         ...order,
         processtime: `${order.processtime}min`
       }));
-      console.log(processTimes, 'newalldatanewalldatanewalldatanewalldata bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb')
-      // Calculate average, min, and max processing time
       if (processTimes.length > 0) {
         const totalTime = processTimes.reduce((sum, time) => {
           return sum + (typeof time === 'number' ? time : 0);
@@ -3365,23 +3523,18 @@ handleChangefine(selectedOptionsfine)
 
       return { orders: result, stats: null };
     }
-
-
     let newalldata = processData(one)
 
-    
     setEditall(newalldata)
- 
-
   }
 
-  let callfordataonetwo = (two) => {
+  let callfordataonetwo = (two, allt, cos) => {
 
     function processData(data) {
       let result = [];
       let processTimes = [];
 
- 
+
 
       Object.entries(data).forEach(([dateKey, orders]) => {
         orders.forEach(order => {
@@ -3391,40 +3544,107 @@ handleChangefine(selectedOptionsfine)
           const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
 
           const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-          if (timeEntries.length >= 2) {
-            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
-            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
 
-            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
-            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
+          const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
+          const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
 
-            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+          const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
+          const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
 
-               
+          const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+          const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+          // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+          // let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
 
-            if (processTime < 2) { 
- 
-            } else {
-              processTimes.push(processTime);
+          // let processTime = calculateTotalMinutes(order?.STAMP)
 
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
+          let valuesPresent = allt.map(item => item.value);
+
+
+          let processTime = 0;
+
+
+
+          let processess = calculateTotalMinutes(order?.STAMP)
+          let holdd = calculateTotalWithHold(order?.STAMP)
+          let passtime = calculateIdleTimes(order?.STAMP)
+
+
+          if (valuesPresent.includes("R")) processTime += Number(processess);
+          if (valuesPresent.includes("P")) processTime += Number(passtime);
+          if (valuesPresent.includes("H")) processTime += Number(holdd);
+
+
+          function calculateCourseDuration(selected, time_stamp) {
+            if (selected.some(c => c.value === 'All')) return 0;
+
+            const parts = time_stamp.split(' ');
+            const entries = parts.slice(1); // skip the first part (date)
+            const courseMap = {};
+
+            for (let i = 0; i < entries.length - 1; i++) {
+              const cur = entries[i];
+              const next = entries[i + 1];
+
+              const matchR = cur.match(/^(\d{2})(\d{2})R(\d)$/); // e.g., 12:06 R0
+              const matchP = next.match(/^(\d{2})(\d{2})P(\d)$/); // e.g., 12:14 P0
+
+              if (matchR && matchP && matchR[3] === matchP[3]) {
+                const index = matchR[3];
+                const startMin = parseInt(matchR[1]) * 60 + parseInt(matchR[2]); // HH*60 + mm
+                const endMin = parseInt(matchP[1]) * 60 + parseInt(matchP[2]);
+                courseMap[index] = endMin - startMin;
+              }
             }
 
+            const courseIndexMap = {
+              main: 3,
+              starter: 0,
+              sushi: 1,
+              hot: 2,
+              dessert: 4,
+            };
+
+            let total = 0;
+
+            for (const course of selected) {
+              const idx = courseIndexMap[course.value];
+              if (courseMap[idx] == null) return 0; // If any duration is missing, return 0
+              total += courseMap[idx];
+            }
+
+            return total;
+          }
 
 
-            // Calculate processing time
+
+          if (cos.length != 0) {
+
+            processTime = calculateCourseDuration(cos, order?.STAMP)
+
+
+
 
           }
+
+
+
+
+
+          processTimes.push(processTime);
+
+          result.push({
+            date: formattedDate,
+            processtime: processTime, // Store as a number for sorting
+            table: `T${order.TABLE}`,
+            starttime: `@${startTimeFormatted}`,
+            staff: order.STAFF,
+            order: order
+          });
+
+          // Calculate processing time
+
+
         });
       });
 
@@ -3462,7 +3682,7 @@ handleChangefine(selectedOptionsfine)
 
     console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
     setEditallone(newalldata)
- 
+
   }
 
 

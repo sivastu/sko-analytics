@@ -2859,6 +2859,96 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
   }
 
 
+    function calculateTotalMinutes(STAMP) {
+    const parts = STAMP.split(' ').slice(1); // Remove date part
+    const pairs = {};
+    let total = 0;
+
+    parts.forEach(part => {
+      const time = part.slice(0, 4);
+      const type = part[4];
+      const index = part.slice(5);
+
+      if (!pairs[index]) pairs[index] = {};
+      if (type === 'R') {
+        pairs[index].start = time;
+      } else if (type === 'P') {
+        pairs[index].end = time;
+      }
+    });
+
+    Object.values(pairs).forEach(({ start, end }) => {
+      if (!start || !end) return;
+
+      const startH = parseInt(start.slice(0, 2));
+      const startM = parseInt(start.slice(2, 4));
+      const endH = parseInt(end.slice(0, 2));
+      const endM = parseInt(end.slice(2, 4));
+
+      const startTotal = startH * 60 + startM;
+      const endTotal = endH * 60 + endM;
+      const diff = endTotal - startTotal;
+
+      // total += diff === 0 ? 0.5 : diff;
+      total += diff === 0 ? 0 : diff;
+    });
+
+    return total;
+  }
+
+
+  function calculateTotalWithHold(STAMP) {
+    const segments = STAMP.split(" ");
+    let totalMinutes = 0;
+
+    for (let i = 0; i < segments.length; i++) {
+      if (segments[i].includes("H")) {
+        const current = segments[i];
+        const next = segments[i + 1];
+
+        if (next) {
+          const currentTime = parseInt(current.slice(0, 4)); // e.g., 1919
+          const nextTime = parseInt(next.slice(0, 4));       // e.g., 1924
+
+          if (currentTime === nextTime) {
+            // totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
+          } else {
+            totalMinutes += (nextTime - currentTime); // normal minute diff
+          }
+        }
+      }
+    }
+
+    return totalMinutes;
+  }
+
+
+  function calculateIdleTimes(STAMP) {
+    const segments = STAMP.split(" ");
+    let totalMinutes = 0;
+
+    for (let i = 0; i < segments.length; i++) {
+      if (segments[i].includes("P")) {
+        const current = segments[i];
+        const next = segments[i + 1];
+
+        if (next) {
+          const currentTime = parseInt(current.slice(0, 4)); // e.g., 1919
+          const nextTime = parseInt(next.slice(0, 4));       // e.g., 1924
+
+          if (currentTime === nextTime) {
+            // totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
+          } else {
+            totalMinutes += (nextTime - currentTime); // normal minute diff
+          }
+        }
+      }
+    }
+
+    return totalMinutes;
+  }
+
+
 
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype) {
 
@@ -3551,7 +3641,7 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
 
     setFilterdataone(filteredData)
 
-    callfordataone(filteredData)
+   callfordataone(filteredData, alltype, cources)
     let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
     let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
     // Extract values into separate arrays
@@ -4338,7 +4428,7 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
 
     setFilterdatatwo(filteredData)
 
-    callfordataonetwo(filteredData)
+    callfordataonetwo(filteredData, alltype, cources)
 
 
     let ghi = processTimeDatafgh(alldat , generateTimeSlots(time , time2))
@@ -4400,9 +4490,10 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
 
 
   }
+ let callfordataone = (one, allt, cos) => {
 
-  let callfordataone = (one) => {
 
+    console.log(one, allt, cos, 'one, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cos')
 
     function processData(data) {
       let result = [];
@@ -4416,41 +4507,114 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
           const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
 
           const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-          if (timeEntries.length >= 2) {
-            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
-            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
 
-            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
-            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
+          console.log(timeEntries, 'processTimeprocessTimeprocessTimeprocessTimeprocessTimeprocessTimeprocessTimeprocessTime')
 
-            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
 
-            if (processTime < 2) {
+          const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1 
 
-            } else {
-              processTimes.push(processTime);
+          const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
 
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
+          // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+          // let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
+
+          let valuesPresent = allt.map(item => item.value);
+
+
+          let processTime = 0;
+
+
+
+          let processess = calculateTotalMinutes(order?.STAMP)
+          let holdd = calculateTotalWithHold(order?.STAMP)
+          let passtime = calculateIdleTimes(order?.STAMP)
+
+
+          if (valuesPresent.includes("R")) processTime += Number(processess);
+          if (valuesPresent.includes("P")) processTime += Number(passtime);
+          if (valuesPresent.includes("H")) processTime += Number(holdd);
+
+
+          // console.log(processess, 'processess')
+          // console.log(holdd, 'holdd')
+          // console.log(passtime, 'passtime')
+          // console.log(valuesPresent, 'valuesPresent')
+
+          function calculateCourseDuration(selected, time_stamp) {
+            if (selected.some(c => c.value === 'All')) return 0;
+
+            const parts = time_stamp.split(' ');
+            const entries = parts.slice(1); // skip the first part (date)
+            const courseMap = {};
+
+            for (let i = 0; i < entries.length - 1; i++) {
+              const cur = entries[i];
+              const next = entries[i + 1];
+
+              const matchR = cur.match(/^(\d{2})(\d{2})R(\d)$/); // e.g., 12:06 R0
+              const matchP = next.match(/^(\d{2})(\d{2})P(\d)$/); // e.g., 12:14 P0
+
+              if (matchR && matchP && matchR[3] === matchP[3]) {
+                const index = matchR[3];
+                const startMin = parseInt(matchR[1]) * 60 + parseInt(matchR[2]); // HH*60 + mm
+                const endMin = parseInt(matchP[1]) * 60 + parseInt(matchP[2]);
+                courseMap[index] = endMin - startMin;
+              }
             }
 
+            const courseIndexMap = {
+              main: 3,
+              starter: 0,
+              sushi: 1,
+              hot: 2,
+              dessert: 4,
+            };
+
+            let total = 0;
+
+            for (const course of selected) {
+              const idx = courseIndexMap[course.value];
+              if (courseMap[idx] == null) return 0; // If any duration is missing, return 0
+              total += courseMap[idx];
+            }
+
+            return total;
+          }
 
 
-            // Calculate processing time
+
+          if (cos.length != 0) {
+
+            processTime = calculateCourseDuration(cos, order?.STAMP)
+
+
+
 
           }
+
+
+
+
+
+
+
+
+
+          // let processTime = calculateTotalMinutes(order?.STAMP)
+
+          processTimes.push(processTime);
+
+          result.push({
+            date: formattedDate,
+            processtime: processTime, // Store as a number for sorting
+            table: `T${order.TABLE}`,
+            starttime: `@${startTimeFormatted}`,
+            staff: order.STAFF,
+            order: order
+          });
+
         });
       });
-
       // Sort orders by process time (high to low)
       result.sort((a, b) => b.processtime - a.processtime);
 
@@ -4459,10 +4623,10 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
         ...order,
         processtime: `${order.processtime}min`
       }));
-
-      // Calculate average, min, and max processing time
       if (processTimes.length > 0) {
-        const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
+        const totalTime = processTimes.reduce((sum, time) => {
+          return sum + (typeof time === 'number' ? time : 0);
+        }, 0);
         const averageTime = Math.round(totalTime / processTimes.length);
         const minTime = Math.min(...processTimes);
         const maxTime = Math.max(...processTimes);
@@ -4479,258 +4643,18 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
 
       return { orders: result, stats: null };
     }
-
-
     let newalldata = processData(one)
 
-    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
     setEditall(newalldata)
-
-    // console.log( JSON.stringify( alltype) , 'oneone') 
-
-    // if(alltype.length === 0 ){
-
-    // }else{
-
-    // }
-
-
-    // const categorizeItems = (datasssssss) => {
-    //   const edited = ["2", "12", "22", "32"];
-    //   const moved = ["3", "13", "23", "33"];
-    //   const deleted = ["4", "24"];
-
-    //   const result = {
-    //     edited: [],
-    //     moved: [],
-    //     deleted: [],
-    //     served: [],
-    //     tableMoved: []
-    //   };
-
-    //   for (const [date, entries] of Object.entries(datasssssss)) {
-
-
-    //     entries.forEach(entry => {
-
-
-    //       if (entry.NOTE && entry.NOTE.includes("$ND$")) {
-    //         result.tableMoved.push(entry);
-    //       }
-
-
-    //       entry.ITEMS.forEach(item => {
-    //         if (edited.includes(item.STATUS)) {
-    //           result.edited.push(item);
-    //         } else if (moved.includes(item.STATUS)) {
-    //           result.moved.push(item);
-    //         } else if (deleted.includes(item.STATUS)) {
-    //           result.deleted.push(item);
-    //         } else if (parseInt(item.STATUS) > 20) {
-    //           result.served.push(item);
-    //         }
-    //       });
-    //     });
-
-    //   }
-
-    //   return result;
-    // };
-
-    // let editttsone = categorizeItems(one)
-    // // let editttstwo = categorizeItems(two)
-
-    // console.log(editttsone, 'editttsoneeditttsone')
-
-
-    // setEditall(editttsone)
-    // // setEditallone(editttstwo)
-
-    // const processItems = (data) => {
-    //   const dishCounts = {};
-
-    //   // Iterate through the data to collect and process dishes
-    //   for (const [date, entries] of Object.entries(data)) {
-
-
-
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Remove "Sp\\" prefix if present
-    //         const cleanItemName = item.ITEM.replace(/^Sp\\\s*/, "");
-
-    //         // If dish is already counted, increment its count and append data
-    //         if (dishCounts[cleanItemName]) {
-    //           dishCounts[cleanItemName].count += parseInt(item.QUANTITY, 10);
-    //           dishCounts[cleanItemName].data.push(item);
-    //         } else {
-    //           // If not, initialize a new entry for the dish
-    //           dishCounts[cleanItemName] = {
-    //             count: parseInt(item.QUANTITY, 10),
-    //             name: cleanItemName,
-    //             data: [item],
-    //           };
-    //         }
-    //       });
-    //     });
-    //   }
-
-    //   // Convert the dishCounts object to an array
-    //   return Object.values(dishCounts).sort((a, b) => b.count - a.count);
-    // };
-
-
-    // let minnscount = processItems(one)
-    // // let maxnscount = processItems(two)
-    // setServed(minnscount)
-    // // setServedone(maxnscount)
-
-    // const processRefundedItems = (data) => {
-    //   const results = [];
-
-    //   // Iterate through each date's data
-    //   for (const [date, entries] of Object.entries(data)) {
-    //     let refundedItems = [];
-
-
-
-    //     entries.forEach(entry => {
-    //       entry.ITEMS.forEach(item => {
-    //         // Check if "Refunded" exists in the ITEM field
-    //         if (item?.NOTE?.includes("Refunded")) {
-    //           refundedItems.push(item);
-    //         }
-    //       });
-    //     });
-
-    //     if (refundedItems.length > 0) {
-    //       // Calculate the total quantity for refunded items
-    //       const totalQuantity = refundedItems.reduce(
-    //         (sum, item) => sum + parseInt(item.QUANTITY, 10),
-    //         0
-    //       );
-
-    //       results.push({
-    //         date,
-    //         count: totalQuantity,
-    //         name: refundedItems[0].NOTE, // Assuming all refunded items share the same name
-    //         data: refundedItems,
-    //       });
-    //     }
-    //   }
-
-    //   return results;
-    // };
-
-    // let refundcount = processRefundedItems(one)
-    // // let refundcounttwo = processRefundedItems(two)
-    // setMinperday(refundcount)
-    // console.log(refundcount ,'refundcountrefundcountrefundcount')
-    // // setMaxperday(refundcounttwo)
-
-
-
-
   }
 
-  let callfordataonetwo = (two) => {
- 
-     function processData(data) {
-       let result = [];
-       let processTimes = [];
- 
-  
- 
-       Object.entries(data).forEach(([dateKey, orders]) => {
-         orders.forEach(order => {
-           const date = dateKey.split(") ")[1]; // Extract the date from the key
-           const stampParts = order.STAMP.split(" ");
-           const extractedDate = stampParts[0].substring(0, 8); // Get the first 8 characters for the date
-           const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
- 
-           const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-           if (timeEntries.length >= 2) {
-             const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
-             const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
- 
-             const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
-             const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
- 
-             const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-             const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-             // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-             let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
- 
-                
- 
-             if (processTime < 2) { 
-  
-             } else {
-               processTimes.push(processTime);
- 
-               result.push({
-                 date: formattedDate,
-                 processtime: processTime, // Store as a number for sorting
-                 table: `T${order.TABLE}`,
-                 starttime: `@${startTimeFormatted}`,
-                 staff: order.STAFF,
-                 order: order
-               });
-             }
- 
- 
- 
-             // Calculate processing time
- 
-           }
-         });
-       });
- 
-       // Sort orders by process time (high to low)
-       result.sort((a, b) => b.processtime - a.processtime);
- 
-       // Convert process time back to string format for display
-       result = result.map(order => ({
-         ...order,
-         processtime: `${order.processtime}min`
-       }));
- 
-       // Calculate average, min, and max processing time
-       if (processTimes.length > 0) {
-         const totalTime = processTimes.reduce((sum, time) => sum + time, 0);
-         const averageTime = Math.round(totalTime / processTimes.length);
-         const minTime = Math.min(...processTimes);
-         const maxTime = Math.max(...processTimes);
- 
-         return {
-           orders: result,
-           stats: {
-             averageProcessTime: `${averageTime}min`,
-             minProcessTime: `${minTime}min`,
-             maxProcessTime: `${maxTime}min`
-           }
-         };
-       }
- 
-       return { orders: result, stats: null };
-     }
- 
- 
-     let newalldata = processData(two)
- 
-     console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
-     setEditallone(newalldata)
-  
-   }
-
-
-  let callfordataonesearch = (one, bitedata) => {
-
-    console.log(one, bitedata, 'one, bitedataone, bitedataone, bitedataone, bitedataone, bitedata')
+  let callfordataonetwo = (two, allt, cos) => {
 
     function processData(data) {
       let result = [];
       let processTimes = [];
+
+
 
       Object.entries(data).forEach(([dateKey, orders]) => {
         orders.forEach(order => {
@@ -4740,45 +4664,107 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
           const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
 
           const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-          if (timeEntries.length >= 2) {
-            const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
-            const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
 
-            const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
-            const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
+          const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1
+          const endTime = timeEntries[timeEntries.length - 1].replace(/[A-Z]\d/, '');
 
-            const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
-            const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
-            // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
-            let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
-            const regex = new RegExp(bitedata, "i"); // "i" makes it case-insensitive
-            const isMatch = regex.test(order.DOCKETID);
+          const startTimeFormatted = `${startTime.substring(0, 2)}:${startTime.substring(2, 4)}`;
+          const endTimeFormatted = `${endTime.substring(0, 2)}:${endTime.substring(2, 4)}`;
 
+          const start = new Date(`2000-01-01T${startTimeFormatted}:00`);
+          const end = new Date(`2000-01-01T${endTimeFormatted}:00`);
+          // const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
+          // let processTime = timeDifferencebug(startTimeFormatted,  order?.STAMP)
 
+          // let processTime = calculateTotalMinutes(order?.STAMP)
 
-            if (isMatch) {
-
-              processTimes.push(processTime);
-
-              result.push({
-                date: formattedDate,
-                processtime: processTime, // Store as a number for sorting
-                table: `T${order.TABLE}`,
-                starttime: `@${startTimeFormatted}`,
-                staff: order.STAFF,
-                order: order
-              });
+          let valuesPresent = allt.map(item => item.value);
 
 
-            } else {
+          let processTime = 0;
 
+
+
+          let processess = calculateTotalMinutes(order?.STAMP)
+          let holdd = calculateTotalWithHold(order?.STAMP)
+          let passtime = calculateIdleTimes(order?.STAMP)
+
+
+          if (valuesPresent.includes("R")) processTime += Number(processess);
+          if (valuesPresent.includes("P")) processTime += Number(passtime);
+          if (valuesPresent.includes("H")) processTime += Number(holdd);
+
+
+          function calculateCourseDuration(selected, time_stamp) {
+            if (selected.some(c => c.value === 'All')) return 0;
+
+            const parts = time_stamp.split(' ');
+            const entries = parts.slice(1); // skip the first part (date)
+            const courseMap = {};
+
+            for (let i = 0; i < entries.length - 1; i++) {
+              const cur = entries[i];
+              const next = entries[i + 1];
+
+              const matchR = cur.match(/^(\d{2})(\d{2})R(\d)$/); // e.g., 12:06 R0
+              const matchP = next.match(/^(\d{2})(\d{2})P(\d)$/); // e.g., 12:14 P0
+
+              if (matchR && matchP && matchR[3] === matchP[3]) {
+                const index = matchR[3];
+                const startMin = parseInt(matchR[1]) * 60 + parseInt(matchR[2]); // HH*60 + mm
+                const endMin = parseInt(matchP[1]) * 60 + parseInt(matchP[2]);
+                courseMap[index] = endMin - startMin;
+              }
             }
 
+            const courseIndexMap = {
+              main: 3,
+              starter: 0,
+              sushi: 1,
+              hot: 2,
+              dessert: 4,
+            };
+
+            let total = 0;
+
+            for (const course of selected) {
+              const idx = courseIndexMap[course.value];
+              if (courseMap[idx] == null) return 0; // If any duration is missing, return 0
+              total += courseMap[idx];
+            }
+
+            return total;
+          }
 
 
-            // Calculate processing time
+
+          if (cos.length != 0) {
+
+            processTime = calculateCourseDuration(cos, order?.STAMP)
+
+
+
 
           }
+
+
+
+
+
+          processTimes.push(processTime);
+
+          result.push({
+            date: formattedDate,
+            processtime: processTime, // Store as a number for sorting
+            table: `T${order.TABLE}`,
+            starttime: `@${startTimeFormatted}`,
+            staff: order.STAFF,
+            order: order
+          });
+
+          // Calculate processing time
+
+
         });
       });
 
@@ -4812,12 +4798,10 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
     }
 
 
-    let newalldata = processData(one)
+    let newalldata = processData(two)
 
     console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
-    setEditall(newalldata)
-
-
+    setEditallone(newalldata)
 
   }
 
