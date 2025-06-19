@@ -5444,10 +5444,10 @@ handleChangefine(selectedOptionsfine)
                         onChange={(e) => {
                           setCources(e.target.checked)
                           if (e.target.checked === false) {
-                            // setSelectedCources([])
-                            // handleChangeCources([])
+                            setSelectedCources([])
+                            handleChangeCources([])
                           } else {
-                            // handleChangeCources([...selectedCources, ...[{ label: "All Courses", value: "All" }]])
+                            handleChangeCources([...selectedCources, ...[{ label: "All Courses", value: "All" }]])
                           }
                         }}
                         id="switch4"
