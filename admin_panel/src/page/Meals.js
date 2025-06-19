@@ -685,6 +685,12 @@ let Meals = () => {
         backgroundColor: '#CA424E',
         borderColor: '#CA424E',
         borderWidth: 1,
+        
+         customData: {
+        percentages: [85, 92, 78, 95], // Example additional data
+        targets: [100, 120, 80, 110],
+        categories: ['High', 'Medium', 'Low', 'High']
+      }
       },
       {
         label: 'Comparing range',
@@ -3070,9 +3076,7 @@ if (val21.length != 0) {
     let timeLabels = kidshort.map(entry => entry.time);
     let timeCounts = kidshort.map(entry => entry.count);
 
-
-    console.log( timeCounts , 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv' )
-    
+ 
     setOption(timeLabels)
     setOneBar(timeCounts)
 
@@ -3096,7 +3100,7 @@ if (val21.length != 0) {
   }
 
 
-  function processTimeData(data) {
+  function processTimeData(data) { 
     let timeCounts = {};
 
     function extractTime(stamp) {
@@ -3121,21 +3125,18 @@ if (val21.length != 0) {
               let stamps = order.STAMP.split(" "); // Split STAMP string
               stamps.forEach(stamp => {
                 const hasRParen = stamp.includes("R0");
-                console.log(hasRParen , 'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
-
+               
                 if(hasRParen){
                   let extractedTime = extractTime(stamp);
 
-                  console.log(extractedTime , 'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
-  
+                   
   
                   if (extractedTime) {
                     let interval = roundToInterval(extractedTime);
 
                     timeCounts[interval] = (timeCounts[interval] || 0) + order.ITEMS.length;
 
-                    console.log(timeCounts[interval] , 'qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq')
-
+                  
   
                   }
                 }
@@ -3174,7 +3175,7 @@ if (val21.length != 0) {
     // Convert to final array format
     return Object.keys(timeCounts)
       .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
-      .map(time => ({ time, count: timeCounts[time] })).slice(1);
+      .map(time => ({ time, count: timeCounts[time] }));
   }
 
 
@@ -6239,12 +6240,12 @@ if (val21.length != 0) {
                             {/* Left Scroll Button */}
                             <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
 
-                            <p className="gggjgjjg"># of new dockets</p>
+                            <p className="gggjgjjg"># of new meals</p>
 
                             {/* Scrollable Chart Container */}
                             <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                               <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
-                                <Bar data={datafine} options={optionshshs} id="chart-capture" />
+                                <Bar data={datafine} options={optionshshs} id="chart-capture" /> 
                               </div>
                             </div>
 

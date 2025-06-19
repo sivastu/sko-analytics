@@ -3516,7 +3516,7 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
     // Convert to final array format
     return Object.keys(timeCounts)
       .sort((a, b) => a.localeCompare(b)) // Sort times in ascending order
-      .map(time => ({ time, count: timeCounts[time] })).slice(1);
+      .map(time => ({ time, count: timeCounts[time] }));
   }
 
 
@@ -6869,7 +6869,7 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
                             {/* Left Scroll Button */}
                             <button onClick={scrollLeft} style={buttonStyle}>⬅</button>
 
-                            <p className="gggjgjjg"># of new dockets</p>
+                            <p className="gggjgjjg"># of new meals</p>
 
                             {/* Scrollable Chart Container */}
                             <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
