@@ -1577,17 +1577,28 @@ handleChangefine(selserdatare)
 
   const handleChangehub = (selected) => {
 
+
+    console.log(selected , 'selectedselectedselectedselectedselected')
+ 
+
     const hasAllValue = selected.some(item => item.value === "All");
+
+
     const hasAllValueold = oldpro.some(item => item.value === "All");
 
     setOldpro(selected)
+
+
+    // if(hasAllValue){
+    //   return
+    // }
 
     if (hasAllValue === false && hasAllValueold === true) {
 
 
       setSelectedhubOptions([]);
-      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, [])
       return
 
     }
@@ -1689,9 +1700,9 @@ handleChangefine(selserdatare)
 
       setSelectedCources([]);
 
-      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
     }
@@ -5433,10 +5444,10 @@ handleChangefine(selectedOptionsfine)
                         onChange={(e) => {
                           setCources(e.target.checked)
                           if (e.target.checked === false) {
-                            setSelectedCources([])
-                            handleChangeCources([])
+                            // setSelectedCources([])
+                            // handleChangeCources([])
                           } else {
-                            handleChangeCources([...selectedCources, ...[{ label: "All Courses", value: "All" }]])
+                            // handleChangeCources([...selectedCources, ...[{ label: "All Courses", value: "All" }]])
                           }
                         }}
                         id="switch4"
