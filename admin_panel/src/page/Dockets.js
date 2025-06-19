@@ -466,54 +466,109 @@ let Dockets = () => {
 
   return result;
 }
+const OrderDisplay = ({ orders = {} }) => {
+  if (!orders || Object.keys(orders).length === 0) {
+    return <p style={{ textAlign: 'center', color: 'red' }}>No orders available</p>;
+  }
 
+  // Course mapping
+  const courseMap = {
+    0: 'starter',
+    1: 'sushi',
+    2: 'hot',
+    3: 'main',
+    4: 'dessert'
+  };
 
-  const OrderDisplay = ({ orders = {} }) => {
-    if (!orders || Object.keys(orders).length === 0) {
-      return <p style={{ textAlign: 'center', color: 'red' }}>No orders available</p>;
-    }
+  // Get stamp from orders (assuming it's available in the data structure)
+  let stamp = cval1?.order?.STAMP || stampval;
 
+  // Function to find first occurrence by status and index
+  const findFirstOccurrenceByStatus = (stampString, status, index) => {
+    if (!stampString) return '';
     
+    const parts = stampString.split(' ').slice(1); // Remove date part
+    
+    for (const part of parts) {
+      if (part.length >= 6) {
+        const time = part.slice(0, 4);
+        const type = part[4];
+        const idx = part.slice(5);
+        
+        if (type === status && idx === index.toString()) {
+          return `${time.slice(0, 2)}:${time.slice(2, 4)}`;
+        }
+      }
+    }
+    return '';
+  };
 
-    let stamp = cval1?.order?.STAMP
+  // Group items by course
+  const groupedByCourse = {};
+  
+  // Flatten all items from all orders and group by COURSE
+  Object.values(orders).flat().forEach(item => {
+    const courseKey = item?.COURSE;
+    if (courseKey !== undefined) {
+      if (!groupedByCourse[courseKey]) {
+        groupedByCourse[courseKey] = [];
+      }
+      groupedByCourse[courseKey].push(item);
+    }
+  });
 
-    return (
-      <div>
-        {Object.entries(orders).map(([course, items] , key) => (
-          <div key={course} style={{ marginBottom: 20 }}>
+  // Sort courses by their numeric key
+  const sortedCourses = Object.keys(groupedByCourse).sort((a, b) => Number(a) - Number(b));
+
+  return (
+    <div>
+      {sortedCourses.map((courseKey) => {
+        const courseName = courseMap[courseKey] || `Course ${courseKey}`;
+        const items = groupedByCourse[courseKey];
+        
+        return (
+          <div key={courseKey} style={{ marginBottom: 20 }}>
             <p style={{ fontWeight: '600', fontSize: 15, textAlign: 'center', marginBottom: 0 }}>
-              Course: {course === "empty" ? '' : course}
+              Course: {courseName}
             </p>
-            <p onClick={()=>{
-              console.log(orders , 'stampvalstampvalstampval')
-            }} style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}>
-              Time:  {  findFirstOccurrenceByStatus(stampval , 'R' , key )} . | {findFirstOccurrenceByStatus(stampval , 'P' , key )}. | {findFirstOccurrenceByStatus(stampval , 'H' , key )}.
+            <p 
+              onClick={() => {
+                console.log(orders, 'stampvalstampvalstampval');
+              }} 
+              style={{ fontWeight: '500', fontSize: 13, textAlign: 'center', color: "#707070" }}
+            >
+              Time: {findFirstOccurrenceByStatus(stamp, 'R', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'P', courseKey)} | {findFirstOccurrenceByStatus(stamp, 'H', courseKey)}
             </p>
 
             <div style={{ marginTop: 10 }}>
               {items?.map((kai, index) => (
                 <div key={kai?.ITEMID || index} style={{ marginBottom: 15 }}>
-                  <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>Item {index + 1}: {kai?.ITEM}</p>
-                  <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>Note: {parseRemarks(kai?.NOTE)}</p>
+                  <p style={{ fontWeight: '600', fontSize: 13, marginBottom: 0 }}>
+                    Item {courseKey}: {kai?.ITEM}
+                  </p>
                   <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
-  {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
-  {["2", "12", "22", "32"].includes(kai?.STATUS) &&
-    (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
+                    Note: {parseRemarks(kai?.NOTE)}
+                  </p>
+                  <p style={{ fontWeight: '400', fontSize: 13, marginBottom: 0, color: "#707070" }}>
+                    {["2", "12", "22", "32"].includes(kai?.STATUS) && "Edited: Yes"}
+                    {["2", "12", "22", "32"].includes(kai?.STATUS) &&
+                      (["3", "13", "23", "33"].includes(kai?.STATUS) || ["4", "24"].includes(kai?.STATUS)) && " | "}
 
-  {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
-  {["3", "13", "23", "33"].includes(kai?.STATUS) &&
-    ["4", "24"].includes(kai?.STATUS) && " | "}
+                    {["3", "13", "23", "33"].includes(kai?.STATUS) && "Moved: Yes"}
+                    {["3", "13", "23", "33"].includes(kai?.STATUS) &&
+                      ["4", "24"].includes(kai?.STATUS) && " | "}
 
-  {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
-</p>
+                    {["4", "24"].includes(kai?.STATUS) && "Deleted: Yes"}
+                  </p>
                 </div>
               ))}
             </div>
           </div>
-        ))}
-      </div>
-    );
-  };
+        );
+      })}
+    </div>
+  );
+};
 
   const datafineone = {
     labels: optionbarone,
@@ -712,8 +767,16 @@ let Dockets = () => {
 
       let uuuk = extractUniqueNotes(cleanedData, optionsone)
       uuuk.unshift({ label: "All Courses", value: "All" });
-      setFulldatafull(uuuk)
-      setOldcou(uuuk)
+     setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
+      setOldcou([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
       // setSelectedCources(uuuk)
 
 
@@ -809,8 +872,16 @@ let Dockets = () => {
       let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
       uuuk.unshift({ label: "All Courses", value: "All" });
       // setSelectedCources(uuuk)
-      setOldcou(uuuk)
-      setFulldatafull(uuuk)
+       setOldcou([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
+      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
     }
 
 
@@ -1150,7 +1221,11 @@ handleChangefine(selserdatare)
       let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-      setFulldatafull(uuuk)
+     setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
 
       setSelectedOptions([]);
 
@@ -1192,7 +1267,12 @@ handleChangefine(selserdatare)
       let uuuk = extractUniqueNotes(basicall, basic)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-      setFulldatafull(uuuk)
+       setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
+
 
 
       setSelectedOptions(basic || []);
@@ -1270,7 +1350,11 @@ handleChangefine(selserdatare)
       let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-      setFulldatafull(uuuk)
+      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
       setSelectedOptions(selected || []);
 
       filterDataByDate(dateRange, onetime, twotime, selected, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
@@ -1628,9 +1712,11 @@ handleChangefine(selserdatare)
       const index = part.slice(5);
 
       if (!pairs[index]) pairs[index] = {};
-      if (type === 'R') {
+      
+      // Only set if not already set (keep first occurrence)
+      if (type === 'R' && !pairs[index].start) {
         pairs[index].start = time;
-      } else if (type === 'P') {
+      } else if (type === 'P' && !pairs[index].end) {
         pairs[index].end = time;
       }
     });
@@ -1647,12 +1733,11 @@ handleChangefine(selserdatare)
       const endTotal = endH * 60 + endM;
       const diff = endTotal - startTotal;
 
-      // total += diff === 0 ? 0.5 : diff;
-      total += diff === 0 ? 0 : diff;
+      total += diff === 0 ? 0.5 : diff;
     });
 
     return total;
-  }
+}
 
 
   function calculateTotalWithHold(STAMP) {
@@ -1669,7 +1754,7 @@ handleChangefine(selserdatare)
           const nextTime = parseInt(next.slice(0, 4));       // e.g., 1924
 
           if (currentTime === nextTime) {
-            // totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
+            totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
           } else {
             totalMinutes += (nextTime - currentTime); // normal minute diff
           }
@@ -1695,7 +1780,7 @@ handleChangefine(selserdatare)
           const nextTime = parseInt(next.slice(0, 4));       // e.g., 1924
 
           if (currentTime === nextTime) {
-            // totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
+            totalMinutes += 0.5; // same timestamp → add 30 seconds (0.5 min)
           } else {
             totalMinutes += (nextTime - currentTime); // normal minute diff
           }
