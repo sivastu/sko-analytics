@@ -685,7 +685,7 @@ let Meals = () => {
         backgroundColor: '#CA424E',
         borderColor: '#CA424E',
         borderWidth: 1,
-        
+
          customData: {
         percentages: [85, 92, 78, 95], // Example additional data
         targets: [100, 120, 80, 110],
@@ -824,8 +824,16 @@ let Meals = () => {
 
       let uuuk = extractUniqueNotes(cleanedData, optionsone)
       uuuk.unshift({ label: "All Courses", value: "All" });
-      setFulldatafull(uuuk)
-      setOldcou(uuuk)
+      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
+      setOldcou([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
       // setSelectedCources(uuuk)
 
 
@@ -922,8 +930,16 @@ let Meals = () => {
 
 
       uuuk.unshift({ label: "All Courses", value: "All" });
-      setFulldatafull(uuuk)
-      setOldcou(uuuk)
+        setOldcou([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
+      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
 
     }
 
@@ -1810,7 +1826,11 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
       let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-      setFulldatafull(uuuk)
+        setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
 
 
 
@@ -1854,7 +1874,11 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
       let uuuk = extractUniqueNotes(basicall, basic)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-      setFulldatafull(uuuk)
+          setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
 
 
       setSelectedOptions(basic || []);
@@ -1933,7 +1957,11 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
       let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-      setFulldatafull(uuuk)
+       setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
 
 
       setSelectedOptions(selected || []);
@@ -2102,11 +2130,47 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
 
   const [selectedCources, setSelectedCources] = useState([]);
 
-  const handleChangeCources = (selected) => {
-    setMenuIsOpenthree(true)
+ const handleChangeCources = (selected) => {
+
+    
 
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldcou.some(item => item.value === "All");
+
+    console.log(hasAllValue , 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', hasAllValueold , selected )
+
+     if (hasAllValue === false && selected.length === 5 ) {
+
+      setSelectedCources([]);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      return
+    } 
+
+    
+
+
+    if (hasAllValue === true ) {
+
+      setSelectedCources(fulldatafull);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      return
+    } 
 
     setOldcou(selected)
 
@@ -2125,9 +2189,9 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
 
       setSelectedCources(fulldatafull);
 
-      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
     } else {
@@ -2333,6 +2397,18 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype , filteredDataoneess) { 
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
+
+    if(alltype.length === 0){
+      alltype = [{
+    "label": "All Stages",
+    "value": "All"
+  },
+  { value: 'R', label: 'On Process' },
+  { value: 'H', label: 'On Hold' },
+  { value: 'P', label: 'On Pass' },
+    // { value: 'S', label: 'Served' },
+  ]
+    }
 
     if(basicall === undefined ) {
         alldat= filteredDataoneess
@@ -3182,6 +3258,18 @@ if (val21.length != 0) {
   function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype , filteredDataoneess ) {
 
 
+
+    if(alltype.length === 0){
+      alltype = [{
+    "label": "All Stages",
+    "value": "All"
+  },
+  { value: 'R', label: 'On Process' },
+  { value: 'H', label: 'On Hold' },
+  { value: 'P', label: 'On Pass' },
+    // { value: 'S', label: 'Served' },
+  ]
+    }
 
 
     cources = cources.filter(item => item.value !== "All");

@@ -864,6 +864,8 @@ const OrderDisplay = ({ orders = {} }) => {
       setSelectedOptions(optionsone)
 
       let uuuk = extractUniqueNotes(cleanedData, optionsone)
+
+      
       uuuk.unshift({ label: "All Courses", value: "All" });
      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
       { value: 'sushi', label: 'sushi' },
@@ -1690,9 +1692,45 @@ handleChangefine(selserdatare)
   const [selectedCources, setSelectedCources] = useState([]);
   const handleChangeCources = (selected) => {
 
+    
 
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldcou.some(item => item.value === "All");
+
+    console.log(hasAllValue , 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', hasAllValueold , selected )
+
+     if (hasAllValue === false && selected.length === 5 ) {
+
+      setSelectedCources([]);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      return
+    } 
+
+    
+
+
+    if (hasAllValue === true ) {
+
+      setSelectedCources(fulldatafull);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      return
+    } 
 
     setOldcou(selected)
 
@@ -1700,9 +1738,9 @@ handleChangefine(selserdatare)
 
       setSelectedCources([]);
 
-      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
     }
@@ -1711,9 +1749,9 @@ handleChangefine(selserdatare)
 
       setSelectedCources(fulldatafull);
 
-      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
 
     } else {
@@ -1905,12 +1943,26 @@ handleChangefine(selserdatare)
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, filteredDataoneess) {
 
 
-    console.log(time, time2, 'jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj')
+    
+    if(alltype.length === 0){
+      alltype = [{
+    "label": "All Stages",
+    "value": "All"
+  },
+  { value: 'R', label: 'On Process' },
+  { value: 'H', label: 'On Hold' },
+  { value: 'P', label: 'On Pass' },
+    // { value: 'S', label: 'Served' },
+  ]
+    }
 
+     
 
     cources = cources.filter(item => item.value !== "All");
+
+    console.log(alltype , cources , 'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
     let alldat = basicall
-  if(basicall === undefined ) {
+    if(basicall === undefined ) {
         alldat= filteredDataoneess
     }
 
@@ -2182,7 +2234,9 @@ handleChangefine(selserdatare)
 
     }
 
-    if (cources.length != 0) {
+    if(cources.length === 0){
+
+    }else  {
 
 
       function filterByNoted(data, filterNotes) {
@@ -2623,7 +2677,7 @@ handleChangefine(selserdatare)
     setOneBarone(timeCountsone)
     console.log(JSON.stringify(ghione), 'thousand', ghione)
 
-handleChangefine(selectedOptionsfine)
+    handleChangefine(selectedOptionsfine)
 
   }
 
@@ -2766,6 +2820,18 @@ handleChangefine(selectedOptionsfine)
 
       if(basicall === undefined ) {
         alldat= filteredDataoneess
+    }
+
+    if(alltype.length === 0){
+      alltype = [{
+    "label": "All Stages",
+    "value": "All"
+  },
+  { value: 'R', label: 'On Process' },
+  { value: 'H', label: 'On Hold' },
+  { value: 'P', label: 'On Pass' },
+    // { value: 'S', label: 'Served' },
+  ]
     }
 
     console.log(JSON.stringify(alltype), 'val2245')
@@ -3566,9 +3632,7 @@ handleChangefine(selectedOptionsfine)
 
   let callfordataone = (one, allt, cos) => {
 
-
-    console.log(one, allt, cos, 'one, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cosone, allt, cos')
-
+ 
     function processData(data) {
       let result = [];
       let processTimes = [];
@@ -3581,8 +3645,7 @@ handleChangefine(selectedOptionsfine)
           const formattedDate = `${extractedDate.substring(0, 4)}-${extractedDate.substring(4, 6)}-${extractedDate.substring(6, 8)}`;
 
           const timeEntries = stampParts.slice(1).filter(entry => /R\d/.test(entry)); // Filter only R0, R1, etc.
-
-          console.log(timeEntries, 'processTimeprocessTimeprocessTimeprocessTimeprocessTimeprocessTimeprocessTimeprocessTime')
+ 
 
 
           const startTime = timeEntries[0].replace(/[A-Z]\d/, ''); // Remove R0, R1 
@@ -5447,7 +5510,8 @@ handleChangefine(selectedOptionsfine)
                             setSelectedCources([])
                             handleChangeCources([])
                           } else {
-                            handleChangeCources([...selectedCources, ...[{ label: "All Courses", value: "All" }]])
+      
+                            handleChangeCources([...selectedCources, ...[{ label: "All Courses", value: "All" }]]) 
                           }
                         }}
                         id="switch4"

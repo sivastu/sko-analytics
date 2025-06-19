@@ -489,8 +489,16 @@ let Mealsmulti = () => {
 
       let uuuk = extractUniqueNotes(cleanedData, optionsone)
       uuuk.unshift({ label: "All Courses", value: "All" });
-      setFulldatafull(uuuk)
-      setOldcou(uuuk)
+    setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
+      setOldcou([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
       // setSelectedCources(uuuk)
 
 
@@ -586,8 +594,16 @@ let Mealsmulti = () => {
       let uuuk = extractUniqueNotes(cleanedData, parsedatajson.venue)
       uuuk.unshift({ label: "All Courses", value: "All" });
       // setSelectedCources(uuuk)
-      setOldcou(uuuk)
-      setFulldatafull(uuuk)
+        setOldcou([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
+      setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
     }
 
 
@@ -1507,7 +1523,11 @@ function removeMatchingValues(arr1, arr2) {
       let uuuk = extractUniqueNotes(basicall, [])
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-      setFulldatafull(uuuk)
+          setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
 
 
       setSelectedOptions([]);
@@ -1560,7 +1580,11 @@ function removeMatchingValues(arr1, arr2) {
       let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-      setFulldatafull(uuuk)
+         setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
 
       setSelectedOptions(selected || []);
 
@@ -1633,7 +1657,11 @@ function removeMatchingValues(arr1, arr2) {
       let uuuk = extractUniqueNotes(basicall, selected)
       uuuk.unshift({ label: "All Courses", value: "All" });
 
-      setFulldatafull(uuuk)
+         setFulldatafull([{ label: "All Courses", value: "All" }, { value: 'starter', label: 'starter' },
+      { value: 'sushi', label: 'sushi' },
+      { value: 'hot', label: 'hot' },
+      { value: 'main', label: 'main' },
+      { value: 'dessert', label: 'dessert' }])
 
       setSelectedOptions(selected || []);
 
@@ -2610,11 +2638,47 @@ function removeMatchingValues(arr1, arr2) {
 
   const [selectedCources, setSelectedCources] = useState([]);
 
-  const handleChangeCources = (selected) => {
+ const handleChangeCources = (selected) => {
 
+    
 
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldcou.some(item => item.value === "All");
+
+    console.log(hasAllValue , 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', hasAllValueold , selected )
+
+     if (hasAllValue === false && selected.length === 5 ) {
+
+      setSelectedCources([]);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      return
+    } 
+
+    
+
+
+    if (hasAllValue === true ) {
+
+      setSelectedCources(fulldatafull);
+
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+
+      return
+    } 
 
     setOldcou(selected)
 
@@ -2624,10 +2688,7 @@ function removeMatchingValues(arr1, arr2) {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        hubbtwo, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       return
     }
@@ -2636,11 +2697,7 @@ function removeMatchingValues(arr1, arr2) {
 
       setSelectedCources(fulldatafull);
 
-      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        hubbtwo, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
+      // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
@@ -2650,18 +2707,13 @@ function removeMatchingValues(arr1, arr2) {
 
       filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRange, onetime, twotime, selectedOptionsfive,
-        hubbtwo, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
-
-
-      // filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
     }
 
 
 
 
   };
-
 
   //select takeaway
   const [takeaway, setTakeaway] = useState(false)
@@ -2770,7 +2822,17 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
 
     console.log(val21 , 'valsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsvalsv gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg')
 
-
+if(alltype.length === 0){
+      alltype = [{
+    "label": "All Stages",
+    "value": "All"
+  },
+  { value: 'R', label: 'On Process' },
+  { value: 'H', label: 'On Hold' },
+  { value: 'P', label: 'On Pass' },
+    // { value: 'S', label: 'Served' },
+  ]
+    }
 
     function areObjectsEqual(obj1, obj2) {
       return JSON.stringify(obj1) === JSON.stringify(obj2);
@@ -3524,7 +3586,17 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
 
 
 
-
+if(alltype.length === 0){
+      alltype = [{
+    "label": "All Stages",
+    "value": "All"
+  },
+  { value: 'R', label: 'On Process' },
+  { value: 'H', label: 'On Hold' },
+  { value: 'P', label: 'On Pass' },
+    // { value: 'S', label: 'Served' },
+  ]
+    }
 
     console.log(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, '222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222')
 
