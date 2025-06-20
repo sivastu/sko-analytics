@@ -1512,8 +1512,7 @@ let Dockets = () => {
 
 
   const handleChangefine = (selected) => {
-    console.log(editall, 'WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW')
-
+   
     setSetservedatare(selected.value)
     if (editall.length === 0) {
 
@@ -1634,8 +1633,7 @@ let Dockets = () => {
     setOldhub(selectedss)
 
     if (hasAllValue === false && hasAllValueold === true) {
-
-      console.log(selectedss, 'selectedssselectedssselectedss')
+ 
 
       setHubb([])
 
@@ -1648,8 +1646,7 @@ let Dockets = () => {
       return
     }
 
-    if (hasAllValue === true) {
-      console.log(selectedss, 'selectedssselectedssselectedss')
+    if (hasAllValue === true) { 
 
       setHubb(basicone)
 
@@ -1659,8 +1656,7 @@ let Dockets = () => {
 
       filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, basicone, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-    } else {
-      console.log(selectedss, 'selectedssselectedssselectedss')
+    } else { 
 
       setHubb(selectedss)
 
@@ -1958,7 +1954,7 @@ let Dockets = () => {
 
 
 
-  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, filteredDataoneess , compare) {
+  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, filteredDataoneess, compare) {
 
 
 
@@ -1977,8 +1973,7 @@ let Dockets = () => {
 
 
     cources = cources.filter(item => item.value !== "All");
-
-    console.log(alltype, cources, 'TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT')
+ 
     let alldat = basicall
     if (basicall === undefined) {
       alldat = filteredDataoneess
@@ -2047,9 +2042,8 @@ let Dockets = () => {
       console.log(alldat, 'one')
 
     }
-
-    console.log(meals, 'onMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMe')
-    if (meals === 4 || compare === 4 ) {
+ 
+    if (meals === 4 || compare === 4) {
 
 
 
@@ -2781,21 +2775,17 @@ let Dockets = () => {
     // let ghi = processTimeData(alldat)
 
     let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
-    let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
+    let ghis = processTimeDatafgh(alldat, generateTimeSlots(threetime, fourtime))
+
+    const merged1 = [...new Set([...ghi, ...ghis])];
+
+    let kidshort = merged1.sort((a, b) => a.time.localeCompare(b.time));
     // Extract values into separate arrays
     // let timeLabels = kidshort.map(entry => entry.time);
-    let timeLabels = generateTimeSlots(time, time2)
-    let timeCounts = kidshort.map(entry => entry.count);
+    let timeLabels = kidshort.map(entry => entry.time);
+    let timeCounts = kidshort.map(entry => entry.count); 
 
-
-
-
-
-
-
-
-   
-
+    console.log(merged1, 'timeCounts This is ') 
 
     setOption(timeLabels)
 
@@ -2808,11 +2798,10 @@ let Dockets = () => {
     let timeLabelsone = generateTimeSlots(time, time2)
     let timeCountsone = kidshortone.map(entry => entry.count);
 
-    console.log(timeLabelsone, 'timeCounts This is ')
-    console.log(timeCountsone, 'timeCounts This is ')
+    
 
 
-    setOptionone(timeLabelsone)
+    setOptionone(timeLabels)
     setOneBarone(timeCountsone)
 
     handleChangefine(selectedOptionsfine)
@@ -2875,7 +2864,7 @@ let Dockets = () => {
 
 
 
-function processTimeDatafghtwo(data, timeSlots) {
+  function processTimeDatafghtwo(data, timeSlots) {
     const timeSums = {};
     const timeCounts = {};
 
@@ -2922,14 +2911,12 @@ function processTimeDatafghtwo(data, timeSlots) {
               const sTime = extractTime(order.STAMP, 'S');
 
               if (r0Time && sTime) {
-                const diff = getMinuteDiff(r0Time, sTime);
-                console.log(diff, 'diff', r0Time, 'to', sTime);
+                const diff = getMinuteDiff(r0Time, sTime); 
 
                 for (const slot of timeSlots) {
                   if (isInRange(sTime, slot)) {
                     timeSums[slot] += diff;
-                    timeCounts[slot] += 1;
-                    console.log(`Added to slot ${slot}: diff=${diff}, total=${timeSums[slot]}, count=${timeCounts[slot]}`);
+                    timeCounts[slot] += 1; 
                     break;
                   }
                 }
@@ -2942,15 +2929,14 @@ function processTimeDatafghtwo(data, timeSlots) {
 
     return timeSlots.map(slot => {
       const average = timeCounts[slot] > 0 ? timeSums[slot] / timeCounts[slot] : 0;
-      const rounded = Math.round(average);
-      console.log(`Slot ${slot}: sum=${timeSums[slot]}, count=${timeCounts[slot]}, average=${average}, rounded=${rounded}`);
-      
+      const rounded = Math.round(average); 
+
       return {
         time: slot,
         count: rounded
       };
     });
-}
+  }
 
 
 
@@ -2959,7 +2945,7 @@ function processTimeDatafghtwo(data, timeSlots) {
 
 
 
-  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, filteredDataoneess , compare ) {
+  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, filteredDataoneess, compare) {
 
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
@@ -3045,7 +3031,7 @@ function processTimeDatafghtwo(data, timeSlots) {
 
     }
 
-   if (meals === 4 || compare === 4 ) {
+    if (meals === 4 || compare === 4) {
 
 
 
@@ -3498,6 +3484,8 @@ function processTimeDatafghtwo(data, timeSlots) {
 
     } else {
     }
+
+
     if (inone?.length > 2 && intwo === undefined || intwo === '') {
       let splitone = inone.split('-')
 
@@ -3787,7 +3775,11 @@ function processTimeDatafghtwo(data, timeSlots) {
 
     let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
 
-    let kidshort = ghi.sort((a, b) => a.time.localeCompare(b.time));
+    let ghis = processTimeDatafgh(alldat, generateTimeSlots(onetime, twotime))
+
+    const merged1 = [...new Set([...ghi, ...ghis])];
+
+    let kidshort = merged1.sort((a, b) => a.time.localeCompare(b.time));
 
     // Extract values into separate arrays
     let timeLabels = kidshort.map(entry => entry.time);
@@ -3795,19 +3787,30 @@ function processTimeDatafghtwo(data, timeSlots) {
 
 
 
-    console.log(timeLabels, 'timecounts THIS IS COUNT')
+    
 
+        console.log(timeLabels, 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+
+    setOption(timeLabels)
+
+    setMinperday(timeLabels)
     setTwobar(timeCounts)
 
     let ghitwo = processTimeDatafghtwo(alldat, generateTimeSlots(time, time2))
 
-    console.log(ghitwo, 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+    let ghisthree = processTimeDatafghtwo(alldat, generateTimeSlots(onetime, twotime))
 
-    let kidshorttwo = ghitwo.sort((a, b) => a.time.localeCompare(b.time));
+    const merged12 = [...new Set([...ghitwo, ...ghisthree])];
+
+
+    let kidshorttwo = merged12.sort((a, b) => a.time.localeCompare(b.time));
 
     // Extract values into separate arrays
     let timeLabelstwo = kidshorttwo.map(entry => entry.time);
     let timeCountstwo = kidshorttwo.map(entry => entry.count);
+
+    setOptionone(timeLabels)
+
 
     setTwobarone(timeCountstwo)
 
@@ -6078,10 +6081,10 @@ function processTimeDatafghtwo(data, timeSlots) {
                           <div class="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                             setMeals(4)
 
- 
-                              filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , '', 4)
-                            filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , '', 4)
-                       
+
+                            filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions, '', 4)
+                            filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions, '', 4)
+
 
 
                           }}>
