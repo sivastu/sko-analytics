@@ -2789,8 +2789,12 @@ let Dockets = () => {
 
 
 
-    console.log(timeLabels, 'timeCounts This is ')
 
+
+
+
+
+   
 
 
     setOption(timeLabels)
@@ -2804,12 +2808,12 @@ let Dockets = () => {
     let timeLabelsone = generateTimeSlots(time, time2)
     let timeCountsone = kidshortone.map(entry => entry.count);
 
-
+    console.log(timeLabelsone, 'timeCounts This is ')
+    console.log(timeCountsone, 'timeCounts This is ')
 
 
     setOptionone(timeLabelsone)
     setOneBarone(timeCountsone)
-    console.log(JSON.stringify(ghione), 'thousand', ghione)
 
     handleChangefine(selectedOptionsfine)
 
@@ -2871,7 +2875,7 @@ let Dockets = () => {
 
 
 
-  function processTimeDatafghtwo(data, timeSlots) {
+function processTimeDatafghtwo(data, timeSlots) {
     const timeSums = {};
     const timeCounts = {};
 
@@ -2915,15 +2919,17 @@ let Dockets = () => {
           for (let date in data[group][location][section]) {
             data[group][location][section][date].forEach(order => {
               const r0Time = extractTime(order.STAMP, 'R0');
-              const s0Time = extractTime(order.STAMP, 'S0');
+              const sTime = extractTime(order.STAMP, 'S');
 
-              if (r0Time && s0Time) {
-                const diff = getMinuteDiff(r0Time, s0Time);
+              if (r0Time && sTime) {
+                const diff = getMinuteDiff(r0Time, sTime);
+                console.log(diff, 'diff', r0Time, 'to', sTime);
 
                 for (const slot of timeSlots) {
-                  if (isInRange(s0Time, slot)) {
+                  if (isInRange(sTime, slot)) {
                     timeSums[slot] += diff;
                     timeCounts[slot] += 1;
+                    console.log(`Added to slot ${slot}: diff=${diff}, total=${timeSums[slot]}, count=${timeCounts[slot]}`);
                     break;
                   }
                 }
@@ -2934,11 +2940,17 @@ let Dockets = () => {
       }
     }
 
-    return timeSlots.map(slot => ({
-      time: slot,
-      count: timeCounts[slot] > 0 ? Math.round(timeSums[slot] / timeCounts[slot]) : 0
-    }));
-  }
+    return timeSlots.map(slot => {
+      const average = timeCounts[slot] > 0 ? timeSums[slot] / timeCounts[slot] : 0;
+      const rounded = Math.round(average);
+      console.log(`Slot ${slot}: sum=${timeSums[slot]}, count=${timeCounts[slot]}, average=${average}, rounded=${rounded}`);
+      
+      return {
+        time: slot,
+        count: rounded
+      };
+    });
+}
 
 
 
