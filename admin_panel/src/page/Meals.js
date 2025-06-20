@@ -2130,7 +2130,7 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
 
   const [selectedCources, setSelectedCources] = useState([]);
 
- const handleChangeCources = (selected) => {
+  const handleChangeCources = (selected) => {
 
 
 
@@ -2180,9 +2180,9 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
 
       setSelectedCources(selected);
 
-      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb,selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb,selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 

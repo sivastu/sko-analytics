@@ -1740,9 +1740,9 @@ let Dockets = () => {
 
       setSelectedCources(selected);
 
-      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb,selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, [], selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb,selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
