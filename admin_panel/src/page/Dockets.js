@@ -2792,16 +2792,19 @@ let Dockets = () => {
     setOneBar(timeCounts)
 
     let ghione = processTimeDatafghtwo(alldat, generateTimeSlots(time, time2))
-    let kidshortone = ghione.sort((a, b) => a.time.localeCompare(b.time));
+    let ghisddd = processTimeDatafghtwo(alldat, generateTimeSlots(threetime, fourtime))
+    const merged12 = [...new Set([...ghione, ...ghisddd])];
+
+    let kidshortone = merged12.sort((a, b) => a.time.localeCompare(b.time));
 
     // Extract values into separate arrays
-    let timeLabelsone = generateTimeSlots(time, time2)
+    let timeLabelsone = kidshortone.map(entry => entry.time);
     let timeCountsone = kidshortone.map(entry => entry.count);
 
     
 
 
-    setOptionone(timeLabels)
+    setOptionone(timeLabelsone)
     setOneBarone(timeCountsone)
 
     handleChangefine(selectedOptionsfine)
@@ -3809,7 +3812,7 @@ let Dockets = () => {
     let timeLabelstwo = kidshorttwo.map(entry => entry.time);
     let timeCountstwo = kidshorttwo.map(entry => entry.count);
 
-    setOptionone(timeLabels)
+    setOptionone(timeLabelstwo)
 
 
     setTwobarone(timeCountstwo)
