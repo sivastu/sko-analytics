@@ -298,7 +298,7 @@ let Meals = () => {
 
     let newalldata = processData(one)
 
-    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
+    
     setEditall(newalldata)
 
 
@@ -331,7 +331,7 @@ let Meals = () => {
             const processTime = Math.round((end - start) / 60000); // Convert milliseconds to minutes
 
 
-            console.log(processTime, 'processTimeprocessTimeprocessTimeprocessTime')
+            
 
 
             if (processTime === parseInt(bitedata)) {
@@ -390,7 +390,7 @@ let Meals = () => {
 
     let newalldata = processData(two)
 
-    console.log(newalldata, 'newalldatanewalldatanewalldatanewalldata')
+    
     setEditallone(newalldata)
 
     // const categorizeItems = (datasssssss) => {
@@ -530,7 +530,7 @@ let Meals = () => {
 
   }
   let searchvalue = (e) => {
-    console.log(editallclone, 'searchvaluesearchvaluesearchvalue')
+    
 
     if (e === undefined || e === '' || e === null) {
       setServed(editallclone)
@@ -587,7 +587,7 @@ let Meals = () => {
   let [usedname, setUsedname] = useState('')
   function getName(data) {
 
-    console.log(data?.venue , 'state.datastate.data')
+    
 
 
     // if (!data.venue || data.venue.length === 0) {
@@ -1046,17 +1046,14 @@ let Meals = () => {
   }
 
   if(meals_Custom_range_with1 != null){
-    console.log(meals_Custom_range_with2 , 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
     setTwotime(meals_Custom_range_with1)
   }
 
   if(meals_Custom_range_with2 != null){
-      console.log(meals_Custom_range_with1 , 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
     setThreetime(meals_Custom_range_with2)
   }
 
   if(meals_Custom_range_with3 != null){
-      console.log(meals_Custom_range_with0 , 'meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0meals_Custom_range_with0')
     setFourtime(meals_Custom_range_with3)
   }
 
@@ -2137,7 +2134,6 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldcou.some(item => item.value === "All");
 
-    console.log(hasAllValue, 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', hasAllValueold, selected, fulldatafull)
 
 
 
@@ -5628,7 +5624,6 @@ if (val21.length != 0) {
                               onClick={() => {
                                 if (!isPdfLoad) {
                                   setIsPdfLoad(true);  // Prevent click when loading
-                                  console.log(JSON.stringify(selectedOptions), 'dateRange');
                                   editexportpdf();
                                 }
                               }}
@@ -6648,7 +6643,7 @@ if (val21.length != 0) {
                         }} className="" alt="Example Image" />}</span></span>
 
 
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                        
                   })()}</span></p>
               </div>
 
@@ -6685,7 +6680,7 @@ if (val21.length != 0) {
                         }} className="" alt="Example Image" />}</span></span>
 
 
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                        
                   })()}</span></p>
               </div>
 
@@ -6722,7 +6717,7 @@ if (val21.length != 0) {
                         }} className="" alt="Example Image" />}</span></span>
 
 
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                        
                   })()}</span></p>
               </div>
 
@@ -6759,7 +6754,7 @@ if (val21.length != 0) {
                         }} className="" alt="Example Image" />}</span></span>
 
 
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                        
                   })()}</span></p>
               </div>
 
@@ -6787,7 +6782,7 @@ if (val21.length != 0) {
 
                     let tot = ((datdtwo - datd) / datd) * 100
 
-                    console.log(tot, 'nan')
+                    
 
                     return <span >{isNaN(tot) ? "+000.00" : tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                       style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
@@ -6799,7 +6794,7 @@ if (val21.length != 0) {
                         }} className="" alt="Example Image" />}</span></span>
 
 
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot)
+                        
                   })()}</span></p>
               </div>
 
@@ -7146,7 +7141,7 @@ if (val21.length != 0) {
                     let datdtwo = ggggrtsgg();
                     let tot = ((datd - datdtwo) / datdtwo) * 100;
 
-                    console.log(datd, datdtwo, 'vvvvvvvvvvvvvvvvvvvvvvvvvvvvv', tot);
+                    
 
                     return (
                       <>

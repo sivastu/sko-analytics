@@ -1697,10 +1697,6 @@ let Dockets = () => {
     const hasAllValue = selected.some(item => item.value === "All");
     const hasAllValueold = oldcou.some(item => item.value === "All");
 
-    console.log(hasAllValue, 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', hasAllValueold, selected, fulldatafull)
-
-
-
 
 
     if (hasAllValue === true) {
@@ -1740,9 +1736,9 @@ let Dockets = () => {
 
       setSelectedCources(selected);
 
-      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb,selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb,selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
+      filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selected, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
       // filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, fulldatafull, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
@@ -1962,7 +1958,7 @@ let Dockets = () => {
 
 
 
-  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, filteredDataoneess) {
+  function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, filteredDataoneess , compare) {
 
 
 
@@ -2052,89 +2048,200 @@ let Dockets = () => {
 
     }
 
-    if (time != "" && time2 === '') {
-      let filterDataByTime = (targetTime) => {
-        // Convert targetTime (e.g. "16:23") to a comparable Date object 
-        targetTime = targetTime.replace(":", "");
-        console.log(targetTime, 'targetTimetargetTimetargetTime')
-        // Function to process STAMP and filter based on time
-        function processData(obj) {
-          let result = {};
+    console.log(meals, 'onMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMe')
+    if (meals === 4 || compare === 4 ) {
 
-          for (const dateKey in obj) {
-            if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
-              result[dateKey] = processData(obj[dateKey]);
-            } else if (Array.isArray(obj[dateKey])) {
-              // Filter items based on the STAMP field
-              result[dateKey] = obj[dateKey].filter(item => {
-                if (item.STAMP) {
-                  let stamp = item.STAMP;
-                  let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
 
-                  timeStr = timeStr.replace("R0", ""); // Remove "R0"
 
-                  // Compare the STAMP time with targetTime
-                  return timeStr === targetTime;
-                }
-                return false;
-              });
+
+
+      if (time != "" && time2 === '') {
+        let filterDataByTime = (targetTime) => {
+          // Convert targetTime (e.g. "16:23") to comparable format (1623)
+          targetTime = parseInt(targetTime.replace(":", ""), 10);
+          console.log(targetTime, 'targetTimetargetTimetargetTime')
+
+          // Function to process STAMP and filter based on time
+          function processData(obj) {
+            let result = {};
+
+            for (const dateKey in obj) {
+              if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
+                result[dateKey] = processData(obj[dateKey]);
+              } else if (Array.isArray(obj[dateKey])) {
+                // Filter items based on the STAMP field
+                result[dateKey] = obj[dateKey].filter(item => {
+                  if (item.STAMP) {
+                    let stamp = item.STAMP;
+                    // Split by spaces and find the S value
+                    let parts = stamp.split(" ");
+
+                    // Find the part that contains 'S' (e.g., "1245S2")
+                    let sValue = parts.find(part => part.includes('S'));
+
+                    if (sValue) {
+                      // Extract time from S value (e.g., "1245S2" -> 1245)
+                      let timeStr = parseInt(sValue.replace(/S\d+/, ""), 10);
+
+                      // Compare the S time with targetTime
+                      return timeStr === targetTime;
+                    }
+                  }
+                  return false;
+                });
+              }
             }
+
+            return result;
           }
 
-          return result;
-        }
+          return processData(alldat);
+        };
 
-        return processData(alldat);
-      };
+        alldat = filterDataByTime(time)
+        console.log(alldat, 'two')
+      }
 
+      if (time != "" && time2 != '') {
+        let filterDataByTimeRange = (startTime, endTime) => {
+          startTime = parseInt(startTime.replace(":", ""), 10);
+          endTime = parseInt(endTime.replace(":", ""), 10);
 
-      alldat = filterDataByTime(time)
-      console.log(alldat, 'two')
+          function processData(obj) {
+            let result = {};
 
-    }
+            for (const dateKey in obj) {
+              if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
+                result[dateKey] = processData(obj[dateKey]);
+              } else if (Array.isArray(obj[dateKey])) {
+                // Filter items based on the STAMP field
+                result[dateKey] = obj[dateKey].filter(item => {
+                  if (item.STAMP) {
+                    let stamp = item.STAMP;
+                    // Split by spaces and find the S value
+                    let parts = stamp.split(" ");
 
-    if (time != "" && time2 != '') {
-      let filterDataByTimeRange = (startTime, endTime) => {
+                    // Find the part that contains 'S' (e.g., "1245S2")
+                    let sValue = parts.find(part => part.includes('S'));
 
-        startTime = parseInt(startTime.replace(":", ""), 10);   // Make sure seconds are zero for comparison
+                    if (sValue) {
+                      // Extract time from S value (e.g., "1245S2" -> 1245)
+                      let timeStr = parseInt(sValue.replace(/S\d+/, ""), 10);
 
-        endTime = parseInt(endTime.replace(":", ""), 10);
-
-        function processData(obj) {
-          let result = {};
-
-          for (const dateKey in obj) {
-            if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
-              result[dateKey] = processData(obj[dateKey]);
-            } else if (Array.isArray(obj[dateKey])) {
-              // Filter items based on the STAMP field
-              result[dateKey] = obj[dateKey].filter(item => {
-                if (item.STAMP) {
-                  let stamp = item.STAMP;
-                  let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
-                  timeStr = parseInt(timeStr.replace("R0", "")); // Remove "R0" 
-
-
-                  // Check if the time is within the range
-                  return timeStr >= startTime && timeStr <= endTime;
-                }
-                return false;
-              });
+                      // Check if the time is within the range
+                      return timeStr >= startTime && timeStr <= endTime;
+                    }
+                  }
+                  return false;
+                });
+              }
             }
+
+            return result;
           }
 
-          return result;
-        }
+          return processData(alldat);
+        };
 
-        return processData(alldat);
-      };
+        let alldddd = filterDataByTimeRange(time, time2)
+        alldat = alldddd
+        console.log(alldddd, 'three')
+      }
 
-      let alldddd = filterDataByTimeRange(time, time2)
 
-      alldat = alldddd
 
-      console.log(alldddd, 'three')
+
+
+
+
+
+    } else {
+      if (time != "" && time2 === '') {
+        let filterDataByTime = (targetTime) => {
+          // Convert targetTime (e.g. "16:23") to a comparable Date object 
+          targetTime = targetTime.replace(":", "");
+          console.log(targetTime, 'targetTimetargetTimetargetTime')
+          // Function to process STAMP and filter based on time
+          function processData(obj) {
+            let result = {};
+
+            for (const dateKey in obj) {
+              if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
+                result[dateKey] = processData(obj[dateKey]);
+              } else if (Array.isArray(obj[dateKey])) {
+                // Filter items based on the STAMP field
+                result[dateKey] = obj[dateKey].filter(item => {
+                  if (item.STAMP) {
+                    let stamp = item.STAMP;
+                    let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
+
+                    timeStr = timeStr.replace("R0", ""); // Remove "R0"
+
+                    // Compare the STAMP time with targetTime
+                    return timeStr === targetTime;
+                  }
+                  return false;
+                });
+              }
+            }
+
+            return result;
+          }
+
+          return processData(alldat);
+        };
+
+
+        alldat = filterDataByTime(time)
+        console.log(alldat, 'two')
+
+      }
+
+      if (time != "" && time2 != '') {
+        let filterDataByTimeRange = (startTime, endTime) => {
+
+          startTime = parseInt(startTime.replace(":", ""), 10);   // Make sure seconds are zero for comparison
+
+          endTime = parseInt(endTime.replace(":", ""), 10);
+
+          function processData(obj) {
+            let result = {};
+
+            for (const dateKey in obj) {
+              if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
+                result[dateKey] = processData(obj[dateKey]);
+              } else if (Array.isArray(obj[dateKey])) {
+                // Filter items based on the STAMP field
+                result[dateKey] = obj[dateKey].filter(item => {
+                  if (item.STAMP) {
+                    let stamp = item.STAMP;
+                    let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
+                    timeStr = parseInt(timeStr.replace("R0", "")); // Remove "R0" 
+
+
+                    // Check if the time is within the range
+                    return timeStr >= startTime && timeStr <= endTime;
+                  }
+                  return false;
+                });
+              }
+            }
+
+            return result;
+          }
+
+          return processData(alldat);
+        };
+
+        let alldddd = filterDataByTimeRange(time, time2)
+
+        alldat = alldddd
+
+        console.log(alldddd, 'three')
+      }
     }
+
+
 
 
     const hasAll = val21?.some(item => item.value === "All"); // returns true
@@ -2682,7 +2789,12 @@ let Dockets = () => {
 
 
 
+    console.log(timeLabels, 'timeCounts This is ')
+
+
+
     setOption(timeLabels)
+
     setOneBar(timeCounts)
 
     let ghione = processTimeDatafghtwo(alldat, generateTimeSlots(time, time2))
@@ -2835,7 +2947,7 @@ let Dockets = () => {
 
 
 
-  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, filteredDataoneess) {
+  function filterDataByDateonee(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype, filteredDataoneess , compare ) {
 
     cources = cources.filter(item => item.value !== "All");
     let alldat = basicall
@@ -2921,88 +3033,196 @@ let Dockets = () => {
 
     }
 
-    if (time != "" && time2 === '') {
-      let filterDataByTime = (targetTime) => {
-        // Convert targetTime (e.g. "16:23") to a comparable Date object 
-        targetTime = targetTime.replace(":", "");
-        console.log(targetTime, 'targetTimetargetTimetargetTime')
-        // Function to process STAMP and filter based on time
-        function processData(obj) {
-          let result = {};
+   if (meals === 4 || compare === 4 ) {
 
-          for (const dateKey in obj) {
-            if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
-              result[dateKey] = processData(obj[dateKey]);
-            } else if (Array.isArray(obj[dateKey])) {
-              // Filter items based on the STAMP field
-              result[dateKey] = obj[dateKey].filter(item => {
-                if (item.STAMP) {
-                  let stamp = item.STAMP;
-                  let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
 
-                  timeStr = timeStr.replace("R0", ""); // Remove "R0"
 
-                  // Compare the STAMP time with targetTime
-                  return timeStr === targetTime;
-                }
-                return false;
-              });
+
+
+      if (time != "" && time2 === '') {
+        let filterDataByTime = (targetTime) => {
+          // Convert targetTime (e.g. "16:23") to comparable format (1623)
+          targetTime = parseInt(targetTime.replace(":", ""), 10);
+          console.log(targetTime, 'targetTimetargetTimetargetTime')
+
+          // Function to process STAMP and filter based on time
+          function processData(obj) {
+            let result = {};
+
+            for (const dateKey in obj) {
+              if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
+                result[dateKey] = processData(obj[dateKey]);
+              } else if (Array.isArray(obj[dateKey])) {
+                // Filter items based on the STAMP field
+                result[dateKey] = obj[dateKey].filter(item => {
+                  if (item.STAMP) {
+                    let stamp = item.STAMP;
+                    // Split by spaces and find the S value
+                    let parts = stamp.split(" ");
+
+                    // Find the part that contains 'S' (e.g., "1245S2")
+                    let sValue = parts.find(part => part.includes('S'));
+
+                    if (sValue) {
+                      // Extract time from S value (e.g., "1245S2" -> 1245)
+                      let timeStr = parseInt(sValue.replace(/S\d+/, ""), 10);
+
+                      // Compare the S time with targetTime
+                      return timeStr === targetTime;
+                    }
+                  }
+                  return false;
+                });
+              }
             }
+
+            return result;
           }
 
-          return result;
-        }
+          return processData(alldat);
+        };
 
-        return processData(alldat);
-      };
+        alldat = filterDataByTime(time)
+        console.log(alldat, 'two')
+      }
 
+      if (time != "" && time2 != '') {
+        let filterDataByTimeRange = (startTime, endTime) => {
+          startTime = parseInt(startTime.replace(":", ""), 10);
+          endTime = parseInt(endTime.replace(":", ""), 10);
 
-      alldat = filterDataByTime(time)
-      console.log(alldat, 'two')
+          function processData(obj) {
+            let result = {};
 
-    }
+            for (const dateKey in obj) {
+              if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
+                result[dateKey] = processData(obj[dateKey]);
+              } else if (Array.isArray(obj[dateKey])) {
+                // Filter items based on the STAMP field
+                result[dateKey] = obj[dateKey].filter(item => {
+                  if (item.STAMP) {
+                    let stamp = item.STAMP;
+                    // Split by spaces and find the S value
+                    let parts = stamp.split(" ");
 
-    if (time != "" && time2 != '') {
-      let filterDataByTimeRange = (startTime, endTime) => {
+                    // Find the part that contains 'S' (e.g., "1245S2")
+                    let sValue = parts.find(part => part.includes('S'));
 
-        startTime = parseInt(startTime.replace(":", ""), 10);   // Make sure seconds are zero for comparison
+                    if (sValue) {
+                      // Extract time from S value (e.g., "1245S2" -> 1245)
+                      let timeStr = parseInt(sValue.replace(/S\d+/, ""), 10);
 
-        endTime = parseInt(endTime.replace(":", ""), 10);
-
-        function processData(obj) {
-          let result = {};
-
-          for (const dateKey in obj) {
-            if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
-              result[dateKey] = processData(obj[dateKey]);
-            } else if (Array.isArray(obj[dateKey])) {
-              // Filter items based on the STAMP field
-              result[dateKey] = obj[dateKey].filter(item => {
-                if (item.STAMP) {
-                  let stamp = item.STAMP;
-                  let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
-                  timeStr = parseInt(timeStr.replace("R0", "")); // Remove "R0" 
-
-
-                  // Check if the time is within the range
-                  return timeStr >= startTime && timeStr <= endTime;
-                }
-                return false;
-              });
+                      // Check if the time is within the range
+                      return timeStr >= startTime && timeStr <= endTime;
+                    }
+                  }
+                  return false;
+                });
+              }
             }
+
+            return result;
           }
 
-          return result;
-        }
+          return processData(alldat);
+        };
 
-        return processData(alldat);
-      };
+        let alldddd = filterDataByTimeRange(time, time2)
+        alldat = alldddd
+        console.log(alldddd, 'three')
+      }
 
-      let alldddd = filterDataByTimeRange(time, time2)
 
-      alldat = alldddd
 
-      console.log(alldddd, 'three')
+
+
+
+
+
+    } else {
+      if (time != "" && time2 === '') {
+        let filterDataByTime = (targetTime) => {
+          // Convert targetTime (e.g. "16:23") to a comparable Date object 
+          targetTime = targetTime.replace(":", "");
+          console.log(targetTime, 'targetTimetargetTimetargetTime')
+          // Function to process STAMP and filter based on time
+          function processData(obj) {
+            let result = {};
+
+            for (const dateKey in obj) {
+              if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
+                result[dateKey] = processData(obj[dateKey]);
+              } else if (Array.isArray(obj[dateKey])) {
+                // Filter items based on the STAMP field
+                result[dateKey] = obj[dateKey].filter(item => {
+                  if (item.STAMP) {
+                    let stamp = item.STAMP;
+                    let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
+
+                    timeStr = timeStr.replace("R0", ""); // Remove "R0"
+
+                    // Compare the STAMP time with targetTime
+                    return timeStr === targetTime;
+                  }
+                  return false;
+                });
+              }
+            }
+
+            return result;
+          }
+
+          return processData(alldat);
+        };
+
+
+        alldat = filterDataByTime(time)
+        console.log(alldat, 'two')
+
+      }
+
+      if (time != "" && time2 != '') {
+        let filterDataByTimeRange = (startTime, endTime) => {
+
+          startTime = parseInt(startTime.replace(":", ""), 10);   // Make sure seconds are zero for comparison
+
+          endTime = parseInt(endTime.replace(":", ""), 10);
+
+          function processData(obj) {
+            let result = {};
+
+            for (const dateKey in obj) {
+              if (typeof obj[dateKey] === 'object' && !Array.isArray(obj[dateKey])) {
+                result[dateKey] = processData(obj[dateKey]);
+              } else if (Array.isArray(obj[dateKey])) {
+                // Filter items based on the STAMP field
+                result[dateKey] = obj[dateKey].filter(item => {
+                  if (item.STAMP) {
+                    let stamp = item.STAMP;
+                    let timeStr = stamp.split(" ")[1]; // Get the second part (e.g., "1121R0")
+                    timeStr = parseInt(timeStr.replace("R0", "")); // Remove "R0" 
+
+
+                    // Check if the time is within the range
+                    return timeStr >= startTime && timeStr <= endTime;
+                  }
+                  return false;
+                });
+              }
+            }
+
+            return result;
+          }
+
+          return processData(alldat);
+        };
+
+        let alldddd = filterDataByTimeRange(time, time2)
+
+        alldat = alldddd
+
+        console.log(alldddd, 'three')
+      }
     }
 
 
@@ -3563,6 +3783,7 @@ let Dockets = () => {
 
 
 
+    console.log(timeLabels, 'timecounts THIS IS COUNT')
 
     setTwobar(timeCounts)
 
@@ -5844,6 +6065,13 @@ let Dockets = () => {
                         <div className='col-lg-6 col-md-12 mt-lg-0 mt-md-4 mb-4 d-flex justify-content-lg-start justify-content-center' style={{ paddingLeft: `${padd}px`, paddingRight: paddOpp }} >
                           <div class="box" style={{ maxWidth: `${boxWidth}px`, height: `${Height}px` }} onClick={() => {
                             setMeals(4)
+
+ 
+                              filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , '', 4)
+                            filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions , '', 4)
+                       
+
+
                           }}>
                             <div class="boxs" style={{ cursor: 'pointer' }}>
                               <div className="d-flex justify-content-between" >
