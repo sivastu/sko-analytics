@@ -3352,6 +3352,8 @@ if(alltype.length === 0){
     }
 
     if (intwo?.length > 2 && inone?.length > 2) {
+
+      console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB')
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
@@ -3386,31 +3388,32 @@ if(alltype.length === 0){
       }
 
       const ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+      const ranges2 = [[Number(splittwo[0]), Number(splittwo[1])]];
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
-      let twelvesone = filterDataByTableRanges(alldat, rangesone)
+      let twelvesone = filterDataByTableRanges(alldat, ranges2)
+
+      console.log(twelves, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+      console.log(twelvesone, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+
 
       function deepMerge(obj1, obj2) {
-        const result = { ...obj1 };
-
-        Object.keys(obj2).forEach(key => {
-          if (obj1[key] && typeof obj1[key] === "object" && typeof obj2[key] === "object") {
-            result[key] = deepMerge(obj1[key], obj2[key]);
-          } else {
-            result[key] = obj2[key];
-          }
-        });
-
-        return result;
+      const result = { ...obj1 };
+      
+      for (const key in obj2) {
+        if (obj2[key] && typeof obj2[key] === 'object' && !Array.isArray(obj2[key])) {
+          result[key] = result[key] ? deepMerge(result[key], obj2[key]) : obj2[key];
+        } else if (Array.isArray(obj2[key]) && Array.isArray(result[key])) {
+          result[key] = [...result[key], ...obj2[key]];
+        } else {
+          result[key] = obj2[key];
+        }
       }
-
-      // let findddddataa = deepMerge(twelves, twelvesone)
-      alldat = { ...twelves, ...twelvesone }
-
-      console.log(alldat, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
-
+      
+      return result;
+        }
 
     }
 
@@ -4138,7 +4141,9 @@ if(alltype.length === 0){
       }
     }
 
-    if (intwo?.length > 2 && inone?.length > 2) {
+     if (intwo?.length > 2 && inone?.length > 2) {
+
+      console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB')
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
@@ -4173,31 +4178,32 @@ if(alltype.length === 0){
       }
 
       const ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+      const ranges2 = [[Number(splittwo[0]), Number(splittwo[1])]];
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
-      let twelvesone = filterDataByTableRanges(alldat, rangesone)
+      let twelvesone = filterDataByTableRanges(alldat, ranges2)
+
+      console.log(twelves, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+      console.log(twelvesone, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+
 
       function deepMerge(obj1, obj2) {
-        const result = { ...obj1 };
-
-        Object.keys(obj2).forEach(key => {
-          if (obj1[key] && typeof obj1[key] === "object" && typeof obj2[key] === "object") {
-            result[key] = deepMerge(obj1[key], obj2[key]);
-          } else {
-            result[key] = obj2[key];
-          }
-        });
-
-        return result;
+      const result = { ...obj1 };
+      
+      for (const key in obj2) {
+        if (obj2[key] && typeof obj2[key] === 'object' && !Array.isArray(obj2[key])) {
+          result[key] = result[key] ? deepMerge(result[key], obj2[key]) : obj2[key];
+        } else if (Array.isArray(obj2[key]) && Array.isArray(result[key])) {
+          result[key] = [...result[key], ...obj2[key]];
+        } else {
+          result[key] = obj2[key];
+        }
       }
-
-      // let findddddataa = deepMerge(twelves, twelvesone)
-      alldat = { ...twelves, ...twelvesone }
-
-      console.log(alldat, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
-
+      
+      return result;
+        }
 
     }
 

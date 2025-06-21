@@ -140,6 +140,15 @@ let Dockets = () => {
   let [cval2, setcval2] = useState()
 
 
+  let [lastcorrectvalue, setLastcorrectvalue] = useState()
+  let [lastcorrectvalue2, setLastcorrectvalue2 ] = useState()
+
+
+  let [lastcorrectvalue3, setLastcorrectvalue3] = useState()
+  let [lastcorrectvalue24, setLastcorrectvalue24 ] = useState()
+
+
+
 
   const [menuIsOpen, setMenuIsOpen] = useState(false);
 
@@ -1512,7 +1521,7 @@ let Dockets = () => {
 
 
   const handleChangefine = (selected) => {
-   
+
     setSetservedatare(selected.value)
     if (editall.length === 0) {
 
@@ -1633,7 +1642,7 @@ let Dockets = () => {
     setOldhub(selectedss)
 
     if (hasAllValue === false && hasAllValueold === true) {
- 
+
 
       setHubb([])
 
@@ -1646,7 +1655,7 @@ let Dockets = () => {
       return
     }
 
-    if (hasAllValue === true) { 
+    if (hasAllValue === true) {
 
       setHubb(basicone)
 
@@ -1656,7 +1665,7 @@ let Dockets = () => {
 
       filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, basicone, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions)
 
-    } else { 
+    } else {
 
       setHubb(selectedss)
 
@@ -1973,7 +1982,7 @@ let Dockets = () => {
 
 
     cources = cources.filter(item => item.value !== "All");
- 
+
     let alldat = basicall
     if (basicall === undefined) {
       alldat = filteredDataoneess
@@ -2042,7 +2051,7 @@ let Dockets = () => {
       console.log(alldat, 'one')
 
     }
- 
+
     if (meals === 4 || compare === 4) {
 
 
@@ -2502,6 +2511,8 @@ let Dockets = () => {
     }
 
     if (inone?.length > 2 && intwo === undefined || intwo === '') {
+
+      console.log('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF')
       let splitone = inone.split('-')
 
 
@@ -2555,6 +2566,8 @@ let Dockets = () => {
     }
 
     if (intwo?.length > 2 && inone === undefined || intwo === '') {
+
+      console.log('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD')
       let splitone = intwo.split('-')
 
 
@@ -2608,6 +2621,8 @@ let Dockets = () => {
     }
 
     if (intwo?.length > 2 && inone?.length > 2) {
+
+      console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB')
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
@@ -2642,28 +2657,40 @@ let Dockets = () => {
       }
 
       const ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+      const ranges2 = [[Number(splittwo[0]), Number(splittwo[1])]];
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
-      let twelvesone = filterDataByTableRanges(alldat, rangesone)
+      let twelvesone = filterDataByTableRanges(alldat, ranges2)
+
+      console.log(twelves, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+      console.log(twelvesone, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+
 
       function deepMerge(obj1, obj2) {
-        const result = { ...obj1 };
-
-        Object.keys(obj2).forEach(key => {
-          if (obj1[key] && typeof obj1[key] === "object" && typeof obj2[key] === "object") {
-            result[key] = deepMerge(obj1[key], obj2[key]);
-          } else {
-            result[key] = obj2[key];
-          }
-        });
-
-        return result;
+      const result = { ...obj1 };
+      
+      for (const key in obj2) {
+        if (obj2[key] && typeof obj2[key] === 'object' && !Array.isArray(obj2[key])) {
+          result[key] = result[key] ? deepMerge(result[key], obj2[key]) : obj2[key];
+        } else if (Array.isArray(obj2[key]) && Array.isArray(result[key])) {
+          result[key] = [...result[key], ...obj2[key]];
+        } else {
+          result[key] = obj2[key];
+        }
       }
+      
+      return result;
+    }
+
+
+
+    alldat = deepMerge(twelves, twelvesone);
+
 
       // let findddddataa = deepMerge(twelves, twelvesone)
-      alldat = { ...twelves, ...twelvesone }
+      // alldat = { ...twelves, ...twelvesone }
 
       console.log(alldat, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
 
@@ -2766,48 +2793,167 @@ let Dockets = () => {
       }
 
       return result;
+    } 
+    callfordataone(filteredData, alltype, cources)
+    // let ghi = processTimeData(alldat)
+
+
+
+
+
+
+
+
+    // Process first dataset
+    const timeSlots1 = generateTimeSlots(time, time2);
+    const timeSlots2 = generateTimeSlots(threetime, fourtime);
+
+    const processedData1 = processTimeDatafgh(alldat, timeSlots1);
+    const processedData2 = processTimeDatafgh(alldat, timeSlots2);
+
+    // Merge and deduplicate data based on time property
+    const mergedData1 = mergeTimeData(processedData1, processedData2);
+
+    // Custom sort function to handle time format properly
+    const sortedData1 = mergedData1.sort((a, b) => {
+        // Convert time strings to comparable format
+        const timeA = parseFloat(a.time.replace('.', ''));
+        const timeB = parseFloat(b.time.replace('.', ''));
+        return timeA - timeB;
+    });
+
+    const sortedDatareal = processedData1.sort((a, b) => {
+        // Convert time strings to comparable format
+        const timeA = parseFloat(a.time.replace('.', ''));
+        const timeB = parseFloat(b.time.replace('.', ''));
+        return timeA - timeB;
+    });
+
+    function compareTimesAndCounts(one, two) {
+        // Handle edge cases - if one or two is empty/undefined
+        if (!one || !Array.isArray(one) || one.length === 0) {
+          return two ? two.map(() => 0) : [];
+        }
+        
+        if (!two || !Array.isArray(two) || two.length === 0) {
+          return [];
+        }
+        
+        // Create a map for quick lookup of time -> count
+        const timeCountMap = {};
+        one.forEach(item => {
+          // Also check if item exists and has required properties
+          if (item && item.time !== undefined && item.count !== undefined) {
+            timeCountMap[item.time] = item.count;
+          }
+        });
+        
+        // Map through two array and get count or 0
+        return two.map(time => timeCountMap[time] || 0);
+      }
+          
+    setLastcorrectvalue(sortedDatareal)
+
+    //lastcorrectvalue2
+
+    const timeLabels1 = sortedData1.map(entry => entry.time);
+
+    let fivvkk = compareTimesAndCounts(sortedDatareal , timeLabels1 )
+    let fivvkk2 = compareTimesAndCounts(lastcorrectvalue2 , timeLabels1 )
+ 
+
+     
+    // const timeCounts1 = sortedData1.map(entry => entry.count);
+ 
+
+    setOption(timeLabels1);
+    setOneBar(fivvkk);
+    setTwobar(fivvkk2);
+
+
+
+
+
+    // Process second dataset
+    const processedDataTwo1 = processTimeDatafghtwo(alldat, timeSlots1);
+    // const processedDataTwo2 = processTimeDatafghtwo(alldat, timeSlots2);
+
+    // console.log(processedDataTwo1, 'First processed data');
+
+    // Merge and deduplicate second dataset
+    // const mergedData2 = mergeTimeData(processedDataTwo1, processedDataTwo2);
+
+    setLastcorrectvalue3(processedDataTwo1)
+
+
+
+    // Apply same sorting to second dataset
+    const sortedData2 = processedDataTwo1.sort((a, b) => {
+        const timeA = parseFloat(a.time.replace('.', ''));
+        const timeB = parseFloat(b.time.replace('.', ''));
+        return timeA - timeB;
+    });
+
+    let fivvkk3 = compareTimesAndCounts(sortedData2 , timeLabels1 )
+    let fivvkk24 = compareTimesAndCounts(lastcorrectvalue24 , timeLabels1 )
+
+
+
+    // Extract labels and counts for second dataset
+    // const timeLabels2 = sortedData2.map(entry => entry.time);
+    // const timeCounts2 = sortedData2.map(entry => entry.count);
+
+    setOptionone(timeLabels1);
+
+
+    setOneBarone(fivvkk3);
+    setTwobarone(fivvkk24)
+
+
+
+
+
+
+
+    // Helper function to merge time data and handle duplicates properly
+    function mergeTimeData(data1, data2) {
+        const timeMap = new Map();
+        
+        // Add data1 entries
+        data1.forEach(entry => {
+            timeMap.set(entry.time, entry);
+        });
+        
+        // Add data2 entries, handling duplicates
+        data2.forEach(entry => {
+            if (timeMap.has(entry.time)) {
+                // If time already exists, sum the counts
+                const existing = timeMap.get(entry.time);
+                timeMap.set(entry.time, {
+                    ...existing,
+                    count: existing.count + entry.count
+                });
+            } else {
+                timeMap.set(entry.time, entry);
+            }
+        });
+        
+        return Array.from(timeMap.values());
     }
 
 
 
 
-    callfordataone(filteredData, alltype, cources)
-    // let ghi = processTimeData(alldat)
-
-    let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
-    let ghis = processTimeDatafgh(alldat, generateTimeSlots(threetime, fourtime))
-
-    const merged1 = [...new Set([...ghi, ...ghis])];
-
-    let kidshort = merged1.sort((a, b) => a.time.localeCompare(b.time));
-    // Extract values into separate arrays
-    // let timeLabels = kidshort.map(entry => entry.time);
-    let timeLabels = kidshort.map(entry => entry.time);
-    let timeCounts = kidshort.map(entry => entry.count); 
-
-    console.log(merged1, 'timeCounts This is ') 
-
-    setOption(timeLabels)
-
-    setOneBar(timeCounts)
-
-    let ghione = processTimeDatafghtwo(alldat, generateTimeSlots(time, time2))
-    let ghisddd = processTimeDatafghtwo(alldat, generateTimeSlots(threetime, fourtime))
-    const merged12 = [...new Set([...ghione, ...ghisddd])];
-
-    let kidshortone = merged12.sort((a, b) => a.time.localeCompare(b.time));
-
-    // Extract values into separate arrays
-    let timeLabelsone = kidshortone.map(entry => entry.time);
-    let timeCountsone = kidshortone.map(entry => entry.count);
-
-    
 
 
-    setOptionone(timeLabelsone)
-    setOneBarone(timeCountsone)
+
 
     handleChangefine(selectedOptionsfine)
+
+    // if(meals === 4 || compare === 4 || meals === 5 ) {
+    //     filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, inputvaluetwo, selectedhubOptions, '' , 4 )
+
+    // }
 
   }
 
@@ -2914,12 +3060,12 @@ let Dockets = () => {
               const sTime = extractTime(order.STAMP, 'S');
 
               if (r0Time && sTime) {
-                const diff = getMinuteDiff(r0Time, sTime); 
+                const diff = getMinuteDiff(r0Time, sTime);
 
                 for (const slot of timeSlots) {
                   if (isInRange(sTime, slot)) {
                     timeSums[slot] += diff;
-                    timeCounts[slot] += 1; 
+                    timeCounts[slot] += 1;
                     break;
                   }
                 }
@@ -2932,7 +3078,7 @@ let Dockets = () => {
 
     return timeSlots.map(slot => {
       const average = timeCounts[slot] > 0 ? timeSums[slot] / timeCounts[slot] : 0;
-      const rounded = Math.round(average); 
+      const rounded = Math.round(average);
 
       return {
         time: slot,
@@ -3595,7 +3741,17 @@ let Dockets = () => {
       }
     }
 
+
+
+
+
+
+
+
+
     if (intwo?.length > 2 && inone?.length > 2) {
+
+      console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB')
       let splitone = inone.split('-')
 
       let splittwo = intwo.split('-')
@@ -3630,33 +3786,40 @@ let Dockets = () => {
       }
 
       const ranges = [[Number(splitone[0]), Number(splitone[1])]];
-      const rangesone = [[Number(splittwo[0]), Number(splittwo[1])]];
+
+      const ranges2 = [[Number(splittwo[0]), Number(splittwo[1])]];
 
       let twelves = filterDataByTableRanges(alldat, ranges)
 
-      let twelvesone = filterDataByTableRanges(alldat, rangesone)
+      let twelvesone = filterDataByTableRanges(alldat, ranges2)
+
+      console.log(twelves, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+      console.log(twelvesone, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+
 
       function deepMerge(obj1, obj2) {
-        const result = { ...obj1 };
-
-        Object.keys(obj2).forEach(key => {
-          if (obj1[key] && typeof obj1[key] === "object" && typeof obj2[key] === "object") {
-            result[key] = deepMerge(obj1[key], obj2[key]);
-          } else {
-            result[key] = obj2[key];
-          }
-        });
-
-        return result;
+      const result = { ...obj1 };
+      
+      for (const key in obj2) {
+        if (obj2[key] && typeof obj2[key] === 'object' && !Array.isArray(obj2[key])) {
+          result[key] = result[key] ? deepMerge(result[key], obj2[key]) : obj2[key];
+        } else if (Array.isArray(obj2[key]) && Array.isArray(result[key])) {
+          result[key] = [...result[key], ...obj2[key]];
+        } else {
+          result[key] = obj2[key];
+        }
       }
-
-      // let findddddataa = deepMerge(twelves, twelvesone)
-      alldat = { ...twelves, ...twelvesone }
-
-      console.log(alldat, 'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
-
+      
+      return result;
+        }
 
     }
+
+
+
+
+
+    
 
     if (alltype === undefined || alltype.length === 0) {
 
@@ -3776,46 +3939,162 @@ let Dockets = () => {
       return result;
     }
 
-    let ghi = processTimeDatafgh(alldat, generateTimeSlots(time, time2))
 
-    let ghis = processTimeDatafgh(alldat, generateTimeSlots(onetime, twotime))
 
-    const merged1 = [...new Set([...ghi, ...ghis])];
 
-    let kidshort = merged1.sort((a, b) => a.time.localeCompare(b.time));
 
-    // Extract values into separate arrays
-    let timeLabels = kidshort.map(entry => entry.time);
-    let timeCounts = kidshort.map(entry => entry.count);
+
+        // Generate time slots
+        const timeSlots1 = generateTimeSlots(time, time2);
+        const timeSlots2 = generateTimeSlots(onetime, twotime);
+
+        // Process first dataset using processTimeDatafgh
+        const processedData1 = processTimeDatafgh(alldat, timeSlots1);
+        const processedData2 = processTimeDatafgh(alldat, timeSlots2);
+
+        // Merge and deduplicate data based on time property
+        const mergedData1 = mergeTimeData(processedData1, processedData2);
+
+        // Custom sort function to handle time format properly
+        const sortedData1 = mergedData1.sort((a, b) => {
+            // Convert time strings to comparable format
+            const timeA = parseFloat(a.time.replace('.', ''));
+            const timeB = parseFloat(b.time.replace('.', ''));
+            return timeA - timeB;
+        });
+
+
+      
+
+         const sortedDatafinal = processedData1.sort((a, b) => {
+            // Convert time strings to comparable format
+            const timeA = parseFloat(a.time.replace('.', ''));
+            const timeB = parseFloat(b.time.replace('.', ''));
+            return timeA - timeB;
+        });
+
+        
+    function compareTimesAndCounts(one, two) {
+        // Handle edge cases - if one or two is empty/undefined
+        if (!one || !Array.isArray(one) || one.length === 0) {
+          return two ? two.map(() => 0) : [];
+        }
+        
+        if (!two || !Array.isArray(two) || two.length === 0) {
+          return [];
+        }
+        
+        // Create a map for quick lookup of time -> count
+        const timeCountMap = {};
+        one.forEach(item => {
+          // Also check if item exists and has required properties
+          if (item && item.time !== undefined && item.count !== undefined) {
+            timeCountMap[item.time] = item.count;
+          }
+        });
+        
+        // Map through two array and get count or 0
+        return two.map(time => timeCountMap[time] || 0);
+      }
+
+       
+
+        setLastcorrectvalue2(sortedDatafinal)
+
+
+        const timeLabels1 = sortedData1.map(entry => entry.time);
+
+      let fivvkk = compareTimesAndCounts(sortedDatafinal , timeLabels1 )
+      let fivvkk2 = compareTimesAndCounts(lastcorrectvalue , timeLabels1 )
+
+        // Extract labels and counts for first dataset
+        // const timeLabels = sortedData1.map(entry => entry.time);
+        // const timeCounts = sortedData1.map(entry => entry.count);
+
+        // console.log(timeLabels, 'Sorted Time Labels');
+
+        setOption(timeLabels1);
+        setOneBar(fivvkk2);
+        setTwobar(fivvkk);
+
+        setOptionone(timeLabels1);
+
+
+
+
+
+        //setLastcorrectvalue24
+
+
+        
+
+        // setOption(timeLabels1);
+        // setMinperday(timeLabels);
+        // setTwobar(timeCounts);
+
+        // // Process second dataset using processTimeDatafghtwo
+        const processedDataTwo1 = processTimeDatafghtwo(alldat, timeSlots1);
+        // const processedDataTwo2 = processTimeDatafghtwo(alldat, timeSlots2);
+
+        // // Merge and deduplicate second dataset
+        // const mergedData2 = mergeTimeData(processedDataTwo1, processedDataTwo2);
+
+        // // Apply same sorting to second dataset
+        const sortedData2 = processedDataTwo1.sort((a, b) => {
+            const timeA = parseFloat(a.time.replace('.', ''));
+            const timeB = parseFloat(b.time.replace('.', ''));
+            return timeA - timeB;
+        });
+
+        setLastcorrectvalue24(sortedData2)
+
+        let fivvkk3 = compareTimesAndCounts(sortedData2 , timeLabels1 )
+        let fivvkk24 = compareTimesAndCounts(lastcorrectvalue3 , timeLabels1 )
+
+
+
+
+        // // Extract labels and counts for second dataset
+        // const timeLabelstwo = sortedData2.map(entry => entry.time);
+        // const timeCountstwo = sortedData2.map(entry => entry.count);
+
+        setOneBarone(fivvkk24);
+        setTwobarone(fivvkk3);
+
+
+
+
+
+        function mergeTimeData(data1, data2) {
+            const timeMap = new Map();
+            
+            // Add data1 entries
+            data1.forEach(entry => {
+                timeMap.set(entry.time, entry);
+            });
+            
+            // Add data2 entries, handling duplicates
+            data2.forEach(entry => {
+                if (timeMap.has(entry.time)) {
+                    // If time already exists, sum the counts
+                    const existing = timeMap.get(entry.time);
+                    timeMap.set(entry.time, {
+                        ...existing,
+                        count: existing.count + entry.count
+                    });
+                } else {
+                    timeMap.set(entry.time, entry);
+                }
+            });
+            
+            return Array.from(timeMap.values());
+        }
 
 
 
     
 
-        console.log(timeLabels, 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
 
-    setOption(timeLabels)
-
-    setMinperday(timeLabels)
-    setTwobar(timeCounts)
-
-    let ghitwo = processTimeDatafghtwo(alldat, generateTimeSlots(time, time2))
-
-    let ghisthree = processTimeDatafghtwo(alldat, generateTimeSlots(onetime, twotime))
-
-    const merged12 = [...new Set([...ghitwo, ...ghisthree])];
-
-
-    let kidshorttwo = merged12.sort((a, b) => a.time.localeCompare(b.time));
-
-    // Extract values into separate arrays
-    let timeLabelstwo = kidshorttwo.map(entry => entry.time);
-    let timeCountstwo = kidshorttwo.map(entry => entry.count);
-
-    setOptionone(timeLabelstwo)
-
-
-    setTwobarone(timeCountstwo)
 
     handleChangefine(selectedOptionsfine)
   }
