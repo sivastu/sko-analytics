@@ -4105,15 +4105,12 @@ let Dockets = () => {
     handleChangefine(selectedOptionsfine)
   }
 
-
-  function timeDifference(startTime, endTime) {
-
+function timeDifference(startTime, endTime) {
     console.log(endTime)
 
     if (!endTime) {
       return
     }
-
 
     // Extract the "S" event using regex
     const match = endTime?.match(/\b(\d{4})S\d\b/);
@@ -4121,10 +4118,6 @@ let Dockets = () => {
     if (match) {
       const time = match[1]; // Extract the 4-digit time (e.g., "1500")
       const formattedTime = `${time.slice(0, 2)}:${time.slice(2)}`; // Convert to HH:mm
-
-      // console.log(formattedTime); // Output: "15:00"
-
-
 
       const [startHour, startMinute] = startTime.split(":").map(Number);
       const [endHour, endMinute] = formattedTime.split(":").map(Number);
@@ -4137,11 +4130,12 @@ let Dockets = () => {
         diffHours -= 1;
       }
 
-      return `${diffHours}:${diffMinutes.toString().padStart(2, "0")}`;
+      // Convert total time difference to minutes
+      const totalMinutes = (diffHours * 60) + diffMinutes;
+      
+      return totalMinutes;
     }
-
-
-  }
+}
 
   function timeDifferencebug(startTime, endTime) {
 
