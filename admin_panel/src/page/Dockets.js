@@ -4133,7 +4133,7 @@ function timeDifference(startTime, endTime) {
       // Convert total time difference to minutes
       const totalMinutes = (diffHours * 60) + diffMinutes;
       
-      return totalMinutes;
+      return `${totalMinutes} min`;
     }
 }
 
