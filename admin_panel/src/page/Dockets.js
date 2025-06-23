@@ -6049,8 +6049,13 @@ let Dockets = () => {
                     <div className="switch-container">
                       <input
                         type="checkbox"
-                        checked={Cources}
+                        // checked={Cources}
+
+                        checked={false}
+
                         onChange={(e) => {
+
+                          return
                           setCources(e.target.checked)
                           if (e.target.checked === false) {
                             setSelectedCources([])
