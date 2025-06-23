@@ -5972,8 +5972,14 @@ let Dockets = () => {
                     <div className="switch-container">
                       <input
                         type="checkbox"
-                        checked={Hubradio}
+                        // checked={Hubradio}
+                        checked={false}
                         onChange={(e) => {
+
+                          return 
+
+
+
                           setHubradio(e.target.checked)
                           if (e.target.checked === false) {
                             setSelectedhubOptions([])
@@ -6115,7 +6121,10 @@ let Dockets = () => {
                   <p style={{ color: '#707070', fontWeight: '700', fontSize: 15, marginBottom: 2 }}>Filter by tables/takeaways</p>
                   <div className="custom-inputoness d-flex justify-content-between gap-1" style={{ width: '100%', paddingBottom: 2, paddingTop: 2 }}>
                     <input
+                    
                       onChange={(e) => {
+
+                        return
                         setInputvalue(e.target.value)
                         filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
                         filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, e.target.value, inputvaluetwo, selectedhubOptions)
@@ -6124,9 +6133,17 @@ let Dockets = () => {
                       placeholder="0-9999"
                       style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', borderRight: '1px solid #707070', textAlign: 'center', paddingTop: 9, paddingBottom: 9 }}
                       type="text"
+
+
+
+                      disabled 
                     />
                     <input
                       onChange={(e) => {
+
+                        return
+
+
                         setInputvaluetwo(e.target.value)
                         filterDataByDate(dateRange, onetime, twotime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
                         filterDataByDateonee(dateRangetwo, threetime, fourtime, selectedOptions, hubb, selectedCources, selectedTakeaway, inputvalue, e.target.value, selectedhubOptions)
@@ -6135,6 +6152,10 @@ let Dockets = () => {
                       placeholder="9999-9999"
                       style={{ width: '50%', border: 'unset', fontSize: 15, color: '#1A1A1B', textAlign: 'center', paddingTop: 9, paddingBottom: 9 }}
                       type="text"
+
+
+
+                      disabled 
                     />
                   </div>
 
@@ -6146,8 +6167,13 @@ let Dockets = () => {
                     <div className="switch-container">
                       <input
                         type="checkbox"
-                        checked={takeaway}
+                        // checked={takeaway}
+                        checked={false}
+
+
                         onChange={(e) => {
+
+                          return
                           setTakeaway(e.target.checked)
                           if (e.target.checked === false) {
                             setSelectedTakeaway([])
