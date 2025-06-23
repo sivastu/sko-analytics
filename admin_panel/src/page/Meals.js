@@ -1033,10 +1033,10 @@ let Meals = () => {
 
    
 
-  let meals_Custom_range_with0 = await localStorage.getItem('meals_start_with_time');
-  let meals_Custom_range_with1 = await localStorage.getItem('meals_start_with_time_1');
-  let meals_Custom_range_with2 = await localStorage.getItem('meals_start_with_time_2');
-  let meals_Custom_range_with3 = await localStorage.getItem('meals_start_with_time_3');
+  let meals_Custom_range_with0 = await sessionStorage.getItem('meals_start_with_time');
+  let meals_Custom_range_with1 = await sessionStorage.getItem('meals_start_with_time_1');
+  let meals_Custom_range_with2 = await sessionStorage.getItem('meals_start_with_time_2');
+  let meals_Custom_range_with3 = await sessionStorage.getItem('meals_start_with_time_3');
 
 
 
@@ -1068,9 +1068,9 @@ let Meals = () => {
     const yesterday = [getFormattedDate(2), getFormattedDate(2)];
     const eightDaysBefore = [getFormattedDate(9), getFormattedDate(9)];
 
-    let meals_Custom_range_with =await localStorage.getItem('meals_start_range');
+    let meals_Custom_range_with =await sessionStorage.getItem('meals_start_range');
 
-    let meals_Custom_range_range =  await localStorage.getItem('meals_start_with');
+    let meals_Custom_range_range =  await sessionStorage.getItem('meals_start_with');
 
 
     if(meals_Custom_range_with != null && meals_Custom_range_range != null  ){
@@ -2327,11 +2327,11 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
   };
 
   //times
-const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_with_time') || "");
+const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start_with_time') || "00:00");
 
-  let [twotime, setTwotime] = useState(() => localStorage.getItem('meals_start_with_time_1') || "");
-  let [threetime, setThreetime] =useState(() => localStorage.getItem('meals_start_with_time_2') || "");
-  let [fourtime, setFourtime] = useState(() => localStorage.getItem('meals_start_with_time_3') || "");
+  let [twotime, setTwotime] = useState(() => sessionStorage.getItem('meals_start_with_time_1') || "00:00");
+  let [threetime, setThreetime] =useState(() => sessionStorage.getItem('meals_start_with_time_2') || "00:00");
+  let [fourtime, setFourtime] = useState(() => sessionStorage.getItem('meals_start_with_time_3') || "00:00");
 
   //input value
   let [inputvalue, setInputvalue] = useState()
@@ -5187,7 +5187,7 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
                       console.log(update, 'update')
                       setDateRange(update)
 
-                      localStorage.setItem('meals_start_with', JSON.stringify(update))
+                      sessionStorage.setItem('meals_start_with', JSON.stringify(update))
 
                       if (update[1] === null || update[1] === "null") {
 
@@ -5221,7 +5221,7 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
  
                       const value = e.target.value;
                           setOnetime(value);
-                          localStorage.setItem('meals_start_with_time', value);
+                          sessionStorage.setItem('meals_start_with_time', value);
                         if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
                           return
                         }
@@ -5236,7 +5236,7 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
                       onChange={(e) => {
                          const value = e.target.value;
                         setTwotime(value)
-                        localStorage.setItem('meals_start_with_time_1', value)
+                        sessionStorage.setItem('meals_start_with_time_1', value)
                         if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
                           return
                         }
@@ -5262,7 +5262,7 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
                       console.log(update, 'update neww ffffffffffffffffffffffffffffffffffffffffffffffffffff')
                       
 
-                      localStorage.setItem('meals_start_range', JSON.stringify(update))
+                      sessionStorage.setItem('meals_start_range', JSON.stringify(update))
 
 
                       setDateRangetwo(update)
@@ -5301,7 +5301,7 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
                       onChange={(e) => {
                         const value = e.target.value;
                         setThreetime(value)
-                        localStorage.setItem('meals_start_with_time_2', value)
+                        sessionStorage.setItem('meals_start_with_time_2', value)
                         if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
                           return
                         }
@@ -5316,7 +5316,7 @@ const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_w
                       onChange={(e) => {
                         const value = e.target.value;
                         setFourtime(value)
-                        localStorage.setItem('meals_start_with_time_3',value)
+                        sessionStorage.setItem('meals_start_with_time_3',value)
                         if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
                           return
                         }

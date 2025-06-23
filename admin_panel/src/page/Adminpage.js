@@ -388,6 +388,12 @@ useEffect(()=>{
           <button
             onClick={() => {
               sessionStorage.removeItem('data')
+
+              sessionStorage.removeItem('meals_start_with_time')
+              sessionStorage.removeItem('meals_start_with_time_1')
+              sessionStorage.removeItem('meals_start_with_time_2')
+              sessionStorage.removeItem('meals_start_with_time_3')
+
               dispatch({ type: "RESET_DATA" }); 
               navigate('/')
             }}

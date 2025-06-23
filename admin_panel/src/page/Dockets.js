@@ -1107,10 +1107,10 @@ let Dockets = () => {
 
 
 
-    let meals_Custom_range_with0 = await localStorage.getItem('meals_start_with_time');
-    let meals_Custom_range_with1 = await localStorage.getItem('meals_start_with_time_1');
-    let meals_Custom_range_with2 = await localStorage.getItem('meals_start_with_time_2');
-    let meals_Custom_range_with3 = await localStorage.getItem('meals_start_with_time_3');
+    let meals_Custom_range_with0 = await sessionStorage.getItem('meals_start_with_time');
+    let meals_Custom_range_with1 = await sessionStorage.getItem('meals_start_with_time_1');
+    let meals_Custom_range_with2 = await sessionStorage.getItem('meals_start_with_time_2');
+    let meals_Custom_range_with3 = await sessionStorage.getItem('meals_start_with_time_3');
 
 
 
@@ -1143,19 +1143,22 @@ let Dockets = () => {
 
 
     // alldat = filteredDataonee
-    const yesterday = [getFormattedDate(1), getFormattedDate(1)];
+    const yesterday = [getFormattedDate(2), getFormattedDate(2)];
     const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
 
 
 
-    let meals_Custom_range_with = localStorage.getItem('meals_start_range');
+    let meals_Custom_range_with = sessionStorage.getItem('meals_start_range');
 
-    let meals_Custom_range_range = localStorage.getItem('meals_start_with');
+    let meals_Custom_range_range = sessionStorage.getItem('meals_start_with');
 
+
+
+    console.log(meals_Custom_range_with, meals_Custom_range_range, 'meals_Custom_range_with_parse GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
 
     if (meals_Custom_range_with != null && meals_Custom_range_range != null) {
 
-      console.log(meals_Custom_range_with, meals_Custom_range_range, 'meals_Custom_range_with_parse GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
+      
 
       let meals_Custom_range_with_parse = JSON.parse(meals_Custom_range_with)
 
@@ -1193,7 +1196,7 @@ let Dockets = () => {
 
 
 
-    handleChangefine(selserdatare)
+    // handleChangefine(selserdatare)
 
   }
 
@@ -1313,7 +1316,7 @@ let Dockets = () => {
 
   const [selectedOptions, setSelectedOptions] = useState([]);
 
-  const [selectedOptionsfine, setSelectedOptionsfine] = useState([basicfine[0]]);
+  const [selectedOptionsfine, setSelectedOptionsfine] = useState({value: 'Maximum', label: 'Maximum'});
 
 
   const handleChange = (selected) => {
@@ -1521,6 +1524,9 @@ let Dockets = () => {
 
 
   const handleChangefine = (selected) => {
+
+
+    console.log(selected , 'KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK')
 
     setSetservedatare(selected.value)
     if (editall.length === 0) {
@@ -1831,11 +1837,11 @@ let Dockets = () => {
 
   };
   //times
-  const [onetime, setOnetime] = useState(() => localStorage.getItem('meals_start_with_time') || "");
+  const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start_with_time') || "00:00");
 
-  let [twotime, setTwotime] = useState(() => localStorage.getItem('meals_start_with_time_1') || "");
-  let [threetime, setThreetime] = useState(() => localStorage.getItem('meals_start_with_time_2') || "");
-  let [fourtime, setFourtime] = useState(() => localStorage.getItem('meals_start_with_time_3') || "");
+  let [twotime, setTwotime] = useState(() => sessionStorage.getItem('meals_start_with_time_1') || "00:00");
+  let [threetime, setThreetime] = useState(() => sessionStorage.getItem('meals_start_with_time_2') || "00:00");
+  let [fourtime, setFourtime] = useState(() => sessionStorage.getItem('meals_start_with_time_3') || "00:00");
 
   //input value
   let [inputvalue, setInputvalue] = useState()
@@ -4175,7 +4181,7 @@ let Dockets = () => {
 
     function processData(data) {
       let result = [];
-      let processTimes = [];
+      let processTimes = []; 
 
       Object.entries(data).forEach(([dateKey, orders]) => {
         orders.forEach(order => {
@@ -4200,74 +4206,49 @@ let Dockets = () => {
 
           let processTime = 0;
 
-
-
-          let processess = calculateTotalMinutes(order?.STAMP)
-          let holdd = calculateTotalWithHold(order?.STAMP)
-          let passtime = calculateIdleTimes(order?.STAMP)
-
-
-          if (valuesPresent.includes("R")) processTime += Number(processess);
-          if (valuesPresent.includes("P")) processTime += Number(passtime);
-          if (valuesPresent.includes("H")) processTime += Number(holdd);
-
-
           // console.log(processess, 'processess')
           // console.log(holdd, 'holdd')
           // console.log(passtime, 'passtime')
           // console.log(valuesPresent, 'valuesPresent')
 
-          function calculateCourseDuration(selected, time_stamp) {
-            if (selected.some(c => c.value === 'All')) return 0;
-
+          
+       function calculateCourseDuration(selected, time_stamp) {
             const parts = time_stamp.split(' ');
             const entries = parts.slice(1); // skip the first part (date)
-            const courseMap = {};
 
-            for (let i = 0; i < entries.length - 1; i++) {
-              const cur = entries[i];
-              const next = entries[i + 1];
+            let firstR = null;
+            let lastS = null;
 
-              const matchR = cur.match(/^(\d{2})(\d{2})R(\d)$/); // e.g., 12:06 R0
-              const matchP = next.match(/^(\d{2})(\d{2})P(\d)$/); // e.g., 12:14 P0
-
-              if (matchR && matchP && matchR[3] === matchP[3]) {
-                const index = matchR[3];
-                const startMin = parseInt(matchR[1]) * 60 + parseInt(matchR[2]); // HH*60 + mm
-                const endMin = parseInt(matchP[1]) * 60 + parseInt(matchP[2]);
-                courseMap[index] = endMin - startMin;
+            for (const entry of entries) {
+              if (/^\d{4}R\d$/.test(entry) && !firstR) {
+                firstR = entry;
+              }
+              if (/^\d{4}S\d$/.test(entry)) {
+                lastS = entry;
               }
             }
 
-            const courseIndexMap = {
-              main: 3,
-              starter: 0,
-              sushi: 1,
-              hot: 2,
-              dessert: 4,
-            };
+            if (firstR && lastS) {
+              const getMinutes = (time) => {
+                const hour = parseInt(time.slice(0, 2), 10);
+                const minute = parseInt(time.slice(2, 4), 10);
+                return hour * 60 + minute;
+              };
 
-            let total = 0;
-
-            for (const course of selected) {
-              const idx = courseIndexMap[course.value];
-              if (courseMap[idx] == null) return 0; // If any duration is missing, return 0
-              total += courseMap[idx];
+              const duration = getMinutes(lastS) - getMinutes(firstR);
+              return duration;
             }
 
-            return total;
+            return 0; // fallback if R or S not found
           }
 
 
 
-          if (cos.length != 0) {
-
-            processTime = calculateCourseDuration(cos, order?.STAMP)
 
 
 
-
-          }
+            processTime = calculateCourseDuration(cos, order?.STAMP) 
+         
 
 
 
@@ -4325,6 +4306,9 @@ let Dockets = () => {
     setEditall(newalldata)
   }
 
+
+
+
   let callfordataonetwo = (two, allt, cos) => {
 
     function processData(data) {
@@ -4362,67 +4346,51 @@ let Dockets = () => {
 
 
 
-          let processess = calculateTotalMinutes(order?.STAMP)
-          let holdd = calculateTotalWithHold(order?.STAMP)
-          let passtime = calculateIdleTimes(order?.STAMP)
+          // let processess = calculateTotalMinutes(order?.STAMP)
+          // let holdd = calculateTotalWithHold(order?.STAMP)
+          // let passtime = calculateIdleTimes(order?.STAMP)
 
 
-          if (valuesPresent.includes("R")) processTime += Number(processess);
-          if (valuesPresent.includes("P")) processTime += Number(passtime);
-          if (valuesPresent.includes("H")) processTime += Number(holdd);
+          // if (valuesPresent.includes("R")) processTime += Number(processess);
+          // if (valuesPresent.includes("P")) processTime += Number(passtime);
+          // if (valuesPresent.includes("H")) processTime += Number(holdd);
 
 
           function calculateCourseDuration(selected, time_stamp) {
-            if (selected.some(c => c.value === 'All')) return 0;
-
             const parts = time_stamp.split(' ');
             const entries = parts.slice(1); // skip the first part (date)
-            const courseMap = {};
 
-            for (let i = 0; i < entries.length - 1; i++) {
-              const cur = entries[i];
-              const next = entries[i + 1];
+            let firstR = null;
+            let lastS = null;
 
-              const matchR = cur.match(/^(\d{2})(\d{2})R(\d)$/); // e.g., 12:06 R0
-              const matchP = next.match(/^(\d{2})(\d{2})P(\d)$/); // e.g., 12:14 P0
-
-              if (matchR && matchP && matchR[3] === matchP[3]) {
-                const index = matchR[3];
-                const startMin = parseInt(matchR[1]) * 60 + parseInt(matchR[2]); // HH*60 + mm
-                const endMin = parseInt(matchP[1]) * 60 + parseInt(matchP[2]);
-                courseMap[index] = endMin - startMin;
+            for (const entry of entries) {
+              if (/^\d{4}R\d$/.test(entry) && !firstR) {
+                firstR = entry;
+              }
+              if (/^\d{4}S\d$/.test(entry)) {
+                lastS = entry;
               }
             }
 
-            const courseIndexMap = {
-              main: 3,
-              starter: 0,
-              sushi: 1,
-              hot: 2,
-              dessert: 4,
-            };
+            if (firstR && lastS) {
+              const getMinutes = (time) => {
+                const hour = parseInt(time.slice(0, 2), 10);
+                const minute = parseInt(time.slice(2, 4), 10);
+                return hour * 60 + minute;
+              };
 
-            let total = 0;
-
-            for (const course of selected) {
-              const idx = courseIndexMap[course.value];
-              if (courseMap[idx] == null) return 0; // If any duration is missing, return 0
-              total += courseMap[idx];
+              const duration = getMinutes(lastS) - getMinutes(firstR);
+              return duration;
             }
 
-            return total;
+            return 0; // fallback if R or S not found
           }
 
 
-
-          if (cos.length != 0) {
-
+ 
             processTime = calculateCourseDuration(cos, order?.STAMP)
 
-
-
-
-          }
+ 
 
 
 
@@ -5686,7 +5654,7 @@ let Dockets = () => {
                       startDate={startDate}
                       endDate={endDate}
                       onChange={(update) => {
-                        localStorage.setItem('meals_start_with', JSON.stringify(update))
+                        sessionStorage.setItem('meals_start_with', JSON.stringify(update))
 
                         setDateRange(update)
                         if (update[1] === null || update[1] === "null") {
@@ -5716,7 +5684,7 @@ let Dockets = () => {
                         onChange={(e) => {
                           const value = e.target.value;
                           setOnetime(value);
-                          localStorage.setItem('meals_start_with_time', value);
+                          sessionStorage.setItem('meals_start_with_time', value);
 
 
                           if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
@@ -5737,7 +5705,7 @@ let Dockets = () => {
 
                           const value = e.target.value;
                           setTwotime(value)
-                          localStorage.setItem('meals_start_with_time_1', value)
+                          sessionStorage.setItem('meals_start_with_time_1', value)
                           if (dateRange.length === 0 || dateRange === undefined || dateRange === null || dateRange[0] === null || dateRange[1] === null) {
                             return
                           }
@@ -5760,7 +5728,7 @@ let Dockets = () => {
                       endDate={endDatetwo}
                       onChange={(update) => {
 
-                        localStorage.setItem('meals_start_range', JSON.stringify(update))
+                        sessionStorage.setItem('meals_start_range', JSON.stringify(update))
                         setDateRangetwo(update)
                         if (update[1] === null || update[1] === "null") {
                         } else {
@@ -5789,7 +5757,7 @@ let Dockets = () => {
                         onChange={(e) => {
                           const value = e.target.value;
                           setThreetime(value)
-                          localStorage.setItem('meals_start_with_time_2', value)
+                          sessionStorage.setItem('meals_start_with_time_2', value)
                           if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
                             return
                           }
@@ -5804,7 +5772,7 @@ let Dockets = () => {
                         onChange={(e) => {
                           const value = e.target.value;
                           setFourtime(value)
-                          localStorage.setItem('meals_start_with_time_3', value)
+                          sessionStorage.setItem('meals_start_with_time_3', value)
                           if (dateRangetwo.length === 0 || dateRangetwo === undefined || dateRangetwo === null || dateRangetwo[0] === null || dateRangetwo[1] === null) {
                             return
                           }
@@ -7087,7 +7055,7 @@ let Dockets = () => {
 
                             </div>
 
-
+                          <p className=" " style={{ textAlign : 'center' }}>Time period</p>
                             <div style={{ visibility: 'hidden', position: 'absolute' }}>
                               <div ref={pdfRefredone}  >
 
@@ -7303,7 +7271,7 @@ let Dockets = () => {
                               {/* Right Scroll Button */}
                               <button onClick={scrollRight} style={buttonStyle}>➡</button>
                             </div>
-
+                          <p className=" " style={{ textAlign : 'center' }}>Time period</p>
 
                             <div style={{ visibility: 'hidden', position: 'absolute' }}>
                               <div ref={pdfRefred}  >
