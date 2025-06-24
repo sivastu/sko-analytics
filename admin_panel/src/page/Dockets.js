@@ -391,6 +391,8 @@ let Dockets = () => {
       tooltip: {
         callbacks: {
           title: function (tooltipItems) {
+
+            console.log(tooltipItems , 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ' , optionbar)
             const item = tooltipItems[0];
             // This is usually the x-axis label
             return `${item.label} . ${addMinutes(item.label, 9)}`;
@@ -2820,6 +2822,8 @@ let Dockets = () => {
     // Merge and deduplicate data based on time property
     const mergedData1 = mergeTimeData(processedData1, processedData2);
 
+ 
+
     // Custom sort function to handle time format properly
     const sortedData1 = mergedData1.sort((a, b) => {
         // Convert time strings to comparable format
@@ -2965,6 +2969,8 @@ let Dockets = () => {
 
 
   function processTimeDatafgh(data, timeSlots) {
+
+   
     const timeCounts = {};
     timeSlots.forEach(slot => timeCounts[slot] = 0); // Init all counts to 0
 
@@ -2998,6 +3004,7 @@ let Dockets = () => {
               if (extractedTime) {
                 for (const slot of timeSlots) {
                   if (isInRange(extractedTime, slot)) {
+                     console.log(slot, 'mergedData1 OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOo' , ) 
                     timeCounts[slot]++;
                     break; // Only increment the first matching slot
                   }
@@ -3011,7 +3018,7 @@ let Dockets = () => {
 
     return timeSlots.map(time => ({
       time,
-      count: timeCounts[time]
+      count: timeCounts[time] 
     }));
   }
 
@@ -6714,7 +6721,7 @@ function timeDifference(startTime, endTime) {
                                               const processTimeTwo = parseInt(correspondingErv?.processtime) || 0;
                                               let percentageChange = 0;
                                               if (processTimeTwo > 0) {
-                                                percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
+                                                percentageChange = (( processTimeTwo - processTimeOne ) / processTimeTwo) * 100;
                                               }
                                               return (
                                                 <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>
@@ -7256,7 +7263,7 @@ function timeDifference(startTime, endTime) {
                               <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                 <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
 
-                                  <Bar data={datafine} options={optionshshs} id="docChart-capture" />
+                                  <Bar data={datafine} options={optionshshs} id="docChart-capture" /> 
 
 
                                 </div>
@@ -7610,7 +7617,7 @@ function timeDifference(startTime, endTime) {
 
                                 let percentageChange = 0;
                                 if (processTimeTwo > 0) {
-                                  percentageChange = ((processTimeOne - processTimeTwo) / processTimeTwo) * 100;
+                                  percentageChange = ((  processTimeTwo - processTimeOne ) / processTimeTwo) * 100;
                                 }
 
                                 return (

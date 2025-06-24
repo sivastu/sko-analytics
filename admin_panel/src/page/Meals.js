@@ -6072,7 +6072,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                       {(() => {
                                         let datd = editallone?.edited?.length
                                         let datdtwo = editall?.edited?.length
-                                        let tot = ((datdtwo - datd) / datd) * 100
+                                        let tot = (( datd - datdtwo) / datd) * 100
                                         return (
                                           <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{isNaN(tot) ? "+0.0%" : tot.toFixed(2) + "%"}
                                             <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
@@ -6107,7 +6107,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                         {(() => {
                                           let datd = editallone?.moved?.length
                                           let datdtwo = editall?.moved?.length
-                                          let tot = ((datdtwo - datd) / datd) * 100
+                                          let tot = ((   datdtwo - datd) / datd) * 100
                                           return (
                                             <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{isNaN(tot) ? "+0.0%" : tot.toFixed(2) + "%"}
                                               <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
@@ -6142,7 +6142,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                         {(() => {
                                           let datd = editallone?.deleted?.length
                                           let datdtwo = editall?.deleted?.length
-                                          let tot = ((datdtwo - datd) / datd) * 100
+                                          let tot = (( datd - datdtwo ) / datd) * 100
                                           return (
                                             <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{isNaN(tot) ? "+0.0%" : tot.toFixed(2) + "%"}
                                               <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
@@ -6177,7 +6177,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                         {(() => {
                                           let datd = editallone?.tableMoved?.length
                                           let datdtwo = editall?.tableMoved?.length
-                                          let tot = ((datdtwo - datd) / datd) * 100
+                                          let tot = (( datd - datdtwo) / datd) * 100
                                           return (
                                             <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }} >{isNaN(tot) ? "+0.0%" : tot.toFixed(2) + "%"}
                                               <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
@@ -6523,7 +6523,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                     const datdtwo = servedoneItem?.count || 0;
                                                     
                                                     // Calculate percentage
-                                                    const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
+                                                    const tot = datdtwo !== 0 ? (( datdtwo - datd) / datdtwo) * 100 : 0;
                                                     
                                                     return (
                                                       <>
@@ -6775,8 +6775,8 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
 
 
                                           return (
-                                            <React.Fragment key={`${name}-${index}`}>
-                                              <div className="d-flex">
+                                            <React.Fragment key={`${name}-${index}`} style={{borderBottom: "1px solid #ccc" }}>
+                                              <div className="d-flex" >
                                                 <div style={{ width: '33%' }}>
                                                   <p style={{ 
                                                     fontWeight: '700', 
@@ -6813,7 +6813,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                   }}>
                                                     {maxItem?.count }
                                                   </p>
-                                                </div>
+                                                </div> 
 
                                                 <div style={{ 
                                                   justifyContent: 'end', 
@@ -6831,7 +6831,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                       {(() => {
                                                         const datd = minItem?.count || 0;
                                                         const datdtwo = maxItem?.count || 0;
-                                                        const tot = datdtwo === 0 ? 0 : ((datd - datdtwo) / datdtwo) * 100;
+                                                        const tot = datdtwo === 0 ? 0 : (( datdtwo - datd ) / datdtwo) * 100;
 
                                                         return (
                                                           <span style={{ 
@@ -7261,7 +7261,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                 + editall?.deleted?.length
                                 + editall?.moved?.length
 
-                              let tot = ((datdtwo - datd) / datd) * 100
+                              let tot = ((  datd - datdtwo ) / datd) * 100
 
                               return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                                 style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
@@ -7298,7 +7298,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
 
                               let datdtwo = editall?.moved?.length
 
-                              let tot = ((datdtwo - datd) / datd) * 100
+                              let tot = ((  datd - datdtwo ) / datd) * 100
 
                               return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                                 style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
@@ -7335,7 +7335,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
 
                               let datdtwo = editall?.edited?.length
 
-                              let tot = ((datdtwo - datd) / datd) * 100
+                              let tot = (( datd - datdtwo ) / datd) * 100
 
                               return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                                 style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
@@ -7372,7 +7372,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
 
                               let datdtwo = editall?.deleted?.length
 
-                              let tot = ((datdtwo - datd) / datd) * 100
+                              let tot = (( datd -  datdtwo ) / datd) * 100
 
                               return <span >{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }} >{tot > 0 ? <img src="up_arw.png"
                                 style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => {
@@ -7410,7 +7410,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
 
                               let datdtwo = editall?.tableMoved?.length
 
-                              let tot = ((datdtwo - datd) / datd) * 100
+                              let tot = ((  datd - datdtwo ) / datd) * 100
 
                               
 
@@ -7671,7 +7671,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                     const datdtwo = servedoneItem?.count || 0;
                                                     
                                                     // Calculate percentage
-                                                    const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
+                                                    const tot = datdtwo !== 0 ? (( datdtwo - datd ) / datdtwo) * 100 : 0;
                                                     
                                                     return (
                                                       <>
@@ -7930,7 +7930,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                       {(() => {
                         const datd = minItem?.count || 0;
                         const datdtwo = maxItem?.count || 0;
-                        const tot = datdtwo !== 0 ? ((datd - datdtwo) / datdtwo) * 100 : 0;
+                        const tot = datdtwo !== 0 ? (( datdtwo - datd ) / datdtwo) * 100 : 0;
                         return (
                           <>
                             <span style={{ marginRight: '5px' }}>
