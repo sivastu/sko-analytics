@@ -140,6 +140,10 @@ let Meals = () => {
   const [menuIsOpenthree, setMenuIsOpenthree] = useState(false);
   const [menuIsOpenfour, setMenuIsOpenfour] = useState(false);
 
+  const [menuIsOpenfive, setMenuIsOpenfive] = useState();
+  const [menuIsOpensix, setMenuIsOpensix] = useState();
+
+
 
   const selectRef = useRef(null);
 
@@ -653,6 +657,49 @@ let Meals = () => {
     }
   }
 
+  let finedataaaa = (tooltipItem) => {
+    let finedata = tooltipItem
+
+    if(tooltipItem.dataset.label === 'Chosen range' ){
+
+
+      let searchdata = tooltipItem.label
+
+      const filtered = menuIsOpenfive.filter(item => item.time === tooltipItem.label);
+
+      let allOrders = filtered[0].biggestValue.allOrders;
+
+      let largestItemOrder = allOrders.reduce((maxOrder, currentOrder) => {
+        return (currentOrder.ITEMS.length > (maxOrder?.ITEMS.length || 0)) ? currentOrder : maxOrder;
+      }, null);
+
+
+
+      console.log(  largestItemOrder , 'finedata')
+
+    }else{
+        console.log(menuIsOpensix , 'finedata2' , finedata)
+    }
+
+
+    
+  }
+
+
+   function addMinutes(timeStr, minutesToAdd) {
+    let [hours, minutes] = timeStr.split('.').map(Number);
+
+    // Convert to total minutes
+    let totalMinutes = hours * 60 + minutes + minutesToAdd;
+
+    // Convert back to hours and minutes
+    let newHours = Math.floor(totalMinutes / 60);
+    let newMinutes = totalMinutes % 60;
+
+    // Format as needed (e.g., "5.19")
+    return `${newHours}.${newMinutes.toString().padStart(2, '0')}`;
+  }
+
 
   const decrypt = (cipherText) => {
     const bytes = CryptoJS.AES.decrypt(cipherText, 'secretKey')
@@ -661,12 +708,34 @@ let Meals = () => {
 
   }
 
-  const optionshshs = {
+   const optionshshs = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: { position: 'top' },
       title: { display: false, text: 'X-Axis Scrollable Bar Chart' },
+      tooltip: {
+          callbacks: {title: function () {
+          return '';
+        },
+        label: function (tooltipItem) { 
+          return ` ${tooltipItem.dataset.label}`; // This appears first
+        },
+        afterLabel: function (tooltipItem) { 
+            const item = tooltipItem; 
+
+            let vvv = finedataaaa(tooltipItem)
+
+            
+
+          return [
+            `${item.label} - ${addMinutes(item.label, 9)}`,
+            `Most Meals: ${item.formattedValue}`,
+            ``
+          ];
+        }
+      }
+    }
     },
     scales: {
       x: {
@@ -677,7 +746,6 @@ let Meals = () => {
       },
     },
   };
-
 
   const datafine = {
     labels: optionbar,
@@ -2465,6 +2533,98 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
 
   };
 
+  function processTimeDatafghddddd(data, timeSlots) {
+    const timeCounts = {};
+    const timeOrders = {}; // Store orders for each time slot
+    const timeBiggestValues = {}; // Store biggest value for each time slot
+    
+    timeSlots.forEach(slot => {
+        timeCounts[slot] = 0;
+        timeOrders[slot] = [];
+        timeBiggestValues[slot] = { maxValue: 0, biggestOrder: null };
+    });
+
+    function extractTime(stamp) {
+        const match = stamp.match(/\d{4}(R0|H0|P0|S0)/);
+        if (match) {
+            const hh = match[0].slice(0, 2);
+            const mm = match[0].slice(2, 4);
+            return `${hh}:${mm}`;
+        }
+        return null;
+    }
+
+    function isInRange(extracted, slot) {
+        const [exH, exM] = extracted.split(':').map(Number);
+        const extractedMinutes = exH * 60 + exM;
+
+        const [slotH, slotM] = slot.split('.').map(Number);
+        const slotStart = slotH * 60 + slotM;
+        const slotEnd = slotStart + 9;
+
+        return extractedMinutes >= slotStart && extractedMinutes <= slotEnd;
+    }
+
+    for (let group in data) {
+        for (let location in data[group]) {
+            for (let section in data[group][location]) {
+                for (let date in data[group][location][section]) {
+                    data[group][location][section][date].forEach(order => {
+                        const extractedTime = extractTime(order.STAMP);
+                        if (extractedTime) {
+                            for (const slot of timeSlots) {
+                                if (isInRange(extractedTime, slot)) {
+                                    console.log(slot, 'mergedData1 OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOo');
+                                    timeCounts[slot]++;
+                                    
+                                    // Store order with full context
+                                    const fullOrder = {
+                                        ...order,
+                                        group,
+                                        location,
+                                        section,
+                                        date,
+                                        extractedTime
+                                    };
+                                    timeOrders[slot].push(fullOrder);
+                                    
+                                    // Find biggest value for this time slot (assuming comparing by a numeric field)
+                                    // You can change 'order.VALUE' to whatever field you want to compare
+                                    const orderValue = order.VALUE || order.AMOUNT || order.TOTAL || order.QTY || 0;
+                                    if (orderValue > timeBiggestValues[slot].maxValue) {
+                                        timeBiggestValues[slot].maxValue = orderValue;
+                                        timeBiggestValues[slot].biggestOrder = fullOrder;
+                                    }
+                                    
+                                    break; // Only increment the first matching slot
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    // Calculate total count
+    const totalCount = Object.values(timeCounts).reduce((sum, count) => sum + count, 0);
+
+    // Create the result array with biggest value for each time slot
+    return timeSlots.map(time => ({
+        time,
+        count: timeCounts[time],
+        percentage: totalCount > 0 ? ((timeCounts[time] / totalCount) * 100).toFixed(2) : "0.00",
+        biggestValue: {
+            count: timeCounts[time],
+            percentage: totalCount > 0 ? ((timeCounts[time] / totalCount) * 100).toFixed(2) : "0.00",
+            time: time,
+            maxOrderValue: timeBiggestValues[time].maxValue,
+            biggestOrder: timeBiggestValues[time].biggestOrder,
+            allOrders: timeOrders[time]
+        }
+    }));
+}
+
 
   function filterDataByDate(vals, time, time2, val21, val22, cources, takeaways, inone, intwo, alltype , filteredDataoneess) { 
     cources = cources.filter(item => item.value !== "All");
@@ -3248,6 +3408,9 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
 
               const processedData1 = processTimeDatafgh(alldat, timeSlots1);
               const processedData2 = processTimeDatafgh(alldat, timeSlots2);
+
+              const processedData15 = processTimeDatafghddddd(alldat, timeSlots1); 
+              setMenuIsOpenfive(processedData15) 
 
               // Merge and deduplicate data based on time property
               const mergedData1 = mergeTimeData(processedData1, processedData2);
@@ -4216,6 +4379,9 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                   // Process first dataset using processTimeDatafgh
                   const processedData1 = processTimeDatafgh(alldat, timeSlots1);
                   const processedData2 = processTimeDatafgh(alldat, timeSlots2);
+
+                  const processedData17 = processTimeDatafghddddd(alldat, timeSlots1);
+                  setMenuIsOpensix(processedData17)
 
                   // Merge and deduplicate data based on time property
                   const mergedData1 = mergeTimeData(processedData1, processedData2);

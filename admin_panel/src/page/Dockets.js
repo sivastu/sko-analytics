@@ -157,6 +157,12 @@ let Dockets = () => {
   const [menuIsOpenthree, setMenuIsOpenthree] = useState(false);
   const [menuIsOpenfour, setMenuIsOpenfour] = useState(false);
 
+  const [menuIsOpenfive, setMenuIsOpenfive] = useState();
+  const [menuIsOpensix, setMenuIsOpensix] = useState();
+
+  const [menuIsOpenseven, setMenuIsOpenseven] = useState();
+  const [menuIsOpeneight , setMenuIsOpeneight] = useState();
+
 
   const selectRef = useRef(null);
 
@@ -382,6 +388,34 @@ let Dockets = () => {
     return `${newHours}.${newMinutes.toString().padStart(2, '0')}`;
   }
 
+  let finedataaaa = (tooltipItem) => {
+    let finedata = tooltipItem
+
+    if(tooltipItem.dataset.label === 'Chosen range' ){
+
+
+      let searchdata = tooltipItem.label
+
+      const filtered = menuIsOpenfive.filter(item => item.time === tooltipItem.label);
+
+      let allOrders = filtered[0].biggestValue.allOrders;
+
+      let largestItemOrder = allOrders.reduce((maxOrder, currentOrder) => {
+        return (currentOrder.ITEMS.length > (maxOrder?.ITEMS.length || 0)) ? currentOrder : maxOrder;
+      }, null);
+
+
+
+      console.log(  largestItemOrder , 'finedata')
+
+    }else{
+        console.log(menuIsOpensix , 'finedata2' , finedata)
+    }
+
+
+    
+  }
+
   const optionshshs = {
     responsive: true,
     maintainAspectRatio: false,
@@ -389,16 +423,66 @@ let Dockets = () => {
       legend: { position: 'top' },
       title: { display: false, text: 'X-Axis Scrollable Bar Chart' },
       tooltip: {
-        callbacks: {
-          title: function (tooltipItems) {
-
-            console.log(tooltipItems , 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ' , optionbar)
-            const item = tooltipItems[0];
-            // This is usually the x-axis label
-            return `${item.label} . ${addMinutes(item.label, 9)}`;
-          },
+          callbacks: {title: function () {
+          return '';
         },
+        label: function (tooltipItem) { 
+          return ` ${tooltipItem.dataset.label}`; // This appears first
+        },
+        afterLabel: function (tooltipItem) { 
+            const item = tooltipItem; 
+
+            let vvv = finedataaaa(tooltipItem)
+
+            
+
+          return [
+            `${item.label} - ${addMinutes(item.label, 9)}`,
+            `Most Meals: ${item.formattedValue}`,
+            ``
+          ];
+        }
+      }
+    }
+    },
+    scales: {
+      x: {
+        ticks: { maxRotation: 45, minRotation: 0 }, // Prevents overlap
       },
+      y: {
+        beginAtZero: true,
+      },
+    },
+  };
+
+  const optionshshsone = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top' },
+      title: { display: false, text: 'X-Axis Scrollable Bar Chart' },
+      tooltip: {
+          callbacks: {title: function () {
+          return '';
+        },
+        label: function (tooltipItem) { 
+          return ` ${tooltipItem.dataset.label}`; // This appears first
+        },
+        afterLabel: function (tooltipItem) { 
+            const item = tooltipItem; 
+
+            let vvv = finedataaaa(tooltipItem)
+
+            
+
+          return [
+            `${item.label} - ${addMinutes(item.label, 9)}`,
+            `Most Meals: ${item.formattedValue}`,
+            ``
+          ];
+        }
+      }
+    }
     },
     scales: {
       x: {
@@ -2818,6 +2902,13 @@ let Dockets = () => {
 
     const processedData1 = processTimeDatafgh(alldat, timeSlots1);
     const processedData2 = processTimeDatafgh(alldat, timeSlots2);
+    
+
+    const processedData15 = processTimeDatafghddddd(alldat, timeSlots1); 
+    setMenuIsOpenfive(processedData15) 
+
+    console.log(processedData15, 'processedData15 YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY') 
+
 
     // Merge and deduplicate data based on time property
     const mergedData1 = mergeTimeData(processedData1, processedData2);
@@ -2886,6 +2977,13 @@ let Dockets = () => {
 
     // Process second dataset
     const processedDataTwo1 = processTimeDatafghtwo(alldat, timeSlots1);
+
+    const processedDataTwo2 = processTimeDatafghtwodddddddd(alldat, timeSlots1);
+
+    setMenuIsOpenseven(processedDataTwo2)
+
+
+
     // const processedDataTwo2 = processTimeDatafghtwo(alldat, timeSlots2);
 
     // console.log(processedDataTwo1, 'First processed data');
@@ -3022,6 +3120,99 @@ let Dockets = () => {
     }));
   }
 
+ 
+function processTimeDatafghddddd(data, timeSlots) {
+    const timeCounts = {};
+    const timeOrders = {}; // Store orders for each time slot
+    const timeBiggestValues = {}; // Store biggest value for each time slot
+    
+    timeSlots.forEach(slot => {
+        timeCounts[slot] = 0;
+        timeOrders[slot] = [];
+        timeBiggestValues[slot] = { maxValue: 0, biggestOrder: null };
+    });
+
+    function extractTime(stamp) {
+        const match = stamp.match(/\d{4}(R0|H0|P0|S0)/);
+        if (match) {
+            const hh = match[0].slice(0, 2);
+            const mm = match[0].slice(2, 4);
+            return `${hh}:${mm}`;
+        }
+        return null;
+    }
+
+    function isInRange(extracted, slot) {
+        const [exH, exM] = extracted.split(':').map(Number);
+        const extractedMinutes = exH * 60 + exM;
+
+        const [slotH, slotM] = slot.split('.').map(Number);
+        const slotStart = slotH * 60 + slotM;
+        const slotEnd = slotStart + 9;
+
+        return extractedMinutes >= slotStart && extractedMinutes <= slotEnd;
+    }
+
+    for (let group in data) {
+        for (let location in data[group]) {
+            for (let section in data[group][location]) {
+                for (let date in data[group][location][section]) {
+                    data[group][location][section][date].forEach(order => {
+                        const extractedTime = extractTime(order.STAMP);
+                        if (extractedTime) {
+                            for (const slot of timeSlots) {
+                                if (isInRange(extractedTime, slot)) {
+                                    console.log(slot, 'mergedData1 OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOo');
+                                    timeCounts[slot]++;
+                                    
+                                    // Store order with full context
+                                    const fullOrder = {
+                                        ...order,
+                                        group,
+                                        location,
+                                        section,
+                                        date,
+                                        extractedTime
+                                    };
+                                    timeOrders[slot].push(fullOrder);
+                                    
+                                    // Find biggest value for this time slot (assuming comparing by a numeric field)
+                                    // You can change 'order.VALUE' to whatever field you want to compare
+                                    const orderValue = order.VALUE || order.AMOUNT || order.TOTAL || order.QTY || 0;
+                                    if (orderValue > timeBiggestValues[slot].maxValue) {
+                                        timeBiggestValues[slot].maxValue = orderValue;
+                                        timeBiggestValues[slot].biggestOrder = fullOrder;
+                                    }
+                                    
+                                    break; // Only increment the first matching slot
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    // Calculate total count
+    const totalCount = Object.values(timeCounts).reduce((sum, count) => sum + count, 0);
+
+    // Create the result array with biggest value for each time slot
+    return timeSlots.map(time => ({
+        time,
+        count: timeCounts[time],
+        percentage: totalCount > 0 ? ((timeCounts[time] / totalCount) * 100).toFixed(2) : "0.00",
+        biggestValue: {
+            count: timeCounts[time],
+            percentage: totalCount > 0 ? ((timeCounts[time] / totalCount) * 100).toFixed(2) : "0.00",
+            time: time,
+            maxOrderValue: timeBiggestValues[time].maxValue,
+            biggestOrder: timeBiggestValues[time].biggestOrder,
+            allOrders: timeOrders[time]
+        }
+    }));
+}
+
 
 
 
@@ -3099,6 +3290,118 @@ let Dockets = () => {
       };
     });
   }
+
+
+  function processTimeDatafghtwodddddddd(data, timeSlots) {
+    const timeSums = {};
+    const timeCounts = {};
+    const timeOrders = {}; // Store orders for each time slot
+    const timeBiggestValues = {}; // Store biggest value for each time slot
+
+    timeSlots.forEach(slot => {
+        timeSums[slot] = 0;   // total of diffs
+        timeCounts[slot] = 0; // count of entries
+        timeOrders[slot] = [];
+        timeBiggestValues[slot] = { maxDiff: 0, biggestOrder: null };
+    });
+
+    function extractTime(stamp, type) {
+        const regex = new RegExp(`(\\d{4})${type}`);
+        const match = stamp.match(regex);
+        if (match) {
+            const hh = match[1].slice(0, 2);
+            const mm = match[1].slice(2, 4);
+            return `${hh}:${mm}`;
+        }
+        return null;
+    }
+
+    function isInRange(extracted, slot) {
+        const [exH, exM] = extracted.split(':').map(Number);
+        const extractedMinutes = exH * 60 + exM;
+
+        const [slotH, slotM] = slot.split('.').map(Number);
+        const slotStart = slotH * 60 + slotM;
+        const slotEnd = slotStart + 9;
+
+        return extractedMinutes >= slotStart && extractedMinutes <= slotEnd;
+    }
+
+    function getMinuteDiff(start, end) {
+        if (start === end) return 1;
+        const [startH, startM] = start.split(':').map(Number);
+        const [endH, endM] = end.split(':').map(Number);
+        return (endH * 60 + endM) - (startH * 60 + startM);
+    }
+
+    for (let group in data) {
+        for (let location in data[group]) {
+            for (let section in data[group][location]) {
+                for (let date in data[group][location][section]) {
+                    data[group][location][section][date].forEach(order => {
+                        const r0Time = extractTime(order.STAMP, 'R0');
+                        const sTime = extractTime(order.STAMP, 'S');
+
+                        if (r0Time && sTime) {
+                            const diff = getMinuteDiff(r0Time, sTime);
+
+                            for (const slot of timeSlots) {
+                                if (isInRange(sTime, slot)) {
+                                    timeSums[slot] += diff;
+                                    timeCounts[slot] += 1;
+
+                                    // Store order with full context
+                                    const fullOrder = {
+                                        ...order,
+                                        group,
+                                        location,
+                                        section,
+                                        date,
+                                        r0Time,
+                                        sTime,
+                                        timeDiff: diff
+                                    };
+                                    timeOrders[slot].push(fullOrder);
+
+                                    // Find biggest diff value for this time slot
+                                    if (diff > timeBiggestValues[slot].maxDiff) {
+                                        timeBiggestValues[slot].maxDiff = diff;
+                                        timeBiggestValues[slot].biggestOrder = fullOrder;
+                                    }
+
+                                    break;
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    // Calculate total count for percentage
+    const totalCount = Object.values(timeCounts).reduce((sum, count) => sum + count, 0);
+
+    return timeSlots.map(slot => {
+        const average = timeCounts[slot] > 0 ? timeSums[slot] / timeCounts[slot] : 0;
+        const rounded = Math.round(average);
+
+        return {
+            time: slot,
+            count: rounded,
+            biggestValue: {
+                count: rounded,
+                percentage: totalCount > 0 ? ((timeCounts[slot] / totalCount) * 100).toFixed(2) : "0.00",
+                time: slot,
+                maxTimeDiff: timeBiggestValues[slot].maxDiff,
+                averageTimeDiff: average.toFixed(2),
+                totalOrders: timeCounts[slot],
+                biggestOrder: timeBiggestValues[slot].biggestOrder,
+                allOrders: timeOrders[slot]
+            }
+        };
+    });
+}
 
 
 
@@ -3965,6 +4268,11 @@ let Dockets = () => {
         const processedData1 = processTimeDatafgh(alldat, timeSlots1);
         const processedData2 = processTimeDatafgh(alldat, timeSlots2);
 
+        const processedData17 = processTimeDatafghddddd(alldat, timeSlots1);
+        setMenuIsOpensix(processedData17)
+        console.log(processedData17 , 'processedData15 YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY') 
+
+
         // Merge and deduplicate data based on time property
         const mergedData1 = mergeTimeData(processedData1, processedData2);
 
@@ -4047,6 +4355,14 @@ let Dockets = () => {
 
         // // Process second dataset using processTimeDatafghtwo
         const processedDataTwo1 = processTimeDatafghtwo(alldat, timeSlots1);
+
+        const processedDataTwo2 = processTimeDatafghtwodddddddd(alldat, timeSlots1);
+
+        setMenuIsOpeneight(processedDataTwo2)
+
+        console.log(processedDataTwo2, 'First processed data UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU');
+ 
+        
         // const processedDataTwo2 = processTimeDatafghtwo(alldat, timeSlots2);
 
         // // Merge and deduplicate second dataset
@@ -7263,7 +7579,7 @@ function timeDifference(startTime, endTime) {
                               <div ref={chartContainerRef} className="kiy" style={{ width: '100%', overflowX: 'auto', border: '1px solid #ccc', padding: '10px', whiteSpace: 'nowrap' }}>
                                 <div style={{ width: '1500px', height: '350px' }}> {/* Chart width exceeds container */}
 
-                                  <Bar data={datafine} options={optionshshs} id="docChart-capture" /> 
+                                  <Bar data={datafine} options={optionshshsone} id="docChart-capture" /> 
 
 
                                 </div>
