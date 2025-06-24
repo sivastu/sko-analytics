@@ -730,7 +730,7 @@ let Meals = () => {
 
           return [
             `${item.label} - ${addMinutes(item.label, 9)}`,
-            `Most Meals: ${item.formattedValue}`,
+            `Total Meals: ${item.formattedValue}`,
             ``
           ];
         }

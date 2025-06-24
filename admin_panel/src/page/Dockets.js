@@ -438,7 +438,7 @@ let Dockets = () => {
 
           return [
             `${item.label} - ${addMinutes(item.label, 9)}`,
-            `Most Meals: ${item.formattedValue}`,
+            `Total: ${item.formattedValue}`,
             ``
           ];
         }
@@ -477,7 +477,7 @@ let Dockets = () => {
 
           return [
             `${item.label} - ${addMinutes(item.label, 9)}`,
-            `Most Meals: ${item.formattedValue}`,
+            `Total: ${item.formattedValue}`,
             ``
           ];
         }
