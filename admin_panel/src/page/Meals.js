@@ -6637,7 +6637,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                   fontWeight: '700', 
                                                   color: val4
                                                 }}>
-                                                  {servedItem?.name || '-'}
+                                                  {servedItem?.name || servedoneItem?.name + " " + '0'}
                                                 </p>
                                                 <p style={{ 
                                                   fontWeight: '400', 
@@ -6658,7 +6658,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                     fontWeight: '700', 
                                                   color: val7
                                                   }}>
-                                                    {servedoneItem?.name || '-'}
+                                                    {servedoneItem?.name || servedItem?.name + " " + '0'}
                                                   </p>
                                                   <p style={{ 
                                                     fontWeight: '400', 
@@ -6699,9 +6699,12 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                           width: '60px', 
                                                           textAlign: 'right' 
                                                         }}>
-                                                          {tot.toFixed(2) + "%"}
+                                                          {tot === 0.00 || tot === "0.00" ? <p style={{ marginRight : 10 }}>-</p> : tot.toFixed(2) + "%"}
                                                         </span>{" "}
-                                                        <img
+
+                                                        {
+                                                          tot === 0.00 || tot === "0.00"  ?  "" : 
+                                                          <img
                                                           src={tot > 0 ? "up_arw.png" : "d_arw.png"}
                                                           style={{
                                                             width: 16,
@@ -6711,6 +6714,9 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                           }}
                                                           alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
                                                         />
+
+                                                        }
+                                                        
                                                       </>
                                                     );
                                                   })()}
@@ -6950,7 +6956,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                     marginBlock: '4px', 
                                                     fontSize: 'clamp(12px, 2.5vw, 14px)' 
                                                   }}>
-                                                    {minItem?.name || '-'}
+                                                    {minItem?.name || maxItem?.name + " " + '0' }
                                                   </p>
                                                   <p style={{ 
                                                     fontWeight: '400', 
@@ -6969,7 +6975,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                     marginBlock: '4px', 
                                                     fontSize: 'clamp(12px, 2.5vw, 14px)' 
                                                   }}>
-                                                    {maxItem?.name || '-'}
+                                                    {maxItem?.name || minItem?.name + " " + '0'}
                                                   </p>
                                                   <p style={{ 
                                                     fontWeight: '400', 
@@ -7006,13 +7012,14 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                             marginBlock: '4px', 
                                                             fontSize: 'clamp(12px, 2.5vw, 14px)' 
                                                           }}>
-                                                            {isNaN(tot) ? "0%" : tot.toFixed(2) + "%"}
+                                                            {isNaN(tot) ? "0%" : tot === "0.00" || tot === 0.00 ? <p style={{ marginRight :  10  }}>-</p> : tot.toFixed(2) + "%"}
                                                             <span style={{ 
                                                               color: tot > 0 ? "green" : "red", 
                                                               fontWeight: '700',
                                                               marginLeft: '5px'
                                                             }}>
-                                                              {isNaN(tot) ? '' : tot > 0 ? (
+                                                              
+                                                              {isNaN(tot) ? '' : tot === "0.00" || tot === 0.00 ? '' : tot > 0 ? (
                                                                 <img 
                                                                   src="up_arw.png" 
                                                                   style={{ 
@@ -7782,7 +7789,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                   fontWeight: '700', 
                                                   color: index === 0 && selserdata === 'Minimum' ? "#CA424E" : '#000' 
                                                 }}>
-                                                  {servedItem?.name || '-'}
+                                                  {servedItem?.name || servedoneItem?.name + " " + '0' }
                                                 </p>
                                                 <p style={{ 
                                                   fontWeight: '400', 
@@ -7803,7 +7810,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                     fontWeight: '700', 
                                                     color: index === 0 && selserdata === 'Maximum' ? "#316AAF" : '#000' 
                                                   }}>
-                                                    {servedoneItem?.name || '-'}
+                                                    {servedoneItem?.name || servedItem?.name + " " + '0'}
                                                   </p>
                                                   <p style={{ 
                                                     fontWeight: '400', 
@@ -7847,9 +7854,11 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                           width: '60px', 
                                                           textAlign: 'right' 
                                                         }}>
-                                                          {tot.toFixed(2) + "%"}
+                                                          {tot === 0.00 || tot === "0.00" ? <p style={{ marginRight : 10 }}>-</p> : tot.toFixed(2) + "%"}
                                                         </span>{" "}
-                                                        <img
+                                                         {
+                                                          tot === 0.00 || tot === "0.00"  ?  "" : 
+                                                          <img
                                                           src={tot > 0 ? "up_arw.png" : "d_arw.png"}
                                                           style={{
                                                             width: 16,
@@ -7859,6 +7868,8 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                           }}
                                                           alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
                                                         />
+
+                                                        }
                                                       </>
                                                     );
                                                   })()}
