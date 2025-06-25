@@ -6882,182 +6882,219 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                     <hr style={{ margin: '0px 0px', backgroundColor: 'black', height: 3 }} />
 
                                     <div className="scroll" id="scrrrrol" style={{ height: 420, overflowY: 'auto' }}>
-                                    {(() => {
-                                        // Create a comprehensive list of all unique names from both arrays
-                                        const allNames = new Set([
-                                          ...(minperday?.map(item => item?.name) || []),
-                                          ...(maxperday?.map(item => item?.name) || [])
-                                        ]);
 
 
 
-                                        
-                                        
-
-                                        // Convert to array and map over all unique names
-                                        return Array.from(allNames).map((name, index) => {
-                                          // Find corresponding items in both arrays
-                                          const minItem = minperday?.find(item => item?.name === name);
-                                          const maxItem = maxperday?.find(item => item?.name === name);
-
-                                          
-                                          let prootimrr = 0
 
 
 
-                                          let val4 = 'black'
-                                          let val7 = 'black'
-
-                                          if (index === 0) {
-                                            if (selectedOptionsfine?.label === "Maximum") {
-                                              const number1 = minItem?.count  || 0
-                                              const number2 = maxItem?.count || 0
 
 
-                                              console.log(number1 , number2 , 'HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH')
+                                      {(() => {
+  // Create a comprehensive list of all unique item names from both arrays' data
+  const allItemNames = new Set();
+  
+  // Extract item names from minperday data
+  minperday?.forEach(dayItem => {
+    dayItem?.data?.forEach(dataItem => {
+      if (dataItem?.ITEM) {
+        allItemNames.add(dataItem.ITEM);
+      }
+    });
+  });
+  
+  // Extract item names from maxperday data
+  maxperday?.forEach(dayItem => {
+    dayItem?.data?.forEach(dataItem => {
+      if (dataItem?.ITEM) {
+        allItemNames.add(dataItem.ITEM);
+      }
+    });
+  });
 
-                                              if (number1 > number2) {
-                                                val4 = '#CA424E'
-                                                val7 = "black"
-                                              } else if (number1 === number2) {
-                                                val4 = '#CA424E'
-                                                val7 = '#CA424E'
-                                              } else {
-                                                val4 = 'black'
-                                                val7 = "#CA424E"
-                                              }
-                                            } else {
-                                              const number1 = minItem?.count || 0
-                                              const number2 = maxItem?.count || 0
+  // Convert to array and map over all unique item names
+  return Array.from(allItemNames).map((itemName, index) => {
+    console.log(minperday, 'QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ', maxperday);
+    
+    // Find corresponding items in both arrays' data
+    let minItem = null;
+    let maxItem = null;
+    
+    // Search through minperday data
+    minperday?.forEach(dayItem => {
+      const foundItem = dayItem?.data?.find(dataItem => dataItem?.ITEM === itemName);
+      if (foundItem) {
+        minItem = {
+          ...foundItem,
+          name: foundItem.ITEM,
+          count: parseInt(foundItem.QUANTITY) || 0
+        };
+      }
+    });
+    
+    // Search through maxperday data
+    maxperday?.forEach(dayItem => {
+      const foundItem = dayItem?.data?.find(dataItem => dataItem?.ITEM === itemName);
+      if (foundItem) {
+        maxItem = {
+          ...foundItem,
+          name: foundItem.ITEM,
+          count: parseInt(foundItem.QUANTITY) || 0
+        };
+      }
+    });
+
+    let prootimrr = 0;
+    let val4 = 'black';
+    let val7 = 'black';
+
+    if (index === 0) {
+      if (selectedOptionsfine?.label === "Maximum") {
+        const number1 = minItem?.count || 0;
+        const number2 = maxItem?.count || 0;
+
+        if (number1 > number2) {
+          val4 = '#CA424E';
+          val7 = "black";
+        } else if (number1 === number2) {
+          val4 = '#CA424E';
+          val7 = '#CA424E';
+        } else {
+          val4 = 'black';
+          val7 = "#CA424E";
+        }
+      } else {
+        const number1 = minItem?.count || 0;
+        const number2 = maxItem?.count || 0;
+
+        if (number1 < number2) {
+          val4 = '#316AAF';
+          val7 = "black";
+        } else if (number1 === number2) {
+          val4 = '#316AAF';
+          val7 = '#316AAF';
+        } else {
+          val4 = 'black';
+          val7 = "#316AAF";
+        }
+      }
+    }
+
+    return (
+      <React.Fragment key={`${itemName}-${index}`} style={{borderBottom: "1px solid #ccc"}}>
+        <div className="d-flex">
+          <div style={{ width: '33%' }}>
+            <p style={{ 
+              fontWeight: '700', 
+              color: val4, 
+              marginBlock: '4px', 
+              fontSize: 'clamp(12px, 2.5vw, 14px)' 
+            }}>
+              {minItem?.name || itemName + " " + '0'}
+            </p>
+            <p style={{ 
+              fontWeight: '400', 
+              color: val4, 
+              marginBlock: '7px', 
+              fontSize: 'clamp(12px, 2.5vw, 14px)' 
+            }}>
+              {minItem?.count || 0}
+            </p>
+          </div>
+
+          <div style={{ width: '33%', textAlign: 'center' }}>
+            <p style={{ 
+              fontWeight: '700', 
+              color: val7, 
+              marginBlock: '4px', 
+              fontSize: 'clamp(12px, 2.5vw, 14px)' 
+            }}>
+              {maxItem?.name || itemName + " " + '0'}
+            </p>
+            <p style={{ 
+              fontWeight: '400', 
+              color: val7, 
+              marginBlock: '7px', 
+              fontSize: 'clamp(12px, 2.5vw, 14px)' 
+            }}>
+              {maxItem?.count || 0}
+            </p>
+          </div> 
+
+          <div style={{ 
+            justifyContent: 'end', 
+            alignItems: 'center', 
+            display: 'flex', 
+            width: '33%' 
+          }}>
+            <p style={{ 
+              fontWeight: '400', 
+              color: '#000', 
+              marginBlock: '7px', 
+              fontSize: 'clamp(12px, 2.5vw, 14px)' 
+            }}>
+              <span>
+                {(() => {
+                  const datd = minItem?.count || 0;
+                  const datdtwo = maxItem?.count || 0;
+                  const tot = datdtwo === 0 ? 0 : ((datdtwo - datd) / datdtwo) * 100;
+
+                  return (
+                    <span style={{ 
+                      fontWeight: '700', 
+                      color: '#000', 
+                      marginBlock: '4px', 
+                      fontSize: 'clamp(12px, 2.5vw, 14px)' 
+                    }}>
+                      {isNaN(tot) ? "0%" : tot === "0.00" || tot === 0.00 ? <p style={{ marginRight: 10 }}>-</p> : tot.toFixed(2) + "%"}
+                      <span style={{ 
+                        color: tot > 0 ? "green" : "red", 
+                        fontWeight: '700',
+                        marginLeft: '5px'
+                      }}>
+                        {isNaN(tot) ? '' : tot === "0.00" || tot === 0.00 ? '' : tot > 0 ? (
+                          <img 
+                            src="up_arw.png" 
+                            style={{ 
+                              width: 16, 
+                              height: 16, 
+                              verticalAlign: 'middle' 
+                            }} 
+                            alt="Up Arrow" 
+                          />
+                        ) : (
+                          <img 
+                            src="d_arw.png" 
+                            style={{ 
+                              width: 16, 
+                              height: 16, 
+                              verticalAlign: 'middle' 
+                            }} 
+                            alt="Down Arrow" 
+                          />
+                        )}
+                      </span>
+                    </span>
+                  );
+                })()}
+              </span>
+            </p>
+          </div>
+        </div>
+        <hr style={{ 
+          margin: '10px 0px', 
+          backgroundColor: '#ccc', 
+          height: '1px',
+          border: 'none'
+        }} />
+      </React.Fragment>
+    );
+  });
+})()
 
 
-                                              if (number1 < number2) {
-                                                val4 = '#316AAF'
-                                                val7 = "black"
-                                              } else if (number1 === number2) {
-                                                val4 = '#316AAF'
-                                                val7 = '#316AAF'
-                                              } else {
-                                                val4 = 'black'
-                                                val7 = "#316AAF"
-                                              }
-                                            }
-                                          }
-
-
-
-                                          return (
-                                            <React.Fragment key={`${name}-${index}`} style={{borderBottom: "1px solid #ccc" }}>
-                                              <div className="d-flex" >
-                                                <div style={{ width: '33%' }}>
-                                                  <p style={{ 
-                                                    fontWeight: '700', 
-                                                    color:val4, 
-                                                    marginBlock: '4px', 
-                                                    fontSize: 'clamp(12px, 2.5vw, 14px)' 
-                                                  }}>
-                                                    {minItem?.name || maxItem?.name + " " + '0' }
-                                                  </p>
-                                                  <p style={{ 
-                                                    fontWeight: '400', 
-                                                    color:val4, 
-                                                    marginBlock: '7px', 
-                                                    fontSize: 'clamp(12px, 2.5vw, 14px)' 
-                                                  }}>
-                                                    {minItem?.count}
-                                                  </p>
-                                                </div>
-
-                                                <div style={{ width: '33%', textAlign: 'center' }}>
-                                                  <p style={{ 
-                                                    fontWeight: '700', 
-                                                    color: val7, 
-                                                    marginBlock: '4px', 
-                                                    fontSize: 'clamp(12px, 2.5vw, 14px)' 
-                                                  }}>
-                                                    {maxItem?.name || minItem?.name + " " + '0'}
-                                                  </p>
-                                                  <p style={{ 
-                                                    fontWeight: '400', 
-                                                    color: val7, 
-                                                    marginBlock: '7px', 
-                                                    fontSize: 'clamp(12px, 2.5vw, 14px)' 
-                                                  }}>
-                                                    {maxItem?.count }
-                                                  </p>
-                                                </div> 
-
-                                                <div style={{ 
-                                                  justifyContent: 'end', 
-                                                  alignItems: 'center', 
-                                                  display: 'flex', 
-                                                  width: '33%' 
-                                                }}>
-                                                  <p style={{ 
-                                                    fontWeight: '400', 
-                                                    color: '#000', 
-                                                    marginBlock: '7px', 
-                                                    fontSize: 'clamp(12px, 2.5vw, 14px)' 
-                                                  }}>
-                                                    <span>
-                                                      {(() => {
-                                                        const datd = minItem?.count || 0;
-                                                        const datdtwo = maxItem?.count || 0;
-                                                        const tot = datdtwo === 0 ? 0 : (( datdtwo - datd ) / datdtwo) * 100;
-
-                                                        return (
-                                                          <span style={{ 
-                                                            fontWeight: '700', 
-                                                            color: '#000', 
-                                                            marginBlock: '4px', 
-                                                            fontSize: 'clamp(12px, 2.5vw, 14px)' 
-                                                          }}>
-                                                            {isNaN(tot) ? "0%" : tot === "0.00" || tot === 0.00 ? <p style={{ marginRight :  10  }}>-</p> : tot.toFixed(2) + "%"}
-                                                            <span style={{ 
-                                                              color: tot > 0 ? "green" : "red", 
-                                                              fontWeight: '700',
-                                                              marginLeft: '5px'
-                                                            }}>
-                                                              
-                                                              {isNaN(tot) ? '' : tot === "0.00" || tot === 0.00 ? '' : tot > 0 ? (
-                                                                <img 
-                                                                  src="up_arw.png" 
-                                                                  style={{ 
-                                                                    width: 16, 
-                                                                    height: 16, 
-                                                                    verticalAlign: 'middle' 
-                                                                  }} 
-                                                                  alt="Up Arrow" 
-                                                                />
-                                                              ) : (
-                                                                <img 
-                                                                  src="d_arw.png" 
-                                                                  style={{ 
-                                                                    width: 16, 
-                                                                    height: 16, 
-                                                                    verticalAlign: 'middle' 
-                                                                  }} 
-                                                                  alt="Down Arrow" 
-                                                                />
-                                                              )}
-                                                            </span>
-                                                          </span>
-                                                        );
-                                                      })()}
-                                                    </span>
-                                                  </p>
-                                                </div>
-                                              </div>
-                                              <hr style={{ 
-                                                margin: '10px 0px', 
-                                                backgroundColor: '#ccc', 
-                                                height: '1px',
-                                                border: 'none'
-                                              }} />
-                                            </React.Fragment>
-                                          );
-                                        });
-                                      })()}
+}
+                                    
                                     </div>
                                   </div>
                                 </div>
