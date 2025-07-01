@@ -1133,8 +1133,8 @@ let Meals = () => {
 
 
 
-    const yesterday = [getFormattedDate(2), getFormattedDate(2)];
-    const eightDaysBefore = [getFormattedDate(9), getFormattedDate(9)];
+    const yesterday = [getFormattedDate(6), getFormattedDate(1)];
+    const eightDaysBefore = [getFormattedDate(5), getFormattedDate(4)];
 
     let meals_Custom_range_with =await sessionStorage.getItem('meals_start_range');
 
@@ -2429,9 +2429,9 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
   //times
 const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start_with_time') || "00:00");
 
-  let [twotime, setTwotime] = useState(() => sessionStorage.getItem('meals_start_with_time_1') || "00:00");
-  let [threetime, setThreetime] =useState(() => sessionStorage.getItem('meals_start_with_time_2') || "00:00");
-  let [fourtime, setFourtime] = useState(() => sessionStorage.getItem('meals_start_with_time_3') || "00:00");
+  let [twotime, setTwotime] = useState(() => sessionStorage.getItem('meals_start_with_time_1') || "23:59");
+  let [threetime, setThreetime] =useState(() => sessionStorage.getItem('meals_start_with_time_2') || "01:00");
+  let [fourtime, setFourtime] = useState(() => sessionStorage.getItem('meals_start_with_time_3') || "23:00");
 
   //input value
   let [inputvalue, setInputvalue] = useState()
@@ -6218,20 +6218,20 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                               <div style={{ marginTop: 50, padding: 20 }}>
                                 <div className="row">
                                   <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
-                                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                                    <p style={{ fontWeight: '800', color: '#000', marginBlock: '4px' , fontSize : 17  }}>Chosen range</p>
+                                    <p style={{ fontWeight: '800', color: '#000', marginBlock: '4px' , fontSize : 17 }}>
                                       ( Total ) <span>{editall?.edited?.length + editall?.deleted?.length + editall?.moved?.length}</span>
                                     </p>
                                   </div>
-                                  <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
-                                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>
+                                  <div className="col-lg-4 col-md-4 col-sm-12 mb-3"> 
+                                    <p style={{ fontWeight: '800', color: '#000', marginBlock: '4px' , fontSize : 17 }}>Comparing range</p>
+                                    <p style={{ fontWeight: '800', color: '#000', marginBlock: '4px' , fontSize : 17 }}>
                                       ( Total ) <span>{editallone?.edited?.length + editallone?.deleted?.length + editallone?.moved?.length}</span>
                                     </p>
                                   </div>
                                   <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
-                                    <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', textAlign: 'end' }}>Variance</p>
-                                    <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', textAlign: 'end' }}>
+                                    <p style={{ fontWeight: '800', color: '#000', marginBlock: '4px' , fontSize : 17 ,textAlign: 'end' }}>Variance</p>
+                                    <p style={{ fontWeight: '800', color: '#000', marginBlock: '4px' , fontSize : 17, textAlign: 'end' }}>
                                       ( Total ) <span>
                                         {(() => {
                                           let datd = editallone?.edited?.length + editallone?.deleted?.length + editallone?.moved?.length
@@ -6239,7 +6239,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                           let tot = ((datdtwo - datd) / datd) * 100
                                           return (
                                             <span >{isNaN(tot) ? "+0.0%" : tot.toFixed(2) + "%"}
-                                              <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                              <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' ,  marginLeft : 10 }}>
                                                 {tot > 0 ?
                                                   <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
                                                   <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
@@ -6273,7 +6273,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                         let tot = (( datd - datdtwo) / datd) * 100
                                         return (
                                           <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{isNaN(tot) ? "+0.0%" : tot.toFixed(2) + "%"}
-                                            <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                            <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' ,  marginLeft : 10 }}>
                                               {tot > 0 ?
                                                 <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
                                                 <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
@@ -6308,7 +6308,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                           let tot = ((   datdtwo - datd) / datd) * 100
                                           return (
                                             <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{isNaN(tot) ? "+0.0%" : tot.toFixed(2) + "%"}
-                                              <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                              <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' ,  marginLeft : 10 }}>
                                                 {tot > 0 ?
                                                   <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
                                                   <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
@@ -6343,7 +6343,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                           let tot = (( datd - datdtwo ) / datd) * 100
                                           return (
                                             <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }}>{isNaN(tot) ? "+0.0%" : tot.toFixed(2) + "%"}
-                                              <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                              <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' ,  marginLeft : 10 }}>
                                                 {tot > 0 ?
                                                   <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
                                                   <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
@@ -6378,7 +6378,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                           let tot = (( datd - datdtwo) / datd) * 100
                                           return (
                                             <span style={{ fontWeight: '700', color: '#000', marginBlock: '4px' }} >{isNaN(tot) ? "+0.0%" : tot.toFixed(2) + "%"}
-                                              <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                              <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' ,  marginLeft : 10 }}>
                                                 {tot > 0 ?
                                                   <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Up arrow" /> :
                                                   <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} className="" alt="Down arrow" />
@@ -6416,7 +6416,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                       />
                                       <p style={{ fontWeight: 600, color: '#1A1A1B', fontSize: 20, marginLeft: 10, marginRight: 5, marginBottom: 0 }}>Served meals</p>
                                     </div>
-                                    <div className="custom-inputonessfine pt-2 mx-2 ml-2 ml-md-3 " style={{ width: 'auto', maxWidth: '200px' }}>
+                                    <div className="custom-inputonessfine pt-2 ml-2 ml-md-3 " style={{ width: 'auto', maxWidth: '200px' , marginLeft : 60 }}>
                                       <Select
                                         className="newoneonee"
                                         options={basicfine}
@@ -6555,21 +6555,21 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                 <div style={{ marginTop: 20, padding: 20 }}>
                                   <div className="d-flex justify-content-between">
                                     <div>
-                                      <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>Chosen range</p>
-                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>( Total ) <span>{ggggrt()}</span></p>
+                                      <p style={{ fontWeight: '800', color: '#000',   fontSize: 17 }}>Chosen range</p>
+                                      <p style={{ fontWeight: '800', color: '#000',   fontSize: 17 , marginTop : -8 }}>( Total ) <span>{ggggrt()}</span></p>
                                     </div>
                                     <div>
-                                      <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>Comparing range</p>
-                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>( Total ) <span>{ggggrts()}</span></p>
+                                      <p style={{ fontWeight: '800', color: '#000',   fontSize: 17 }}>Comparing range</p>
+                                      <p style={{ fontWeight: '800', color: '#000',   fontSize: 17 , marginTop : -8 }}>( Total ) <span>{ggggrts()}</span></p>
                                     </div>
                                     <div>
-                                      <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>Variance</p>
-                                      <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: window.innerWidth < 768 ? '13px' : '14px' }}>( Total ) <span>
+                                      <p style={{ fontWeight: '800', color: '#000',   fontSize: 17 , }}>Variance</p>
+                                      <p style={{ fontWeight: '800', color: '#000',   fontSize: 17 , marginTop : -8 }}>( Total ) <span>
                                         {(() => {
                                           let datd = ggggrt()
                                           let datdtwo = ggggrts()
                                           let tot = ((datd - datdtwo) / datdtwo) * 100
-                                          return <span>{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                          return <span>{tot.toFixed(2) + "%"} <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' , marginLeft :  10 }}>
                                             {tot > 0 ?
                                               <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Up Arrow" /> :
                                               <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Down Arrow" />
@@ -6657,24 +6657,27 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                               style={{ 
                                                 alignItems: "center", 
                                                 height: "40px", 
-                                                borderBottom: "1px solid #ccc" 
+                                                borderBottom: "1px solid #ccc" ,
+                                                paddingTop : 25 , 
+                                                paddingBottom :30
                                               }}
                                             >
                                               {/* First column - served data */}
                                               <div 
-                                                style={{ width: '46%' }} 
-                                                className={`d-flex ${index === 0 ? 'mt-2' : ''}`}
+                                                style={{ width: '44%' }} 
+                                                className={` ${index === 0 ? 'mt-2' : ''}`}
                                               >
                                                 <p style={{ 
                                                   fontWeight: '700', 
-                                                  color: val4
+                                                  color: val4,
+                                                  marginBottom: 0
                                                 }}>
                                                   {servedItem?.name || servedoneItem?.name + " " + '0'}
-                                                </p>
+                                                </p>  
                                                 <p style={{ 
                                                   fontWeight: '400', 
                                                   color: val4, 
-                                                  marginLeft: 5 
+                                                  marginLeft: 5, 
                                                 }}>
                                                   {servedItem?.count }
                                                 </p>
@@ -6682,13 +6685,14 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
 
                                               {/* Second column - servedone data */}
                                               <div 
-                                                style={{ width: '31%', textAlign: 'center' }} 
+                                                style={{ width: '31%',  }} 
                                                 className={`${index === 0 ? 'mt-2' : ''}`}
                                               >
-                                                <div className="d-flex">
+                                                <div className=" ">
                                                   <p style={{ 
                                                     fontWeight: '700', 
-                                                  color: val7
+                                                    color: val7,
+                                                    marginBottom: 0
                                                   }}>
                                                     {servedoneItem?.name || servedItem?.name + " " + '0'}
                                                   </p>
@@ -6782,7 +6786,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                           console.log(minperday, 'minperday minperday')
                                         }}>Refunded meals</p>
                                       </div>
-                                      <div className="custom-inputonessfine d-flex align-items-center pt-1 mt-2">
+                                      <div className="custom-inputonessfine d-flex align-items-center pt-1 mt-2" style={{ marginLeft : 70}}>
                                         <Select
                                           className="newoneonee"
                                           options={basicfine}
@@ -6871,23 +6875,23 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                     </div>
                                   </div>
 
-                                  <div style={{ marginTop: 10, padding: '10px 20px' }}>
+                                  <div style={{ marginTop: 10, padding: '10px 20px' }}> 
                                     <div className="d-flex justify-content-between flex-wrap">
                                       <div className="mb-2 mb-md-0" style={{ minWidth: '120px' }}>
-                                        <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>Chosen range</p>
-                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                                        <p style={{ fontWeight: '800', color: '#000', marginBlock: '4px', fontSize: 17 }}>Chosen range</p>
+                                        <p style={{ fontWeight: '800', color: '#000', marginBlock: '4px', fontSize: 17 }}>
                                           ( Total ) <span>{ggggrtsg()}</span>
                                         </p>
                                       </div>
                                       <div className="mb-2 mb-md-0" style={{ minWidth: '120px' }}>
-                                        <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>Comparing range</p>
-                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                                        <p style={{ fontWeight: '800', color: '#000', marginBlock: '4px', fontSize: 17 }}>Comparing range</p>
+                                        <p style={{ fontWeight: '800', color: '#000', marginBlock: '4px', fontSize: 17 }}>
                                           ( Total ) <span>{ggggrtsgg()}</span>
                                         </p>
                                       </div>
                                       <div style={{ minWidth: '120px' }}>
-                                        <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>Variance</p>
-                                        <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px', fontSize: 'clamp(12px, 2.5vw, 14px)' }}>
+                                        <p style={{ fontWeight: '800', color: '#000', marginBlock: '4px', fontSize: 17 , textAlign : 'end' }}>Variance</p>
+                                        <p style={{ fontWeight: '800', color: '#000', marginBlock: '4px', fontSize: 17 }}>
                                           ( Total ) <span>
                                             {(() => {
                                               let datd = ggggrtsg();
@@ -6897,7 +6901,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                               return (
                                                 <span>
                                                   {isNaN(tot) ? 0 : tot.toFixed(2) + "%"}
-                                                  <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' }}>
+                                                  <span style={{ color: tot > 0 ? "green" : "red", fontWeight: '700' , marginLeft : 10 }}>
                                                     {isNaN(tot) ? '%' : tot > 0 ?
                                                       <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Up Arrow" /> :
                                                       <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} alt="Down Arrow" />
@@ -7081,8 +7085,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                                   {isNaN(tot) ? "0%" : tot === "0.00" || tot === 0.00 ? <p style={{ marginRight: 10 }}>-</p> : tot.toFixed(2) + "%"}
                                                                   <span style={{ 
                                                                     color: tot > 0 ? "green" : "red", 
-                                                                    fontWeight: '700',
-                                                                    marginLeft: '5px'
+                                                                    fontWeight: '700',  marginLeft : 10
                                                                   }}>
                                                                     {isNaN(tot) ? '' : tot === "0.00" || tot === 0.00 ? '' : tot > 0 ? (
                                                                       <img 

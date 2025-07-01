@@ -1229,8 +1229,8 @@ let Dockets = () => {
 
 
     // alldat = filteredDataonee
-    const yesterday = [getFormattedDate(2), getFormattedDate(2)];
-    const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
+    const yesterday = [getFormattedDate(6), getFormattedDate(1)];
+    const eightDaysBefore = [getFormattedDate(5), getFormattedDate(4)];
 
 
 
@@ -1925,9 +1925,9 @@ let Dockets = () => {
   //times
   const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start_with_time') || "00:00");
 
-  let [twotime, setTwotime] = useState(() => sessionStorage.getItem('meals_start_with_time_1') || "00:00");
-  let [threetime, setThreetime] = useState(() => sessionStorage.getItem('meals_start_with_time_2') || "00:00");
-  let [fourtime, setFourtime] = useState(() => sessionStorage.getItem('meals_start_with_time_3') || "00:00");
+  let [twotime, setTwotime] = useState(() => sessionStorage.getItem('meals_start_with_time_1') || "23:59");
+  let [threetime, setThreetime] = useState(() => sessionStorage.getItem('meals_start_with_time_2') || "01:00");
+  let [fourtime, setFourtime] = useState(() => sessionStorage.getItem('meals_start_with_time_3') || "23:00");
 
   //input value
   let [inputvalue, setInputvalue] = useState()
@@ -6743,7 +6743,7 @@ function timeDifference(startTime, endTime) {
                               </p>
                             </div>
 
-                            <div className="custom-inputonessfine mt-lg-0 mt-md-3 pt-lg-1 pt-md-2 mx-3">
+                            <div className="custom-inputonessfine mt-lg-0 mt-md-3 pt-lg-1 pt-md-2 " style={{ marginLeft: 80 }}>
                               <Select
                                 className="newoneonee"
                                 options={basicfine}
@@ -6784,7 +6784,8 @@ function timeDifference(startTime, endTime) {
                               maxWidth: '250px',
                               width: '100%',
                               height: 45,
-                              border: '1px solid rgb(203 203 203)'
+                              border: '1px solid rgb(203 203 203)',
+                              marginRight : 50
                             }}>
                               <div className="input-group">
                                 <input
@@ -6817,7 +6818,7 @@ function timeDifference(startTime, endTime) {
                               </div>
                             </div>
 
-                            <div className="position-relative mx-3">
+                            <div className="position-relative  " style={{ marginLeft: 20 }}>
                               <img
                                 src="threedot.png"
                                 ref={toggleButtonRef}
@@ -6891,21 +6892,21 @@ function timeDifference(startTime, endTime) {
                       <div style={{ marginTop: 50, padding: 20 }}>
                         <div className="d-flex gap-5">
                           <div style={{ width: "40%" }}>
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Chosen range</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span>{editall?.stats?.averageProcessTime || 0}</span></p>
+                            <p style={{ fontWeight: '800', color: '#000', fontSize : 17 }}>Chosen range</p>
+                            <p style={{ fontWeight: '800', color: '#000', fontSize : 17 , marginTop : -8 }}>(Average) <span>{editall?.stats?.averageProcessTime || 0}</span></p>
                           </div>
                           <div style={{ width: "40%", display: 'flex', alignItems: 'start', flexDirection: 'column' }}>
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Comparing range</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span>{editallone?.stats?.averageProcessTime || 0}</span></p>
+                            <p style={{ fontWeight: '800', color: '#000', fontSize : 17 }}>Comparing range</p>
+                            <p style={{ fontWeight: '800', color: '#000', fontSize : 17 , marginTop : -8 }}>(Average) <span>{editallone?.stats?.averageProcessTime || 0}</span></p>
                           </div>
                           <div style={{ width: "20%", display: 'flex', justifyContent: 'end', alignItems: 'end', flexDirection: 'column' }}>
-                            <p style={{ fontWeight: '700', color: '#707070', marginBlock: '4px' }}>Variance</p>
-                            <p style={{ fontWeight: '400', color: '#000', marginBlock: '7px' }}>(Average) <span>
+                            <p style={{ fontWeight: '800', color: '#000', fontSize : 17 }}>Variance</p>
+                            <p style={{ fontWeight: '800', color: '#000', fontSize : 17 , marginTop : -8 }}>(Average) <span>
                               {(() => {
                                 let numOne = parseInt(editall?.stats?.averageProcessTime || 0);
                                 let numTwo = parseInt(editallone?.stats?.averageProcessTime || 0);
                                 let average = Math.round((numOne + numTwo) / 2);
-                                return <span>{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' }}>{average > 0 ?
+                                return <span>{average + "%"} <span style={{ color: average > 0 ? "green" : "red", fontWeight: '700' , }}>{average > 0 ?
                                   <img src="up_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => { }} className="" alt="Example Image" /> :
                                   <img src="d_arw.png" style={{ width: 16, height: 16, cursor: 'pointer' }} onClick={() => { }} className="" alt="Example Image" />}</span></span>
                               })()}
@@ -7045,7 +7046,7 @@ function timeDifference(startTime, endTime) {
                                                   <span
                                                     style={{
                                                       color: percentageChange > 0 ? "green" : "red",
-                                                      fontWeight: "700",
+                                                      fontWeight: "700", marginLeft : 10
                                                     }}
                                                   >
                                                     {percentageChange > 0 ? (
