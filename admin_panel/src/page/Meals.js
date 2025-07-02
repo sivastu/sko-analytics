@@ -6708,56 +6708,59 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                               </div>
 
                                               {/* Third column - percentage calculation */}
-                                              <div 
+                                            <div 
                                                 style={{  
                                                   display: 'flex', 
                                                   width: '23%',
-                                                  justifyContent : 'end'
+                                                  justifyContent: 'flex-end', // Changed from 'end' to 'flex-end'
+                                                  alignItems: 'center' // Added for better vertical alignment
                                                 }} 
                                                 className={`${index === 0 ? 'mt-2' : ''}`}
                                               >
-                                                <p style={{ 
+                                                <div style={{ 
                                                   fontWeight: '400', 
                                                   color: '#000', 
-                                                  display: 'inline-flex',  
+                                                  display: 'flex', // Changed from inline-flex to flex
+                                                  alignItems: 'center', // Added for better alignment
+                                                  gap: '8px' // Added consistent spacing
                                                 }}> 
                                                   {(() => {
-                                                    const datd = servedItem?.count || 0;
-                                                    const datdtwo = servedoneItem?.count || 0;
+                                                    const currentCount = servedItem?.count || 0;
+                                                    const previousCount = servedoneItem?.count || 0;
                                                     
-                                                    // Calculate percentage
-                                                    const tot = datdtwo !== 0 ? (( datdtwo - datd) / datdtwo) * 100 : 0;
+                                                    // Calculate percentage change
+                                                    const percentageChange = previousCount !== 0 
+                                                      ? ((currentCount - previousCount) / previousCount) * 100 
+                                                      : 0;
+                                                    
+                                                    const hasChange = percentageChange !== 0;
                                                     
                                                     return (
                                                       <>
                                                         <span style={{ 
                                                           verticalAlign: 'middle', 
                                                           display: 'inline-block', 
-                                                          width: '60px', 
+                                                          minWidth: '60px', // Changed from width to minWidth
                                                           textAlign: 'right' 
                                                         }}>
-                                                          {tot === 0.00 || tot === "0.00" ? <p style={{ marginRight : 10 }}>-</p> : tot.toFixed(2) + "%"}
-                                                        </span>{" "}
+                                                          {hasChange ? `${percentageChange.toFixed(2)}%` : '-'}
+                                                        </span>
 
-                                                        {
-                                                          tot === 0.00 || tot === "0.00"  ?  "" : 
+                                                        {hasChange && (
                                                           <img
-                                                          src={tot > 0 ? "up_arw.png" : "d_arw.png"}
-                                                          style={{
-                                                            width: 16,
-                                                            height: 16,
-                                                            marginLeft: 14,
-                                                            verticalAlign: 'middle',
-                                                          }}
-                                                          alt={tot > 0 ? "Up Arrow" : "Down Arrow"}
-                                                        />
-
-                                                        }
-                                                        
+                                                            src={percentageChange > 0 ? "up_arw.png" : "d_arw.png"}
+                                                            style={{
+                                                              width: 16,
+                                                              height: 16,
+                                                              verticalAlign: 'middle',
+                                                            }}
+                                                            alt={percentageChange > 0 ? "Up Arrow" : "Down Arrow"}
+                                                          />
+                                                        )}
                                                       </>
                                                     );
                                                   })()}
-                                                </p>
+                                                </div>
                                               </div>
                                             </div>
                                           );
