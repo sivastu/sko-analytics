@@ -1251,17 +1251,24 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
 
   const [time, setTime] = useState('12:00');
 
-  const formatRange = (start, end) => {
-    const formatDate = (date) =>
-      date
-        ? new Intl.DateTimeFormat("en-GB", {
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-        }).format(date)
-        : "";
-    return formatDate(start) + " " + " " + " " + "|" + " " + " " + formatDate(end);
-  };
+ const formatRange = (start, end) => {
+  const formatDate = (date) =>
+    date
+      ? new Intl.DateTimeFormat("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }).format(date)
+      : "";
+  
+  return (
+    <>
+      <span>{formatDate(start)}</span>
+      <span style={{ margin: '0 1.5em' }}>|</span>
+      <span>{formatDate(end)}</span>
+    </>
+  );
+};
 
   const [dateRangetwo, setDateRangetwo] = useState([null, null]); // [startDate, endDate]
   const [startDatetwo, endDatetwo] = dateRangetwo;
