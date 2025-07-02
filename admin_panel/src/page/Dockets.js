@@ -394,22 +394,83 @@ let Dockets = () => {
     if(tooltipItem.dataset.label === 'Chosen range' ){
 
 
-      let searchdata = tooltipItem.label
+    let searchdata = tooltipItem.label
 
       const filtered = menuIsOpenfive.filter(item => item.time === tooltipItem.label);
 
       let allOrders = filtered[0].biggestValue.allOrders;
 
-      let largestItemOrder = allOrders.reduce((maxOrder, currentOrder) => {
-        return (currentOrder.ITEMS.length > (maxOrder?.ITEMS.length || 0)) ? currentOrder : maxOrder;
-      }, null);
+      // let largestItemOrder = allOrders.reduce((maxOrder, currentOrder) => {
+      //   return (currentOrder.ITEMS.length > (maxOrder?.ITEMS.length || 0)) ? currentOrder : maxOrder;
+      // }, null);
 
+        const itemCounts = {};
+  
+        allOrders.forEach(order => {
+          order.ITEMS.forEach(item => {
+            const itemName = item.ITEM;
+            const quantity = parseInt(item.QUANTITY);
+            
+            if (itemCounts[itemName]) {
+              itemCounts[itemName] += quantity;
+            } else {
+              itemCounts[itemName] = quantity;
+            }
+          });
+        });
+
+        // Convert to array and sort by quantity (descending)
+        const sortedItems = Object.entries(itemCounts)
+          .map(([item, quantity]) => ({ item, quantity }))
+          .sort((a, b) => b.quantity - a.quantity);
+
+        // Get top 3
+        const top3Items = sortedItems.slice(0, 3);
+
+        console.log( top3Items , 'finedata' , tooltipItem)
+
+        return top3Items
 
 
       console.log(  largestItemOrder , 'finedata')
 
     }else{
-        console.log(menuIsOpensix , 'finedata2' , finedata)
+       let searchdata = tooltipItem.label
+
+      const filtered = menuIsOpensix.filter(item => item.time === tooltipItem.label);
+
+      let allOrders = filtered[0].biggestValue.allOrders;
+
+      // let largestItemOrder = allOrders.reduce((maxOrder, currentOrder) => {
+      //   return (currentOrder.ITEMS.length > (maxOrder?.ITEMS.length || 0)) ? currentOrder : maxOrder;
+      // }, null);
+
+        const itemCounts = {};
+  
+        allOrders.forEach(order => {
+          order.ITEMS.forEach(item => {
+            const itemName = item.ITEM;
+            const quantity = parseInt(item.QUANTITY);
+            
+            if (itemCounts[itemName]) {
+              itemCounts[itemName] += quantity;
+            } else {
+              itemCounts[itemName] = quantity;
+            }
+          });
+        });
+
+        // Convert to array and sort by quantity (descending)
+        const sortedItems = Object.entries(itemCounts)
+          .map(([item, quantity]) => ({ item, quantity }))
+          .sort((a, b) => b.quantity - a.quantity);
+
+        // Get top 3
+        const top3Items = sortedItems.slice(0, 3);
+
+        console.log( menuIsOpensix , 'finedata' )
+
+        return top3Items 
     }
 
 
@@ -434,12 +495,14 @@ let Dockets = () => {
 
             let vvv = finedataaaa(tooltipItem)
 
-            
+            console.log(vvv , 'vvv KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK')
 
           return [
             `${item.label} - ${addMinutes(item.label, 9)}`,
             `Total: ${item.formattedValue}`,
-            ``
+            `${vvv?.[0]?.item || ''} - ${vvv?.[0]?.quantity || ''}`,
+            `${vvv?.[1]?.item || ''} - ${vvv?.[1]?.quantity || ''}`,
+            `${vvv?.[2]?.item || ''} - ${vvv?.[2]?.quantity || ''}` 
           ];
         }
       }
@@ -477,8 +540,10 @@ let Dockets = () => {
 
           return [
             `${item.label} - ${addMinutes(item.label, 9)}`,
-            `Total: ${item.formattedValue}`,
-            ``
+            `Total: ${item.formattedValue}`, 
+            `${vvv?.[0]?.item || ''} - ${vvv?.[0]?.quantity || ''}`,
+            `${vvv?.[1]?.item || ''} - ${vvv?.[1]?.quantity || ''}`,
+            `${vvv?.[2]?.item || ''} - ${vvv?.[2]?.quantity || ''}` 
           ];
         }
       }
@@ -1143,9 +1208,7 @@ let Dockets = () => {
         setBasicall(filteredDataonee);
       }
     }
-
-
-    console.log(filteredDataonee, ' zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz')
+ 
 
     if (parsedatajson.hub) {
 

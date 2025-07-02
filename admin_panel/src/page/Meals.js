@@ -669,15 +669,78 @@ let Meals = () => {
 
       let allOrders = filtered[0].biggestValue.allOrders;
 
-      let largestItemOrder = allOrders.reduce((maxOrder, currentOrder) => {
-        return (currentOrder.ITEMS.length > (maxOrder?.ITEMS.length || 0)) ? currentOrder : maxOrder;
-      }, null);
+      // let largestItemOrder = allOrders.reduce((maxOrder, currentOrder) => {
+      //   return (currentOrder.ITEMS.length > (maxOrder?.ITEMS.length || 0)) ? currentOrder : maxOrder;
+      // }, null);
 
+        const itemCounts = {};
+  
+        allOrders.forEach(order => {
+          order.ITEMS.forEach(item => {
+            const itemName = item.ITEM;
+            const quantity = parseInt(item.QUANTITY);
+            
+            if (itemCounts[itemName]) {
+              itemCounts[itemName] += quantity;
+            } else {
+              itemCounts[itemName] = quantity;
+            }
+          });
+        });
 
+        // Convert to array and sort by quantity (descending)
+        const sortedItems = Object.entries(itemCounts)
+          .map(([item, quantity]) => ({ item, quantity }))
+          .sort((a, b) => b.quantity - a.quantity);
 
-      console.log(  largestItemOrder , 'finedata')
+        // Get top 3
+        const top3Items = sortedItems.slice(0, 3);
+
+        console.log( top3Items , 'finedata' , tooltipItem)
+
+        return top3Items
+
 
     }else{
+
+      let searchdata = tooltipItem.label
+
+      const filtered = menuIsOpensix.filter(item => item.time === tooltipItem.label);
+
+      let allOrders = filtered[0].biggestValue.allOrders;
+
+      // let largestItemOrder = allOrders.reduce((maxOrder, currentOrder) => {
+      //   return (currentOrder.ITEMS.length > (maxOrder?.ITEMS.length || 0)) ? currentOrder : maxOrder;
+      // }, null);
+
+        const itemCounts = {};
+  
+        allOrders.forEach(order => {
+          order.ITEMS.forEach(item => {
+            const itemName = item.ITEM;
+            const quantity = parseInt(item.QUANTITY);
+            
+            if (itemCounts[itemName]) {
+              itemCounts[itemName] += quantity;
+            } else {
+              itemCounts[itemName] = quantity;
+            }
+          });
+        });
+
+        // Convert to array and sort by quantity (descending)
+        const sortedItems = Object.entries(itemCounts)
+          .map(([item, quantity]) => ({ item, quantity }))
+          .sort((a, b) => b.quantity - a.quantity);
+
+        // Get top 3
+        const top3Items = sortedItems.slice(0, 3);
+
+        console.log( top3Items , 'finedata' , tooltipItem)
+
+        return top3Items
+
+
         console.log(menuIsOpensix , 'finedata2' , finedata)
     }
 
@@ -726,12 +789,17 @@ let Meals = () => {
 
             let vvv = finedataaaa(tooltipItem)
 
+
+            console.log(vvv , 'vvv KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK')
+
             
 
           return [
             `${item.label} - ${addMinutes(item.label, 9)}`,
             `Total Meals: ${item.formattedValue}`,
-            ``
+            `${vvv?.[0]?.item || ''} - ${vvv?.[0]?.quantity || ''}`,
+            `${vvv?.[1]?.item || ''} - ${vvv?.[1]?.quantity || ''}`,
+            `${vvv?.[2]?.item || ''} - ${vvv?.[2]?.quantity || ''}`
           ];
         }
       }
