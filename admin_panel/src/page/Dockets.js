@@ -5992,7 +5992,7 @@ function timeDifference(startTime, endTime) {
                     />
                   </div>
                   <div className="mt-3">
-                    <div className="custom-inputone d-flex justify-content-between">
+                    <div className="custom-inputone d-flex justify-content-around">
                       <input
                         className='inputttt'
                         type="time"
@@ -6065,7 +6065,7 @@ function timeDifference(startTime, endTime) {
                     />
                   </div>
                   <div className="mt-3">
-                    <div className="custom-inputone d-flex justify-content-between">
+                    <div className="custom-inputone d-flex justify-content-around">
                       <input
                         className='inputttt'
                         type="time"

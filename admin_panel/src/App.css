@@ -26,6 +26,10 @@ body{
   height: 40vmin;
   pointer-events: none;
 }
+.custom-display-input {
+  justify-content: center !important;
+  display: flex !important;
+}
 
 .css-zn0ehl-DropDown{
   background-color: rgb(240, 248, 255) !important;

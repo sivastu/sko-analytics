@@ -1260,7 +1260,7 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
           year: "numeric",
         }).format(date)
         : "";
-    return `${formatDate(start)}  |  ${formatDate(end)}`;
+    return formatDate(start) + " " + " " + " " + "|" + " " + " " + formatDate(end);
   };
 
   const [dateRangetwo, setDateRangetwo] = useState([null, null]); // [startDate, endDate]
@@ -5415,7 +5415,8 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                             />
                           </div>
                           <div className="mt-3">
-                            <div className="custom-inputone d-flex justify-content-between">
+                            <div className="custom-inputone d-flex justify-content-around ">
+
                               <input
                                 className='inputttt'
                                 type="time"
@@ -5496,7 +5497,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                             />
                           </div>
                           <div className="mt-3">
-                            <div className="custom-inputone d-flex justify-content-between">
+                            <div className="custom-inputone d-flex justify-content-around">
                               <input
                                 className='inputttt'
                                 type="time"
