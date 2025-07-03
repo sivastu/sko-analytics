@@ -499,10 +499,7 @@ let Dockets = () => {
 
           return [
             `${item.label} - ${addMinutes(item.label, 9)}`,
-            `Total: ${item.formattedValue}`,
-            `${vvv?.[0]?.item || ''} - ${vvv?.[0]?.quantity || ''}`,
-            `${vvv?.[1]?.item || ''} - ${vvv?.[1]?.quantity || ''}`,
-            `${vvv?.[2]?.item || ''} - ${vvv?.[2]?.quantity || ''}` 
+            `Total: ${item.formattedValue}`, 
           ];
         }
       }
@@ -540,10 +537,7 @@ let Dockets = () => {
 
           return [
             `${item.label} - ${addMinutes(item.label, 9)}`,
-            `Total: ${item.formattedValue}`, 
-            `${vvv?.[0]?.item || ''} - ${vvv?.[0]?.quantity || ''}`,
-            `${vvv?.[1]?.item || ''} - ${vvv?.[1]?.quantity || ''}`,
-            `${vvv?.[2]?.item || ''} - ${vvv?.[2]?.quantity || ''}` 
+            `Total: ${item.formattedValue}`,  
           ];
         }
       }
@@ -1292,8 +1286,8 @@ let Dockets = () => {
 
 
     // alldat = filteredDataonee
-    const yesterday = [getFormattedDate(6), getFormattedDate(1)];
-    const eightDaysBefore = [getFormattedDate(5), getFormattedDate(4)];
+    const yesterday = [getFormattedDate(2), getFormattedDate(2)];
+    const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
 
 
 
@@ -1996,8 +1990,8 @@ let Dockets = () => {
   const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start_with_time') || "00:00");
 
   let [twotime, setTwotime] = useState(() => sessionStorage.getItem('meals_start_with_time_1') || "23:59");
-  let [threetime, setThreetime] = useState(() => sessionStorage.getItem('meals_start_with_time_2') || "01:00");
-  let [fourtime, setFourtime] = useState(() => sessionStorage.getItem('meals_start_with_time_3') || "23:00");
+  let [threetime, setThreetime] = useState(() => sessionStorage.getItem('meals_start_with_time_2') || "00:00");
+  let [fourtime, setFourtime] = useState(() => sessionStorage.getItem('meals_start_with_time_3') || "23:59");
 
   //input value
   let [inputvalue, setInputvalue] = useState()

@@ -1201,8 +1201,8 @@ let Meals = () => {
 
 
 
-    const yesterday = [getFormattedDate(6), getFormattedDate(1)];
-    const eightDaysBefore = [getFormattedDate(5), getFormattedDate(4)];
+    const yesterday = [getFormattedDate(2), getFormattedDate(2)];
+    const eightDaysBefore = [getFormattedDate(8), getFormattedDate(8)];
 
     let meals_Custom_range_with =await sessionStorage.getItem('meals_start_range');
 
@@ -2505,8 +2505,8 @@ let eightDaysBefore_range = [getFormattedDatewith( meals_Custom_range_range_pars
 const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start_with_time') || "00:00");
 
   let [twotime, setTwotime] = useState(() => sessionStorage.getItem('meals_start_with_time_1') || "23:59");
-  let [threetime, setThreetime] =useState(() => sessionStorage.getItem('meals_start_with_time_2') || "01:00");
-  let [fourtime, setFourtime] = useState(() => sessionStorage.getItem('meals_start_with_time_3') || "23:00");
+  let [threetime, setThreetime] =useState(() => sessionStorage.getItem('meals_start_with_time_2') || "00:00");
+  let [fourtime, setFourtime] = useState(() => sessionStorage.getItem('meals_start_with_time_3') || "23:59");
 
   //input value
   let [inputvalue, setInputvalue] = useState()
@@ -7098,7 +7098,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                 return (
                                                   <React.Fragment key={`${itemName}-${index}`} style={{borderBottom: "1px solid #ccc"}}>
                                                     <div className="d-flex">
-                                                      <div style={{ width: '33%' }}>
+                                                      <div style={{ width: '33%' }}> 
                                                         <p style={{ 
                                                           fontWeight: '700', 
                                                           color: val4, 
@@ -7197,7 +7197,7 @@ const [onetime, setOnetime] = useState(() => sessionStorage.getItem('meals_start
                                                     </div>
                                                     <hr style={{ 
                                                       margin: '10px 0px', 
-                                                      backgroundColor: '#ccc', 
+                                                      backgroundColor: '#000', 
                                                       height: '1px',
                                                       border: 'none'
                                                     }} />
