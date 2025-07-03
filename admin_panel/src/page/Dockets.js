@@ -708,9 +708,9 @@ let Dockets = () => {
 
     return (
       <div>
-        {sortedCourses.map((courseKey) => {
-          const courseName = courseMap[courseKey] || `Course ${courseKey+1}`;
-          const courseNames = `Course ${courseKey}`;
+        {sortedCourses.map((courseKey , index) => {
+          const courseName = courseMap[courseKey] || `Course ${index+1}`;
+          const courseNames = `Course ${index+1}`;
           const items = groupedByCourse[courseKey];
 
           // Separate items based on regex match
