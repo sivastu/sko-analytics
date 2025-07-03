@@ -709,7 +709,7 @@ let Dockets = () => {
     return (
       <div>
         {sortedCourses.map((courseKey) => {
-          const courseName = courseMap[courseKey] || `Course ${courseKey}`;
+          const courseName = courseMap[courseKey] || `Course ${courseKey+1}`;
           const courseNames = `Course ${courseKey}`;
           const items = groupedByCourse[courseKey];
 
